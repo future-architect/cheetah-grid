@@ -18,7 +18,10 @@ module.exports = {
 	plugins: [],
 	templates: {
 		cleverLinks: false,
-		monospaceLinks: false
+		monospaceLinks: false,
+		default: {
+			includeDate: false,
+		},
 	},
 	opts: {
 		encoding: 'utf8',
