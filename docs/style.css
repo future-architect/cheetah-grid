@@ -5,6 +5,20 @@ body {
     height: 100%;
     margin: 0px;
 }
+.primary {
+    background-color: #284060;
+    color: #fff;
+}
+
+.primary.light,.primary .light {
+    background-color: #556b8e;
+    color: #fff;
+}
+
+.primary.dark,.primary .dark {
+    background-color: #001a36;
+    color: #fff;
+}
 
 #parent {
     width: 100%;

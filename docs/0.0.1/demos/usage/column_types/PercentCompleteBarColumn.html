@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="author" content="Cheetah Grid">
+    <meta name="keywords" content="spreadsheet,grid,canvas,table,web-components">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Cheetah Grid - PercentCompleteBarColumn</title>
+
+    <link rel="stylesheet" type="text/css" href="./../../../css/style.css">
+    <link rel="stylesheet" type="text/css" href="./../../../css/highlightjs.css">
+    
+    <!-- <script src="http://localhost:35729/livereload.js"></script> -->
+	
+    <script type="text/javascript" src="https://unpkg.com/cheetah-grid@0.0.1"></script>
+
+    <style type="text/css">
+        html {
+            height: 100%;
+        }
+        body {
+            height: calc(100% - 100px);
+        }
+        .contents {
+        	padding: 30px;
+			box-sizing: border-box;
+        }
+        .demo-grid {
+            width: 100%;
+            height: 300px;
+            box-sizing: border-box;
+            border: solid 1px #ddd;
+        }
+        .demo-grid.large {
+            height: 500px;
+        }
+        .demo-grid.middle {
+            height: 300px;   
+        }
+        .demo-grid.small {
+            height: 240px;   
+        }
+        .log {
+            width: 100%;
+            height: 80px;
+            background-color: #F5F5F5;
+        }
+
+        .hljs { 
+        	 tab-size: 4;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <script type="text/javascript">
+'use strict';
+////babel
+'use strict';
+
+function getErrorLogElement() {
+	return document.querySelector('#error_log') || function () {
+		var element = document.createElement('textarea');
+		element.id = 'error_log';
+		element.style.width = '100%';
+		element.style.position = 'fixed';
+		element.style.bottom = '0';
+		element.style['z-index'] = '100';
+		element.style.background = '#ddd';
+		element.style.color = 'red';
+		document.body.appendChild(element);
+		return element;
+	}();
+}
+
+window.onerror = function (msg, file, line, column, err) {
+	getErrorLogElement().value += err && err.stack || msg + '\n    at ' + file + ':' + line + ':' + column;
+};
+    </script>
+	<nav class="header primary">
+		<div class="nav-wrapper">
+			<a href="./../../../../index.html">
+				<img src="./../../../../logo.png" style="width: 100px;padding: 5px;vertical-align: middle;" alt="Cheetah Grid">
+			</a>
+	
+			<ul id="nav-mobile" class="right hide-on-med-and-down">
+				<li><a href="./../../../index.html" class="primary">Docoments - TOP</a></li>
+			</ul>
+		</div>
+	</nav>	<h1>Usage &gt; <a href="./../../../demos\usage\column_types.html">Column Types</a> &gt; <a href="./../../../demos\usage\column_types\Classes.html">Classes</a> &gt; PercentCompleteBarColumn</h1>
+	<div class="contents">
+    	
+<h2 id="percentcompletebarcolumn">PercentCompleteBarColumn</h2>
+<p>パーセントバーを表示する</p>
+
+<div id="sample1" class="demo-grid middle">
+</div>
+<script type="text/javascript">
+////wrapscript
+(function() {
+//babel
+
+//
+/*global cheetahGrid*/
+'use strict';
+
+var grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#sample1'),
+	header: [{ field: 'percent', caption: 'label', width: 100 }, {
+		field: 'percent',
+		caption: 'percent',
+		width: 200,
+		columnType: new cheetahGrid.columns.type.PercentCompleteBarColumn()
+	}, {
+		field: 'value',
+		caption: 'value(10-20)',
+		width: 200,
+		columnType: new cheetahGrid.columns.type.PercentCompleteBarColumn({
+			min: 10,
+			max: 20
+		})
+	}, {
+		field: 'value',
+		caption: 'value(format)',
+		width: 200,
+		columnType: new cheetahGrid.columns.type.PercentCompleteBarColumn({
+			min: 10,
+			max: 20,
+			formatter: function formatter(v) {
+				return v + 'pt';
+			}
+		})
+	}, {
+		field: 'percent',
+		caption: 'percent2',
+		width: 200,
+		columnType: new cheetahGrid.columns.type.PercentCompleteBarColumn({
+			formatter: function formatter(s) {
+				return '';
+			}
+		}),
+		style: {
+			barHeight: 19
+		}
+	}, {
+		field: 'percent',
+		caption: 'percent3',
+		width: 200,
+		columnType: new cheetahGrid.columns.type.PercentCompleteBarColumn(),
+		style: {
+			barBgColor: '#aaa',
+			barColor: '#444'
+		}
+	}, {
+		field: 'percent',
+		caption: 'percent4',
+		width: 200,
+		columnType: new cheetahGrid.columns.type.PercentCompleteBarColumn(),
+		style: {
+			barBgColor: function barBgColor(per) {
+				return per > 50 ? '#faa' : '#aaa';
+			},
+			barColor: function barColor(per) {
+				return per > 50 ? '#f44' : '#444';
+			}
+		}
+	}],
+	frozenColCount: 1
+});
+grid.records = [{ percent: '100%', value: 20 }, { percent: '80%', value: 18 }, { percent: '60%', value: 16 }, { percent: '40%', value: 14 }, { percent: '20%', value: 12 }, { percent: '0%', value: 10 }];
+
+//
+//
+})();
+</script>
+<pre><code class="js hljs javascript"><span class="hljs-comment">/*global cheetahGrid*/</span>
+<span class="hljs-meta">'use strict'</span>;
+
+<span class="hljs-keyword">const</span> grid = <span class="hljs-keyword">new</span> cheetahGrid.ListGrid({
+	<span class="hljs-attr">parentElement</span>: <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample1'</span>),
+	<span class="hljs-attr">header</span>: [
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'percent'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'label'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">100</span>},
+		{
+			<span class="hljs-attr">field</span>: <span class="hljs-string">'percent'</span>,
+			<span class="hljs-attr">caption</span>: <span class="hljs-string">'percent'</span>,
+			<span class="hljs-attr">width</span>: <span class="hljs-number">200</span>,
+			<span class="hljs-attr">columnType</span>: <span class="hljs-keyword">new</span> cheetahGrid.columns.type.PercentCompleteBarColumn(),
+		},
+		{
+			<span class="hljs-attr">field</span>: <span class="hljs-string">'value'</span>,
+			<span class="hljs-attr">caption</span>: <span class="hljs-string">'value(10-20)'</span>,
+			<span class="hljs-attr">width</span>: <span class="hljs-number">200</span>,
+			<span class="hljs-attr">columnType</span>: <span class="hljs-keyword">new</span> cheetahGrid.columns.type.PercentCompleteBarColumn({
+				<span class="hljs-attr">min</span>: <span class="hljs-number">10</span>,
+				<span class="hljs-attr">max</span>: <span class="hljs-number">20</span>
+			}),
+		},
+		{
+			<span class="hljs-attr">field</span>: <span class="hljs-string">'value'</span>,
+			<span class="hljs-attr">caption</span>: <span class="hljs-string">'value(format)'</span>,
+			<span class="hljs-attr">width</span>: <span class="hljs-number">200</span>,
+			<span class="hljs-attr">columnType</span>: <span class="hljs-keyword">new</span> cheetahGrid.columns.type.PercentCompleteBarColumn({
+				<span class="hljs-attr">min</span>: <span class="hljs-number">10</span>,
+				<span class="hljs-attr">max</span>: <span class="hljs-number">20</span>,
+				<span class="hljs-attr">formatter</span>: <span class="hljs-function">(<span class="hljs-params">v</span>) =&gt;</span> v + <span class="hljs-string">'pt'</span>,
+			}),
+		},
+		{
+			<span class="hljs-attr">field</span>: <span class="hljs-string">'percent'</span>,
+			<span class="hljs-attr">caption</span>: <span class="hljs-string">'percent2'</span>,
+			<span class="hljs-attr">width</span>: <span class="hljs-number">200</span>,
+			<span class="hljs-attr">columnType</span>: <span class="hljs-keyword">new</span> cheetahGrid.columns.type.PercentCompleteBarColumn({
+				<span class="hljs-attr">formatter</span>: <span class="hljs-function">(<span class="hljs-params">s</span>) =&gt;</span> <span class="hljs-string">''</span>,
+			}),
+			<span class="hljs-attr">style</span>: {
+				<span class="hljs-attr">barHeight</span>: <span class="hljs-number">19</span>,
+			}
+		},
+		{
+			<span class="hljs-attr">field</span>: <span class="hljs-string">'percent'</span>,
+			<span class="hljs-attr">caption</span>: <span class="hljs-string">'percent3'</span>,
+			<span class="hljs-attr">width</span>: <span class="hljs-number">200</span>,
+			<span class="hljs-attr">columnType</span>: <span class="hljs-keyword">new</span> cheetahGrid.columns.type.PercentCompleteBarColumn(),
+			<span class="hljs-attr">style</span>: {
+				<span class="hljs-attr">barBgColor</span>: <span class="hljs-string">'#aaa'</span>,
+				<span class="hljs-attr">barColor</span>: <span class="hljs-string">'#444'</span>,
+			}
+		},
+		{
+			<span class="hljs-attr">field</span>: <span class="hljs-string">'percent'</span>,
+			<span class="hljs-attr">caption</span>: <span class="hljs-string">'percent4'</span>,
+			<span class="hljs-attr">width</span>: <span class="hljs-number">200</span>,
+			<span class="hljs-attr">columnType</span>: <span class="hljs-keyword">new</span> cheetahGrid.columns.type.PercentCompleteBarColumn(),
+			<span class="hljs-attr">style</span>: {
+				<span class="hljs-attr">barBgColor</span>: <span class="hljs-function">(<span class="hljs-params">per</span>) =&gt;</span> per &gt; <span class="hljs-number">50</span> ? <span class="hljs-string">'#faa'</span> : <span class="hljs-string">'#aaa'</span>,
+				<span class="hljs-attr">barColor</span>: <span class="hljs-function">(<span class="hljs-params">per</span>) =&gt;</span> per &gt; <span class="hljs-number">50</span> ? <span class="hljs-string">'#f44'</span> : <span class="hljs-string">'#444'</span>,
+			}
+		},
+	],
+	<span class="hljs-attr">frozenColCount</span>: <span class="hljs-number">1</span>
+});
+grid.records = [
+	{<span class="hljs-attr">percent</span>: <span class="hljs-string">'100%'</span>, <span class="hljs-attr">value</span>: <span class="hljs-number">20</span>},
+	{<span class="hljs-attr">percent</span>: <span class="hljs-string">'80%'</span>, <span class="hljs-attr">value</span>: <span class="hljs-number">18</span>},
+	{<span class="hljs-attr">percent</span>: <span class="hljs-string">'60%'</span>, <span class="hljs-attr">value</span>: <span class="hljs-number">16</span>},
+	{<span class="hljs-attr">percent</span>: <span class="hljs-string">'40%'</span>, <span class="hljs-attr">value</span>: <span class="hljs-number">14</span>},
+	{<span class="hljs-attr">percent</span>: <span class="hljs-string">'20%'</span>, <span class="hljs-attr">value</span>: <span class="hljs-number">12</span>},
+	{<span class="hljs-attr">percent</span>: <span class="hljs-string">'0%'</span>, <span class="hljs-attr">value</span>: <span class="hljs-number">10</span>},
+];
+
+<span class="hljs-comment">//</span></code></pre>
+
+    </div>
+
+</body></html>

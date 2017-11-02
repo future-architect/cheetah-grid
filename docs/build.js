@@ -43,6 +43,7 @@ Metalsmith(__dirname).
 			'FAQ',
 		],
 		script: docScript,
+		version: cheetah.version,
 	}).
 	source('./src').
 	destination(`./${cheetah.version}`).
