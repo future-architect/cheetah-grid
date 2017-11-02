@@ -46,6 +46,7 @@
 		MOUSEMOVE_CELL: 'mousemove_cell',
 		MOUSEENTER_CELL: 'mouseenter_cell',
 		MOUSELEAVE_CELL: 'mouseleave_cell',
+		RESIZE_COLUMN: 'resize_column',
 	};
 
 	//private methods
@@ -1058,7 +1059,9 @@
 			const rect = _getVisibleRect(this._grid);
 			rect.left = this._invalidateAbsoluteLeft;
 			_invalidateRect(this._grid, rect);
-			
+
+			this._grid.fireListeners(EVENT_TYPE.RESIZE_COLUMN, {col: this._targetCol});
+
 			return true;
 		}
 		_upInternal(e) {
