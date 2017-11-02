@@ -68,3 +68,16 @@ body {
     color: #fff;
     font-weight: 200;
 }
+
+.share-buttons>* {
+    line-height: 20px;
+}
+
+.share-buttons>*>* {
+    vertical-align: bottom;
+}
+
+.share-buttons {
+    text-align: right;
+    padding: 5px;
+}
