@@ -39,6 +39,7 @@
 
 	const EVENT_TYPE = {
 		CLICK_CELL: 'click_cell',
+		DBLCLICK_CELL: 'dblclick_cell',
 		MOUSEDOWN_CELL: 'mousedown_cell',
 		MOUSEUP_CELL: 'mouseup_cell',
 		SELECTED_CELL: 'selected_cell',
@@ -46,6 +47,9 @@
 		MOUSEMOVE_CELL: 'mousemove_cell',
 		MOUSEENTER_CELL: 'mouseenter_cell',
 		MOUSELEAVE_CELL: 'mouseleave_cell',
+		INPUT_CELL: 'input_cell',
+		EDITABLEINPUT_CELL: 'editableinput_cell',
+		MODIFY_STATUS_EDITABLEINPUT_CELL: 'modify_status_editableinput_cell',
 	};
 
 	//private methods
@@ -758,6 +762,16 @@
 			}
 			grid.fireListeners(EVENT_TYPE.CLICK_CELL, eventArgs);
 		});
+		grid[_].handler.on(grid[_].element, 'dblclick', (e) => {
+			if (!grid.hasListeners(EVENT_TYPE.DBLCLICK_CELL)) {
+				return;
+			}
+			const {eventArgs} = getCellEventArgsSet(e);
+			if (!eventArgs) {
+				return;
+			}
+			grid.fireListeners(EVENT_TYPE.DBLCLICK_CELL, eventArgs);
+		});
 		grid[_].focusControl.listen('keydown', (keyCode, e) => {
 			grid.fireListeners(EVENT_TYPE.KEYDOWN, keyCode, e);
 		});
@@ -799,8 +813,9 @@
 			return copyValue;
 		});
 		grid[_].focusControl.onCopy((e) => array.find(grid.fireListeners('copydata', grid[_].selection.range), isDef));
-		grid[_].focusControl.onInput((val) => {
-			//TODO console.log(val);
+		grid[_].focusControl.onInput((value) => {
+			const {col, row} = grid[_].selection.select;
+			grid.fireListeners(EVENT_TYPE.INPUT_CELL, {col, row, value});
 		});
 		grid.bindEventsInternal();
 	}
@@ -1067,16 +1082,25 @@
 		}
 	}
 
+	function setSafeInputValue(input, value) {
+		const type = input.type;
+		input.type = '';
+		input.value = value;
+		if (type) {
+			input.type = type;
+		}
+	}
+
 	/**
 	 * Manage focus
 	 * @private
 	 */
 	class FocusControl extends EventTarget {
-		constructor(parentElement, scrollable) {
+		constructor(grid, parentElement, scrollable) {
 			super();
 			this._scrollable = scrollable;
 			this._handler = new EventHandler();
-			this._input = document.createElement('textarea');
+			this._input = document.createElement('input');
 			this._input.classList.add('grid-focus-control');
 			this._input.readOnly = true;
 			parentElement.appendChild(this._input);
@@ -1084,19 +1108,29 @@
 			this._handler.on(this._input, 'compositionstart', (e) => {
 				this._input.classList.add('composition');
 				this._isComposition = true;
+				grid.focus();
 			});
 			this._handler.on(this._input, 'compositionend', (e) => {
 				this._isComposition = false;
 				this._input.classList.remove('composition');
-				this.fireListeners('input', this._input.value);
-				this._input.value = '';
+				if (!this._input.readOnly) {
+					this.fireListeners('input', this._input.value);
+				}
+				setSafeInputValue(this._input, '');
 			});
 			this._handler.on(this._input, 'keypress', (e) => {
 				if (this._isComposition) {
 					return;
 				}
-				this.fireListeners('input', this._input.value);
-				this._input.value = '';
+				if (!this._input.readOnly && e.key && e.key.length === 1) {
+					if (e.key === 'c' && e.ctrlKey) {
+						//copy! for Firefox
+					} else {
+						this.fireListeners('input', e.key);
+						cancelEvent(e);
+					}
+				}
+				setSafeInputValue(this._input, '');
 			});
 			this._handler.on(this._input, 'keydown', (e) => {
 				if (this._isComposition) {
@@ -1114,10 +1148,10 @@
 				}
 				const keyCode = getKeyCode(e);
 				if (keyCode === KEY_ALPHA_C && e.ctrlKey) {
-					this._input.value = 'dummy';
+					setSafeInputValue(this._input, 'dummy');
 					this._input.select();
 					setTimeout(() => {
-						this._input.value = '';
+						setSafeInputValue(this._input, '');
 					}, 100);
 				}
 			});
@@ -1128,7 +1162,7 @@
 				if (!isDescendantElement(parentElement, e.target)) {
 					return;
 				}
-				this._input.value = '';
+				setSafeInputValue(this._input, '');
 				const data = array.find(this.fireListeners('copy'), isDef);
 				if (isDef(data)) {
 					cancelEvent(e);
@@ -1164,7 +1198,7 @@
 			return this.listen('copy', fn);
 		}
 		focus() {
-			this._input.value = '';
+			// this._input.value = '';
 			this._input.focus();
 		}
 		setFocusRect(rect) {
@@ -1176,6 +1210,45 @@
 		}
 		set editMode(editMode) {
 			this._input.readOnly = !editMode;
+		}
+		resetInputStatus() {
+			const el = this._input;
+			const composition = el.classList.contains('composition');
+			
+			const atts = el.attributes;
+			const removeNames = [];
+			for (let i = 0, n = atts.length; i < n; i++) {
+				const att = atts[i];
+				if (!this._inputStatus.hasOwnProperty(att.nodeName)) {
+					removeNames.push(att.name);
+				}
+			}
+			removeNames.forEach((removeName) => {
+				el.removeAttribute(removeName);
+			});
+			for (const name in this._inputStatus) {
+				el.setAttribute(name, this._inputStatus[name]);
+			}
+			if (composition) {
+				el.classList.add('composition');
+			} else {
+				el.classList.remove('composition');
+			}
+		}
+		storeInputStatus() {
+			const el = this._input;
+			this._inputStatus = {};
+			const atts = el.attributes;
+			for (let i = 0, n = atts.length; i < n; i++) {
+				const att = atts[i];
+				this._inputStatus[att.name] = att.value;
+			}
+		}
+		get editMode() {
+			return !this._input.readOnly;
+		}
+		get input() {
+			return this._input;
 		}
 		dispose() {
 			super.dispose();
@@ -1476,7 +1549,7 @@
 			this[_].scrollable = new Scrollable();
 			this[_].handler = new EventHandler();
 			this[_].selection = new Selection(this);
-			this[_].focusControl = new FocusControl(this[_].scrollable.getElement(), this[_].scrollable);
+			this[_].focusControl = new FocusControl(this, this[_].scrollable.getElement(), this[_].scrollable);
 
 			this[_].canvas = document.createElement('canvas');
 			this[_].context = this[_].canvas.getContext('2d', {alpha: false});
@@ -1514,11 +1587,22 @@
 		getElement() {
 			return this[_].element;
 		}
+		appendChildElement(element, rect) {
+			rect = _toRelativeRect(this, rect);
+			element.style.position = 'absolute';
+			element.style['box-sizing'] = 'border-box';
+			element.style.top = rect.top.toFixed() + 'px';
+			element.style.left = rect.left.toFixed() + 'px';
+			element.style.width = rect.width.toFixed() + 'px';
+			element.style.height = rect.height.toFixed() + 'px';
+			this.getElement().appendChild(element);
+		}
 		get canvas() {
 			return this[_].canvas;
 		}
 		focus() {
-			this.focusCell(this[_].selection[_].focus.col, this[_].selection[_].focus.row);
+			const {col, row} = this[_].selection.select;
+			this.focusCell(col, row);
 		}
 		get selection() {
 			return this[_].selection;
@@ -1732,7 +1816,31 @@
 			}
 		}
 		focusCell(col, row) {
+			const oldEditMode = this[_].focusControl.editMode;
+			if (oldEditMode) {
+				this[_].focusControl.resetInputStatus();
+			}
+
 			this[_].focusControl.setFocusRect(this.getCellRect(col, row));
+			
+			const {col: selCol, row: selRow} = this[_].selection.select;
+			const results = this.fireListeners(
+					EVENT_TYPE.EDITABLEINPUT_CELL,
+					{col: selCol, row: selRow}
+			);
+			
+			const editMode = (array.findIndex(results, (v) => !!v) >= 0);
+			this[_].focusControl.editMode = editMode;
+			
+			if (editMode) {
+				this[_].focusControl.storeInputStatus();
+				this.fireListeners(
+						EVENT_TYPE.MODIFY_STATUS_EDITABLEINPUT_CELL,
+						{col: selCol, row: selRow, input: this[_].focusControl.input}
+				);
+			}
+
+			// Failure occurs in IE if focus is not last
 			this[_].focusControl.focus();
 		}
 		invalidateCell(col, row) {

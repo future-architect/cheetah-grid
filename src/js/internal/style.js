@@ -50,7 +50,7 @@
 			height: calc(100% - ${SCROLLBAR_SIZE}px);
 		}
 		.cheetah-grid .grid-focus-control {
-			position: relative;
+			position: relative !important;
 			width: 1px;
 			height: 1px;
 			opacity: 0;
@@ -60,6 +60,11 @@
 			pointer-events: none;
 			max-width: 0;
 			max-height: 0;
+			float: none !important;
+		}
+		.cheetah-grid input.grid-focus-control::-ms-clear,
+		.cheetah-grid input.input-editor::-ms-clear {
+			visibility:hidden;
 		}
 		.cheetah-grid .grid-focus-control.composition {
 			opacity: 1;

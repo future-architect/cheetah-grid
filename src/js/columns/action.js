@@ -5,8 +5,17 @@
 	const Editor = require('./action/Editor');
 	const CheckEditor = require('./action/CheckEditor');
 	const ButtonAction = require('./action/ButtonAction');
+	const InputEditor = require('./action/InputEditor');
 
 	class ImmutableCheckEditor extends CheckEditor {
+		get disabled() {
+			return this._disabled;
+		}
+		get readOnly() {
+			return this._readOnly;
+		}
+	}
+	class ImmutableInputEditor extends InputEditor {
 		get disabled() {
 			return this._disabled;
 		}
@@ -24,6 +33,7 @@
 	const action = {
 		ACTIONS: {
 			CHECK: new ImmutableCheckEditor(),
+			INPUT: new ImmutableInputEditor(),
 		},
 		get BaseAction() {
 			return BaseAction;
@@ -39,6 +49,9 @@
 		},
 		get ButtonAction() {
 			return ButtonAction;
+		},
+		get InputEditor() {
+			return InputEditor;
 		},
 		of(columnAction) {
 			if (!columnAction) {
