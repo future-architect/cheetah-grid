@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Grid(遅延描画サンプル)</title>
+    
+    <script src="http://localhost:35729/livereload.js"></script>
+    <script type="text/javascript" src="./browser-common.js"></script>
+    
+    <script type="text/javascript" src="../../dist/cheetahGrid.es5.js"></script>
+</head>
+<body>
+    <div id="parent" style="width: 100%;height: 300px;">
+    </div>
+	<script type="text/javascript">
+        const grid = new cheetahGrid.core.DrawGrid({
+            parentElement: document.querySelector('#parent')
+        });
+        window.gridElement = grid.getElement();
+        window.grid = grid;
+        // grid.rowCount = 10;
+        // grid.colCount = 2;
+        grid.rowCount = 1000000;
+        grid.colCount = 200;
+        grid.frozenColCount = 2;
+        grid.frozenRowCount = 1;
+
+        const GridCanvasHelper = cheetahGrid.GridCanvasHelper;
+
+        const helper = new GridCanvasHelper(grid);
+        
+
+        grid.onDrawCell = function(col, row, context) {
+            //サンプル実装
+
+            //最低限、描画できる範囲を描画する
+            
+            //cell全体を描画
+            helper.fillCellWithState(context);
+            helper.borderWithState(context);
+
+            //遅延描画実行
+            if (context.drawing) {
+                //遅延描画処理中は新たに遅延描画をしない
+                return null;
+            }
+            return new Promise((resolve, reject) => {
+             setTimeout(() => {
+                // 現時点の計算を済ませ、速度劣化を防ぐ
+                const currentContext = context.toCurrentContext();
+                //遅延描画
+                const drawRect = currentContext.getDrawRect();
+                if (drawRect) { // drawRectが取得できない時は描画範囲外
+                    //文字描画
+                    helper.text('[' + col + ':' + row + ']', currentContext);
+                }
+
+                resolve();//必ず呼ぶこと
+             }, 100);
+            });
+        };
+        grid.invalidate();
+        
+    </script>
+</body>
+</html>

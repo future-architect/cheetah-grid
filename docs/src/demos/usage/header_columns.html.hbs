@@ -1,0 +1,109 @@
+---
+category: Usage
+title: Header and Columns
+layout: demo.html
+order: 100
+---
+
+{{#marked}}
+## Standard Column
+`cheetahGrid.ListGrid`のプロパティ`header`の設定によって列、およびヘッダを設定できます。  
+`header`コンストラクタ引数から設定することもできます。  
+
+`header`はObject配列（Array<Object>）で指定し、
+Objectには以下のプロパティを設定します。  
+
+
+|property|説明|LINK|
+|---|---|---|
+|caption   |ヘッダに表示されるキャプション|---|
+|field     |セルに表示するレコードのfield名、またはfunction|---|
+|width     |列幅|---|
+|columnType|列タイプ|[link](./column_types.html)|
+|style     |列スタイル|[link](./column_styles.html)|
+|action    |列アクション|---|
+{{/marked}}
+
+
+
+<div id="sample1" class="demo-grid middle">
+</div>
+<script type="text/javascript">
+//{{{babel textContents.demos.[demos/init.parts.js]}}}
+//{{#babel}}
+/*global generatePersons*/
+/*eslint-disable no-unused-vars*/
+'use strict';
+const records = generatePersons(100);
+//{{/babel}}
+</script>
+<script type="text/javascript">
+//{{#wrapscript}}
+//{{#copy "script1"}}
+/*global cheetahGrid, records*/
+'use strict';
+const grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#sample1'),
+	header: [
+		{field: 'personid', caption: 'ID', width: 100, columnType: 'center'},
+		{field: 'fname', caption: 'First Name', width: 200},
+		{field: 'lname', caption: 'Last Name', width: 200},
+		{field: 'email', caption: 'Email', width: 250},
+		{field: 'birthday', caption: 'birthday', width: 500},
+	],
+	frozenColCount: 1,
+});
+grid.records = records;
+//{{/copy}}
+//{{/wrapscript}}
+</script>
+{{> code class="js" code=script1}}
+
+{{#marked}}
+```js
+//record object properties
+{
+	personid: 'ID',
+	fname: 'First Name',
+	lname: 'Last Name',
+	email: 'Email',
+	birthday: 'birthday',
+}
+```
+{{/marked}}
+
+{{#marked}}
+## Multiple Header  
+`header`に指定するObjectを階層化することで多段ヘッダーを表示できます。  
+
+
+{{/marked}}
+
+<div id="sample2" class="demo-grid middle">
+</div>
+<script type="text/javascript">
+//{{#wrapscript}}
+//{{#copy "script2"}}
+/*global cheetahGrid, records*/
+'use strict';
+const grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#sample2'),
+	header: [
+		{field: 'personid', caption: 'ID', width: 100, columnType: 'center'},
+		{ /* multiple header */
+			caption: 'name',
+			columns: [
+				{field: 'fname', caption: 'First Name', width: 200},
+				{field: 'lname', caption: 'Last Name', width: 200},
+			],
+		},
+		{field: 'email', caption: 'Email', width: 250},
+		{field: 'birthday', caption: 'birthday', width: 500},
+	],
+	frozenColCount: 1,
+});
+grid.records = records;
+//{{/copy}}
+//{{/wrapscript}}
+</script>
+{{> code class="js" code=script2}}

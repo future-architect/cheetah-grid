@@ -1,0 +1,98 @@
+{
+  "name": "cheetah-grid",
+  "version": "0.0.1",
+  "description": "Cheetah Grid is a high performance grid engine that works on canvas",
+  "keywords": [
+    "spreadsheet",
+    "grid",
+    "table",
+    "web-components",
+    "data",
+    "canvas",
+    "cheetah",
+    "datagrid",
+    "datatable"
+  ],
+  "main": "dist/cheetahGrid.es5.min.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/future-architect/cheetah-grid.git"
+  },
+  "author": {
+    "name": "yosuke ota",
+    "email": "otameshiyo23@gmail.com",
+    "url" : "https://www.npmjs.com/~ota-meshi"
+  },
+  "contributors": [
+    {
+      "name": "yasuhiro murata",
+      "email": "y.murata.38@future.co.jp"
+    }
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/future-architect/cheetah-grid/issues",
+    "email": "gr-tig-oss@future.co.jp"
+  },
+  "homepage": "https://future-architect.github.io/cheetah-grid/",
+  "files": [
+    "src/js/",
+    "dist/",
+    "tools/src/"
+  ],
+  "scripts": {
+    "test": "karma start --min",
+    "build": "npm run webpack",
+    "lint": "npm run eslint",
+    "ci": "karma start --no-auto-watch --single-run --browsers PhantomJS",
+    "testff": "karma start --browsers Firefox",
+    "test-nonopt": "karma start",
+    "test-headless": "karma start --browsers ChromeHeadless,PhantomJS",
+    "test-ie": "karma start --min --browsers IE_no_addons",
+    "ci-headless": "karma start --no-auto-watch --single-run --browsers ChromeHeadless",
+    "watch": "webpack --watch",
+    "webpack": "webpack",
+    "eslint": "eslint src/js",
+    "eslintci": "eslint src/js -f checkstyle > .eslint_report.xml"
+  },
+  "directories": {
+    "src": "src/js",
+    "test": "src/test/specs"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-es2015": "^6.24.1",
+    "eslint": "^4.7.2",
+    "eslint-plugin-html": "^3.2.2",
+    "font-awesome": "^4.7.0",
+    "imagediff": "^1.0.8",
+    "jasmine": "^2.8.0",
+    "jsdom": "^11.3.0",
+    "karma": "^1.7.1",
+    "karma-babel-preprocessor": "^7.0.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-cli": "^1.0.1",
+    "karma-coverage": "^1.1.1",
+    "karma-firefox-launcher": "^1.0.1",
+    "karma-htmlfile-reporter": "^0.3.5",
+    "karma-ie-launcher": "^1.0.0",
+    "karma-jasmine": "^1.1.0",
+    "karma-junit-reporter": "^1.2.0",
+    "karma-mocha-reporter": "^2.2.4",
+    "karma-phantomjs-launcher": "^1.0.4",
+    "karma-remap-istanbul": "^0.6.0",
+    "material-design-icons": "^3.0.1",
+    "phantomjs-prebuilt": "^2.1.15",
+    "promise-polyfills": "^7.0.4",
+    "uglify-es": "^3.1.1",
+    "uglify-es-webpack-plugin": "0.0.3",
+    "uglify-js": "^3.1.4",
+    "webfontloader": "^1.6.28",
+    "webpack": "^3.6.0",
+    "webpack-livereload-plugin": "^0.11.0",
+    "webpack-sources": "^1.0.1",
+    "wrapper-webpack-plugin": "^1.0.0"
+  }
+}

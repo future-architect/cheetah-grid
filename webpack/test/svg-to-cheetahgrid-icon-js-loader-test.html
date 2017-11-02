@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>ICON</title>
+	
+	<script src="http://localhost:35729/livereload.js"></script>
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jasmine/2.5.2/jasmine.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/2.5.2/jasmine.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/2.5.2/jasmine-html.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/2.5.2/boot.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/imagediff@1.0.8/imagediff.js"></script>
+
+    <script type="text/javascript" src="../../dist/cheetahGrid.es5.min.js"></script>
+</head>
+<body>
+	<h1>ICONS</h1>
+	<div id="links" style="
+    position: fixed;
+    background: #fff;
+    border: 1px solid #ddd;
+    right: 50px;
+	"></div>
+	<div id="main" style="padding-top: 81px;"></div>
+	<script type="text/javascript" src="./all_mdi_icons.js"></script>
+	<script>
+/*global allMdiIcons, allFaIcons*/
+/*eslint prefer-arrow-callback:"off", object-shorthand:"off"*/
+'use strict';
+
+const linksEl = document.querySelector('#links');
+const mainEl = document.querySelector('#main');
+
+function charToHexCodeStr(c) {
+	if (/[!#-&(-[\]-_a-~]/.test(c)) {
+		return c;
+	}
+	return '\\u' + ('0000' + c.charCodeAt(0).toString(16)).slice(-4);
+}
+
+function toCodeString(code) {
+	let ret = '';
+	for (let i = 0; i < code.length; i++) {
+		ret += charToHexCodeStr(code[i]);
+	}
+	return ret;
+}
+
+const path2DManager = cheetahGrid._internal.path2DManager;
+
+function draws(icons, name) {
+	const menu = document.createElement('div');
+	linksEl.appendChild(menu);
+
+	const alink = document.createElement('a');
+	alink.href = '#' + name;
+	alink.textContent = name;
+	alink.style.display = 'inline-block';
+	alink.style.width = '120px';
+	menu.appendChild(alink);
+
+	const showhide = document.createElement('button');
+	showhide.textContent = 'show/hide';
+	menu.appendChild(showhide);
+
+	const aid = document.createElement('a');
+	aid.id = name;
+	aid.textContent = name;
+	mainEl.appendChild(document.createElement('br'));
+	mainEl.appendChild(aid);
+	mainEl.appendChild(document.createElement('br'));
+
+	const wrapper = document.createElement('div');
+	wrapper.id = 'id_' + name;
+	mainEl.appendChild(wrapper);
+	
+	showhide.onclick = function() {
+		if (wrapper.style.display === 'none') {
+			wrapper.style.display = '';
+		} else {
+			wrapper.style.display = 'none';
+		}
+	};
+
+	const names = [];
+	for (let k in icons) { // eslint-disable-line
+		names.push(k);
+	}
+	const iconSize = 48;
+
+	while (names.length) {
+		const div = document.createElement('div');
+		wrapper.appendChild(div);
+		div.style.display = 'inline-block';
+		div.style.width = '350px';
+
+		const name = names.pop();
+		const canvas = document.createElement('canvas');
+		div.appendChild(canvas);
+		const width = iconSize;
+		const height = iconSize;
+		canvas.style.width = (width + 20) + 'px';
+		canvas.style.height = (height + 20) + 'px';
+		canvas.width = (width + 20);
+		canvas.height = (height + 20);
+		const ctx = canvas.getContext('2d', {alpha: false});
+		ctx.beginPath();
+		ctx.fillStyle = '#FFF';
+		ctx.rect(0, 0, width + 20, height + 20);
+		ctx.fill();
+		ctx.beginPath();
+		ctx.strokeStyle = '#ddd';
+		ctx.rect(10, 10, iconSize, iconSize);
+		ctx.stroke();
+		ctx.fillStyle = '#000';
+		path2DManager.fill(icons[name], ctx, 10, 10, iconSize, iconSize);
+		div.appendChild(document.createTextNode(toCodeString(name)));
+		// mainEl.appendChild(document.createElement('br'));
+	}
+}
+
+draws(allMdiIcons, 'mdi');
+	</script>
+</body>
+</html>

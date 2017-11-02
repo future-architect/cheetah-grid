@@ -1,0 +1,57 @@
+---
+category: Usage
+title: Column Actions
+layout: demo.html
+order: 130
+---
+
+{{#marked}}
+## Standard Column Action
+プロパティ`action`を利用して、列のアクションを指定します。  
+用意された各アクションは同じ列に設定する`columnType`に合わせた、Actionクラスを利用してください。
+
+| columnType | action | Class | 説明 | LINK |
+|---|---|---|---|
+| `check`  | `check` | [`cheetahGrid.columns.action.CheckEditor`](./column_actions/CheckEditor.html) | チェックボックスをクリックした際の動作を指定します | [CheckEditor](./column_actions/CheckEditor.html) |
+| `button` | ---     | [`cheetahGrid.columns.action.ButtonAction`](./column_actions/ButtonAction.html) | ボタンをクリックした際の動作を指定します | [ButtonAction](./column_actions/ButtonAction.html) |
+{{/marked}}
+
+<div id="sample1" class="demo-grid small">
+</div>
+<script type="text/javascript">
+//{{#wrapscript}}
+//{{#copy "sample1"}}
+/*global cheetahGrid*/
+'use strict';
+const grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#sample1'),
+	header: [
+		{field: 'no', caption: 'no', width: 50},
+		// action: 'check'
+		{field: 'check', caption: 'check', width: 50, columnType: 'check', action: 'check'},
+		{
+			caption: 'button',
+			width: 100,
+			columnType: new cheetahGrid.columns.type.ButtonColumn({
+				caption: 'show rec',
+			}),
+			// ButtonAction
+			action: new cheetahGrid.columns.action.ButtonAction({
+				action(rec) {
+					alert(JSON.stringify(rec));
+				},
+			}),
+		}
+
+
+	],
+});
+grid.records = [
+	{no: 1, check: true},
+	{no: 2, check: false},
+	{no: 3, check: true},
+];
+//{{/copy}}
+//{{/wrapscript}}
+</script>
+{{> code class="js" code=sample1}}

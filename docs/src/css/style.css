@@ -1,0 +1,55 @@
+.primary {
+    background-color: #284060;
+    color: #fff;
+}
+
+.primary.light,.primary .light {
+    background-color: #556b8e;
+    color: #fff;
+}
+
+.primary.dark,.primary .dark {
+    background-color: #001a36;
+    color: #fff;
+}
+
+nav {
+    line-height: 80px;
+    height: 80px;
+}
+nav ul {
+    padding-left: 0;
+    list-style-type: none;
+    margin: 0;
+}
+nav ul li {
+    float: left;
+    padding: 0;
+}
+nav ul a {
+    font-size: 1rem;
+    display: block;
+    padding: 0 15px;
+    cursor: pointer;
+}
+nav ul li a:hover {
+    background-color: rgba(0,0,0,0.1);
+}
+
+table {
+    border-collapse: collapse;
+    margin-bottom: 30px;
+}
+th {
+	border-top: solid 1.5px #aaa;
+	border-bottom: solid 1.5px #aaa;
+	padding: 5px 10px;
+}
+td {
+	border-bottom: solid 1px #aaa;
+	padding: 5px 10px;
+}
+
+.right {
+    float: right !important;
+}

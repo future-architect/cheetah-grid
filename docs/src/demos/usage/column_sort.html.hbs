@@ -1,0 +1,73 @@
+---
+category: Usage
+title: Column Sort
+layout: demo.html
+order: 115
+---
+
+{{#marked}}
+## Sort by Column
+プロパティ`sort`を利用して、列ごとのソート設定を行います。  
+truthy valueを設定するとGrid内部に定義されているソートロジックを使用します。  
+ソートロジックを自前で定義したい場合はfunctionを定義してください。
+{{/marked}}
+
+<div id="sample1" class="demo-grid middle">
+</div>
+<script type="text/javascript">
+//{{#wrapscript}}
+//{{#copy "sample1"}}
+/*global cheetahGrid*/
+'use strict';
+let records = [
+	{
+		no: 1,
+		name: 'Asian',
+	},
+	{
+		no: 2,
+		name: 'South African',
+	},
+	{
+		no: 3,
+		name: 'Tanzanian',
+	},
+	{
+		no: 4,
+		name: 'Sudan',
+	},
+	{
+		no: 5,
+		name: 'King',
+	},
+];
+const grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#sample1'),
+	header: [
+		// use inner sort logic
+		{
+			field: 'no',
+			caption: 'no',
+			width: 50,
+			sort: true
+		},
+		// define custom sort logic
+		{
+			field: 'name',
+			caption: 'name',
+			width: 200,
+			sort: function(order, col, grid) {
+				const compare = order === 'desc'
+					? (v1, v2) => v1 === v2 ? 0 : v1 > v2 ? 1 : -1
+					: (v1, v2) => v1 === v2 ? 0 : v1 < v2 ? 1 : -1;
+				records.sort((r1, r2) => compare(r1.name, r2.name));
+				grid.records = records;
+			}
+		}
+	],
+});
+grid.records = records;
+//{{/copy}}
+//{{/wrapscript}}
+</script>
+{{> code class="js" code=sample1}}

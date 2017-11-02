@@ -1,0 +1,154 @@
+---
+category:
+    - Usage
+    - Column Actions
+    - Classes
+title: CheckEditor
+layout: demo.html
+order: 300
+---
+
+{{#marked}}
+## CheckEditor
+
+チェックボックスをクリックした際の動作・データ編集を指定します。  
+
+セルをクリック、Enter・Spaceキーを押すと、レコードデータが編集されます。  
+
+列の`action`に`CheckEditor`クラスのインスタンスを利用すると、`readOnly`・`disabled`プロパティの制御を動的に行うことができますが、  
+文字列`'check'`と定義した場合は、`readOnly`・`disabled`プロパティを制御出来ません。  
+
+{{/marked}}
+
+<div id="sample1" class="demo-grid small">
+</div>
+
+<label>change action properties : </label>
+<select id="sample1mode">
+    <option value="" selected="true">both false</option>
+    <option value="readOnly">readOnly = true</option>
+    <option value="disabled">disabled = true</option>
+</select> <span id="sample1modememo"></span>
+
+<script type="text/javascript">
+//{{#wrapscript}}
+//{{#copy "sample1"}}
+/*global cheetahGrid*/
+'use strict';
+const checkEditorAction = new cheetahGrid.columns.action.CheckEditor();
+const grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#sample1'),
+	header: [
+
+		{field: 'check1', caption: 'defined by string', width: 220, columnType: 'check', action: 'check'},
+
+		//
+		{field: 'check2', caption: 'defined by class instance', width: 220, columnType: 'check', action: checkEditorAction},
+
+		{
+			caption: 'show',
+			width: 100,
+			columnType: new cheetahGrid.columns.type.ButtonColumn({
+				caption: 'SHOW',
+			}),
+			action: new cheetahGrid.columns.action.ButtonAction({
+				action(rec) {
+					alert(JSON.stringify(rec, null, '  '));
+				},
+			}),
+		}
+
+
+	],
+});
+grid.records = [
+	{check1: true, check2: false},
+	{check1: false, check2: true},
+	{check1: true, check2: false},
+];
+
+document.querySelector('#sample1mode').onchange = function() {
+	//change action properties
+	if (this.value === 'readOnly') {
+		checkEditorAction.readOnly = true;
+		checkEditorAction.disabled = false;
+		document.querySelector('#sample1modememo').textContent = 'It will not toggle';
+	} else if (this.value === 'disabled') {
+		checkEditorAction.readOnly = false;
+		checkEditorAction.disabled = true;
+		document.querySelector('#sample1modememo').textContent = 'It will not toggle and does not respond when hovering the mouse';
+	} else {
+		checkEditorAction.readOnly = false;
+		checkEditorAction.disabled = false;
+		document.querySelector('#sample1modememo').textContent = 'both false';
+	}
+};
+//{{/copy}}
+//{{/wrapscript}}
+</script>
+{{> code class="js" code=sample1}}
+
+
+{{#marked}}
+### データ編集
+
+基本的な動作は、`true`と`false`を切り替えます。  
+
+特殊な動作として、以下の切り替えも行われます。  
+
+| 型 | truthy value | falsy value |
+|----|-----|---|
+| 数値 | `1` | `0` |
+| 文字列 | `'true'` | `'false'` |
+| 文字列 | `'on'` | `'off'` |
+| 文字列 | `'1'` | `'0'` |
+| 文字列 | `'01'` | `'00'` |
+| 文字列 | `'00001'` | `'00000'` |
+
+その他の値は、javascriptの動作として、真とみなされる値(truthy value)であれば、`false`に  
+偽とみなされる値(falsy value)であれば、`true`に切り替えます。  
+数値型の`0`以外は`0`に置き換えられます。この場合、その後、切り替えを行っても元の値には戻しません。  
+
+{{/marked}}
+
+<div id="sample2" class="demo-grid small">
+</div>
+<script type="text/javascript">
+//{{#wrapscript}}
+//{{#copy "sample2"}}
+/*global cheetahGrid*/
+'use strict';
+const grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#sample2'),
+	header: [
+		{field: 'boolean', caption: 'true/false', width: 100, columnType: 'check', action: 'check'},
+		{field: 'num', caption: '1/0', width: 100, columnType: 'check', action: 'check'},
+		{field: 'truefalse', caption: '\'true\'/\'false\'', width: 100, columnType: 'check', action: 'check'},
+		{field: 'onoff', caption: 'on/off', width: 100, columnType: 'check', action: 'check'},
+		{field: 'onezero', caption: '\'1\'/\'0\'', width: 100, columnType: 'check', action: 'check'},
+		{field: 'numstring', caption: 'num string', width: 100, columnType: 'check', action: 'check'},
+		{
+			caption: 'show',
+			width: 100,
+			columnType: new cheetahGrid.columns.type.ButtonColumn({
+				caption: 'SHOW',
+			}),
+			action: new cheetahGrid.columns.action.ButtonAction({
+				action(rec) {
+					alert(JSON.stringify(rec, null, '  '));
+				},
+			}),
+		}
+
+
+	],
+});
+grid.records = [
+	{boolean: true, num: 0, truefalse: 'true', onoff: 'off', onezero: '1', numstring: '00'},
+	{boolean: false, num: 1, truefalse: 'false', onoff: 'on', onezero: '0', numstring: '0001'},
+	{boolean: true, num: 0, truefalse: 'true', onoff: 'off', onezero: '1', numstring: '00000000000'},
+];
+//{{/copy}}
+//{{/wrapscript}}
+</script>
+{{> code class="js" code=sample2}}

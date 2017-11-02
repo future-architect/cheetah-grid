@@ -1,0 +1,72 @@
+'use strict';
+{
+	const {getChainSafe} = require('../internal/utils');
+	const DataSource = require('./DataSource');
+
+	function _setFieldCache({_fCache}, index, field, value) {
+		const recCache = _fCache[index] || (_fCache[index] = {});
+		recCache[field] = value;
+	}
+	/**
+	 * grid data source
+	 *
+	 * @classdesc cheetahGrid.data.CachedDataSource
+	 * @extends cheetahGrid.data.DataSource
+	 * @memberof cheetahGrid.data
+	 */
+	class CachedDataSource extends DataSource {
+		static get EVENT_TYPE() {
+			return DataSource.EVENT_TYPE;
+		}
+		static ofArray(array) {
+			return new CachedDataSource({
+				get: (index) => array[index],
+				length: array.length
+			});
+		}
+		constructor(opt = {}) {
+			super(opt);
+			this._rCache = {};
+			this._fCache = {};
+		}
+		getOriginal(index) {
+			if (this._rCache && this._rCache[index]) {
+				return this._rCache[index];
+			}
+			return super.getOriginal(index);
+		}
+		getOriginalField(index, field) {
+			const cache = getChainSafe(this._fCache, index, field);
+			if (cache) {
+				return cache;
+			}
+			return super.getOriginalField(index, field);
+		}
+		setOriginalField(index, field, value) {
+			const cache = getChainSafe(this._fCache, index, field);
+			if (cache) {
+				_setFieldCache(this, index, field, value);
+			}
+			return super.setOriginalField(index, field, value);
+		}
+		clearCache() {
+			if (this._rCache) {
+				this._rCache = {};
+			}
+			if (this._fCache) {
+				this._fCache = {};
+			}
+		}
+		fieldPromiseCallBackInternal(index, field, val) {
+			_setFieldCache(this, index, field, val);
+		}
+		recordPromiseCallBackInternal(index, val) {
+			this._rCache[index] = val;
+		}
+		dispose() {
+			super.dispose();
+		}
+	}
+
+	module.exports = CachedDataSource;
+}

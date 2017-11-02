@@ -1,0 +1,190 @@
+---
+category: Usage
+title: Using promises
+layout: demo.html
+order: 200
+---
+
+{{#marked}}
+## Using promises
+Cheetah Gridは`Promise`オブジェクトの扱いをサポートしています。  
+例として以下の用途での利用を想定しています。  
+
+* レコード情報を遅延して取得する  
+   初期表示では上位数十件のデータを取得・表示し、後のデータはスクロールして表示させようとしたタイミングで取得・表示するような場合  
+* セルに表示する情報を遅延して取得する  
+   初期表示ではレコードの重要な情報を取得・表示し、詳細な情報は遅延して取得・表示するような場合    
+{{/marked}}
+
+{{#marked}}
+## Promise Records
+以下に利用例を示します。  
+
+例は、全体で1000件のレコードを表示しますが、レコード100件ごとにajax経由で取得することを想定した例です。  
+
+{{/marked}}
+
+
+<textarea id="rec_sample_log" class="log" readonly="true">ajax logs</textarea>
+<div id="rec_sample" class="demo-grid middle">
+</div>
+
+{{#marked}}
+
+コード例の`getRecordsWithAjax`は、ajaxでレコード100件を取得する`Promise`オブジェクトを返します。  
+
+{{/marked}}
+
+<script type="text/javascript">
+
+//{{{babel textContents.demos.[demos/init.parts.js]}}}
+//{{#babel}}
+/*global generatePerson*/
+/*eslint-disable no-unused-vars*/
+'use strict';
+const getRecordsWithAjax = (startIndex, num) => new Promise((resolve) => {
+	setTimeout(() => {
+		const records = [];
+		for (let i = 0; i < num; i++) {
+			records.push(generatePerson(startIndex + i));
+		}
+		const log = document.querySelector('#rec_sample_log');
+		log.value += `\nAcquire ${num} data from index ${startIndex}.`;
+		log.value = log.value.trim();
+		log.scrollTop = log.scrollHeight;
+		
+		resolve(records);
+	}, 500);
+});
+//{{/babel}}
+</script>
+<script type="text/javascript">
+//{{#wrapscript}}
+//{{#copy "script_rec_sample"}}
+/*global cheetahGrid, getRecordsWithAjax*/
+'use strict';
+// create DataSource
+const loadedData = {};
+const dataSource = new cheetahGrid.data.CachedDataSource({
+	get(index) {
+		const loadStartIndex = Math.floor(index / 100) * 100;
+		if (!loadedData[loadStartIndex]) {
+			const promiseObject = getRecordsWithAjax(loadStartIndex, 100); // return Promise Object
+			loadedData[loadStartIndex] = promiseObject;
+		}
+		return loadedData[loadStartIndex].
+			then((data) => data[index - loadStartIndex]);
+	},
+	length: 1000, //all records count
+});
+
+// create cheetahGrid
+const grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#rec_sample'),
+	header: [
+		{field: 'personid', caption: 'ID', width: 100, columnType: 'center'},
+		{field: 'fname', caption: 'First Name', width: 200},
+		{field: 'lname', caption: 'Last Name', width: 200},
+		{field: 'email', caption: 'Email', width: 250},
+		{field: (rec) => new Intl.DateTimeFormat().format(rec.birthday), caption: 'birthday', width: 200},
+	],
+	frozenColCount: 1,
+});
+grid.configure('fadeinWhenCallbackInPromise', true);
+
+// set dataSource
+grid.dataSource = dataSource;
+//{{/copy}}
+//{{/wrapscript}}
+</script>
+{{> code class="js" code=script_rec_sample}}
+
+
+
+{{#marked}}
+## Promise Cells
+以下に利用例を示します。  
+
+例は、人員データを表示しますが、部署情報については、表示時にajax経由で取得することを想定した例です。  
+
+{{/marked}}
+
+
+<textarea id="cell_sample_log" class="log" readonly="true">ajax logs</textarea>
+<div id="cell_sample" class="demo-grid middle">
+</div>
+
+{{#marked}}
+
+コード例の`getPersonDeptWithAjax`は、ajaxで部署情報を取得する`Promise`オブジェクトを返します。  
+
+{{/marked}}
+
+<script type="text/javascript">
+//{{#babel}}
+/*global generatePersons*/
+/*eslint-disable no-unused-vars*/
+'use strict';
+const records = generatePersons(1000);
+const depts = [
+	'General Affairs',
+	'Personnel',
+	'General Accounting',
+	'Sales',
+	'Sales Promotion',
+	'Procurement',
+	'Development',
+	'Engineering',
+	'Manufacturing',
+	'Procurement',
+	'Export',
+	'Public Relations',
+	'Information & Research',
+	'Legal',
+	'Advertising',
+	'Planning',
+	'Secretary',
+];
+const getPersonDeptWithAjax = (personid) => new Promise((resolve) => {
+	setTimeout(() => {
+
+		const dept = depts[Math.floor(Math.random() * depts.length)];
+		const log = document.querySelector('#cell_sample_log');
+		log.value += `\nAcquire department data of personid: ${personid}. => department: ${dept}`;
+		log.value = log.value.trim();
+		log.scrollTop = log.scrollHeight;
+		
+		resolve(dept);
+	}, 500);
+});
+//{{/babel}}
+</script>
+<script type="text/javascript">
+//{{#wrapscript}}
+//{{#copy "script_cell_sample"}}
+/*global cheetahGrid, records, getPersonDeptWithAjax*/
+'use strict';
+const grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#cell_sample'),
+	header: [
+		{field: 'personid', caption: 'ID', width: 100, columnType: 'center'},
+		{field: 'fname', caption: 'First Name', width: 200},
+		{field: 'lname', caption: 'Last Name', width: 200},
+		{field: 'email', caption: 'Email', width: 250},
+		{
+			field(rec) {
+				return getPersonDeptWithAjax(rec.personid);// return Promise Object
+			},
+			caption: 'Department',
+			width: 250
+		},
+	],
+	frozenColCount: 1,
+});
+grid.configure('fadeinWhenCallbackInPromise', true);
+
+grid.records = records;
+//{{/copy}}
+//{{/wrapscript}}
+</script>
+{{> code class="js" code=script_cell_sample}}

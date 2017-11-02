@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Grid</title>
+    
+    <script src="http://localhost:35729/livereload.js"></script>
+    <script type="text/javascript" src="../../dist/cheetahGrid.es5.js"></script>
+    <script type="text/javascript" src="./TestGrid.js"></script>
+</head>
+<body>
+    <div id="parent" style="width: 100%;height: 300px;">
+    </div>
+	<script type="text/javascript">
+        // const DrawGrid = require('../js/DrawGrid');
+        const grid = new TestGrid({
+            parentElement: document.querySelector('#parent')
+        });
+        window.gridElement = grid.getElement();
+    </script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>ICON</title>
+	
+	<script src="http://localhost:35729/livereload.js"></script>
+    <script type="text/javascript" src="../../../dist/cheetahGrid.es5.min.js"></script>
+</head>
+<body>
+	<h1>ICONS</h1>
+	<div id="test" style="width: 100%;height: 300px;"></div>
+	<script type="text/javascript" src="./mdi_icons.js"></script>
+	<script type="text/javascript" src="./fa_icons.js"></script>
+	<script>
+'use strict';
+
+function getErrorLogElement() {
+	return document.querySelector('#error_log') || function() {
+		const element = document.createElement('textarea');
+		element.id = 'error_log';
+		element.style.width = '100%';
+		element.style.position = 'fixed';
+		element.style.bottom = '0';
+		element.style['z-index'] = '100';
+		element.style.background = '#ddd';
+		element.style.color = 'red';
+		document.body.appendChild(element);
+		return element;
+	}();
+}
+
+window.onerror = function(msg, file, line, column, err) {
+	getErrorLogElement().value += err && err.stack || msg + '\n    at ' + file + ':' + line + ':' + column;
+};
+    </script>
+
+	<script>
+/*global cheetahGrid*/
+'use strict';
+function charToHexCodeStr(c) {
+	if (/[!#-&(-[\]-_a-~]/.test(c)) {
+		return c;
+	}
+	return '\\u' + ('0000' + c.charCodeAt(0).toString(16)).slice(-4);
+}
+
+function toCodeString(code) {
+	let ret = '';
+	for (let i = 0; i < code.length; i++) {
+		ret += charToHexCodeStr(code[i]);
+	}
+	return ret;
+}
+(function() {
+
+	const grid = new cheetahGrid.ListGrid({
+		parentElement: document.querySelector('#test'),
+		header: [
+			{
+				field: 'no',
+				caption: 'no',
+				width: 50,
+			},
+			{
+				field: 'label',
+				caption: 'Label',
+				width: 150,
+			},
+			{
+				field: 'icon',
+				caption: 'icon',
+				icon: {
+					name: 'icon',
+					width: 48,
+				},
+				width: 200,
+			}],
+		frozenColCount: 1,
+		defaultRowHeight: 50,
+		headerRowHeight: 24,
+	});
+	const records = [];
+	const icons = cheetahGrid.icons;
+	Object.keys(icons).forEach(function(k, i) {
+		records.push({
+			no: i + 1,
+			label: toCodeString(k),
+			icon: k,
+		});
+	});
+	grid.records = records;
+	window.grid = grid;
+
+})();
+	</script>
+</body>
+</html>

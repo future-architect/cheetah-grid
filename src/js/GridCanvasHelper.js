@@ -1,0 +1,474 @@
+/*eslint no-bitwise:0*/
+'use strict';
+{
+	const {calcStartPosition} = require('./internal/canvases');
+	const inlines = require('./element/inlines');
+	const canvashelper = require('./tools/canvashelper');
+	const themes = require('./themes');
+	const {colorToRGB} = require('./internal/color');
+	const Rect = require('./internal/Rect');
+	const {getChainSafe, getOrApply, array: {isArray}, style: {toBoxArray}} = require('./internal/utils');
+	const fonts = require('./internal/fonts');
+
+	function invalidateCell(context, grid) {
+		const {col, row} = context;
+		grid.invalidateCell(col, row);
+	}
+	function getColor(color, col, row, grid, context) {
+		return getOrApply(color, {
+			col,
+			row,
+			grid,
+			context,
+		});
+	}
+	function getThemeColor(grid, ...names) {
+		return getChainSafe(grid.theme, ...names) || getChainSafe(themes.default, ...names);
+	}
+	function testFontLoad(font, value, context, grid) {
+		if (font) {
+			if (!fonts.check(font, value)) {
+				fonts.load(font, value, () => invalidateCell(context, grid));
+				return false;
+			}
+		}
+		return true;
+	}
+
+	function drawInlines(ctx, inlines, rect, offset, col, row, grid) {
+		const inlineWidths = inlines.map((inline) => (inline.width({ctx}) || 0) - 0);
+		let offsetRight = inlineWidths.reduce((a, b) => a + b);
+
+		let offsetLeft = 0;
+		inlines.forEach((inline, index) => {
+			const inlineWidth = inlineWidths[index];
+			offsetRight -= inlineWidth;
+			if (inline.canDraw()) {
+				ctx.save();
+				try {
+					ctx.fillStyle = getColor(inline.color() || ctx.fillStyle, col, row, grid, ctx);
+					ctx.font = inline.font() || ctx.font;
+					inline.draw({
+						ctx,
+						canvashelper,
+						rect,
+						offset,
+						offsetLeft,
+						offsetRight,
+					});
+				} finally {
+					ctx.restore();
+				}
+			} else {
+				inline.onReady(() => grid.invalidateCell(col, row));
+				//noop
+			}
+			offsetLeft += inlineWidth;
+		});
+		return offsetLeft;
+	}
+
+	function _inlineRect(grid, ctx, inline, rect, col, row,
+			{
+				offset,
+				color,
+				textAlign,
+				textBaseline,
+				font,
+				icons,
+			} = {}) {
+
+		//文字style
+		ctx.fillStyle = getColor(color, col, row, grid, ctx);
+		ctx.textAlign = textAlign;
+		ctx.textBaseline = textBaseline;
+		ctx.font = font || ctx.font;
+
+		const actInlines = inlines.buildInlines(icons, inline);
+		drawInlines(ctx, actInlines, rect, offset, col, row, grid);
+	}
+
+
+	function drawCheckbox(ctx, rect, check, helper,
+			{
+				animElapsedTime = 1,
+				uncheckBgColor = helper.theme.checkbox.uncheckBgColor,
+				checkBgColor = helper.theme.checkbox.checkBgColor,
+				borderColor = helper.theme.checkbox.borderColor,
+				textAlign = 'center',
+				textBaseline = 'middle',
+			} = {}) {
+		const boxWidth = canvashelper.measureCheckbox(ctx).width;
+		ctx.textAlign = textAlign;
+		ctx.textBaseline = textBaseline;
+		const pos = calcStartPosition(ctx, rect, boxWidth + 1/*罫線分+1*/, boxWidth + 1/*罫線分+1*/);
+		if (0 < animElapsedTime && animElapsedTime < 1) {
+			const uncheckBgRGB = colorToRGB(uncheckBgColor);
+			const checkBgRGB = colorToRGB(checkBgColor);
+			const checkRGB = (colorName) => {
+				const start = uncheckBgRGB[colorName];
+				const end = checkBgRGB[colorName];
+				if (animElapsedTime >= 1) {
+					return end;
+				}
+				const diff = start - end;
+				return Math.ceil(start - diff * animElapsedTime);
+			};
+			const uncheckRGB = (colorName) => {
+				const end = uncheckBgRGB[colorName];
+				const start = checkBgRGB[colorName];
+				if (animElapsedTime >= 1) {
+					return end;
+				}
+				const diff = end - start;
+				return Math.ceil(start + diff * animElapsedTime);
+			};
+			uncheckBgColor = check ? uncheckBgColor : `rgb(${uncheckRGB('r')} , ${uncheckRGB('g')}, ${uncheckRGB('b')})`;
+			checkBgColor = `rgb(${checkRGB('r')} , ${checkRGB('g')}, ${checkRGB('b')})`;
+		}
+
+		canvashelper.drawCheckbox(ctx, pos.x, pos.y, check ? animElapsedTime : false, {
+			uncheckBgColor,
+			checkBgColor,
+			borderColor,
+		});
+	}
+
+	class Theme {
+		constructor(grid) {
+			this._grid = grid;
+		}
+		getThemeColor(...name) {
+			return getThemeColor(this._grid, ...name);
+		}
+		// color
+		get color() {
+			return getThemeColor(this._grid, 'color');
+		}
+		get frozenRowsColor() {
+			return getThemeColor(this._grid, 'frozenRowsColor');
+		}
+		// background
+		get defaultBgColor() {
+			return getThemeColor(this._grid, 'defaultBgColor');
+		}
+		get frozenRowsBgColor() {
+			return getThemeColor(this._grid, 'frozenRowsBgColor');
+		}
+		get selectionBgColor() {
+			return getThemeColor(this._grid, 'selectionBgColor');
+		}
+		// border
+		get borderColor() {
+			return getThemeColor(this._grid, 'borderColor');
+		}
+		get frozenRowsBorderColor() {
+			return getThemeColor(this._grid, 'frozenRowsBorderColor');
+		}
+		get hiliteBorderColor() {
+			return getThemeColor(this._grid, 'hiliteBorderColor');
+		}
+		get checkbox() {
+			const grid = this._grid;
+			return this._checkbox || (this._checkbox = {
+				get uncheckBgColor() {
+					return getThemeColor(grid, 'checkbox', 'uncheckBgColor');
+				},
+				get checkBgColor() {
+					return getThemeColor(grid, 'checkbox', 'checkBgColor');
+				},
+				get borderColor() {
+					return getThemeColor(grid, 'checkbox', 'borderColor');
+				}
+			});
+		}
+		get button() {
+			const grid = this._grid;
+			return this._button || (this._button = {
+				get color() {
+					return getThemeColor(grid, 'button', 'color');
+				},
+				get bgColor() {
+					return getThemeColor(grid, 'button', 'bgColor');
+				},
+			});
+		}
+
+	}
+	
+
+	function strokeRect(ctx, color, left, top, width, height) {
+		if (!isArray(color)) {
+			if (color) {
+				ctx.strokeStyle = color;
+				ctx.strokeRect(left, top, width, height);
+			}
+		} else {
+			const borderColors = toBoxArray(color);
+			canvashelper.strokeColorsRect(ctx, borderColors, left, top, width, height);
+		}
+	}
+
+	class GridCanvasHelper {
+		constructor(grid) {
+			this._grid = grid;
+			this._theme = new Theme(grid);
+		}
+		getColor(color, col, row, ctx) {
+			return getColor(color, col, row, this._grid, ctx);
+		}
+		toBoxArray(obj) {
+			return toBoxArray(obj);
+		}
+		get theme() {
+			return this._theme;
+		}
+		drawWithClip(context, draw) {
+			const drawRect = context.getDrawRect();
+			if (!drawRect) {
+				return;
+			}
+			const ctx = context.getContext();
+
+			ctx.save();
+			try {
+				ctx.beginPath();
+				ctx.rect(drawRect.left, drawRect.top, drawRect.width, drawRect.height);
+				//clip
+				ctx.clip();
+
+				draw(ctx);
+			} finally {
+				ctx.restore();
+			}
+		}
+		drawBorderWithClip(context, draw) {
+			const drawRect = context.getDrawRect();
+			if (!drawRect) {
+				return;
+			}
+			const rect = context.getRect();
+			const ctx = context.getContext();
+			ctx.save();
+			try {
+				//罫線用clip
+				ctx.beginPath();
+				let clipLeft = drawRect.left;
+				let clipWidth = drawRect.width;
+				if (drawRect.left === rect.left) {
+					clipLeft += -1;
+					clipWidth += 1;
+				}
+				let clipTop = drawRect.top;
+				let clipHeight = drawRect.height;
+				if (drawRect.top === rect.top) {
+					clipTop += -1;
+					clipHeight += 1;
+				}
+				ctx.rect(clipLeft, clipTop, clipWidth, clipHeight);
+				ctx.clip();
+
+				draw(ctx);
+			} finally {
+				ctx.restore();
+			}
+		}
+		text(text, context,
+				{
+					offset = 2,
+					color,
+					textAlign = 'left',
+					textBaseline = 'middle',
+					font,
+					icons,
+				} = {}) {
+			const rect = context.getRect();
+
+			const {col, row} = context;
+
+			if (!color) {
+				color = this.theme.color;
+				// header color
+				const isFrozenCell = this._grid.isFrozenCell(col, row);
+				if (isFrozenCell && isFrozenCell.row) {
+					color = this.theme.frozenRowsColor;
+				}
+			}
+
+			this.drawWithClip(context, (ctx) => {
+				_inlineRect(this._grid, ctx, text, rect, col, row,
+						{
+							offset,
+							color,
+							textAlign,
+							textBaseline,
+							font,
+							icons,
+						});
+			});
+		}
+		fillCell(context,
+				{
+					fillColor = this.theme.defaultBgColor,
+				} = {}) {
+			const rect = context.getRect();
+
+			this.drawWithClip(context, (ctx) => {
+				const {col, row} = context;
+				ctx.fillStyle = getColor(fillColor, col, row, this._grid, ctx);
+
+				ctx.beginPath();
+				ctx.rect(rect.left, rect.top, rect.width, rect.height);
+				ctx.fill();
+			});
+		}
+		fillCellWithState(context, option = {}) {
+			const state = context.getSelectState();
+			const {col, row} = context;
+
+			option.fillColor = (() => {
+				if (!state.selected && state.selection) {
+					return this.theme.selectionBgColor;
+				} else {
+					const isFrozenCell = this._grid.isFrozenCell(col, row);
+					if (isFrozenCell && isFrozenCell.row) {
+						return this.theme.frozenRowsBgColor;
+					}
+				}
+				return option.fillColor || this.theme.defaultBgColor;
+			})();
+
+			this.fillCell(context, option);
+		}
+		border(context,
+				{
+					borderColor = this.theme.borderColor,
+					lineWidth = 1,
+				} = {}) {
+			const rect = context.getRect();
+
+			this.drawBorderWithClip(context, (ctx) => {
+				const {col, row} = context;
+				const borderColors = getColor(borderColor, col, row, this._grid, ctx);
+				
+				if (lineWidth === 1) {
+					ctx.lineWidth = 1;
+					strokeRect(ctx, borderColors, rect.left - 0.5, rect.top - 0.5, rect.width, rect.height);
+				} else if (lineWidth === 2) {
+					ctx.lineWidth = 2;
+					strokeRect(ctx, borderColors, rect.left, rect.top, rect.width - 1, rect.height - 1);
+				} else {
+					ctx.lineWidth = lineWidth;
+					const startOffset = (lineWidth / 2) - 1;
+					strokeRect(ctx, borderColors,
+							rect.left + startOffset,
+							rect.top + startOffset,
+							rect.width - lineWidth + 1,
+							rect.height - lineWidth + 1
+					);
+				}
+			});
+		}
+		borderWithState(context, option = {}) {
+			const rect = context.getRect();
+			const state = context.getSelectState();
+			const {col, row} = context;
+
+			//罫線
+			if (state.selected) {
+				option.borderColor = this.theme.hiliteBorderColor;
+				option.lineWidth = 2;
+				this.border(context, option);
+			} else {
+				// header color
+				const isFrozenCell = this._grid.isFrozenCell(col, row);
+				if (isFrozenCell && isFrozenCell.row) {
+					option.borderColor = this.theme.frozenRowsBorderColor;
+				}
+
+				option.lineWidth = 1;
+				this.border(context, option);
+
+				//追加処理
+				const sel = this._grid.selection.select;
+				if (sel.col + 1 === col && sel.row === row) {
+					//右が選択されている
+					this.drawBorderWithClip(context, (ctx) => {
+						const borderColors = toBoxArray(
+								getColor(this.theme.hiliteBorderColor, sel.col, sel.row, this._grid, ctx)
+						);
+						ctx.lineWidth = 1;
+						ctx.strokeStyle = borderColors[1];
+						ctx.beginPath();
+						ctx.moveTo(rect.left - 0.5, rect.top);
+						ctx.lineTo(rect.left - 0.5, rect.bottom);
+						ctx.stroke();
+					});
+				} else if (sel.col === col && sel.row + 1 === row) {
+					//上が選択されている
+					this.drawBorderWithClip(context, (ctx) => {
+						const borderColors = toBoxArray(
+								getColor(this.theme.hiliteBorderColor, sel.col, sel.row, this._grid, ctx)
+						);
+						ctx.lineWidth = 1;
+						ctx.strokeStyle = borderColors[0];
+						ctx.beginPath();
+						ctx.moveTo(rect.left, rect.top - 0.5);
+						ctx.lineTo(rect.right, rect.top - 0.5);
+						ctx.stroke();
+					});
+				}
+			}
+		}
+		checkbox(check, context, option = {}) {
+			this.drawWithClip(context, (ctx) => {
+				drawCheckbox(ctx, context.getRect(), check, this, option);
+			});
+		}
+		button(caption, context,
+				{
+					bgColor = this.theme.button.bgColor,
+					padding,
+					offset = 2,
+					color = this.theme.button.color,
+					textAlign = 'center',
+					textBaseline = 'middle',
+					shadow,
+					font,
+					icons,
+				} = {}) {
+			const rect = context.getRect();
+
+			this.drawWithClip(context, (ctx) => {
+				const {col, row} = context;
+				padding = padding || rect.height / 8;
+				const left = rect.left + padding;
+				const top = rect.top + padding;
+				const width = rect.width - padding * 2;
+				const height = rect.height - padding * 2;
+
+				canvashelper.drawButton(ctx, left, top, width, height, {
+					bgColor,
+					radius: rect.height / 8,
+					offset,
+					shadow,
+				});
+				_inlineRect(this._grid, ctx, caption, new Rect(left, top, width, height),
+						col, row,
+						{
+							offset,
+							color,
+							textAlign,
+							textBaseline,
+							font,
+							icons,
+						});
+			});
+		}
+		testFontLoad(font, value, context) {
+			return testFontLoad(font, value, context, this._grid);
+		}
+	}
+
+	module.exports = GridCanvasHelper;
+}

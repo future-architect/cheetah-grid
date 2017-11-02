@@ -1,0 +1,266 @@
+/*global cheetahGrid*/
+/*eslint object-shorthand:0, prefer-arrow-callback:0*/
+'use strict';
+function generate(num) {
+	const fnames = ['Sophia', 'Emma', 'Olivia', 'Isabella', 'Ava', 'Mia', 'Emily', 'Abigail', 'Madison', 'Elizabeth', 'Charlotte', 'Avery', 'Sofia', 'Chloe', 'Ella', 'Harper', 'Amelia', 'Aubrey', 'Addison', 'Evelyn', 'Natalie', 'Grace', 'Hannah', 'Zoey', 'Victoria', 'Lillian', 'Lily', 'Brooklyn', 'Samantha', 'Layla', 'Zoe', 'Audrey', 'Leah', 'Allison', 'Anna', 'Aaliyah', 'Savannah', 'Gabriella', 'Camila', 'Aria', 'Noah', 'Liam', 'Jacob', 'Mason', 'William', 'Ethan', 'Michael', 'Alexander', 'Jayden', 'Daniel', 'Elijah', 'Aiden', 'James', 'Benjamin', 'Matthew', 'Jackson', 'Logan', 'David', 'Anthony', 'Joseph', 'Joshua', 'Andrew', 'Lucas', 'Gabriel', 'Samuel', 'Christopher', 'John', 'Dylan', 'Isaac', 'Ryan', 'Nathan', 'Carter', 'Caleb', 'Luke', 'Christian', 'Hunter', 'Henry', 'Owen', 'Landon', 'Jack'];
+	const lnames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Miller', 'Davis', 'Garcia', 'Rodriguez', 'Wilson', 'Martinez', 'Anderson', 'Taylor', 'Thomas', 'Hernandez', 'Moore', 'Martin', 'Jackson', 'Thompson', 'White', 'Lopez', 'Lee', 'Gonzalez', 'Harris', 'Clark', 'Lewis', 'Robinson', 'Walker', 'Perez', 'Hall', 'Young', 'Allen', 'Sanchez', 'Wright', 'King', 'Scott', 'Green', 'Baker', 'Adams', 'Nelson', 'Hill', 'Ramirez', 'Campbell', 'Mitchell', 'Roberts', 'Carter', 'Phillips', 'Evans', 'Turner', 'Torres', 'Parker', 'Collins', 'Edwards', 'Stewart', 'Flores', 'Morris', 'Nguyen', 'Murphy', 'Rivera', 'Cook', 'Rogers', 'Morgan', 'Peterson', 'Cooper', 'Reed', 'Bailey', 'Bell', 'Gomez', 'Kelly', 'Howard', 'Ward', 'Cox', 'Diaz', 'Richardson', 'Wood', 'Watson', 'Brooks', 'Bennett', 'Gray', 'James', 'Reyes', 'Cruz', 'Hughes', 'Price', 'Myers', 'Long', 'Foster', 'Sanders', 'Ross', 'Morales', 'Powell', 'Sullivan', 'Russell', 'Ortiz', 'Jenkins', 'Gutierrez', 'Perry', 'Butler', 'Barnes', 'Fisher'];
+	const records = [];
+	for (let i = 0; i < num * 1000; i++) {
+		const fname = fnames[Math.floor(Math.random() * fnames.length)];
+		const lname = lnames[Math.floor(Math.random() * lnames.length)];
+		const pVal = i + 0.987;
+		const data = {
+			check: i % 2 === 0,
+			check2: 'false',
+			check3: 'off',
+			check4: 0,
+			check5: '00',
+			check6: i % 2 === 0 ? null : {chain: {check: true}},
+			checkReadOnly: i % 2 !== 0,
+			personid: i + 1,
+			fname: fname,
+			lname: lname,
+			email: (fname + '_' + lname + '@example.com').toLowerCase(),
+			sdate: '1/1/2013',
+			num: i + 0.987,
+			manager: '--',
+			fn: function() {
+				return 'return';
+			},
+			promise: function() {
+				return new Promise(function(resolve, reject) {
+					setTimeout(function() {
+						resolve(pVal);
+					}, 1000);
+				});
+			},
+		};
+		if (i < 900000) {
+			records.push(data);
+		} else {
+			data.fname = '遅延テスト';
+			records.push(function() {
+				return new Promise(function(resolve, reject) {
+					setTimeout(function() {
+						resolve(data);
+					}, 1000);
+				});
+			});
+		}
+	}
+	return records;
+}
+(function() {
+	window.cheetah = cheetahGrid;
+	const columnType = cheetahGrid.columns.type;
+	const columnAction = cheetahGrid.columns.action;
+	const records = generate(1000);
+	const startTime = new Date();
+	const grid = new cheetahGrid.ListGrid({
+		parentElement: document.querySelector('#parent'),
+		header: [
+			{field: 'check', caption: 'check', width: 50, columnType: 'check', action: 'check'},
+			{
+				field: 'personid',
+				caption: 'ID',
+				width: 100,
+				columnType: 'center',
+				// sort
+				sort: function(order, col, grid) {
+					const compare = order === 'desc'
+						? (v1, v2) => v1 === v2 ? 0 : v1 > v2 ? 1 : -1
+						: (v1, v2) => v1 === v2 ? 0 : v1 < v2 ? 1 : -1;
+					records.sort((r1, r2) => compare(r1.personid, r2.personid));
+					grid.records = records;
+				}
+				// sort
+			},
+			{field: 'checkReadOnly', caption: 'read', width: 50, columnType: 'check'},
+			{
+				caption: 'name',
+				columns: [
+					{field: 'fname', caption: 'First Name', width: 200},
+					{field: 'lname', caption: 'Last Name', width: 200},
+				],
+			},
+			{
+				field: 'email',
+				caption: 'Email',
+				width: 100,
+				sort: true
+			},
+			{
+				caption: 'nums',
+				columns: [
+					{
+						field: 'num',
+						caption: 'num',
+						width: 80,
+						columnType: 'number',
+						style: function(r) {
+							if (r.num > 100) {
+								return {
+									color: 'red'
+								};
+							}
+							return null;
+						}
+					},
+				]
+			},
+			{
+				caption: 'ex',
+				columns: [
+					{field: function(r) { return r.personid + '行目'; }, caption: 'personid', width: 100, columnType: 'number'},
+					{
+						caption: 'sub',
+						columns: [
+							{field: 'fn', caption: 'fn', width: 80},
+							{field: 'promise', caption: 'promise', width: 80, columnType: 'number'},
+						],
+					},
+					{
+						caption: 'checks',
+						columns: [
+							{field: 'check2', caption: 'str', width: 50, columnType: 'check', action: 'check'},
+							{field: 'check3', caption: 'on/off', width: 50, columnType: 'check', action: 'check'},
+							{field: 'check4', caption: 'num', width: 50, columnType: 'check', action: 'check'},
+							{field: 'check5', caption: 'numstr', width: 50, columnType: 'check', action: 'check'},
+							{field: 'check6.chain.check', caption: 'chain', width: 50, columnType: 'check', action: 'check'},
+						],
+					},
+					{
+						caption: 'buttons',
+						columns: [
+							{
+								caption: 'button',
+								width: 80,
+								columnType: new columnType.ButtonColumn({
+									caption: 'BUTTON',
+								}),
+								action: new columnAction.ButtonAction({
+									action: function(rec) {
+										alert('ID:' + rec.personid + ' ' + JSON.stringify(rec));
+									},
+								}),
+							}
+						],
+					},
+				]
+			}
+		],
+		frozenColCount: 2,
+	});
+	grid.records = records;
+	const endTime = new Date();
+	document.body.insertBefore(document.createTextNode(endTime - startTime + 'ms'), document.body.childNodes[0]);
+	window.gridElement = grid.getElement();
+	window.grid = grid;
+
+	// filter
+	const filterButton = document.querySelector('#filter');
+	filterButton.onclick = function() {
+		const _records = records.filter((record) => !!record.check);
+		grid.records = _records;
+	};
+	const unfilterButton = document.querySelector('#unfilter');
+	unfilterButton.onclick = function() {
+		grid.records = records;
+	};
+	// filter
+
+
+	/////// jump
+	const focusButton = document.querySelector('#focus');
+	focusButton.onclick = function() {
+		grid.makeVisibleGridCell('email', 45);
+		grid.focusGridCell('email', 45);
+	};
+	/////// jump
+
+	cheetahGrid.register.theme('RED', cheetahGrid.themes.default.extends({
+		color: 'red',
+		defaultBgColor: '#FDD',
+		frozenRowsBgColor: '#EAA',
+		hiliteBorderColor: '#FD5',
+		selectionBgColor: '#FDA',
+		borderColor: 'red',
+		checkbox: {
+			uncheckBgColor: '#FDD',
+			checkBgColor: 'rgb(255, 73, 72)',
+			borderColor: 'red',
+		},
+		button: {
+			color: '#FDD',
+			bgColor: '#F55',
+		}
+	}));
+
+	cheetahGrid.register.theme('ONLYHEADER', cheetahGrid.themes.default.extends({
+		color: 'rgba(0, 0, 0, 0.87)',
+		defaultBgColor: '#FFF',
+		frozenRowsBgColor: '#FFF',
+		frozenRowsColor: 'rgba(0, 0, 0, 0.54)',
+		hiliteBorderColor: '#5E9ED6',
+		selectionBgColor: '#CCE0FF',
+		borderColor: ['#ccc7c7', null],
+		frozenRowsBorderColor: '#ccc7c7',
+		checkbox: {
+			uncheckBgColor: '#FFF',
+			checkBgColor: 'rgb(76, 73, 72)',
+			borderColor: 'rgba(0, 0, 0, 0.26)',
+		},
+		button: {
+			color: '#FFF',
+			bgColor: '#2196F3',
+		}
+	}));
+	cheetahGrid.register.theme('ALL_light', cheetahGrid.themes.default.extends({
+		color: 'rgba(0, 0, 0, 0.87)',
+		defaultBgColor: '#FFF',
+		frozenRowsBgColor: '#FFF',
+		frozenRowsColor: 'rgba(0, 0, 0, 0.54)',
+		hiliteBorderColor: '#5E9ED6',
+		selectionBgColor: '#CCE0FF',
+		borderColor: ['#ccc7c7', '#f2f2f2'],
+		frozenRowsBorderColor: ['#ccc7c7', '#f2f2f2'],
+		checkbox: {
+			uncheckBgColor: '#FFF',
+			checkBgColor: 'rgb(76, 73, 72)',
+			borderColor: 'rgba(0, 0, 0, 0.26)',
+		},
+		button: {
+			color: '#FFF',
+			bgColor: '#2196F3',
+		}
+	}));
+	cheetahGrid.register.theme('ALL', cheetahGrid.themes.default.extends({
+		color: 'rgba(0, 0, 0, 0.87)',
+		defaultBgColor: '#FFF',
+		frozenRowsBgColor: '#FFF',
+		frozenRowsColor: 'rgba(0, 0, 0, 0.54)',
+		hiliteBorderColor: '#5E9ED6',
+		selectionBgColor: '#CCE0FF',
+		borderColor: '#ccc7c7',
+		frozenRowsBorderColor: '#ccc7c7',
+		checkbox: {
+			uncheckBgColor: '#FFF',
+			checkBgColor: 'rgb(76, 73, 72)',
+			borderColor: 'rgba(0, 0, 0, 0.26)',
+		},
+		button: {
+			color: '#FFF',
+			bgColor: '#2196F3',
+		}
+	}));
+
+	const themeSelect = document.querySelector('#theme');
+	themeSelect.onchange = function() {
+		if (themeSelect.value === 'default') {
+			grid.theme = null;
+		} else {
+			grid.theme = themeSelect.value;
+		}
+		console.log(themeSelect.value);
+	};
+})();

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="author" content="Cheetah Grid">
+    <meta name="keywords" content="spreadsheet,grid,canvas,table,web-components">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Cheetah Grid{{#if title}} - {{title}}{{/if}}</title>
+    <link rel="stylesheet" type="text/css" href="{{ms_path 'css/style.css'}}">
+    {{#if css}}<style type="text/css">
+    	{{css}}
+    </style>{{/if}}
+    {{#each csslink}}
+    <link rel="stylesheet" type="text/css" href="{{this}}">
+    {{/each}}
+</head>
+<body>
+	{{> share-buttons}}
+	{{> header}}
+    
+    {{{ contents }}}
+</body>
+</html>
