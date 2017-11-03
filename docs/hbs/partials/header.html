@@ -5,7 +5,38 @@
 		</a>
 
 		<ul id="nav-mobile" class="right hide-on-med-and-down">
-			<li><a href="{{ms_path 'index.html'}}" class="primary">Docoments - TOP</a></li>
+			<li><a href="{{ms_path (concat langDir 'index.html')}}" class="primary">Docoments - TOP</a></li>
+			<li><a id="nav-lang" href="#" class="primary">lang<span class="icon-arrow"></span></a>
+				<ul id="langs" class="nav-dropdown right-dropdown">
+					<li><a href="{{ms_path (ms_finalpath (concat 'ja/' originalPath))}}" class="primary">日本語</a></li>
+					<li><a href="{{ms_path (ms_finalpath originalPath)}}" class="primary">English</a></li>
+				</ul>
+			</li>
 		</ul>
 	</div>
 </nav>
+
+<script type="text/javascript">
+	'use strict';
+	//{{#babel}}
+	const navLang = document.getElementById('nav-lang');
+	navLang.onclick = () => {
+    	document.getElementById('langs').classList.toggle('show');
+	};
+
+	// Close the dropdown menu if the user clicks outside of it
+	window.onclick = (event) => {
+		if (!(event.target.classList.contains('nav-dropdown') || navLang === event.target)) {
+
+			const dropdowns = document.getElementsByClassName('nav-dropdown');
+			let i;
+			for (i = 0; i < dropdowns.length; i++) {
+				const openDropdown = dropdowns[i];
+				if (openDropdown.classList.contains('show')) {
+					openDropdown.classList.remove('show');
+				}
+			}
+		}
+	};
+	//{{/babel}}
+</script>
