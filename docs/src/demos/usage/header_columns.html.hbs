@@ -7,13 +7,24 @@ order: 100
 
 {{#marked}}
 ## Standard Column
+{{#if lang_ja}}
 `cheetahGrid.ListGrid`のプロパティ`header`の設定によって列、およびヘッダを設定できます。  
 `header`コンストラクタ引数から設定することもできます。  
+{{else}}
+The `header` property, the property of `cheetahGrid.ListGrid`, decides the behave and appearance of columns and header cells.  
+We can set this property by constructor arguments.  
+{{/if}}
 
+{{#if lang_ja}}
 `header`はObject配列（Array<Object>）で指定し、
 Objectには以下のプロパティを設定します。  
+{{else}}
+The `header` property must be set by objects array (Array<Object>).  
+Each object consists of following properties.  
+{{/if}}
 
 
+{{#if lang_ja}}
 |property|説明|LINK|
 |---|---|---|
 |caption   |ヘッダに表示されるキャプション|---|
@@ -22,6 +33,16 @@ Objectには以下のプロパティを設定します。
 |columnType|列タイプ|[link](./column_types.html)|
 |style     |列スタイル|[link](./column_styles.html)|
 |action    |列アクション|---|
+{{else}}
+|property|Description|LINK|
+|---|---|---|
+|caption   |header caption|---|
+|field     |field name or function|---|
+|width     |width of column|---|
+|columnType|type of column|[link](./column_types.html)|
+|style     |style of column|[link](./column_styles.html)|
+|action    |action of column|---|
+{{/if}}
 {{/marked}}
 
 
@@ -74,7 +95,11 @@ grid.records = records;
 
 {{#marked}}
 ## Multiple Header  
+{{#if lang_ja}}
 `header`に指定するObjectを階層化することで多段ヘッダーを表示できます。  
+{{else}}
+To use multiple header, set the hierarchical structured Object to the `header` property.  
+{{/if}}
 
 
 {{/marked}}
