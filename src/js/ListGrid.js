@@ -279,26 +279,26 @@
 		grid.colCount = grid[_].headerMap.columns.length;
 		_refreshRowCount(grid);
 		grid.frozenRowCount = grid[_].headerMap.rowCount;
-		_refreshColsWidth(grid);
+		for (let col = 0; col < grid[_].headerMap.columns.length; col++) {
+			const column = grid[_].headerMap.columns[col];
+			const width = column.width;
+			if (width && (width > 0 || typeof width === 'string')) {
+				grid.setColWidth(col, width);
+			}
+			const minWidth = column.minWidth;
+			if (minWidth && (minWidth > 0 || typeof minWidth === 'string')) {
+				grid.setMinColWidth(col, minWidth);
+			}
+			const maxWidth = column.maxWidth;
+			if (maxWidth && (maxWidth > 0 || typeof maxWidth === 'string')) {
+				grid.setMaxColWidth(col, maxWidth);
+			}
+		}
 		const isArrayHeaderRowHeight = isArray(grid[_].headerRowHeight);
 		for (let row = 0; row < grid[_].headerMap.rowCount; row++) {
 			const height = isArrayHeaderRowHeight ? grid[_].headerRowHeight[row] : grid[_].headerRowHeight;
 			if (height && height > 0) {
 				grid.setRowHeight(row, height);
-			}
-		}
-	}
-	function _refreshColsWidth(grid) {
-		for (let col = 0; col < grid[_].headerMap.columns.length; col++) {
-			const width = grid[_].headerMap.columns[col].width;
-			if (width) {
-				if (typeof width === 'string' && /[+-]?\d+\.?\d*%/) {
-					if (!grid[_].userColResize[col]) {
-						grid.setColWidth(col, grid[_].canvas.width * width.substr(0, width.length - 1) / 100);
-					}
-				} else if ((width - 0) > 0) {
-					grid.setColWidth(col, width);
-				}
 			}
 		}
 	}
@@ -445,6 +445,8 @@
 				} else {
 					this._columns.push({
 						width: hd.width,
+						minWidth: hd.minWidth,
+						maxWidth: hd.maxWidth,
 						field: hd.field,
 						icon: hd.icon,
 						columnType: columns.type.of(hd.columnType),
@@ -525,7 +527,6 @@
 			super(adjustListGridOption(options));
 			this[_].header = options.header || [];
 			this[_].headerRowHeight = options.headerRowHeight || [];
-			this[_].userColResize = [];
 			if (options.dataSource) {
 				_setDataSource(this, options.dataSource);
 			} else {
@@ -541,15 +542,9 @@
 			this.invalidate();
 			this[_].handler.on(window, 'resize', () => {
 				this.updateSize();
-				_refreshColsWidth(this);
 				this.updateScroll();
 				this.invalidate();
 			});
-			this.listen(EVENT_TYPE.RESIZE_COLUMN, ({col}) => {
-				this[_].userColResize[col] = true;
-			});
-
-			
 		}
 		/**
 		 * header define

@@ -14,12 +14,16 @@
     <link rel="stylesheet" type="text/css" href="{{this}}">
     {{/each}}
     
-    <!-- <script src="http://localhost:35729/livereload.js"></script> -->
+    {{#unless debug}}<!-- {{/unless}}<script src="http://localhost:35729/livereload.js"></script>{{#unless debug}} -->{{/unless}}
     {{#if (includes contents 'Promise')}}
     <script src="https://www.promisejs.org/polyfills/promise-7.0.4.min.js"></script>
     {{/if}}
 	
+    {{#if debug}}
+    <script type="text/javascript" src="{{ms_path '../../dist/cheetahGrid.es5.js'}}"></script>
+    {{else}}
     <script type="text/javascript" src="https://unpkg.com/cheetah-grid@{{version}}"></script>
+    {{/if}}
     {{#each scriptpath}}
     <script type="text/javascript" src="{{ms_path this}}"></script>
     {{/each}}
