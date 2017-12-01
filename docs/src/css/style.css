@@ -51,6 +51,13 @@ td {
 	padding: 5px 10px;
 }
 
+code {
+    border: .1rem solid #E5E5E5;
+    margin: 0 .3rem;
+    padding: .2rem .4rem;
+    background-color: #F4F9F9;
+}
+
 .right {
     float: right !important;
 }
