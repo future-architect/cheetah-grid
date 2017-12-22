@@ -32,6 +32,9 @@
 		},
 		get COLUMN_FADEIN_STATE_ID() {
 			return this.get('col.fadein_stateID');
+		},
+		get BRANCH_GRAPH_COLUMN_STATE_ID() {
+			return this.get('branch_graph_col.stateID');
 		}
 	};
 
