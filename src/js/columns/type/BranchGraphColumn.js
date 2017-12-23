@@ -296,6 +296,57 @@ function calcBranchesInfo(start, grid, col) {
 	return result;
 }
 
+function renderMerge(grid, ctx, x, upLine, downLine, colorIndex, {
+	branchWidth, margin, branchColors, branchLineWidth, circleSize, mergeStyle
+}, {
+	width, col, row, pos
+}) {
+	if (isDef(upLine) || isDef(downLine)) {
+		const radius = circleSize / 2;
+		ctx.strokeStyle = getOrApply(branchColors, colorIndex);
+		ctx.lineWidth = branchLineWidth;
+		ctx.beginPath();
+
+
+		if (isDef(upLine)) {
+			const upX = pos.x + radius + (upLine * branchWidth);
+			const upPos = calcStartPosition(ctx, grid.getCellRelativeRect(col, row - 1), width, 0, {
+				offset: margin,
+			});
+			ctx.moveTo(upX, upPos.y);
+			if (mergeStyle === 'bezier') {
+				ctx.bezierCurveTo(
+						upX, (pos.y + upPos.y) / 2,
+						x, (pos.y + upPos.y) / 2,
+						x, pos.y
+				);
+			} else {
+				ctx.lineTo(x, pos.y);
+			}
+		} else {
+			ctx.moveTo(x, pos.y);
+		}
+
+		if (isDef(downLine)) {
+			const downX = pos.x + radius + (downLine * branchWidth);
+			const downPos = calcStartPosition(ctx, grid.getCellRelativeRect(col, row + 1), width, 0, {
+				offset: margin,
+			});
+			if (mergeStyle === 'bezier') {
+				ctx.bezierCurveTo(
+						x, (pos.y + downPos.y) / 2,
+						downX, (pos.y + downPos.y) / 2,
+						downX, downPos.y
+				);
+			} else {
+				ctx.lineTo(downX, downPos.y);
+			}
+		}
+
+		ctx.stroke();
+	}
+}
+
 /**
  * BranchGraphColumn
  *
@@ -372,6 +423,7 @@ class BranchGraphColumn extends BaseColumn {
 			branchWidth,
 			branchLineWidth,
 			circleSize,
+			mergeStyle,
 			margin,
 			bgColor,
 		} = style;
@@ -383,39 +435,6 @@ class BranchGraphColumn extends BaseColumn {
 		const radius = circleSize / 2;
 		const width = branches.length * branchWidth;
 		const rect = context.getRect();
-
-		function strokeLines(ctx, lines, pos, index, top, bottom) {
-			lines.filter((line) => !line.point || !line.point.disabled).forEach((line) => {
-				if (isDef(line[upLineIndexKey]) || isDef(line[downLineIndexKey])) {
-					ctx.strokeStyle = getOrApply(branchColors, line.colorIndex);
-					ctx.lineWidth = branchLineWidth;
-					ctx.beginPath();
-
-					const x = pos.x + radius + (index * branchWidth);
-
-					if (isDef(line[upLineIndexKey])) {
-						const upX = pos.x + radius + (line[upLineIndexKey] * branchWidth);
-						const upPos = calcStartPosition(ctx, grid.getCellRelativeRect(col, row - 1), width, 0, {
-							offset: margin,
-						});
-						ctx.moveTo(upX, upPos.y);
-						ctx.lineTo(x, pos.y);
-					} else {
-						ctx.moveTo(x, pos.y);
-					}
-
-					if (isDef(line[downLineIndexKey])) {
-						const downX = pos.x + radius + (line[downLineIndexKey] * branchWidth);
-						const downPos = calcStartPosition(ctx, grid.getCellRelativeRect(col, row + 1), width, 0, {
-							offset: margin,
-						});
-						ctx.lineTo(downX, downPos.y);
-					}
-
-					ctx.stroke();
-				}
-			});
-		}
 
 		helper.drawWithClip(context, (ctx) => {
 			ctx.textAlign = textAlign;
@@ -429,7 +448,18 @@ class BranchGraphColumn extends BaseColumn {
 				const x = pos.x + radius + (index * branchWidth);
 				const p = data[index];
 				if (p && !p.disabled) {
-					strokeLines(ctx, p.lines, pos, index, rect.top, rect.bottom);
+					p.lines.filter((line) => !line.point || !line.point.disabled).forEach((line) => {
+						renderMerge(grid, ctx, x, line[upLineIndexKey], line[downLineIndexKey], line.colorIndex, {
+							margin,
+							branchWidth,
+							branchLineWidth,
+							branchColors,
+							circleSize,
+							mergeStyle,
+						}, {
+							width, col, row, pos
+						});
+					});
 
 					ctx.fillStyle = getOrApply(branchColors, index);
 					if (p.commit) {
