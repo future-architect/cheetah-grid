@@ -49,11 +49,10 @@ class BranchLine {
 	}
 }
 class BranchPoint {
-	constructor({index, commit = false, lines = [], disabled = false, tag}) {
+	constructor({index, commit = false, lines = [], tag}) {
 		this.index = index;
 		this.commit = commit;
 		this.lines = lines;
-		this.disabled = disabled;
 		this.tag = tag;
 	}
 	static mergeLines(lines) {
@@ -65,7 +64,7 @@ class BranchPoint {
 		froms.forEach((f) => {
 			for (let i = 0; i < tos.length; i++) {
 				const t = tos[i];
-				if (t.point && t.point.disabled) {
+				if (t.point) {
 					continue;
 				}
 				if (f.colorIndex === t.colorIndex) {
@@ -88,7 +87,6 @@ class BranchPoint {
 			index: a.index,
 			commit: a.commit || b.commit,
 			lines: BranchPoint.mergeLines(a.lines.concat(b.lines)),
-			disabled: a.disabled && b.disabled,
 			tag: a.tag || b.tag
 		});
 	}
@@ -96,27 +94,29 @@ class BranchPoint {
 
 function joinLine(timeline, branchIndex) {
 	const reverse = [...timeline].reverse();
-	return !reverse.every((tl, index) => {
-		const f = tl[branchIndex];
+	for (let i = 0; i < reverse.length; i++) {
+		const f = reverse[i][branchIndex];
 		if (f) {
 			f.lines = BranchPoint.mergeLines(f.lines.concat([new BranchLine({
 				toIndex: branchIndex,
 				colorIndex: branchIndex,
 			})]));
-			f.disabled = false;
-			return false;
-		} else {
-			tl[branchIndex] = new BranchPoint({
-				index: branchIndex,
-				lines: [new BranchLine({
-					fromIndex: branchIndex,
-					toIndex: branchIndex,
-					colorIndex: branchIndex
-				})]
-			});
+
+			for (let j = 0; j < i; j++) {
+				const tl = reverse[j];
+				tl[branchIndex] = new BranchPoint({
+					index: branchIndex,
+					lines: [new BranchLine({
+						fromIndex: branchIndex,
+						toIndex: branchIndex,
+						colorIndex: branchIndex
+					})]
+				});
+			}
+			return true;
 		}
-		return true;
-	});
+	}
+	return false;
 }
 
 function branch({timeline, branches}, from, to) {
@@ -126,51 +126,51 @@ function branch({timeline, branches}, from, to) {
 		toIndex = branches.length;
 		branches.push(to);
 	}
+	
+	function findBranchRootIndex() {
+		for (let index = timeline.length - 1; index >= 0; index--) {
+			const tl = timeline[index];
+			const from = tl[fromIndex];
+			if (from && from.commit) {
+				return index;
+			}
+		}
+		return -1;
+	}
 
 	if (fromIndex < 0) {
 		return new BranchPoint({
 			index: toIndex,
-			disabled: true,
 		});
 	} else {
-		const reverse = [...timeline].reverse();
-		for (let index = 0; index < reverse.length; index++) {
-			const tl = reverse[index];
-			const f = tl[fromIndex];
-			if (f && f.commit) {
-				let point;
-				let result;
-				if (index > 0) {
-					const targetLine = reverse[index - 1];
-					point = targetLine[toIndex] = BranchPoint.merge(targetLine[toIndex], new BranchPoint({
-						index: toIndex,
-						disabled: true,
-						lines: [new BranchLine({
-							fromIndex,
-							colorIndex: toIndex
-						})]
-					}));
-					result = null;
-				} else {
-					point = new BranchPoint({
-						index: toIndex,
-						disabled: true,
-						lines: [new BranchLine({
-							fromIndex,
-							colorIndex: toIndex
-						})]
-					});
-					result = point;
-				}
-				f.lines = BranchPoint.mergeLines(f.lines.concat([new BranchLine({
-					toIndex,
-					colorIndex: toIndex,
-					point,
-				})]));
-				return result;
-			}
+		const fromTargetIndex = findBranchRootIndex();
+		if (fromTargetIndex === -1) {
+			return null;
 		}
-		return null;
+		const branchTargetFromIndex = fromTargetIndex + 1;
+		const branchPoint = new BranchPoint({
+			index: toIndex,
+			lines: [new BranchLine({
+				fromIndex,
+				colorIndex: toIndex
+			})]
+		});
+		let point;
+		let result;
+		if (branchTargetFromIndex < timeline.length) {
+			const targetLine = timeline[branchTargetFromIndex];
+			point = targetLine[toIndex] = BranchPoint.merge(targetLine[toIndex], branchPoint);
+		} else {
+			point = branchPoint;
+			result = branchPoint;
+		}
+		const from = timeline[fromTargetIndex][fromIndex];
+		from.lines = BranchPoint.mergeLines(from.lines.concat([new BranchLine({
+			toIndex,
+			colorIndex: toIndex,
+			point,
+		})]));
+		return result;
 	}
 	
 }
@@ -305,6 +305,7 @@ function renderMerge(grid, ctx, x, upLine, downLine, colorIndex, {
 		const radius = circleSize / 2;
 		ctx.strokeStyle = getOrApply(branchColors, colorIndex);
 		ctx.lineWidth = branchLineWidth;
+		ctx.lineCap = 'round';
 		ctx.beginPath();
 
 
@@ -447,8 +448,8 @@ class BranchGraphColumn extends BaseColumn {
 			branches.forEach((b, index) => {
 				const x = pos.x + radius + (index * branchWidth);
 				const p = data[index];
-				if (p && !p.disabled) {
-					p.lines.filter((line) => !line.point || !line.point.disabled).forEach((line) => {
+				if (p) {
+					p.lines.forEach((line) => {
 						renderMerge(grid, ctx, x, line[upLineIndexKey], line[downLineIndexKey], line.colorIndex, {
 							margin,
 							branchWidth,
