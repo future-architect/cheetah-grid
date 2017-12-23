@@ -389,7 +389,7 @@ class BranchGraphColumn extends BaseColumn {
 	constructor(option = {}) {
 		super(option);
 		this._start = option.start || 'bottom';
-		this._cache = isDef(option.cache) ? option.cache : true;
+		this._cache = isDef(option.cache) ? option.cache : false;
 	}
 	get StyleClass() {
 		return BranchGraphStyle;
