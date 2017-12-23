@@ -15,12 +15,42 @@ order: 400
 
 {{/marked}}
 
-<div id="sample1" class="demo-grid middle">
+<div id="sample1" class="demo-grid large">
 </div>
 <div>
 	<label style="vertical-align: top;">data:</label>
-	<textarea id="command" style="height: 100px; vertical-align: top;"></textarea>
-	<button id="add" style="vertical-align: top;">add</button>
+	<textarea id="command" style="width: calc(100% - 100px);height: 300px; vertical-align: top;" wrap="off">[
+	[
+		{
+			command: 'branch',
+			branch: {
+				from: 'mastar',
+				to: 'develop'
+			}
+		},
+		{
+			command: 'commit',
+			branch: 'develop'
+		}
+	],
+	[
+		{
+			command: 'commit',
+			branch: 'mastar'
+		}
+	],
+	[
+		{
+			command: 'branch',
+			branch: 'mastar'
+		},
+		{
+			command: 'commit',
+			branch: 'mastar'
+		}
+	]
+]</textarea><br>
+	<button id="update" style="vertical-align: top;">update</button>
 </div>
 <script type="text/javascript">
 //{{#wrapscript}}
@@ -32,14 +62,17 @@ const grid = new cheetahGrid.ListGrid({
 	parentElement: document.querySelector('#sample1'),
 	header: [
 		{
-			field: 'data',
+			field: (rec) => rec,
 			caption: 'BranchGraph',
-			width: 200,
-			columnType: new cheetahGrid.columns.type.BranchGraphColumn({cache: false}),
+			width: 320,
+			columnType: new cheetahGrid.columns.type.BranchGraphColumn({
+				start: 'top', // Specify the start and indicate the direction to proceed. 'top' or 'bottom'. default 'bottom'
+				cache: false // cache enable. default true
+			}),
 		},
 		{
 			field(rec) {
-				return JSON.stringify(rec.data);
+				return JSON.stringify(rec);
 			},
 			caption: 'command',
 			width: 1000
@@ -48,18 +81,64 @@ const grid = new cheetahGrid.ListGrid({
 	frozenColCount: 1
 });
 grid.records = [
-	{data: [
+
+	[
+		// new branch 'mastar'
+		{
+			command: 'branch',
+			branch: 'mastar'
+		}, 
+		// and commit 'mastar' branch
+		{
+			command: 'commit',
+			branch: 'mastar'
+		}
+	],
+	[
+		// commit 'mastar' branch
+		{
+			command: 'commit',
+			branch: 'mastar'
+		},
+	],
+	[
+		// new branch 'develop'. from 'mastar'
+		{
+			command: 'branch',
+			branch: {
+				from: 'mastar',
+				to: 'develop'
+			}
+		},
+	],
+	[
+		// commit 'develop' branch
+		{
+			command: 'commit',
+			branch: 'develop'
+		},
+	],
+	[
+		// merge 'develop' branch into 'master' branch
+		{
+			command: 'merge',
+			branch: {
+				from: 'develop',
+				to: 'mastar'
+			}
+		},
+		// and tag with v.0.0.1
 		{
 			command: 'tag',
 			branch: 'mastar',
 			tag: 'v1.0.0'
 		},
-		{
-			command: 'commit',
-			branch: 'mastar'
-		}
-	]},
-	{data: [
+	],
+	[
+		null // not doing
+	],
+	//-------------------------
+	[
 		{
 			command: 'branch',
 			branch: {
@@ -70,45 +149,84 @@ grid.records = [
 			command: 'commit',
 			branch: 'develop2'
 		}
-	]},
-	{data: {
-		command: 'merge',
-		branch: {
-			from: 'develop',
-			to: 'mastar'
-		}
-	}},
-	{data: {
-		command: 'commit',
-		branch: 'develop'
-	}},
-	{data: null},
-	{data: {
-		command: 'branch',
-		branch: {
-			from: 'mastar',
-			to: 'develop'
-		}
-	}},
-	{data: {
-		command: 'commit',
-		branch: 'mastar'
-	}},
-	{data: [
+	],
+	[
 		{
 			command: 'branch',
-			branch: 'mastar'
+			branch: {
+				from: 'develop',
+				to: 'develop3'
+			}
 		}, {
 			command: 'commit',
-			branch: 'mastar'
+			branch: 'develop3'
+		},
+		{
+			command: 'merge',
+			branch: {
+				from: 'develop2',
+				to: 'mastar'
+			}
+		},
+	],
+	[
+		{
+			command: 'commit',
+			branch: 'develop2'
 		}
 	],
-	},
+	[
+		{
+			command: 'branch',
+			branch: {
+				from: 'develop2',
+				to: 'develop4'
+			}
+		}, {
+			command: 'commit',
+			branch: 'develop4'
+		},
+		{
+			command: 'branch',
+			branch: {
+				from: 'develop2',
+				to: 'develop5'
+			}
+		}, {
+			command: 'commit',
+			branch: 'develop5'
+		},
+	],
+	[
+		{
+			command: 'commit',
+			branch: 'develop2'
+		}
+	],
+	[
+		{
+			command: 'tag',
+			branch: 'mastar',
+			tag: 'v1.1.0'
+		},
+		{
+			command: 'commit',
+			branch: 'mastar'
+		},
+		{
+			command: 'commit',
+			branch: 'develop4'
+		}
+	],
+	{
+			command: 'commit',
+			branch: 'develop3'
+	}
 ];
 
 //{{/copy}}
-document.querySelector('#add').onclick = () => {
-	grid.records = [{data: JSON.parse(document.querySelector('#command').value)}, ...grid.records];
+document.querySelector('#update').onclick = () => {
+	grid.records = eval('(function() {return ' + document.querySelector('#command').value + ';})()');
 };
 
 //{{/wrapscript}}
