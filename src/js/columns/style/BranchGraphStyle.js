@@ -29,6 +29,7 @@ class BranchGraphStyle extends BaseStyle {
 		this._branchWidth = style.branchWidth || 50;
 		this._circleSize = style.circleSize || 16;
 		this._branchLineWidth = style.branchLineWidth || 4;
+		this._mergeStyle = style.mergeStyle || 'bezier';
 	}
 	get branchColors() {
 		return this._branchColors;
@@ -63,6 +64,13 @@ class BranchGraphStyle extends BaseStyle {
 	}
 	set branchLineWidth(branchLineWidth) {
 		this._branchLineWidth = branchLineWidth;
+		this.doChangeStyle();
+	}
+	get mergeStyle() {
+		return this._mergeStyle;
+	}
+	set mergeStyle(mergeStyle) {
+		this._mergeStyle = mergeStyle;
 		this.doChangeStyle();
 	}
 
