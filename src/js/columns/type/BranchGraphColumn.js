@@ -414,6 +414,9 @@ function renderMerge(grid, ctx, x, y, upLineIndex, downLineIndex, colorIndex, {
  * 	tag: 'tag name'
  * }
  * </code></pre>
+ *
+ *
+ * @memberof cheetahGrid.columns.type
  */
 class BranchGraphColumn extends BaseColumn {
 	constructor(option = {}) {
