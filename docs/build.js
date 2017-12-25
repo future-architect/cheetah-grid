@@ -15,6 +15,7 @@ const registerHbsPartials = require('./handlebars/register-partials');
 const registerHbsHelpers = require('./handlebars/helpers');
 
 const cheetah = require('../package.json');
+const {isDevVersion} = require('./buildcommon');
 
 const hbs = {
 	directory: 'hbs/layouts',
@@ -48,7 +49,7 @@ Metalsmith(__dirname).
 		version: cheetah.version,
 	}).
 	source('./src').
-	destination(`./${cheetah.version}`).
+	destination(`./${isDevVersion(cheetah.version) ? '.devdoc' : cheetah.version}`).
 
 	clean(true).
 	use(mstatic({
@@ -63,6 +64,19 @@ Metalsmith(__dirname).
 		partials: hbs.partials,
 		pattern: ['**/*.dummy'],
 	})).
+	use((files, metalsmith, done) => {
+		// 最新バージョンより新しいドキュメントはデバッグフラグを立てる
+		Object.keys(files).forEach((file) => {
+			const data = files[file];
+			if (data.docVersion) {
+				if (isDevVersion(data.docVersion)) {
+					data.debug = true;
+					// data.disabled = true;
+				}
+			}
+		});
+		done();
+	}).
 	use(i18n()).
 	use(collections(demos)).
 	use(textContents({
