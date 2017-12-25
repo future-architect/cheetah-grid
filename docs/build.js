@@ -8,6 +8,7 @@ const layouts = require('metalsmith-layouts');
 const inPlace = require('metalsmith-in-place');
 const codeHighlight = require('./metalsmith-code-highlight');
 const textContents = require('./metalsmith-text-contents');
+const i18n = require('./metalsmith-i18n-files');
 const mstatic = require('metalsmith-static');
 
 const registerHbsPartials = require('./handlebars/register-partials');
@@ -39,6 +40,7 @@ Metalsmith(__dirname).
 	metadata({
 		demoCategorys: [
 			'Sample',
+			'Getting Started',
 			'Usage',
 			'FAQ',
 		],
@@ -61,6 +63,7 @@ Metalsmith(__dirname).
 		partials: hbs.partials,
 		pattern: ['**/*.dummy'],
 	})).
+	use(i18n()).
 	use(collections(demos)).
 	use(textContents({
 		demos: 'demos/**/*.parts*'

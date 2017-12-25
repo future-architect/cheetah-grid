@@ -11,12 +11,19 @@ order: 200
 {{#marked}}
 ## ButtonAction
 
+{{#if lang_ja}}
 ボタンをクリックした際の動作を指定します。  
 
 セルをクリック、Enterキーを押すと、指定されたメソッドが実行されます。  
 
 `ButtonAction`クラスのインスタンスを操作することで、`disabled`・`action`プロパティの制御を動的に行うことができます。  
+{{else}}
+Define the behavior when the button is clicked.  
 
+The specified method is executed after select the cell by clicking it and then push Enter.  
+
+You can control the property of `disabled` and `action` by manipulating the instance of `ButtonAction` class.  
+{{/if}}
 {{/marked}}
 
 
