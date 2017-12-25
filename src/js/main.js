@@ -10,10 +10,6 @@
 	const ListGrid = require('./ListGrid');
 	const GridCanvasHelper = require('./GridCanvasHelper');
 	
-	const color = require('./internal/color');
-	const sort = require('./internal/sort');
-	const symbolManager = require('./internal/symbolManager');
-	const path2DManager = require('./internal/path2DManager');
 	const icons = require('./icons');
 	const register = require('./register');
 	
@@ -46,10 +42,11 @@
 		get _internal() {
 			console.warn('use internal!!');
 			return {
-				color,
-				sort,
-				symbolManager,
-				path2DManager,
+				color: require('./internal/color'),
+				sort: require('./internal/sort'),
+				calc: require('./internal/calc'),
+				symbolManager: require('./internal/symbolManager'),
+				path2DManager: require('./internal/path2DManager'),
 			};
 		}
 	};

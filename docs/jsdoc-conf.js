@@ -1,6 +1,7 @@
 'use strict';
 
 const cheetah = require('../package.json');
+const {isDevVersion} = require('./buildcommon');
 
 module.exports = {
 	tags: {
@@ -25,7 +26,7 @@ module.exports = {
 	},
 	opts: {
 		encoding: 'utf8',
-		destination: `./${cheetah.version}/jsdoc/`,
+		destination: `./${isDevVersion(cheetah.version) ? '.devdoc' : cheetah.version}/jsdoc/`,
 		recurse: true,
 		readme: '../README.md'
 	}
