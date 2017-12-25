@@ -6,8 +6,8 @@ function adj(style) {
 	style.textAlign = textAlign;
 	return style;
 }
-const DEFAULT_BRANCH_COLORS = (num) => {
-	switch (num % 3) {
+const DEFAULT_BRANCH_COLORS = (name, index) => {
+	switch (index % 3) {
 	case 0:
 		return '#979797';
 	case 1:
@@ -28,7 +28,7 @@ class BranchGraphStyle extends BaseStyle {
 		this._margin = style.margin || 4;
 		this._circleSize = style.circleSize || 16;
 		this._branchLineWidth = style.branchLineWidth || 4;
-		this._mergeStyle = style.mergeStyle || 'bezier';
+		this._mergeStyle = style.mergeStyle === 'straight' ? 'straight' : 'bezier';
 	}
 	get branchColors() {
 		return this._branchColors;

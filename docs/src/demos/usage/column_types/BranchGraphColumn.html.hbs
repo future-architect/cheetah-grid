@@ -13,6 +13,24 @@ order: 400
 
 ブランチグラフを表示する
 
+### constructor properties
+
+|property|説明|default|
+|---|---|---|
+|`start`|開始位置を指定し、進行する方向を指定します。 `'top'` or `'bottom'`|`'bottom'`|
+|`cache`|ブランチ構造の計算結果をキャッすする場合は`true`を指定。 キャッシュを破棄するには`clearCache(grid)`を呼び出してください。 |`false`|
+
+### style properties
+
+|property|説明|default|
+|---|---|---|
+|`branchColors`|ブランチを表現する色を返す関数を渡します。 関数の引数:(ブランチ名, `index`)|`'#979797'`・`'#008fb5'`・`'#f1c109'`を順番に返す関数|
+|`margin`|横のマージンを指定します。|`4`|
+|`circleSize`|`commit`を表現する点の大きさを指定します。|`16`|
+|`branchLineWidth`|ブランチ線の幅を指定します。|`4`|
+|`mergeStyle`|`'bezier'`を指定するとベジェ曲線でマージを表現します。 `'straight'`を指定すると直線でマージを表現します。|`'bezier'`|
+
+
 {{/marked}}
 
 <div id="sample1" class="demo-grid large">

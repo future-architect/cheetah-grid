@@ -322,10 +322,10 @@ function calcBranchXPoints(ctx, left, width, radius, branches, timeline) {
 function renderMerge(grid, ctx, x, y, upLineIndex, downLineIndex, colorIndex, {
 	branchXPoints, margin, branchColors, branchLineWidth, mergeStyle
 }, {
-	width, col, row
+	width, col, row, branches
 }) {
 	if (isDef(upLineIndex) || isDef(downLineIndex)) {
-		ctx.strokeStyle = getOrApply(branchColors, colorIndex);
+		ctx.strokeStyle = getOrApply(branchColors, branches[colorIndex], colorIndex);
 		ctx.lineWidth = branchLineWidth;
 		ctx.lineCap = 'round';
 		ctx.beginPath();
@@ -482,14 +482,14 @@ class BranchGraphColumn extends BaseColumn {
 						branchColors,
 						mergeStyle,
 					}, {
-						width, col, row
+						width, col, row, branches
 					});
 				});
 			// draw commit points
 			data.forEach((p, index) => {
 				if (p && p.commit) {
 					const x = branchXPoints[index];
-					ctx.fillStyle = getOrApply(branchColors, index);
+					ctx.fillStyle = getOrApply(branchColors, branches[index], index);
 					ctx.beginPath();
 					ctx.arc(x, y, radius, 0, Math.PI * 2, true);
 					ctx.fill();
@@ -499,7 +499,7 @@ class BranchGraphColumn extends BaseColumn {
 			// draw tags
 			data.forEach((p, index) => {
 				if (p && p.tag) {
-					ctx.fillStyle = getOrApply(branchColors, index);
+					ctx.fillStyle = getOrApply(branchColors, branches[index], index);
 					ctx.fillText(p.tag, branchXPoints[index] + radius + 4, y);
 				}
 			});
