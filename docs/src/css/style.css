@@ -104,6 +104,7 @@ code {
 nav ul.nav-dropdown li {
     float: none;
     line-height: 50px;
+    white-space: nowrap;
 }
 
 .nav-dropdown.show {

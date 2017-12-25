@@ -1,4 +1,4 @@
-<nav class="header primary">
+<nav class="header primary" id="header-nav">
 	<div class="nav-wrapper">
 		<a href="{{ms_path '../index.html'}}">
 			<img src="{{ms_path '../logo.png'}}" style="width: 100px;padding: 5px;vertical-align: middle;" alt="Cheetah Grid" />
@@ -32,7 +32,7 @@
 	function getVersions(callback) {
 		const xhr = new XMLHttpRequest();
 		function onError() {
-			callback([`{{version}}${''}`]);
+			callback(['0.1.0', `{{version}}${''}`]);
 		}
 		xhr.onload = () => {
 			const versions = JSON.parse(xhr.responseText);
@@ -61,8 +61,20 @@
 	//
 	getVersions((versions) => {
 		const myVersion = `{{version}}${''}`;
+		function getVerLocation(v) {
+			return location.href.replace(myVersion, v);
+		}
+		const latest = versions[0];
 		const versEl = document.getElementById('versions');
-		versEl.innerHTML = versions.map((v) => `<li><a href="${location.href.replace(myVersion, v)}" class="primary">${v}</a></li>`).join();
+		versEl.innerHTML = versions.map((v, i) => `<li><a href="${getVerLocation(v)}" class="primary">${v}${i === 0 ? ' (latest)' : ''}</a></li>`).join('');
+
+		if (latest !== myVersion) {
+			const header = document.getElementById('header-nav');
+			const a = document.createElement('a');
+			header.parentElement.insertBefore(a, header.nextSibling);
+			a.href = getVerLocation(latest);
+			a.textContent = `<goto the latest version(${latest}) document>`;
+		}
 	});
 
 	// Close the dropdown menu if the user clicks outside of it

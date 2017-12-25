@@ -40,6 +40,7 @@ Metalsmith(__dirname).
 	metadata({
 		demoCategorys: [
 			'Sample',
+			'Getting Started',
 			'Usage',
 			'FAQ',
 		],
