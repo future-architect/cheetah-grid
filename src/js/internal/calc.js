@@ -3,7 +3,7 @@
 function parse(calcStr) {
 	function replacer(match, num, unit) {
 		if (unit === '%') {
-			return `(${num} * fullValue / 100)`;
+			return `(${num} * this / 100)`;
 		}
 		if (unit === 'px') {
 			return `(${num})`;
@@ -13,10 +13,12 @@ function parse(calcStr) {
 	const script = calcStr.replace(/^calc\((.*)\)$/, '$1').replace(/(\d+)([A-Za-z%]+)/g, replacer);
 	return {
 		eval(fullValue) {
-			function calc(v) { // eslint-disable-line no-unused-vars
-				return v;
-			}
-			return eval(script);// eslint-disable-line no-eval
+			return (() => {
+				function calc(v) { // eslint-disable-line no-unused-vars
+					return v;
+				}
+				return eval(script);// eslint-disable-line no-eval
+			}).call(fullValue);
 		}
 	};
 }
