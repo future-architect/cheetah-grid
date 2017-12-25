@@ -294,12 +294,6 @@ function calcBranchesInfo(start, grid, col) {
 	return result;
 }
 
-function calcLeftPosition(rect, margin) {
-	return {
-		x: margin,
-		y: rect.top + rect.height / 2,
-	};
-}
 function calcBranchXPoints(ctx, left, width, radius, branches, timeline) {
 	let w = Math.max(width / branches.length + 1, 5);
 	timeline.forEach((tl) => {
@@ -325,46 +319,48 @@ function calcBranchXPoints(ctx, left, width, radius, branches, timeline) {
 	return result;
 }
 
-function renderMerge(grid, ctx, x, upLine, downLine, colorIndex, {
+function renderMerge(grid, ctx, x, y, upLineIndex, downLineIndex, colorIndex, {
 	branchXPoints, margin, branchColors, branchLineWidth, mergeStyle
 }, {
-	width, col, row, pos
+	width, col, row
 }) {
-	if (isDef(upLine) || isDef(downLine)) {
+	if (isDef(upLineIndex) || isDef(downLineIndex)) {
 		ctx.strokeStyle = getOrApply(branchColors, colorIndex);
 		ctx.lineWidth = branchLineWidth;
 		ctx.lineCap = 'round';
 		ctx.beginPath();
 
 
-		if (isDef(upLine)) {
-			const upX = branchXPoints[upLine];
-			const upPos = calcLeftPosition(grid.getCellRelativeRect(col, row - 1), margin);
-			ctx.moveTo(upX, upPos.y);
+		if (isDef(upLineIndex)) {
+			const upX = branchXPoints[upLineIndex];
+			const upRect = grid.getCellRelativeRect(col, row - 1);
+			const upY = upRect.top + upRect.height / 2;
+			ctx.moveTo(upX, upY);
 			if (mergeStyle === 'bezier') {
 				ctx.bezierCurveTo(
-						upX, (pos.y + upPos.y) / 2,
-						x, (pos.y + upPos.y) / 2,
-						x, pos.y
+						upX, (y + upY) / 2,
+						x, (y + upY) / 2,
+						x, y
 				);
 			} else {
-				ctx.lineTo(x, pos.y);
+				ctx.lineTo(x, y);
 			}
 		} else {
-			ctx.moveTo(x, pos.y);
+			ctx.moveTo(x, y);
 		}
 
-		if (isDef(downLine)) {
-			const downX = branchXPoints[downLine];
-			const downPos = calcLeftPosition(grid.getCellRelativeRect(col, row + 1), margin);
+		if (isDef(downLineIndex)) {
+			const downX = branchXPoints[downLineIndex];
+			const downRect = grid.getCellRelativeRect(col, row + 1);
+			const downY = downRect.top + downRect.height / 2;
 			if (mergeStyle === 'bezier') {
 				ctx.bezierCurveTo(
-						x, (pos.y + downPos.y) / 2,
-						downX, (pos.y + downPos.y) / 2,
-						downX, downPos.y
+						x, (y + downY) / 2,
+						downX, (y + downY) / 2,
+						downX, downY
 				);
 			} else {
-				ctx.lineTo(downX, downPos.y);
+				ctx.lineTo(downX, downY);
 			}
 		}
 
@@ -464,40 +460,47 @@ class BranchGraphColumn extends BaseColumn {
 			ctx.textBaseline = 'middle';
 			const branchXPoints = calcBranchXPoints(ctx, rect.left + margin, width, radius, branches, timeline);
 			
-			const pos = calcLeftPosition(rect, margin);
-			
-			branches.forEach((b, index) => {
-				const x = branchXPoints[index];
-				const p = data[index];
-				if (p) {
-					p.lines.forEach((line) => {
-						renderMerge(grid, ctx, x, line[upLineIndexKey], line[downLineIndexKey], line.colorIndex, {
-							margin,
-							branchXPoints,
-							branchLineWidth,
-							branchColors,
-							mergeStyle,
-						}, {
-							width, col, row, pos
-						});
-					});
+			const y = rect.top + rect.height / 2;
 
+			// draw join lines
+			data.
+				map((point, index) => point ? point.lines.map((line) => ({
+					colorIndex: line.colorIndex,
+					upLineIndex: line[upLineIndexKey],
+					downLineIndex: line[downLineIndexKey],
+					pointIndex: index,
+				})) : []).
+				reduce((p, c) => p.concat(c), []).// flatMap
+				// order of overlap
+				sort((a, b) => b.colorIndex - a.colorIndex).
+				forEach((line) => {
+					const x = branchXPoints[line.pointIndex];
+					renderMerge(grid, ctx, x, y, line.upLineIndex, line.downLineIndex, line.colorIndex, {
+						margin,
+						branchXPoints,
+						branchLineWidth,
+						branchColors,
+						mergeStyle,
+					}, {
+						width, col, row
+					});
+				});
+			// draw commit points
+			data.forEach((p, index) => {
+				if (p && p.commit) {
+					const x = branchXPoints[index];
 					ctx.fillStyle = getOrApply(branchColors, index);
-					if (p.commit) {
-						ctx.beginPath();
-						ctx.arc(x, pos.y, radius, 0, Math.PI * 2, true);
-						ctx.closePath();
-						ctx.fill();
-					}
+					ctx.beginPath();
+					ctx.arc(x, y, radius, 0, Math.PI * 2, true);
+					ctx.fill();
+					ctx.closePath();
 				}
 			});
-			branches.forEach((b, index) => {
-				const p = data[index];
-				if (p) {
-					if (p.tag) {
-						ctx.fillStyle = getOrApply(branchColors, index);
-						ctx.fillText(p.tag, branchXPoints[index] + radius + 4, pos.y);
-					}
+			// draw tags
+			data.forEach((p, index) => {
+				if (p && p.tag) {
+					ctx.fillStyle = getOrApply(branchColors, index);
+					ctx.fillText(p.tag, branchXPoints[index] + radius + 4, y);
 				}
 			});
 		});

@@ -73,7 +73,7 @@ const grid = new cheetahGrid.ListGrid({
 		},
 		{
 			field(rec) {
-				return JSON.stringify(rec);
+				return JSON.stringify(rec) + ',';
 			},
 			caption: 'command',
 			width: 1000
