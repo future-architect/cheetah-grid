@@ -43,7 +43,13 @@
 					textAlign,
 					textBaseline,
 					margin,
+					bgColor,
 				} = style;
+				if (bgColor) {
+					drawCellBase({
+						bgColor,
+					});
+				}
 				helper.drawWithClip(context, (ctx) => {
 					
 					ctx.textAlign = textAlign;

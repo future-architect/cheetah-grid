@@ -1,13 +1,13 @@
 'use strict';
 {
-	const BaseStyle = require('./BaseStyle');
+	const StdBaseStyle = require('./StdBaseStyle');
 	let defaultStyle;
 	function adj(style) {
 		const {textAlign = 'center'} = style;
 		style.textAlign = textAlign;
 		return style;
 	}
-	class ImageStyle extends BaseStyle {
+	class ImageStyle extends StdBaseStyle {
 		static get DEFAULT() {
 			return defaultStyle ? defaultStyle : (defaultStyle = new ImageStyle());
 		}

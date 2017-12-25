@@ -1,9 +1,9 @@
 'use strict';
 
-
+const {isDef} = require('../internal/utils');
 class Inline {
 	constructor(content) {
-		this._content = content || '';
+		this._content = isDef(content) ? content : '';
 	}
 	width({ctx}) {
 		return ctx.measureText(this._content).width;

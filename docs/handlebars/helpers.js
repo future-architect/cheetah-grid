@@ -342,5 +342,12 @@ function registerHelpers() {
 		}
 		return `[${label}](${url})`;
 	});
+	/**
+	 * バージョン判定ブロック
+	 */
+	Handlebars.registerHelper('if_v', function(v, ...args) {
+		const {isEnabledVersion} = require('../buildcommon');
+		return Handlebars.helpers.if.call(this, isEnabledVersion(v), ...args);
+	});
 }
 
