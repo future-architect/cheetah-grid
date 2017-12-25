@@ -23,14 +23,11 @@ order: 400
 	[
 		{
 			command: 'branch',
-			branch: {
-				from: 'mastar',
-				to: 'develop'
-			}
+			branch: 'mastar'
 		},
 		{
 			command: 'commit',
-			branch: 'develop'
+			branch: 'mastar'
 		}
 	],
 	[
@@ -42,13 +39,17 @@ order: 400
 	[
 		{
 			command: 'branch',
-			branch: 'mastar'
+			branch: {
+				from: 'mastar',
+				to: 'develop'
+			}
 		},
 		{
 			command: 'commit',
-			branch: 'mastar'
+			branch: 'develop'
 		}
-	]
+	],
+	
 ]</textarea><br>
 	<button id="update" style="vertical-align: top;">update</button>
 </div>

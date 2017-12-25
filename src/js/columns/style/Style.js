@@ -1,8 +1,8 @@
 'use strict';
 {
-	const BaseStyle = require('./BaseStyle');
+	const StdBaseStyle = require('./StdBaseStyle');
 	let defaultStyle;
-	class Style extends BaseStyle {
+	class Style extends StdBaseStyle {
 		static get DEFAULT() {
 			return defaultStyle ? defaultStyle : (defaultStyle = new Style());
 		}

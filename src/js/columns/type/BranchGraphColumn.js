@@ -1,10 +1,8 @@
 'use strict';
 const {isDef, getOrApply, isPromise, obj: {isObject}} = require('../../internal/utils');
 const BranchGraphStyle = require('../style/BranchGraphStyle');
-const {calcStartPosition} = require('../../internal/canvases');
 const BaseColumn = require('./BaseColumn');
 const {BRANCH_GRAPH_COLUMN_STATE_ID: _} = require('../../internal/symbolManager');
-const canvashelper = require('../../tools/canvashelper');
 
 function getAllColumnData(grid, col, callback) {
 	const dataSource = grid.dataSource;
@@ -296,13 +294,43 @@ function calcBranchesInfo(start, grid, col) {
 	return result;
 }
 
+function calcLeftPosition(rect, margin) {
+	return {
+		x: margin,
+		y: rect.top + rect.height / 2,
+	};
+}
+function calcBranchXPoints(ctx, left, width, radius, branches, timeline) {
+	let w = Math.max(width / branches.length + 1, 5);
+	timeline.forEach((tl) => {
+		tl.forEach((p, index) => {
+			if (index <= 0) {
+				// 計算の意味が無い
+				return;
+			}
+			if (p.tag) {
+				const textWidth = ctx.measureText(p.tag).width;
+				if (((w * index) + (radius * 2) + 4 + textWidth) > width) {
+					w = Math.max((width - (radius * 2) - 4 - textWidth) / index, 5);
+				}
+			}
+		});
+	});
+	const result = [];
+	let x = left;
+	branches.forEach(() => {
+		result.push(Math.ceil(x + radius));
+		x += w;
+	});
+	return result;
+}
+
 function renderMerge(grid, ctx, x, upLine, downLine, colorIndex, {
-	branchWidth, margin, branchColors, branchLineWidth, circleSize, mergeStyle
+	branchXPoints, margin, branchColors, branchLineWidth, mergeStyle
 }, {
 	width, col, row, pos
 }) {
 	if (isDef(upLine) || isDef(downLine)) {
-		const radius = circleSize / 2;
 		ctx.strokeStyle = getOrApply(branchColors, colorIndex);
 		ctx.lineWidth = branchLineWidth;
 		ctx.lineCap = 'round';
@@ -310,10 +338,8 @@ function renderMerge(grid, ctx, x, upLine, downLine, colorIndex, {
 
 
 		if (isDef(upLine)) {
-			const upX = pos.x + radius + (upLine * branchWidth);
-			const upPos = calcStartPosition(ctx, grid.getCellRelativeRect(col, row - 1), width, 0, {
-				offset: margin,
-			});
+			const upX = branchXPoints[upLine];
+			const upPos = calcLeftPosition(grid.getCellRelativeRect(col, row - 1), margin);
 			ctx.moveTo(upX, upPos.y);
 			if (mergeStyle === 'bezier') {
 				ctx.bezierCurveTo(
@@ -329,10 +355,8 @@ function renderMerge(grid, ctx, x, upLine, downLine, colorIndex, {
 		}
 
 		if (isDef(downLine)) {
-			const downX = pos.x + radius + (downLine * branchWidth);
-			const downPos = calcStartPosition(ctx, grid.getCellRelativeRect(col, row + 1), width, 0, {
-				offset: margin,
-			});
+			const downX = branchXPoints[downLine];
+			const downPos = calcLeftPosition(grid.getCellRelativeRect(col, row + 1), margin);
 			if (mergeStyle === 'bezier') {
 				ctx.bezierCurveTo(
 						x, (pos.y + downPos.y) / 2,
@@ -418,10 +442,7 @@ class BranchGraphColumn extends BaseColumn {
 		const data = this._start !== 'top' ? timeline[timeline.length - (row - grid.frozenRowCount) - 1] : timeline[row - grid.frozenRowCount];
 
 		const {
-			textAlign,
-			textBaseline,
 			branchColors,
-			branchWidth,
 			branchLineWidth,
 			circleSize,
 			mergeStyle,
@@ -433,29 +454,28 @@ class BranchGraphColumn extends BaseColumn {
 				bgColor,
 			});
 		}
-		const radius = circleSize / 2;
-		const width = branches.length * branchWidth;
+		
 		const rect = context.getRect();
+		const radius = circleSize / 2;
+		const width = rect.width - margin * 2;
 
 		helper.drawWithClip(context, (ctx) => {
-			ctx.textAlign = textAlign;
-			ctx.textBaseline = textBaseline;
+			ctx.textAlign = 'left';
+			ctx.textBaseline = 'middle';
+			const branchXPoints = calcBranchXPoints(ctx, rect.left + margin, width, radius, branches, timeline);
 			
-			const pos = calcStartPosition(ctx, rect, width, 0, {
-				offset: margin,
-			});
+			const pos = calcLeftPosition(rect, margin);
 			
 			branches.forEach((b, index) => {
-				const x = pos.x + radius + (index * branchWidth);
+				const x = branchXPoints[index];
 				const p = data[index];
 				if (p) {
 					p.lines.forEach((line) => {
 						renderMerge(grid, ctx, x, line[upLineIndexKey], line[downLineIndexKey], line.colorIndex, {
 							margin,
-							branchWidth,
+							branchXPoints,
 							branchLineWidth,
 							branchColors,
-							circleSize,
 							mergeStyle,
 						}, {
 							width, col, row, pos
@@ -469,12 +489,14 @@ class BranchGraphColumn extends BaseColumn {
 						ctx.closePath();
 						ctx.fill();
 					}
-
+				}
+			});
+			branches.forEach((b, index) => {
+				const p = data[index];
+				if (p) {
 					if (p.tag) {
-						const {width: textWidth} = ctx.measureText(p.tag);
-						canvashelper.fillTextRect(ctx, p.tag, x + radius + 4, pos.y - radius, textWidth, circleSize, {
-							offset: 4,
-						});
+						ctx.fillStyle = getOrApply(branchColors, index);
+						ctx.fillText(p.tag, branchXPoints[index] + radius + 4, pos.y);
 					}
 				}
 			});
