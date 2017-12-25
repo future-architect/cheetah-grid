@@ -36,13 +36,7 @@
 	}
 
 	function drawInlines(ctx, inlines, rect, offset, col, row, grid) {
-		const inlineWidths = inlines.map((inline) => (inline.width({ctx}) || 0) - 0);
-		let offsetRight = inlineWidths.reduce((a, b) => a + b);
-
-		let offsetLeft = 0;
-		inlines.forEach((inline, index) => {
-			const inlineWidth = inlineWidths[index];
-			offsetRight -= inlineWidth;
+		function drawInline(inline, offsetLeft, offsetRight) {
 			if (inline.canDraw()) {
 				ctx.save();
 				try {
@@ -63,9 +57,23 @@
 				inline.onReady(() => grid.invalidateCell(col, row));
 				//noop
 			}
-			offsetLeft += inlineWidth;
-		});
-		return offsetLeft;
+		}
+		if (inlines.length === 1) {
+			//1件の場合は幅計算が不要なため分岐
+			const inline = inlines[0];
+			drawInline(inline, 0, 0);
+		} else {
+			const inlineWidths = inlines.map((inline) => (inline.width({ctx}) || 0) - 0);
+			let offsetRight = inlineWidths.reduce((a, b) => a + b);
+
+			let offsetLeft = 0;
+			inlines.forEach((inline, index) => {
+				const inlineWidth = inlineWidths[index];
+				offsetRight -= inlineWidth;
+				drawInline(inline, offsetLeft, offsetRight);
+				offsetLeft += inlineWidth;
+			});
+		}
 	}
 
 	function _inlineRect(grid, ctx, inline, rect, col, row,
