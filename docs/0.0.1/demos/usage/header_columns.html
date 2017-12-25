@@ -78,7 +78,7 @@ window.onerror = function (msg, file, line, column, err) {
 	getErrorLogElement().value += err && err.stack || msg + '\n    at ' + file + ':' + line + ':' + column;
 };
     </script>
-	<nav class="header primary">
+	<nav class="header primary" id="header-nav">
 		<div class="nav-wrapper">
 			<a href="./../../../index.html">
 				<img src="./../../../logo.png" style="width: 100px;padding: 5px;vertical-align: middle;" alt="Cheetah Grid">
@@ -86,52 +86,144 @@ window.onerror = function (msg, file, line, column, err) {
 	
 			<ul id="nav-mobile" class="right hide-on-med-and-down">
 				<li><a href="./../../index.html" class="primary">Docoments - TOP</a></li>
+				<li class="nav-dropdown-container">
+					<a id="nav-versions" href="#" class="primary nav-dropdown-button" data-target="versions">
+						version<span class="icon-arrow"></span>
+					</a>
+					<ul id="versions" class="nav-dropdown right-dropdown">
+					</ul>
+				</li>
+				<li class="nav-dropdown-container">
+					<a id="nav-lang" href="#" class="primary nav-dropdown-button" data-target="langs">
+						lang<span class="icon-arrow"></span>
+					</a>
+					<ul id="langs" class="nav-dropdown right-dropdown">
+						<li><a href="./../../ja/demos\usage\header_columns.html" class="primary">日本語</a></li>
+						<li><a href="./../../demos\usage\header_columns.html" class="primary">English</a></li>
+					</ul>
+				</li>
 			</ul>
 		</div>
-	</nav>	<h1>Usage &gt; Header and Columns</h1>
+	</nav>
+	
+	<script type="text/javascript">
+		'use strict';
+		////babel
+	'use strict';
+	
+	function getVersions(callback) {
+		var xhr = new XMLHttpRequest();
+		function onError() {
+			callback(['0.1.0', '0.0.1']);
+		}
+		xhr.onload = function () {
+			var versions = JSON.parse(xhr.responseText);
+			callback(versions);
+		};
+		xhr.onerror = onError;
+		xhr.onabort = onError;
+		try {
+			xhr.open('GET', './../../../versions.json');
+			xhr.send();
+		} catch (e) {
+			onError();
+		}
+	}
+	
+	//
+	var buttons = document.querySelectorAll('.nav-dropdown-button');
+	
+	var _loop = function _loop(i) {
+		var button = buttons[i];
+		button.onclick = function () {
+			var target = button.getAttribute('data-target');
+			document.getElementById(target).classList.toggle('show');
+		};
+	};
+	
+	for (var i = 0; i < buttons.length; i++) {
+		_loop(i);
+	}
+	
+	//
+	getVersions(function (versions) {
+		var myVersion = '0.0.1';
+		function getVerLocation(v) {
+			return location.href.replace(myVersion, v);
+		}
+		var latest = versions[0];
+		var versEl = document.getElementById('versions');
+		versEl.innerHTML = versions.map(function (v, i) {
+			return '<li><a href="' + getVerLocation(v) + '" class="primary">' + v + (i === 0 ? ' (latest)' : '') + '</a></li>';
+		}).join('');
+	
+		if (latest !== myVersion) {
+			var header = document.getElementById('header-nav');
+			var a = document.createElement('a');
+			header.parentElement.insertBefore(a, header.nextSibling);
+			a.href = getVerLocation(latest);
+			a.textContent = '<goto the latest version(' + latest + ') document>';
+		}
+	});
+	
+	// Close the dropdown menu if the user clicks outside of it
+	window.onclick = function (event) {
+		if (event.target.classList.contains('nav-dropdown') || event.target.classList.contains('nav-dropdown-button')) {
+			return;
+		}
+	
+		var dropdowns = document.querySelectorAll('.nav-dropdown');
+		for (var i = 0; i < dropdowns.length; i++) {
+			var openDropdown = dropdowns[i];
+			if (openDropdown.classList.contains('show')) {
+				openDropdown.classList.remove('show');
+			}
+		}
+	};
+	//
+	</script>	<h1>Usage &gt; Header and Columns</h1>
 	<div class="contents">
     	
 <h2 id="standard-column">Standard Column</h2>
-<p><code>cheetahGrid.ListGrid</code>のプロパティ<code>header</code>の設定によって列、およびヘッダを設定できます。<br><code>header</code>コンストラクタ引数から設定することもできます。  </p>
-<p><code>header</code>はObject配列（Array&lt;Object&gt;）で指定し、
-Objectには以下のプロパティを設定します。  </p>
+<p>The <code>header</code> property, the property of <code>cheetahGrid.ListGrid</code>, decides the behave and appearance of columns and header cells.<br>We can set this property by constructor arguments.  </p>
+<p>The <code>header</code> property must be set by objects array (Array&lt;Object&gt;).<br>Each object consists of following properties.  </p>
 <table>
 <thead>
 <tr>
 <th>property</th>
-<th>説明</th>
+<th>Description</th>
 <th>LINK</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>caption</td>
-<td>ヘッダに表示されるキャプション</td>
+<td>header caption</td>
 <td>---</td>
 </tr>
 <tr>
 <td>field</td>
-<td>セルに表示するレコードのfield名、またはfunction</td>
+<td>field name or function</td>
 <td>---</td>
 </tr>
 <tr>
 <td>width</td>
-<td>列幅</td>
+<td>width of column</td>
 <td>---</td>
 </tr>
 <tr>
 <td>columnType</td>
-<td>列タイプ</td>
+<td>type of column</td>
 <td><a href="./column_types.html">link</a></td>
 </tr>
 <tr>
 <td>style</td>
-<td>列スタイル</td>
+<td>style of column</td>
 <td><a href="./column_styles.html">link</a></td>
 </tr>
 <tr>
 <td>action</td>
-<td>列アクション</td>
+<td>action of column</td>
 <td>---</td>
 </tr>
 </tbody>
@@ -238,7 +330,7 @@ grid.records = records;
 </code></pre>
 
 <h2 id="multiple-header">Multiple Header</h2>
-<p><code>header</code>に指定するObjectを階層化することで多段ヘッダーを表示できます。  </p>
+<p>To use multiple header, set the hierarchical structured Object to the <code>header</code> property.  </p>
 
 <div id="sample2" class="demo-grid middle">
 </div>

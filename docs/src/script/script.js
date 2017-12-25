@@ -44,6 +44,7 @@ const indexHelper = {
 				last.sort((a, b) => a.order - b.order);
 			}
 		});
+		nodes.sort((a, b) => data.demoCategorys.indexOf(a) - data.demoCategorys.indexOf(b));
 		// console.log(JSON.stringify(nodes, null, '  '));
 		return nodes;
 	}

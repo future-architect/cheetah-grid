@@ -7,9 +7,15 @@ order: 115
 
 {{#marked}}
 ## Sort by Column
+{{#if lang_ja}}
 プロパティ`sort`を利用して、列ごとのソート設定を行います。  
 truthy valueを設定するとGrid内部に定義されているソートロジックを使用します。  
 ソートロジックを自前で定義したい場合はfunctionを定義してください。
+{{else}}
+Define sort settings of each column by using `sort` property.  
+When you set truthy value, records are sorted by internal logic pre-defined in Cheetah Grid.  
+Please define function if you want to sort by your own logic.  
+{{/if}}
 {{/marked}}
 
 <div id="sample1" class="demo-grid middle">

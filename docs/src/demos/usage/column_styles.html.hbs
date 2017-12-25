@@ -7,6 +7,7 @@ order: 120
 
 {{#marked}}
 ## Standard Column Style
+{{#if lang_ja}}
 プロパティ`style`を利用して、列のスタイルを指定できます。
 
 標準で用意されたプロパティは以下です。
@@ -17,6 +18,18 @@ order: 120
 |textAlign|セルのテキスト横位置を指定できます|
 |textBaseline|セルのテキスト縦位置を指定できます|
 |bgColor|セルの背景色を指定できます|
+{{else}}
+Define column style by using `style` property.  
+
+Properties below are prepared in standard.  
+
+|property|description|
+|---|---|
+|color|define color of cell|
+|textAlign|define horizontal position of text in cell|
+|textBaseline|define vertical position of text in cell|
+|bgColor|define background color of cell|
+{{/if}}
 {{/marked}}
 
 <div id="sample1" class="demo-grid small">
@@ -60,6 +73,7 @@ grid.records = [
 {{#marked}}
 
 ## Advanced Column Style
+{{#if lang_ja}}
 プロパティ`style`は以下のような高度な使い方も可能です。  
 
 * 途中でスタイルを変更する  
@@ -68,11 +82,20 @@ grid.records = [
 これらは以下の仕組みによって実現可能です。  
 * functionによる指定
 * Styleインスタンスによる指定
+{{else}}
+`style` property can be used by the advanced ways below.  
+
+* change style by each record
+
+This can be done by functions below.  
+* use the function
+* use the instance of Style class
+{{/if}}
 {{/marked}}
 
 <div id="sample2" class="demo-grid small">
 </div>
-<label>text背景色変更</label>
+<label>change background color of text</label>
 <select id="sample2theme">
     <option value="" selected="true">default</option>
     <option value="red">red</option>

@@ -51,6 +51,18 @@ td {
 	padding: 5px 10px;
 }
 
+code {
+    border: .1rem solid #E5E5E5;
+    margin: 0 .3rem;
+    padding: .2rem .4rem;
+    background-color: #F4F9F9;
+}
+
+.contents h1, .contents h2 {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: .1em;
+}
+
 .right {
     float: right !important;
 }
@@ -66,4 +78,40 @@ td {
 .share-buttons {
     text-align: right;
     padding: 5px;
+}
+
+.icon-arrow {
+    display: inline-block;
+    background: -moz-linear-gradient(-45deg, transparent 0%, transparent 50%, #DDD 51%, #DDD 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(-45deg, transparent 0%, transparent 50%, #DDD 51%, #DDD 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(135deg, transparent 0%, transparent 50%, #DDD 51%, #DDD 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    width: 10px;
+    height: 10px;
+    transform: rotate(45deg) translateY(-5px);
+    vertical-align: middle;
+}
+
+.nav-dropdown-container {
+    position: relative;
+}
+
+.nav-dropdown {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+.nav-dropdown.right-dropdown {
+    right: 0;
+}
+
+nav ul.nav-dropdown li {
+    float: none;
+    line-height: 50px;
+    white-space: nowrap;
+}
+
+.nav-dropdown.show {
+    display:block;
 }

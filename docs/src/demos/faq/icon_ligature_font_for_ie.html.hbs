@@ -12,11 +12,20 @@ disabled: true
 
 {{#marked}}
 ## Icon Ligature Font(for IE)
+{{#if lang_ja}}
 IE11を利用して、Web Font ICONを描画する際
 ICONを合字から取得する方法
+{{else}}
+Drawing Web Font ICON in IE11
+How to get ICON from Ligature
+{{/if}}
 
 
+{{#if lang_ja}}
 注1: IEなどPromise未対応ブラウザでは[es6-promise](https://www.npmjs.com/package/es6-promise)などのpolyfillを読み込ませる必要があります。
+{{else}}
+Note1: If you use the browsers like IE, incompatiable with Promise, please load pollyfill such as [es6-promise](https://www.npmjs.com/package/es6-promise).  
+{{/if}}
 {{/marked}}
 
 <div id="sample1" class="demo-grid small" style="height: 200px;">
@@ -80,9 +89,17 @@ grid.records = [
 </script>
 {{#marked}}
 
+{{#if lang_ja}}
 この機能を利用するには`fontTools.js`を追加で読み込んでください。
+{{else}}
+To use this mode, please load `fontTools.js` in addition.  
+{{/if}}
 
+{{#if lang_ja}}
 ※サンプルで表示しているICONは[Material icons](https://material.io/icons/)を利用しています。
+{{else}}
+※This sample uses [Material icons](https://material.io/icons/).  
+{{/if}}
 
 ```html
 <!-- extention tool -->

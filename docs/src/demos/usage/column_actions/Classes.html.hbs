@@ -10,9 +10,19 @@ order: 100
 {{#marked}}
 ## Namespace `cheetahGrid.columns.action`
 
+{{#if lang_ja}}
+
 | Class Name | 機能 | 補足 |
 |----------|-----|---|
 | [`CheckEditor`](./CheckEditor.html) | チェックボックスをクリックした際の動作・編集 | `action: 'check'`と同様の動作 |
 | [`ButtonAction`](./ButtonAction.html) | ボタンをクリックした際の動作 | --- |
 
+{{else}}
+
+| Class Name | Function | Others |
+|----------|-----|---|
+| [`CheckEditor`](./CheckEditor.html) | The behavior when clicking the checkbox | same as `action: 'check'` |
+| [`ButtonAction`](./ButtonAction.html) | The behavior when clicking the button | --- |
+
+{{/if}}
 {{/marked}}

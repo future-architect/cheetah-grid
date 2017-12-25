@@ -18,10 +18,18 @@ css: >
 {{#marked}}
 ## IconColumn
 
+{{#if lang_ja}}
 Web Fontを利用したICONを表示する  
 fieldに指定された個数のICONを表示します。  
 
 ※通常のカラムにICONを表示する方法は[こちら](../draw_icon.html)を参照してください。
+
+{{else}}
+Show ICON using Web Font.  
+Number of ICONs can be set at field.  
+
+※When showing ICON to ordinal column, please refer to [here](../draw_icon.html)
+{{/if}}
 
 {{/marked}}
 
@@ -30,7 +38,11 @@ fieldに指定された個数のICONを表示します。
 
 {{#marked}}
 
+{{#if lang_ja}}
 ※サンプルで表示しているICONは[Material icons](https://material.io/icons/)を利用しています。
+{{else}}
+※ICON in sample uses [Material icons](https://material.io/icons/)
+{{/if}}
 
 ```html
 <!-- Material Icons:  https://material.io/icons/ -->

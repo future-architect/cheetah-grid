@@ -8,14 +8,17 @@ order: 1
 {{#marked}}
 # What it is
 
-Cheetah Grid is a high performance JavaScript grid/spreadsheet component that works on canvas
-
+{{#if lang_ja}}
 Cheetah Gridは、Canvasで実現する、ハイパフォーマンスなJavaScriptグリッドコンポーネントです。
-
+{{else}}
+Cheetah Grid is a high performance JavaScript data table component that works on canvas
+{{/if}}
 
 # Show **1,000,000** records without stress
 
+{{#if lang_ja}}
 100万レコードのデータを一瞬で表示できます。
+{{/if}}
 
 ---
 {{/marked}}
@@ -113,8 +116,9 @@ for (const name in cheetahGrid.themes.choices) {
 
 # A simple example
 
-
+{{#if lang_ja}}
 シンプルな Cheetah Grid の生成は非常に簡単です。
+{{/if}}
 
 ---
 {{/marked}}
