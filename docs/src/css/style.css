@@ -58,6 +58,11 @@ code {
     background-color: #F4F9F9;
 }
 
+.contents h1, .contents h2 {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: .1em;
+}
+
 .right {
     float: right !important;
 }
