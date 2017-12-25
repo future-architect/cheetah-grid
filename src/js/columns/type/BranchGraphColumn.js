@@ -369,41 +369,51 @@ function renderMerge(grid, ctx, x, y, upLineIndex, downLineIndex, colorIndex, {
 }
 
 /**
- * BranchGraphColumn
- *
- * # Data command
- * ## mastar branch or orphan branch
+ * BranchGraphColumn<br>
+ * <br>
+ * # Data command<br>
+ * ## mastar branch or orphan branch<br>
+ * <pre><code class="js">
  * {
- *  command: 'branch',
+ * 	command: 'branch',
  * 	branch: 'branch name A',
  * }
- * ## commit
+ * </code></pre>
+ * ## commit<br>
+ * <pre><code class="js">
  * {
- *  command: 'commit',
+ * 	command: 'commit',
  * 	branch: 'branch name A'
  * }
- * ## branch
+ * </code></pre>
+ * ## branch<br>
+ * <pre><code class="js">
  * {
- *  command: 'branch',
+ * 	command: 'branch',
  * 	branch: {
  * 		from: 'branch name A',
  * 		to: 'branch name B'
  * 	}
  * }
- * ## merge
+ * </code></pre>
+ * ## merge<br>
+ * <pre><code class="js">
  * {
- *  command: 'merge',
+ * 	command: 'merge',
  * 	branch: {
  * 		from: 'branch name B',
  * 		to: 'branch name A'
  * 	}
  * }
- * ## tag
+ * </code></pre>
+ * ## tag<br>
+ * <pre><code class="js">
  * {
- *  command: 'tag',
- *  branch: 'branch name A',
+ * 	command: 'tag',
+ * 	branch: 'branch name A',
  * 	tag: 'tag name'
  * }
+ * </code></pre>
  */
 class BranchGraphColumn extends BaseColumn {
 	constructor(option = {}) {
