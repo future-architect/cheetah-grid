@@ -39,12 +39,12 @@ const indexHelper = {
 			content.disabled = disabled;
 			
 			if (level === 0) {
-				last.sort((a, b) => data.demoCategorys.indexOf(a) - data.demoCategorys.indexOf(b));
+				last.sort((a, b) => data.demoCategorys.map((d) => d.title).indexOf(a) - data.demoCategorys.map((d) => d.title).indexOf(b));
 			} else {
 				last.sort((a, b) => a.order - b.order);
 			}
 		});
-		nodes.sort((a, b) => data.demoCategorys.indexOf(a) - data.demoCategorys.indexOf(b));
+		nodes.sort((a, b) => data.demoCategorys.map((d) => d.title).indexOf(a) - data.demoCategorys.map((d) => d.title).indexOf(b));
 		// console.log(JSON.stringify(nodes, null, '  '));
 		return nodes;
 	}
