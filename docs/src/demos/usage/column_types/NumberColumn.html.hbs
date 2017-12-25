@@ -11,6 +11,7 @@ order: 900
 {{#marked}}
 ## NumberColumn
 
+{{#if lang_ja}}
 数値をフォーマットして表示する  
 
 コンストラクタ引数に指定した`format`で数値をフォーマットした値を表示します。  
@@ -19,6 +20,17 @@ order: 900
 プロパティを指定しない場合、`new Intl.NumberFormat()`で生成したインスタンスを利用してフォーマットします。  
 つまり、小数の扱い等のフォーマット仕様は`Intl.NumberFormat`の仕様に依存します。  
 また、`columnType: 'number'`と指定した場合と同様の動作をします。  
+{{else}}
+Show formatted numbers.  
+
+Format number with the style defined at `format` property in constructor.  
+Please define the instance of `Intl.NumberFormat` class at `format` property.  
+
+If property isn't defined, format number using the instance created by `new Intl.NumberFormat()` automatically.  
+Which means format style completely depends on `Intl.NumberFormat`.  
+
+In addition, this column type behave same as `columnType: 'number'`.  
+{{/if}}
 
 
 {{/marked}}

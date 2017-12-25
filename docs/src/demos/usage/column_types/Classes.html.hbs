@@ -10,6 +10,7 @@ order: 100
 {{#marked}}
 ## Namespace `cheetahGrid.columns.type`
 
+{{#if lang_ja}}
 | Class Name | 機能 | 補足 | LINK |
 |----------|-----|---|---|
 | `Column` | テキストの表示 | 無指定と同様の動作 | --- |
@@ -19,5 +20,15 @@ order: 100
 | `ImageColumn` | 画像の表示 | `columnType: 'image'`と同様の動作 | [Draw Image](../draw_image.html) |
 | [`PercentCompleteBarColumn`](./PercentCompleteBarColumn.html) | パーセントバーの表示 | --- | [PercentCompleteBarColumn](./PercentCompleteBarColumn.html) |
 | [`IconColumn`](./IconColumn.html) | アイコンのみの表示 | --- | [IconColumn](./IconColumn.html) |
-
+{{else}}
+| Class Name | Function | Others | LINK |
+|----------|-----|---|---|
+| `Column` | show text | same as not specify type | --- |
+| `NumberColumn` | show number with comma-separated | samee as `columnType: 'number'` | [NumberColumn](./NumberColumn.html) |
+| `CheckColumn` | show checkbox | same as `columnType: 'check'` | --- |
+| [`ButtonColumn`](./ButtonColumn.html) | show button | `columnType: 'button'` has same the function | [ButtonColumn](./ButtonColumn.html) |
+| `ImageColumn` | show image | same as `columnType: 'image'` | [Draw Image](../draw_image.html) |
+| [`PercentCompleteBarColumn`](./PercentCompleteBarColumn.html) | show percent complete bar | --- | [PercentCompleteBarColumn](./PercentCompleteBarColumn.html) |
+| [`IconColumn`](./IconColumn.html) | show icon only | --- | [IconColumn](./IconColumn.html) |
+{{/if}}
 {{/marked}}
