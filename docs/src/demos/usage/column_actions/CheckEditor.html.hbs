@@ -11,6 +11,8 @@ order: 300
 {{#marked}}
 ## CheckEditor
 
+{{#if lang_ja}}
+
 チェックボックスをクリックした際の動作・データ編集を指定します。  
 
 セルをクリック、Enter・Spaceキーを押すと、レコードデータが編集されます。  
@@ -18,6 +20,14 @@ order: 300
 列の`action`に`CheckEditor`クラスのインスタンスを利用すると、`readOnly`・`disabled`プロパティの制御を動的に行うことができますが、  
 文字列`'check'`と定義した場合は、`readOnly`・`disabled`プロパティを制御出来ません。  
 
+{{else}}
+Define the behavior and data editing when checkbox is clicked.  
+
+The record is edited after select the cell by clicking it and then push Enter or Space.  
+
+You can control the property of `readOnly` and `disabled` by setting the instance of `CheckEditor` class to `action` of the column.  
+But if you define `'check'`, as string, to `action` of the column, you can't control these properties.  
+{{/if}}
 {{/marked}}
 
 <div id="sample1" class="demo-grid small">
@@ -90,6 +100,7 @@ document.querySelector('#sample1mode').onchange = function() {
 
 
 {{#marked}}
+{{#if lang_ja}}
 ### データ編集
 
 基本的な動作は、`true`と`false`を切り替えます。  
@@ -105,10 +116,32 @@ document.querySelector('#sample1mode').onchange = function() {
 | 文字列 | `'01'` | `'00'` |
 | 文字列 | `'00001'` | `'00000'` |
 
-その他の値は、javascriptの動作として、真とみなされる値(truthy value)であれば、`false`に  
+その他の値は、JavaScriptの動作として、真とみなされる値(truthy value)であれば、`false`に  
 偽とみなされる値(falsy value)であれば、`true`に切り替えます。  
 数値型の`0`以外は`0`に置き換えられます。この場合、その後、切り替えを行っても元の値には戻しません。  
 
+{{else}}
+### Data editing
+
+Basic behavior is switching `true` and `false`.  
+
+Switchings shown below can be done as the special behavior.  
+
+| type | truthy value | falsy value |
+|----|-----|---|
+| number | `1` | `0` |
+| string | `'true'` | `'false'` |
+| string | `'on'` | `'off'` |
+| string | `'1'` | `'0'` |
+| string | `'01'` | `'00'` |
+| string | `'00001'` | `'00000'` |
+
+The value regarded as truthy value in JavaScript is switched to `false`.  
+The value regarded as falsy value is switched to `true`.  
+
+All numbers except `0` are switched to `0`.  
+In this case, the original number will not be restored when switching again.  
+{{/if}}
 {{/marked}}
 
 <div id="sample2" class="demo-grid small">

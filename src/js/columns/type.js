@@ -7,6 +7,7 @@
 	const ImageColumn = require('./type/ImageColumn');
 	const PercentCompleteBarColumn = require('./type/PercentCompleteBarColumn');
 	const IconColumn = require('./type/IconColumn');
+	const BranchGraphColumn = require('./type/BranchGraphColumn');
 
 	/**
 	 * column types
@@ -42,6 +43,9 @@
 		},
 		get IconColumn() {
 			return IconColumn;
+		},
+		get BranchGraphColumn() {
+			return BranchGraphColumn;
 		},
 		of(columnType) {
 			if (!columnType) {

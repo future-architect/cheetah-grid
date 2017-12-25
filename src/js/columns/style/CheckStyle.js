@@ -1,6 +1,6 @@
 'use strict';
 {
-	const BaseStyle = require('./BaseStyle');
+	const StdBaseStyle = require('./StdBaseStyle');
 
 	function adj(style) {
 		const {textAlign = 'center'} = style;
@@ -8,7 +8,7 @@
 		return style;
 	}
 	let defaultStyle;
-	class CheckStyle extends BaseStyle {
+	class CheckStyle extends StdBaseStyle {
 		static get DEFAULT() {
 			return defaultStyle ? defaultStyle : (defaultStyle = new CheckStyle());
 		}

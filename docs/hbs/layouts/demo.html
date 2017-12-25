@@ -14,19 +14,15 @@
     <link rel="stylesheet" type="text/css" href="{{this}}">
     {{/each}}
     
-    {{#if dev}}
-    <script src="http://localhost:35729/livereload.js"></script>
-    {{else}}
-    <!-- <script src="http://localhost:35729/livereload.js"></script> -->
-    {{/if}}
+    {{#unless debug}}<!-- {{/unless}}<script src="http://localhost:35729/livereload.js"></script>{{#unless debug}} -->{{/unless}}
     {{#if (includes contents 'Promise')}}
     <script src="https://www.promisejs.org/polyfills/promise-7.0.4.min.js"></script>
     {{/if}}
-	
-    {{#if dev}}
+    
+    {{#if debug}}
     <script type="text/javascript" src="{{ms_path '../../dist/cheetahGrid.es5.js'}}"></script>
     {{else}}
-    <script type="text/javascript" src="https://unpkg.com/cheetah-grid@{{version}}"></script>
+    <script type="text/javascript" src="https://unpkg.com/cheetah-grid@{{libVersion}}"></script>
     {{/if}}
     {{#each scriptpath}}
     <script type="text/javascript" src="{{ms_path this}}"></script>
@@ -40,8 +36,8 @@
             height: calc(100% - 100px);
         }
         .contents {
-        	padding: 30px;
-			box-sizing: border-box;
+            padding: 30px;
+            box-sizing: border-box;
         }
         .demo-grid {
             width: 100%;
@@ -65,7 +61,7 @@
         }
 
         .hljs { 
-        	 tab-size: 4;
+             tab-size: 4;
         }
 
         {{#if css}}{{{css}}}{{/if}}
@@ -76,10 +72,10 @@
 'use strict';
 //{{{babel textContents.demos.[demos/commons.parts.js]}}}
     </script>
-	{{> header}}
-	<h1>{{{ms_breadcrumb category}}} &gt; {{title}}</h1>
-	<div class="contents">
-    	{{{ contents }}}
+    {{> header}}
+    <h1>{{{ms_breadcrumb category}}} &gt; {{title}}</h1>
+    <div class="contents">
+        {{{ contents }}}
     </div>
 </body>
 </html>

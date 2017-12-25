@@ -306,7 +306,13 @@ function registerHelpers() {
 		const arg = analyzeArguments(...args);
 		const option = Object.assign({class: 'js'}, arg.hash);
 		option.code = arg.get(this);
-		const template = Handlebars.compile(Handlebars.partials.code);
+		let template;
+		if (typeof Handlebars.partials.code !== 'function') {
+			template = Handlebars.compile(Handlebars.partials.code);
+		} else {
+			template = Handlebars.partials.code;
+		}
+		
 		return new Handlebars.SafeString(template(option));
 	});
 	Handlebars.registerHelper('json', function(...args) {
@@ -335,6 +341,13 @@ function registerHelpers() {
 			url += '/index.html';
 		}
 		return `[${label}](${url})`;
+	});
+	/**
+	 * バージョン判定ブロック
+	 */
+	Handlebars.registerHelper('if_v', function(v, ...args) {
+		const {isEnabledVersion} = require('../buildcommon');
+		return Handlebars.helpers.if.call(this, isEnabledVersion(v), ...args);
 	});
 }
 

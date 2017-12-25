@@ -1,0 +1,48 @@
+---
+category: Usage
+title: Column Width
+layout: demo.html
+order: 105
+docVersion: 0.1.0
+---
+
+{{#marked}}
+## Specify column width
+プロパティ`width`を利用して、列ごとのカラム幅を設定できます。  
+`width`が指定されない場合、`grid`のプロパティ`defaultColWidth`を利用します。  
+
+`string`の値を指定することで`%`表記での指定も可能です。  
+{{/marked}}
+
+<div id="sample1" class="demo-grid middle">
+</div>
+<script type="text/javascript">
+//{{{babel textContents.demos.[demos/init.parts.js]}}}
+//{{#babel}}
+/*global generatePersons*/
+/*eslint-disable no-unused-vars*/
+'use strict';
+const records = generatePersons(100);
+//{{/babel}}
+</script>
+<script type="text/javascript">
+//{{#wrapscript}}
+//{{#copy "script1"}}
+/*global cheetahGrid, records*/
+'use strict';
+const grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#sample1'),
+	header: [
+		{field: 'check', caption: '', /*unset width. use defaultColWidth*/ columnType: 'check', action: 'check', minWidth: 50, maxWidth: 50},
+		{field: 'personid', caption: 'ID', width: '60px', columnType: 'center', minWidth: '50px', maxWidth: '50%'},
+		{field: 'fname', caption: 'First Name', width: '20%', minWidth: '120px'},
+		{field: 'lname', caption: 'Last Name', width: '20%', minWidth: '120px'},
+		{field: 'email', caption: 'Email', width: 'calc(60% - 110px)', minWidth: '120px'},
+	],
+	defaultColWidth: 50,
+});
+grid.records = records;
+//{{/copy}}
+//{{/wrapscript}}
+</script>
+{{> code class="js" code=script1}}

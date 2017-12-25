@@ -20,6 +20,7 @@
 	const EventHandler = require('../internal/EventHandler');
 	const NumberMap = require('../internal/NumberMap');
 	const style = require('../internal/style');
+	const calc = require('../internal/calc');
 	//protected symbol
 	const {PROTECTED_SYMBOL: _} = require('../internal/symbolManager');
 
@@ -50,6 +51,7 @@
 		INPUT_CELL: 'input_cell',
 		EDITABLEINPUT_CELL: 'editableinput_cell',
 		MODIFY_STATUS_EDITABLEINPUT_CELL: 'modify_status_editableinput_cell',
+		RESIZE_COLUMN: 'resize_column',
 	};
 
 	//private methods
@@ -369,21 +371,50 @@
 
 	}
 
+	function _toPxWidth(grid, width) {
+		return Math.round(calc.toPxWidth(width, grid[_].calcContext));
+	}
+
+	function _getDefaultColPxWidth(grid) {
+		return _toPxWidth(grid, grid.defaultColWidth);
+	}
+
+	function _adjustColWidth(grid, col, orgWidth) {
+		const limit = grid[_].colWidthsLimit[col];
+		if (!limit) {
+			return orgWidth;
+		}
+		
+		if (limit.min) {
+			const min = _toPxWidth(grid, limit.min);
+			if (min > orgWidth) {
+				return min;
+			}
+		}
+		if (limit.max) {
+			const max = _toPxWidth(grid, limit.max);
+			if (max < orgWidth) {
+				return max;
+			}
+		}
+		return orgWidth;
+	}
+
 	function _getColWidth(grid, col) {
 		const width = grid[_].colWidthsMap.get(col);
 		if (width) {
-			return width;
+			return _adjustColWidth(grid, col, _toPxWidth(grid, width));
 		}
-		return grid[_].defaultColWidth;
+		return _getDefaultColPxWidth(grid);
 	}
 	function _setColWidth(grid, col, width) {
 		grid[_].colWidthsMap.put(col, width);
 	}
 	function _getColsWidth(grid, startCol, endCol) {
 		const colCount = endCol - startCol + 1;
-		let w = grid[_].defaultColWidth * colCount;
-		grid[_].colWidthsMap.each(startCol, endCol, (width) => {
-			w += width - grid[_].defaultColWidth;
+		let w = _getDefaultColPxWidth(grid) * colCount;
+		grid[_].colWidthsMap.each(startCol, endCol, (width, col) => {
+			w += _adjustColWidth(grid, col, _toPxWidth(grid, width)) - _getDefaultColPxWidth(grid);
 		});
 		return w;
 	}
@@ -415,10 +446,10 @@
 		return h;
 	}
 
-	function _getScrollWidth(grid, col) {
-		let w = grid[_].defaultColWidth * grid[_].colCount;
-		grid[_].colWidthsMap.eachAll((width) => {
-			w += width - grid[_].defaultColWidth;
+	function _getScrollWidth(grid) {
+		let w = _getDefaultColPxWidth(grid) * grid[_].colCount;
+		grid[_].colWidthsMap.eachAll((width, col) => {
+			w += _adjustColWidth(grid, col, _toPxWidth(grid, width)) - _getDefaultColPxWidth(grid);
 		});
 		return w;
 	}
@@ -625,6 +656,13 @@
 				eventArgs
 			};
 		};
+		const canResizeColumn = (col) => {
+			const limit = grid[_].colWidthsLimit[col];
+			if (!limit || !limit.min || !limit.max) {
+				return true;
+			}
+			return limit.max !== limit.min;
+		};
 		grid[_].handler.on(grid[_].element, 'mousedown', (e) => {
 			const eventArgsSet = getCellEventArgsSet(e);
 			const {abstractPos, eventArgs} = eventArgsSet;
@@ -641,7 +679,7 @@
 				return;
 			}
 			const resizeCol = _getResizeColAt(grid, abstractPos.x, abstractPos.y);
-			if (resizeCol >= 0) {
+			if (resizeCol >= 0 && canResizeColumn(resizeCol)) {
 				//幅変更
 				grid[_].columnResizer.start(resizeCol, e);
 			} else {
@@ -659,8 +697,8 @@
 					return;
 				}
 
-				const resizeCol = _getResizeColAt(grid, abstractPos.x, abstractPos.y);
-				if (resizeCol >= 0) {
+				const resizeCol = _getResizeColAt(grid, abstractPos.x, abstractPos.y, 15);
+				if (resizeCol >= 0 && canResizeColumn(resizeCol)) {
 					//幅変更
 					grid[_].columnResizer.start(resizeCol, e);
 				} else {
@@ -741,7 +779,7 @@
 				return;
 			}
 			const resizeCol = _getResizeColAt(grid, abstractPos.x, abstractPos.y);
-			if (resizeCol >= 0) {
+			if (resizeCol >= 0 && canResizeColumn(resizeCol)) {
 				style.cursor = 'col-resize';
 			} else {
 				if (style.cursor === 'col-resize') {
@@ -820,7 +858,7 @@
 		grid.bindEventsInternal();
 	}
 
-	function _getResizeColAt(grid, abstractX, abstractY) {
+	function _getResizeColAt(grid, abstractX, abstractY, offset = 5) {
 		if (grid[_].frozenRowCount <= 0) {
 			return -1;
 		}
@@ -830,10 +868,10 @@
 		}
 		const cell = grid.getCellAt(abstractX, abstractY);
 		const cellRect = grid.getCellRect(cell.col, cell.row);
-		if (abstractX < cellRect.left + 5) {
+		if (abstractX < cellRect.left + offset) {
 			return cell.col - 1;
 		}
-		if (cellRect.right - 5 < abstractX) {
+		if (cellRect.right - offset < abstractX) {
 			return cell.col;
 		}
 		return -1;
@@ -1068,12 +1106,18 @@
 			const moveX = x - this._preX;
 			this._preX = x;
 			const pre = this._grid.getColWidth(this._targetCol);
-			_setColWidth(this._grid, this._targetCol, Math.max(pre + moveX, 10));
+			let afterSize = _adjustColWidth(this._grid, this._targetCol, pre + moveX);
+			if (afterSize < 10 && moveX < 0) {
+				afterSize = 10;
+			}
+			_setColWidth(this._grid, this._targetCol, afterSize);
 
 			const rect = _getVisibleRect(this._grid);
 			rect.left = this._invalidateAbsoluteLeft;
 			_invalidateRect(this._grid, rect);
-			
+
+			this._grid.fireListeners(EVENT_TYPE.RESIZE_COLUMN, {col: this._targetCol});
+
 			return true;
 		}
 		_upInternal(e) {
@@ -1567,6 +1611,8 @@
 			/////
 			this[_].rowHeightsMap = new NumberMap();
 			this[_].colWidthsMap = new NumberMap();
+			this[_].colWidthsLimit = {};
+			this[_].calcContext = this[_].canvas;
 
 			this[_].columnResizer = new ColumnResizer(this);
 			this[_].cellSelector = new CellSelector(this);
@@ -1699,6 +1745,22 @@
 		setColWidth(col, width) {
 			_setColWidth(this, col, width);
 			this.updateScroll();
+		}
+		getMaxColWidth(col) {
+			const obj = this[_].colWidthsLimit[col];
+			return obj && obj.max || undefined;
+		}
+		setMaxColWidth(col, maxwidth) {
+			const obj = this[_].colWidthsLimit[col] || (this[_].colWidthsLimit[col] = {});
+			obj.max = maxwidth;
+		}
+		getMinColWidth(col) {
+			const obj = this[_].colWidthsLimit[col];
+			return obj && obj.min || undefined;
+		}
+		setMinColWidth(col, minwidth) {
+			const obj = this[_].colWidthsLimit[col] || (this[_].colWidthsLimit[col] = {});
+			obj.min = minwidth;
 		}
 		getCellRect(col, row) {
 			const isFrozenCell = this.isFrozenCell(col, row);

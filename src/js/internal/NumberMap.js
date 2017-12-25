@@ -35,7 +35,7 @@
 		}
 		eachAll(fn) {
 			this._keys.forEach((key) => {
-				fn(this.get(key));
+				fn(this.get(key), key);
 			});
 		}
 		each(keyFrom, keyTo, fn) {
@@ -53,7 +53,7 @@
 			for (let i = indexFirst(keys, keyFrom); i < length; i++) {
 				const key = keys[i];
 				if (keyFrom <= key && key <= keyTo) {
-					fn(this.get(key));
+					fn(this.get(key), key);
 				} else if (keyTo < key) {
 					return;
 				}

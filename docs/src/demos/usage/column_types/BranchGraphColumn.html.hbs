@@ -1,0 +1,255 @@
+---
+category:
+    - Usage
+    - Column Types
+    - Classes
+title: BranchGraphColumn
+layout: demo.html
+order: 400
+docVersion: 0.1.0
+---
+
+{{#marked}}
+## BranchGraphColumn
+
+ブランチグラフを表示する
+
+### constructor properties
+
+|property|説明|default|
+|---|---|---|
+|`start`|開始位置を指定し、進行する方向を指定します。 `'top'` or `'bottom'`|`'bottom'`|
+|`cache`|ブランチ構造の計算結果をキャッすする場合は`true`を指定。 キャッシュを破棄するには`clearCache(grid)`を呼び出してください。 |`false`|
+
+### style properties
+
+|property|説明|default|
+|---|---|---|
+|`branchColors`|ブランチを表現する色を返す関数を渡します。 関数の引数:(ブランチ名, `index`)|`'#979797'`・`'#008fb5'`・`'#f1c109'`を順番に返す関数|
+|`margin`|横のマージンを指定します。|`4`|
+|`circleSize`|`commit`を表現する点の大きさを指定します。|`16`|
+|`branchLineWidth`|ブランチ線の幅を指定します。|`4`|
+|`mergeStyle`|`'bezier'`を指定するとベジェ曲線でマージを表現します。 `'straight'`を指定すると直線でマージを表現します。|`'bezier'`|
+
+
+{{/marked}}
+
+<div id="sample1" class="demo-grid large">
+</div>
+<div>
+	<label style="vertical-align: top;">data:</label>
+	<textarea id="command" style="width: calc(100% - 100px);height: 300px; vertical-align: top;" wrap="off">[
+	[
+		{
+			command: 'branch',
+			branch: 'mastar'
+		},
+		{
+			command: 'commit',
+			branch: 'mastar'
+		}
+	],
+	[
+		{
+			command: 'commit',
+			branch: 'mastar'
+		}
+	],
+	[
+		{
+			command: 'branch',
+			branch: {
+				from: 'mastar',
+				to: 'develop'
+			}
+		},
+		{
+			command: 'commit',
+			branch: 'develop'
+		}
+	],
+	
+]</textarea><br>
+	<button id="update" style="vertical-align: top;">update</button>
+</div>
+<script type="text/javascript">
+//{{#wrapscript}}
+//{{#copy "sample1"}}
+/*global cheetahGrid*/
+'use strict';
+
+const grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#sample1'),
+	header: [
+		{
+			field: (rec) => rec,
+			caption: 'BranchGraph',
+			width: 320,
+			columnType: new cheetahGrid.columns.type.BranchGraphColumn({
+				start: 'top', // Specify the start and indicate the direction to proceed. 'top' or 'bottom'. default 'bottom'
+				cache: false // cache enable. default false
+			}),
+		},
+		{
+			field(rec) {
+				return JSON.stringify(rec) + ',';
+			},
+			caption: 'command',
+			width: 1000
+		},
+	],
+	frozenColCount: 1
+});
+grid.records = [
+
+	[
+		// new branch 'mastar'
+		{
+			command: 'branch',
+			branch: 'mastar'
+		}, 
+		// and commit 'mastar' branch
+		{
+			command: 'commit',
+			branch: 'mastar'
+		}
+	],
+	[
+		// commit 'mastar' branch
+		{
+			command: 'commit',
+			branch: 'mastar'
+		},
+	],
+	[
+		// new branch 'develop'. from 'mastar'
+		{
+			command: 'branch',
+			branch: {
+				from: 'mastar',
+				to: 'develop'
+			}
+		},
+	],
+	[
+		// commit 'develop' branch
+		{
+			command: 'commit',
+			branch: 'develop'
+		},
+	],
+	[
+		// merge 'develop' branch into 'master' branch
+		{
+			command: 'merge',
+			branch: {
+				from: 'develop',
+				to: 'mastar'
+			}
+		},
+		// and tag with v.0.0.1
+		{
+			command: 'tag',
+			branch: 'mastar',
+			tag: 'v1.0.0'
+		},
+	],
+	[
+		null // not doing
+	],
+	//-------------------------
+	[
+		{
+			command: 'branch',
+			branch: {
+				from: 'develop',
+				to: 'develop2'
+			}
+		}, {
+			command: 'commit',
+			branch: 'develop2'
+		}
+	],
+	[
+		{
+			command: 'branch',
+			branch: {
+				from: 'develop',
+				to: 'develop3'
+			}
+		}, {
+			command: 'commit',
+			branch: 'develop3'
+		},
+		{
+			command: 'merge',
+			branch: {
+				from: 'develop2',
+				to: 'mastar'
+			}
+		},
+	],
+	[
+		{
+			command: 'commit',
+			branch: 'develop2'
+		}
+	],
+	[
+		{
+			command: 'branch',
+			branch: {
+				from: 'develop2',
+				to: 'develop4'
+			}
+		}, {
+			command: 'commit',
+			branch: 'develop4'
+		},
+		{
+			command: 'branch',
+			branch: {
+				from: 'develop2',
+				to: 'develop5'
+			}
+		}, {
+			command: 'commit',
+			branch: 'develop5'
+		},
+	],
+	[
+		{
+			command: 'commit',
+			branch: 'develop2'
+		}
+	],
+	[
+		{
+			command: 'tag',
+			branch: 'mastar',
+			tag: 'v1.1.0'
+		},
+		{
+			command: 'commit',
+			branch: 'mastar'
+		},
+		{
+			command: 'commit',
+			branch: 'develop4'
+		}
+	],
+	{
+			command: 'commit',
+			branch: 'develop3'
+	}
+];
+
+//{{/copy}}
+document.querySelector('#update').onclick = () => {
+	grid.records = eval('(function() {return ' + document.querySelector('#command').value + ';})()');
+};
+
+//{{/wrapscript}}
+</script>
+{{> code class="js" code=sample1}}
+

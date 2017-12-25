@@ -2,6 +2,8 @@
 
 [![npm](https://img.shields.io/npm/l/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
 [![npm](https://img.shields.io/npm/v/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
+[![npm](https://img.shields.io/npm/dm/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
+[![npm](https://img.shields.io/npm/dt/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
 
 <img src="https://future-architect.github.io/cheetah-grid/logo.png" style="max-width: 600px;" alt="Cheetah Grid" />
 
