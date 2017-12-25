@@ -20,6 +20,10 @@ order: 100
 | `ImageColumn` | 画像の表示 | `columnType: 'image'`と同様の動作 | [Draw Image](../draw_image.html) |
 | [`PercentCompleteBarColumn`](./PercentCompleteBarColumn.html) | パーセントバーの表示 | --- | [PercentCompleteBarColumn](./PercentCompleteBarColumn.html) |
 | [`IconColumn`](./IconColumn.html) | アイコンのみの表示 | --- | [IconColumn](./IconColumn.html) |
+{{#if_v '0.1.0'}}
+| [`BranchGraphColumn`](./BranchGraphColumn.html) | ブランチグラフの表示 | --- | [BranchGraphColumn](./BranchGraphColumn.html) |
+{{/if_v}}
+
 {{else}}
 | Class Name | Function | Others | LINK |
 |----------|-----|---|---|
@@ -30,5 +34,8 @@ order: 100
 | `ImageColumn` | show image | same as `columnType: 'image'` | [Draw Image](../draw_image.html) |
 | [`PercentCompleteBarColumn`](./PercentCompleteBarColumn.html) | show percent complete bar | --- | [PercentCompleteBarColumn](./PercentCompleteBarColumn.html) |
 | [`IconColumn`](./IconColumn.html) | show icon only | --- | [IconColumn](./IconColumn.html) |
+{{#if_v '0.1.0'}}
+| [`BranchGraphColumn`](./BranchGraphColumn.html) | show branch graph | --- | [BranchGraphColumn](./BranchGraphColumn.html) |
+{{/if_v}}
 {{/if}}
 {{/marked}}

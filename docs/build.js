@@ -15,7 +15,7 @@ const registerHbsPartials = require('./handlebars/register-partials');
 const registerHbsHelpers = require('./handlebars/helpers');
 
 const cheetah = require('../package.json');
-const {isDevVersion} = require('./buildcommon');
+const {isDevVersion, latestVersion, isEnabledVersion} = require('./buildcommon');
 
 const hbs = {
 	directory: 'hbs/layouts',
@@ -47,6 +47,8 @@ Metalsmith(__dirname).
 		],
 		script: docScript,
 		version: cheetah.version,
+		libVersion: isDevVersion(cheetah.version) ? latestVersion : cheetah.version,
+		latestVersion,
 	}).
 	source('./src').
 	destination(`./${isDevVersion(cheetah.version) ? '.devdoc' : cheetah.version}`).
@@ -71,7 +73,18 @@ Metalsmith(__dirname).
 			if (data.docVersion) {
 				if (isDevVersion(data.docVersion)) {
 					data.debug = true;
-					// data.disabled = true;
+				}
+			}
+		});
+		done();
+	}).
+	use((files, metalsmith, done) => {
+		// 非表示ドキュメントはdisabledフラグを立てる
+		Object.keys(files).forEach((file) => {
+			const data = files[file];
+			if (data.docVersion) {
+				if (!isEnabledVersion(data.docVersion)) {
+					data.disabled = true;
 				}
 			}
 		});

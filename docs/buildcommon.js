@@ -33,8 +33,12 @@ function versionCompare(v1, v2) {
 	return 0;
 }
 module.exports = {
+	latestVersion,
 	isDevVersion(v) {
 		return versionCompare(v, latestVersion) > 0;
 	},
-	versionCompare
+	isEnabledVersion(v) {
+		return versionCompare(v, '9999.0.0') <= 0;
+	},
+	versionCompare,
 };
