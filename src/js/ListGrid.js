@@ -280,9 +280,18 @@
 		_refreshRowCount(grid);
 		grid.frozenRowCount = grid[_].headerMap.rowCount;
 		for (let col = 0; col < grid[_].headerMap.columns.length; col++) {
-			const width = grid[_].headerMap.columns[col].width;
-			if (width && width > 0) {
+			const column = grid[_].headerMap.columns[col];
+			const width = column.width;
+			if (width && (width > 0 || typeof width === 'string')) {
 				grid.setColWidth(col, width);
+			}
+			const minWidth = column.minWidth;
+			if (minWidth && (minWidth > 0 || typeof minWidth === 'string')) {
+				grid.setMinColWidth(col, minWidth);
+			}
+			const maxWidth = column.maxWidth;
+			if (maxWidth && (maxWidth > 0 || typeof maxWidth === 'string')) {
+				grid.setMaxColWidth(col, maxWidth);
 			}
 		}
 		const isArrayHeaderRowHeight = isArray(grid[_].headerRowHeight);
@@ -293,6 +302,7 @@
 			}
 		}
 	}
+
 	function _refreshRowCount(grid) {
 		grid.rowCount = grid[_].dataSource.length + grid[_].headerMap.rowCount;
 	}
@@ -435,6 +445,8 @@
 				} else {
 					this._columns.push({
 						width: hd.width,
+						minWidth: hd.minWidth,
+						maxWidth: hd.maxWidth,
 						field: hd.field,
 						icon: hd.icon,
 						columnType: columns.type.of(hd.columnType),
@@ -515,7 +527,6 @@
 			super(adjustListGridOption(options));
 			this[_].header = options.header || [];
 			this[_].headerRowHeight = options.headerRowHeight || [];
-			
 			if (options.dataSource) {
 				_setDataSource(this, options.dataSource);
 			} else {
