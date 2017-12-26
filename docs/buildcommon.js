@@ -12,6 +12,9 @@ function versionCompare(v1, v2) {
 		return NaN;
 	}
 
+	while (v1parts.length < v2parts.length) v1parts.push('9999');
+	while (v2parts.length < v1parts.length) v2parts.push('9999');
+
 	for (let i = 0; i < v1parts.length; ++i) {
 		if (v2parts.length === i) {
 			return 1;

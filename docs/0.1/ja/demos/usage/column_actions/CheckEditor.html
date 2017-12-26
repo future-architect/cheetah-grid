@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="author" content="Cheetah Grid">
+    <meta name="keywords" content="spreadsheet,grid,canvas,table,web-components">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Cheetah Grid - CheckEditor</title>
+
+    <link rel="stylesheet" type="text/css" href="./../../../../css/style.css">
+    <link rel="stylesheet" type="text/css" href="./../../../../css/highlightjs.css">
+    
+    <!-- <script src="http://localhost:35729/livereload.js"></script> -->
+    
+    <script type="text/javascript" src="https://unpkg.com/cheetah-grid@0.1.1"></script>
+
+    <style type="text/css">
+        html {
+            height: 100%;
+        }
+        body {
+            height: calc(100% - 100px);
+        }
+        .contents {
+            padding: 30px;
+            box-sizing: border-box;
+        }
+        .demo-grid {
+            width: 100%;
+            height: 300px;
+            box-sizing: border-box;
+            border: solid 1px #ddd;
+        }
+        .demo-grid.large {
+            height: 500px;
+        }
+        .demo-grid.middle {
+            height: 300px;   
+        }
+        .demo-grid.small {
+            height: 240px;   
+        }
+        .log {
+            width: 100%;
+            height: 80px;
+            background-color: #F5F5F5;
+        }
+
+        .hljs { 
+             tab-size: 4;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <script type="text/javascript">
+'use strict';
+////babel
+'use strict';
+
+function getErrorLogElement() {
+	return document.querySelector('#error_log') || function () {
+		var element = document.createElement('textarea');
+		element.id = 'error_log';
+		element.style.width = '100%';
+		element.style.position = 'fixed';
+		element.style.bottom = '0';
+		element.style['z-index'] = '100';
+		element.style.background = '#ddd';
+		element.style.color = 'red';
+		document.body.appendChild(element);
+		return element;
+	}();
+}
+
+window.onerror = function (msg, file, line, column, err) {
+	getErrorLogElement().value += err && err.stack || msg + '\n    at ' + file + ':' + line + ':' + column;
+};
+    </script>
+    <nav class="header primary" id="header-nav">
+    	<div class="nav-wrapper">
+    		<a href="./../../../../../index.html">
+    			<img src="./../../../../../logo.png" style="width: 100px;padding: 5px;vertical-align: middle;" alt="Cheetah Grid">
+    		</a>
+    
+    		<ul class="right hide-on-med-and-down nav-dropdown-container">
+    			<a href="#" class="primary nav-dropdown-button mobile-only" data-target="all-nav" style="width: 30px;">
+    				<span class="icon-arrow"></span>
+    			</a>
+    			<ul id="all-nav" class="mobile-nav-dropdown right-dropdown primary">
+    				<li><a href="./../../../../ja/index.html" class="primary">Docoments - TOP</a></li>
+    				<li class="nav-dropdown-container">
+    					<a id="nav-versions" href="#" class="primary nav-dropdown-button" data-target="versions">
+    						version<span class="icon-arrow"></span>
+    					</a>
+    					<ul id="versions" class="nav-dropdown right-dropdown">
+    					</ul>
+    				</li>
+    				<li class="nav-dropdown-container">
+    					<a id="nav-lang" href="#" class="primary nav-dropdown-button" data-target="langs">
+    						lang<span class="icon-arrow"></span>
+    					</a>
+    					<ul id="langs" class="nav-dropdown right-dropdown">
+    						<li><a href="./../../../../ja/demos/usage/column_actions/CheckEditor.html" class="primary">日本語</a></li>
+    						<li><a href="./../../../../demos/usage/column_actions/CheckEditor.html" class="primary">English</a></li>
+    					</ul>
+    				</li>
+    			</ul>
+    		</ul>
+    	</div>
+    </nav>
+    
+    <script type="text/javascript">
+    	'use strict';
+    	////babel
+    'use strict';
+    
+    function getVersions(callback) {
+    	var xhr = new XMLHttpRequest();
+    	function onError() {
+    		callback(['0.1', '0.0.1']);
+    	}
+    	xhr.onload = function () {
+    		var versions = JSON.parse(xhr.responseText);
+    		callback(versions);
+    	};
+    	xhr.onerror = onError;
+    	xhr.onabort = onError;
+    	try {
+    		xhr.open('GET', './../../../../../versions.json');
+    		xhr.send();
+    	} catch (e) {
+    		onError();
+    	}
+    }
+    
+    //
+    var buttons = document.querySelectorAll('.nav-dropdown-button');
+    
+    var _loop = function _loop(i) {
+    	var button = buttons[i];
+    	button.onclick = function () {
+    		var target = button.getAttribute('data-target');
+    		document.getElementById(target).classList.toggle('show');
+    	};
+    };
+    
+    for (var i = 0; i < buttons.length; i++) {
+    	_loop(i);
+    }
+    
+    //
+    getVersions(function (versions) {
+    	var myVersion = '0.1';
+    	function getVerLocation(v) {
+    		return location.href.replace(myVersion, v).replace('.devdoc', v);
+    	}
+    	var latest = versions[0];
+    	var versEl = document.getElementById('versions');
+    	versEl.innerHTML = versions.map(function (v, i) {
+    		return '<li><a href="' + getVerLocation(v) + '" class="primary">' + v + (i === 0 ? ' (latest)' : '') + '</a></li>';
+    	}).join('');
+    
+    	if (latest !== myVersion) {
+    		var header = document.getElementById('header-nav');
+    		var a = document.createElement('a');
+    		header.parentElement.insertBefore(a, header.nextSibling);
+    		a.href = getVerLocation(latest);
+    		a.textContent = '<goto the latest version(' + latest + ') document>';
+    	}
+    });
+    
+    // Close the dropdown menu if the user clicks outside of it
+    window.onclick = function (event) {
+    	if (event.target.classList.contains('nav-dropdown') || event.target.classList.contains('nav-dropdown-button') || event.target.classList.contains('mobile-nav-dropdown') || event.target.classList.contains('mobile-nav-dropdown-button')) {
+    		return;
+    	}
+    
+    	var dropdowns = document.querySelectorAll('.nav-dropdown,.mobile-nav-dropdown');
+    	for (var i = 0; i < dropdowns.length; i++) {
+    		var openDropdown = dropdowns[i];
+    		if (openDropdown.classList.contains('show')) {
+    			openDropdown.classList.remove('show');
+    		}
+    	}
+    };
+    //
+    </script>    <h1>Usage &gt; <a href="./../../../../demos/usage/column_actions.html">Column Actions</a> &gt; <a href="./../../../../demos/usage/column_actions/Classes.html">Classes</a> &gt; CheckEditor</h1>
+    <div class="contents">
+        
+<h2 id="checkeditor">CheckEditor</h2>
+<p>チェックボックスをクリックした際の動作・データ編集を指定します。  </p>
+<p>セルをクリック、Enter・Spaceキーを押すと、レコードデータが編集されます。  </p>
+<p>列の<code>action</code>に<code>CheckEditor</code>クラスのインスタンスを利用すると、<code>readOnly</code>・<code>disabled</code>プロパティの制御を動的に行うことができますが、<br>文字列<code>'check'</code>と定義した場合は、<code>readOnly</code>・<code>disabled</code>プロパティを制御出来ません。  </p>
+
+<div id="sample1" class="demo-grid small">
+</div>
+
+<label>change action properties : </label>
+<select id="sample1mode">
+    <option value="" selected="true">both false</option>
+    <option value="readOnly">readOnly = true</option>
+    <option value="disabled">disabled = true</option>
+</select> <span id="sample1modememo"></span>
+
+<script type="text/javascript">
+////wrapscript
+(function() {
+//babel
+
+//
+/*global cheetahGrid*/
+'use strict';
+
+var checkEditorAction = new cheetahGrid.columns.action.CheckEditor();
+var grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#sample1'),
+	header: [{ field: 'check1', caption: 'defined by string', width: 220, columnType: 'check', action: 'check' },
+
+	//
+	{ field: 'check2', caption: 'defined by class instance', width: 220, columnType: 'check', action: checkEditorAction }, {
+		caption: 'show',
+		width: 100,
+		columnType: new cheetahGrid.columns.type.ButtonColumn({
+			caption: 'SHOW'
+		}),
+		action: new cheetahGrid.columns.action.ButtonAction({
+			action: function action(rec) {
+				alert(JSON.stringify(rec, null, '  '));
+			}
+		})
+	}]
+});
+grid.records = [{ check1: true, check2: false }, { check1: false, check2: true }, { check1: true, check2: false }];
+
+document.querySelector('#sample1mode').onchange = function () {
+	//change action properties
+	if (this.value === 'readOnly') {
+		checkEditorAction.readOnly = true;
+		checkEditorAction.disabled = false;
+		document.querySelector('#sample1modememo').textContent = 'It will not toggle';
+	} else if (this.value === 'disabled') {
+		checkEditorAction.readOnly = false;
+		checkEditorAction.disabled = true;
+		document.querySelector('#sample1modememo').textContent = 'It will not toggle and does not respond when hovering the mouse';
+	} else {
+		checkEditorAction.readOnly = false;
+		checkEditorAction.disabled = false;
+		document.querySelector('#sample1modememo').textContent = 'both false';
+	}
+};
+//
+//
+})();
+</script>
+<pre><code class="js hljs javascript"><span class="hljs-comment">/*global cheetahGrid*/</span>
+<span class="hljs-meta">'use strict'</span>;
+<span class="hljs-keyword">const</span> checkEditorAction = <span class="hljs-keyword">new</span> cheetahGrid.columns.action.CheckEditor();
+<span class="hljs-keyword">const</span> grid = <span class="hljs-keyword">new</span> cheetahGrid.ListGrid({
+	<span class="hljs-attr">parentElement</span>: <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample1'</span>),
+	<span class="hljs-attr">header</span>: [
+
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'check1'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'defined by string'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">220</span>, <span class="hljs-attr">columnType</span>: <span class="hljs-string">'check'</span>, <span class="hljs-attr">action</span>: <span class="hljs-string">'check'</span>},
+
+		<span class="hljs-comment">//</span>
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'check2'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'defined by class instance'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">220</span>, <span class="hljs-attr">columnType</span>: <span class="hljs-string">'check'</span>, <span class="hljs-attr">action</span>: checkEditorAction},
+
+		{
+			<span class="hljs-attr">caption</span>: <span class="hljs-string">'show'</span>,
+			<span class="hljs-attr">width</span>: <span class="hljs-number">100</span>,
+			<span class="hljs-attr">columnType</span>: <span class="hljs-keyword">new</span> cheetahGrid.columns.type.ButtonColumn({
+				<span class="hljs-attr">caption</span>: <span class="hljs-string">'SHOW'</span>,
+			}),
+			<span class="hljs-attr">action</span>: <span class="hljs-keyword">new</span> cheetahGrid.columns.action.ButtonAction({
+				action(rec) {
+					alert(<span class="hljs-built_in">JSON</span>.stringify(rec, <span class="hljs-literal">null</span>, <span class="hljs-string">'  '</span>));
+				},
+			}),
+		}
+
+
+	],
+});
+grid.records = [
+	{<span class="hljs-attr">check1</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">check2</span>: <span class="hljs-literal">false</span>},
+	{<span class="hljs-attr">check1</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">check2</span>: <span class="hljs-literal">true</span>},
+	{<span class="hljs-attr">check1</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">check2</span>: <span class="hljs-literal">false</span>},
+];
+
+<span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample1mode'</span>).onchange = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+	<span class="hljs-comment">//change action properties</span>
+	<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.value === <span class="hljs-string">'readOnly'</span>) {
+		checkEditorAction.readOnly = <span class="hljs-literal">true</span>;
+		checkEditorAction.disabled = <span class="hljs-literal">false</span>;
+		<span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample1modememo'</span>).textContent = <span class="hljs-string">'It will not toggle'</span>;
+	} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.value === <span class="hljs-string">'disabled'</span>) {
+		checkEditorAction.readOnly = <span class="hljs-literal">false</span>;
+		checkEditorAction.disabled = <span class="hljs-literal">true</span>;
+		<span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample1modememo'</span>).textContent = <span class="hljs-string">'It will not toggle and does not respond when hovering the mouse'</span>;
+	} <span class="hljs-keyword">else</span> {
+		checkEditorAction.readOnly = <span class="hljs-literal">false</span>;
+		checkEditorAction.disabled = <span class="hljs-literal">false</span>;
+		<span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample1modememo'</span>).textContent = <span class="hljs-string">'both false'</span>;
+	}
+};
+<span class="hljs-comment">//</span></code></pre>
+
+<h3 id="-">データ編集</h3>
+<p>基本的な動作は、<code>true</code>と<code>false</code>を切り替えます。  </p>
+<p>特殊な動作として、以下の切り替えも行われます。  </p>
+<table>
+<thead>
+<tr>
+<th>型</th>
+<th>truthy value</th>
+<th>falsy value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>数値</td>
+<td><code>1</code></td>
+<td><code>0</code></td>
+</tr>
+<tr>
+<td>文字列</td>
+<td><code>'true'</code></td>
+<td><code>'false'</code></td>
+</tr>
+<tr>
+<td>文字列</td>
+<td><code>'on'</code></td>
+<td><code>'off'</code></td>
+</tr>
+<tr>
+<td>文字列</td>
+<td><code>'1'</code></td>
+<td><code>'0'</code></td>
+</tr>
+<tr>
+<td>文字列</td>
+<td><code>'01'</code></td>
+<td><code>'00'</code></td>
+</tr>
+<tr>
+<td>文字列</td>
+<td><code>'00001'</code></td>
+<td><code>'00000'</code></td>
+</tr>
+</tbody>
+</table>
+<p>その他の値は、JavaScriptの動作として、真とみなされる値(truthy value)であれば、<code>false</code>に<br>偽とみなされる値(falsy value)であれば、<code>true</code>に切り替えます。<br>数値型の<code>0</code>以外は<code>0</code>に置き換えられます。この場合、その後、切り替えを行っても元の値には戻しません。  </p>
+
+<div id="sample2" class="demo-grid small">
+</div>
+<script type="text/javascript">
+////wrapscript
+(function() {
+//babel
+
+//
+/*global cheetahGrid*/
+'use strict';
+
+var grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#sample2'),
+	header: [{ field: 'boolean', caption: 'true/false', width: 100, columnType: 'check', action: 'check' }, { field: 'num', caption: '1/0', width: 100, columnType: 'check', action: 'check' }, { field: 'truefalse', caption: '\'true\'/\'false\'', width: 100, columnType: 'check', action: 'check' }, { field: 'onoff', caption: 'on/off', width: 100, columnType: 'check', action: 'check' }, { field: 'onezero', caption: '\'1\'/\'0\'', width: 100, columnType: 'check', action: 'check' }, { field: 'numstring', caption: 'num string', width: 100, columnType: 'check', action: 'check' }, {
+		caption: 'show',
+		width: 100,
+		columnType: new cheetahGrid.columns.type.ButtonColumn({
+			caption: 'SHOW'
+		}),
+		action: new cheetahGrid.columns.action.ButtonAction({
+			action: function action(rec) {
+				alert(JSON.stringify(rec, null, '  '));
+			}
+		})
+	}]
+});
+grid.records = [{ boolean: true, num: 0, truefalse: 'true', onoff: 'off', onezero: '1', numstring: '00' }, { boolean: false, num: 1, truefalse: 'false', onoff: 'on', onezero: '0', numstring: '0001' }, { boolean: true, num: 0, truefalse: 'true', onoff: 'off', onezero: '1', numstring: '00000000000' }];
+//
+//
+})();
+</script>
+<pre><code class="js hljs javascript"><span class="hljs-comment">/*global cheetahGrid*/</span>
+<span class="hljs-meta">'use strict'</span>;
+<span class="hljs-keyword">const</span> grid = <span class="hljs-keyword">new</span> cheetahGrid.ListGrid({
+	<span class="hljs-attr">parentElement</span>: <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample2'</span>),
+	<span class="hljs-attr">header</span>: [
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'boolean'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'true/false'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">100</span>, <span class="hljs-attr">columnType</span>: <span class="hljs-string">'check'</span>, <span class="hljs-attr">action</span>: <span class="hljs-string">'check'</span>},
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'num'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'1/0'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">100</span>, <span class="hljs-attr">columnType</span>: <span class="hljs-string">'check'</span>, <span class="hljs-attr">action</span>: <span class="hljs-string">'check'</span>},
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'truefalse'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'\'true\'/\'false\''</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">100</span>, <span class="hljs-attr">columnType</span>: <span class="hljs-string">'check'</span>, <span class="hljs-attr">action</span>: <span class="hljs-string">'check'</span>},
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'onoff'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'on/off'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">100</span>, <span class="hljs-attr">columnType</span>: <span class="hljs-string">'check'</span>, <span class="hljs-attr">action</span>: <span class="hljs-string">'check'</span>},
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'onezero'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'\'1\'/\'0\''</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">100</span>, <span class="hljs-attr">columnType</span>: <span class="hljs-string">'check'</span>, <span class="hljs-attr">action</span>: <span class="hljs-string">'check'</span>},
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'numstring'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'num string'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">100</span>, <span class="hljs-attr">columnType</span>: <span class="hljs-string">'check'</span>, <span class="hljs-attr">action</span>: <span class="hljs-string">'check'</span>},
+		{
+			<span class="hljs-attr">caption</span>: <span class="hljs-string">'show'</span>,
+			<span class="hljs-attr">width</span>: <span class="hljs-number">100</span>,
+			<span class="hljs-attr">columnType</span>: <span class="hljs-keyword">new</span> cheetahGrid.columns.type.ButtonColumn({
+				<span class="hljs-attr">caption</span>: <span class="hljs-string">'SHOW'</span>,
+			}),
+			<span class="hljs-attr">action</span>: <span class="hljs-keyword">new</span> cheetahGrid.columns.action.ButtonAction({
+				action(rec) {
+					alert(<span class="hljs-built_in">JSON</span>.stringify(rec, <span class="hljs-literal">null</span>, <span class="hljs-string">'  '</span>));
+				},
+			}),
+		}
+
+
+	],
+});
+grid.records = [
+	{<span class="hljs-attr">boolean</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">num</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">truefalse</span>: <span class="hljs-string">'true'</span>, <span class="hljs-attr">onoff</span>: <span class="hljs-string">'off'</span>, <span class="hljs-attr">onezero</span>: <span class="hljs-string">'1'</span>, <span class="hljs-attr">numstring</span>: <span class="hljs-string">'00'</span>},
+	{<span class="hljs-attr">boolean</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">num</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">truefalse</span>: <span class="hljs-string">'false'</span>, <span class="hljs-attr">onoff</span>: <span class="hljs-string">'on'</span>, <span class="hljs-attr">onezero</span>: <span class="hljs-string">'0'</span>, <span class="hljs-attr">numstring</span>: <span class="hljs-string">'0001'</span>},
+	{<span class="hljs-attr">boolean</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">num</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">truefalse</span>: <span class="hljs-string">'true'</span>, <span class="hljs-attr">onoff</span>: <span class="hljs-string">'off'</span>, <span class="hljs-attr">onezero</span>: <span class="hljs-string">'1'</span>, <span class="hljs-attr">numstring</span>: <span class="hljs-string">'00000000000'</span>},
+];
+<span class="hljs-comment">//</span></code></pre>
+    </div>
+
+</body></html>

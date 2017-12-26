@@ -1,6 +1,6 @@
 {
   "name": "cheetah-grid",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Cheetah Grid is a high performance grid engine that works on canvas",
   "keywords": [
     "spreadsheet",
@@ -21,7 +21,7 @@
   "author": {
     "name": "yosuke ota",
     "email": "otameshiyo23@gmail.com",
-    "url" : "https://www.npmjs.com/~ota-meshi"
+    "url": "https://www.npmjs.com/~ota-meshi"
   },
   "contributors": [
     {
