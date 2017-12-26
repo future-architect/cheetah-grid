@@ -15,7 +15,7 @@ const registerHbsPartials = require('./handlebars/register-partials');
 const registerHbsHelpers = require('./handlebars/helpers');
 
 const cheetah = require('../package.json');
-const {isDevVersion, latestVersion, isEnabledVersion} = require('./buildcommon');
+const {isDevVersion, latestVersion, isEnabledVersion, getDocumentVersion} = require('./buildcommon');
 
 const hbs = {
 	directory: 'hbs/layouts',
@@ -51,7 +51,7 @@ Metalsmith(__dirname).
 		latestVersion,
 	}).
 	source('./src').
-	destination(`./${isDevVersion(cheetah.version) ? '.devdoc' : cheetah.version}`).
+	destination(`./${getDocumentVersion(cheetah.version)}`).
 
 	clean(true).
 	use(mstatic({

@@ -32,13 +32,21 @@ function versionCompare(v1, v2) {
 
 	return 0;
 }
-module.exports = {
+const com = {
 	latestVersion,
+	getDocumentVersion(v) {
+		if (com.isDevVersion(v)) {
+			return '.devdoc';
+		}
+		const [major, minor/*, patch*/] = v.split('.');
+		return `${major}.${minor}`;
+	},
 	isDevVersion(v) {
 		return versionCompare(v, latestVersion) > 0;
 	},
 	isEnabledVersion(v) {
-		return versionCompare(v, latestVersion) <= 0;
+		return versionCompare(v, '9999') <= 0;
 	},
 	versionCompare,
 };
+module.exports = com;
