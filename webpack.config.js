@@ -69,7 +69,7 @@ const newDefaultProps = (opt = {}) => {
 		},
 		resolveLoader: {
 			alias: {
-				'svg-to-cheetahgrid-icon-js-loader': require.resolve('./webpack/svg-to-cheetahgrid-icon-js-loader')
+				'svg-to-cheetahgrid-icon-js-loader': require.resolve('./webpack-loader/svg-to-icon-js-loader')
 			}
 		},
 		resolve: {

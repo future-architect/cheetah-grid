@@ -38,7 +38,8 @@
   "files": [
     "src/js/",
     "dist/",
-    "tools/src/"
+    "tools/src/",
+    "webpack-loader/"
   ],
   "scripts": {
     "test": "karma start --min",
@@ -59,7 +60,9 @@
     "src": "src/js",
     "test": "src/test/specs"
   },
-  "dependencies": {},
+  "dependencies": {
+    "jsdom": "^11.3.0"
+  },
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
@@ -69,7 +72,6 @@
     "font-awesome": "^4.7.0",
     "imagediff": "^1.0.8",
     "jasmine": "^2.8.0",
-    "jsdom": "^11.3.0",
     "karma": "^1.7.1",
     "karma-babel-preprocessor": "^7.0.0",
     "karma-chrome-launcher": "^2.2.0",

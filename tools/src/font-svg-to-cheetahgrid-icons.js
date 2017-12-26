@@ -3,8 +3,6 @@
 
 const fs = require('fs');
 const svgToIcon = require('./svg-to-cheetahgrid-icon');
-const UglifyJS = require('uglify-js');
-const babel = require('babel-core');
 const jsdom = require('jsdom');
 
 function toGlyphs(svgCode) {
@@ -48,36 +46,39 @@ function toCodeString(code) {
 	return ret;
 }
 
-function buildCode(svgfile, {
+function buildObjectCode(svgCode, resource, {
 	name = 'unicode'
 } = {}) {
-	const svgCode = fs.readFileSync(require.resolve(svgfile), 'utf-8');
-	let script = `
-/*eslint-disable max-len*/
-/*global cheetahGrid*/
-'use strict';
-cheetahGrid.register.icons({
-`;
+	let script = '{\n';
 	toGlyphs(svgCode).forEach((glyph) => {
 		const unicode = glyph.getAttribute('unicode');
 		const targetName = glyph.getAttribute(name);
 		script += `
-	'${toCodeString(targetName)}': ${transform(unicode, svgCode, svgfile).replace(/\r?\n|\r/g, `
+	'${toCodeString(targetName)}': ${transform(unicode, svgCode, resource).replace(/\r?\n|\r/g, `
 	`)},`;
 	});
-	script += '\n});';
+	script += '\n}';
 	return script;
 }
 
-module.exports = {
-	toIconsJs(svgfile, opt = {}) {
-		let script = buildCode(svgfile, opt);
-		if (opt.es5) {
-			script = babel.transform(script, {presets: ['es2015']}).code;
-			if (opt.minify) {
-				script = UglifyJS.minify(script).code;
-			}
-		}
-		return script;
+const svgToIcons = {
+	toIconsJsObject(svgfile, opt = {}) {
+		const svgCode = fs.readFileSync(require.resolve(svgfile), 'utf-8');
+		return svgToIcons.sourceToIconsJsObject(svgCode, Object.assign({}, {
+			resource: svgfile,
+		}, opt));
 	},
+	sourceToIconsJsObject(svgCode, opt = {}) {
+		let resource = opt.resource;
+		let idx = resource.indexOf('\\node_modules\\');
+		if (idx === -1) {
+			idx = resource.indexOf('/node_modules/');
+		}
+		if (idx >= 0) {
+			resource = resource.substr(idx + '/node_modules/'.length);
+		}
+		return buildObjectCode(svgCode, resource, opt);
+	}
 };
+
+module.exports = svgToIcons;
