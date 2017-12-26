@@ -49,7 +49,7 @@ Metalsmith(__dirname).
 		version: cheetah.version,
 		libVersion: isDevVersion(cheetah.version) ? latestVersion : cheetah.version,
 		latestVersion,
-		docVersion: getDocumentVersion(cheetah.version),
+		docLinkVersion: getDocumentVersion(cheetah.version),
 	}).
 	source('./src').
 	destination(`./${getDocumentVersion(cheetah.version)}`).

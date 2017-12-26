@@ -37,7 +37,7 @@
 	function getVersions(callback) {
 		const xhr = new XMLHttpRequest();
 		function onError() {
-			callback([`{{docVersion}}${''}`, '0.0.1']);
+			callback([`{{docLinkVersion}}${''}`, '0.0.1']);
 		}
 		xhr.onload = () => {
 			const versions = JSON.parse(xhr.responseText);
@@ -65,7 +65,7 @@
 
 	//
 	getVersions((versions) => {
-		const myVersion = `{{docVersion}}${''}`;
+		const myVersion = `{{docLinkVersion}}${''}`;
 		function getVerLocation(v) {
 			return location.href.replace(myVersion, v).replace('.devdoc', v);
 		}

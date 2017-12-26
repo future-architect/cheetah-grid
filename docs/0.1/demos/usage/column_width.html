@@ -119,7 +119,7 @@ window.onerror = function (msg, file, line, column, err) {
     function getVersions(callback) {
     	var xhr = new XMLHttpRequest();
     	function onError() {
-    		callback(['0.1.0', '0.0.1']);
+    		callback(['0.1', '0.0.1']);
     	}
     	xhr.onload = function () {
     		var versions = JSON.parse(xhr.responseText);
@@ -152,7 +152,7 @@ window.onerror = function (msg, file, line, column, err) {
     
     //
     getVersions(function (versions) {
-    	var myVersion = '0.1.0';
+    	var myVersion = '0.1';
     	function getVerLocation(v) {
     		return location.href.replace(myVersion, v).replace('.devdoc', v);
     	}
