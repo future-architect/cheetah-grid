@@ -38,7 +38,7 @@ module.exports = {
 		return versionCompare(v, latestVersion) > 0;
 	},
 	isEnabledVersion(v) {
-		return versionCompare(v, '9999.0.0') <= 0;
+		return versionCompare(v, latestVersion) <= 0;
 	},
 	versionCompare,
 };
