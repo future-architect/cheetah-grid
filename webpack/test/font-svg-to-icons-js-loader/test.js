@@ -8,6 +8,7 @@ const UglifyJS = require('uglify-js');
 const babel = require('babel-core');
 
 function buildCode(svgfile) {
+	const start = Date.now();
 	const script = `
 /*eslint-disable max-len*/
 /*global cheetahGrid*/
@@ -18,6 +19,8 @@ function buildCode(svgfile) {
 	`)}
 	cheetahGrid.register.icons(module.exports);
 })();`;
+	const end = Date.now();
+	console.log('end', end - start);
 	return script;
 }
 

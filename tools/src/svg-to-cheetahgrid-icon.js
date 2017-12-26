@@ -2,9 +2,7 @@
 'use strict';
 
 const fs = require('fs');
-const jsdom = require('jsdom');
-
-const cache = {};
+const svgData = require('./svg-data');
 
 function circleToPath(circle) {
 	const cx = circle.getAttribute('cx') - 0;
@@ -99,33 +97,17 @@ function glyphToJSON(svgString, {
 	unicode,
 }, resource) {
 	
-	const svg = cache[`font:${svgString}`] || (cache[`font:${svgString}`] = (() => {
-		const document = new jsdom.JSDOM().window.document.createElement('div');
-		document.innerHTML = svgString;
-		return document.children[0];
-	})());
-	function findElement(el, test) {
-		for (const child of el.children) {
-			if (test(child)) {
-				return child;
-			}
-			const r = findElement(child, test);
-			if (r) {
-				return r;
-			}
-		}
-		return null;
-	}
+	const svg = svgData.get(svgString);
 	function findGlyph() {
 		if (glyphName) {
-			return findElement(svg, (child) => child.getAttribute('glyph-name') === glyphName);
+			return svg.findGlyph(glyphName);
 		} else {
-			return findElement(svg, (child) => child.getAttribute('unicode') === unicode);
+			return svg.findGlyphByUnicode(unicode);
 		}
 		
 	}
-	const fontFace = findElement(svg, (child) => child.tagName.toLowerCase() === 'font-face') || {getAttribute() {}};
-	const font = findElement(svg, (child) => child.tagName.toLowerCase() === 'font') || {getAttribute() {}};
+	const fontFace = svg.fontFaceElement || {getAttribute() {}};
+	const font = svg.fontElement || {getAttribute() {}};
 	const glyph = findGlyph();
 	//左下隅の x座標値，同y座標値，右上隅のx座標値，同y座標値
 	// const bbox = (fontFace.getAttribute('bbox') || '').split(' ');
@@ -179,9 +161,7 @@ function glyphToJSON(svgString, {
 }
 
 function svgToJSON(svgString, resource) {
-	const document = new jsdom.JSDOM().window.document.createElement('div');
-	document.innerHTML = svgString;
-	const svg = document.children[0];
+	const {svg} = svgData.get(svgString);
 	const viewBox = (svg.getAttribute('viewBox') || '').split(' ');
 	const width = ((svg.getAttribute('width') || viewBox[2]) - 0) || 0;
 	const height = ((svg.getAttribute('height') || viewBox[3]) - 0) || 0;

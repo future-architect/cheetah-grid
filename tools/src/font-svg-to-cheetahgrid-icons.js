@@ -3,24 +3,13 @@
 
 const fs = require('fs');
 const svgToIcon = require('./svg-to-cheetahgrid-icon');
-const jsdom = require('jsdom');
+const svgData = require('./svg-data');
 
 function toGlyphs(svgCode) {
-	const document = new jsdom.JSDOM().window.document.createElement('div');
-	document.innerHTML = svgCode;
-	const svg = document.children[0];
+	const svg = svgData.get(svgCode);
 
 	const glyphs = [];
-	function findGlyph(el) {
-		for (const child of el.children) {
-			if (child.getAttribute('unicode') && child.getAttribute('d')) {
-				glyphs.push(child);
-			} else {
-				findGlyph(child);
-			}
-		}
-	}
-	findGlyph(svg);
+	svg.walkAllGlyph((el) => glyphs.push(el));
 	return glyphs;
 }
 
