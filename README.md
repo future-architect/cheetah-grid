@@ -42,6 +42,23 @@ const cheetahGrid = require("cheetah-grid")
 SourceMap  
 [cheetahGrid.es5.min.js.map](https://unpkg.com/cheetah-grid@0.1.1/dist/cheetahGrid.es5.min.js.map)  
 
+
+### Downloading Cheetah Grid using GitHub
+[![GitHub package version](https://img.shields.io/github/package-json/v/future-architect/cheetah-grid.svg)](https://github.com/future-architect/cheetah-grid)
+
+#### git clone
+```bash
+$ git clone https://github.com/future-architect/cheetah-grid.git
+```
+
+#### npm install & build
+```bash
+$ npm install
+$ npm run build
+```
+
+built file is created in the `./dist` directory
+
 ## Usage
 
 ```js
