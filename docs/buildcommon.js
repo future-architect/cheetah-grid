@@ -23,7 +23,7 @@ function versionCompare(v1, v2) {
 
 		if (v1parts[i] === v2parts[i]) {
 			continue;
-		} else if (v1parts[i] > v2parts[i]) {
+		} else if ((v1parts[i] - 0) > (v2parts[i] - 0)) {
 			return 1;
 		} else {
 			return -1;
