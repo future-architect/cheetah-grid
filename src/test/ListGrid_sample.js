@@ -68,9 +68,9 @@ function generate(num) {
 				// sort
 				sort: function(order, col, grid) {
 					const compare = order === 'desc'
-						? (v1, v2) => v1 === v2 ? 0 : v1 > v2 ? 1 : -1
-						: (v1, v2) => v1 === v2 ? 0 : v1 < v2 ? 1 : -1;
-					records.sort((r1, r2) => compare(r1.personid, r2.personid));
+						? function(v1, v2) { return v1 === v2 ? 0 : v1 > v2 ? 1 : -1; }
+						: function(v1, v2) { return v1 === v2 ? 0 : v1 < v2 ? 1 : -1; };
+					records.sort(function(r1, r2) { return compare(r1.personid, r2.personid); });
 					grid.records = records;
 				}
 				// sort
@@ -160,7 +160,7 @@ function generate(num) {
 	// filter
 	const filterButton = document.querySelector('#filter');
 	filterButton.onclick = function() {
-		const _records = records.filter((record) => !!record.check);
+		const _records = records.filter(function(record) { return !!record.check; });
 		grid.records = _records;
 	};
 	const unfilterButton = document.querySelector('#unfilter');
