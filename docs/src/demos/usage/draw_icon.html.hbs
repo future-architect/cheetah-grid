@@ -14,16 +14,28 @@ css: >
 
 {{#marked}}
 ## Draw icon
+{{#if lang_ja}}
 iconに描画するには`icon`プロパティを利用します。
 
 iconプロパティは指定方法によって以下のICONを実現します。
 
 * Web FontによるICON
 * 画像によるICON
+{{else}}
+Use `icon` property when drawing icons.
+
+You can use 2 types of icons below by setting.
+* ICON by Web Font
+* ICON by picture
+{{/if}}
 
 ## Standard way to specify web fonts
 
+{{#if lang_ja}}
 スタンダードなWEBフォントの表示には`font`と`content`を指定します。
+{{else}}
+For standard Web font, you should set `font` and `content`.
+{{/if}}
 
 {{/marked}}
 
@@ -32,7 +44,11 @@ iconプロパティは指定方法によって以下のICONを実現します。
 </div>
 
 {{#marked}}
+{{#if lang_ja}}
 ※サンプルで表示しているICONは[Font Awesome Icons](http://fontawesome.io/icons/)を利用しています。
+{{else}}
+※ICON in sample uses [Material icons](https://material.io/icons/)
+{{/if}}
 
 ```html
 <!-- Font Awesome:  http://fontawesome.io -->
@@ -98,7 +114,11 @@ grid.records = [
 
 ## Other ways to specify web font
 
+{{#if lang_ja}}
 WEBフォントの表示方法は、`className`を指定する方法も提供しています。
+{{else}}
+You can use web font by setting `className`.
+{{/if}}
 
 {{/marked}}
 
@@ -161,9 +181,15 @@ grid.records = [
 
 ## How to specify images
 
+{{#if lang_ja}}
 画像を表示するには、`src`を指定します。
 
 注1: IEなどPromise未対応ブラウザでは[es6-promise](https://www.npmjs.com/package/es6-promise)などのpolyfillを読み込ませる必要があります。
+{{else}}
+Set `src` to show pictures.
+
+note: You should load polyfill like [es6-promise](https://www.npmjs.com/package/es6-promise), when using the browser which doesn't support Promise, such as IE.
+{{/if}}
 
 {{/marked}}
 
@@ -235,7 +261,11 @@ grid.records = [
 
 ## Multiple icons
 
+{{#if lang_ja}}
 複数ICONを表示するには配列を渡します
+{{else}}
+Give array in order to show multiple icons.
+{{/if}}
 
 {{/marked}}
 

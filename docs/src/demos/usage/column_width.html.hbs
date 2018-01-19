@@ -8,10 +8,17 @@ docVersion: 0.1.0
 
 {{#marked}}
 ## Specify column width
+{{#if lang_ja}}
 プロパティ`width`を利用して、列ごとのカラム幅を設定できます。  
 `width`が指定されない場合、`grid`のプロパティ`defaultColWidth`を利用します。  
 
 `string`の値を指定することで`%`表記での指定も可能です。  
+{{else}}
+You can set the width of each column by using `width` property.
+If nothing is set to `width` property, the value of `defaultColWidth` (property in `grid`) is used.
+
+You can use `%` mode by setting value as `string`.
+{{/if}}
 {{/marked}}
 
 <div id="sample1" class="demo-grid middle">

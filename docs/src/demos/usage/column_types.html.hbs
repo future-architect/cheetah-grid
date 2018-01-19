@@ -11,8 +11,6 @@ order: 110
 {{#if lang_ja}}
 プロパティ`columnType`を利用して、列のタイプを指定できます。
 
-標準で用意されたプロパティは以下です。
-
 |property|説明|LINK|
 |---|---|---|
 |指定なし|テキストをセルに描画します|---|
@@ -21,6 +19,15 @@ order: 110
 |button|ボタンをセルに描画します| [ButtonColumn](./column_types/ButtonColumn.html) |
 |image|画像をセルに描画します| [Draw Image](./draw_image.html) |
 {{else}}
+Set the column type by using `columnType`.
+
+|property|description|LINK|
+|---|---|---|
+|none|draw text in the cell|---|
+|number|draw number in the cell with comma-separated| [NumberColumn](./column_types/NumberColumn.html) |
+|check|draw checkbox in the cell|---|
+|button|draw button in the cell| [ButtonColumn](./column_types/ButtonColumn.html) |
+|image|draq image in the cell| [Draw Image](./draw_image.html) |
 {{/if}}
 {{/marked}}
 
