@@ -7,6 +7,7 @@ order: 200
 
 {{#marked}}
 ## Using promises
+{{#if lang_ja}}
 Cheetah Gridは`Promise`オブジェクトの扱いをサポートしています。  
 例として以下の用途での利用を想定しています。  
 
@@ -14,13 +15,28 @@ Cheetah Gridは`Promise`オブジェクトの扱いをサポートしていま�
    初期表示では上位数十件のデータを取得・表示し、後のデータはスクロールして表示させようとしたタイミングで取得・表示するような場合  
 * セルに表示する情報を遅延して取得する  
    初期表示ではレコードの重要な情報を取得・表示し、詳細な情報は遅延して取得・表示するような場合    
+{{else}}
+Cheetah Grid supports `Promise` object.
+We suppose the situations below as a example.
+
+* Get the record informations as deferred
+  Get and show a few records in first view. Remaining records are shown when scrolled.
+* Get the cell informations as deferred
+  Get and show the important informations in first view. Remaining details are shown later.
+{{/if}}
 {{/marked}}
 
 {{#marked}}
 ## Promise Records
+{{#if lang_ja}}
 以下に利用例を示します。  
 
 例は、全体で1000件のレコードを表示しますが、レコード100件ごとにajax経由で取得することを想定した例です。  
+{{else}}
+Shows usage below.
+
+In this example grid shows 1,000 recors as a whole. Getting 100 records by each ajax is supposed.  
+{{/if}}
 
 {{/marked}}
 
@@ -31,7 +47,11 @@ Cheetah Gridは`Promise`オブジェクトの扱いをサポートしていま�
 
 {{#marked}}
 
+{{#if lang_ja}}
 コード例の`getRecordsWithAjax`は、ajaxでレコード100件を取得する`Promise`オブジェクトを返します。  
+{{else}}
+`getRecordsWithAjax` in example code returns `Promise` object which get 100 records by ajax.
+{{/if}}
 
 {{/marked}}
 
@@ -103,9 +123,13 @@ grid.dataSource = dataSource;
 
 {{#marked}}
 ## Promise Cells
+{{#if lang_ja}}
 以下に利用例を示します。  
 
 例は、人員データを表示しますが、部署情報については、表示時にajax経由で取得することを想定した例です。  
+{{else}}
+Example below shows Person data. Department informations are shown later by ajax.
+{{/if}}
 
 {{/marked}}
 
@@ -116,7 +140,11 @@ grid.dataSource = dataSource;
 
 {{#marked}}
 
+{{#if lang_ja}}
 コード例の`getPersonDeptWithAjax`は、ajaxで部署情報を取得する`Promise`オブジェクトを返します。  
+{{else}}
+`getPersonDeptWithAjax` in example code returns `Promise` object which get department information by ajax.
+{{/if}}
 
 {{/marked}}
 
@@ -128,7 +156,7 @@ grid.dataSource = dataSource;
 const records = generatePersons(1000);
 const depts = [
 	'General Affairs',
-	'Personnel',
+	'Personal',
 	'General Accounting',
 	'Sales',
 	'Sales Promotion',

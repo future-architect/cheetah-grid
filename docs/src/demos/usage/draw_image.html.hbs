@@ -7,17 +7,28 @@ order: 300
 
 {{#marked}}
 ## Draw image
+{{#if lang_ja}}
 Imageをセルに描画するには`columnType: 'image'`を利用します(注1)。
 
 注1: IEなどPromise未対応ブラウザでは[es6-promise](https://www.npmjs.com/package/es6-promise)などのpolyfillを読み込ませる必要があります。
+{{else}}
+Use `columnType: 'image'` to draw image in the cell.
+
+note: You should load polyfill like [es6-promise](https://www.npmjs.com/package/es6-promise), when using the browser which doesn't support Promise, such as IE.
+{{/if}}
 
 {{/marked}}
 
 <div id="sample" class="demo-grid middle">
 </div>
 {{#marked}}
+{{#if lang_ja}}
 ※サンプルで表示している画像は[wikipedia](https://en.wikipedia.org/wiki/Cheetah)に載っている画像です  
 画像の詳細については表示されている画像をクリックしてください。  
+{{else}}
+note: Images used in samples are on [wikipedia](https://en.wikipedia.org/wiki/Cheetah).
+Please click the images to check details of those.
+{{/if}}
 {{/marked}}
 <script type="text/javascript">
 //{{#wrapscript}}

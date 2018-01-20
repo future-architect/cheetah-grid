@@ -192,12 +192,13 @@ window.onerror = function (msg, file, line, column, err) {
     <div class="contents">
         
 <h2 id="draw-image">Draw image</h2>
-<p>Imageをセルに描画するには<code>columnType: 'image'</code>を利用します(注1)。</p>
-<p>注1: IEなどPromise未対応ブラウザでは<a href="https://www.npmjs.com/package/es6-promise">es6-promise</a>などのpolyfillを読み込ませる必要があります。</p>
+<p>Use <code>columnType: 'image'</code> to draw image in the cell.</p>
+<p>note: You should load polyfill like <a href="https://www.npmjs.com/package/es6-promise">es6-promise</a>, when using the browser which doesn't support Promise, such as IE.</p>
 
 <div id="sample" class="demo-grid middle">
 </div>
-<p>※サンプルで表示している画像は<a href="https://en.wikipedia.org/wiki/Cheetah">wikipedia</a>に載っている画像です<br>画像の詳細については表示されている画像をクリックしてください。  </p>
+<p>note: Images used in samples are on <a href="https://en.wikipedia.org/wiki/Cheetah">wikipedia</a>.
+Please click the images to check details of those.</p>
 <script type="text/javascript">
 ////wrapscript
 (function() {
