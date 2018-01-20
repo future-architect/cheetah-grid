@@ -602,6 +602,12 @@
 			this[_].theme = themes.of(theme);
 			this.invalidate();
 		}
+		get font() {
+			return super.font || this[_].gridCanvasHelper.theme.font;
+		}
+		set font(font) {
+			super.font = font;
+		}
 		get sortState() {
 			return this[_].sortState;
 		}

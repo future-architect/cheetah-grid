@@ -11,6 +11,9 @@
 	}
 	function createTheme(obj = {}, superTheme = defaultTheme) {
 		return {
+			get font() {
+				return getProp(obj, superTheme, ['font']);
+			},
 			// color
 			get color() {
 				return getProp(obj, superTheme, ['color']);

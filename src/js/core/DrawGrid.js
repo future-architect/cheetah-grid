@@ -1510,7 +1510,7 @@
 					defaultRowHeight = 40,
 					// defaultRowHeight = 24,
 					defaultColWidth = 80,
-					font = '16px sans-serif',
+					font,
 					parentElement,
 				} = {}) {
 			super();
@@ -1916,7 +1916,7 @@
 			ctx.textAlign = 'left';
 			ctx.textBaseline = 'top';
 			ctx.lineWidth = 1;
-			ctx.font = this[_].font;
+			ctx.font = this.font || '16px sans-serif';
 			return ctx;
 		}
 	}

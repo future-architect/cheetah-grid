@@ -7,3 +7,4 @@
 /webpack/test/font-svg-to-icons-js-loader/fa_icons.js
 /webpack/test/font-svg-to-icons-js-loader/mdi_icons.js
 /webpack/test/svg-to-icon-js-loader/all_mdi_icons.js
+package-lock.json
