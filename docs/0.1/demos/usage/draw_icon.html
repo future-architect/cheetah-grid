@@ -197,20 +197,20 @@ window.onerror = function (msg, file, line, column, err) {
     <div class="contents">
         
 <h2 id="draw-icon">Draw icon</h2>
-<p>iconに描画するには<code>icon</code>プロパティを利用します。</p>
-<p>iconプロパティは指定方法によって以下のICONを実現します。</p>
+<p>Use <code>icon</code> property when drawing icons.</p>
+<p>You can use 2 types of icons below by setting.</p>
 <ul>
-<li>Web FontによるICON</li>
-<li>画像によるICON</li>
+<li>ICON by Web Font</li>
+<li>ICON by picture</li>
 </ul>
 <h2 id="standard-way-to-specify-web-fonts">Standard way to specify web fonts</h2>
-<p>スタンダードなWEBフォントの表示には<code>font</code>と<code>content</code>を指定します。</p>
+<p>For standard Web font, you should set <code>font</code> and <code>content</code>.</p>
 
 
 <div id="sample1" class="demo-grid small">
 </div>
 
-<p>※サンプルで表示しているICONは<a href="http://fontawesome.io/icons/">Font Awesome Icons</a>を利用しています。</p>
+<p>※ICON in sample uses <a href="http://fontawesome.io/icons/">Font Awesome Icons</a></p>
 <pre><code class="lang-html hljs xml"><span class="hljs-comment">&lt;!-- Font Awesome:  http://fontawesome.io --&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">"stylesheet"</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/css"</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"</span>&gt;</span>
 </code></pre>
@@ -305,7 +305,7 @@ grid.records = [
 
 <span class="hljs-comment">//</span></code></pre>
 <h2 id="other-ways-to-specify-web-font">Other ways to specify web font</h2>
-<p>WEBフォントの表示方法は、<code>className</code>を指定する方法も提供しています。</p>
+<p>You can use web font by setting <code>className</code>.</p>
 
 
 <div id="sample2" class="demo-grid small">
@@ -398,8 +398,8 @@ grid.records = [
 
 <span class="hljs-comment">//</span></code></pre>
 <h2 id="how-to-specify-images">How to specify images</h2>
-<p>画像を表示するには、<code>src</code>を指定します。</p>
-<p>注1: IEなどPromise未対応ブラウザでは<a href="https://www.npmjs.com/package/es6-promise">es6-promise</a>などのpolyfillを読み込ませる必要があります。</p>
+<p>Set <code>src</code> to show pictures.</p>
+<p>note: You should load polyfill like <a href="https://www.npmjs.com/package/es6-promise">es6-promise</a>, when using the browser which doesn't support Promise, such as IE.</p>
 
 
 <div id="sample3" class="demo-grid small">
@@ -512,7 +512,7 @@ grid.records = [
 
 <span class="hljs-comment">//</span></code></pre>
 <h2 id="multiple-icons">Multiple icons</h2>
-<p>複数ICONを表示するには配列を渡します</p>
+<p>Give array in order to show multiple icons.</p>
 
 <div id="sample4" class="demo-grid small">
 </div>

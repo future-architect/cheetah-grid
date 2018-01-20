@@ -191,25 +191,25 @@ window.onerror = function (msg, file, line, column, err) {
     <div class="contents">
         
 <h2 id="branchgraphcolumn">BranchGraphColumn</h2>
-<p>ブランチグラフを表示する</p>
+<p>Show branch graph.</p>
 <h3 id="constructor-properties">constructor properties</h3>
 <table>
 <thead>
 <tr>
 <th>property</th>
-<th>説明</th>
+<th>description</th>
 <th>default</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>start</code></td>
-<td>開始位置を指定し、進行する方向を指定します。 <code>'top'</code> or <code>'bottom'</code></td>
+<td>set the moving direction by setting the beggining point. <code>'top'</code> or <code>'bottom'</code></td>
 <td><code>'bottom'</code></td>
 </tr>
 <tr>
 <td><code>cache</code></td>
-<td>ブランチ構造の計算結果をキャッすする場合は<code>true</code>を指定。 キャッシュを破棄するには<code>clearCache(grid)</code>を呼び出してください。</td>
+<td>set <code>true</code> when caching the calculation result of the branch structure. Please call <code>clearCache(grid)</code> when deleting the cahced data.</td>
 <td><code>false</code></td>
 </tr>
 </tbody>
@@ -219,34 +219,34 @@ window.onerror = function (msg, file, line, column, err) {
 <thead>
 <tr>
 <th>property</th>
-<th>説明</th>
+<th>description</th>
 <th>default</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>branchColors</code></td>
-<td>ブランチを表現する色を返す関数を渡します。 関数の引数:(ブランチ名, <code>index</code>)</td>
-<td><code>'#979797'</code>・<code>'#008fb5'</code>・<code>'#f1c109'</code>を順番に返す関数</td>
+<td>set the function which returns the color of branch you want to use. arguments: (branch name, <code>index</code>)</td>
+<td>the function which returns following colors in turn. <code>'#979797'</code>,<code>'#008fb5'</code>,<code>'#f1c109'</code></td>
 </tr>
 <tr>
 <td><code>margin</code></td>
-<td>横のマージンを指定します。</td>
+<td>set the margin of side.</td>
 <td><code>4</code></td>
 </tr>
 <tr>
 <td><code>circleSize</code></td>
-<td><code>commit</code>を表現する点の大きさを指定します。</td>
+<td>set the size of point which express <code>commit</code>.</td>
 <td><code>16</code></td>
 </tr>
 <tr>
 <td><code>branchLineWidth</code></td>
-<td>ブランチ線の幅を指定します。</td>
+<td>set the width of branch lines.</td>
 <td><code>4</code></td>
 </tr>
 <tr>
 <td><code>mergeStyle</code></td>
-<td><code>'bezier'</code>を指定するとベジェ曲線でマージを表現します。 <code>'straight'</code>を指定すると直線でマージを表現します。</td>
+<td>set the way to express the merge line. <code>'bezier'</code> or <code>'straight'</code></td>
 <td><code>'bezier'</code></td>
 </tr>
 </tbody>
