@@ -3,7 +3,7 @@
 
 const path = require('path');
 const mdiRoot = path.dirname(require.resolve('material-design-icons/package.json'));
-const loader = require('../svg-to-cheetahgrid-icon-js-loader');
+const loader = require('../../../webpack-loader/svg-to-icon-js-loader');
 const UglifyJS = require('uglify-js');
 const babel = require('babel-core');
 
@@ -34,7 +34,6 @@ walkTree(mdiRoot, (dir, filename) => {
 });
 
 function transform(file) {
-	console.log('mdi svg', file);
 	return `
 const module = {};
 (function(module) {
@@ -45,6 +44,7 @@ return module.exports;`;
 }
 
 const buildCode = () => {
+	const start = Date.now();
 	let script = `
 /*eslint-disable camelcase, max-statements, max-len, no-inner-declarations*/
 'use strict';
@@ -58,6 +58,9 @@ window.allMdiIcons = {
 	},`;
 	}
 	script += '\n};';
+	const end = Date.now();
+	console.log('end', end - start);
+	console.log('count', Object.keys(svgs).length);
 	return script;
 };
 

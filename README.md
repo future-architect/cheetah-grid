@@ -3,6 +3,7 @@
 [![npm](https://img.shields.io/npm/l/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
 [![npm](https://img.shields.io/npm/v/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
 [![npm](https://img.shields.io/npm/dm/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
+[![npm](https://img.shields.io/npm/dy/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
 [![npm](https://img.shields.io/npm/dt/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
 
 <img src="https://future-architect.github.io/cheetah-grid/logo.png" style="max-width: 600px;" alt="Cheetah Grid" />
@@ -16,9 +17,10 @@ The fastest open-source web component of data table.
 ## Downloading Cheetah Grid 
 
 ### Using Cheetah Grid with a CDN
+[![npm](https://img.shields.io/npm/v/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
 
 ```html
-<script src="https://unpkg.com/cheetah-grid@0.0.1"></script>
+<script src="https://unpkg.com/cheetah-grid@0.1.x"></script>
 ```
 
 ### Downloading Cheetah Grid using npm
@@ -33,11 +35,29 @@ const cheetahGrid = require("cheetah-grid")
 ```
 
 ### Downloading Cheetah Grid source code
+[![npm](https://img.shields.io/npm/v/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
 
-[cheetahGrid.es5.min.js](https://unpkg.com/cheetah-grid@0.0.1/dist/cheetahGrid.es5.min.js)  
+[cheetahGrid.es5.min.js](https://unpkg.com/cheetah-grid@0.1.x/dist/cheetahGrid.es5.min.js)  
 
 SourceMap  
-[cheetahGrid.es5.min.js.map](https://unpkg.com/cheetah-grid@0.0.1/dist/cheetahGrid.es5.min.js.map)  
+[cheetahGrid.es5.min.js.map](https://unpkg.com/cheetah-grid@0.1.x/dist/cheetahGrid.es5.min.js.map)  
+
+
+### Downloading Cheetah Grid using GitHub
+[![GitHub package version](https://img.shields.io/github/package-json/v/future-architect/cheetah-grid.svg)](https://github.com/future-architect/cheetah-grid)
+
+#### git clone
+```bash
+$ git clone https://github.com/future-architect/cheetah-grid.git
+```
+
+#### npm install & build
+```bash
+$ npm install
+$ npm run build
+```
+
+built file is created in the `./dist` directory
 
 ## Usage
 

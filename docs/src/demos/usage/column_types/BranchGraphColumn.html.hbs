@@ -5,24 +5,37 @@ category:
     - Classes
 title: BranchGraphColumn
 layout: demo.html
-order: 400
+order: 2000
 docVersion: 0.1.0
 ---
 
 {{#marked}}
 ## BranchGraphColumn
 
+{{#if lang_ja}}
 ブランチグラフを表示する
+{{else}}
+Show branch graph.
+{{/if}}
 
 ### constructor properties
 
+{{#if lang_ja}}
 |property|説明|default|
 |---|---|---|
 |`start`|開始位置を指定し、進行する方向を指定します。 `'top'` or `'bottom'`|`'bottom'`|
-|`cache`|ブランチ構造の計算結果をキャッすする場合は`true`を指定。 キャッシュを破棄するには`clearCache(grid)`を呼び出してください。 |`false`|
+|`cache`|ブランチ構造の計算結果をキャッシュする場合は`true`を指定。 キャッシュを破棄するには`clearCache(grid)`を呼び出してください。 |`false`|
+{{else}}
+|property|description|default|
+|---|---|---|
+|`start`|set the moving direction by setting the beggining point. `'top'` or `'bottom'`|`'bottom'`|
+|`cache`|set `true` when caching the calculation result of the branch structure. Please call `clearCache(grid)` when deleting the cahced data.|`false`|
+{{/if}}
 
 ### style properties
 
+
+{{#if lang_ja}}
 |property|説明|default|
 |---|---|---|
 |`branchColors`|ブランチを表現する色を返す関数を渡します。 関数の引数:(ブランチ名, `index`)|`'#979797'`・`'#008fb5'`・`'#f1c109'`を順番に返す関数|
@@ -30,7 +43,15 @@ docVersion: 0.1.0
 |`circleSize`|`commit`を表現する点の大きさを指定します。|`16`|
 |`branchLineWidth`|ブランチ線の幅を指定します。|`4`|
 |`mergeStyle`|`'bezier'`を指定するとベジェ曲線でマージを表現します。 `'straight'`を指定すると直線でマージを表現します。|`'bezier'`|
-
+{{else}}
+|property|description|default|
+|---|---|---|
+|`branchColors`|set the function which returns the color of branch you want to use. arguments: (branch name, `index`)|the function which returns following colors in turn. `'#979797'`,`'#008fb5'`,`'#f1c109'`|
+|`margin`|set the margin of side.|`4`|
+|`circleSize`|set the size of point which express `commit`.|`16`|
+|`branchLineWidth`|set the width of branch lines.|`4`|
+|`mergeStyle`|set the way to express the merge line. `'bezier'` or `'straight'`|`'bezier'`|
+{{/if}}
 
 {{/marked}}
 
@@ -84,7 +105,7 @@ const grid = new cheetahGrid.ListGrid({
 		{
 			field: (rec) => rec,
 			caption: 'BranchGraph',
-			width: 320,
+			width: 200,
 			columnType: new cheetahGrid.columns.type.BranchGraphColumn({
 				start: 'top', // Specify the start and indicate the direction to proceed. 'top' or 'bottom'. default 'bottom'
 				cache: false // cache enable. default false

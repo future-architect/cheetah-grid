@@ -14,8 +14,7 @@ const mstatic = require('metalsmith-static');
 const registerHbsPartials = require('./handlebars/register-partials');
 const registerHbsHelpers = require('./handlebars/helpers');
 
-const cheetah = require('../package.json');
-const {isDevVersion, latestVersion, isEnabledVersion} = require('./buildcommon');
+const {isDevVersion, latestVersion, isEnabledVersion, getDocumentVersion, packageVersion, libVersion} = require('./buildcommon');
 
 const hbs = {
 	directory: 'hbs/layouts',
@@ -46,12 +45,13 @@ Metalsmith(__dirname).
 			'FAQ',
 		],
 		script: docScript,
-		version: cheetah.version,
-		libVersion: isDevVersion(cheetah.version) ? latestVersion : cheetah.version,
+		version: packageVersion,
+		libVersion,
 		latestVersion,
+		docLinkVersion: getDocumentVersion(),
 	}).
 	source('./src').
-	destination(`./${isDevVersion(cheetah.version) ? '.devdoc' : cheetah.version}`).
+	destination(`./${getDocumentVersion()}`).
 
 	clean(true).
 	use(mstatic({

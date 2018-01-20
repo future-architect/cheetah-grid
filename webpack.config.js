@@ -2,7 +2,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const rm = require('rimraf');
-const UglifyEsPlugin = require('uglify-es-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const PACKAGEJSON = require('./package.json');
 const LiveReloadPlugin = require('webpack-livereload-plugin');
 const WrapperPlugin = require('wrapper-webpack-plugin');
@@ -69,7 +69,7 @@ const newDefaultProps = (opt = {}) => {
 		},
 		resolveLoader: {
 			alias: {
-				'svg-to-cheetahgrid-icon-js-loader': require.resolve('./webpack/svg-to-cheetahgrid-icon-js-loader')
+				'svg-to-cheetahgrid-icon-js-loader': require.resolve('./webpack-loader/svg-to-icon-js-loader')
 			}
 		},
 		resolve: {
@@ -142,7 +142,10 @@ function newEs6MinConfig(opt) {
 	opt = Object.assign({}, opt);
 	opt.plugins = [
 		//minify
-		new UglifyEsPlugin({sourceMap: true}),
+		new UglifyJsPlugin({
+			sourceMap: true,
+			uglifyOptions: {ecma: 6},
+		}),
 		new webpack.optimize.AggressiveMergingPlugin(),
 		...(opt.plugins || [])
 	];
@@ -153,7 +156,7 @@ function newEs5MinConfig(opt) {
 	opt = Object.assign({}, opt);
 	opt.plugins = [
 		//minify
-		new webpack.optimize.UglifyJsPlugin({sourceMap: true}),
+		new UglifyJsPlugin({sourceMap: true}),
 		new webpack.optimize.AggressiveMergingPlugin(),
 		...(opt.plugins || [])
 	];

@@ -12,7 +12,7 @@
     
     <!-- <script src="http://localhost:35729/livereload.js"></script> -->
     <script src="https://www.promisejs.org/polyfills/promise-7.0.4.min.js"></script>
-	
+    
     <script type="text/javascript" src="https://unpkg.com/cheetah-grid@0.0.1"></script>
 
     <style type="text/css">
@@ -23,8 +23,8 @@
             height: calc(100% - 100px);
         }
         .contents {
-        	padding: 30px;
-			box-sizing: border-box;
+            padding: 30px;
+            box-sizing: border-box;
         }
         .demo-grid {
             width: 100%;
@@ -48,7 +48,7 @@
         }
 
         .hljs { 
-        	 tab-size: 4;
+             tab-size: 4;
         }
 
         
@@ -79,112 +79,117 @@ window.onerror = function (msg, file, line, column, err) {
 	getErrorLogElement().value += err && err.stack || msg + '\n    at ' + file + ':' + line + ':' + column;
 };
     </script>
-	<nav class="header primary" id="header-nav">
-		<div class="nav-wrapper">
-			<a href="./../../../../index.html">
-				<img src="./../../../../logo.png" style="width: 100px;padding: 5px;vertical-align: middle;" alt="Cheetah Grid">
-			</a>
-	
-			<ul id="nav-mobile" class="right hide-on-med-and-down">
-				<li><a href="./../../../ja/index.html" class="primary">Docoments - TOP</a></li>
-				<li class="nav-dropdown-container">
-					<a id="nav-versions" href="#" class="primary nav-dropdown-button" data-target="versions">
-						version<span class="icon-arrow"></span>
-					</a>
-					<ul id="versions" class="nav-dropdown right-dropdown">
-					</ul>
-				</li>
-				<li class="nav-dropdown-container">
-					<a id="nav-lang" href="#" class="primary nav-dropdown-button" data-target="langs">
-						lang<span class="icon-arrow"></span>
-					</a>
-					<ul id="langs" class="nav-dropdown right-dropdown">
-						<li><a href="./../../../ja/demos\usage\draw_image.html" class="primary">日本語</a></li>
-						<li><a href="./../../../demos\usage\draw_image.html" class="primary">English</a></li>
-					</ul>
-				</li>
-			</ul>
-		</div>
-	</nav>
-	
-	<script type="text/javascript">
-		'use strict';
-		////babel
-	'use strict';
-	
-	function getVersions(callback) {
-		var xhr = new XMLHttpRequest();
-		function onError() {
-			callback(['0.1.0', '0.0.1']);
-		}
-		xhr.onload = function () {
-			var versions = JSON.parse(xhr.responseText);
-			callback(versions);
-		};
-		xhr.onerror = onError;
-		xhr.onabort = onError;
-		try {
-			xhr.open('GET', './../../../../versions.json');
-			xhr.send();
-		} catch (e) {
-			onError();
-		}
-	}
-	
-	//
-	var buttons = document.querySelectorAll('.nav-dropdown-button');
-	
-	var _loop = function _loop(i) {
-		var button = buttons[i];
-		button.onclick = function () {
-			var target = button.getAttribute('data-target');
-			document.getElementById(target).classList.toggle('show');
-		};
-	};
-	
-	for (var i = 0; i < buttons.length; i++) {
-		_loop(i);
-	}
-	
-	//
-	getVersions(function (versions) {
-		var myVersion = '0.0.1';
-		function getVerLocation(v) {
-			return location.href.replace(myVersion, v);
-		}
-		var latest = versions[0];
-		var versEl = document.getElementById('versions');
-		versEl.innerHTML = versions.map(function (v, i) {
-			return '<li><a href="' + getVerLocation(v) + '" class="primary">' + v + (i === 0 ? ' (latest)' : '') + '</a></li>';
-		}).join('');
-	
-		if (latest !== myVersion) {
-			var header = document.getElementById('header-nav');
-			var a = document.createElement('a');
-			header.parentElement.insertBefore(a, header.nextSibling);
-			a.href = getVerLocation(latest);
-			a.textContent = '<goto the latest version(' + latest + ') document>';
-		}
-	});
-	
-	// Close the dropdown menu if the user clicks outside of it
-	window.onclick = function (event) {
-		if (event.target.classList.contains('nav-dropdown') || event.target.classList.contains('nav-dropdown-button')) {
-			return;
-		}
-	
-		var dropdowns = document.querySelectorAll('.nav-dropdown');
-		for (var i = 0; i < dropdowns.length; i++) {
-			var openDropdown = dropdowns[i];
-			if (openDropdown.classList.contains('show')) {
-				openDropdown.classList.remove('show');
-			}
-		}
-	};
-	//
-	</script>	<h1>Usage &gt; Draw Image</h1>
-	<div class="contents">
-    	
+    <nav class="header primary" id="header-nav">
+    	<div class="nav-wrapper">
+    		<a href="./../../../../index.html">
+    			<img src="./../../../../logo.png" style="width: 100px;padding: 5px;vertical-align: middle;" alt="Cheetah Grid">
+    		</a>
+    
+    		<ul class="right hide-on-med-and-down nav-dropdown-container">
+    			<a href="#" class="primary nav-dropdown-button mobile-only" data-target="all-nav" style="width: 30px;">
+    				<span class="icon-arrow"></span>
+    			</a>
+    			<ul id="all-nav" class="mobile-nav-dropdown right-dropdown primary">
+    				<li><a href="./../../../ja/index.html" class="primary">Docoments - TOP</a></li>
+    				<li class="nav-dropdown-container">
+    					<a id="nav-versions" href="#" class="primary nav-dropdown-button" data-target="versions">
+    						version<span class="icon-arrow"></span>
+    					</a>
+    					<ul id="versions" class="nav-dropdown right-dropdown">
+    					</ul>
+    				</li>
+    				<li class="nav-dropdown-container">
+    					<a id="nav-lang" href="#" class="primary nav-dropdown-button" data-target="langs">
+    						lang<span class="icon-arrow"></span>
+    					</a>
+    					<ul id="langs" class="nav-dropdown right-dropdown">
+    						<li><a href="./../../../ja/demos\usage\draw_image.html" class="primary">日本語</a></li>
+    						<li><a href="./../../../demos\usage\draw_image.html" class="primary">English</a></li>
+    					</ul>
+    				</li>
+    			</ul>
+    		</ul>
+    	</div>
+    </nav>
+    
+    <script type="text/javascript">
+    	'use strict';
+    	////babel
+    'use strict';
+    
+    function getVersions(callback) {
+    	var xhr = new XMLHttpRequest();
+    	function onError() {
+    		callback(['0.0.1', '0.0.1']);
+    	}
+    	xhr.onload = function () {
+    		var versions = JSON.parse(xhr.responseText);
+    		callback(versions);
+    	};
+    	xhr.onerror = onError;
+    	xhr.onabort = onError;
+    	try {
+    		xhr.open('GET', './../../../../versions.json');
+    		xhr.send();
+    	} catch (e) {
+    		onError();
+    	}
+    }
+    
+    //
+    var buttons = document.querySelectorAll('.nav-dropdown-button');
+    
+    var _loop = function _loop(i) {
+    	var button = buttons[i];
+    	button.onclick = function () {
+    		var target = button.getAttribute('data-target');
+    		document.getElementById(target).classList.toggle('show');
+    	};
+    };
+    
+    for (var i = 0; i < buttons.length; i++) {
+    	_loop(i);
+    }
+    
+    //
+    getVersions(function (versions) {
+    	var myVersion = '0.0.1';
+    	function getVerLocation(v) {
+    		return location.href.replace(myVersion, v).replace('.devdoc', v);
+    	}
+    	var latest = versions[0];
+    	var versEl = document.getElementById('versions');
+    	versEl.innerHTML = versions.map(function (v, i) {
+    		return '<li><a href="' + getVerLocation(v) + '" class="primary">' + v + (i === 0 ? ' (latest)' : '') + '</a></li>';
+    	}).join('');
+    
+    	if (latest !== myVersion) {
+    		var header = document.getElementById('header-nav');
+    		var a = document.createElement('a');
+    		header.parentElement.insertBefore(a, header.nextSibling);
+    		a.href = getVerLocation(latest);
+    		a.textContent = '<goto the latest version(' + latest + ') document>';
+    	}
+    });
+    
+    // Close the dropdown menu if the user clicks outside of it
+    window.onclick = function (event) {
+    	if (event.target.classList.contains('nav-dropdown') || event.target.classList.contains('nav-dropdown-button') || event.target.classList.contains('mobile-nav-dropdown') || event.target.classList.contains('mobile-nav-dropdown-button')) {
+    		return;
+    	}
+    
+    	var dropdowns = document.querySelectorAll('.nav-dropdown,.mobile-nav-dropdown');
+    	for (var i = 0; i < dropdowns.length; i++) {
+    		var openDropdown = dropdowns[i];
+    		if (openDropdown.classList.contains('show')) {
+    			openDropdown.classList.remove('show');
+    		}
+    	}
+    };
+    //
+    </script>    <h1>Usage &gt; Draw Image</h1>
+    <div class="contents">
+        
 <h2 id="draw-image">Draw image</h2>
 <p>Imageをセルに描画するには<code>columnType: 'image'</code>を利用します(注1)。</p>
 <p>注1: IEなどPromise未対応ブラウザでは<a href="https://www.npmjs.com/package/es6-promise">es6-promise</a>などのpolyfillを読み込ませる必要があります。</p>
