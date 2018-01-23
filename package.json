@@ -1,6 +1,6 @@
 {
   "name": "cheetah-grid",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Cheetah Grid is a high performance grid engine that works on canvas",
   "keywords": [
     "spreadsheet",
@@ -61,17 +61,17 @@
     "test": "src/test/specs"
   },
   "dependencies": {
-    "jsdom": "^11.3.0"
+    "jsdom": "^11.6.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-preset-es2015": "^6.24.1",
-    "eslint": "^4.7.2",
+    "eslint": "^4.16.0",
     "eslint-plugin-html": "^4.0.1",
     "font-awesome": "^4.7.0",
     "imagediff": "^1.0.8",
-    "jasmine": "^2.8.0",
+    "jasmine": "^2.9.0",
     "karma": "^2.0.0",
     "karma-babel-preprocessor": "^7.0.0",
     "karma-chrome-launcher": "^2.2.0",
