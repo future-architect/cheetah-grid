@@ -21,6 +21,7 @@
 	const NumberMap = require('../internal/NumberMap');
 	const style = require('../internal/style');
 	const calc = require('../internal/calc');
+	const hiDPI = require('../internal/hiDPI');
 	//protected symbol
 	const {PROTECTED_SYMBOL: _} = require('../internal/symbolManager');
 
@@ -1522,7 +1523,7 @@
 			this[_].selection = new Selection(this);
 			this[_].focusControl = new FocusControl(this[_].scrollable.getElement(), this[_].scrollable);
 
-			this[_].canvas = document.createElement('canvas');
+			this[_].canvas = hiDPI.transform(document.createElement('canvas'));
 			this[_].context = this[_].canvas.getContext('2d', {alpha: false});
 
 			this[_].rowCount = rowCount;
