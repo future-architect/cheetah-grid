@@ -193,7 +193,8 @@ function generate(num) {
 		button: {
 			color: '#FDD',
 			bgColor: '#F55',
-		}
+		},
+		font: '8px sans-serif'
 	}));
 
 	cheetahGrid.register.theme('ONLYHEADER', cheetahGrid.themes.default.extends({

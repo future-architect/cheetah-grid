@@ -149,6 +149,9 @@
 		getThemeColor(...name) {
 			return getThemeColor(this._grid, ...name);
 		}
+		get font() {
+			return getThemeColor(this._grid, 'font');
+		}
 		// color
 		get color() {
 			return getThemeColor(this._grid, 'color');
