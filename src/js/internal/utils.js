@@ -74,11 +74,7 @@
 			for (const key in source) {
 				Object.defineProperty(result, key, {
 					get() {
-						const v = source[key];
-						if (typeof v === 'function') {
-							return v.bind(source);
-						}
-						return v;
+						return source[key];
 					},
 					set(val) {
 						source[key] = val;
