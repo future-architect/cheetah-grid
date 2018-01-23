@@ -4,7 +4,7 @@
 const path = require('path');
 const mdiRoot = path.dirname(require.resolve('material-design-icons/package.json'));
 const loader = require('../../../webpack-loader/svg-to-icon-js-loader');
-const UglifyJS = require('uglify-js');
+const UglifyJS = require('uglify-es');
 const babel = require('babel-core');
 
 const fs = require('fs');

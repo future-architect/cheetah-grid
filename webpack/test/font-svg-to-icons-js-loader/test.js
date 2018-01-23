@@ -4,7 +4,7 @@
 const path = require('path');
 const fs = require('fs');
 const loader = require('../../../webpack-loader/font-svg-to-icons-js-loader');
-const UglifyJS = require('uglify-js');
+const UglifyJS = require('uglify-es');
 const babel = require('babel-core');
 
 function buildCode(svgfile) {

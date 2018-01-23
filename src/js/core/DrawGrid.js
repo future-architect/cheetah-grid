@@ -21,6 +21,7 @@
 	const NumberMap = require('../internal/NumberMap');
 	const style = require('../internal/style');
 	const calc = require('../internal/calc');
+	const hiDPI = require('../internal/hiDPI');
 	//protected symbol
 	const {PROTECTED_SYMBOL: _} = require('../internal/symbolManager');
 
@@ -1583,7 +1584,7 @@
 					defaultRowHeight = 40,
 					// defaultRowHeight = 24,
 					defaultColWidth = 80,
-					font = '16px sans-serif',
+					font,
 					parentElement,
 				} = {}) {
 			super();
@@ -1595,7 +1596,7 @@
 			this[_].selection = new Selection(this);
 			this[_].focusControl = new FocusControl(this, this[_].scrollable.getElement(), this[_].scrollable);
 
-			this[_].canvas = document.createElement('canvas');
+			this[_].canvas = hiDPI.transform(document.createElement('canvas'));
 			this[_].context = this[_].canvas.getContext('2d', {alpha: false});
 
 			this[_].rowCount = rowCount;
@@ -2024,7 +2025,7 @@
 			ctx.textAlign = 'left';
 			ctx.textBaseline = 'top';
 			ctx.lineWidth = 1;
-			ctx.font = this[_].font;
+			ctx.font = this.font || '16px sans-serif';
 			return ctx;
 		}
 	}
