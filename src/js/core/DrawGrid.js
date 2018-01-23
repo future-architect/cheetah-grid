@@ -21,6 +21,7 @@
 	const NumberMap = require('../internal/NumberMap');
 	const style = require('../internal/style');
 	const calc = require('../internal/calc');
+	const hiDPI = require('../internal/hiDPI');
 	//protected symbol
 	const {PROTECTED_SYMBOL: _} = require('../internal/symbolManager');
 
@@ -1522,54 +1523,8 @@
 			this[_].selection = new Selection(this);
 			this[_].focusControl = new FocusControl(this[_].scrollable.getElement(), this[_].scrollable);
 
-			const canvas = this[_].canvas = document.createElement('canvas');
-			const ctx = this[_].context = this[_].canvas.getContext('2d', {alpha: false});
-
-			//* Retina Display compatible *//
-			Object.defineProperty(canvas, 'width', {
-				get() {
-					return canvas.getAttribute('width') / 2;
-				},
-				set: (val) => {
-					canvas.setAttribute('width', val * 2);
-					ctx.scale(2, 2);
-				},
-				configurable: true,
-				enumerable: true,
-			});
-			Object.defineProperty(canvas, 'height', {
-				get() {
-					return canvas.getAttribute('height') / 2;
-				},
-				set: (val) => {
-					canvas.setAttribute('height', val * 2);
-					ctx.scale(2, 2);
-				},
-				configurable: true,
-				enumerable: true,
-			});
-			const drawImage = ctx.drawImage;
-			ctx.drawImage = function(img, ...args) {
-				if (img !== canvas) {
-					drawImage.call(ctx, img, ...args);
-					return;
-				}
-				ctx.save();
-				try {
-					ctx.scale(0.5, 0.5);
-					if (args.length > 4) {
-						args[4] = args[4] * 2;
-						args[5] = args[5] * 2;
-					} else {
-						args[0] = args[0] * 2;
-						args[1] = args[1] * 2;
-					}
-					drawImage.call(ctx, img, ...args);
-				} finally {
-					ctx.restore();
-				}
-			};
-			//* ------ *//
+			this[_].canvas = hiDPI.transform(document.createElement('canvas'));
+			this[_].context = this[_].canvas.getContext('2d', {alpha: false});
 
 			this[_].rowCount = rowCount;
 			this[_].colCount = colCount;
