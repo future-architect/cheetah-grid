@@ -211,6 +211,47 @@
 	};
 
 	window.imageMatchers = (function() {
+		function blurImage(object, blurLevel) {
+			if (!blurLevel) {
+				return object;
+			}
+			const data = imagediff.toImageData(object);
+			const blurImage = imagediff.createImageData(data.width, data.height);
+			const buf = data.data;
+			for (let i = 0, length = buf.length; i < length; i += 4) {
+				
+				const posList = [];
+				for (let y = -blurLevel; y <= blurLevel; y++) {
+					for (let x = -blurLevel; x <= blurLevel; x++) {
+						const pos = i + (x * 4) + (y * data.width * 4);
+						posList.push(pos);
+					}
+				}
+
+				let r = 0;
+				let g = 0;
+				let b = 0;
+				let a = 0;
+				let count = 0;
+
+				for (let k = 0, kLength = posList.length; k < kLength; ++k) {
+					if (0 <= posList[k] && posList[k] < length) {
+						++count;
+						r += buf[posList[k] + 0];
+						g += buf[posList[k] + 1];
+						b += buf[posList[k] + 2];
+						a += buf[posList[k] + 3];
+					}
+				}
+				blurImage.data[i + 0] = Math.floor(r / count);
+				blurImage.data[i + 1] = Math.floor(g / count);
+				blurImage.data[i + 2] = Math.floor(b / count);
+				// blurImage.data[i + 3] = 255;//Math.floor(a / count);
+				blurImage.data[i + 3] = Math.floor(a / count);
+
+			}
+			return blurImage;
+		}
 		function toCanvas(object) {
 			const data = imagediff.toImageData(object),
 				canvas = imagediff.createCanvas(data.width, data.height),
@@ -219,6 +260,7 @@
 			context.putImageData(data, 0, 0);
 			return canvas;
 		}
+
 		function get(element, content) {
 			element = document.createElement(element);
 			if (element && content) {
@@ -229,9 +271,12 @@
 		return {
 			toImageTest: function() {
 				return {
-					compare: function(actual, expected, safeCount, tolerance) {
-						safeCount = safeCount || 0;
-						tolerance = tolerance || 0;
+					compare: function(actual, expected, opt) {
+						const safeCount = opt.safeCount || 0;
+						const tolerance = opt.tolerance || 0;
+						const blurLevel = opt.blurLevel || 0;
+						actual = blurImage(actual, blurLevel);
+						expected = blurImage(expected, blurLevel);
 						const diffImage = imagediff.diff(actual, expected);
 						const width = diffImage.width;
 						const testImage = imagediff.createImageData(width, diffImage.height);
@@ -296,7 +341,10 @@
 						}
 
 						if (diffCount <= safeCount) {
-							const msg = 'Diff points: ' + diffCount + ', safe count: ' + safeCount + ', tolerance: ' + tolerance + ', max diffpoint: ' + maxPoint;
+							const msg = 'Diff points: ' + diffCount +
+							', safe count: ' + safeCount +
+							', tolerance: ' + tolerance +
+							', blurLevel: ' + blurLevel + ', max diffpoint: ' + maxPoint;
 							const prev = document.body.children[0];
 							prev.parentElement.insertBefore(document.createTextNode(msg), prev);
 						}
@@ -364,7 +412,7 @@
 	 */
 	window.to25Matchers = function(obj) {
 		const ret = {};
-		for (const k in obj) {
+		for (let k in obj) {//eslint-disable-line
 			(function(oldMatcher) {
 				ret[k] = function() {
 					return {

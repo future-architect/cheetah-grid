@@ -42,7 +42,8 @@
 
 		//文字描画
 		const ctx = context.getContext();
-		ctx.font = '10px Arial';
+		ctx.font = '16px sans-serif';
+		ctx.fillStyle = '#000';
 		helper.text('[' + col + ':' + row + ']', context);
 	};
 	grid.invalidate();
@@ -73,7 +74,7 @@
 				const girdHelper = canvasHelper.createGridHelper(cols, rows);
 
 				//塗りつぶし
-				canvasHelper.fillRect('#ddd');
+				canvasHelper.fillRect('#f6f6f6');
 				girdHelper.fillRect('white');
 				girdHelper.fillRect('#d3d3d3', 0, 0, null, 0);
 				girdHelper.fillRect('#F6F6F6', 0, 2, null, 2);
@@ -87,7 +88,7 @@
 				girdHelper.lineV(2, 0, 0, 0, true);
 
 				//TEXT
-				ctx.font = '10px Arial';
+				ctx.font = '16px sans-serif';
 				ctx.fillStyle = '#000';
 
 				for (let row = 0; row < rows.length; row++) {
@@ -101,7 +102,7 @@
 				return canvas;
 			}
 			const canvas = createAnswerCanvas();
-			expect(grid.canvas).toImageTest(canvas, 20, 0);
+			expect(grid.canvas).toImageTest(canvas, {safeCount: 0, tolerance: 15, blurLevel: 1});
 		});
 
 		it('select and makeVisible', function() {
@@ -122,7 +123,7 @@
 				const girdHelper = canvasHelper.createGridHelper(cols, rows);
 
 				//塗りつぶし
-				canvasHelper.fillRect('#ddd');
+				canvasHelper.fillRect('#f6f6f6');
 				girdHelper.fillRect('white');
 				girdHelper.fillRect('#d3d3d3', 0, 0, null, 0);
 				girdHelper.fillRect('#F6F6F6', 0, 2, null, 2);
@@ -138,7 +139,7 @@
 				girdHelper.lineV(2, 6, 1, 1, true);
 
 				//TEXT
-				ctx.font = '10px Arial';
+				ctx.font = '16px sans-serif';
 				ctx.fillStyle = '#000';
 
 				for (let row = 0; row < rows.length; row++) {
@@ -154,7 +155,7 @@
 				return canvas;
 			}
 			const canvas = createAnswerCanvas();
-			expect(grid.canvas).toImageTest(canvas, 5, 10);
+			expect(grid.canvas).toImageTest(canvas, {safeCount: 0, tolerance: 15, blurLevel: 1});
 		});
 	});
 
