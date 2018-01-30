@@ -3,6 +3,7 @@ const path = require('path');
 const Metalsmith = require('metalsmith');
 const collections = require('metalsmith-collections');
 const layouts = require('metalsmith-layouts');
+const watch = require('metalsmith-watch');
 //const markdown = require('metalsmith-markdown');
 //const permalinks = require('metalsmith-permalinks');
 const inPlace = require('metalsmith-in-place');
@@ -15,6 +16,14 @@ const registerHbsPartials = require('./handlebars/register-partials');
 const registerHbsHelpers = require('./handlebars/helpers');
 
 const {isDevVersion, latestVersion, isEnabledVersion, getDocumentVersion, packageVersion, libVersion} = require('./buildcommon');
+
+let watchMode = false;
+for (let i = 0; i < process.argv.length; i++) {
+	if (process.argv[i] === '--watch') {
+		watchMode = true;
+		break;
+	}
+}
 
 const hbs = {
 	directory: 'hbs/layouts',
@@ -49,11 +58,19 @@ Metalsmith(__dirname).
 		libVersion,
 		latestVersion,
 		docLinkVersion: getDocumentVersion(),
+		debug: watchMode,
 	}).
 	source('./src').
 	destination(`./${getDocumentVersion()}`).
 
 	clean(true).
+	use(watchMode ? watch({
+		paths: {
+			'${source}/**/*': true,
+			'${source}/*': true,
+		},
+		livereload: true,
+	}) : (files, metalsmith, done) => done()).
 	use(mstatic({
 		src: path.relative(path.resolve('.'), require.resolve('highlight.js/styles/kimbie.dark.css')),
 		dest: 'css/highlightjs.css'

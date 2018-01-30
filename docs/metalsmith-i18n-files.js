@@ -36,7 +36,7 @@ module.exports = function({defaultLang = 'en', locales = ['ja']} = {}) {
 				newData['lang_' + lang] = true;
 				newData.lang = lang;
 				newData.langDir = langDir;
-				newData.originalPath = file;
+				newData.originalPath = file.replace(/\\/g, '/');
 				files[newName] = newData;
 			});
 		});

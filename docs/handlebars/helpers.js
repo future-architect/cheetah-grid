@@ -34,7 +34,8 @@ function registerHelpers() {
 			}
 		});
 		paths.pop();
-		return new Handlebars.SafeString(paths.length ? `./${paths.join('/')}/${text}` : `./${text}`);
+		const path = paths.length ? `./${paths.join('/')}/${text}` : `./${text}`;
+		return new Handlebars.SafeString(path.replace(/\\/g, '/'));
 	});
 	/**
 	 * metalsmithで最終的に適用されるpath
@@ -46,7 +47,7 @@ function registerHelpers() {
 			last = filepath;
 			filepath = filepath.slice(0, -ext.length);
 		}
-		return last;
+		return last.replace(/\\/g, '/');
 	});
 
 	Handlebars.registerHelper('ms_breadcrumb', function(categorys, opt) {
