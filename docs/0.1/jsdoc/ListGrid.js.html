@@ -636,6 +636,12 @@
 		set font(font) {
 			super.font = font;
 		}
+		get underlayBackgroundColor() {
+			return super.underlayBackgroundColor || this[_].gridCanvasHelper.theme.underlayBackgroundColor;
+		}
+		set underlayBackgroundColor(underlayBackgroundColor) {
+			super.underlayBackgroundColor = underlayBackgroundColor;
+		}
 		get sortState() {
 			return this[_].sortState;
 		}
