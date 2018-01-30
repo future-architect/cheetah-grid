@@ -152,6 +152,9 @@
 		get font() {
 			return getThemeColor(this._grid, 'font');
 		}
+		get underlayBackgroundColor() { 
+			return getThemeColor(this._grid, 'underlayBackgroundColor');
+		}
 		// color
 		get color() {
 			return getThemeColor(this._grid, 'color');

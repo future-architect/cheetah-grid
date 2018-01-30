@@ -14,6 +14,9 @@
 			get font() {
 				return getProp(obj, superTheme, ['font']);
 			},
+			get underlayBackgroundColor() {
+				return getProp(obj, superTheme, ['underlayBackgroundColor']);
+			},
 			// color
 			get color() {
 				return getProp(obj, superTheme, ['color']);
