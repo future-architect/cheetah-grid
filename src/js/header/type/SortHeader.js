@@ -42,7 +42,7 @@
 			}
 
 			const ctx = context.getContext();
-			const arrowSize = ctx.measureText('X').width * 1.8;
+			const arrowSize = ctx.measureText('あ').width * 1.2;
 
 			helper.text(value, context, {
 				textAlign,

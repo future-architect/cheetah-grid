@@ -18,6 +18,7 @@
 				color,
 				font,
 				bgColor,
+				padding,
 			} = style;
 			if (bgColor) {
 				drawCellBase({
@@ -32,6 +33,7 @@
 					color,
 					font,
 					icons,
+					padding,
 				});
 			});
 		}

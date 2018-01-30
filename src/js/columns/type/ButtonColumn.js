@@ -29,7 +29,7 @@
 			return this._caption || value;
 		}
 		drawInternal(value, context, style, helper, grid, {drawCellBase, getIcon}) {
-			const {textAlign, textBaseline, bgColor, color, buttonBgColor, font} = style;
+			const {textAlign, textBaseline, bgColor, color, buttonBgColor, font, padding} = style;
 			if (bgColor) {
 				drawCellBase({
 					bgColor,
@@ -56,6 +56,7 @@
 					bgColor: buttonBgColor,
 					color,
 					font,
+					padding,
 					shadow: active ? {
 						color: 'rgba(0, 0, 0, 0.48)',
 						blur: 6,

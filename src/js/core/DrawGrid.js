@@ -369,7 +369,7 @@
 	}
 
 	function _toPxWidth(grid, width) {
-		return Math.round(calc.toPxWidth(width, grid[_].calcContext));
+		return Math.round(calc.toPx(width, grid[_].calcWidthContext));
 	}
 
 	function _getDefaultColPxWidth(grid) {
@@ -1544,7 +1544,15 @@
 			this[_].rowHeightsMap = new NumberMap();
 			this[_].colWidthsMap = new NumberMap();
 			this[_].colWidthsLimit = {};
-			this[_].calcContext = this[_].canvas;
+			this[_].calcWidthContext = {
+				_: this[_],
+				get full() {
+					return this._.canvas.width;
+				},
+				get em() {
+					return this._.context.measureText('あ').width;
+				}
+			};
 
 			this[_].columnResizer = new ColumnResizer(this);
 			this[_].cellSelector = new CellSelector(this);

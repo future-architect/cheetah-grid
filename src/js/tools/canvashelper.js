@@ -143,7 +143,7 @@
 	 */
 	function measureCheckbox(ctx) {
 		return {
-			width: ctx.measureText('X').width * 1.5
+			width: ctx.measureText('あ').width
 		};
 	}
 		
