@@ -61,5 +61,6 @@ module.exports = {
 	button: {
 		color: '#FFF',
 		bgColor: '#2196F3',
-	}
+	},
+	underlayBackgroundColor: '#F6F6F6',
 };
