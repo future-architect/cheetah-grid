@@ -6,6 +6,7 @@
     "jsdoc": "jsdoc ../src/js -c jsdoc-conf.js",
     "build:documents": "node build.js",
     "watch": "node build.js --watch",
+    "build:dev": "node build.js --dev",
     "winproc": "node winProc.js"
   },
   "dependencies": {},

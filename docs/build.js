@@ -15,15 +15,7 @@ const mstatic = require('metalsmith-static');
 const registerHbsPartials = require('./handlebars/register-partials');
 const registerHbsHelpers = require('./handlebars/helpers');
 
-const {isDevVersion, latestVersion, isEnabledVersion, getDocumentVersion, packageVersion, libVersion} = require('./buildcommon');
-
-let watchMode = false;
-for (let i = 0; i < process.argv.length; i++) {
-	if (process.argv[i] === '--watch') {
-		watchMode = true;
-		break;
-	}
-}
+const {isEnabledVersion, getDocumentVersion, packageVersion, watchMode, devMode} = require('./buildcommon');
 
 const hbs = {
 	directory: 'hbs/layouts',
@@ -54,11 +46,9 @@ Metalsmith(__dirname).
 			'FAQ',
 		],
 		script: docScript,
-		version: packageVersion,
-		libVersion,
-		latestVersion,
+		packageVersion,
 		docLinkVersion: getDocumentVersion(),
-		debug: watchMode,
+		debug: watchMode || devMode,
 	}).
 	source('./src').
 	destination(`./${getDocumentVersion()}`).
@@ -83,18 +73,6 @@ Metalsmith(__dirname).
 		partials: hbs.partials,
 		pattern: ['**/*.dummy'],
 	})).
-	use((files, metalsmith, done) => {
-		// 最新バージョンより新しいドキュメントはデバッグフラグを立てる
-		Object.keys(files).forEach((file) => {
-			const data = files[file];
-			if (data.docVersion) {
-				if (isDevVersion(data.docVersion)) {
-					data.debug = true;
-				}
-			}
-		});
-		done();
-	}).
 	use((files, metalsmith, done) => {
 		// 非表示ドキュメントはdisabledフラグを立てる
 		Object.keys(files).forEach((file) => {

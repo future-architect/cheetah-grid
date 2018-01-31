@@ -11,7 +11,8 @@ const {getDocumentVersion} = require('./buildcommon');
 
 
 const rootDir = `./${getDocumentVersion()}/`;
-const files = readFiles(rootDir);
+const files = readFiles(rootDir).
+	filter((name) => name.endsWith('.html') || name.endsWith('.css') || name.endsWith('.txt') || name.endsWith('.svg') || name.endsWith('.js'));
 
 for (const file of files) {
 	const path = rootDir + file;
@@ -19,7 +20,7 @@ for (const file of files) {
 		if (err) {
 			throw err;
 		}
-		fs.writeFile(path, data.replace(/\r?\n/g, '\r\n'), (err) => {
+		fs.writeFile(path, data.replace(/\r?\n/g, '\n').replace(/\r/g, '\n').replace(/\n/g, '\r\n'), (err) => {
 			if (err) {
 				throw err;
 			} else {
