@@ -670,6 +670,9 @@
 					return false;
 				}
 				const after = changeValueCallback(before);
+				if (after === undefined) {
+					return false;
+				}
 				return _setCellValue(this, col, row, after);
 			}
 		}

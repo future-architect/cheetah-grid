@@ -1143,6 +1143,7 @@
 	class FocusControl extends EventTarget {
 		constructor(grid, parentElement, scrollable) {
 			super();
+			this._grid = grid;
 			this._scrollable = scrollable;
 			this._handler = new EventHandler();
 			this._input = document.createElement('input');
@@ -1288,6 +1289,9 @@
 				const att = atts[i];
 				this._inputStatus[att.name] = att.value;
 			}
+		}
+		setDefaultInputStatus() {
+			this._input.style.font = this._grid.font || '16px sans-serif';
 		}
 		get editMode() {
 			return !this._input.readOnly;
@@ -1915,6 +1919,7 @@
 			
 			if (editMode) {
 				this[_].focusControl.storeInputStatus();
+				this[_].focusControl.setDefaultInputStatus();
 				this.fireListeners(
 						EVENT_TYPE.MODIFY_STATUS_EDITABLEINPUT_CELL,
 						{col: selCol, row: selRow, input: this[_].focusControl.input}

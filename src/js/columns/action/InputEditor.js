@@ -7,17 +7,9 @@
 		},
 	} = require('../../internal/utils');
 	
-	const Editor = require('./Editor');
+	const BaseInputEditor = require('./BaseInputEditor');
 	const EventHandler = require('../../internal/EventHandler');
-	// const {CHECK_COLUMN_STATE_ID} = require('../../internal/symbolManager');
-	const {EVENT_TYPE: {
-		INPUT_CELL,
-		EDITABLEINPUT_CELL,
-		SELECTED_CELL,
-		DBLCLICK_CELL,
-		KEYDOWN,
-		MODIFY_STATUS_EDITABLEINPUT_CELL,
-	}} = require('../../core/DrawGrid');
+	
 	const globalState = {};
 	const inputHandler = new EventHandler();
 
@@ -86,9 +78,10 @@
 	function bindInputElement(grid, cell, editorInstance, value) {
 		const rect = grid.getCellRect(cell.col, cell.row);
 		const input = getInputElement();
+		input.style.font = grid.font || '16px sans-serif';
 		grid.appendChildElement(input, rect);
 
-		setInputAttrs(editorInstance, input);
+		setInputAttrs(editorInstance, grid, input);
 		input.value = value;
 		globalState.bindGrid = grid;
 		globalState.bindCell = cell;
@@ -146,7 +139,7 @@
 			grid.invalidateCell(cell.col, cell.row);
 		});
 	}
-	function setInputAttrs(inputEditor, input) {
+	function setInputAttrs(inputEditor, grid, input) {
 		const classList = inputEditor.classList;
 		if (classList) {
 			input.classList.add(classList);
@@ -154,7 +147,7 @@
 		input.type = inputEditor.type || '';
 	}
 
-	class InputEditor extends Editor {
+	class InputEditor extends BaseInputEditor {
 		constructor(option = {}) {
 			super(option);
 			this._classList = option.classList;
@@ -175,69 +168,20 @@
 		clone() {
 			return new InputEditor(this);
 		}
-		bindGridEvent(grid, col, util) {
-			const onEditor = (cell, value) => {
-				if (this.readOnly || this.disabled) {
-					return;
-				}
+		onInputCellInternal(grid, cell, inputValue) {
+			bindInputElement(grid, cell, this, inputValue);
+		}
+		onOpenCellInternal(grid, cell) {
+			grid.doChangeValue(cell.col, cell.row, (value) => {
 				bindInputElement(grid, cell, this, value);
-			};
-			return [
-				grid.listen(INPUT_CELL, (e) => {
-					if (!util.isTarget(e.col, e.row)) {
-						return;
-					}
-					onEditor({
-						col: e.col,
-						row: e.row
-					}, e.value);
-				}),
-				grid.listen(DBLCLICK_CELL, (e) => {
-					if (!util.isTarget(e.col, e.row)) {
-						return;
-					}
-					onEditor({
-						col: e.col,
-						row: e.row
-					}, grid.getCopyCellValue(e.col, e.row) /* TODO get cell value */);
-				}),
-				grid.listen(KEYDOWN, (keyCode, e) => {
-					if (keyCode !== 113/*F2*/) {
-						return;
-					}
-					const sel = grid.selection.select;
-					if (!util.isTarget(sel.col, sel.row)) {
-						return;
-					}
-					onEditor({
-						col: sel.col,
-						row: sel.row
-					}, grid.getCopyCellValue(sel.col, sel.row) /* TODO get cell value */);
-				}),
-				grid.listen(SELECTED_CELL, (e) => {
-					doChangeValue();
-					removeInputElement();
-				}),
-				grid.listen(EDITABLEINPUT_CELL, (e) => {
-					if (!util.isTarget(e.col, e.row)) {
-						return false;
-					}
-					if (this.readOnly || this.disabled) {
-						return false;
-					}
-					return true;
-				}),
-				grid.listen(MODIFY_STATUS_EDITABLEINPUT_CELL, (e) => {
-					if (!util.isTarget(e.col, e.row)) {
-						return;
-					}
-					if (this.readOnly || this.disabled) {
-						return;
-					}
-					setInputAttrs(this, e.input);
-				}),
-				
-			];
+			});
+		}
+		onChangeSelectCellInternal(grid, cell, selected) {
+			doChangeValue();
+			removeInputElement();
+		}
+		onSetInputAttrsInternal(grid, cell, input) {
+			setInputAttrs(this, grid, input);
 		}
 	}
 
