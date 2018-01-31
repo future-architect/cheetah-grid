@@ -10,6 +10,7 @@
 			super(style);
 			this._color = style.color;
 			this._font = style.font;
+			this._padding = style.padding;
 		}
 		get color() {
 			return this._color;
@@ -23,6 +24,13 @@
 		}
 		set font(font) {
 			this._font = font;
+			this.doChangeStyle();
+		}
+		get padding() {
+			return this._padding;
+		}
+		set padding(padding) {
+			this._padding = padding;
 			this.doChangeStyle();
 		}
 		clone() {

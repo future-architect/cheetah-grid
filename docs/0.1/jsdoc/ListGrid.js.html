@@ -630,6 +630,18 @@
 			this[_].theme = themes.of(theme);
 			this.invalidate();
 		}
+		get font() {
+			return super.font || this[_].gridCanvasHelper.theme.font;
+		}
+		set font(font) {
+			super.font = font;
+		}
+		get underlayBackgroundColor() {
+			return super.underlayBackgroundColor || this[_].gridCanvasHelper.theme.underlayBackgroundColor;
+		}
+		set underlayBackgroundColor(underlayBackgroundColor) {
+			super.underlayBackgroundColor = underlayBackgroundColor;
+		}
 		get sortState() {
 			return this[_].sortState;
 		}

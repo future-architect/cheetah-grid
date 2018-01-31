@@ -56,6 +56,12 @@ const newDefaultProps = (opt = {}) => {
 		filenamePrefix = library.join('/');
 		library = ['cheetahGrid', ...library];
 	}
+	const devtoolModuleFilenameTemplate = ({resourcePath}) => {
+		if (resourcePath.indexOf('node_modules') >= 0) {
+			resourcePath = resourcePath.substr(resourcePath.indexOf('node_modules'));
+		}
+		return `cheetahGrid${suffix}/${resourcePath}`;
+	};
 	return {
 		context: path.resolve(__dirname, 'src/js/'),
 		entry: entries,
@@ -64,8 +70,8 @@ const newDefaultProps = (opt = {}) => {
 			filename: `${filenamePrefix}${suffix}.js`,
 			library,
 			libraryTarget: 'umd',
-			devtoolModuleFilenameTemplate: `cheetahGrid${suffix}/[resource-path]`,
-			devtoolFallbackModuleFilenameTemplate: `cheetahGrid${suffix}/[resource-path]`,
+			devtoolModuleFilenameTemplate,
+			devtoolFallbackModuleFilenameTemplate: devtoolModuleFilenameTemplate,
 		},
 		resolveLoader: {
 			alias: {

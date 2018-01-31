@@ -93,7 +93,7 @@
 				return canvas;
 			}
 			const canvas = createAnswerCanvas();
-			expect(grid.canvas).toImageTest(canvas, 112);
+			expect(grid.canvas).toImageTest(canvas, {safeCount: 0, tolerance: 10, blurLevel: 1});
 		});
 		it('init Small', function() {
 			grid.rowCount = 10;
@@ -110,7 +110,7 @@
 				const canvas = canvasHelper.canvas;
 
 				//全体塗りつぶし
-				canvasHelper.fillRect('#ddd');
+				canvasHelper.fillRect('#F6f6f6');
 
 				const girdHelper = canvasHelper.createGridHelper(cols, rows);
 
@@ -136,7 +136,7 @@
 				return canvas;
 			}
 			const canvas = createAnswerCanvas();
-			expect(grid.canvas).toImageTest(canvas, 30/*30箇所の違いは許容する*/, 10);
+			expect(grid.canvas).toImageTest(canvas, {safeCount: 0, tolerance: 10, blurLevel: 1});
 		});
 	});
 

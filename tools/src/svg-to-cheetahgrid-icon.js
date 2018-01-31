@@ -1,8 +1,8 @@
 /*eslint-disable no-sync*/
 'use strict';
 
-const fs = require('fs');
 const svgData = require('./svg-data');
+const ELEMENT_NODE = 1;
 
 function circleToPath(circle) {
 	const cx = circle.getAttribute('cx') - 0;
@@ -43,7 +43,12 @@ function elementToPaths(el, resource) {
 		return circleToPath(el);
 	case 'g':
 		let path = '';
-		for (const child of el.children) {
+		const childNodes = el.childNodes;
+		for (let i = 0; i < childNodes.length; i++) {
+			const child = childNodes[i];
+			if (child.nodeType !== ELEMENT_NODE) {
+				continue;
+			}
 			if (!child.getAttribute('fill')) {
 				child.setAttribute('fill', el.getAttribute('fill'));
 			}
@@ -169,7 +174,12 @@ function svgToJSON(svgString, resource) {
 	const offsetY = (0 - viewBox[1]) || 0;
 
 	let d = '';
-	for (const el of svg.children) {
+	const childNodes = svg.childNodes;
+	for (let i = 0; i < childNodes.length; i++) {
+		const el = childNodes[i];
+		if (el.nodeType !== ELEMENT_NODE) {
+			continue;
+		}
 		d += elementToPaths(el, resource);
 	}
 	return buildScript({
@@ -185,6 +195,7 @@ function svgToJSON(svgString, resource) {
 
 const svgToIcon = {
 	toIconJsObject(svgfile, opt = {}) {
+		const fs = require('fs');
 		const svgCode = fs.readFileSync(require.resolve(svgfile), 'utf-8');
 		return svgToIcon.sourceToIconJsObject(svgCode, Object.assign({}, {
 			resource: svgfile,

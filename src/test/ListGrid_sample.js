@@ -72,8 +72,9 @@ function generate(num) {
 						: function(v1, v2) { return v1 === v2 ? 0 : v1 < v2 ? 1 : -1; };
 					records.sort(function(r1, r2) { return compare(r1.personid, r2.personid); });
 					grid.records = records;
-				}
+				},
 				// sort
+				style: {padding: [0, 0, 0, '1.2em']}
 			},
 			{field: 'checkReadOnly', caption: 'read', width: 50, columnType: 'check'},
 			{

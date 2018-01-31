@@ -9,6 +9,7 @@
 	const Rect = require('./internal/Rect');
 	const {getChainSafe, getOrApply, array: {isArray}, style: {toBoxArray}} = require('./internal/utils');
 	const fonts = require('./internal/fonts');
+	const calc = require('./internal/calc');
 
 	function invalidateCell(context, grid) {
 		const {col, row} = context;
@@ -152,6 +153,9 @@
 		get font() {
 			return getThemeColor(this._grid, 'font');
 		}
+		get underlayBackgroundColor() {
+			return getThemeColor(this._grid, 'underlayBackgroundColor');
+		}
 		// color
 		get color() {
 			return getThemeColor(this._grid, 'color');
@@ -225,11 +229,52 @@
 			this._grid = grid;
 			this._theme = new Theme(grid);
 		}
+		createCalculator(context) {
+			return {
+				calcWidth(width) {
+					return calc.toPx(width, {
+						get full() {
+							const rect = context.getRect();
+							return rect.width;
+						},
+						get em() {
+							const ctx = context.getContext();
+							return ctx.measureText('あ').width;
+						}
+					});
+				},
+				calcHeight(height) {
+					return calc.toPx(height, {
+						get full() {
+							const rect = context.getRect();
+							return rect.height;
+						},
+						get em() {
+							const ctx = context.getContext();
+							return ctx.measureText('あ').width;
+						}
+					});
+				}
+			};
+		}
 		getColor(color, col, row, ctx) {
 			return getColor(color, col, row, this._grid, ctx);
 		}
 		toBoxArray(obj) {
 			return toBoxArray(obj);
+		}
+		toBoxPixelArray(value, context) {
+			if (typeof value === 'string' || isArray(value)) {
+				const calculator = this.createCalculator(context);
+				const box = toBoxArray(value);
+				return [
+					calculator.calcHeight(box[0]),
+					calculator.calcWidth(box[1]),
+					calculator.calcHeight(box[2]),
+					calculator.calcWidth(box[3]),
+				];
+			}
+			return toBoxArray(value);
 		}
 		get theme() {
 			return this._theme;
@@ -286,6 +331,7 @@
 		}
 		text(text, context,
 				{
+					padding,
 					offset = 2,
 					color,
 					textAlign = 'left',
@@ -293,7 +339,7 @@
 					font,
 					icons,
 				} = {}) {
-			const rect = context.getRect();
+			let rect = context.getRect();
 
 			const {col, row} = context;
 
@@ -307,6 +353,14 @@
 			}
 
 			this.drawWithClip(context, (ctx) => {
+				if (padding) {
+					padding = this.toBoxPixelArray(padding, context);
+					const left = rect.left + padding[3];
+					const top = rect.top + padding[0];
+					const width = rect.width - padding[1] - padding[3];
+					const height = rect.height - padding[0] - padding[2];
+					rect = new Rect(left, top, width, height);
+				}
 				_inlineRect(this._grid, ctx, text, rect, col, row,
 						{
 							offset,
@@ -452,11 +506,11 @@
 
 			this.drawWithClip(context, (ctx) => {
 				const {col, row} = context;
-				padding = padding || rect.height / 8;
-				const left = rect.left + padding;
-				const top = rect.top + padding;
-				const width = rect.width - padding * 2;
-				const height = rect.height - padding * 2;
+				padding = this.toBoxPixelArray(padding || rect.height / 8, context);
+				const left = rect.left + padding[3];
+				const top = rect.top + padding[0];
+				const width = rect.width - padding[1] - padding[3];
+				const height = rect.height - padding[0] - padding[2];
 
 				canvashelper.drawButton(ctx, left, top, width, height, {
 					bgColor,

@@ -1,11 +1,24 @@
 /*eslint-disable no-sync*/
 'use strict';
 
-const jsdom = require('jsdom');
-
+const {DOMParser} = (() => {
+	if (typeof window !== 'undefined') {
+		return {
+			DOMParser: window.DOMParser
+		};
+	}
+	return require('xmldom');
+})();
+const parser = new DOMParser();
+const ELEMENT_NODE = 1;
 
 function findElement(el, test) {
-	for (const child of el.children) {
+	const childNodes = el.childNodes;
+	for (let i = 0; i < childNodes.length; i++) {
+		const child = childNodes[i];
+		if (child.nodeType !== ELEMENT_NODE) {
+			continue;
+		}
 		if (test(child)) {
 			return child;
 		}
@@ -19,9 +32,11 @@ function findElement(el, test) {
 
 class Svg {
 	constructor(svgCode) {
-		const document = new jsdom.JSDOM().window.document.createElement('div');
-		document.innerHTML = svgCode;
-		const svg = document.children[0];
+		const document = parser.parseFromString(svgCode, 'image/svg+xml');
+
+		// new jsdom.JSDOM().window.document.createElement('div');
+		// document.innerHTML = svgCode;
+		const svg = document.documentElement;
 		this.svg = svg;
 		this._glyphs = {};
 		this._glyphUnis = {};
@@ -49,7 +64,12 @@ class Svg {
 	}
 	walkAllGlyph(callback) {
 		const walkGlyph = (el) => {
-			for (const child of el.children) {
+			const childNodes = el.childNodes;
+			for (let i = 0; i < childNodes.length; i++) {
+				const child = childNodes[i];
+				if (child.nodeType !== ELEMENT_NODE) {
+					continue;
+				}
 				const unicode = child.getAttribute('unicode');
 				if (unicode && child.getAttribute('d')) {
 					if (!this._glyphUnis[unicode]) {

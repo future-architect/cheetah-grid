@@ -59,7 +59,7 @@
 			const girdHelper = canvasHelper.createGridHelper(cols, rows);
 
 			//塗りつぶし
-			canvasHelper.fillRect('#ddd');
+			canvasHelper.fillRect('#f6f6f6');
 			girdHelper.fillRect('white');
 			girdHelper.fillRect('#d3d3d3', 0, 0, null, 0);
 			girdHelper.fillRect('#f6f6f6', 0, 2, null, 2);
@@ -117,7 +117,7 @@
 				return canvasHelper.canvas;
 			}
 			const canvas = createAnswerCanvas();
-			expect(grid.canvas).toImageTest(canvas, 15, 0);
+			expect(grid.canvas).toImageTest(canvas, {safeCount: 0, tolerance: 10, blurLevel: 1});
 		});
 
 		it('toggle', function(done) {
@@ -171,7 +171,7 @@
 					return canvas;
 				}
 				const canvas = createAnswerCanvas();
-				expect(grid.canvas).toImageTest(canvas, 275, 0);
+				expect(grid.canvas).toImageTest(canvas, {safeCount: 20, tolerance: 20, blurLevel: 1});
 
 				done();
 

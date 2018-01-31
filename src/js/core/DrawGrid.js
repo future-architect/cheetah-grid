@@ -259,7 +259,7 @@
 				const outerLeft = absoluteLeft - visibleRect.left;
 				ctx.save();
 				ctx.beginPath();
-				ctx.fillStyle = '#ddd';
+				ctx.fillStyle = grid.underlayBackgroundColor || '#F6F6F6';
 				ctx.rect(outerLeft, absoluteTop - visibleRect.top, grid[_].canvas.width - outerLeft, height);
 				ctx.fill();
 				ctx.restore();
@@ -326,7 +326,7 @@
 				const outerTop = absoluteTop - visibleRect.top;
 				ctx.save();
 				ctx.beginPath();
-				ctx.fillStyle = '#ddd';
+				ctx.fillStyle = grid.underlayBackgroundColor || '#F6F6F6';
 				ctx.rect(0, outerTop, grid[_].canvas.width, grid[_].canvas.height - outerTop);
 				ctx.fill();
 				ctx.restore();
@@ -373,7 +373,7 @@
 	}
 
 	function _toPxWidth(grid, width) {
-		return Math.round(calc.toPxWidth(width, grid[_].calcContext));
+		return Math.round(calc.toPx(width, grid[_].calcWidthContext));
 	}
 
 	function _getDefaultColPxWidth(grid) {
@@ -1569,6 +1569,8 @@
 		 * defaultRowHeight: default grid row height. default 40
 		 * defaultColWidth: default grid col width. default 80
 		 * parentElement: canvas parentElement
+		 * font: default font
+		 * underlayBackgroundColor: underlay background color
 		 * -----
 		 * </pre>
 		 *
@@ -1585,6 +1587,7 @@
 					// defaultRowHeight = 24,
 					defaultColWidth = 80,
 					font,
+					underlayBackgroundColor,
 					parentElement,
 				} = {}) {
 			super();
@@ -1608,12 +1611,21 @@
 			this[_].defaultColWidth = defaultColWidth;
 
 			this[_].font = font;
+			this[_].underlayBackgroundColor = underlayBackgroundColor;
 
 			/////
 			this[_].rowHeightsMap = new NumberMap();
 			this[_].colWidthsMap = new NumberMap();
 			this[_].colWidthsLimit = {};
-			this[_].calcContext = this[_].canvas;
+			this[_].calcWidthContext = {
+				_: this[_],
+				get full() {
+					return this._.canvas.width;
+				},
+				get em() {
+					return this._.context.measureText('あ').width;
+				}
+			};
 
 			this[_].columnResizer = new ColumnResizer(this);
 			this[_].cellSelector = new CellSelector(this);
@@ -1699,6 +1711,12 @@
 		}
 		set font(font) {
 			this[_].font = font;
+		}
+		get underlayBackgroundColor() {
+			return this[_].underlayBackgroundColor;
+		}
+		set underlayBackgroundColor(underlayBackgroundColor) {
+			this[_].underlayBackgroundColor = underlayBackgroundColor;
 		}
 		configure(name, value) {
 			const cfg = this[_].config || (this[_].config = {});

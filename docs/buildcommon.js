@@ -1,7 +1,18 @@
 'use strict';
 
+let watchMode = false;
+let devMode = false;
+for (let i = 0; i < process.argv.length; i++) {
+	if (process.argv[i] === '--watch') {
+		watchMode = true;
+	}
+	if (process.argv[i] === '--dev' || process.argv[i] === '-D') {
+		devMode = true;
+	}
+}
+
 const packageVersion = require('../package.json').version;
-const latestVersion = require('./versions.json')[0];
+// const latestVersion = require('./versions.json')[0];
 function versionCompare(v1, v2) {
 	const v1parts = v1.split('.');
 	const v2parts = v2.split('.');
@@ -37,24 +48,18 @@ function versionCompare(v1, v2) {
 	return 0;
 }
 const com = {
-	get libVersion() {
-		return com.isDevVersion(packageVersion) ? latestVersion : packageVersion;
-	},
-	latestVersion,
 	getDocumentVersion() {
-		if (com.isDevVersion(packageVersion)) {
+		if (watchMode || devMode) {
 			return '.devdoc';
 		}
 		const [major, minor/*, patch*/] = packageVersion.split('.');
 		return `${major}.${minor}`;
 	},
-	isDevVersion(v) {
-		return versionCompare(v, latestVersion) > 0;
-	},
 	isEnabledVersion(v) {
-		return versionCompare(v, '9999') <= 0;
+		return versionCompare(v, packageVersion) <= 0;
 	},
-	versionCompare,
 	packageVersion,
+	watchMode,
+	devMode,
 };
 module.exports = com;

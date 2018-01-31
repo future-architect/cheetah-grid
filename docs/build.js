@@ -3,6 +3,7 @@ const path = require('path');
 const Metalsmith = require('metalsmith');
 const collections = require('metalsmith-collections');
 const layouts = require('metalsmith-layouts');
+const watch = require('metalsmith-watch');
 //const markdown = require('metalsmith-markdown');
 //const permalinks = require('metalsmith-permalinks');
 const inPlace = require('metalsmith-in-place');
@@ -14,7 +15,7 @@ const mstatic = require('metalsmith-static');
 const registerHbsPartials = require('./handlebars/register-partials');
 const registerHbsHelpers = require('./handlebars/helpers');
 
-const {isDevVersion, latestVersion, isEnabledVersion, getDocumentVersion, packageVersion, libVersion} = require('./buildcommon');
+const {isEnabledVersion, getDocumentVersion, packageVersion, watchMode, devMode} = require('./buildcommon');
 
 const hbs = {
 	directory: 'hbs/layouts',
@@ -45,15 +46,21 @@ Metalsmith(__dirname).
 			'FAQ',
 		],
 		script: docScript,
-		version: packageVersion,
-		libVersion,
-		latestVersion,
+		packageVersion,
 		docLinkVersion: getDocumentVersion(),
+		debug: watchMode || devMode,
 	}).
 	source('./src').
 	destination(`./${getDocumentVersion()}`).
 
 	clean(true).
+	use(watchMode ? watch({
+		paths: {
+			'${source}/**/*': true,
+			'${source}/*': true,
+		},
+		livereload: true,
+	}) : (files, metalsmith, done) => done()).
 	use(mstatic({
 		src: path.relative(path.resolve('.'), require.resolve('highlight.js/styles/kimbie.dark.css')),
 		dest: 'css/highlightjs.css'
@@ -66,18 +73,6 @@ Metalsmith(__dirname).
 		partials: hbs.partials,
 		pattern: ['**/*.dummy'],
 	})).
-	use((files, metalsmith, done) => {
-		// 最新バージョンより新しいドキュメントはデバッグフラグを立てる
-		Object.keys(files).forEach((file) => {
-			const data = files[file];
-			if (data.docVersion) {
-				if (isDevVersion(data.docVersion)) {
-					data.debug = true;
-				}
-			}
-		});
-		done();
-	}).
 	use((files, metalsmith, done) => {
 		// 非表示ドキュメントはdisabledフラグを立てる
 		Object.keys(files).forEach((file) => {

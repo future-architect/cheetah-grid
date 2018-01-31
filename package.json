@@ -1,6 +1,6 @@
 {
   "name": "cheetah-grid",
-  "version": "0.1.1",
+  "version": "0.1.3",
   "description": "Cheetah Grid is a high performance grid engine that works on canvas",
   "keywords": [
     "spreadsheet",
@@ -54,24 +54,32 @@
     "watch": "webpack --watch",
     "webpack": "webpack",
     "eslint": "eslint src/js",
-    "eslintci": "eslint src/js -f checkstyle > .eslint_report.xml"
+    "eslintci": "eslint src/js -f checkstyle > .eslint_report.xml",
+    "test:font-svg-to-icons-js-loader": "node webpack/test/font-svg-to-icons-js-loader/test.js",
+    "test:svg-to-icon-js-loader": "node webpack/test/svg-to-icon-js-loader/test.js",
+    "test:loader": "npm run test:font-svg-to-icons-js-loader && npm run test:svg-to-icon-js-loader",
+    "build:doc": "cd docs && npm run build && cd ../",
+    "build:all": "npm run build && npm run build:doc",
+    "i:doc": "cd docs && npm i && cd ../",
+    "postinstall": "npm run i:doc",
+    "prepack": "npm run build:all"
   },
   "directories": {
     "src": "src/js",
     "test": "src/test/specs"
   },
   "dependencies": {
-    "jsdom": "^11.3.0"
+    "xmldom": "^0.1.27"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-preset-es2015": "^6.24.1",
-    "eslint": "^4.7.2",
+    "eslint": "^4.16.0",
     "eslint-plugin-html": "^4.0.1",
     "font-awesome": "^4.7.0",
     "imagediff": "^1.0.8",
-    "jasmine": "^2.8.0",
+    "jasmine": "^2.9.0",
     "karma": "^2.0.0",
     "karma-babel-preprocessor": "^7.0.0",
     "karma-chrome-launcher": "^2.2.0",
