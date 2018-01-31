@@ -1,7 +1,6 @@
 /*eslint-disable no-sync*/
 'use strict';
 
-const fs = require('fs');
 const svgToIcon = require('./svg-to-cheetahgrid-icon');
 const svgData = require('./svg-data');
 
@@ -52,6 +51,7 @@ function buildObjectCode(svgCode, resource, {
 
 const svgToIcons = {
 	toIconsJsObject(svgfile, opt = {}) {
+		const fs = require('fs');
 		const svgCode = fs.readFileSync(require.resolve(svgfile), 'utf-8');
 		return svgToIcons.sourceToIconsJsObject(svgCode, Object.assign({}, {
 			resource: svgfile,

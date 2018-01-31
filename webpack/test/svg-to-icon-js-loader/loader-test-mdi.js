@@ -1,4 +1,4 @@
-/*eslint-disable no-sync*/
+/*eslint-disable no-sync, handle-callback-err*/
 'use strict';
 
 const path = require('path');
@@ -9,24 +9,33 @@ const babel = require('babel-core');
 
 const fs = require('fs');
 
-const walkTree = (p, callback, paths = '') => {
-	const list = fs.readdirSync(p);
-	for (let i = 0; i < list.length; i++) {
-		const n = list[i];
-		const f = path.join(p, n);
-		const stats = fs.statSync(f);
-		if (stats.isFile()) {
-			callback(paths, n);
-		} else if (stats.isDirectory()) {
-			walkTree(f, callback, path.join(paths, n));
+const walkTree = (p, callback, paths = '') => new Promise((resolve) => {
+	fs.readdir(p, (err, list) => {
+		const results = [];
+		const svgs = {};
+		for (let i = 0; i < list.length; i++) {
+			const n = list[i];
+			const f = path.join(p, n);
+			const stats = fs.statSync(f);
+			if (stats.isFile()) {
+				callback(paths, n, svgs);
+			} else if (stats.isDirectory()) {
+				results.push(walkTree(f, callback, path.join(paths, n)));
+			}
 		}
-	}
-};
-
-const svgs = {};
+		resolve(Promise.all(results).then((results) => {
+			results.forEach((data) => {
+				for (const k in data) {
+					svgs[k] = data[k];
+				}
+			});
+			return svgs;
+		}));
+	});
+});
 
 console.log('mdi root: ', mdiRoot);
-walkTree(mdiRoot, (dir, filename) => {
+const svgsPromise = walkTree(mdiRoot, (dir, filename, svgs) => {
 	if (path.extname(filename) === '.svg' && filename.startsWith('ic_')) {
 		const name = filename.replace(/\.[^/.]+$/, '');
 		svgs[name] = path.join('material-design-icons', dir, filename).replace(/\\/g, '/');
@@ -43,7 +52,7 @@ const module = {};
 return module.exports;`;
 }
 
-const buildCode = () => {
+const buildCode = (svgs) => {
 	const start = Date.now();
 	let script = `
 /*eslint-disable camelcase, max-statements, max-len, no-inner-declarations*/
@@ -60,17 +69,21 @@ window.allMdiIcons = {
 	script += '\n};';
 	const end = Date.now();
 	console.log('end', end - start);
-	console.log('count', Object.keys(svgs).length);
+	console.log('count', Object.keys(svgs).length);//2069
 	return script;
 };
 
-const targetPath = path.resolve(__dirname, './all_mdi_icons.js');
-const script = buildCode();
-const es5 = babel.transform(script, {presets: ['es2015']}).code;
-// fs.writeFileSync(targetPath + '.es5.js', es5, 'utf-8');
-const minify = UglifyJS.minify(es5).code;
+const start = Date.now();
+svgsPromise.then((svgs) => {
+	console.log('findtime:', Date.now() - start);
+	const targetPath = path.resolve(__dirname, './all_mdi_icons.js');
+	const script = buildCode(svgs);
+	const es5 = babel.transform(script, {presets: ['es2015']}).code;
+	// fs.writeFileSync(targetPath + '.es5.js', es5, 'utf-8');
+	const minify = UglifyJS.minify(es5).code;
 
-console.log('write: ', targetPath);
-fs.writeFileSync(targetPath, minify, 'utf-8');
+	console.log('write: ', targetPath);
+	fs.writeFile(targetPath, minify, 'utf-8');
+});
 
 
