@@ -1,4 +1,4 @@
-/*global cheetahGrid,imagediff*/
+/*global cheetahGrid*/
 /*eslint-env es6*/
 /*eslint prefer-arrow-callback:"off", object-shorthand:"off"*/
 'use strict';
@@ -42,11 +42,6 @@
 	
 
 	describe('CheckColumn', function() {
-		beforeEach(function() {
-			// Matchers
-			jasmine.addMatchers(window.to25Matchers(imagediff.jasmine));
-			jasmine.addMatchers(window.imageMatchers);
-		});
 
 		function createAnswerCanvasBase() {
 			const rows = [24, 24, 24];
@@ -117,7 +112,7 @@
 				return canvasHelper.canvas;
 			}
 			const canvas = createAnswerCanvas();
-			expect(grid.canvas).toImageTest(canvas, {safeCount: 0, tolerance: 10, blurLevel: 1});
+			expect(grid.canvas).toMatchImage(canvas, {tolerance: 50, delta: '15%', blurLevel: 1});
 		});
 
 		it('toggle', function(done) {
@@ -171,7 +166,7 @@
 					return canvas;
 				}
 				const canvas = createAnswerCanvas();
-				expect(grid.canvas).toImageTest(canvas, {safeCount: 20, tolerance: 20, blurLevel: 1});
+				expect(grid.canvas).toMatchImage(canvas, {tolerance: 20, delta: '20%', blurLevel: 1});
 
 				done();
 

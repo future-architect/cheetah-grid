@@ -1,4 +1,4 @@
-/*global cheetahGrid,imagediff*/
+/*global cheetahGrid*/
 /*eslint-env es6*/
 /*eslint prefer-arrow-callback:"off", object-shorthand:"off", max-len: "off"*/
 'use strict';
@@ -44,11 +44,6 @@
 	
 
 	describe('CheckStyle', function() {
-		beforeEach(function() {
-			// Matchers
-			jasmine.addMatchers(window.to25Matchers(imagediff.jasmine));
-			jasmine.addMatchers(window.imageMatchers);
-		});
 
 		function createAnswerCanvasBase() {
 			const rows = [24, 24, 24];
@@ -120,7 +115,7 @@
 			}
 			const canvas = createAnswerCanvas();
 			setTimeout(function() {
-				expect(grid.canvas).toImageTest(canvas, {safeCount: 0, tolerance: 10, blurLevel: 1});
+				expect(grid.canvas).toMatchImage(canvas, {tolerance: 50, delta: '15%', blurLevel: 1});
 				done();
 			}, 200);
 			
@@ -177,7 +172,7 @@
 					return canvas;
 				}
 				const canvas = createAnswerCanvas();
-				expect(grid.canvas).toImageTest(canvas, {safeCount: 100, tolerance: 15, blurLevel: 1});
+				expect(grid.canvas).toMatchImage(canvas, {tolerance: 110, delta: '15%', blurLevel: 1});
 
 				done();
 
@@ -286,7 +281,7 @@
 				return canvas;
 			}
 			const canvas = createAnswerCanvas();
-			expect(grid.canvas).toImageTest(canvas, {safeCount: 0, tolerance: 10, blurLevel: 1});
+			expect(grid.canvas).toMatchImage(canvas, {tolerance: 50, delta: '10%', blurLevel: 1});
 		});
 		it('checkBgColor', function(done) {
 			action.readOnly = false;
@@ -327,7 +322,7 @@
 					return canvas;
 				}
 				const canvas = createAnswerCanvas();
-				expect(grid.canvas).toImageTest(canvas, {safeCount: 100, tolerance: 20, blurLevel: 1});
+				expect(grid.canvas).toMatchImage(canvas, {tolerance: 100, delta: '20%', blurLevel: 1});
 
 				done();
 
@@ -364,7 +359,7 @@
 				return canvas;
 			}
 			const canvas = createAnswerCanvas();
-			expect(grid.canvas).toImageTest(canvas, {safeCount: 100, tolerance: 20, blurLevel: 1});
+			expect(grid.canvas).toMatchImage(canvas, {tolerance: 100, delta: '20%', blurLevel: 1});
 		});
 	});
 })();
