@@ -6,6 +6,7 @@
     <meta name="keywords" content="spreadsheet,grid,canvas,table,web-components">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Cheetah Grid - Draw Image</title>
+    <link rel="shortcut icon" type="image/x-icon" href="./../../../icon_512x512.ico">
 
     <link rel="stylesheet" type="text/css" href="./../../css/style.css">
     <link rel="stylesheet" type="text/css" href="./../../css/highlightjs.css">
@@ -103,8 +104,8 @@ window.onerror = function (msg, file, line, column, err) {
     						lang<span class="icon-arrow"></span>
     					</a>
     					<ul id="langs" class="nav-dropdown right-dropdown">
-    						<li><a href="./../../ja/demos\usage\draw_image.html" class="primary">日本語</a></li>
-    						<li><a href="./../../demos\usage\draw_image.html" class="primary">English</a></li>
+    						<li><a href="./../../ja/demos/usage/draw_image.html" class="primary">日本語</a></li>
+    						<li><a href="./../../demos/usage/draw_image.html" class="primary">English</a></li>
     					</ul>
     				</li>
     			</ul>
@@ -137,21 +138,6 @@ window.onerror = function (msg, file, line, column, err) {
     }
     
     //
-    var buttons = document.querySelectorAll('.nav-dropdown-button');
-    
-    var _loop = function _loop(i) {
-    	var button = buttons[i];
-    	button.onclick = function () {
-    		var target = button.getAttribute('data-target');
-    		document.getElementById(target).classList.toggle('show');
-    	};
-    };
-    
-    for (var i = 0; i < buttons.length; i++) {
-    	_loop(i);
-    }
-    
-    //
     getVersions(function (versions) {
     	var myVersion = '0.0.1';
     	function getVerLocation(v) {
@@ -171,32 +157,18 @@ window.onerror = function (msg, file, line, column, err) {
     		a.textContent = '<goto the latest version(' + latest + ') document>';
     	}
     });
-    
-    // Close the dropdown menu if the user clicks outside of it
-    window.onclick = function (event) {
-    	if (event.target.classList.contains('nav-dropdown') || event.target.classList.contains('nav-dropdown-button') || event.target.classList.contains('mobile-nav-dropdown') || event.target.classList.contains('mobile-nav-dropdown-button')) {
-    		return;
-    	}
-    
-    	var dropdowns = document.querySelectorAll('.nav-dropdown,.mobile-nav-dropdown');
-    	for (var i = 0; i < dropdowns.length; i++) {
-    		var openDropdown = dropdowns[i];
-    		if (openDropdown.classList.contains('show')) {
-    			openDropdown.classList.remove('show');
-    		}
-    	}
-    };
     //
     </script>    <h1>Usage &gt; Draw Image</h1>
     <div class="contents">
         
 <h2 id="draw-image">Draw image</h2>
-<p>Imageをセルに描画するには<code>columnType: 'image'</code>を利用します(注1)。</p>
-<p>注1: IEなどPromise未対応ブラウザでは<a href="https://www.npmjs.com/package/es6-promise">es6-promise</a>などのpolyfillを読み込ませる必要があります。</p>
+<p>Use <code>columnType: 'image'</code> to draw image in the cell.</p>
+<p>note: You should load polyfill like <a href="https://www.npmjs.com/package/es6-promise">es6-promise</a>, when using the browser which doesn't support Promise, such as IE.</p>
 
 <div id="sample" class="demo-grid middle">
 </div>
-<p>※サンプルで表示している画像は<a href="https://en.wikipedia.org/wiki/Cheetah">wikipedia</a>に載っている画像です<br>画像の詳細については表示されている画像をクリックしてください。  </p>
+<p>note: Images used in samples are on <a href="https://en.wikipedia.org/wiki/Cheetah">wikipedia</a>.
+Please click the images to check details of those.</p>
 <script type="text/javascript">
 ////wrapscript
 (function() {
@@ -327,5 +299,6 @@ grid.configure(<span class="hljs-string">'fadeinWhenCallbackInPromise'</span>, <
 <span class="hljs-comment">//</span></code></pre>
 
     </div>
+    <script type="text/javascript" src="./../../js/doc-common.js"></script>
 
 </body></html>

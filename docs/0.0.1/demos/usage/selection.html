@@ -5,14 +5,13 @@
     <meta name="author" content="Cheetah Grid">
     <meta name="keywords" content="spreadsheet,grid,canvas,table,web-components">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Cheetah Grid - Auto Paging</title>
+    <title>Cheetah Grid - Selection</title>
     <link rel="shortcut icon" type="image/x-icon" href="./../../../icon_512x512.ico">
 
     <link rel="stylesheet" type="text/css" href="./../../css/style.css">
     <link rel="stylesheet" type="text/css" href="./../../css/highlightjs.css">
     
     <!-- <script src="http://localhost:35729/livereload.js"></script> -->
-    <script src="https://www.promisejs.org/polyfills/promise-7.0.4.min.js"></script>
     
     <script type="text/javascript" src="https://unpkg.com/cheetah-grid@0.0.1"></script>
 
@@ -104,8 +103,8 @@ window.onerror = function (msg, file, line, column, err) {
     						lang<span class="icon-arrow"></span>
     					</a>
     					<ul id="langs" class="nav-dropdown right-dropdown">
-    						<li><a href="./../../ja/demos/faq/auto_paging.html" class="primary">日本語</a></li>
-    						<li><a href="./../../demos/faq/auto_paging.html" class="primary">English</a></li>
+    						<li><a href="./../../ja/demos/usage/selection.html" class="primary">日本語</a></li>
+    						<li><a href="./../../demos/usage/selection.html" class="primary">English</a></li>
     					</ul>
     				</li>
     			</ul>
@@ -158,17 +157,37 @@ window.onerror = function (msg, file, line, column, err) {
     	}
     });
     //
-    </script>    <h1>FAQ &gt; Auto Paging</h1>
+    </script>    <h1>Usage &gt; Selection</h1>
     <div class="contents">
         
-<h2 id="auto-paging">Auto Paging</h2>
-<p>Real time loading by scroll action  </p>
+<h2 id="selection">Selection</h2>
+<p>You can get the area selected by the user from the <code>selection</code> property.  </p>
+<table>
+<thead>
+<tr>
+<th>property</th>
+<th>description</th>
+<th>exp.</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>selection.select</code></td>
+<td>You can get the selection start position with Object. The <code>row</code> in the Object is the INDEX line containing the header.</td>
+<td><code>{"col": 0, "row": 0}</code></td>
+</tr>
+<tr>
+<td><code>selection.range</code></td>
+<td>You can get the selection range with Object. The <code>row</code> in the Object is the INDEX line containing the header.</td>
+<td><code>{"start": {"col": 0, "row": 0}, "end": {"col": 2, "row": 2}}</code></td>
+</tr>
+</tbody>
+</table>
 
-
-<textarea id="sample_log" class="log" readonly="true">ajax logs</textarea>
-<div id="sample" class="demo-grid middle">
+<div id="sample1" class="demo-grid middle">
 </div>
-
+<button id="button">SHOW SELECTION</button>
+<pre id="result"></pre>
 <script type="text/javascript">
 
 ////babel
@@ -213,154 +232,57 @@ function generatePersonsDataSource(num) {
 		length: num
 	});
 }
-////babel
+////wrapscript
+(function() {
+//babel
 
 /*global generatePerson*/
 /*eslint-disable no-unused-vars*/
 'use strict';
 
-var getRecordsWithAjax = function getRecordsWithAjax(startIndex, num) {
-	return new Promise(function (resolve) {
-		var loadedCount = startIndex + num;
-		var last = false;
-		if (loadedCount >= 1080) {
-			num = 1080 - startIndex;
-			last = true;
-		}
-		setTimeout(function () {
-			var records = [];
-			for (var i = 0; i < num; i++) {
-				records.push(generatePerson(startIndex + i));
-			}
-			var log = document.querySelector('#sample_log');
-			log.value += '\nAcquire ' + num + ' data from index ' + startIndex + '.';
-			log.value = log.value.trim();
-			log.scrollTop = log.scrollHeight;
-
-			if (last && records.length) {
-				var lastData = records[records.length - 1];
-				lastData.fname = 'Cheetah';
-				lastData.lname = 'Grid!!';
-				lastData.email = 'hello_cheetah_grid@gmail.com';
-			}
-			resolve(records);
-		}, 500);
-	});
-};
-//
-</script>
-<script type="text/javascript">
-////wrapscript
-(function() {
-//babel
-
-//
-/*global cheetahGrid, getRecordsWithAjax*/
-'use strict';
-// create DataSource
-
-var GET_RECORDS_SIZE = 100;
-var BUFFER_RECORDS_SIZE = Math.floor(GET_RECORDS_SIZE / 2) || 1;
-var loadedData = {};
-var isAllLoaded = false;
-var dataSource = new cheetahGrid.data.CachedDataSource({
-	get: function get(index) {
-		var loadStartIndex = Math.floor(index / GET_RECORDS_SIZE) * GET_RECORDS_SIZE;
-		if (!loadedData[loadStartIndex]) {
-			var promiseObject = getRecordsWithAjax(loadStartIndex, GET_RECORDS_SIZE). // return Promise Object
-			then(function (data) {
-				if (isAllLoaded) {
-					return data;
-				}
-				// length update?
-				var length = loadStartIndex + data.length;
-				if (data.length < GET_RECORDS_SIZE) {
-					// all loaded!!
-					dataSource.length = length;
-					isAllLoaded = true;
-				} else if (dataSource.length <= length) {
-					// append length!!
-					dataSource.length = length + BUFFER_RECORDS_SIZE;
-				}
-				return data;
-			});
-			loadedData[loadStartIndex] = promiseObject;
-		}
-		return loadedData[loadStartIndex].then(function (data) {
-			return data[index - loadStartIndex];
-		});
-	},
-
-	length: BUFFER_RECORDS_SIZE //init records count
-});
-
-// create cheetahGrid
+var lang = navigator.language || navigator.userLanguage || navigator.browserLanguage;
+var records = generatePersons(100);
 var grid = new cheetahGrid.ListGrid({
-	parentElement: document.querySelector('#sample'),
-	header: [{ field: 'personid', caption: 'ID', width: 100, columnType: 'center' }, { field: 'fname', caption: 'First Name', width: 200 }, { field: 'lname', caption: 'Last Name', width: 200 }, { field: 'email', caption: 'Email', width: 250 }],
-	frozenColCount: 1
-});
-grid.configure('fadeinWhenCallbackInPromise', true);
+	parentElement: document.querySelector('#sample1'),
+	header: [{ field: 'personid', caption: 'ID', width: 100, columnType: 'center' }, { field: 'fname', caption: 'First Name', width: 200 }, { field: 'lname', caption: 'Last Name', width: 200 }, { field: 'email', caption: 'Email', width: 250 }, {
+		field: function field(rec) {
+			return rec.birthday.toLocaleString(lang, { year: 'numeric', month: 'long', day: 'numeric' });
+		},
 
-// set dataSource
-grid.dataSource = dataSource;
+		caption: 'birthday',
+		width: 500
+	}],
+	frozenColCount: 1,
+	records: records
+});
+//
+document.querySelector('#button').addEventListener('click', function () {
+	var select = grid.selection.select;
+	var range = grid.selection.range;
+
+	document.querySelector('#result').textContent = '\nselect:\n---\n' + JSON.stringify(select, null, '  ') + ',\n---\n\nrange:\n---\n' + JSON.stringify(range, null, '  ') + ',\n---';
+});
 //
 //
 })();
 </script>
-<pre><code class="js hljs javascript"><span class="hljs-comment">/*global cheetahGrid, getRecordsWithAjax*/</span>
-<span class="hljs-meta">'use strict'</span>;
-<span class="hljs-comment">// create DataSource</span>
-<span class="hljs-keyword">const</span> GET_RECORDS_SIZE = <span class="hljs-number">100</span>;
-<span class="hljs-keyword">const</span> BUFFER_RECORDS_SIZE = (<span class="hljs-built_in">Math</span>.floor(GET_RECORDS_SIZE / <span class="hljs-number">2</span>) || <span class="hljs-number">1</span>);
-<span class="hljs-keyword">const</span> loadedData = {};
-<span class="hljs-keyword">let</span> isAllLoaded = <span class="hljs-literal">false</span>;
-<span class="hljs-keyword">const</span> dataSource = <span class="hljs-keyword">new</span> cheetahGrid.data.CachedDataSource({
-	get(index) {
-		<span class="hljs-keyword">const</span> loadStartIndex = <span class="hljs-built_in">Math</span>.floor(index / GET_RECORDS_SIZE) * GET_RECORDS_SIZE;
-		<span class="hljs-keyword">if</span> (!loadedData[loadStartIndex]) {
-			<span class="hljs-keyword">const</span> promiseObject = getRecordsWithAjax(loadStartIndex, GET_RECORDS_SIZE).<span class="hljs-comment">// return Promise Object</span>
-				then(<span class="hljs-function">(<span class="hljs-params">data</span>) =&gt;</span> {
-					<span class="hljs-keyword">if</span> (isAllLoaded) {
-						<span class="hljs-keyword">return</span> data;
-					}
-					<span class="hljs-comment">// length update?</span>
-					<span class="hljs-keyword">const</span> length = loadStartIndex + data.length;
-					<span class="hljs-keyword">if</span> (data.length &lt; GET_RECORDS_SIZE) {
-						<span class="hljs-comment">// all loaded!!</span>
-						dataSource.length = length;
-						isAllLoaded = <span class="hljs-literal">true</span>;
-					} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (dataSource.length &lt;= length) {
-						<span class="hljs-comment">// append length!!</span>
-						dataSource.length = length + BUFFER_RECORDS_SIZE;
-					}
-					<span class="hljs-keyword">return</span> data;
-				});
-			loadedData[loadStartIndex] = promiseObject;
-		}
-		<span class="hljs-keyword">return</span> loadedData[loadStartIndex].
-			then(<span class="hljs-function">(<span class="hljs-params">data</span>) =&gt;</span> data[index - loadStartIndex]);
-	},
-	<span class="hljs-attr">length</span>: BUFFER_RECORDS_SIZE, <span class="hljs-comment">//init records count</span>
-});
 
-<span class="hljs-comment">// create cheetahGrid</span>
-<span class="hljs-keyword">const</span> grid = <span class="hljs-keyword">new</span> cheetahGrid.ListGrid({
-	<span class="hljs-attr">parentElement</span>: <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample'</span>),
-	<span class="hljs-attr">header</span>: [
-		{<span class="hljs-attr">field</span>: <span class="hljs-string">'personid'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'ID'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">100</span>, <span class="hljs-attr">columnType</span>: <span class="hljs-string">'center'</span>},
-		{<span class="hljs-attr">field</span>: <span class="hljs-string">'fname'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'First Name'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">200</span>},
-		{<span class="hljs-attr">field</span>: <span class="hljs-string">'lname'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'Last Name'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">200</span>},
-		{<span class="hljs-attr">field</span>: <span class="hljs-string">'email'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'Email'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">250</span>},
-	],
-	<span class="hljs-attr">frozenColCount</span>: <span class="hljs-number">1</span>,
-});
-grid.configure(<span class="hljs-string">'fadeinWhenCallbackInPromise'</span>, <span class="hljs-literal">true</span>);
+<pre><code class="js hljs javascript"><span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#button'</span>).addEventListener(<span class="hljs-string">'click'</span>, () =&gt; {
+	<span class="hljs-keyword">const</span> select = grid.selection.select;
+	<span class="hljs-keyword">const</span> range = grid.selection.range;
+	
+	<span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#result'</span>).textContent = <span class="hljs-string">`
+select:
+---
+<span class="hljs-subst">${<span class="hljs-built_in">JSON</span>.stringify(select, <span class="hljs-literal">null</span>, <span class="hljs-string">'  '</span>)}</span>,
+---
 
-<span class="hljs-comment">// set dataSource</span>
-grid.dataSource = dataSource;
+range:
+---
+<span class="hljs-subst">${<span class="hljs-built_in">JSON</span>.stringify(range, <span class="hljs-literal">null</span>, <span class="hljs-string">'  '</span>)}</span>,
+---`</span>;
+});
 <span class="hljs-comment">//</span></code></pre>
-
     </div>
     <script type="text/javascript" src="./../../js/doc-common.js"></script>
 
