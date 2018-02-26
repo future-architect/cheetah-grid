@@ -22,7 +22,7 @@ module.exports = function(config) {
 		// list of files / patterns to load in the browser
 		files: [
 			require.resolve('promise-polyfills'),
-			require.resolve('imagediff'),
+			require.resolve('image-matcher'),
 			'src/test/specs/test-helper.js',
 			mintarget ? 'dist/cheetahGrid.es5.min.js' : 'dist/cheetahGrid.es5.js',
 			'src/test/specs/*_spec.js',

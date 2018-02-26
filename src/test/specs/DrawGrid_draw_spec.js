@@ -1,4 +1,4 @@
-/*global cheetahGrid,imagediff*/
+/*global cheetahGrid*/
 /*eslint-env es6*/
 /*eslint prefer-arrow-callback:"off", object-shorthand:"off"*/
 'use strict';
@@ -56,11 +56,6 @@
 	}
 
 	describe('DrawGrid draw image', function() {
-		beforeEach(function() {
-			// Matchers
-			jasmine.addMatchers(window.to25Matchers(imagediff.jasmine));
-			jasmine.addMatchers(window.imageMatchers);
-		});
 
 		it('draw default helper', function() {
 			function createAnswerCanvas() {
@@ -102,7 +97,7 @@
 				return canvas;
 			}
 			const canvas = createAnswerCanvas();
-			expect(grid.canvas).toImageTest(canvas, {safeCount: 0, tolerance: 15, blurLevel: 1});
+			expect(grid.canvas).toMatchImage(canvas, {tolerance: 0, delta: '15%', blurLevel: 1});
 		});
 
 		it('select and makeVisible', function() {
@@ -155,7 +150,7 @@
 				return canvas;
 			}
 			const canvas = createAnswerCanvas();
-			expect(grid.canvas).toImageTest(canvas, {safeCount: 0, tolerance: 15, blurLevel: 1});
+			expect(grid.canvas).toMatchImage(canvas, {tolerance: 0, delta: '15%', blurLevel: 1});
 		});
 	});
 
