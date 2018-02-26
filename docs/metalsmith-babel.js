@@ -15,7 +15,6 @@ module.exports = function() {
 		let file, data;
 		for (file in files) {
 			if (JS_FILENAME_REGEXP.test(file)) {
-				console.log(file)
 				data = files[file];
 
 				const option = {presets: ['es2015']};

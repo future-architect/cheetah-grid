@@ -52,6 +52,9 @@ const com = {
 		if (watchMode || devMode) {
 			return '.devdoc';
 		}
+		if (packageVersion === '0.0.1') {
+			return packageVersion;
+		}
 		const [major, minor/*, patch*/] = packageVersion.split('.');
 		return `${major}.${minor}`;
 	},
