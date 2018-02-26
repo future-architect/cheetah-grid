@@ -1,0 +1,104 @@
+---
+category: Usage
+title: Events
+layout: demo.html
+order: 195
+---
+
+{{#marked}}
+## Events
+{{#if lang_ja}}
+メソッド`listen(type, listener)`を利用してイベントリスナーを設定することができます。  
+
+イベントタイプは`cheetahGrid.ListGrid.EVENT_TYPE`から取得してください。  
+
+{{else}}
+You can set an event listener using the `listen(type, listener)` method.  
+
+Please get the event type from `cheetahGrid.ListGrid.EVENT_TYPE`.  
+
+{{/if}}
+{{/marked}}
+<textarea id="log" class="log">Event logs</textarea>
+<input id="include-mouse" type="checkbox"><label>Include mousemove,mouseenter,mouseleave in the log</label>
+<div id="sample1" class="demo-grid middle">
+</div>
+<script type="text/javascript">
+
+//{{{babel textContents.demos.[demos/init.parts.js]}}}
+//{{#wrapscript}}
+/*global generatePerson*/
+/*eslint-disable no-unused-vars*/
+'use strict';
+const lang = navigator.language || navigator.userLanguage || navigator.browserLanguage;
+const records = generatePersons(100);
+const grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#sample1'),
+	header: [
+		{field: 'personid', caption: 'ID', width: 100, columnType: 'center'},
+		{field: 'fname', caption: 'First Name', width: 200},
+		{field: 'lname', caption: 'Last Name', width: 200},
+		{field: 'email', caption: 'Email', width: 250},
+		{
+			field(rec) {
+				return rec.birthday.toLocaleString(lang, {year: 'numeric', month: 'long', day: 'numeric'});
+			},
+			caption: 'birthday',
+			width: 500
+		},
+	],
+	frozenColCount: 1,
+	records,
+});
+//{{#copy "sample1"}}
+const log = (typeName, args) => {
+	const el = document.querySelector('#log');
+	el.value += `\nEvent: ${typeName} , args (${args.map(JSON.stringify).join(', ')})`;
+	el.value = el.value.trim();
+	el.scrollTop = el.scrollHeight;
+
+};
+
+const {
+	CLICK_CELL,
+	SELECTED_CELL,
+	MOUSEDOWN_CELL,
+	MOUSEUP_CELL,
+	MOUSEMOVE_CELL,
+	MOUSEENTER_CELL,
+	MOUSELEAVE_CELL,
+	KEYDOWN,
+	RESIZE_COLUMN,
+} = cheetahGrid.ListGrid.EVENT_TYPE;
+
+grid.listen(CLICK_CELL, (...args) => log('click cell', args));
+grid.listen(SELECTED_CELL, (...args) => log('selected cell', args));
+grid.listen(MOUSEDOWN_CELL, (...args) => log('mousedown cell', args));
+grid.listen(MOUSEUP_CELL, (...args) => log('mouseup cell', args));
+grid.listen(KEYDOWN, (...args) => log('keydown', args));
+grid.listen(RESIZE_COLUMN, (...args) => log('resize column', args));
+
+grid.listen(MOUSEMOVE_CELL, (...args) => {
+	if (!document.querySelector('#include-mouse').checked) {
+		return;
+	}
+	log('mousemove cell', args);
+});
+grid.listen(MOUSEENTER_CELL, (...args) => {
+	if (!document.querySelector('#include-mouse').checked) {
+		return;
+	}
+	log('mouseenter cell', args);
+});
+grid.listen(MOUSELEAVE_CELL, (...args) => {
+	if (!document.querySelector('#include-mouse').checked) {
+		return;
+	}
+	log('mouseleave cell', args);
+});
+
+//{{/copy}}
+//{{/wrapscript}}
+</script>
+
+{{> code class="js" code=sample1}}
