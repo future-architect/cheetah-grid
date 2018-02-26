@@ -2,7 +2,6 @@
 const path = require('path');
 const webpack = require('webpack');
 const rm = require('rimraf');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const PACKAGEJSON = require('./package.json');
 const LiveReloadPlugin = require('webpack-livereload-plugin');
 const WrapperPlugin = require('wrapper-webpack-plugin');
@@ -63,6 +62,7 @@ const newDefaultProps = (opt = {}) => {
 		return `cheetahGrid${suffix}/${resourcePath}`;
 	};
 	return {
+		mode: opt.mode || 'production',
 		context: path.resolve(__dirname, 'src/js/'),
 		entry: entries,
 		output: {
@@ -83,7 +83,7 @@ const newDefaultProps = (opt = {}) => {
 		},
 
 		module: {
-			loaders: [
+			rules: [
 				{
 					test: /\.js$/,
 					exclude: /node_modules/,
@@ -110,6 +110,7 @@ const newDefaultProps = (opt = {}) => {
 
 function newEs6Config(opt) {
 	opt = Object.assign({}, opt);
+	opt.mode = opt.mode || 'development';
 	return newDefaultProps(opt);
 }
 
@@ -134,6 +135,7 @@ function newEs5Config(opt) {
 			footer: '\n})();'
 		}), ...(opt.plugins || [])
 	];
+	opt.mode = opt.mode || 'development';
 
 			
 	const es5 = newDefaultProps(opt);
@@ -147,25 +149,20 @@ function newEs6MinConfig(opt) {
 	opt = opt || {};
 	opt = Object.assign({}, opt);
 	opt.plugins = [
-		//minify
-		new UglifyJsPlugin({
-			sourceMap: true,
-			uglifyOptions: {ecma: 6},
-		}),
 		new webpack.optimize.AggressiveMergingPlugin(),
 		...(opt.plugins || [])
 	];
+	opt.mode = 'production';
 	return newEs6Config(opt);
 }
 function newEs5MinConfig(opt) {
 	opt = opt || {};
 	opt = Object.assign({}, opt);
 	opt.plugins = [
-		//minify
-		new UglifyJsPlugin({sourceMap: true}),
 		new webpack.optimize.AggressiveMergingPlugin(),
 		...(opt.plugins || [])
 	];
+	opt.mode = 'production';
 	return newEs5Config(opt);
 }
 
