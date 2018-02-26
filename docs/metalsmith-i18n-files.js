@@ -29,7 +29,7 @@ module.exports = function({defaultLang = 'en', locales = ['ja']} = {}) {
 				const newName = path.join(langDir, file);
 				const newData = cloneDeep(data, (value) => {
 					if (value instanceof Buffer) {
-						return new Buffer(value);
+						return Buffer.from(value);
 					}
 					return value;
 				});

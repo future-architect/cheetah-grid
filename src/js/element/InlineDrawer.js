@@ -32,7 +32,6 @@ class InlineDrawer extends Inline {
 	}
 	onReady(callback) {
 	}
-
 	draw(
 			{
 				ctx,

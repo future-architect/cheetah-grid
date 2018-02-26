@@ -18,10 +18,8 @@ function parseExtension(url) {
 	if (match) { return match[1]; } else { return ''; }
 }
 function mimes() {
-	/*
-     * Only WOFF and EOT mime types for fonts are 'real'
-     * see http://www.iana.org/assignments/media-types/media-types.xhtml
-     */
+	// Only WOFF and EOT mime types for fonts are 'real'
+	// see http://www.iana.org/assignments/media-types/media-types.xhtml
 	const WOFF = 'application/font-woff';
 	const JPEG = 'image/jpeg';
 

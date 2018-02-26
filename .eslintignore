@@ -1,0 +1,12 @@
+/node_modules
+/dist
+/coverage
+/report
+/docs/node_modules
+/docs/.devdoc
+/docs/0.1
+/docs/0.0.1
+/webpack/test/font-svg-to-icons-js-loader/fa_icons.js
+/webpack/test/font-svg-to-icons-js-loader/mdi_icons.js
+/webpack/test/svg-to-icon-js-loader/all_mdi_icons.js
+/webpack/fork

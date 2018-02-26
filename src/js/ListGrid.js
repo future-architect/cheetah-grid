@@ -717,7 +717,6 @@
 		getOffsetInvalidateCells() {
 			return 1;
 		}
-
 		getColumnIndexByField(field) {
 			for (const columnIndex in this[_].headerMap.columns) {
 				if (this[_].headerMap.columns[columnIndex].field === field) {

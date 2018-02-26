@@ -41,7 +41,6 @@ class InlineIcon extends Inline {
 			fonts.load(icon.font, icon.content, callback);
 		}
 	}
-
 	draw(
 			{
 				ctx,
