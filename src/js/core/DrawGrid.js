@@ -1454,7 +1454,6 @@
 
 			return rect;
 		}
-
 		_delayMode(grid, onTerminate) {
 			this._mode = 1;
 			this._ctx = null;
@@ -1926,7 +1925,6 @@
 		getOffsetInvalidateCells() {
 			return 0;
 		}
-
 		_getInitContext() {
 			const ctx = this[_].context;
 			//初期化

@@ -98,8 +98,7 @@ function getAllFontFaceInfos() {
 			}
 			return [];
 		});
-	return Thenable.all(result).then((rets) =>
-		Array.prototype.concat.apply([], rets)
+	return Thenable.all(result).then((rets) => Array.prototype.concat.apply([], rets)
 	);
 }
 

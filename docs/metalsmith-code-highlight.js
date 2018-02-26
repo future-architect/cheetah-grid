@@ -62,7 +62,7 @@ module.exports = function(options = {}) {
 		for (file in files) {
 			if (HTML_FILENAME_REGEXP.test(file)) {
 				data = files[file];
-				data.contents = new Buffer(highlightFile(data.contents.toString()));
+				data.contents = Buffer.from(highlightFile(data.contents.toString()));
 			}
 		}
 

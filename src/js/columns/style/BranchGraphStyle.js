@@ -65,7 +65,6 @@ class BranchGraphStyle extends BaseStyle {
 		this._mergeStyle = mergeStyle;
 		this.doChangeStyle();
 	}
-
 	clone() {
 		return new BranchGraphStyle(this);
 	}
