@@ -5,7 +5,7 @@
     <meta name="author" content="Cheetah Grid">
     <meta name="keywords" content="spreadsheet,grid,canvas,table,web-components">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Cheetah Grid - Header and Columns</title>
+    <title>Cheetah Grid - Selection</title>
     <link rel="shortcut icon" type="image/x-icon" href="./../../../icon_512x512.ico">
 
     <link rel="stylesheet" type="text/css" href="./../../css/style.css">
@@ -13,7 +13,7 @@
     
     <!-- <script src="http://localhost:35729/livereload.js"></script> -->
     
-    <script type="text/javascript" src="https://unpkg.com/cheetah-grid@0.1"></script>
+    <script type="text/javascript" src="https://unpkg.com/cheetah-grid@0.0.1"></script>
 
     <style type="text/css">
         html {
@@ -103,8 +103,8 @@ window.onerror = function (msg, file, line, column, err) {
     						lang<span class="icon-arrow"></span>
     					</a>
     					<ul id="langs" class="nav-dropdown right-dropdown">
-    						<li><a href="./../../ja/demos/usage/header_columns.html" class="primary">日本語</a></li>
-    						<li><a href="./../../demos/usage/header_columns.html" class="primary">English</a></li>
+    						<li><a href="./../../ja/demos/usage/selection.html" class="primary">日本語</a></li>
+    						<li><a href="./../../demos/usage/selection.html" class="primary">English</a></li>
     					</ul>
     				</li>
     			</ul>
@@ -120,7 +120,7 @@ window.onerror = function (msg, file, line, column, err) {
     function getVersions(callback) {
     	var xhr = new XMLHttpRequest();
     	function onError() {
-    		callback(['0.1', '0.0.1']);
+    		callback(['0.0.1', '0.0.1']);
     	}
     	xhr.onload = function () {
     		var versions = JSON.parse(xhr.responseText);
@@ -138,7 +138,7 @@ window.onerror = function (msg, file, line, column, err) {
     
     //
     getVersions(function (versions) {
-    	var myVersion = '0.1';
+    	var myVersion = '0.0.1';
     	function getVerLocation(v) {
     		return location.href.replace(myVersion, v).replace('.devdoc', v);
     	}
@@ -157,59 +157,39 @@ window.onerror = function (msg, file, line, column, err) {
     	}
     });
     //
-    </script>    <h1>Usage &gt; Header and Columns</h1>
+    </script>    <h1>Usage &gt; Selection</h1>
     <div class="contents">
         
-<h2 id="standard-column">Standard Column</h2>
-<p>The <code>header</code> property, the property of <code>cheetahGrid.ListGrid</code>, decides the behave and appearance of columns and header cells.<br>We can set this property by constructor arguments.  </p>
-<p>The <code>header</code> property must be set by objects array (Array&lt;Object&gt;).<br>Each object consists of following properties.  </p>
+<h2 id="selection">Selection</h2>
+<p>You can get the area selected by the user from the <code>selection</code> property.  </p>
 <table>
 <thead>
 <tr>
 <th>property</th>
-<th>Description</th>
-<th>LINK</th>
+<th>description</th>
+<th>exp.</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>caption</td>
-<td>header caption</td>
-<td>---</td>
+<td><code>selection.select</code></td>
+<td>You can get the selection start position with Object. The <code>row</code> in the Object is the INDEX line containing the header.</td>
+<td><code>{"col": 0, "row": 0}</code></td>
 </tr>
 <tr>
-<td>field</td>
-<td>field name or function</td>
-<td>---</td>
-</tr>
-<tr>
-<td>width</td>
-<td>width of column</td>
-<td>---</td>
-</tr>
-<tr>
-<td>columnType</td>
-<td>type of column</td>
-<td><a href="./column_types.html">link</a></td>
-</tr>
-<tr>
-<td>style</td>
-<td>style of column</td>
-<td><a href="./column_styles.html">link</a></td>
-</tr>
-<tr>
-<td>action</td>
-<td>action of column</td>
-<td>---</td>
+<td><code>selection.range</code></td>
+<td>You can get the selection range with Object. The <code>row</code> in the Object is the INDEX line containing the header.</td>
+<td><code>{"start": {"col": 0, "row": 0}, "end": {"col": 2, "row": 2}}</code></td>
 </tr>
 </tbody>
 </table>
 
-
-
 <div id="sample1" class="demo-grid middle">
 </div>
+<button id="button">SHOW SELECTION</button>
+<pre id="result"></pre>
 <script type="text/javascript">
+
 ////babel
 'use strict';
 
@@ -252,105 +232,56 @@ function generatePersonsDataSource(num) {
 		length: num
 	});
 }
-////babel
+////wrapscript
+(function() {
+//babel
 
-/*global generatePersons*/
+/*global generatePerson*/
 /*eslint-disable no-unused-vars*/
 'use strict';
 
+var lang = navigator.language || navigator.userLanguage || navigator.browserLanguage;
 var records = generatePersons(100);
-//
-</script>
-<script type="text/javascript">
-////wrapscript
-(function() {
-//babel
-
-//
-/*global cheetahGrid, records*/
-'use strict';
-
 var grid = new cheetahGrid.ListGrid({
 	parentElement: document.querySelector('#sample1'),
-	header: [{ field: 'personid', caption: 'ID', width: 100, columnType: 'center' }, { field: 'fname', caption: 'First Name', width: 200 }, { field: 'lname', caption: 'Last Name', width: 200 }, { field: 'email', caption: 'Email', width: 250 }, { field: 'birthday', caption: 'birthday', width: 500 }],
-	frozenColCount: 1
-});
-grid.records = records;
-//
-//
-})();
-</script>
-<pre><code class="js hljs javascript"><span class="hljs-comment">/*global cheetahGrid, records*/</span>
-<span class="hljs-meta">'use strict'</span>;
-<span class="hljs-keyword">const</span> grid = <span class="hljs-keyword">new</span> cheetahGrid.ListGrid({
-	<span class="hljs-attr">parentElement</span>: <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample1'</span>),
-	<span class="hljs-attr">header</span>: [
-		{<span class="hljs-attr">field</span>: <span class="hljs-string">'personid'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'ID'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">100</span>, <span class="hljs-attr">columnType</span>: <span class="hljs-string">'center'</span>},
-		{<span class="hljs-attr">field</span>: <span class="hljs-string">'fname'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'First Name'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">200</span>},
-		{<span class="hljs-attr">field</span>: <span class="hljs-string">'lname'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'Last Name'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">200</span>},
-		{<span class="hljs-attr">field</span>: <span class="hljs-string">'email'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'Email'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">250</span>},
-		{<span class="hljs-attr">field</span>: <span class="hljs-string">'birthday'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'birthday'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">500</span>},
-	],
-	<span class="hljs-attr">frozenColCount</span>: <span class="hljs-number">1</span>,
-});
-grid.records = records;
-<span class="hljs-comment">//</span></code></pre>
-<pre><code class="lang-js hljs javascript"><span class="hljs-comment">//record object properties</span>
-{
-    <span class="hljs-attr">personid</span>: <span class="hljs-string">'ID'</span>,
-    <span class="hljs-attr">fname</span>: <span class="hljs-string">'First Name'</span>,
-    <span class="hljs-attr">lname</span>: <span class="hljs-string">'Last Name'</span>,
-    <span class="hljs-attr">email</span>: <span class="hljs-string">'Email'</span>,
-    <span class="hljs-attr">birthday</span>: <span class="hljs-string">'birthday'</span>,
-}
-</code></pre>
-
-<h2 id="multiple-header">Multiple Header</h2>
-<p>To use multiple header, set the hierarchical structured Object to the <code>header</code> property.  </p>
-
-<div id="sample2" class="demo-grid middle">
-</div>
-<script type="text/javascript">
-////wrapscript
-(function() {
-//babel
-
-//
-/*global cheetahGrid, records*/
-'use strict';
-
-var grid = new cheetahGrid.ListGrid({
-	parentElement: document.querySelector('#sample2'),
-	header: [{ field: 'personid', caption: 'ID', width: 100, columnType: 'center' }, { /* multiple header */
-		caption: 'name',
-		columns: [{ field: 'fname', caption: 'First Name', width: 200 }, { field: 'lname', caption: 'Last Name', width: 200 }]
-	}, { field: 'email', caption: 'Email', width: 250 }, { field: 'birthday', caption: 'birthday', width: 500 }],
-	frozenColCount: 1
-});
-grid.records = records;
-//
-//
-})();
-</script>
-<pre><code class="js hljs javascript"><span class="hljs-comment">/*global cheetahGrid, records*/</span>
-<span class="hljs-meta">'use strict'</span>;
-<span class="hljs-keyword">const</span> grid = <span class="hljs-keyword">new</span> cheetahGrid.ListGrid({
-	<span class="hljs-attr">parentElement</span>: <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample2'</span>),
-	<span class="hljs-attr">header</span>: [
-		{<span class="hljs-attr">field</span>: <span class="hljs-string">'personid'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'ID'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">100</span>, <span class="hljs-attr">columnType</span>: <span class="hljs-string">'center'</span>},
-		{ <span class="hljs-comment">/* multiple header */</span>
-			caption: <span class="hljs-string">'name'</span>,
-			<span class="hljs-attr">columns</span>: [
-				{<span class="hljs-attr">field</span>: <span class="hljs-string">'fname'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'First Name'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">200</span>},
-				{<span class="hljs-attr">field</span>: <span class="hljs-string">'lname'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'Last Name'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">200</span>},
-			],
+	header: [{ field: 'personid', caption: 'ID', width: 100, columnType: 'center' }, { field: 'fname', caption: 'First Name', width: 200 }, { field: 'lname', caption: 'Last Name', width: 200 }, { field: 'email', caption: 'Email', width: 250 }, {
+		field: function field(rec) {
+			return rec.birthday.toLocaleString(lang, { year: 'numeric', month: 'long', day: 'numeric' });
 		},
-		{<span class="hljs-attr">field</span>: <span class="hljs-string">'email'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'Email'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">250</span>},
-		{<span class="hljs-attr">field</span>: <span class="hljs-string">'birthday'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'birthday'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">500</span>},
-	],
-	<span class="hljs-attr">frozenColCount</span>: <span class="hljs-number">1</span>,
+
+		caption: 'birthday',
+		width: 500
+	}],
+	frozenColCount: 1,
+	records: records
 });
-grid.records = records;
+//
+document.querySelector('#button').addEventListener('click', function () {
+	var select = grid.selection.select;
+	var range = grid.selection.range;
+
+	document.querySelector('#result').textContent = '\nselect:\n---\n' + JSON.stringify(select, null, '  ') + ',\n---\n\nrange:\n---\n' + JSON.stringify(range, null, '  ') + ',\n---';
+});
+//
+//
+})();
+</script>
+
+<pre><code class="js hljs javascript"><span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#button'</span>).addEventListener(<span class="hljs-string">'click'</span>, () =&gt; {
+	<span class="hljs-keyword">const</span> select = grid.selection.select;
+	<span class="hljs-keyword">const</span> range = grid.selection.range;
+	
+	<span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#result'</span>).textContent = <span class="hljs-string">`
+select:
+---
+<span class="hljs-subst">${<span class="hljs-built_in">JSON</span>.stringify(select, <span class="hljs-literal">null</span>, <span class="hljs-string">'  '</span>)}</span>,
+---
+
+range:
+---
+<span class="hljs-subst">${<span class="hljs-built_in">JSON</span>.stringify(range, <span class="hljs-literal">null</span>, <span class="hljs-string">'  '</span>)}</span>,
+---`</span>;
+});
 <span class="hljs-comment">//</span></code></pre>
     </div>
     <script type="text/javascript" src="./../../js/doc-common.js"></script>

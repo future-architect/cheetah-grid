@@ -5,7 +5,7 @@
     <meta name="author" content="Cheetah Grid">
     <meta name="keywords" content="spreadsheet,grid,canvas,table,web-components">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Cheetah Grid - Header and Columns</title>
+    <title>Cheetah Grid - Events</title>
     <link rel="shortcut icon" type="image/x-icon" href="./../../../icon_512x512.ico">
 
     <link rel="stylesheet" type="text/css" href="./../../css/style.css">
@@ -13,7 +13,7 @@
     
     <!-- <script src="http://localhost:35729/livereload.js"></script> -->
     
-    <script type="text/javascript" src="https://unpkg.com/cheetah-grid@0.1"></script>
+    <script type="text/javascript" src="https://unpkg.com/cheetah-grid@0.0.1"></script>
 
     <style type="text/css">
         html {
@@ -103,8 +103,8 @@ window.onerror = function (msg, file, line, column, err) {
     						lang<span class="icon-arrow"></span>
     					</a>
     					<ul id="langs" class="nav-dropdown right-dropdown">
-    						<li><a href="./../../ja/demos/usage/header_columns.html" class="primary">日本語</a></li>
-    						<li><a href="./../../demos/usage/header_columns.html" class="primary">English</a></li>
+    						<li><a href="./../../ja/demos/usage/events.html" class="primary">日本語</a></li>
+    						<li><a href="./../../demos/usage/events.html" class="primary">English</a></li>
     					</ul>
     				</li>
     			</ul>
@@ -120,7 +120,7 @@ window.onerror = function (msg, file, line, column, err) {
     function getVersions(callback) {
     	var xhr = new XMLHttpRequest();
     	function onError() {
-    		callback(['0.1', '0.0.1']);
+    		callback(['0.0.1', '0.0.1']);
     	}
     	xhr.onload = function () {
     		var versions = JSON.parse(xhr.responseText);
@@ -138,7 +138,7 @@ window.onerror = function (msg, file, line, column, err) {
     
     //
     getVersions(function (versions) {
-    	var myVersion = '0.1';
+    	var myVersion = '0.0.1';
     	function getVerLocation(v) {
     		return location.href.replace(myVersion, v).replace('.devdoc', v);
     	}
@@ -157,59 +157,18 @@ window.onerror = function (msg, file, line, column, err) {
     	}
     });
     //
-    </script>    <h1>Usage &gt; Header and Columns</h1>
+    </script>    <h1>Usage &gt; Events</h1>
     <div class="contents">
         
-<h2 id="standard-column">Standard Column</h2>
-<p>The <code>header</code> property, the property of <code>cheetahGrid.ListGrid</code>, decides the behave and appearance of columns and header cells.<br>We can set this property by constructor arguments.  </p>
-<p>The <code>header</code> property must be set by objects array (Array&lt;Object&gt;).<br>Each object consists of following properties.  </p>
-<table>
-<thead>
-<tr>
-<th>property</th>
-<th>Description</th>
-<th>LINK</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>caption</td>
-<td>header caption</td>
-<td>---</td>
-</tr>
-<tr>
-<td>field</td>
-<td>field name or function</td>
-<td>---</td>
-</tr>
-<tr>
-<td>width</td>
-<td>width of column</td>
-<td>---</td>
-</tr>
-<tr>
-<td>columnType</td>
-<td>type of column</td>
-<td><a href="./column_types.html">link</a></td>
-</tr>
-<tr>
-<td>style</td>
-<td>style of column</td>
-<td><a href="./column_styles.html">link</a></td>
-</tr>
-<tr>
-<td>action</td>
-<td>action of column</td>
-<td>---</td>
-</tr>
-</tbody>
-</table>
-
-
-
+<h2 id="events">Events</h2>
+<p>You can set an event listener using the <code>listen(type, listener)</code> method.  </p>
+<p>Please get the event type from <code>cheetahGrid.ListGrid.EVENT_TYPE</code>.  </p>
+<textarea id="log" class="log">Event logs</textarea>
+<input id="include-mouse" type="checkbox"><label>Include mousemove,mouseenter,mouseleave in the log</label>
 <div id="sample1" class="demo-grid middle">
 </div>
 <script type="text/javascript">
+
 ////babel
 'use strict';
 
@@ -252,105 +211,174 @@ function generatePersonsDataSource(num) {
 		length: num
 	});
 }
-////babel
+////wrapscript
+(function() {
+//babel
 
-/*global generatePersons*/
+/*global generatePerson*/
 /*eslint-disable no-unused-vars*/
 'use strict';
 
+var lang = navigator.language || navigator.userLanguage || navigator.browserLanguage;
 var records = generatePersons(100);
-//
-</script>
-<script type="text/javascript">
-////wrapscript
-(function() {
-//babel
-
-//
-/*global cheetahGrid, records*/
-'use strict';
-
 var grid = new cheetahGrid.ListGrid({
 	parentElement: document.querySelector('#sample1'),
-	header: [{ field: 'personid', caption: 'ID', width: 100, columnType: 'center' }, { field: 'fname', caption: 'First Name', width: 200 }, { field: 'lname', caption: 'Last Name', width: 200 }, { field: 'email', caption: 'Email', width: 250 }, { field: 'birthday', caption: 'birthday', width: 500 }],
-	frozenColCount: 1
-});
-grid.records = records;
-//
-//
-})();
-</script>
-<pre><code class="js hljs javascript"><span class="hljs-comment">/*global cheetahGrid, records*/</span>
-<span class="hljs-meta">'use strict'</span>;
-<span class="hljs-keyword">const</span> grid = <span class="hljs-keyword">new</span> cheetahGrid.ListGrid({
-	<span class="hljs-attr">parentElement</span>: <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample1'</span>),
-	<span class="hljs-attr">header</span>: [
-		{<span class="hljs-attr">field</span>: <span class="hljs-string">'personid'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'ID'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">100</span>, <span class="hljs-attr">columnType</span>: <span class="hljs-string">'center'</span>},
-		{<span class="hljs-attr">field</span>: <span class="hljs-string">'fname'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'First Name'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">200</span>},
-		{<span class="hljs-attr">field</span>: <span class="hljs-string">'lname'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'Last Name'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">200</span>},
-		{<span class="hljs-attr">field</span>: <span class="hljs-string">'email'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'Email'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">250</span>},
-		{<span class="hljs-attr">field</span>: <span class="hljs-string">'birthday'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'birthday'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">500</span>},
-	],
-	<span class="hljs-attr">frozenColCount</span>: <span class="hljs-number">1</span>,
-});
-grid.records = records;
-<span class="hljs-comment">//</span></code></pre>
-<pre><code class="lang-js hljs javascript"><span class="hljs-comment">//record object properties</span>
-{
-    <span class="hljs-attr">personid</span>: <span class="hljs-string">'ID'</span>,
-    <span class="hljs-attr">fname</span>: <span class="hljs-string">'First Name'</span>,
-    <span class="hljs-attr">lname</span>: <span class="hljs-string">'Last Name'</span>,
-    <span class="hljs-attr">email</span>: <span class="hljs-string">'Email'</span>,
-    <span class="hljs-attr">birthday</span>: <span class="hljs-string">'birthday'</span>,
-}
-</code></pre>
-
-<h2 id="multiple-header">Multiple Header</h2>
-<p>To use multiple header, set the hierarchical structured Object to the <code>header</code> property.  </p>
-
-<div id="sample2" class="demo-grid middle">
-</div>
-<script type="text/javascript">
-////wrapscript
-(function() {
-//babel
-
-//
-/*global cheetahGrid, records*/
-'use strict';
-
-var grid = new cheetahGrid.ListGrid({
-	parentElement: document.querySelector('#sample2'),
-	header: [{ field: 'personid', caption: 'ID', width: 100, columnType: 'center' }, { /* multiple header */
-		caption: 'name',
-		columns: [{ field: 'fname', caption: 'First Name', width: 200 }, { field: 'lname', caption: 'Last Name', width: 200 }]
-	}, { field: 'email', caption: 'Email', width: 250 }, { field: 'birthday', caption: 'birthday', width: 500 }],
-	frozenColCount: 1
-});
-grid.records = records;
-//
-//
-})();
-</script>
-<pre><code class="js hljs javascript"><span class="hljs-comment">/*global cheetahGrid, records*/</span>
-<span class="hljs-meta">'use strict'</span>;
-<span class="hljs-keyword">const</span> grid = <span class="hljs-keyword">new</span> cheetahGrid.ListGrid({
-	<span class="hljs-attr">parentElement</span>: <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample2'</span>),
-	<span class="hljs-attr">header</span>: [
-		{<span class="hljs-attr">field</span>: <span class="hljs-string">'personid'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'ID'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">100</span>, <span class="hljs-attr">columnType</span>: <span class="hljs-string">'center'</span>},
-		{ <span class="hljs-comment">/* multiple header */</span>
-			caption: <span class="hljs-string">'name'</span>,
-			<span class="hljs-attr">columns</span>: [
-				{<span class="hljs-attr">field</span>: <span class="hljs-string">'fname'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'First Name'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">200</span>},
-				{<span class="hljs-attr">field</span>: <span class="hljs-string">'lname'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'Last Name'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">200</span>},
-			],
+	header: [{ field: 'personid', caption: 'ID', width: 100, columnType: 'center' }, { field: 'fname', caption: 'First Name', width: 200 }, { field: 'lname', caption: 'Last Name', width: 200 }, { field: 'email', caption: 'Email', width: 250 }, {
+		field: function field(rec) {
+			return rec.birthday.toLocaleString(lang, { year: 'numeric', month: 'long', day: 'numeric' });
 		},
-		{<span class="hljs-attr">field</span>: <span class="hljs-string">'email'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'Email'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">250</span>},
-		{<span class="hljs-attr">field</span>: <span class="hljs-string">'birthday'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'birthday'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">500</span>},
-	],
-	<span class="hljs-attr">frozenColCount</span>: <span class="hljs-number">1</span>,
+
+		caption: 'birthday',
+		width: 500
+	}],
+	frozenColCount: 1,
+	records: records
 });
-grid.records = records;
+//
+var log = function log(typeName, args) {
+	var el = document.querySelector('#log');
+	el.value += '\nEvent: ' + typeName + ' , args (' + args.map(JSON.stringify).join(', ') + ')';
+	el.value = el.value.trim();
+	el.scrollTop = el.scrollHeight;
+};
+
+var _cheetahGrid$ListGrid = cheetahGrid.ListGrid.EVENT_TYPE,
+    CLICK_CELL = _cheetahGrid$ListGrid.CLICK_CELL,
+    SELECTED_CELL = _cheetahGrid$ListGrid.SELECTED_CELL,
+    MOUSEDOWN_CELL = _cheetahGrid$ListGrid.MOUSEDOWN_CELL,
+    MOUSEUP_CELL = _cheetahGrid$ListGrid.MOUSEUP_CELL,
+    MOUSEMOVE_CELL = _cheetahGrid$ListGrid.MOUSEMOVE_CELL,
+    MOUSEENTER_CELL = _cheetahGrid$ListGrid.MOUSEENTER_CELL,
+    MOUSELEAVE_CELL = _cheetahGrid$ListGrid.MOUSELEAVE_CELL,
+    KEYDOWN = _cheetahGrid$ListGrid.KEYDOWN,
+    RESIZE_COLUMN = _cheetahGrid$ListGrid.RESIZE_COLUMN;
+
+
+grid.listen(CLICK_CELL, function () {
+	for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+		args[_key] = arguments[_key];
+	}
+
+	return log('click cell', args);
+});
+grid.listen(SELECTED_CELL, function () {
+	for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+		args[_key2] = arguments[_key2];
+	}
+
+	return log('selected cell', args);
+});
+grid.listen(MOUSEDOWN_CELL, function () {
+	for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+		args[_key3] = arguments[_key3];
+	}
+
+	return log('mousedown cell', args);
+});
+grid.listen(MOUSEUP_CELL, function () {
+	for (var _len4 = arguments.length, args = Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+		args[_key4] = arguments[_key4];
+	}
+
+	return log('mouseup cell', args);
+});
+grid.listen(KEYDOWN, function () {
+	for (var _len5 = arguments.length, args = Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
+		args[_key5] = arguments[_key5];
+	}
+
+	return log('keydown', args);
+});
+grid.listen(RESIZE_COLUMN, function () {
+	for (var _len6 = arguments.length, args = Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
+		args[_key6] = arguments[_key6];
+	}
+
+	return log('resize column', args);
+});
+
+grid.listen(MOUSEMOVE_CELL, function () {
+	for (var _len7 = arguments.length, args = Array(_len7), _key7 = 0; _key7 < _len7; _key7++) {
+		args[_key7] = arguments[_key7];
+	}
+
+	if (!document.querySelector('#include-mouse').checked) {
+		return;
+	}
+	log('mousemove cell', args);
+});
+grid.listen(MOUSEENTER_CELL, function () {
+	for (var _len8 = arguments.length, args = Array(_len8), _key8 = 0; _key8 < _len8; _key8++) {
+		args[_key8] = arguments[_key8];
+	}
+
+	if (!document.querySelector('#include-mouse').checked) {
+		return;
+	}
+	log('mouseenter cell', args);
+});
+grid.listen(MOUSELEAVE_CELL, function () {
+	for (var _len9 = arguments.length, args = Array(_len9), _key9 = 0; _key9 < _len9; _key9++) {
+		args[_key9] = arguments[_key9];
+	}
+
+	if (!document.querySelector('#include-mouse').checked) {
+		return;
+	}
+	log('mouseleave cell', args);
+});
+
+//
+//
+})();
+</script>
+
+<pre><code class="js hljs javascript"><span class="hljs-keyword">const</span> log = <span class="hljs-function">(<span class="hljs-params">typeName, args</span>) =&gt;</span> {
+	<span class="hljs-keyword">const</span> el = <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#log'</span>);
+	el.value += <span class="hljs-string">`\nEvent: <span class="hljs-subst">${typeName}</span> , args (<span class="hljs-subst">${args.map(<span class="hljs-built_in">JSON</span>.stringify).join(<span class="hljs-string">', '</span>)}</span>)`</span>;
+	el.value = el.value.trim();
+	el.scrollTop = el.scrollHeight;
+
+};
+
+<span class="hljs-keyword">const</span> {
+	CLICK_CELL,
+	SELECTED_CELL,
+	MOUSEDOWN_CELL,
+	MOUSEUP_CELL,
+	MOUSEMOVE_CELL,
+	MOUSEENTER_CELL,
+	MOUSELEAVE_CELL,
+	KEYDOWN,
+	RESIZE_COLUMN,
+} = cheetahGrid.ListGrid.EVENT_TYPE;
+
+grid.listen(CLICK_CELL, (...args) =&gt; log(<span class="hljs-string">'click cell'</span>, args));
+grid.listen(SELECTED_CELL, (...args) =&gt; log(<span class="hljs-string">'selected cell'</span>, args));
+grid.listen(MOUSEDOWN_CELL, (...args) =&gt; log(<span class="hljs-string">'mousedown cell'</span>, args));
+grid.listen(MOUSEUP_CELL, (...args) =&gt; log(<span class="hljs-string">'mouseup cell'</span>, args));
+grid.listen(KEYDOWN, (...args) =&gt; log(<span class="hljs-string">'keydown'</span>, args));
+grid.listen(RESIZE_COLUMN, (...args) =&gt; log(<span class="hljs-string">'resize column'</span>, args));
+
+grid.listen(MOUSEMOVE_CELL, (...args) =&gt; {
+	<span class="hljs-keyword">if</span> (!<span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#include-mouse'</span>).checked) {
+		<span class="hljs-keyword">return</span>;
+	}
+	log(<span class="hljs-string">'mousemove cell'</span>, args);
+});
+grid.listen(MOUSEENTER_CELL, (...args) =&gt; {
+	<span class="hljs-keyword">if</span> (!<span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#include-mouse'</span>).checked) {
+		<span class="hljs-keyword">return</span>;
+	}
+	log(<span class="hljs-string">'mouseenter cell'</span>, args);
+});
+grid.listen(MOUSELEAVE_CELL, (...args) =&gt; {
+	<span class="hljs-keyword">if</span> (!<span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#include-mouse'</span>).checked) {
+		<span class="hljs-keyword">return</span>;
+	}
+	log(<span class="hljs-string">'mouseleave cell'</span>, args);
+});
+
 <span class="hljs-comment">//</span></code></pre>
     </div>
     <script type="text/javascript" src="./../../js/doc-common.js"></script>

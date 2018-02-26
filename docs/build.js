@@ -9,6 +9,7 @@ const watch = require('metalsmith-watch');
 const inPlace = require('metalsmith-in-place');
 const codeHighlight = require('./metalsmith-code-highlight');
 const textContents = require('./metalsmith-text-contents');
+const babel = require('./metalsmith-babel');
 const i18n = require('./metalsmith-i18n-files');
 const mstatic = require('metalsmith-static');
 
@@ -107,6 +108,7 @@ Metalsmith(__dirname).
 		// default: '{{{contents}}}',
 	})).
 	use(codeHighlight()).
+	use(babel()).
 	build((err) => {
 		if (err) { throw err; } // error handling is required
 	});

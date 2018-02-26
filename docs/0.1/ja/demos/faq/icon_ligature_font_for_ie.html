@@ -140,21 +140,6 @@ window.onerror = function (msg, file, line, column, err) {
     }
     
     //
-    var buttons = document.querySelectorAll('.nav-dropdown-button');
-    
-    var _loop = function _loop(i) {
-    	var button = buttons[i];
-    	button.onclick = function () {
-    		var target = button.getAttribute('data-target');
-    		document.getElementById(target).classList.toggle('show');
-    	};
-    };
-    
-    for (var i = 0; i < buttons.length; i++) {
-    	_loop(i);
-    }
-    
-    //
     getVersions(function (versions) {
     	var myVersion = '0.1';
     	function getVerLocation(v) {
@@ -174,21 +159,6 @@ window.onerror = function (msg, file, line, column, err) {
     		a.textContent = '<goto the latest version(' + latest + ') document>';
     	}
     });
-    
-    // Close the dropdown menu if the user clicks outside of it
-    window.onclick = function (event) {
-    	if (event.target.classList.contains('nav-dropdown') || event.target.classList.contains('nav-dropdown-button') || event.target.classList.contains('mobile-nav-dropdown') || event.target.classList.contains('mobile-nav-dropdown-button')) {
-    		return;
-    	}
-    
-    	var dropdowns = document.querySelectorAll('.nav-dropdown,.mobile-nav-dropdown');
-    	for (var i = 0; i < dropdowns.length; i++) {
-    		var openDropdown = dropdowns[i];
-    		if (openDropdown.classList.contains('show')) {
-    			openDropdown.classList.remove('show');
-    		}
-    	}
-    };
     //
     </script>    <h1>FAQ &gt; Icon Ligature Font(for IE)</h1>
     <div class="contents">
@@ -319,5 +289,6 @@ grid.records = [
 
 <span class="hljs-comment">//</span></code></pre>
     </div>
+    <script type="text/javascript" src="./../../../js/doc-common.js"></script>
 
 </body></html>

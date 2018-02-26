@@ -6,6 +6,7 @@
     <meta name="keywords" content="spreadsheet,grid,canvas,table,web-components">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Cheetah Grid - Using promises</title>
+    <link rel="shortcut icon" type="image/x-icon" href="./../../../icon_512x512.ico">
 
     <link rel="stylesheet" type="text/css" href="./../../css/style.css">
     <link rel="stylesheet" type="text/css" href="./../../css/highlightjs.css">
@@ -103,8 +104,8 @@ window.onerror = function (msg, file, line, column, err) {
     						lang<span class="icon-arrow"></span>
     					</a>
     					<ul id="langs" class="nav-dropdown right-dropdown">
-    						<li><a href="./../../ja/demos\usage\using_promises.html" class="primary">日本語</a></li>
-    						<li><a href="./../../demos\usage\using_promises.html" class="primary">English</a></li>
+    						<li><a href="./../../ja/demos/usage/using_promises.html" class="primary">日本語</a></li>
+    						<li><a href="./../../demos/usage/using_promises.html" class="primary">English</a></li>
     					</ul>
     				</li>
     			</ul>
@@ -137,21 +138,6 @@ window.onerror = function (msg, file, line, column, err) {
     }
     
     //
-    var buttons = document.querySelectorAll('.nav-dropdown-button');
-    
-    var _loop = function _loop(i) {
-    	var button = buttons[i];
-    	button.onclick = function () {
-    		var target = button.getAttribute('data-target');
-    		document.getElementById(target).classList.toggle('show');
-    	};
-    };
-    
-    for (var i = 0; i < buttons.length; i++) {
-    	_loop(i);
-    }
-    
-    //
     getVersions(function (versions) {
     	var myVersion = '0.0.1';
     	function getVerLocation(v) {
@@ -171,42 +157,30 @@ window.onerror = function (msg, file, line, column, err) {
     		a.textContent = '<goto the latest version(' + latest + ') document>';
     	}
     });
-    
-    // Close the dropdown menu if the user clicks outside of it
-    window.onclick = function (event) {
-    	if (event.target.classList.contains('nav-dropdown') || event.target.classList.contains('nav-dropdown-button') || event.target.classList.contains('mobile-nav-dropdown') || event.target.classList.contains('mobile-nav-dropdown-button')) {
-    		return;
-    	}
-    
-    	var dropdowns = document.querySelectorAll('.nav-dropdown,.mobile-nav-dropdown');
-    	for (var i = 0; i < dropdowns.length; i++) {
-    		var openDropdown = dropdowns[i];
-    		if (openDropdown.classList.contains('show')) {
-    			openDropdown.classList.remove('show');
-    		}
-    	}
-    };
     //
     </script>    <h1>Usage &gt; Using promises</h1>
     <div class="contents">
         
 <h2 id="using-promises">Using promises</h2>
-<p>Cheetah Gridは<code>Promise</code>オブジェクトの扱いをサポートしています。<br>例として以下の用途での利用を想定しています。  </p>
+<p>Cheetah Grid supports <code>Promise</code> object.
+We suppose the situations below as a example.</p>
 <ul>
-<li>レコード情報を遅延して取得する<br> 初期表示では上位数十件のデータを取得・表示し、後のデータはスクロールして表示させようとしたタイミングで取得・表示するような場合  </li>
-<li>セルに表示する情報を遅延して取得する<br> 初期表示ではレコードの重要な情報を取得・表示し、詳細な情報は遅延して取得・表示するような場合    </li>
+<li>Get the record informations as deferred
+Get and show a few records in first view. Remaining records are shown when scrolled.</li>
+<li>Get the cell informations as deferred
+Get and show the important informations in first view. Remaining details are shown later.</li>
 </ul>
 
 <h2 id="promise-records">Promise Records</h2>
-<p>以下に利用例を示します。  </p>
-<p>例は、全体で1000件のレコードを表示しますが、レコード100件ごとにajax経由で取得することを想定した例です。  </p>
+<p>Shows usage below.</p>
+<p>In this example grid shows 1,000 recors as a whole. Getting 100 records by each ajax is supposed.  </p>
 
 
 <textarea id="rec_sample_log" class="log" readonly="true">ajax logs</textarea>
 <div id="rec_sample" class="demo-grid middle">
 </div>
 
-<p>コード例の<code>getRecordsWithAjax</code>は、ajaxでレコード100件を取得する<code>Promise</code>オブジェクトを返します。  </p>
+<p><code>getRecordsWithAjax</code> in example code returns <code>Promise</code> object which get 100 records by ajax.</p>
 
 <script type="text/javascript">
 
@@ -355,15 +329,14 @@ grid.dataSource = dataSource;
 
 
 <h2 id="promise-cells">Promise Cells</h2>
-<p>以下に利用例を示します。  </p>
-<p>例は、人員データを表示しますが、部署情報については、表示時にajax経由で取得することを想定した例です。  </p>
+<p>Example below shows Person data. Department informations are shown later by ajax.</p>
 
 
 <textarea id="cell_sample_log" class="log" readonly="true">ajax logs</textarea>
 <div id="cell_sample" class="demo-grid middle">
 </div>
 
-<p>コード例の<code>getPersonDeptWithAjax</code>は、ajaxで部署情報を取得する<code>Promise</code>オブジェクトを返します。  </p>
+<p><code>getPersonDeptWithAjax</code> in example code returns <code>Promise</code> object which get department information by ajax.</p>
 
 <script type="text/javascript">
 ////babel
@@ -373,7 +346,7 @@ grid.dataSource = dataSource;
 'use strict';
 
 var records = generatePersons(1000);
-var depts = ['General Affairs', 'Personnel', 'General Accounting', 'Sales', 'Sales Promotion', 'Procurement', 'Development', 'Engineering', 'Manufacturing', 'Procurement', 'Export', 'Public Relations', 'Information & Research', 'Legal', 'Advertising', 'Planning', 'Secretary'];
+var depts = ['General Affairs', 'Personal', 'General Accounting', 'Sales', 'Sales Promotion', 'Procurement', 'Development', 'Engineering', 'Manufacturing', 'Procurement', 'Export', 'Public Relations', 'Information & Research', 'Legal', 'Advertising', 'Planning', 'Secretary'];
 var getPersonDeptWithAjax = function getPersonDeptWithAjax(personid) {
 	return new Promise(function (resolve) {
 		setTimeout(function () {
@@ -442,5 +415,6 @@ grid.configure(<span class="hljs-string">'fadeinWhenCallbackInPromise'</span>, <
 grid.records = records;
 <span class="hljs-comment">//</span></code></pre>
     </div>
+    <script type="text/javascript" src="./../../js/doc-common.js"></script>
 
 </body></html>
