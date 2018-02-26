@@ -1,4 +1,3 @@
-/*eslint object-shorthand:0, prefer-arrow-callback:0*/
 'use strict';
 (function(d, s, id) {
 	const fjs = d.getElementsByTagName(s)[0];

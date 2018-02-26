@@ -54,16 +54,6 @@
 	}
 
 	//
-	const buttons = document.querySelectorAll('.nav-dropdown-button');
-	for (let i = 0; i < buttons.length; i++) {
-		const button = buttons[i];
-		button.onclick = () => {
-			const target = button.getAttribute('data-target');
-	    	document.getElementById(target).classList.toggle('show');
-		};
-	}
-
-	//
 	getVersions((versions) => {
 		const myVersion = `{{docLinkVersion}}${''}`;
 		function getVerLocation(v) {
@@ -81,23 +71,5 @@
 			a.textContent = `<goto the latest version(${latest}) document>`;
 		}
 	});
-
-	// Close the dropdown menu if the user clicks outside of it
-	window.onclick = (event) => {
-		if (event.target.classList.contains('nav-dropdown') ||
-			event.target.classList.contains('nav-dropdown-button') ||
-			event.target.classList.contains('mobile-nav-dropdown') ||
-			event.target.classList.contains('mobile-nav-dropdown-button')) {
-			return;
-		}
-
-		const dropdowns = document.querySelectorAll('.nav-dropdown,.mobile-nav-dropdown');
-		for (let i = 0; i < dropdowns.length; i++) {
-			const openDropdown = dropdowns[i];
-			if (openDropdown.classList.contains('show')) {
-				openDropdown.classList.remove('show');
-			}
-		}
-	};
 	//{{/babel}}
 </script>
