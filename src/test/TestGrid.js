@@ -1,7 +1,7 @@
 /*global cheetahGrid*/
 /*eslint prefer-rest-params:0, consistent-this:0*/
+'use strict';
 (function() {
-	'use strict';
 	const DrawGrid = cheetahGrid.core.DrawGrid;
 	const GridCanvasHelper = cheetahGrid.GridCanvasHelper;
 	const themes = cheetahGrid.themes;

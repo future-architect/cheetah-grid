@@ -15,8 +15,7 @@ function parse(calcStr) {
 	}
 	const script = calcStr.replace(/^calc\((.*)\)$/, '$1').
 		replace(/(\d+)([A-Za-z%]+)/g, replacer).
-		replace(/(\d*\.\d+)([A-Za-z%]+)/g, replacer)
-	;
+		replace(/(\d*\.\d+)([A-Za-z%]+)/g, replacer);
 	return {
 		eval(context) {
 			return (() => {
