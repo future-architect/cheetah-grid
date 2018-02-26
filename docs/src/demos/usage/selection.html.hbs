@@ -1,0 +1,83 @@
+---
+category: Usage
+title: Selection
+layout: demo.html
+order: 190
+---
+
+{{#marked}}
+## Selection
+{{#if lang_ja}}
+`selection`プロパティからユーザーが選択した領域を取得できます。  
+
+|property|説明|例|
+|---|---|---|
+|`selection.select`|選択開始位置の情報Objectを取得できます。Object内のの`row`はヘッダーを含んだ行INDEXです。|`{"col": 0, "row": 0}`|
+|`selection.range`|選択範囲の情報Objectを取得できます。Object内のの`row`はヘッダーを含んだ行INDEXです。|`{"start": {"col": 0, "row": 0}, "end": {"col": 2, "row": 2}}`|
+
+{{else}}
+You can get the area selected by the user from the `selection` property.  
+
+
+|property|description|exp.|
+|---|---|---|
+|`selection.select`|You can get the selection start position with Object. The `row` in the Object is the INDEX line containing the header.|`{"col": 0, "row": 0}`|
+|`selection.range`|You can get the selection range with Object. The `row` in the Object is the INDEX line containing the header.|`{"start": {"col": 0, "row": 0}, "end": {"col": 2, "row": 2}}`|
+
+
+{{/if}}
+{{/marked}}
+
+<div id="sample1" class="demo-grid middle">
+</div>
+<button id="button">SHOW SELECTION</button>
+<pre id="result">
+</pre>
+<script type="text/javascript">
+
+//{{{babel textContents.demos.[demos/init.parts.js]}}}
+//{{#wrapscript}}
+/*global generatePerson*/
+/*eslint-disable no-unused-vars*/
+'use strict';
+const lang = navigator.language || navigator.userLanguage || navigator.browserLanguage;
+const records = generatePersons(100);
+const grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#sample1'),
+	header: [
+		{field: 'personid', caption: 'ID', width: 100, columnType: 'center'},
+		{field: 'fname', caption: 'First Name', width: 200},
+		{field: 'lname', caption: 'Last Name', width: 200},
+		{field: 'email', caption: 'Email', width: 250},
+		{
+			field(rec) {
+				return rec.birthday.toLocaleString(lang, {year: 'numeric', month: 'long', day: 'numeric'});
+			},
+			caption: 'birthday',
+			width: 500
+		},
+	],
+	frozenColCount: 1,
+	records,
+});
+//{{#copy "sample1"}}
+document.querySelector('#button').addEventListener('click', () => {
+	const select = grid.selection.select;
+	const range = grid.selection.range;
+	
+	document.querySelector('#result').textContent = `
+select:
+---
+${JSON.stringify(select, null, '  ')},
+---
+
+range:
+---
+${JSON.stringify(range, null, '  ')},
+---`;
+});
+//{{/copy}}
+//{{/wrapscript}}
+</script>
+
+{{> code class="js" code=sample1}}
