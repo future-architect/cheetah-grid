@@ -5,7 +5,9 @@
 	const Editor = require('./action/Editor');
 	const CheckEditor = require('./action/CheckEditor');
 	const ButtonAction = require('./action/ButtonAction');
-	const InputEditor = require('./action/InputEditor');
+	const InlineInputEditor = require('./action/InlineInputEditor');
+	const SmallDialogInputEditor = require('./action/SmallDialogInputEditor');
+	
 
 	class ImmutableCheckEditor extends CheckEditor {
 		get disabled() {
@@ -15,7 +17,7 @@
 			return this._readOnly;
 		}
 	}
-	class ImmutableInputEditor extends InputEditor {
+	class ImmutableInputEditor extends SmallDialogInputEditor {
 		get disabled() {
 			return this._disabled;
 		}
@@ -50,8 +52,11 @@
 		get ButtonAction() {
 			return ButtonAction;
 		},
-		get InputEditor() {
-			return InputEditor;
+		get InlineInputEditor() {
+			return InlineInputEditor;
+		},
+		get SmallDialogInputEditor() {
+			return SmallDialogInputEditor;
 		},
 		of(columnAction) {
 			if (!columnAction) {

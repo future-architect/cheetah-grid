@@ -9,6 +9,7 @@
 		DBLCLICK_CELL,
 		KEYDOWN,
 		MODIFY_STATUS_EDITABLEINPUT_CELL,
+		SCROLL
 	}} = require('../../core/DrawGrid');
 
 	class BaseInputEditor extends Editor {
@@ -28,6 +29,9 @@
 			throw new Error();
 		}
 		onSetInputAttrsInternal(grid, cell, input) {
+			throw new Error();
+		}
+		onGridScrollInternal(grid) {
 			throw new Error();
 		}
 		bindGridEvent(grid, col, util) {
@@ -64,7 +68,7 @@
 					});
 				}),
 				grid.listen(KEYDOWN, (keyCode, e) => {
-					if (keyCode !== 113/*F2*/) {
+					if (keyCode !== 113/*F2*/ && keyCode !== 13) {
 						return;
 					}
 					const sel = grid.selection.select;
@@ -78,6 +82,9 @@
 				}),
 				grid.listen(SELECTED_CELL, (cell, selected) => {
 					this.onChangeSelectCellInternal(grid, cell, selected);
+				}),
+				grid.listen(SCROLL, () => {
+					this.onGridScrollInternal(grid);
 				}),
 				grid.listen(EDITABLEINPUT_CELL, (cell) => {
 					if (!util.isTarget(cell.col, cell.row)) {

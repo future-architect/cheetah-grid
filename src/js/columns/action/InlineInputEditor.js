@@ -51,7 +51,7 @@
 
 	function createInputElement() {
 		const input = document.createElement('input');
-		input.classList.add('input-editor');
+		input.classList.add('cheetah-grid__inline-input-editor__input');
 		bindInputElementEvent(input);
 		return input;
 	}
@@ -135,9 +135,7 @@
 		const value = input.value;
 		const grid = globalState.bindGrid;
 		const cell = globalState.bindCell;
-		grid.doChangeValue(cell.col, cell.row, () => value, () => {
-			grid.invalidateCell(cell.col, cell.row);
-		});
+		grid.doChangeValue(cell.col, cell.row, () => value);
 	}
 	function setInputAttrs(inputEditor, grid, input) {
 		const classList = inputEditor.classList;
@@ -147,7 +145,7 @@
 		input.type = inputEditor.type || '';
 	}
 
-	class InputEditor extends BaseInputEditor {
+	class InlineInputEditor extends BaseInputEditor {
 		constructor(option = {}) {
 			super(option);
 			this._classList = option.classList;
@@ -166,17 +164,21 @@
 			this._type = type;
 		}
 		clone() {
-			return new InputEditor(this);
+			return new InlineInputEditor(this);
 		}
 		onInputCellInternal(grid, cell, inputValue) {
 			bindInputElement(grid, cell, this, inputValue);
 		}
 		onOpenCellInternal(grid, cell) {
-			grid.doChangeValue(cell.col, cell.row, (value) => {
+			grid.doGetCellValue(cell.col, cell.row, (value) => {
 				bindInputElement(grid, cell, this, value);
 			});
 		}
 		onChangeSelectCellInternal(grid, cell, selected) {
+			doChangeValue();
+			removeInputElement();
+		}
+		onGridScrollInternal(grid) {
 			doChangeValue();
 			removeInputElement();
 		}
@@ -185,5 +187,5 @@
 		}
 	}
 
-	module.exports = InputEditor;
+	module.exports = InlineInputEditor;
 }

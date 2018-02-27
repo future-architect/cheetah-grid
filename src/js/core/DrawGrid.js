@@ -53,6 +53,7 @@
 		EDITABLEINPUT_CELL: 'editableinput_cell',
 		MODIFY_STATUS_EDITABLEINPUT_CELL: 'modify_status_editableinput_cell',
 		RESIZE_COLUMN: 'resize_column',
+		SCROLL: 'scroll',
 	};
 
 	//private methods
@@ -823,6 +824,7 @@
 
 		grid[_].scrollable.onScroll((e) => {
 			_onScroll(grid, e);
+			grid.fireListeners(EVENT_TYPE.SCROLL, {event: e});
 		});
 		grid[_].focusControl.onKeyDownMove((e) => {
 			_onKeyDownMove(grid, e);
@@ -1652,7 +1654,6 @@
 		appendChildElement(element, rect) {
 			rect = _toRelativeRect(this, rect);
 			element.style.position = 'absolute';
-			element.style['box-sizing'] = 'border-box';
 			element.style.top = rect.top.toFixed() + 'px';
 			element.style.left = rect.left.toFixed() + 'px';
 			element.style.width = rect.width.toFixed() + 'px';

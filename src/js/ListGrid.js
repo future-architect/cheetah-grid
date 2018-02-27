@@ -659,6 +659,20 @@
 			const cellValue = _getCellValue(this, col, row);
 			return _onDrawValue(this, cellValue, context, {col, row}, style, draw);
 		}
+		doGetCellValue(col, row, valueCallback) {
+			if (row < this[_].headerMap.rowCount) {
+				// nop
+				return false;
+			} else {
+				const value = _getCellValue(this, col, row);
+				if (isPromise(value)) {
+					//遅延中は無視
+					return false;
+				}
+				valueCallback(value);
+			}
+			return true;
+		}
 		doChangeValue(col, row, changeValueCallback) {
 			if (row < this[_].headerMap.rowCount) {
 				// nop
