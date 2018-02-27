@@ -74,46 +74,47 @@
 	box-sizing: border-box;
 }
 .cheetah-grid__small-dialog-input-editor-dialog {
-	padding: 10px;
-	margin: -10px;
+	padding: 8px 24px 24px;
+	margin : -1px auto auto -1px;
 	border: solid 1px #ddd;
-	box-shadow: 0 7px 8px -4px rgba(0,0,0,.2), 0 13px 19px 2px rgba(0,0,0,.14), 0 5px 24px 4px rgba(0,0,0,.12);
 	border-radius: 3px;
-	background-color: white;
+	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
+	background-color: #fafafa;
 }
 .cheetah-grid__small-dialog-input-editor-dialog__input {
 	width: 100%;
 	height: 100%;
 	box-sizing: border-box;
 	border: none;
-	border-bottom: solid 1px rgba(0, 0, 0, 0.5);
+	border-bottom: solid 1px #8a8a8a;
 	outline: none;
-	font-size: 16px;
+	background-color: transparent;
 }
 .cheetah-grid__small-dialog-input-editor-dialog__input:focus {
 	border-bottom: solid 2px #2196f3;
 }
-.cheetah-grid__small-dialog-input-editor-dialog[data-message],
-.cheetah-grid__small-dialog-input-editor-dialog[data-error-message] {
-	padding-bottom: 20px;
-	margin-bottom: -20px;
-}
 .cheetah-grid__small-dialog-input-editor-dialog[data-message]::after,
 .cheetah-grid__small-dialog-input-editor-dialog[data-error-message]::after {
 	font-size: 12px;
-	float: right;
-	clear: both;
+	display: inline-block;
+	width: 100%;
+	text-align: right;
+	transform: translateY(-2px);
 }
 .cheetah-grid__small-dialog-input-editor-dialog[data-message]::after {
 	content: attr(data-message);
-	color: rgba(0, 0, 0, 0.5);
+	color: #8a8a8a;
 }
 .cheetah-grid__small-dialog-input-editor-dialog[data-error-message] input {
-	border-bottom: solid 2px rgb(221,44,0);
+	border-bottom: solid 2px #dd2c00;
 }
 .cheetah-grid__small-dialog-input-editor-dialog[data-error-message]::after {
 	content: attr(data-error-message);
-	color: rgb(221,44,0);
+	color: #dd2c00;
+}
+
+.cheetah-grid__small-dialog-input-editor-dialog {
+transition: padding 150ms ease-out;
 }
 		`;
 

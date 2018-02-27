@@ -14,21 +14,16 @@
 	const inputHandler = new EventHandler();
 
 	function bindInputElementEvent(input) {
-		inputHandler.on(input, 'click', (e) => {
-			// gridにイベントが伝播しないように
-			e.stopPropagation();
-		});
-		inputHandler.on(input, 'mousedown', (e) => {
-			// gridにイベントが伝播しないように
-			e.stopPropagation();
-		});
+		const stopPropagationOnly = (e) => e.stopPropagation();// gridにイベントが伝播しないように
+		inputHandler.on(input, 'click', stopPropagationOnly);
+		inputHandler.on(input, 'mousedown', stopPropagationOnly);
+		inputHandler.on(input, 'dblclick', stopPropagationOnly);
+		
 		inputHandler.on(input, 'compositionstart', (e) => {
 			input.classList.add('composition');
 		});
 		inputHandler.on(input, 'compositionend', (e) => {
 			input.classList.remove('composition');
-		});
-		inputHandler.on(input, 'keypress', (e) => {
 		});
 		inputHandler.on(input, 'keydown', (e) => {
 			if (input.classList.contains('composition')) {

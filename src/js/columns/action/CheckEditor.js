@@ -78,7 +78,7 @@
 			return [
 				...bindCellClickAction(grid, col, util, {
 					action,
-					mouseEnter: (e) => {
+					mouseOver: (e) => {
 						if (this.disabled) {
 							return false;
 						}
@@ -89,7 +89,7 @@
 						grid.invalidateCell(e.col, e.row);
 						return true;
 					},
-					mouseLeave: (e) => {
+					mouseOut: (e) => {
 						delete state.mouseActiveCell;
 						grid.invalidateCell(e.col, e.row);
 					},

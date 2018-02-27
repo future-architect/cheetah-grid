@@ -45,9 +45,8 @@ function getErrorLogElement() {
 	})();
 }
 
-if (!window.debugMode) {
-	window.onerror = function(msg, file, line, column, err) {
-		getErrorLogElement().value += (err && err.stack) || `${msg}
+
+window.onerror = function(msg, file, line, column, err) {
+	getErrorLogElement().value += (err && err.stack) || `${msg}
     at ${file}:${line}:${column}`;
-	};
-}
+};

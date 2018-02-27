@@ -39,28 +39,60 @@
 			this._bindEvents(element, input);
 			return element;
 		}
+		setCloseStylesInternal(element, input) {
+			element.style.padding = '0';// amination
+			input.readonly = true;
+			const transitionProp = document.defaultView.getComputedStyle(element, '')['transition-property'];
+			return transitionProp && transitionProp.indexOf('padding') > -1;
+		}
+		setOpenStylesInternal(element, input) {
+			element.style.padding = '';// amination
+			input.readonly = false;
+		}
 		attach(grid, col, row, value) {
+			this._active = true;
 			this._attachInfo = {grid, col, row};
 
 			const rect = grid.getCellRect(col, row);
 			const element = this.getElementInternal();
 			element.removeAttribute('data-error-message');
-			grid.appendChildElement(element, rect);
 			const input = this.getInputInternal();
+			this.setCloseStylesInternal(element, input);
+			grid.appendChildElement(element, rect);
+			
 			input.value = value;
+			input.style.font = grid.font || '16px sans-serif';
 			this._onInputValue(input);
 			this._focus(input);
+			this.setOpenStylesInternal(element, input);
 		}
 		detach(gridFocus) {
+			this._active = false;
 			if (!this._attachInfo) {
 				return;
 			}
 			if (this._element) {
 				const input = this.getInputInternal();
 				const element = this.getElementInternal();
-				this._handler.tryWithOffEvents(input, 'blur', () => {
-					element.parentElement.removeChild(element);
-				});
+
+				if (this.setCloseStylesInternal(element, input) !== false) {
+					if (!this._handler.hasListener(element, 'transitionend')) {
+						this._handler.on(element, 'transitionend', () => {
+							if (this._active) {
+								return;
+							}
+							if (element.parentElement) {
+								this._handler.tryWithOffEvents(input, 'blur', () => {
+									element.parentElement.removeChild(element);
+								});
+							}
+						});
+					}
+				} else {
+					this._handler.tryWithOffEvents(input, 'blur', () => {
+						element.parentElement.removeChild(element);
+					});
+				}
 			}
 			const {grid, col, row} = this._attachInfo;
 			grid.invalidateCell(col, row);
@@ -75,15 +107,16 @@
 		getInputInternal() {
 			return this.getElementInternal().getElementsByTagName('input')[0];
 		}
-		doChangeValueInternal() {
+		doChangeCellValueInternal() {
 			if (!this._attachInfo) {
 				return false;
 			}
 			const input = this.getInputInternal();
-			if (!this._validate(input)) {
+			const value = input.value;
+			if (!this._validate(value)) {
 				return false;
 			}
-			const value = input.value;
+			
 			const {grid, col, row} = this._attachInfo;
 			grid.doChangeValue(col, row, () => value);
 			return true;
@@ -91,9 +124,7 @@
 		setInputAttrsInternal(input) {
 			input.type = this._type || '';
 		}
-		_validate(input, inputOnly) {
-			const value = input.value;
-
+		_validate(value, inputOnly) {
 			const {grid, col, row} = this._attachInfo;
 			const element = this.getElementInternal();
 			let message = null;
@@ -112,8 +143,8 @@
 			}
 		}
 		_onInputValueChange(after, before) {
+			const element = this.getElementInternal();
 			if (typeof this._message === 'function') {
-				const element = this.getElementInternal();
 				const {grid, col, row} = this._attachInfo;
 				const message = this._message(after, {grid, col, row});
 				if (message) {
@@ -121,6 +152,9 @@
 				} else {
 					element.removeAttribute('data-message');
 				}
+			}
+			if (element.hasAttribute('data-error-message')) {
+				this._validate(after, true);
 			}
 		}
 		_onInputValue(input) {
@@ -132,14 +166,10 @@
 			this._beforeValue = value;
 		}
 		_bindEvents(element, input) {
-			this._handler.on(input, 'click', (e) => {
-				// gridにイベントが伝播しないように
-				e.stopPropagation();
-			});
-			this._handler.on(input, 'mousedown', (e) => {
-				// gridにイベントが伝播しないように
-				e.stopPropagation();
-			});
+			const stopPropagationOnly = (e) => e.stopPropagation();// gridにイベントが伝播しないように
+			this._handler.on(element, 'click', stopPropagationOnly);
+			this._handler.on(element, 'mousedown', stopPropagationOnly);
+			this._handler.on(element, 'dblclick', stopPropagationOnly);
 			this._handler.on(input, 'compositionstart', (e) => {
 				input.classList.add('composition');
 			});
@@ -147,31 +177,24 @@
 				input.classList.remove('composition');
 				this._onInputValue(input);
 			});
-			this._handler.on(input, 'keyup', (e) => {
+			const onKeyupAndPress = (e) => {
 				if (input.classList.contains('composition')) {
 					return;
 				}
 				this._onInputValue(input);
-			});
-			this._handler.on(input, 'keypress', (e) => {
-				if (input.classList.contains('composition')) {
-					return;
-				}
-				this._onInputValue(input);
-			});
+			};
+			this._handler.on(input, 'keyup', onKeyupAndPress);
+			this._handler.on(input, 'keypress', onKeyupAndPress);
 			this._handler.on(input, 'keydown', (e) => {
 				if (input.classList.contains('composition')) {
 					return;
-				}
-				if (element.hasAttribute('data-error-message')) {
-					this._validate(input, true);
 				}
 				const keyCode = getKeyCode(e);
 				if (keyCode === 27) {
 					this.detach(true);
 					cancelEvent(e);
 				} else if (keyCode === 13) {
-					if (this.doChangeValueInternal()) {
+					if (this.doChangeCellValueInternal()) {
 						this.detach(true);
 					}
 					cancelEvent(e);
@@ -181,7 +204,7 @@
 			});
 		}
 		_focusGrid() {
-			const {grid} = this._attachInfo;
+			const {grid} = this._attachInfo || {};
 			if (grid) {
 				grid.focus();
 			}

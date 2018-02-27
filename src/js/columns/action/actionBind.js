@@ -4,14 +4,14 @@
 	const {isPromise, event: {cancel}} = require('../../internal/utils');
 	const {EVENT_TYPE: {
 		CLICK_CELL,
-		MOUSEENTER_CELL,
-		MOUSELEAVE_CELL,
+		MOUSEOVER_CELL,
+		MOUSEOUT_CELL,
 		KEYDOWN,
 	}} = require('../../core/DrawGrid');
 	function bindCellClickAction(grid, col, util, {
 		action,
-		mouseEnter,
-		mouseLeave
+		mouseOver,
+		mouseOut
 	}) {
 		return [
 			// click
@@ -28,15 +28,15 @@
 				});
 			}),
 			// mouse move
-			grid.listen(MOUSEENTER_CELL, (e) => {
+			grid.listen(MOUSEOVER_CELL, (e) => {
 				if (!util.isTarget(e.col, e.row)) {
 					return;
 				}
 				if (isPromise(grid.getRowRecord(e.row))) {
 					return;
 				}
-				if (mouseEnter) {
-					if (!mouseEnter({
+				if (mouseOver) {
+					if (!mouseOver({
 						col: e.col,
 						row: e.row
 					})) {
@@ -45,12 +45,12 @@
 				}
 				grid.getElement().style.cursor = 'pointer';
 			}),
-			grid.listen(MOUSELEAVE_CELL, (e) => {
+			grid.listen(MOUSEOUT_CELL, (e) => {
 				if (!util.isTarget(e.col, e.row)) {
 					return;
 				}
-				if (mouseLeave) {
-					mouseLeave({
+				if (mouseOut) {
+					mouseOut({
 						col: e.col,
 						row: e.row
 					});

@@ -49,6 +49,8 @@
 		MOUSEMOVE_CELL: 'mousemove_cell',
 		MOUSEENTER_CELL: 'mouseenter_cell',
 		MOUSELEAVE_CELL: 'mouseleave_cell',
+		MOUSEOVER_CELL: 'mouseover_cell',
+		MOUSEOUT_CELL: 'mouseout_cell',
 		INPUT_CELL: 'input_cell',
 		EDITABLEINPUT_CELL: 'editableinput_cell',
 		MODIFY_STATUS_EDITABLEINPUT_CELL: 'modify_status_editableinput_cell',
@@ -726,9 +728,16 @@
 			}
 		});
 
-		function mouseleaveCell() {
-			const beforeMouseCell = grid[_].mouseEnterCell;
-			grid[_].mouseEnterCell = null;
+		let isMouseover = false;
+		let mouseEnterCell = null;
+		let mouseOverCell = null;
+		function onMouseenterCell(cell) {
+			grid.fireListeners(EVENT_TYPE.MOUSEENTER_CELL, cell);
+			mouseEnterCell = cell;
+		}
+		function onMouseleaveCell() {
+			const beforeMouseCell = mouseEnterCell;
+			mouseEnterCell = null;
 			if (beforeMouseCell) {
 				grid.fireListeners(EVENT_TYPE.MOUSELEAVE_CELL, {
 					col: beforeMouseCell.col,
@@ -736,39 +745,71 @@
 				});
 			}
 		}
+		function onMouseoverCell(cell) {
+			grid.fireListeners(EVENT_TYPE.MOUSEOVER_CELL, cell);
+			mouseOverCell = cell;
+		}
+		function onMouseoutCell() {
+			const beforeMouseCell = mouseOverCell;
+			mouseOverCell = null;
+			if (beforeMouseCell) {
+				grid.fireListeners(EVENT_TYPE.MOUSEOUT_CELL, {
+					col: beforeMouseCell.col,
+					row: beforeMouseCell.row,
+				});
+			}
+		}
+		const scrollElement = grid[_].scrollable.getElement();
+		grid[_].handler.on(scrollElement, 'mouseover', (e) => {
+			isMouseover = true;
+		});
+		grid[_].handler.on(scrollElement, 'mouseout', (e) => {
+			isMouseover = false;
+			onMouseoutCell();
+		});
 
 		grid[_].handler.on(grid[_].element, 'mouseleave', (e) => {
-			mouseleaveCell();
+			onMouseleaveCell();
 		});
 			
 		grid[_].handler.on(grid[_].element, 'mousemove', (e) => {
 			const eventArgsSet = getCellEventArgsSet(e);
 			const {abstractPos, eventArgs} = eventArgsSet;
 			if (eventArgs) {
-				grid.fireListeners(EVENT_TYPE.MOUSEMOVE_CELL, eventArgs);
-
-				const beforeMouseCell = grid[_].mouseEnterCell;
+				const beforeMouseCell = mouseEnterCell;
 				if (beforeMouseCell) {
+					grid.fireListeners(EVENT_TYPE.MOUSEMOVE_CELL, eventArgs);
 					if (beforeMouseCell.col !== eventArgs.col || beforeMouseCell.row !== eventArgs.row) {
-						grid.fireListeners(EVENT_TYPE.MOUSELEAVE_CELL, {
-							col: beforeMouseCell.col,
-							row: beforeMouseCell.row,
-						});
-						grid.fireListeners(EVENT_TYPE.MOUSEENTER_CELL, eventArgs);
-						grid[_].mouseEnterCell = {
+						onMouseoutCell();
+						onMouseleaveCell();
+						const cell = {
 							col: eventArgs.col,
 							row: eventArgs.row,
 						};
+						onMouseenterCell(cell);
+						if (isMouseover) {
+							onMouseoverCell(cell);
+						}
+					} else if (isMouseover && !mouseOverCell) {
+						onMouseoverCell({
+							col: eventArgs.col,
+							row: eventArgs.row,
+						});
 					}
 				} else {
-					grid.fireListeners(EVENT_TYPE.MOUSEENTER_CELL, eventArgs);
-					grid[_].mouseEnterCell = {
+					const cell = {
 						col: eventArgs.col,
 						row: eventArgs.row,
 					};
+					onMouseenterCell(cell);
+					if (isMouseover) {
+						onMouseoverCell(cell);
+					}
+					grid.fireListeners(EVENT_TYPE.MOUSEMOVE_CELL, eventArgs);
 				}
 			} else {
-				mouseleaveCell();
+				onMouseoutCell();
+				onMouseleaveCell();
 			}
 			if (grid[_].columnResizer.moving(e) || grid[_].cellSelector.moving(e)) {
 				return;

@@ -58,6 +58,15 @@
 				}
 			});
 		}
+		hasListener(target, type) {
+			let result = false;
+			each(this._listeners, (obj) => {
+				if (obj.target === target && obj.type === type) {
+					result = true;
+				}
+			});
+			return result;
+		}
 		clear() {
 			each(this._listeners, (obj) => {
 				if (obj.target.removeEventListener) {
