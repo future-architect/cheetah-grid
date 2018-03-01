@@ -64,6 +64,31 @@ function attachElement(element, rect, menu) {
 	element.appendChild(menu);
 }
 
+function optionToLi({classList, caption, value, html}, index) {
+	const item = document.createElement('li');
+	item.classList.add(ITEM_CLASSNAME);
+	item.tabIndex = 0;
+	item.dataset.valueindex = index;
+	if (classList) {
+		item.classList.add(...(Array.isArray(classList) ? classList : [classList]));
+	}
+
+	if (caption) {
+		const span = document.createElement('span');
+		span.textContent = caption;
+
+		item.appendChild(span);
+	} else if (html) {
+		item.innerHTML = html;
+	}
+
+	if (value === '' || !isDef(value)) {
+		item.classList.add(EMPTY_ITEM_CLASSNAME);
+	}
+
+	return item;
+}
+
 function openMenu(grid, editor, col, row, value, menu) {
 	const {options, classList} = editor;
 	menu.classList.remove(SHOWN_CLASSNAME);
@@ -74,25 +99,13 @@ function openMenu(grid, editor, col, row, value, menu) {
 	let valueItemEl = null;
 		
 	options.forEach((option, i) => {
-		const item = document.createElement('li');
-		item.classList.add(ITEM_CLASSNAME);
-		item.tabIndex = 0;
-		item.dataset.valueindex = i;
-		if (option.classList) {
-			item.classList.add(...(Array.isArray(option.classList) ? option.classList : [option.classList]));
-		}
-
-		const caption = document.createElement('span');
-		caption.textContent = option.caption;
-
-		item.appendChild(caption);
+		const item = optionToLi(option, i);
 		menu.appendChild(item);
 		if (option.value === value) {
 			valueItemEl = item;
 			item.dataset.select = true;
 		}
-		if (option.value === '' || !isDef(option.value)) {
-			item.classList.add(EMPTY_ITEM_CLASSNAME);
+		if (item.classList.contains(EMPTY_ITEM_CLASSNAME)) {
 			emptyItemEl = item;
 		}
 	});
@@ -112,8 +125,13 @@ function openMenu(grid, editor, col, row, value, menu) {
 
 	// Make the selection item at the middle
 	let offset = 0;
-	for (let i = 0; i < focusIndex; i++) {
-		offset += children[i].offsetHeight;
+	let allHeight = 0;
+	for (let i = 0; i < children.length; i++) {
+		const offsetHeight = children[i].offsetHeight;
+		if (i < focusIndex) {
+			offset += offsetHeight;
+		}
+		allHeight += offsetHeight;
 	}
 	rect.offsetTop(-offset);
 	menu.style['transform-origin'] = `center ${offset + Math.ceil(children[focusIndex].offsetHeight / 2)}px 0px`;
@@ -121,18 +139,21 @@ function openMenu(grid, editor, col, row, value, menu) {
 
 	// Control not to overflow the screen range
 	const menuClientRect = menu.getBoundingClientRect();
-	let menuTop = menuClientRect.top;
-	const menuBottom = menuClientRect.top + menuClientRect.height;
+	const scaleDiff = ((allHeight - menuClientRect.height) / 2);
+	const orgMenuTop = menuClientRect.top - scaleDiff;
+	let menuTop = orgMenuTop;
+	const menuBottom = menuTop + allHeight;
 	const winBottom = window.innerHeight;
-	if (menuBottom > winBottom) {
-		const diff = menuBottom - winBottom;
+	const winMargin = 20;
+	if (menuBottom > (winBottom - winMargin)) {
+		const diff = menuBottom - winBottom + winMargin;
 		menuTop -= diff;
 	}
-	if (menuTop < 0/*winTop*/) {
-		menuTop = 0;
+	if (menuTop < 0/*winTop*/ + winMargin) {
+		menuTop = winMargin;
 	}
-	if (menuTop !== menuClientRect.top) {
-		rect.offsetTop(-(menuClientRect.top - menuTop));
+	if (menuTop !== orgMenuTop) {
+		rect.offsetTop(-(orgMenuTop - menuTop));
 		// re update
 		attachElement(element, rect, menu);
 	}

@@ -7,7 +7,7 @@
 	background-color: #fafafa;
 	list-style-type: none;
 	border-radius: 2px;
-	max-height: 100vh;
+	max-height: calc(100vh - 40px);
 	overflow-y: auto;
 
 }
