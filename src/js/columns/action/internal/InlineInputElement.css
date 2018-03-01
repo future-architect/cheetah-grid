@@ -5,5 +5,6 @@
 
 
 .cheetah-grid__inline-input {
+	position: absolute;
 	box-sizing: border-box;
 }

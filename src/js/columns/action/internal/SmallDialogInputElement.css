@@ -16,6 +16,7 @@
 }
 
 .cheetah-grid__small-dialog-input {
+	position: absolute;
 	box-sizing: content-box;
 	margin : -1px auto auto -1px;
 	border-radius: 3px;

@@ -106,13 +106,17 @@ class SmallDialogInputElement {
 			unbindProps(grid, dialog, input, this._beforePropEditor);
 		}
 
-		const rect = grid.getCellRect(col, row);
 		delete dialog.dataset.errorMessage;
 		dialog.classList.remove('show');
 		dialog.classList.add('hide');
 		input.readonly = false;
 		input.tabIndex = 0;
-		grid.appendChildElement(dialog, rect);
+		const {element, rect} = grid.getAttachCellArea(col, row);
+		dialog.style.top = rect.top.toFixed() + 'px';
+		dialog.style.left = rect.left.toFixed() + 'px';
+		dialog.style.width = rect.width.toFixed() + 'px';
+		dialog.style.height = rect.height.toFixed() + 'px';
+		element.appendChild(dialog);
 			
 		input.value = value;
 		input.style.font = grid.font || '16px sans-serif';

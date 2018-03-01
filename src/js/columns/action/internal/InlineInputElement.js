@@ -53,9 +53,14 @@ class InlineInputElement {
 			}
 		}
 
-		const rect = grid.getCellRect(col, row);
 		input.style.font = grid.font || '16px sans-serif';
-		grid.appendChildElement(input, rect);
+
+		const {element, rect} = grid.getAttachCellArea(col, row);
+		input.style.top = rect.top.toFixed() + 'px';
+		input.style.left = rect.left.toFixed() + 'px';
+		input.style.width = rect.width.toFixed() + 'px';
+		input.style.height = rect.height.toFixed() + 'px';
+		element.appendChild(input);
 
 		setInputAttrs(editor, grid, input);
 		input.value = value;

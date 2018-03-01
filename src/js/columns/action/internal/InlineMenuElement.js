@@ -54,6 +54,14 @@ function createMenuElement() {
 	rootElement.classList.add(CLASSNAME);
 	return rootElement;
 }
+function attachElement(element, rect, menu) {
+	menu.style.top = rect.top.toFixed() + 'px';
+	menu.style.left = rect.left.toFixed() + 'px';
+	menu.style.width = rect.width.toFixed() + 'px';
+	menu.style['line-height'] = rect.height.toFixed() + 'px';
+	element.appendChild(menu);
+}
+
 function openMenu(grid, editor, col, row, value, menu) {
 	const {options, classList} = editor;
 	menu.classList.remove('show');
@@ -87,7 +95,7 @@ function openMenu(grid, editor, col, row, value, menu) {
 		menu.classList.add(...classList);
 	}
 	const focusIndex = Array.prototype.slice.call(menu.children, 0).indexOf(focusEl);
-	const rect = grid.getCellRect(col, row);
+	const {element, rect} = grid.getAttachCellArea(col, row);
 
 	// Cover the right line
 	rect.width++;
@@ -96,7 +104,7 @@ function openMenu(grid, editor, col, row, value, menu) {
 	const lineHeight = rect.height;
 	rect.offsetTop(-focusIndex * lineHeight);
 
-	grid.appendChildElement(menu, rect, {heightStyleName: 'line-height'});
+	attachElement(element, rect, menu);
 
 	menu.classList.remove('hide');
 	menu.style.transform = '';
@@ -116,7 +124,7 @@ function openMenu(grid, editor, col, row, value, menu) {
 	if (menuTop !== menuClientRect.top) {
 		rect.offsetTop(-(menuClientRect.top - menuTop));
 		// re update
-		grid.appendChildElement(menu, rect, {heightStyleName: 'line-height'});
+		attachElement(element, rect, menu);
 	}
 		
 	if (focusEl) {

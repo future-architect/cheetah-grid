@@ -1722,15 +1722,6 @@
 		getElement() {
 			return this[_].element;
 		}
-		appendChildElement(element, rect, {heightStyleName = 'height'} = {}) {
-			rect = _toRelativeRect(this, rect);
-			element.style.position = 'absolute';
-			element.style.top = rect.top.toFixed() + 'px';
-			element.style.left = rect.left.toFixed() + 'px';
-			element.style.width = rect.width.toFixed() + 'px';
-			element.style[heightStyleName] = rect.height.toFixed() + 'px';
-			this.getElement().appendChild(element);
-		}
 		get canvas() {
 			return this[_].canvas;
 		}
@@ -2090,6 +2081,12 @@
 			if (parentElement) {
 				parentElement.removeChild(this[_].element);
 			}
+		}
+		getAttachCellArea(col, row) {
+			return {
+				element: this.getElement(),
+				rect: _toRelativeRect(this, this.getCellRect(col, row)),
+			};
 		}
 		bindEventsInternal() {
 			//nop
