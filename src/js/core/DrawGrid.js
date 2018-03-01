@@ -2067,6 +2067,13 @@
 		onDrawCell(col, row, context) {
 			//Please implement cell drawing!!
 		}
+		addDisposable(disposable) {
+			if (!disposable || !disposable.dispose || typeof disposable.dispose !== 'function') {
+				throw new Error('not disposable!');
+			}
+			const disposables = this[_].disposables = this[_].disposables || [];
+			disposables.push(disposable);
+		}
 		dispose() {
 			super.dispose();
 			this[_].handler.dispose();
@@ -2074,6 +2081,10 @@
 			this[_].focusControl.dispose();
 			this[_].columnResizer.dispose();
 			this[_].cellSelector.dispose();
+			if (this[_].disposables) {
+				this[_].disposables.forEach((disposable) => disposable.dispose());
+				this[_].disposables = null;
+			}
 
 			const parentElement = this[_].element.parentElement;
 			if (parentElement) {

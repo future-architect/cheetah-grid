@@ -35,6 +35,15 @@
 		},
 		get BRANCH_GRAPH_COLUMN_STATE_ID() {
 			return this.get('branch_graph_col.stateID');
+		},
+		get SMALL_DIALOG_INPUT_EDITOR_STATE_ID() {
+			return this.get('small_dialog_input_editor.stateID');
+		},
+		get INLINE_INPUT_EDITOR_STATE_ID() {
+			return this.get('inline_input_editor.stateID');
+		},
+		get INLINE_MENU_EDITOR_STATE_ID() {
+			return this.get('inline_menu_editor.stateID');
 		}
 	};
 
