@@ -1243,7 +1243,7 @@
 					return;
 				}
 				if (!this._input.readOnly && e.key && e.key.length === 1) {
-					if (e.key === 'c' && e.ctrlKey) {
+					if (e.key === 'c' && (e.ctrlKey || e.metaKey)) {
 						//copy! for Firefox
 					} else {
 						this.fireListeners('input', e.key);
@@ -1258,6 +1258,13 @@
 				}
 				const keyCode = getKeyCode(e);
 				this.fireListeners('keydown', keyCode, e);
+
+				if (this._input.value) {
+					// for Safari
+					this.fireListeners('input', this._input.value);
+				}
+
+				setSafeInputValue(this._input, '');
 			});
 			this._handler.on(document, 'keydown', (e) => {
 				if (!browser.IE) {

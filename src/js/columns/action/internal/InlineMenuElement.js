@@ -4,8 +4,7 @@ const {
 	event: {
 		getKeyCode,
 		cancel: cancelEvent,
-	},
-	array: {find}
+	}
 } = require('../../../internal/utils');
 
 const EventHandler = require('../../../internal/EventHandler');
@@ -94,20 +93,24 @@ function openMenu(grid, editor, col, row, value, menu) {
 	if (classList) {
 		menu.classList.add(...classList);
 	}
-	const focusIndex = Array.prototype.slice.call(menu.children, 0).indexOf(focusEl);
+	const children = Array.prototype.slice.call(menu.children, 0);
+	const focusIndex = children.indexOf(focusEl);
 	const {element, rect} = grid.getAttachCellArea(col, row);
 
 	// Cover the right line
 	rect.width++;
 
-	// Make the selection item at the middle
-	const lineHeight = rect.height;
-	rect.offsetTop(-focusIndex * lineHeight);
-
+	// append for calculation
+	menu.classList.add('hide');
 	attachElement(element, rect, menu);
 
-	menu.classList.remove('hide');
-	menu.style.transform = '';
+	// Make the selection item at the middle
+	let offset = 0;
+	for (let i = 0; i < focusIndex; i++) {
+		offset += children[i].offsetHeight;
+	}
+	rect.offsetTop(-offset);
+	attachElement(element, rect, menu);
 
 	// Control not to overflow the screen range
 	const menuClientRect = menu.getBoundingClientRect();
@@ -130,6 +133,7 @@ function openMenu(grid, editor, col, row, value, menu) {
 	if (focusEl) {
 		focusEl.focus();
 	}
+	menu.classList.remove('hide');
 	menu.classList.add('show');
 }
 
@@ -251,7 +255,7 @@ class InlineMenuElement {
 			} else if (keyCode === KEY_TAB) {
 				if (!e.shiftKey) {
 					if (!findNextFocusable(item)) {
-						let n = menu.querySelector('.cheetah-grid__inline-menu-editor__menu-item');
+						let n = menu.querySelector('.' + ITEM_CLASSNAME);
 						if (!isFocusable(n)) {
 							n = findNextFocusable(n);
 						}
@@ -262,7 +266,7 @@ class InlineMenuElement {
 					}
 				} else {
 					if (!findPrevFocusable(item)) {
-						const items = menu.querySelectorAll('.cheetah-grid__inline-menu-editor__menu-item');
+						const items = menu.querySelectorAll('.' + ITEM_CLASSNAME);
 						let n = items[items.length - 1];
 						if (!isFocusable(n)) {
 							n = findPrevFocusable(n);

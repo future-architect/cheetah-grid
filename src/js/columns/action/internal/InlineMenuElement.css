@@ -45,22 +45,22 @@
 	transition: padding 150ms ease-out;
 }
 .cheetah-grid__inline-menu.hide .cheetah-grid__inline-menu__menu-item {
-	padding: 0;
+	padding: 0 3px;
 }
 .cheetah-grid__inline-menu.show .cheetah-grid__inline-menu__menu-item {
 	padding: 0 16px;
 }
 
 .cheetah-grid__inline-menu__menu-item::before {
+	content: "";
 	position: absolute;
-	top: calc(50% - 100%);
-	left: calc(50% - 100%);
+	top: -50%;
+	left: -50%;
 	width: 200%;
 	height: 200%;
 	background-color: #000;
 	opacity: 0;
 	pointer-events: none;
-	content: "";
 	transition: opacity 15ms linear;
 }
 .cheetah-grid__inline-menu__menu-item:hover::before {
