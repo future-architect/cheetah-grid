@@ -35,8 +35,8 @@ css: >
 //{{#copy "sample1"}}
 /*global cheetahGrid*/
 'use strict';
-const options = [
-	{value: '', caption: 'Choose your option', classList: 'empty'},
+const menuOptions = [
+	{value: '', caption: 'Empty'},
 	{value: '1', caption: 'Option 1'},
 	{value: '2', caption: 'Option 2'},
 	{value: '3', caption: 'Option 3'},
@@ -45,7 +45,17 @@ const options = [
 	{value: '6', caption: 'Option 6'},
 	{value: '7', caption: 'Option 7'},
 ];
-const menuEditor = new cheetahGrid.columns.action.InlineMenuEditor({options});
+const displayOptions = [
+	{value: '', caption: 'Choose your option'},
+	{value: '1', caption: 'Option 1'},
+	{value: '2', caption: 'Option 2'},
+	{value: '3', caption: 'Option 3'},
+	{value: '4', caption: 'Option 4'},
+	{value: '5', caption: 'Option 5'},
+	{value: '6', caption: 'Option 6'},
+	{value: '7', caption: 'Option 7'},
+];
+const menuEditor = new cheetahGrid.columns.action.InlineMenuEditor({options: menuOptions});
 const grid = new cheetahGrid.ListGrid({
 	parentElement: document.querySelector('#sample1'),
 	header: [
@@ -53,15 +63,15 @@ const grid = new cheetahGrid.ListGrid({
 			field: 'sel',
 			caption: 'InlineMenuEditor',
 			width: 260,
-			columnType: new cheetahGrid.columns.type.MenuColumn({options}),
-			action: new cheetahGrid.columns.action.InlineMenuEditor({options})
+			columnType: new cheetahGrid.columns.type.MenuColumn({options: displayOptions}),
+			action: new cheetahGrid.columns.action.InlineMenuEditor({options: menuOptions}),
 		},
 		{
 			field: 'sel2',
 			caption: 'controlable properties',
 			width: 260,
-			columnType: new cheetahGrid.columns.type.MenuColumn({options}),
-			action: menuEditor
+			columnType: new cheetahGrid.columns.type.MenuColumn({options: displayOptions}),
+			action: menuEditor,
 		},
 
 		{
@@ -94,7 +104,6 @@ grid.records = [
 	{sel: '2', sel2: '2'},
 	{sel: '3', sel2: '3'},
 ];
-
 document.querySelector('#sample1mode').onchange = function() {
 	//change action properties
 	if (this.value === 'readOnly') {

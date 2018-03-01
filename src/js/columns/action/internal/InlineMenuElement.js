@@ -17,6 +17,9 @@ const KEY_ESC = 27;
 
 const CLASSNAME = 'cheetah-grid__inline-menu';
 const ITEM_CLASSNAME = CLASSNAME + '__menu-item';
+const HIDDEN_CLASSNAME = CLASSNAME + '--hidden';
+const SHOWN_CLASSNAME = CLASSNAME + '--shown';
+const EMPTY_ITEM_CLASSNAME = ITEM_CLASSNAME + '--empty';
 
 function findItemParents(target) {
 	let el = target;
@@ -63,8 +66,8 @@ function attachElement(element, rect, menu) {
 
 function openMenu(grid, editor, col, row, value, menu) {
 	const {options, classList} = editor;
-	menu.classList.remove('show');
-	menu.classList.add('hide');
+	menu.classList.remove(SHOWN_CLASSNAME);
+	menu.classList.add(HIDDEN_CLASSNAME);
 	menu.innerHTML = '';
 	menu.style.font = grid.font || '16px sans-serif';
 	let emptyItemEl = null;
@@ -75,17 +78,21 @@ function openMenu(grid, editor, col, row, value, menu) {
 		item.classList.add(ITEM_CLASSNAME);
 		item.tabIndex = 0;
 		item.dataset.valueindex = i;
+		if (option.classList) {
+			item.classList.add(...(Array.isArray(option.classList) ? option.classList : [option.classList]));
+		}
 
 		const caption = document.createElement('span');
 		caption.textContent = option.caption;
 
 		item.appendChild(caption);
 		menu.appendChild(item);
-		if (option.value == value) { // eslint-disable-line eqeqeq
+		if (option.value === value) {
 			valueItemEl = item;
 			item.dataset.select = true;
 		}
 		if (option.value === '' || !isDef(option.value)) {
+			item.classList.add(EMPTY_ITEM_CLASSNAME);
 			emptyItemEl = item;
 		}
 	});
@@ -101,7 +108,6 @@ function openMenu(grid, editor, col, row, value, menu) {
 	rect.width++;
 
 	// append for calculation
-	menu.classList.add('hide');
 	attachElement(element, rect, menu);
 
 	// Make the selection item at the middle
@@ -110,6 +116,7 @@ function openMenu(grid, editor, col, row, value, menu) {
 		offset += children[i].offsetHeight;
 	}
 	rect.offsetTop(-offset);
+	menu.style['transform-origin'] = `center ${offset + Math.ceil(children[focusIndex].offsetHeight / 2)}px 0px`;
 	attachElement(element, rect, menu);
 
 	// Control not to overflow the screen range
@@ -133,13 +140,13 @@ function openMenu(grid, editor, col, row, value, menu) {
 	if (focusEl) {
 		focusEl.focus();
 	}
-	menu.classList.remove('hide');
-	menu.classList.add('show');
+	menu.classList.remove(HIDDEN_CLASSNAME);
+	menu.classList.add(SHOWN_CLASSNAME);
 }
 
 function closeMenu(grid, col, row, menu, valueindex) {
-	menu.classList.remove('show');
-	menu.classList.add('hide');
+	menu.classList.remove(SHOWN_CLASSNAME);
+	menu.classList.add(HIDDEN_CLASSNAME);
 	offFocusable(menu);
 }
 

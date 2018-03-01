@@ -10,6 +10,8 @@ const EventHandler = require('../../../internal/EventHandler');
 
 const CLASSNAME = 'cheetah-grid__small-dialog-input';
 const INPUT_CLASSNAME = CLASSNAME + '__input';
+const HIDDEN_CLASSNAME = CLASSNAME + '--hidden';
+const SHOWN_CLASSNAME = CLASSNAME + '--shown';
 
 const KEY_ENTER = 13;
 const KEY_ESC = 27;
@@ -47,8 +49,8 @@ function createElement() {
 	element.classList.add(CLASSNAME);
 	const input = document.createElement('input');
 	input.classList.add(INPUT_CLASSNAME);
-	element.classList.remove('show');
-	element.classList.add('hide');
+	element.classList.remove(SHOWN_CLASSNAME);
+	element.classList.add(HIDDEN_CLASSNAME);
 	input.readonly = true;
 	input.tabIndex = -1;
 	element.appendChild(input);
@@ -107,8 +109,8 @@ class SmallDialogInputElement {
 		}
 
 		delete dialog.dataset.errorMessage;
-		dialog.classList.remove('show');
-		dialog.classList.add('hide');
+		dialog.classList.remove(SHOWN_CLASSNAME);
+		dialog.classList.add(HIDDEN_CLASSNAME);
 		input.readonly = false;
 		input.tabIndex = 0;
 		const {element, rect} = grid.getAttachCellArea(col, row);
@@ -123,8 +125,8 @@ class SmallDialogInputElement {
 		const activeData = {grid, col, row, editor};
 		this._onInputValue(input, activeData);
 		_focus(input, handler);
-		dialog.classList.add('show');
-		dialog.classList.remove('hide');
+		dialog.classList.add(SHOWN_CLASSNAME);
+		dialog.classList.remove(HIDDEN_CLASSNAME);
 		input.readonly = true;
 
 		
@@ -138,8 +140,8 @@ class SmallDialogInputElement {
 			const dialog = this._dialog;
 			const input = this._input;
 
-			dialog.classList.remove('show');
-			dialog.classList.add('hide');
+			dialog.classList.remove(SHOWN_CLASSNAME);
+			dialog.classList.add(HIDDEN_CLASSNAME);
 			input.readonly = false;
 			input.tabIndex = -1;
 

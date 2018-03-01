@@ -1,6 +1,7 @@
 'use strict';
 {
-	const {normalize, toObject} = require('../../internal/menu-items');
+	const {normalize} = require('../../internal/menu-items');
+	const {isDef} = require('../../internal/utils');
 	const BaseColumn = require('./BaseColumn');
 	const Style = require('../style/Style');
 	const utils = require('./columnUtils');
@@ -9,7 +10,6 @@
 		constructor(option = {}) {
 			super(option);
 			this._options = normalize(option.options);
-			this._optionsMap = toObject(this._options);
 		}
 		get StyleClass() {
 			return Style;
@@ -23,31 +23,36 @@
 		withOptions(options) {
 			const c = this.clone();
 			c._options = normalize(options);
-			c._optionsMap = toObject(c._options);
 			return c;
 		}
 		drawInternal(value, context, style, helper, grid, {drawCellBase, getIcon}) {
 			const {
 				textAlign,
 				textBaseline,
-				color,
 				font,
 				bgColor,
 				padding,
+			} = style;
+			let {
+				color,
 			} = style;
 			if (bgColor) {
 				drawCellBase({
 					bgColor,
 				});
 			}
-			helper.testFontLoad(font, value, context);
+			const text = this._convertInternal(value);
+			helper.testFontLoad(font, text, context);
 			utils.loadIcons(getIcon(), context, helper, (icons, context) => {
 				const basePadding = helper.toBoxPixelArray(padding || 0, context);
 				const textPadding = basePadding.slice(0);
 				textPadding[1] += 26;// icon padding
 				const iconPadding = basePadding.slice(0);
 				iconPadding[1] += 8;
-				helper.text(value, context, {
+				if (!isDef(color) && (!isDef(value) || value === '')) {
+					color = 'rgba(0, 0, 0, .38)';
+				}
+				helper.text(text, context, {
 					textAlign,
 					textBaseline,
 					color,
@@ -72,9 +77,16 @@
 			});
 		}
 		convertInternal(value) {
-			const options = this._optionsMap;
-			if (value in options) {
-				value = options[value];
+			return value;
+		}
+		_convertInternal(value) {
+			const options = this._options;
+			for (let i = 0; i < options.length; i++) {
+				const option = options[i];
+				if (option.value === value) {
+					value = option.caption;
+					break;
+				}
 			}
 			return super.convertInternal(value);
 		}

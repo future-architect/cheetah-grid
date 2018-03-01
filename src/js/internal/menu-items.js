@@ -19,13 +19,7 @@ function normalize(options) {
 	}
 	return result;
 }
-function toObject(options) {
-	const obj = {};
-	normalize(options).forEach((opt) => (obj[opt.value] = opt.caption));
-	return obj;
-}
 
 module.exports = {
 	normalize,
-	toObject
 };
