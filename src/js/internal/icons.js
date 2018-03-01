@@ -1,6 +1,6 @@
 'use strict';
 
-const {isDef, array: {isArray}} = require('./utils');
+const {isDef} = require('./utils');
 
 const ICON_PROP_KEYS = [
 	'content',
@@ -12,6 +12,7 @@ const ICON_PROP_KEYS = [
 	'src',
 	'svg',
 	'name',
+	'path'
 ];
 
 function quote(name) {
@@ -74,7 +75,7 @@ function getIconProps(tagName, className) {
 
 function toPropArray(prop, count) {
 	const result = [];
-	if (isArray(prop)) {
+	if (Array.isArray(prop)) {
 		result.push(...prop);
 		for (let i = prop.length; i < count; i++) {
 			result.push(null);
@@ -90,7 +91,7 @@ function toPropArray(prop, count) {
 function toSimpleArray(iconProps) {
 	if (!iconProps) {
 		return iconProps;
-	} else if (isArray(iconProps)) {
+	} else if (Array.isArray(iconProps)) {
 		return iconProps;
 	}
 
@@ -99,7 +100,7 @@ function toSimpleArray(iconProps) {
 	let count = 0;
 	ICON_PROP_KEYS.forEach((k) => {
 		if (iconProps[k]) {
-			if (isArray(iconProps[k])) {
+			if (Array.isArray(iconProps[k])) {
 				count = Math.max(count, iconProps[k].length);
 			} else {
 				count = Math.max(count, 1);

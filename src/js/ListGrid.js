@@ -1,6 +1,6 @@
 'use strict';
 {
-	const {extend, array: {isArray, find: arrayFind}, isDef, isPromise, obj: {isObject}} = require('./internal/utils');
+	const {extend, array: {find: arrayFind}, isDef, isPromise, obj: {isObject}} = require('./internal/utils');
 	const GridCanvasHelper = require('./GridCanvasHelper');
 	const columns = require('./columns');
 	const {BaseStyle} = columns.style;
@@ -75,8 +75,8 @@
 		if (!isDef(icon)) {
 			return null;
 		}
-		if (isArray(icon)) {
-			return icon.map((i) => _getCellIcon0(grid, i, row, name));
+		if (Array.isArray(icon)) {
+			return icon.map((i) => _getCellIcon0(grid, i, row));
 		}
 		if (!isObject(icon)) {
 			return _getField(grid, icon, row);
@@ -294,7 +294,7 @@
 				grid.setMaxColWidth(col, maxWidth);
 			}
 		}
-		const isArrayHeaderRowHeight = isArray(grid[_].headerRowHeight);
+		const isArrayHeaderRowHeight = Array.isArray(grid[_].headerRowHeight);
 		for (let row = 0; row < grid[_].headerMap.rowCount; row++) {
 			const height = isArrayHeaderRowHeight ? grid[_].headerRowHeight[row] : grid[_].headerRowHeight;
 			if (height && height > 0) {

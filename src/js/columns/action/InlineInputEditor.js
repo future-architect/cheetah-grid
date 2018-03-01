@@ -9,14 +9,21 @@
 	
 	const BaseInputEditor = require('./BaseInputEditor');
 	const EventHandler = require('../../internal/EventHandler');
+
+	const KEY_ENTER = 13;
 	
-	const globalState = {};
+	let globalBindGrid;
+	let globalBindCell;
+	let globalBindEditor;
+	let globalInput;
+
 	const inputHandler = new EventHandler();
 
 	function bindInputElementEvent(input) {
 		const stopPropagationOnly = (e) => e.stopPropagation();// gridにイベントが伝播しないように
 		inputHandler.on(input, 'click', stopPropagationOnly);
 		inputHandler.on(input, 'mousedown', stopPropagationOnly);
+		inputHandler.on(input, 'touchstart', stopPropagationOnly);
 		inputHandler.on(input, 'dblclick', stopPropagationOnly);
 		
 		inputHandler.on(input, 'compositionstart', (e) => {
@@ -29,10 +36,10 @@
 			if (input.classList.contains('composition')) {
 				return;
 			}
-			if (getKeyCode(e) === 13) {
+			if (getKeyCode(e) === KEY_ENTER) {
 				doChangeValue();
-				if (globalState.bindGrid) {
-					globalState.bindGrid.focus();
+				if (globalBindGrid) {
+					globalBindGrid.focus();
 				}
 				removeInputElement();
 				cancelEvent(e);
@@ -51,36 +58,36 @@
 		return input;
 	}
 	function getInputElement() {
-		return globalState.input || (globalState.input = createInputElement());
+		return globalInput || (globalInput = createInputElement());
 	}
 	function removeInputElement() {
 		const input = getActiveInput();
 		if (input) {
 			inputHandler.tryWithOffEvents(input, 'blur', () => {
 				input.parentElement.removeChild(input);
-				const classList = globalState.bindEditorInstance.classList;
+				const classList = globalBindEditor.classList;
 				if (classList) {
 					input.classList.remove(classList);
 				}
 			});
-			const {col, row} = globalState.bindCell;
-			globalState.bindGrid.invalidateCell(col, row);
+			const {col, row} = globalBindCell;
+			globalBindGrid.invalidateCell(col, row);
 		}
-		globalState.bindGrid = null;
-		globalState.bindCell = null;
-		globalState.bindEditorInstance = null;
+		globalBindGrid = null;
+		globalBindCell = null;
+		globalBindEditor = null;
 	}
-	function bindInputElement(grid, cell, editorInstance, value) {
+	function bindInputElement(grid, cell, editor, value) {
 		const rect = grid.getCellRect(cell.col, cell.row);
 		const input = getInputElement();
 		input.style.font = grid.font || '16px sans-serif';
 		grid.appendChildElement(input, rect);
 
-		setInputAttrs(editorInstance, grid, input);
+		setInputAttrs(editor, grid, input);
 		input.value = value;
-		globalState.bindGrid = grid;
-		globalState.bindCell = cell;
-		globalState.bindEditorInstance = editorInstance;
+		globalBindGrid = grid;
+		globalBindCell = cell;
+		globalBindEditor = editor;
 
 		const focus = () => {
 			input.focus();
@@ -108,15 +115,15 @@
 		});
 	}
 	function getActiveInput() {
-		const input = globalState.input;
+		const input = globalInput;
 		if (!input || !input.parentElement) {
 			return undefined;
 		}
-		const grid = globalState.bindGrid;
+		const grid = globalBindGrid;
 		if (!grid) {
 			return undefined;
 		}
-		const cell = globalState.bindCell;
+		const cell = globalBindCell;
 		if (!cell) {
 			return undefined;
 		}
@@ -128,16 +135,16 @@
 			return;
 		}
 		const value = input.value;
-		const grid = globalState.bindGrid;
-		const cell = globalState.bindCell;
+		const grid = globalBindGrid;
+		const cell = globalBindCell;
 		grid.doChangeValue(cell.col, cell.row, () => value);
 	}
-	function setInputAttrs(inputEditor, grid, input) {
-		const classList = inputEditor.classList;
+	function setInputAttrs(editor, grid, input) {
+		const {classList, type} = editor;
 		if (classList) {
 			input.classList.add(classList);
 		}
-		input.type = inputEditor.type || '';
+		input.type = type || '';
 	}
 
 	class InlineInputEditor extends BaseInputEditor {

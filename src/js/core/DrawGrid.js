@@ -42,6 +42,7 @@
 	const EVENT_TYPE = {
 		CLICK_CELL: 'click_cell',
 		DBLCLICK_CELL: 'dblclick_cell',
+		DBLTAP_CELL: 'dbltap_cell',
 		MOUSEDOWN_CELL: 'mousedown_cell',
 		MOUSEUP_CELL: 'mouseup_cell',
 		SELECTED_CELL: 'selected_cell',
@@ -59,6 +60,11 @@
 	};
 
 	//private methods
+	function _vibrate(e) {
+		if (navigator.vibrate && isTouchEvent(e)) {
+			navigator.vibrate(300);
+		}
+	}
 	function _getTargetRowAt(grid, absoluteY) {
 		const internal = grid.getTargetRowAtInternal(absoluteY);
 		if (isDef(internal)) {
@@ -691,8 +697,31 @@
 				grid[_].cellSelector.start(e);
 			}
 		});
+		let doubleTapBefore = false;
 		let longTouchId = null;
 		grid[_].handler.on(grid[_].element, 'touchstart', (e) => {
+		
+			if (!doubleTapBefore) {
+				doubleTapBefore = true;
+				setTimeout(() => {
+					doubleTapBefore = false;
+				}, 350);
+			} else {
+				e.preventDefault();
+
+				const {eventArgs} = getCellEventArgsSet(e);
+				if (eventArgs) {
+					const cell = {
+						col: eventArgs.col,
+						row: eventArgs.row,
+					};
+					grid.fireListeners(EVENT_TYPE.DBLTAP_CELL, cell);
+				}
+
+				doubleTapBefore = false;
+				return;
+			}
+
 			longTouchId = setTimeout(() => {
 				//長押しした場合選択モード
 				longTouchId = null;
@@ -1061,6 +1090,7 @@
 			this._cell = cell;
 
 			cancelEvent(e);
+			_vibrate(e);
 		}
 		select(e) {
 			const cell = this._getTargetCell(e);
@@ -1142,6 +1172,7 @@
 			this._invalidateAbsoluteLeft = _getColsWidth(this._grid, 0, col - 1);
 
 			cancelEvent(e);
+			_vibrate(e);
 		}
 		_moveInternal(e) {
 			const pageX = isTouchEvent(e) ? e.changedTouches[0].pageX : e.pageX;
@@ -1630,7 +1661,6 @@
 					frozenColCount = 0,
 					frozenRowCount = 0,
 					defaultRowHeight = 40,
-					// defaultRowHeight = 24,
 					defaultColWidth = 80,
 					font,
 					underlayBackgroundColor,
@@ -1692,13 +1722,13 @@
 		getElement() {
 			return this[_].element;
 		}
-		appendChildElement(element, rect) {
+		appendChildElement(element, rect, {heightStyleName = 'height'} = {}) {
 			rect = _toRelativeRect(this, rect);
 			element.style.position = 'absolute';
 			element.style.top = rect.top.toFixed() + 'px';
 			element.style.left = rect.left.toFixed() + 'px';
 			element.style.width = rect.width.toFixed() + 'px';
-			element.style.height = rect.height.toFixed() + 'px';
+			element.style[heightStyleName] = rect.height.toFixed() + 'px';
 			this.getElement().appendChild(element);
 		}
 		get canvas() {

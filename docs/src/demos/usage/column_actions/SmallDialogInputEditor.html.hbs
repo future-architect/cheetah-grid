@@ -16,7 +16,7 @@ css: >
 {{#marked}}
 ## SmallDialogInputEditor
 
-入力によるデータ編集を指定します。  
+入力によるデータ編集を可能にします。  
 
 列の`action`に`SmallDialogInputEditor`クラスのインスタンスを利用すると、`readOnly`・`disabled`プロパティの制御を動的に行うことができますが、  
 文字列`'input'`と定義した場合は、`readOnly`・`disabled`プロパティを制御出来ません。  
@@ -107,9 +107,9 @@ document.querySelector('#sample1mode').onchange = function() {
 |---|---|
 |`type`|`<input>`要素の`type`属性を指定します。|
 |`classList`|ダイアログの要素の`class`を指定します。|
-|`message`|初期表示するメッセージを指定します。関数を指定することもできます。|
-|`validator`|入力値確定前のvalidation関数をしていします。エラーがある場合は関数でメッセージ文字列を返してください。|
-|`inputValidator`|入力値変更のvalidation関数をしていします。エラーがある場合は関数でメッセージ文字列を返してください。|
+|`helperText`|ヘルパーテキストを指定します。関数を指定することもできます。|
+|`validator`|入力値確定前のvalidation関数を指定します。エラーがある場合は関数でメッセージ文字列を返してください。|
+|`inputValidator`|`<input>`の入力値のvalidation関数を指定します。エラーがある場合は関数でメッセージ文字列を返してください。|
 
 {{/marked}}
 
@@ -135,10 +135,11 @@ const grid = new cheetahGrid.ListGrid({
 		},
 		{
 			field: 'text',
-			caption: 'validator & message',
+			caption: 'validator & helperText',
 			width: 220,
 			action: new cheetahGrid.columns.action.SmallDialogInputEditor({
-				message(value) {
+				classList: 'helper-text--right-justified',
+				helperText(value) {
 					return `${value.length}/20`;
 				},
 				inputValidator(value) {

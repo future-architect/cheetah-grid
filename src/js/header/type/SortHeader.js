@@ -52,7 +52,7 @@
 				icons: [{
 					name: isDef(order) ? (order === 'asc' ? 'arrow_downward' : 'arrow_upward') : null,
 					width: arrowSize,
-					color: '#555',
+					color: 'rgba(0, 0, 0, 0.38)',
 				}],
 			});
 		}

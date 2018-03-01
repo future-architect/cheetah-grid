@@ -8,6 +8,7 @@
 		MOUSEOUT_CELL,
 		KEYDOWN,
 	}} = require('../../core/DrawGrid');
+	const KEY_ENTER = 13;
 	function bindCellClickAction(grid, col, util, {
 		action,
 		mouseOver,
@@ -60,7 +61,7 @@
 		];
 	}
 	function bindCellKeyAction(grid, col, util, {action, acceptKeys = []}) {
-		acceptKeys = [...acceptKeys, 13];
+		acceptKeys = [...acceptKeys, KEY_ENTER];
 		return [
 			// enter key down
 			grid.listen(KEYDOWN, (keyCode, e) => {

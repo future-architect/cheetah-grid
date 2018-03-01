@@ -7,6 +7,9 @@
 	const Editor = require('./Editor');
 	const {CHECK_COLUMN_STATE_ID} = require('../../internal/symbolManager');
 
+	const KEY_ENTER = 13;
+	const KEY_SPACE = 32;
+
 	function toggleValue(val) {
 		if (typeof val === 'number') {
 			if (val === 0) {
@@ -108,7 +111,7 @@
 							});
 						}
 					},
-					acceptKeys: [13, 32],
+					acceptKeys: [KEY_ENTER, KEY_SPACE],
 				})
 			];
 		}

@@ -9,15 +9,17 @@
 	
 	const BaseInputEditor = require('./BaseInputEditor');
 	const EventHandler = require('../../internal/EventHandler');
+	const KEY_ENTER = 13;
+	const KEY_ESC = 27;
 
 	class InputDialogManager {
-		constructor({validator, inputValidator, classList, type, message} = {}) {
+		constructor({validator, inputValidator, classList, type, helperText} = {}) {
 			this._handler = new EventHandler();
 			this._validator = validator;
 			this._inputValidator = inputValidator;
 			this._classList = classList;
 			this._type = type;
-			this._message = message;
+			this._helperText = helperText;
 		}
 		dispose() {
 			this.detach();
@@ -32,22 +34,16 @@
 				element.classList.add(this._classList);
 			}
 			input.type = this._type || '';
-			if (this._labelMessage && typeof this._labelMessage !== 'function') {
-				element.setAttribute('data-message', this._labelMessage);
+			if (this._helperText && typeof this._helperText !== 'function') {
+				element.dataset.helperText = this._helperText;
 			}
+			element.classList.remove('show');
+			element.classList.add('hide');
+			input.readonly = true;
+			input.tabIndex = -1;
 			element.appendChild(input);
 			this._bindEvents(element, input);
 			return element;
-		}
-		setCloseStylesInternal(element, input) {
-			element.style.padding = '0';// amination
-			input.readonly = true;
-			const transitionProp = document.defaultView.getComputedStyle(element, '')['transition-property'];
-			return transitionProp && transitionProp.indexOf('padding') > -1;
-		}
-		setOpenStylesInternal(element, input) {
-			element.style.padding = '';// amination
-			input.readonly = false;
 		}
 		attach(grid, col, row, value) {
 			this._active = true;
@@ -55,16 +51,21 @@
 
 			const rect = grid.getCellRect(col, row);
 			const element = this.getElementInternal();
-			element.removeAttribute('data-error-message');
+			delete element.dataset.errorMessage;
 			const input = this.getInputInternal();
-			this.setCloseStylesInternal(element, input);
+			element.classList.remove('show');
+			element.classList.add('hide');
+			input.readonly = false;
+			input.tabIndex = 0;
 			grid.appendChildElement(element, rect);
 			
 			input.value = value;
 			input.style.font = grid.font || '16px sans-serif';
 			this._onInputValue(input);
 			this._focus(input);
-			this.setOpenStylesInternal(element, input);
+			element.classList.add('show');
+			element.classList.remove('hide');
+			input.readonly = true;
 		}
 		detach(gridFocus) {
 			this._active = false;
@@ -75,24 +76,10 @@
 				const input = this.getInputInternal();
 				const element = this.getElementInternal();
 
-				if (this.setCloseStylesInternal(element, input) !== false) {
-					if (!this._handler.hasListener(element, 'transitionend')) {
-						this._handler.on(element, 'transitionend', () => {
-							if (this._active) {
-								return;
-							}
-							if (element.parentElement) {
-								this._handler.tryWithOffEvents(input, 'blur', () => {
-									element.parentElement.removeChild(element);
-								});
-							}
-						});
-					}
-				} else {
-					this._handler.tryWithOffEvents(input, 'blur', () => {
-						element.parentElement.removeChild(element);
-					});
-				}
+				element.classList.remove('show');
+				element.classList.add('hide');
+				input.readonly = false;
+				input.tabIndex = -1;
 			}
 			const {grid, col, row} = this._attachInfo;
 			grid.invalidateCell(col, row);
@@ -135,22 +122,22 @@
 				message = this._validator(value, {grid, col, row});
 			}
 			if (message) {
-				element.setAttribute('data-error-message', message);
+				element.dataset.errorMessage = message;
 				return false;
 			} else {
-				element.removeAttribute('data-error-message');
+				delete element.dataset.errorMessage;
 				return true;
 			}
 		}
 		_onInputValueChange(after, before) {
 			const element = this.getElementInternal();
-			if (typeof this._message === 'function') {
+			if (typeof this._helperText === 'function') {
 				const {grid, col, row} = this._attachInfo;
-				const message = this._message(after, {grid, col, row});
-				if (message) {
-					element.setAttribute('data-message', message);
+				const helperText = this._helperText(after, {grid, col, row});
+				if (helperText) {
+					element.dataset.helperText = helperText;
 				} else {
-					element.removeAttribute('data-message');
+					delete element.dataset.helperText;
 				}
 			}
 			if (element.hasAttribute('data-error-message')) {
@@ -168,8 +155,10 @@
 		_bindEvents(element, input) {
 			const stopPropagationOnly = (e) => e.stopPropagation();// gridにイベントが伝播しないように
 			this._handler.on(element, 'click', stopPropagationOnly);
-			this._handler.on(element, 'mousedown', stopPropagationOnly);
 			this._handler.on(element, 'dblclick', stopPropagationOnly);
+			this._handler.on(element, 'mousedown', stopPropagationOnly);
+			this._handler.on(element, 'touchstart', stopPropagationOnly);
+			
 			this._handler.on(input, 'compositionstart', (e) => {
 				input.classList.add('composition');
 			});
@@ -190,10 +179,10 @@
 					return;
 				}
 				const keyCode = getKeyCode(e);
-				if (keyCode === 27) {
+				if (keyCode === KEY_ESC) {
 					this.detach(true);
 					cancelEvent(e);
-				} else if (keyCode === 13) {
+				} else if (keyCode === KEY_ENTER) {
 					if (this.doChangeCellValueInternal()) {
 						this.detach(true);
 					}
@@ -242,14 +231,14 @@
 			inputValidator,
 			classList,
 			type,
-			message
+			helperText
 		} = option;
 		return new InputDialogManager({
 			validator,
 			inputValidator,
 			classList,
 			type,
-			message
+			helperText
 		});
 	}
 	class SmallDialogInputEditor extends BaseInputEditor {
@@ -259,6 +248,10 @@
 		constructor(option = {}) {
 			super(option);
 			this._inputDialogManager = option.inputDialogManager || createDefaultInputDialogManager(option);
+		}
+		dispose() {
+			this._inputDialogManager.dispose();
+			this._inputDialogManager = null;
 		}
 		get inputDialogManager() {
 			return this._inputDialogManager;

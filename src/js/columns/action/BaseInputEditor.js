@@ -7,10 +7,13 @@
 		EDITABLEINPUT_CELL,
 		SELECTED_CELL,
 		DBLCLICK_CELL,
+		DBLTAP_CELL,
 		KEYDOWN,
 		MODIFY_STATUS_EDITABLEINPUT_CELL,
 		SCROLL
 	}} = require('../../core/DrawGrid');
+	const KEY_ENTER = 13;
+	const KEY_F2 = 113;
 
 	class BaseInputEditor extends Editor {
 		constructor(option = {}) {
@@ -67,8 +70,17 @@
 						row: cell.row
 					});
 				}),
+				grid.listen(DBLTAP_CELL, (cell) => {
+					if (!util.isTarget(cell.col, cell.row)) {
+						return;
+					}
+					open({
+						col: cell.col,
+						row: cell.row
+					});
+				}),
 				grid.listen(KEYDOWN, (keyCode, e) => {
-					if (keyCode !== 113/*F2*/ && keyCode !== 13) {
+					if (keyCode !== KEY_F2 && keyCode !== KEY_ENTER) {
 						return;
 					}
 					const sel = grid.selection.select;
