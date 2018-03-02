@@ -62,7 +62,7 @@
 	//private methods
 	function _vibrate(e) {
 		if (navigator.vibrate && isTouchEvent(e)) {
-			navigator.vibrate(300);
+			navigator.vibrate(50);
 		}
 	}
 	function _getTargetRowAt(grid, absoluteY) {
