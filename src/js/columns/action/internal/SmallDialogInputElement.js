@@ -7,6 +7,9 @@ const {
 } = require('../../../internal/utils');
 	
 const EventHandler = require('../../../internal/EventHandler');
+const {
+	createElement,
+} = require('./dom');
 
 const CLASSNAME = 'cheetah-grid__small-dialog-input';
 const INPUT_CLASSNAME = CLASSNAME + '__input';
@@ -43,14 +46,10 @@ function _focus(input, handler) {
 	});
 }
 
-function createElement() {
+function createDialogElement() {
 	require('./SmallDialogInputElement.css');
-	const element = document.createElement('div');
-	element.classList.add(CLASSNAME);
-	const input = document.createElement('input');
-	input.classList.add(INPUT_CLASSNAME);
-	element.classList.remove(SHOWN_CLASSNAME);
-	element.classList.add(HIDDEN_CLASSNAME);
+	const element = createElement('div', {classList: [CLASSNAME, HIDDEN_CLASSNAME]});
+	const input = createElement('input', {classList: INPUT_CLASSNAME});
 	input.readonly = true;
 	input.tabIndex = -1;
 	element.appendChild(input);
@@ -88,7 +87,7 @@ class SmallDialogInputElement {
 	}
 	constructor() {
 		this._handler = new EventHandler();
-		this._dialog = createElement();
+		this._dialog = createDialogElement();
 		this._input = this._dialog.querySelector('.' + INPUT_CLASSNAME);
 		this._bindDialogEvents();
 	}
@@ -241,7 +240,7 @@ class SmallDialogInputElement {
 				delete dialog.dataset.helperText;
 			}
 		}
-		if (dialog.hasAttribute('data-error-message')) {
+		if ('errorMessage' in dialog.dataset) {
 			this._validate(after, true);
 		}
 	}

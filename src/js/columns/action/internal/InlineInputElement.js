@@ -7,16 +7,16 @@ const {
 } = require('../../../internal/utils');
 	
 const EventHandler = require('../../../internal/EventHandler');
-
+const {
+	createElement,
+} = require('./dom');
 const KEY_ENTER = 13;
 
 const CLASSNAME = 'cheetah-grid__inline-input';
 
 function createInputElement() {
 	require('./InlineInputElement.css');
-	const input = document.createElement('input');
-	input.classList.add(CLASSNAME);
-	return input;
+	return createElement('input', {classList: CLASSNAME});
 }
 
 function setInputAttrs(editor, grid, input) {

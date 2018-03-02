@@ -8,6 +8,15 @@ const {
 } = require('../../../internal/utils');
 
 const EventHandler = require('../../../internal/EventHandler');
+const {
+	createElement,
+	appendHtml,
+	empty,
+	disableFocus,
+	isFocusable,
+	findPrevSiblingFocusable,
+	findNextSiblingFocusable,
+} = require('./dom');
 	
 const KEY_TAB = 9;
 const KEY_ENTER = 13;
@@ -32,29 +41,9 @@ function findItemParents(target) {
 	return el;
 }
 
-function isFocusable(el) {
-	return isDef(el.tabIndex) && el.tabIndex > -1;
-}
-function findPrevFocusable(el) {
-	let n = el.previousSibling;
-	while (n && !isFocusable(n)) {
-		n = n.previousSibling;
-	}
-	return n;
-}
-function findNextFocusable(el) {
-	let n = el.nextSibling;
-	while (n && !isFocusable(n)) {
-		n = n.nextSibling;
-	}
-	return n;
-}
-
 function createMenuElement() {
 	require('./InlineMenuElement.css');
-	const rootElement = document.createElement('ul');
-	rootElement.classList.add(CLASSNAME);
-	return rootElement;
+	return createElement('ul', {classList: CLASSNAME});
 }
 function attachElement(element, rect, menu) {
 	menu.style.top = rect.top.toFixed() + 'px';
@@ -65,8 +54,7 @@ function attachElement(element, rect, menu) {
 }
 
 function optionToLi({classList, caption, value, html}, index) {
-	const item = document.createElement('li');
-	item.classList.add(ITEM_CLASSNAME);
+	const item = createElement('li', {classList: ITEM_CLASSNAME});
 	item.tabIndex = 0;
 	item.dataset.valueindex = index;
 	if (classList) {
@@ -74,12 +62,10 @@ function optionToLi({classList, caption, value, html}, index) {
 	}
 
 	if (caption) {
-		const span = document.createElement('span');
-		span.textContent = caption;
-
+		const span = createElement('span', {text: caption});
 		item.appendChild(span);
 	} else if (html) {
-		item.innerHTML = html;
+		appendHtml(item, html);
 	}
 
 	if (value === '' || !isDef(value)) {
@@ -93,7 +79,7 @@ function openMenu(grid, editor, col, row, value, menu) {
 	const {options, classList} = editor;
 	menu.classList.remove(SHOWN_CLASSNAME);
 	menu.classList.add(HIDDEN_CLASSNAME);
-	menu.innerHTML = '';
+	empty(menu);
 	menu.style.font = grid.font || '16px sans-serif';
 	let emptyItemEl = null;
 	let valueItemEl = null;
@@ -168,14 +154,8 @@ function openMenu(grid, editor, col, row, value, menu) {
 function closeMenu(grid, col, row, menu, valueindex) {
 	menu.classList.remove(SHOWN_CLASSNAME);
 	menu.classList.add(HIDDEN_CLASSNAME);
-	offFocusable(menu);
+	disableFocus(menu);
 }
-
-function offFocusable(el) {
-	el.tabIndex = -1;
-	Array.prototype.slice.call(el.children, 0).forEach(offFocusable);
-}
-
 
 class InlineMenuElement {
 	constructor() {
@@ -269,23 +249,23 @@ class InlineMenuElement {
 				this.detach(true);
 				cancelEvent(e);
 			} else if (keyCode === KEY_UP) {
-				const n = findPrevFocusable(item);
+				const n = findPrevSiblingFocusable(item);
 				if (n) {
 					n.focus();
 					cancelEvent(e);
 				}
 			} else if (keyCode === KEY_DOWN) {
-				const n = findNextFocusable(item);
+				const n = findNextSiblingFocusable(item);
 				if (n) {
 					n.focus();
 					cancelEvent(e);
 				}
 			} else if (keyCode === KEY_TAB) {
 				if (!e.shiftKey) {
-					if (!findNextFocusable(item)) {
+					if (!findNextSiblingFocusable(item)) {
 						let n = menu.querySelector('.' + ITEM_CLASSNAME);
 						if (!isFocusable(n)) {
-							n = findNextFocusable(n);
+							n = findNextSiblingFocusable(n);
 						}
 						if (n) {
 							n.focus();
@@ -293,11 +273,11 @@ class InlineMenuElement {
 						}
 					}
 				} else {
-					if (!findPrevFocusable(item)) {
+					if (!findPrevSiblingFocusable(item)) {
 						const items = menu.querySelectorAll('.' + ITEM_CLASSNAME);
 						let n = items[items.length - 1];
 						if (!isFocusable(n)) {
-							n = findPrevFocusable(n);
+							n = findPrevSiblingFocusable(n);
 						}
 						if (n) {
 							n.focus();
