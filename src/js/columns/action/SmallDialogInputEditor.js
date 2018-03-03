@@ -30,7 +30,7 @@ function attachInput(grid, cell, editor, value) {
 
 	globalElement.attach(grid, editor, cell.col, cell.row, value);
 }
-function detachInput(grid) {
+function detachInput() {
 	if (globalElement) {
 		globalElement.detach();
 	}
@@ -86,6 +86,14 @@ class SmallDialogInputEditor extends BaseInputEditor {
 		detachInput();
 	}
 	onGridScrollInternal(grid) {
+		// cancel input
+		detachInput();
+	}
+	onChangeDisabledInternal() {
+		// cancel input
+		detachInput();
+	}
+	onChangeReadOnlyInternal() {
 		// cancel input
 		detachInput();
 	}

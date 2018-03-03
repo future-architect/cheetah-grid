@@ -32,7 +32,7 @@ function attachInput(grid, cell, editor, value) {
 
 	globalElement.attach(grid, editor, cell.col, cell.row, value);
 }
-function detachInput(grid) {
+function detachInput() {
 	if (globalElement) {
 		globalElement.detach();
 	}
@@ -75,11 +75,19 @@ class InlineInputEditor extends BaseInputEditor {
 	}
 	onChangeSelectCellInternal(grid, cell, selected) {
 		doChangeValue(grid);
-		detachInput(grid);
+		detachInput();
 	}
 	onGridScrollInternal(grid) {
 		doChangeValue(grid);
-		detachInput(grid);
+		detachInput();
+	}
+	onChangeDisabledInternal() {
+		// cancel input
+		detachInput();
+	}
+	onChangeReadOnlyInternal() {
+		// cancel input
+		detachInput();
 	}
 	onSetInputAttrsInternal(grid, cell, input) {
 		InlineInputElement.setInputAttrs(this, grid, input);

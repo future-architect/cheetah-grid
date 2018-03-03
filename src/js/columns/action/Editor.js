@@ -12,13 +12,12 @@
 		}
 		set readOnly(readOnly) {
 			this._readOnly = !!readOnly;
+			this.onChangeReadOnlyInternal();
 		}
 		clone() {
 			return new Editor(this);
 		}
-		bindGridEvent(grid, col, util) {
-			return [];
-		}
+		onChangeReadOnlyInternal() {}
 	}
 	module.exports = Editor;
 }

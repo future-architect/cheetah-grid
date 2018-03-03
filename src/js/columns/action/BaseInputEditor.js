@@ -70,14 +70,17 @@
 						row: cell.row
 					});
 				}),
-				grid.listen(DBLTAP_CELL, (cell) => {
-					if (!util.isTarget(cell.col, cell.row)) {
+				grid.listen(DBLTAP_CELL, (e) => {
+					if (!util.isTarget(e.col, e.row)) {
 						return;
 					}
 					open({
-						col: cell.col,
-						row: cell.row
+						col: e.col,
+						row: e.row
 					});
+
+					e.event.preventDefault();
+					e.event.stopPropagation();
 				}),
 				grid.listen(KEYDOWN, (keyCode, e) => {
 					if (keyCode !== KEY_F2 && keyCode !== KEY_ENTER) {

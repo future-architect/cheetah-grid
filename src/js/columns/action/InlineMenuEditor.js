@@ -41,7 +41,7 @@ function attachMenu(grid, cell, editor, value) {
 
 	globalElement.attach(grid, editor, cell.col, cell.row, value);
 }
-function detachMenu(grid) {
+function detachMenu() {
 	if (globalElement) {
 		globalElement.detach();
 	}
@@ -72,6 +72,14 @@ class InlineMenuEditor extends Editor {
 	}
 	clone() {
 		return new InlineMenuEditor(this);
+	}
+	onChangeDisabledInternal() {
+		// cancel input
+		detachMenu();
+	}
+	onChangeReadOnlyInternal() {
+		// cancel input
+		detachMenu();
 	}
 	bindGridEvent(grid, col, util) {
 		const open = (cell) => {
@@ -107,10 +115,10 @@ class InlineMenuEditor extends Editor {
 				});
 			}),
 			grid.listen(SELECTED_CELL, (cell, selected) => {
-				detachMenu(grid);
+				detachMenu();
 			}),
 			grid.listen(SCROLL, () => {
-				detachMenu(grid);
+				detachMenu();
 			}),
 
 			// mouse move

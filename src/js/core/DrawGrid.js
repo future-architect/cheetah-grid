@@ -697,29 +697,28 @@
 				grid[_].cellSelector.start(e);
 			}
 		});
-		let doubleTapBefore = false;
+		let doubleTapBefore = null;
 		let longTouchId = null;
 		grid[_].handler.on(grid[_].element, 'touchstart', (e) => {
 		
 			if (!doubleTapBefore) {
-				doubleTapBefore = true;
+				doubleTapBefore = getCellEventArgsSet(e).eventArgs;
 				setTimeout(() => {
-					doubleTapBefore = false;
+					doubleTapBefore = null;
 				}, 350);
 			} else {
-				e.preventDefault();
-
 				const {eventArgs} = getCellEventArgsSet(e);
-				if (eventArgs) {
-					const cell = {
-						col: eventArgs.col,
-						row: eventArgs.row,
-					};
-					grid.fireListeners(EVENT_TYPE.DBLTAP_CELL, cell);
+				if (eventArgs &&
+					eventArgs.col === doubleTapBefore.col &&
+					eventArgs.row === doubleTapBefore.row) {
+					grid.fireListeners(EVENT_TYPE.DBLTAP_CELL, eventArgs);
 				}
 
-				doubleTapBefore = false;
-				return;
+				doubleTapBefore = null;
+
+				if (e.defaultPrevented) {
+					return;
+				}
 			}
 
 			longTouchId = setTimeout(() => {
@@ -1259,13 +1258,22 @@
 				const keyCode = getKeyCode(e);
 				this.fireListeners('keydown', keyCode, e);
 
-				if (this._input.value) {
+				if (!this._input.readOnly && this._input.value) {
 					// for Safari
 					this.fireListeners('input', this._input.value);
 				}
 
 				setSafeInputValue(this._input, '');
 			});
+			const inputClear = (e) => {
+				if (this._isComposition) {
+					return;
+				}
+				setSafeInputValue(this._input, '');
+			};
+
+			this._handler.on(this._input, 'input', inputClear);
+			this._handler.on(this._input, 'keyup', inputClear);
 			this._handler.on(document, 'keydown', (e) => {
 				if (!browser.IE) {
 					return;
