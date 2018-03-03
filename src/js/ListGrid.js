@@ -1,6 +1,6 @@
 'use strict';
 {
-	const {extend, array: {find: arrayFind}, isDef, isPromise, obj: {isObject}} = require('./internal/utils');
+	const {extend, isDef, isPromise, obj: {isObject}} = require('./internal/utils');
 	const GridCanvasHelper = require('./GridCanvasHelper');
 	const columns = require('./columns');
 	const {BaseStyle} = columns.style;
@@ -60,15 +60,9 @@
 			if (isObject(field) && field.get && field.set) {
 				field = field.set;
 			}
-			if (grid.hasListeners(EVENT_TYPE.SET_VALUE)) {
-				const ret = grid.fireListeners(EVENT_TYPE.SET_VALUE, grid.getRowRecord(row), field, value);
-				grid[_].dataSource.clearCache();
-				return arrayFind(ret, isDef);
-			} else {
-				const index = _getRowRecordIndex(grid, row);
-				const res = grid[_].dataSource.setField(index, field, value);
-				return isPromise(res) ? res : true;
-			}
+			const index = _getRowRecordIndex(grid, row);
+			const res = grid[_].dataSource.setField(index, field, value);
+			return isPromise(res) ? res : true;
 		}
 	}
 	function _getCellIcon0(grid, icon, row) {
@@ -489,7 +483,7 @@
 	}
 	
 	const EVENT_TYPE = extend(DrawGrid.EVENT_TYPE, {
-		SET_VALUE: 'set_value',
+		CHANGED_VALUE: 'changed_value',
 	});
 
 	/**
@@ -687,7 +681,32 @@
 				if (after === undefined) {
 					return false;
 				}
-				return _setCellValue(this, col, row, after);
+				const ret = _setCellValue(this, col, row, after);
+				if (ret) {
+					
+					const onChange = () => {
+						const {field} = this[_].headerMap.columns[col];
+						const self = this;
+						this.fireListeners(EVENT_TYPE.CHANGED_VALUE, {
+							col,
+							row,
+							get record() {
+								return self.getRowRecord(row);
+							},
+							field,
+							value: after,
+						});
+					};
+					if (isPromise(ret)) {
+						return ret.then((r) => {
+							onChange();
+							return r;
+						});
+					} else {
+						onChange();
+					}
+				}
+				return ret;
 			}
 		}
 		bindEventsInternal() {

@@ -15,6 +15,9 @@ order: 130
 |---|---|---|---|
 | `check`  | `check` | [`cheetahGrid.columns.action.CheckEditor`](./column_actions/CheckEditor.html) | チェックボックスをクリックした際の動作を指定します | [CheckEditor](./column_actions/CheckEditor.html) |
 | `button` | ---     | [`cheetahGrid.columns.action.ButtonAction`](./column_actions/ButtonAction.html) | ボタンをクリックした際の動作を指定します | [ButtonAction](./column_actions/ButtonAction.html) |
+{{#if_v '0.2.0'}}
+| `input` | ---     | [`cheetahGrid.columns.action.SmallDialogInputEditor`](./column_actions/SmallDialogInputEditor.html) | 入力によるデータ編集を可能にします | [SmallDialogInputEditor](./column_actions/SmallDialogInputEditor.html) |
+{{/if_v}}
 {{else}}
 Define column action by using `action` property.  
 Please select suitable Action class for `columnType` of same column.  
@@ -23,6 +26,9 @@ Please select suitable Action class for `columnType` of same column.
 |---|---|---|---|
 | `check`  | `check` | [`cheetahGrid.columns.action.CheckEditor`](./column_actions/CheckEditor.html) | Define the behaviour when checkbox is clicked. | [CheckEditor](./column_actions/CheckEditor.html) |
 | `button` | ---     | [`cheetahGrid.columns.action.ButtonAction`](./column_actions/ButtonAction.html) | Define the behaviour when button is clicked. | [ButtonAction](./column_actions/ButtonAction.html) |
+{{#if_v '0.2.0'}}
+| `input` | ---     | [`cheetahGrid.columns.action.SmallDialogInputEditor`](./column_actions/SmallDialogInputEditor.html) | Define the behaviour when cell input. | [SmallDialogInputEditor](./column_actions/SmallDialogInputEditor.html) |
+{{/if_v}}
 {{/if}}
 {{/marked}}
 
@@ -38,7 +44,9 @@ const grid = new cheetahGrid.ListGrid({
 	header: [
 		{field: 'no', caption: 'no', width: 50},
 		// action: 'check'
-		{field: 'check', caption: 'check', width: 50, columnType: 'check', action: 'check'},
+		{field: 'check', caption: 'check', width: 60, columnType: 'check', action: 'check'},
+		//{{#if_v '0.2.0'}} action: 'input'
+		{field: 'text', caption: 'input', width: 120, action: 'input'},//{{/if_v}}
 		{
 			caption: 'button',
 			width: 100,
@@ -57,11 +65,27 @@ const grid = new cheetahGrid.ListGrid({
 	],
 });
 grid.records = [
-	{no: 1, check: true},
-	{no: 2, check: false},
-	{no: 3, check: true},
+	{no: 1, check: true, text: 'abc'},
+	{no: 2, check: false, text: 'def'},
+	{no: 3, check: true, text: 'ghi'},
 ];
 //{{/copy}}
 //{{/wrapscript}}
 </script>
 {{> code class="js" code=sample1}}
+
+{{#marked}}
+## Advanced Column Action
+{{#if lang_ja}}
+プロパティ`action`はActionインスタンスをしてすることで、
+途中でアクションのプロパティ(disable・readonlyなど) を変更することが可能になります。  
+
+
+[詳細はこちら](./column_actions/Classes.html)を参照してください。 　
+{{else}}
+By setting the property `action` as an Action instance,
+You can change the properties of the action (disable, readonly, etc.) in the when you want.  
+
+Please refer to [here](./column_actions/Classes.html)
+{{/if}}
+{{/marked}}
