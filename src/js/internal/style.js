@@ -16,57 +16,23 @@
 
 	let SCROLLBAR_SIZE;
 	const initDocument = () => {
+		require('./style.css');
 		SCROLLBAR_SIZE = getScrollBarWidth() || 10;
 		const style = document.createElement('style');
 		style.setAttribute('type', 'text/css');
 		style.setAttribute('data-name', 'cheetah-grid');
 		style.innerHTML =
 		`
-		.cheetah-grid .grid-scrollable {
-			height: 100%;
-			width: 100%;
-			position: absolute;
-			overflow: scroll;
-		}
-		.cheetah-grid .grid-scroll-end-point {
-			opacity: 0;
-			position: relative;
-			width: ${SCROLLBAR_SIZE}px;
-			height: ${SCROLLBAR_SIZE}px;
-		}
-		.cheetah-grid {
-			position: relative;
-			overflow: hidden;
-			width: 100%;
-			height: 100%;
-		}
-		.cheetah-grid > canvas {
-			position: absolute;
-			width: 0;
-			height: 0;
-			width: -webkit-calc(100% - ${SCROLLBAR_SIZE}px);
-			width: calc(100% - ${SCROLLBAR_SIZE}px);
-			height: -webkit-calc(100% - ${SCROLLBAR_SIZE}px);
-			height: calc(100% - ${SCROLLBAR_SIZE}px);
-		}
-		.cheetah-grid .grid-focus-control {
-			position: relative;
-			width: 1px;
-			height: 1px;
-			opacity: 0;
-			padding: 0;
-			margin: 0;
-			box-sizing: border-box;
-			pointer-events: none;
-			max-width: 0;
-			max-height: 0;
-		}
-		.cheetah-grid .grid-focus-control.composition {
-			opacity: 1;
-			max-width: none;
-			max-height: none;
-		}
-		
+.cheetah-grid .grid-scroll-end-point {
+	width: ${SCROLLBAR_SIZE}px;
+	height: ${SCROLLBAR_SIZE}px;
+}
+.cheetah-grid > canvas {
+	width: -webkit-calc(100% - ${SCROLLBAR_SIZE}px);
+	width: calc(100% - ${SCROLLBAR_SIZE}px);
+	height: -webkit-calc(100% - ${SCROLLBAR_SIZE}px);
+	height: calc(100% - ${SCROLLBAR_SIZE}px);
+}
 		`;
 
 		document.head.appendChild(style);

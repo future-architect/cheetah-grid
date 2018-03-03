@@ -25,14 +25,18 @@ ModuleFilenameHelpers.createFooter = function createFooter(module, requestShorte
 		].join('\n');
 	}
 };
+function resolve(dir) {
+	return path.join(__dirname, dir);
+}
 
-rm.sync(path.join(path.resolve(__dirname, 'dist/'), '*'));
+rm.sync(path.join(resolve('dist/'), '*'));
 
 const gridOpt = {
 	entries: {
 		cheetahGrid: './main.js',
 	}
 };
+
 
 // const extToolsEntriesOpt = {
 // 	entries: {
@@ -63,35 +67,40 @@ const newDefaultProps = (opt = {}) => {
 	};
 	return {
 		mode: opt.mode || 'production',
-		context: path.resolve(__dirname, 'src/js/'),
+		context: resolve('src/js/'),
 		entry: entries,
 		output: {
-			path: path.resolve(__dirname, 'dist/'),
+			path: resolve('dist/'),
 			filename: `${filenamePrefix}${suffix}.js`,
 			library,
 			libraryTarget: 'umd',
 			devtoolModuleFilenameTemplate,
 			devtoolFallbackModuleFilenameTemplate: devtoolModuleFilenameTemplate,
 		},
-		resolveLoader: {
-			alias: {
-				'svg-to-cheetahgrid-icon-js-loader': require.resolve('./webpack-loader/svg-to-icon-js-loader')
-			}
-		},
 		resolve: {
 			extensions: ['.js'],
+			alias: {
+				'@': resolve('src/js')
+			}
 		},
-
 		module: {
 			rules: [
 				{
 					test: /\.js$/,
 					exclude: /node_modules/,
-					loader: 'babel-loader',
+					use: ['babel-loader'],
+				},
+				{
+					test: /\.css$/,
+					exclude: /node_modules/,
+					use: ['style-loader', 'css-loader?minimize']
 				}
 			]
 		},
 		plugins: [
+			new webpack.ProvidePlugin({
+				'Array.isArray': ['@/internal/com.js', 'Array_isArray'],
+			}),
 			// new webpack.SourceMapDevToolPlugin({
 			// 	exclude: /^webpack/,
 			// 	filename: '[name]' + suffix + '.js.map',

@@ -6,6 +6,7 @@ const InlineIcon = require('./InlineIcon');
 const InlineImage = require('./InlineImage');
 const InlineSvg = require('./InlineSvg');
 const InlineDrawer = require('./InlineDrawer');
+const InlinePath2D = require('./InlinePath2D');
 const {isDef} = require('../internal/utils');
 const {calcStartPosition} = require('../internal/canvases');
 const icons = require('../icons');
@@ -44,6 +45,7 @@ function drawRegisteredIcon(ctx, icon,
 	}
 }
 
+
 module.exports = {
 	iconOf(icon) {
 		if (icon instanceof Inline) {
@@ -67,6 +69,14 @@ module.exports = {
 				svg: icon.svg,
 				width: icon.width,
 				height: icon.width,
+			});
+		}
+		if (icon.path) {
+			return new InlinePath2D({
+				path: icon.path,
+				width: icon.width,
+				height: icon.width,
+				color: icon.color,
 			});
 		}
 		const regedIcons = icons.get();

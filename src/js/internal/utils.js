@@ -3,9 +3,6 @@
 	let arrayFind;
 	let arrayFindIndex;
 	const array = {
-		isArray(arg) {
-			return Array.isArray(arg);
-		},
 		get find() {
 			if (arrayFind) {
 				return arrayFind;

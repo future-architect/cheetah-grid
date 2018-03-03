@@ -46,7 +46,9 @@ function pathTokens(d) {
 function command(builder, cmd, argsProvider) {
 	if (cmd.toUpperCase() === 'M' || cmd.toUpperCase() === 'L' || cmd.toUpperCase() === 'T') {
 		builder.command(cmd, argsProvider.next(), argsProvider.next());
-		return cmd;
+		return cmd === 'M' ? 'L'
+			: cmd === 'm' ? 'l'
+			: cmd;
 	} else if (cmd.toUpperCase() === 'H' || cmd.toUpperCase() === 'V') {
 		builder.command(cmd, argsProvider.next());
 		return cmd;
@@ -122,7 +124,7 @@ class PathCommandsParser {
 		const tokens = pathTokens(d);
 		try {
 			let cmd;
-			let lastCommand;
+			let subsequentCommand;
 			while ((cmd = tokens.next())) {
 				if (!isNaN(cmd - 0)) {
 					let fst = true;
@@ -135,9 +137,9 @@ class PathCommandsParser {
 							return tokens.next();
 						}
 					};
-					lastCommand = command(this, lastCommand, argsProvider);
+					subsequentCommand = command(this, subsequentCommand, argsProvider);
 				} else {
-					lastCommand = command(this, cmd, tokens);
+					subsequentCommand = command(this, cmd, tokens);
 				}
 			}
 		} catch (e) {

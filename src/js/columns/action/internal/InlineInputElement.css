@@ -1,0 +1,10 @@
+/*ms*/
+.cheetah-grid__inline-input::-ms-clear {
+	visibility:hidden;
+}
+
+
+.cheetah-grid__inline-input {
+	position: absolute;
+	box-sizing: border-box;
+}

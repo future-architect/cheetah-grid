@@ -69,15 +69,12 @@
     </style>
 </head>
 <body>
-    <script type="text/javascript">
-'use strict';
-//{{{babel textContents.demos.[demos/commons.parts.js]}}}
-    </script>
     {{> header}}
     <h1>{{{ms_breadcrumb category}}} &gt; {{title}}</h1>
     <div class="contents">
         {{{ contents }}}
     </div>
+    {{#if debug}}<script type="text/javascript">window.debugMode = true;</script>{{/if}}
     <script type="text/javascript" src="{{ms_path 'js/doc-common.js'}}"></script>
 </body>
 </html>

@@ -7,7 +7,7 @@
 	const themes = require('./themes');
 	const {colorToRGB} = require('./internal/color');
 	const Rect = require('./internal/Rect');
-	const {getChainSafe, getOrApply, array: {isArray}, style: {toBoxArray}} = require('./internal/utils');
+	const {getChainSafe, getOrApply, style: {toBoxArray}} = require('./internal/utils');
 	const fonts = require('./internal/fonts');
 	const calc = require('./internal/calc');
 
@@ -213,7 +213,7 @@
 	
 
 	function strokeRect(ctx, color, left, top, width, height) {
-		if (!isArray(color)) {
+		if (!Array.isArray(color)) {
 			if (color) {
 				ctx.strokeStyle = color;
 				ctx.strokeRect(left, top, width, height);
@@ -264,7 +264,7 @@
 			return toBoxArray(obj);
 		}
 		toBoxPixelArray(value, context) {
-			if (typeof value === 'string' || isArray(value)) {
+			if (typeof value === 'string' || Array.isArray(value)) {
 				const calculator = this.createCalculator(context);
 				const box = toBoxArray(value);
 				return [

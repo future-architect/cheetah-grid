@@ -1,6 +1,6 @@
 'use strict';
 {
-	const {extend, array: {isArray, find: arrayFind}, isDef, isPromise, obj: {isObject}} = require('./internal/utils');
+	const {extend, isDef, isPromise, obj: {isObject}} = require('./internal/utils');
 	const GridCanvasHelper = require('./GridCanvasHelper');
 	const columns = require('./columns');
 	const {BaseStyle} = columns.style;
@@ -60,23 +60,17 @@
 			if (isObject(field) && field.get && field.set) {
 				field = field.set;
 			}
-			if (grid.hasListeners(EVENT_TYPE.SET_VALUE)) {
-				const ret = grid.fireListeners(EVENT_TYPE.SET_VALUE, grid.getRowRecord(row), field, value);
-				grid[_].dataSource.clearCache();
-				return arrayFind(ret, isDef);
-			} else {
-				const index = _getRowRecordIndex(grid, row);
-				const res = grid[_].dataSource.setField(index, field, value);
-				return isPromise(res) ? res : true;
-			}
+			const index = _getRowRecordIndex(grid, row);
+			const res = grid[_].dataSource.setField(index, field, value);
+			return isPromise(res) ? res : true;
 		}
 	}
 	function _getCellIcon0(grid, icon, row) {
 		if (!isDef(icon)) {
 			return null;
 		}
-		if (isArray(icon)) {
-			return icon.map((i) => _getCellIcon0(grid, i, row, name));
+		if (Array.isArray(icon)) {
+			return icon.map((i) => _getCellIcon0(grid, i, row));
 		}
 		if (!isObject(icon)) {
 			return _getField(grid, icon, row);
@@ -294,7 +288,7 @@
 				grid.setMaxColWidth(col, maxWidth);
 			}
 		}
-		const isArrayHeaderRowHeight = isArray(grid[_].headerRowHeight);
+		const isArrayHeaderRowHeight = Array.isArray(grid[_].headerRowHeight);
 		for (let row = 0; row < grid[_].headerMap.rowCount; row++) {
 			const height = isArrayHeaderRowHeight ? grid[_].headerRowHeight[row] : grid[_].headerRowHeight;
 			if (height && height > 0) {
@@ -489,7 +483,7 @@
 	}
 	
 	const EVENT_TYPE = extend(DrawGrid.EVENT_TYPE, {
-		SET_VALUE: 'set_value',
+		CHANGED_VALUE: 'changed_value',
 	});
 
 	/**
@@ -659,6 +653,20 @@
 			const cellValue = _getCellValue(this, col, row);
 			return _onDrawValue(this, cellValue, context, {col, row}, style, draw);
 		}
+		doGetCellValue(col, row, valueCallback) {
+			if (row < this[_].headerMap.rowCount) {
+				// nop
+				return false;
+			} else {
+				const value = _getCellValue(this, col, row);
+				if (isPromise(value)) {
+					//遅延中は無視
+					return false;
+				}
+				valueCallback(value);
+			}
+			return true;
+		}
 		doChangeValue(col, row, changeValueCallback) {
 			if (row < this[_].headerMap.rowCount) {
 				// nop
@@ -670,7 +678,35 @@
 					return false;
 				}
 				const after = changeValueCallback(before);
-				return _setCellValue(this, col, row, after);
+				if (after === undefined) {
+					return false;
+				}
+				const ret = _setCellValue(this, col, row, after);
+				if (ret) {
+					
+					const onChange = () => {
+						const {field} = this[_].headerMap.columns[col];
+						const self = this;
+						this.fireListeners(EVENT_TYPE.CHANGED_VALUE, {
+							col,
+							row,
+							get record() {
+								return self.getRowRecord(row);
+							},
+							field,
+							value: after,
+						});
+					};
+					if (isPromise(ret)) {
+						return ret.then((r) => {
+							onChange();
+							return r;
+						});
+					} else {
+						onChange();
+					}
+				}
+				return ret;
 			}
 		}
 		bindEventsInternal() {

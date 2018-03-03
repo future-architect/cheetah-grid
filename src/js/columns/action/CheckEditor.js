@@ -7,6 +7,9 @@
 	const Editor = require('./Editor');
 	const {CHECK_COLUMN_STATE_ID} = require('../../internal/symbolManager');
 
+	const KEY_ENTER = 13;
+	const KEY_SPACE = 32;
+
 	function toggleValue(val) {
 		if (typeof val === 'number') {
 			if (val === 0) {
@@ -78,7 +81,7 @@
 			return [
 				...bindCellClickAction(grid, col, util, {
 					action,
-					mouseEnter: (e) => {
+					mouseOver: (e) => {
 						if (this.disabled) {
 							return false;
 						}
@@ -89,7 +92,7 @@
 						grid.invalidateCell(e.col, e.row);
 						return true;
 					},
-					mouseLeave: (e) => {
+					mouseOut: (e) => {
 						delete state.mouseActiveCell;
 						grid.invalidateCell(e.col, e.row);
 					},
@@ -108,7 +111,7 @@
 							});
 						}
 					},
-					acceptKeys: [13, 32],
+					acceptKeys: [KEY_ENTER, KEY_SPACE],
 				})
 			];
 		}

@@ -18,6 +18,26 @@
 			this._listeners[id] = obj;
 			return id;
 		}
+		tryWithOffEvents(target, type, call) {
+			const list = [];
+			try {
+				each(this._listeners, (obj) => {
+					if (obj.target === target && obj.type === type) {
+						if (obj.target.removeEventListener) {
+							obj.target.removeEventListener(obj.type, obj.listener, ...obj.options);
+						}
+						list.push(obj);
+					}
+				});
+				call();
+			} finally {
+				list.forEach((obj) => {
+					if (obj.target.addEventListener) {
+						obj.target.addEventListener(obj.type, obj.listener, ...obj.options);
+					}
+				});
+			}
+		}
 		off(id) {
 			if (!id) {
 				return;
@@ -37,6 +57,15 @@
 					obj.listener.call(obj.target, ...args);
 				}
 			});
+		}
+		hasListener(target, type) {
+			let result = false;
+			each(this._listeners, (obj) => {
+				if (obj.target === target && obj.type === type) {
+					result = true;
+				}
+			});
+			return result;
 		}
 		clear() {
 			each(this._listeners, (obj) => {

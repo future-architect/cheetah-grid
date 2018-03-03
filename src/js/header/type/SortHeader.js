@@ -6,8 +6,8 @@
 	const {isDef} = require('../../internal/utils');
 	const {EVENT_TYPE: {
 		CLICK_CELL,
-		MOUSEENTER_CELL,
-		MOUSELEAVE_CELL,
+		MOUSEOVER_CELL,
+		MOUSEOUT_CELL,
 		MOUSEMOVE_CELL,
 	}} = require('../../core/DrawGrid');
 
@@ -52,7 +52,7 @@
 				icons: [{
 					name: isDef(order) ? (order === 'asc' ? 'arrow_downward' : 'arrow_upward') : null,
 					width: arrowSize,
-					color: '#555',
+					color: 'rgba(0, 0, 0, 0.38)',
 				}],
 			});
 		}
@@ -87,7 +87,7 @@
 					grid.invalidateGridRect(0, 0, grid.colCount - 1, grid.rowCount - 1);
 				}),
 				// mouse move
-				grid.listen(MOUSEENTER_CELL, (e) => {
+				grid.listen(MOUSEOVER_CELL, (e) => {
 					if (!this._range.isCellInRange(e.col, e.row)) {
 						return;
 					}
@@ -102,7 +102,7 @@
 						grid.getElement().style.cursor = 'pointer';
 					}
 				}),
-				grid.listen(MOUSELEAVE_CELL, (e) => {
+				grid.listen(MOUSEOUT_CELL, (e) => {
 					if (!this._range.isCellInRange(e.col, e.row)) {
 						return;
 					}

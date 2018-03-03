@@ -4,6 +4,16 @@
 const svgData = require('./svg-data');
 const ELEMENT_NODE = 1;
 
+function polygonToPath(polygon) {
+	const points = polygon.getAttribute('points');
+	return `M${points}z`;
+}
+
+function polylineToPath(polyline) {
+	const points = polyline.getAttribute('points');
+	return `M${points}`;
+}
+
 function circleToPath(circle) {
 	const cx = circle.getAttribute('cx') - 0;
 	const cy = circle.getAttribute('cy') - 0;
@@ -41,6 +51,10 @@ function elementToPaths(el, resource) {
 		return getD(el);
 	case 'circle':
 		return circleToPath(el);
+	case 'polygon':
+		return polygonToPath(el);
+	case 'polyline':
+		return polylineToPath(el);
 	case 'g':
 		let path = '';
 		const childNodes = el.childNodes;

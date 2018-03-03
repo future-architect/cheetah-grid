@@ -1,0 +1,77 @@
+/*ms*/
+.cheetah-grid__small-dialog-input__input::-ms-clear {
+	visibility:hidden;
+}
+
+@keyframes cheetah-grid__small-dialog-input--hidden-animation {
+	0% {
+		opacity: 1;
+	}
+	99% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+	}
+}
+
+.cheetah-grid__small-dialog-input {
+	position: absolute;
+	box-sizing: content-box;
+	margin : -1px auto auto -1px;
+	border-radius: 3px;
+	background-color: #fafafa;
+
+	transition: padding 150ms ease-out, box-shadow 150ms ease-out;
+}
+.cheetah-grid__small-dialog-input--hidden {
+	box-shadow: none;
+	padding: 0;
+
+	pointer-events: none;
+	animation: cheetah-grid__small-dialog-input--hidden-animation  150ms ease-out;
+	opacity: 0;
+}
+.cheetah-grid__small-dialog-input--shown {
+	box-shadow: 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0px rgba(0, 0, 0, .14), 0 1px 5px 0px rgba(0, 0, 0, .12);
+	padding: 8px 24px 26px;
+}
+.cheetah-grid__small-dialog-input__input {
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	padding: 3px 2px 0 4px;
+	border: none;
+	border-bottom: solid 1px rgba(0, 0, 0, .87);
+	outline: none;
+	background-color: transparent;
+	transition: all 300ms ease-out;
+}
+.cheetah-grid__small-dialog-input__input:focus {
+	border-bottom: solid 1px #2196f3;
+	box-shadow: 0 1px 0 0 #2196f3;
+}
+.cheetah-grid__small-dialog-input.helper-text--right-justified::after {
+	text-align: right;
+}
+.cheetah-grid__small-dialog-input[data-helper-text]::after,
+.cheetah-grid__small-dialog-input[data-error-message]::after {
+	font-size: 12px;
+	line-height: 1;
+	display: block;
+	width: 100%;
+	padding-top: 8px;
+}
+.cheetah-grid__small-dialog-input[data-helper-text]::after {
+	content: attr(data-helper-text);
+	color: rgba(0, 0, 0, .87);
+}
+.cheetah-grid__small-dialog-input[data-error-message] input {
+	border-bottom: solid 1px #dd2c00;
+	box-shadow: 0 1px 0 0 #dd2c00;
+}
+.cheetah-grid__small-dialog-input[data-error-message]::after {
+	content: attr(data-error-message);
+	color: #dd2c00;
+	text-align: left;
+}

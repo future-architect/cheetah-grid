@@ -5,8 +5,19 @@
 	const Editor = require('./action/Editor');
 	const CheckEditor = require('./action/CheckEditor');
 	const ButtonAction = require('./action/ButtonAction');
+	const SmallDialogInputEditor = require('./action/SmallDialogInputEditor');
+	const InlineInputEditor = require('./action/InlineInputEditor');
+	const InlineMenuEditor = require('./action/InlineMenuEditor');
 
 	class ImmutableCheckEditor extends CheckEditor {
+		get disabled() {
+			return this._disabled;
+		}
+		get readOnly() {
+			return this._readOnly;
+		}
+	}
+	class ImmutableInputEditor extends SmallDialogInputEditor {
 		get disabled() {
 			return this._disabled;
 		}
@@ -24,6 +35,7 @@
 	const action = {
 		ACTIONS: {
 			CHECK: new ImmutableCheckEditor(),
+			INPUT: new ImmutableInputEditor(),
 		},
 		get BaseAction() {
 			return BaseAction;
@@ -39,6 +51,16 @@
 		},
 		get ButtonAction() {
 			return ButtonAction;
+		},
+		get SmallDialogInputEditor() {
+			return SmallDialogInputEditor;
+		},
+		get InlineInputEditor() {
+			console.warn('InlineInputEditor is an experiment stage');
+			return InlineInputEditor;
+		},
+		get InlineMenuEditor() {
+			return InlineMenuEditor;
 		},
 		of(columnAction) {
 			if (!columnAction) {
