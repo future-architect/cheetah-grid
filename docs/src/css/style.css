@@ -13,6 +13,14 @@
     color: #fff;
 }
 
+.warn {
+    background-color: #fcf8e3;
+    border-color: #faf2cc;
+    color: #8a6d3b;
+    font-weight: bolder;
+    padding: 5px;
+}
+
 nav {
     line-height: 80px;
     height: 80px;

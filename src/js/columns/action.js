@@ -56,6 +56,7 @@
 			return SmallDialogInputEditor;
 		},
 		get InlineInputEditor() {
+			console.warn('InlineInputEditor is an experiment stage');
 			return InlineInputEditor;
 		},
 		get InlineMenuEditor() {
