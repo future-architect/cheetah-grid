@@ -259,16 +259,18 @@ class SmallDialogInputElement {
 		if (editor.inputValidator) {
 			message = editor.inputValidator(value, {grid, col, row});
 		}
-		if (!message && editor.validator && !inputOnly) {
-			message = editor.validator(value, {grid, col, row});
-		}
 		return then(message, (message) => {
-			if (message && value === input.value) {
-				dialog.dataset.errorMessage = message;
-			} else {
-				delete dialog.dataset.errorMessage;
+			if (!message && editor.validator && !inputOnly) {
+				message = editor.validator(value, {grid, col, row});
 			}
-			return !message;
+			return then(message, (message) => {
+				if (message && value === input.value) {
+					dialog.dataset.errorMessage = message;
+				} else {
+					delete dialog.dataset.errorMessage;
+				}
+				return !message;
+			});
 		});
 	}
 }
