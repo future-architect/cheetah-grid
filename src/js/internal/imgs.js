@@ -1,6 +1,6 @@
 'use strict';
 
-const {isPromise} = require('./utils');
+const {then} = require('./utils');
 const LRUCache = require('./LRUCache');
 
 const allCache = {};
@@ -34,19 +34,18 @@ function loadImage(src) {
 }
 
 function getCacheOrLoad0(cache, src) {
-	if (isPromise(src)) {
-		return src.then((u) => getCacheOrLoad0(cache, u));
-	}
-	const c = cache.get(src);
-	if (c) {
-		return c;
-	}
-	const result = loadImage(src).then((img) => {
-		cache.put(src, img);
-		return img;
+	return then(src, (src) => {
+		const c = cache.get(src);
+		if (c) {
+			return c;
+		}
+		const result = loadImage(src).then((img) => {
+			cache.put(src, img);
+			return img;
+		});
+		cache.put(src, result);
+		return result;
 	});
-	cache.put(src, result);
-	return result;
 }
 
 function getCacheOrLoad(cacheName, cacheSize, src) {

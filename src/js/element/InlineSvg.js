@@ -1,21 +1,15 @@
 'use strict';
 
 const InlineImage = require('./InlineImage');
-const {isPromise} = require('../internal/utils');
+const {then} = require('../internal/utils');
 
 function buildSvgDataUrl(svg) {
-	if (isPromise(svg)) {
-		return svg.then(buildSvgDataUrl);
-	} else {
-		const data = (typeof svg === 'string') ? svg : new XMLSerializer().serializeToString(svg);
-		const url = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(data); //svgデータをbase64に変換
-		return url;
-	}
+	const data = (typeof svg === 'string') ? svg : new XMLSerializer().serializeToString(svg);
+	const url = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(data); //svgデータをbase64に変換
+	return url;
 }
 function getSvgElement(svg) {
-	if (isPromise(svg)) {
-		return svg.then(getSvgElement);
-	} else if (typeof svg === 'string') {
+	if (typeof svg === 'string') {
 		const parser = new DOMParser();
 		return parser.parseFromString(svg, 'image/svg+xml');
 	} else {
@@ -34,11 +28,11 @@ class InlineSvg extends InlineImage {
 				imageWidth,
 				imageHeight,
 			}) {
-		const svgElem = getSvgElement(svg);
+		const svgElem = then(svg, getSvgElement);
 		const elmWidth = svgElem.getAttribute ? svgElem.getAttribute('width') : null;
 		const elmHeight = svgElem.getAttribute ? svgElem.getAttribute('height') : null;
 		super({
-			src: buildSvgDataUrl(svg),
+			src: then(svg, buildSvgDataUrl),
 			width: width || elmWidth,
 			height: height || elmHeight,
 			imageWidth: elmWidth,

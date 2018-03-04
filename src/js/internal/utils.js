@@ -120,6 +120,7 @@
 		return lastIndex !== -1 && lastIndex === position;
 	}
 	const isPromise = (data) => data && typeof data.then === 'function';
+	const then = (result, callback) => isPromise(result) ? result.then((r) => callback(r)) : callback(result);
 	function getMouseButtons(e) {
 		if (isDef(e.buttons)) {
 			return e.buttons;
@@ -210,6 +211,7 @@
 		getOrApply,
 		getIgnoreCase,
 		isPromise,
+		then,
 		array,
 		obj: {
 			setReadonly,
