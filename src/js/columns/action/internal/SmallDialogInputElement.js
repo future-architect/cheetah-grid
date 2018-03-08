@@ -4,6 +4,7 @@ const {
 		getKeyCode,
 		cancel: cancelEvent,
 	},
+	then,
 } = require('../../../internal/utils');
 	
 const EventHandler = require('../../../internal/EventHandler');
@@ -160,12 +161,14 @@ class SmallDialogInputElement {
 		}
 		const input = this._input;
 		const value = input.value;
-		if (!this._validate(value)) {
+		return then(this._validate(value), (res) => {
+			if (res && value === input.value) {
+				const {grid, col, row} = this._activeData;
+				grid.doChangeValue(col, row, () => value);
+				return true;
+			}
 			return false;
-		}
-		const {grid, col, row} = this._activeData;
-		grid.doChangeValue(col, row, () => value);
-		return true;
+		});
 	}
 	_isActive() {
 		const dialog = this._dialog;
@@ -211,9 +214,13 @@ class SmallDialogInputElement {
 				this.detach(true);
 				cancelEvent(e);
 			} else if (keyCode === KEY_ENTER) {
-				if (this._doChangeValue()) {
-					this.detach(true);
-				}
+				const input = this._input;
+				const value = input.value;
+				then(this._doChangeValue(), (r) => {
+					if (r && value === input.value) {
+						this.detach(true);
+					}
+				});
 				cancelEvent(e);
 			} else {
 				this._onInputValue(input);
@@ -246,21 +253,25 @@ class SmallDialogInputElement {
 	}
 	_validate(value, inputOnly) {
 		const dialog = this._dialog;
+		const input = this._input;
 		const {grid, col, row, editor} = this._activeData;
 		let message = null;
 		if (editor.inputValidator) {
 			message = editor.inputValidator(value, {grid, col, row});
 		}
-		if (!message && editor.validator && !inputOnly) {
-			message = editor.validator(value, {grid, col, row});
-		}
-		if (message) {
-			dialog.dataset.errorMessage = message;
-			return false;
-		} else {
-			delete dialog.dataset.errorMessage;
-			return true;
-		}
+		return then(message, (message) => {
+			if (!message && editor.validator && !inputOnly) {
+				message = editor.validator(value, {grid, col, row});
+			}
+			return then(message, (message) => {
+				if (message && value === input.value) {
+					dialog.dataset.errorMessage = message;
+				} else {
+					delete dialog.dataset.errorMessage;
+				}
+				return !message;
+			});
+		});
 	}
 }
 

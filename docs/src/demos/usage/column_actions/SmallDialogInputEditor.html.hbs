@@ -151,6 +151,21 @@ const grid = new cheetahGrid.ListGrid({
 			})
 		},
 		{
+			field: 'code',
+			caption: 'async validator',
+			width: 220,
+			action: new cheetahGrid.columns.action.SmallDialogInputEditor({
+				helperText: 'enter code. /^[A-Z]\\d{3}$/',
+				validator(value) {
+					return new Promise((r) => {
+						setTimeout(() => {
+							r(value.match(/^[A-Z]\d{3}$/) ? null : 'Invalid code.');
+						}, 500);
+					});
+				}
+			})
+		},
+		{
 			caption: 'show',
 			width: 100,
 			columnType: new cheetahGrid.columns.type.ButtonColumn({
@@ -167,9 +182,9 @@ const grid = new cheetahGrid.ListGrid({
 	],
 });
 grid.records = [
-	{number: 1234, text: 'a'},
-	{number: 1234.123, text: 'b'},
-	{number: -1234.123, text: 'c'},
+	{number: 1234, text: 'a', code: 'A001'},
+	{number: 1234.123, text: 'b', code: 'A002'},
+	{number: -1234.123, text: 'c', code: 'A003'},
 ];
 //{{/copy}}
 //{{/wrapscript}}

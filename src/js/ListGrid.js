@@ -1,6 +1,6 @@
 'use strict';
 {
-	const {extend, isDef, isPromise, obj: {isObject}} = require('./internal/utils');
+	const {extend, isDef, isPromise, then, obj: {isObject}} = require('./internal/utils');
 	const GridCanvasHelper = require('./GridCanvasHelper');
 	const columns = require('./columns');
 	const {BaseStyle} = columns.style;
@@ -681,10 +681,8 @@
 				if (after === undefined) {
 					return false;
 				}
-				const ret = _setCellValue(this, col, row, after);
-				if (ret) {
-					
-					const onChange = () => {
+				return then(_setCellValue(this, col, row, after), (ret) => {
+					if (ret) {
 						const {field} = this[_].headerMap.columns[col];
 						const self = this;
 						this.fireListeners(EVENT_TYPE.CHANGED_VALUE, {
@@ -696,17 +694,9 @@
 							field,
 							value: after,
 						});
-					};
-					if (isPromise(ret)) {
-						return ret.then((r) => {
-							onChange();
-							return r;
-						});
-					} else {
-						onChange();
 					}
-				}
-				return ret;
+					return ret;
+				});
 			}
 		}
 		bindEventsInternal() {
