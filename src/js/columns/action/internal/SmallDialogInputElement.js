@@ -117,7 +117,7 @@ class SmallDialogInputElement {
 		dialog.style.top = rect.top.toFixed() + 'px';
 		dialog.style.left = rect.left.toFixed() + 'px';
 		dialog.style.width = rect.width.toFixed() + 'px';
-		dialog.style.height = rect.height.toFixed() + 'px';
+		input.style.height = rect.height.toFixed() + 'px';
 		element.appendChild(dialog);
 			
 		input.value = value;

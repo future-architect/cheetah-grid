@@ -34,7 +34,7 @@
 }
 .cheetah-grid__small-dialog-input--shown {
 	box-shadow: 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0px rgba(0, 0, 0, .14), 0 1px 5px 0px rgba(0, 0, 0, .12);
-	padding: 8px 24px 26px;
+	padding: 8px 24px;
 }
 .cheetah-grid__small-dialog-input__input {
 	width: 100%;
@@ -51,16 +51,17 @@
 	border-bottom: solid 1px #2196f3;
 	box-shadow: 0 1px 0 0 #2196f3;
 }
-.cheetah-grid__small-dialog-input.helper-text--right-justified::after {
-	text-align: right;
-}
-.cheetah-grid__small-dialog-input[data-helper-text]::after,
-.cheetah-grid__small-dialog-input[data-error-message]::after {
+.cheetah-grid__small-dialog-input::after {
+	content: '';
 	font-size: 12px;
+	min-height: 1em;
 	line-height: 1;
 	display: block;
 	width: 100%;
 	padding-top: 8px;
+}
+.cheetah-grid__small-dialog-input.helper-text--right-justified::after {
+	text-align: right;
 }
 .cheetah-grid__small-dialog-input[data-helper-text]::after {
 	content: attr(data-helper-text);
