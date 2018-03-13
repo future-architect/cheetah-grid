@@ -87,7 +87,7 @@
 		};
 		const findAfter = (startRow, startBottom) => {
 			let top = startBottom - _getRowHeight(grid, startRow);
-			const rowCount = grid[_].rowCount;
+			const {rowCount} = grid[_];
 			for (let row = startRow; row < rowCount; row++) {
 				const height = _getRowHeight(grid, row);
 				const bottom = top + height;
@@ -111,7 +111,7 @@
 	}
 	function _getTargetColAt(grid, absoluteX) {
 		let left = 0;
-		const colCount = grid[_].colCount;
+		const {colCount} = grid[_];
 		for (let col = 0; col < colCount; col++) {
 			const width = _getColWidth(grid, col);
 			const right = left + width;
@@ -129,7 +129,7 @@
 		if (!grid[_].frozenRowCount) {
 			return null;
 		}
-		let top = grid[_].scroll.top;
+		let {top} = grid[_].scroll;
 		const rowCount = grid[_].frozenRowCount;
 		for (let row = 0; row < rowCount; row++) {
 			const height = _getRowHeight(grid, row);
@@ -148,7 +148,7 @@
 		if (!grid[_].frozenColCount) {
 			return null;
 		}
-		let left = grid[_].scroll.left;
+		let {left} = grid[_].scroll;
 		const colCount = grid[_].frozenColCount;
 		for (let col = 0; col < colCount; col++) {
 			const width = _getColWidth(grid, col);
@@ -167,7 +167,7 @@
 		if (!grid[_].frozenRowCount) {
 			return null;
 		}
-		const top = grid[_].scroll.top;
+		const {top} = grid[_].scroll;
 		let height = 0;
 		const rowCount = grid[_].frozenRowCount;
 		for (let row = 0; row < rowCount; row++) {
@@ -184,7 +184,7 @@
 		if (!grid[_].frozenColCount) {
 			return null;
 		}
-		const left = grid[_].scroll.left;
+		const {left} = grid[_].scroll;
 		let width = 0;
 		const colCount = grid[_].frozenColCount;
 		for (let col = 0; col < colCount; col++) {
@@ -219,7 +219,7 @@
 		}
 	}
 	function _drawCell(grid, ctx, col, absoluteLeft, width, row, absoluteTop, height, visibleRect,
-			skipAbsoluteTop, skipAbsoluteLeft) {
+			skipAbsoluteTop, skipAbsoluteLeft, drawLayers) {
 		const rect = new Rect(
 				absoluteLeft - visibleRect.left,
 				absoluteTop - visibleRect.top,
@@ -236,32 +236,36 @@
 
 		if (drawRect.height > 0 && drawRect.width > 0) {
 			ctx.save();
-			const dcContext = new DrawCellContext(
-					col, row,
-					ctx, rect, drawRect,
-					_isCellDrawing(grid, col, row),
-					grid[_].selection
-			);
-			const p = grid.onDrawCell(col, row, dcContext);
-			if (isPromise(p)) {
-				//遅延描画
-				_putCellDrawing(grid, col, row, dcContext);
+			try {
+				const dcContext = new DrawCellContext(
+						col, row,
+						ctx, rect, drawRect,
+						_isCellDrawing(grid, col, row),
+						grid[_].selection,
+						drawLayers
+				);
+				const p = grid.onDrawCell(col, row, dcContext);
+				if (isPromise(p)) {
+					//遅延描画
+					_putCellDrawing(grid, col, row, dcContext);
 
-				const pCol = col;
-				dcContext._delayMode(grid, () => {
-					_removeCellDrawing(grid, pCol, row);
-				});
-				p.then(() => {
-					dcContext.terminate();
-				});
+					const pCol = col;
+					dcContext._delayMode(grid, () => {
+						_removeCellDrawing(grid, pCol, row);
+					});
+					p.then(() => {
+						dcContext.terminate();
+					});
+				}
+			} finally {
+				ctx.restore();
 			}
-			ctx.restore();
 		}
 	}
 
 	function _drawRow(grid, ctx, initFrozenCol, initCol,
-			drawRight, row, absoluteTop, height, visibleRect, skipAbsoluteTop) {
-		const colCount = grid[_].colCount;
+			drawRight, row, absoluteTop, height, visibleRect, skipAbsoluteTop, drawLayers) {
+		const {colCount} = grid[_];
 		const drawOuter = (col, absoluteLeft) => {
 			//データ範囲外の描画
 			if (col >= (colCount - 1) && grid[_].canvas.width > (absoluteLeft - visibleRect.left)) {
@@ -279,11 +283,12 @@
 		if (initFrozenCol) {
 			let absoluteLeft = initFrozenCol.left;
 			const count = grid[_].frozenColCount;
-			for (let col = initFrozenCol.col; col < count; col++) {
+			for (let {col} = initFrozenCol; col < count; col++) {
 				const width = _getColWidth(grid, col);
 
 				_drawCell(grid, ctx, col, absoluteLeft, width, row, absoluteTop, height, visibleRect,
-						skipAbsoluteTop, 0);
+						skipAbsoluteTop, 0,
+						drawLayers);
 					
 				absoluteLeft += width;
 				if (drawRight <= absoluteLeft) { //描画範囲外（終了）
@@ -295,10 +300,11 @@
 		}
 
 		let absoluteLeft = initCol.left;
-		for (let col = initCol.col; col < colCount; col++) {
+		for (let {col} = initCol; col < colCount; col++) {
 			const width = _getColWidth(grid, col);
 			_drawCell(grid, ctx, col, absoluteLeft, width, row, absoluteTop, height, visibleRect,
-					skipAbsoluteTop, skipAbsoluteLeft);
+					skipAbsoluteTop, skipAbsoluteLeft,
+					drawLayers);
 
 			absoluteLeft += width;
 			if (drawRight <= absoluteLeft) { //描画範囲外（終了）
@@ -311,7 +317,7 @@
 	}
 	function _invalidateRect(grid, drawRect) {
 		const visibleRect = _getVisibleRect(grid);
-		const rowCount = grid[_].rowCount;
+		const {rowCount} = grid[_];
 		const ctx = grid._getInitContext();
 
 		const initRow = _getTargetRowAt(grid, Math.max(visibleRect.top, drawRect.top)) || {
@@ -328,6 +334,7 @@
 		const initFrozenRow = _getTargetFrozenRowAt(grid, Math.max(visibleRect.top, drawRect.top));
 		const initFrozenCol = _getTargetFrozenColAt(grid, Math.max(visibleRect.left, drawRect.left));
 
+		const drawLayers = new DrawLayers();
 
 		const drawOuter = (row, absoluteTop) => {
 			//データ範囲外の描画
@@ -346,15 +353,17 @@
 		if (initFrozenRow) {
 			let absoluteTop = initFrozenRow.top;
 			const count = grid[_].frozenRowCount;
-			for (let row = initFrozenRow.row; row < count; row++) {
+			for (let {row} = initFrozenRow; row < count; row++) {
 				const height = _getRowHeight(grid, row);
 				_drawRow(grid,
 						ctx, initFrozenCol, initCol, drawRight,
-						row, absoluteTop, height, visibleRect, 0
+						row, absoluteTop, height, visibleRect, 0,
+						drawLayers
 				);
 				absoluteTop += height;
 				if (drawBottom <= absoluteTop) { //描画範囲外（終了）
 					drawOuter(row, absoluteTop);
+					drawLayers.draw(ctx);
 					return;
 				}
 			}
@@ -362,23 +371,26 @@
 		}
 
 		let absoluteTop = initRow.top;
-		for (let row = initRow.row; row < rowCount; row++) {
+		for (let {row} = initRow; row < rowCount; row++) {
 			const height = _getRowHeight(grid, row);
 				
 			//行の描画
 			_drawRow(grid,
 					ctx, initFrozenCol, initCol, drawRight,
-					row, absoluteTop, height, visibleRect, skipAbsoluteTop
+					row, absoluteTop, height, visibleRect, skipAbsoluteTop,
+					drawLayers
 			);
 
 			absoluteTop += height;
 			if (drawBottom <= absoluteTop) { //描画範囲外（終了）
 				drawOuter(row, absoluteTop);
+				drawLayers.draw(ctx);
 				return;
 			}
 		}
 		drawOuter(rowCount - 1, absoluteTop);
 
+		drawLayers.draw(ctx);
 	}
 
 	function _toPxWidth(grid, width) {
@@ -546,7 +558,7 @@
 	}
 
 	function _onKeyDownMove(grid, e) {
-		const shiftKey = e.shiftKey;
+		const {shiftKey} = e;
 		const keyCode = getKeyCode(e);
 		const focusCell = shiftKey ? grid.selection._focus : grid.selection._sel;
 		if (keyCode === KEY_LEFT) {
@@ -842,7 +854,7 @@
 			if (grid[_].columnResizer.moving(e) || grid[_].cellSelector.moving(e)) {
 				return;
 			}
-			const style = grid[_].element.style;
+			const {style} = grid[_].element;
 			if (!abstractPos) {
 				if (style.cursor === 'col-resize') {
 					style.cursor = '';
@@ -900,8 +912,8 @@
 		});
 		grid.listen('copydata', (range) => {
 			let copyValue = '';
-			for (let row = range.start.row; row <= range.end.row; row++) {
-				for (let col = range.start.col; col <= range.end.col; col++) {
+			for (let {row} = range.start; row <= range.end.row; row++) {
+				for (let {col} = range.start; col <= range.end.col; col++) {
 					const copyCellValue = grid.getCopyCellValue(col, row);
 					if (window.Promise && copyCellValue instanceof window.Promise) {
 						//非同期データは取得できない
@@ -1157,9 +1169,9 @@
 		start(col, e) {
 			let pageX;
 			if (!isTouchEvent(e)) {
-				pageX = e.pageX;
+				({pageX} = e);
 			} else {
-				pageX = e.changedTouches[0].pageX;
+				({pageX} = e.changedTouches[0]);
 			}
 
 			this._x = pageX;
@@ -1201,7 +1213,7 @@
 	}
 
 	function setSafeInputValue(input, value) {
-		const type = input.type;
+		const {type} = input;
 		input.type = '';
 		input.value = value;
 		if (type) {
@@ -1485,13 +1497,55 @@
 	}
 
 	/**
+	 * This class manages the drawing process for each layer
+	 */
+	class DrawLayers {
+		constructor() {
+			this._layers = {};
+		}
+		addDraw(level, fn) {
+			const l = this._layers[level] || (this._layers[level] = new DrawLayer(level));
+			l.addDraw(fn);
+		}
+		draw(ctx) {
+			const list = [];
+			for (const k in this._layers) {
+				list.push(this._layers[k]);
+			}
+			list.sort((a, b) => a.level - b.level);
+			list.forEach((l) => l.draw(ctx));
+		}
+	}
+	class DrawLayer {
+		constructor(level) {
+			this._level = level;
+			this._list = [];
+		}
+		get level() {
+			return this._level;
+		}
+		addDraw(fn) {
+			this._list.push(fn);
+		}
+		draw(ctx) {
+			this._list.forEach((fn) => {
+				ctx.save();
+				try {
+					fn(ctx);
+				} finally {
+					ctx.restore();
+				}
+			});
+		}
+	}
+	/**
 	 * Context of cell drawing
 	 */
 	class DrawCellContext {
 		/**
 		 * @private
 		 */
-		constructor(col, row, ctx, rect, drawRect, drawing, selection) {
+		constructor(col, row, ctx, rect, drawRect, drawing, selection, drawLayers) {
 			this._col = col;
 			this._row = row;
 			this._mode = 0;
@@ -1500,6 +1554,7 @@
 			this._drawRect = drawRect;
 			this._drawing = drawing;
 			this._selection = selection;
+			this._drawLayers = drawLayers;
 		}
 		get drawing() {
 			if (this._mode === 0) {
@@ -1577,12 +1632,16 @@
 				const rect = _toRelativeRect(this._grid, absoluteRect);
 				const drawRect = this._toRelativeDrawRect(absoluteRect);
 				const context = new DrawCellContext(
-						this._col, this._row, this.getContext(), rect, drawRect, this.drawing, this._selection
+						this._col, this._row, this.getContext(), rect, drawRect, this.drawing, this._selection,
+						this._drawLayers
 				);
 				// toCurrentContext は自分の toCurrentContextを呼ばせる
 				context.toCurrentContext = this.toCurrentContext.bind(this);
 				return context;
 			}
+		}
+		addLayerDraw(level, fn) {
+			this._drawLayers.addDraw(level, fn);
 		}
 		_toRelativeDrawRect(absoluteRect) {
 			const visibleRect = _getVisibleRect(this._grid);
@@ -2092,7 +2151,7 @@
 				this[_].disposables = null;
 			}
 
-			const parentElement = this[_].element.parentElement;
+			const {parentElement} = this[_].element;
 			if (parentElement) {
 				parentElement.removeChild(this[_].element);
 			}

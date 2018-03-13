@@ -43,9 +43,9 @@
 			return super.getOriginalField(index, field);
 		}
 		setOriginalField(index, field, value) {
-			const cache = getChainSafe(this._fCache, index, field);
-			if (cache) {
-				_setFieldCache(this, index, field, value);
+			const fCache = this._fCache;
+			if (fCache && fCache[index]) {
+				delete fCache[index]; // clear row cache
 			}
 			return super.setOriginalField(index, field, value);
 		}

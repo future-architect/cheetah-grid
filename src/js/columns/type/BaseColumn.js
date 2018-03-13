@@ -1,5 +1,6 @@
 'use strict';
 {
+	const utils = require('./columnUtils');
 	const styleContents = require('../style');
 	const {isPromise, isDef, obj: {setReadonly}} = require('../../internal/utils');
 	const animate = require('../../internal/animate');
@@ -114,10 +115,19 @@
 						if (!drawRect) {
 							return;
 						}
+						const actStyle = styleContents.of(style, getRecord(), this.StyleClass);
 						this.drawInternal(
 								this.convertInternal(val),
 								currentContext,
-								styleContents.of(style, getRecord(), this.StyleClass),
+								actStyle,
+								helper,
+								grid,
+								info
+						);
+						this.drawMessageInternal(
+								info.getMessage(),
+								context,
+								actStyle,
 								helper,
 								grid,
 								info
@@ -138,10 +148,19 @@
 					}
 				});
 			} else {
+				const actStyle = styleContents.of(style, getRecord(), this.StyleClass);
 				this.drawInternal(
 						this.convertInternal(cellValue),
 						context,
-						styleContents.of(style, getRecord(), this.StyleClass),
+						actStyle,
+						helper,
+						grid,
+						info
+				);
+				this.drawMessageInternal(
+						info.getMessage(),
+						context,
+						actStyle,
 						helper,
 						grid,
 						info
@@ -170,6 +189,9 @@
 		}
 		drawInternal(value, context, style, helper, grid, info) {
 			
+		}
+		drawMessageInternal(message, context, style, helper, grid, info) {
+			utils.drawMessage(message, context, helper, style);
 		}
 		bindGridEvent(grid, col, util) {
 			return [];
