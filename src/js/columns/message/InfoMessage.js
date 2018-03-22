@@ -27,7 +27,7 @@ class InfoMessage extends BaseMessage {
 				boxRect.left = boxRect.right - 24;
 				ctx.fillRect(boxRect.left, boxRect.top, boxRect.width, boxRect.height - 1);
 
-				// draw exclamation mark
+				// draw i mark
 				const fillColor = bgColor;
 				const height = 20;
 				const width = height / 5;
