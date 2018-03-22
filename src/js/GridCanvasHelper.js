@@ -118,15 +118,31 @@
 		multiInlines = [...multiInlines];
 
 
+		let paddingTop = 0;
+		let paddingBottom = lineHeight * (multiInlines.length - 1);
+
+		if (ctx.textBaseline === 'top' || ctx.textBaseline === 'hanging') {
+			const em = ctx.measureText('あ').width;
+			const pad = (lineHeight - em) / 2;
+			paddingTop += pad;
+			paddingBottom -= pad;
+		} else if (ctx.textBaseline === 'bottom' || ctx.textBaseline === 'alphabetic' || ctx.textBaseline === 'ideographic') {
+			const em = ctx.measureText('あ').width;
+			const pad = (lineHeight - em) / 2;
+			paddingTop -= pad;
+			paddingBottom += pad;
+		}
 		const line = multiInlines.shift() || '';
 		const actInlines = inlines.buildInlines(icons, line);
-		drawInlines(ctx, actInlines, rect, offset, 0, lineHeight * multiInlines.length, col, row, grid);
-		let paddingTop = lineHeight;
+		drawInlines(ctx, actInlines, rect, offset, paddingTop, paddingBottom, col, row, grid);
+		paddingTop += lineHeight;
+		paddingBottom -= lineHeight;
 		while (multiInlines.length) {
 			const line = multiInlines.shift();
 			const actInlines = inlines.buildInlines(undefined, line);
-			drawInlines(ctx, actInlines, rect, offset, paddingTop, lineHeight * multiInlines.length, col, row, grid);
+			drawInlines(ctx, actInlines, rect, offset, paddingTop, paddingBottom, col, row, grid);
 			paddingTop += lineHeight;
+			paddingBottom -= lineHeight;
 		}
 
 	}
