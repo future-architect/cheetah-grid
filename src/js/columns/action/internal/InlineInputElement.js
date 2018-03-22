@@ -9,7 +9,7 @@ const {
 const EventHandler = require('../../../internal/EventHandler');
 const {
 	createElement,
-} = require('./dom');
+} = require('../../../internal/dom');
 const KEY_ENTER = 13;
 
 const CLASSNAME = 'cheetah-grid__inline-input';
@@ -93,7 +93,7 @@ class InlineInputElement {
 			focus();
 		});
 	}
-	detach() {
+	detach(gridFocus) {
 		if (this._isActive()) {
 			const {grid, col, row} = this._activeData;
 			const input = this._input;
@@ -101,6 +101,9 @@ class InlineInputElement {
 				input.parentElement.removeChild(input);
 			});
 			grid.invalidateCell(col, row);
+			if (gridFocus) {
+				grid.focus();
+			}
 		}
 		this._activeData = null;
 	}
@@ -109,7 +112,7 @@ class InlineInputElement {
 			return;
 		}
 		const input = this._input;
-		const value = input.value;
+		const {value} = input;
 		const {grid, col, row} = this._activeData;
 		grid.doChangeValue(col, row, () => value);
 	}

@@ -394,7 +394,7 @@
 			const {col, row} = context;
 
 			if (!color) {
-				color = this.theme.color;
+				({color} = this.theme);
 				// header color
 				const isFrozenCell = this._grid.isFrozenCell(col, row);
 				if (isFrozenCell && isFrozenCell.row) {
@@ -471,6 +471,36 @@
 						});
 			});
 		}
+		fillText(text, x, y, context,
+				{
+					color,
+					textAlign = 'left',
+					textBaseline = 'top',
+					font,
+				} = {}) {
+
+			const {col, row} = context;
+
+			if (!color) {
+				({color} = this.theme);
+				// header color
+				const isFrozenCell = this._grid.isFrozenCell(col, row);
+				if (isFrozenCell && isFrozenCell.row) {
+					color = this.theme.frozenRowsColor;
+				}
+			}
+			const ctx = context.getContext();
+			ctx.save();
+			try {
+				ctx.fillStyle = getColor(color, col, row, this._grid, ctx);
+				ctx.textAlign = textAlign;
+				ctx.textBaseline = textBaseline;
+				ctx.font = font || ctx.font;
+				ctx.fillText(text, x, y);
+			} finally {
+				ctx.restore();
+			}
+		}
 		fillCell(context,
 				{
 					fillColor = this.theme.defaultBgColor,
@@ -487,22 +517,44 @@
 			});
 		}
 		fillCellWithState(context, option = {}) {
+			option.fillColor = this.getFillColorState(context, option);
+			this.fillCell(context, option);
+		}
+		fillRect(rect, context,
+				{
+					fillColor = this.theme.defaultBgColor,
+				} = {}) {
+
+			const ctx = context.getContext();
+			ctx.save();
+			try {
+				const {col, row} = context;
+				ctx.fillStyle = getColor(fillColor, col, row, this._grid, ctx);
+				
+				ctx.beginPath();
+				ctx.rect(rect.left, rect.top, rect.width, rect.height);
+				ctx.fill();
+			} finally {
+				ctx.restore();
+			}
+		}
+		fillRectWithState(rect, context, option = {}) {
+			option.fillColor = this.getFillColorState(context, option);
+
+			this.fillRect(rect, context, option);
+		}
+		getFillColorState(context, option = {}) {
 			const state = context.getSelectState();
 			const {col, row} = context;
-
-			option.fillColor = (() => {
-				if (!state.selected && state.selection) {
-					return this.theme.selectionBgColor;
-				} else {
-					const isFrozenCell = this._grid.isFrozenCell(col, row);
-					if (isFrozenCell && isFrozenCell.row) {
-						return this.theme.frozenRowsBgColor;
-					}
+			if (!state.selected && state.selection) {
+				return this.theme.selectionBgColor;
+			} else {
+				const isFrozenCell = this._grid.isFrozenCell(col, row);
+				if (isFrozenCell && isFrozenCell.row) {
+					return this.theme.frozenRowsBgColor;
 				}
-				return option.fillColor || this.theme.defaultBgColor;
-			})();
-
-			this.fillCell(context, option);
+			}
+			return option.fillColor || this.theme.defaultBgColor;
 		}
 		border(context,
 				{

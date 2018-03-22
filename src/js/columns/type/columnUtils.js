@@ -2,8 +2,6 @@
 {
 	const {isPromise} = require('../../internal/utils');
 	const icons = require('../../internal/icons');
-
-
 	module.exports = {
 		loadIcons(icon, context, helper, callback) {
 			if (icon) {
@@ -21,6 +19,6 @@
 				}
 			}
 			callback(icon, context);
-		}
+		},
 	};
 }

@@ -95,8 +95,8 @@
 						row: sel.row
 					});
 				}),
-				grid.listen(SELECTED_CELL, (cell, selected) => {
-					this.onChangeSelectCellInternal(grid, cell, selected);
+				grid.listen(SELECTED_CELL, (e) => {
+					this.onChangeSelectCellInternal(grid, {col: e.col, row: e.row}, e.selected);
 				}),
 				grid.listen(SCROLL, () => {
 					this.onGridScrollInternal(grid);

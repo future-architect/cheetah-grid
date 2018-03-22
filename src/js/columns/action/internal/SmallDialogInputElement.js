@@ -10,7 +10,7 @@ const {
 const EventHandler = require('../../../internal/EventHandler');
 const {
 	createElement,
-} = require('./dom');
+} = require('../../../internal/dom');
 
 const CLASSNAME = 'cheetah-grid__small-dialog-input';
 const INPUT_CLASSNAME = CLASSNAME + '__input';
@@ -93,11 +93,15 @@ class SmallDialogInputElement {
 		this._bindDialogEvents();
 	}
 	dispose() {
+		const dialog = this._dialog;
 		this.detach();
 		this._handler.dispose();
 		this._dialog = null;
 		this._input = null;
 		this._beforePropEditor = null;
+		if (dialog.parentElement) {
+			dialog.parentElement.removeChild(dialog);
+		}
 	}
 	attach(grid, editor, col, row, value) {
 		const handler = this._handler;
@@ -160,7 +164,7 @@ class SmallDialogInputElement {
 			return false;
 		}
 		const input = this._input;
-		const value = input.value;
+		const {value} = input;
 		return then(this._validate(value), (res) => {
 			if (res && value === input.value) {
 				const {grid, col, row} = this._activeData;
@@ -215,7 +219,7 @@ class SmallDialogInputElement {
 				cancelEvent(e);
 			} else if (keyCode === KEY_ENTER) {
 				const input = this._input;
-				const value = input.value;
+				const {value} = input;
 				then(this._doChangeValue(), (r) => {
 					if (r && value === input.value) {
 						this.detach(true);
@@ -229,7 +233,7 @@ class SmallDialogInputElement {
 	}
 	_onInputValue(input, activeData) {
 		const before = this._beforeValue;
-		const value = input.value;
+		const {value} = input;
 		if (before !== value) {
 			this._onInputValueChange(value, before, activeData);
 		}
