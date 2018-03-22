@@ -182,8 +182,7 @@ module.exports = {
 			'never'
 		],
 		'prefer-destructuring': [
-			'off', //TODO
-			// 'error',
+			'error',
 			{
 				'array': false,
 				'object': true

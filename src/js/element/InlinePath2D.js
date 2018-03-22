@@ -39,12 +39,16 @@ class InlinePath2D extends Inline {
 		rect,
 		offset,
 		offsetLeft,
-		offsetRight
+		offsetRight,
+		offsetTop,
+		offsetBottom,
 	}) {
 		offset++;
 		const padding = {
 			left: offsetLeft,
 			right: offsetRight,
+			top: offsetTop,
+			bottom: offsetBottom,
 		};
 		ctx.save();
 		try {

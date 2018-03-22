@@ -49,6 +49,8 @@ class InlineIcon extends Inline {
 				offset,
 				offsetLeft,
 				offsetRight,
+				offsetTop,
+				offsetBottom,
 			}) {
 		const icon = this._icon;
 		if (icon.content) {
@@ -59,6 +61,8 @@ class InlineIcon extends Inline {
 						padding: {
 							left: offsetLeft,
 							right: offsetRight,
+							top: offsetTop,
+							bottom: offsetBottom,
 						}
 					});
 		}

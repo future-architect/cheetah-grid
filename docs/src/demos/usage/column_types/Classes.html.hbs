@@ -23,12 +23,19 @@ order: 100
 {{#if_v '0.1.0'}}
 | [`BranchGraphColumn`](./BranchGraphColumn.html) | ブランチグラフの表示 | --- | [BranchGraphColumn](./BranchGraphColumn.html) |
 {{/if_v}}
+{{#if_v '0.2.0'}}
+| `MenuColumn` | メニュー表示 | --- | [InlineMenuEditor](../column_actions/InlineMenuEditor.html) |
+{{/if_v}}
+{{#if_v '0.3.0'}}
+| [`MultilineTextColumn`](./MultilineTextColumn.html) | 複数行テキストの表示 |  `columnType: 'multilinetext'`と同様の動作  | [MultilineTextColumn](./MultilineTextColumn.html) |
+{{/if_v}}
+
 
 {{else}}
 | Class Name | Function | Others | LINK |
 |----------|-----|---|---|
 | `Column` | show text | same as not specify type | --- |
-| `NumberColumn` | show number with comma-separated | samee as `columnType: 'number'` | [NumberColumn](./NumberColumn.html) |
+| `NumberColumn` | show number with comma-separated | same as `columnType: 'number'` | [NumberColumn](./NumberColumn.html) |
 | `CheckColumn` | show checkbox | same as `columnType: 'check'` | --- |
 | [`ButtonColumn`](./ButtonColumn.html) | show button | `columnType: 'button'` has same the function | [ButtonColumn](./ButtonColumn.html) |
 | `ImageColumn` | show image | same as `columnType: 'image'` | [Draw Image](../draw_image.html) |
@@ -36,6 +43,12 @@ order: 100
 | [`IconColumn`](./IconColumn.html) | show icon only | --- | [IconColumn](./IconColumn.html) |
 {{#if_v '0.1.0'}}
 | [`BranchGraphColumn`](./BranchGraphColumn.html) | show branch graph | --- | [BranchGraphColumn](./BranchGraphColumn.html) |
+{{/if_v}}
+{{#if_v '0.2.0'}}
+| `MenuColumn` | show menu | --- | [InlineMenuEditor](../column_actions/InlineMenuEditor.html) |
+{{/if_v}}
+{{#if_v '0.3.0'}}
+| [`MultilineTextColumn`](./MultilineTextColumn.html) | show multiline text | same as `columnType: 'multilinetext'`  | [MultilineTextColumn](./MultilineTextColumn.html) |
 {{/if_v}}
 {{/if}}
 {{/marked}}

@@ -7,6 +7,8 @@
 				padding: {
 					left: paddingLeft = 0,
 					right: paddingRight = 0,
+					top: paddingTop = 0,
+					bottom: paddingBottom = 0,
 				} = {},
 			} = {}) {
 		// const textAlign = ctx.textAlign || 'left';
@@ -32,6 +34,8 @@
 			padding: {
 				left: paddingLeft,
 				right: paddingRight,
+				top: paddingTop,
+				bottom: paddingBottom,
 			}
 		});
 	}
@@ -41,6 +45,8 @@
 				padding: {
 					left: paddingLeft = 0,
 					right: paddingRight = 0,
+					top: paddingTop = 0,
+					bottom: paddingBottom = 0,
 				} = {},
 			} = {}) {
 		const textAlign = ctx.textAlign || 'left';
@@ -54,11 +60,11 @@
 		} else if (textAlign === 'center') {
 			x = rect.left + ((rect.width - width + paddingLeft - paddingRight) / 2);
 		}
-		let y = rect.top + offset;
+		let y = rect.top + offset + paddingTop;
 		if (textBaseline === 'bottom' || textBaseline === 'alphabetic' || textBaseline === 'ideographic') {
-			y = rect.bottom - height - offset;
+			y = rect.bottom - height - offset - paddingBottom;
 		} else if (textBaseline === 'middle') {
-			y = rect.top + ((rect.height - height) / 2);
+			y = rect.top + ((rect.height - height + paddingTop - paddingBottom) / 2);
 		}
 		return {x, y};
 	}

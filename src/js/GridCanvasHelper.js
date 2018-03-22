@@ -36,7 +36,7 @@
 		return true;
 	}
 
-	function drawInlines(ctx, inlines, rect, offset, col, row, grid) {
+	function drawInlines(ctx, inlines, rect, offset, offsetTop, offsetBottom, col, row, grid) {
 		function drawInline(inline, offsetLeft, offsetRight) {
 			if (inline.canDraw()) {
 				ctx.save();
@@ -50,6 +50,8 @@
 						offset,
 						offsetLeft,
 						offsetRight,
+						offsetTop,
+						offsetBottom,
 					});
 				} finally {
 					ctx.restore();
@@ -94,7 +96,39 @@
 		ctx.font = font || ctx.font;
 
 		const actInlines = inlines.buildInlines(icons, inline);
-		drawInlines(ctx, actInlines, rect, offset, col, row, grid);
+		drawInlines(ctx, actInlines, rect, offset, 0, 0, col, row, grid);
+	}
+
+	function _multiInlineRect(grid, ctx, multiInlines, rect, col, row,
+			{
+				offset,
+				color,
+				textAlign,
+				textBaseline,
+				font,
+				lineHeight,
+				icons,
+			} = {}) {
+		//文字style
+		ctx.fillStyle = getColor(color, col, row, grid, ctx);
+		ctx.textAlign = textAlign;
+		ctx.textBaseline = textBaseline;
+		ctx.font = font || ctx.font;
+
+		multiInlines = [...multiInlines];
+
+
+		const line = multiInlines.shift() || '';
+		const actInlines = inlines.buildInlines(icons, line);
+		drawInlines(ctx, actInlines, rect, offset, 0, lineHeight * multiInlines.length, col, row, grid);
+		let paddingTop = lineHeight;
+		while (multiInlines.length) {
+			const line = multiInlines.shift();
+			const actInlines = inlines.buildInlines(undefined, line);
+			drawInlines(ctx, actInlines, rect, offset, paddingTop, lineHeight * multiInlines.length, col, row, grid);
+			paddingTop += lineHeight;
+		}
+
 	}
 
 
@@ -354,6 +388,7 @@
 
 			this.drawWithClip(context, (ctx) => {
 				if (padding) {
+					ctx.font = font || ctx.font;
 					padding = this.toBoxPixelArray(padding, context);
 					const left = rect.left + padding[3];
 					const top = rect.top + padding[0];
@@ -368,6 +403,54 @@
 							textAlign,
 							textBaseline,
 							font,
+							icons,
+						});
+			});
+		}
+		multilineText(multilines, context,
+				{
+					padding,
+					offset = 2,
+					color,
+					textAlign = 'left',
+					textBaseline = 'middle',
+					font,
+					lineHeight = '1em',
+					icons,
+				} = {}) {
+			let rect = context.getRect();
+
+			const {col, row} = context;
+
+			if (!color) {
+				({color} = this.theme);
+				// header color
+				const isFrozenCell = this._grid.isFrozenCell(col, row);
+				if (isFrozenCell && isFrozenCell.row) {
+					color = this.theme.frozenRowsColor;
+				}
+			}
+
+			this.drawWithClip(context, (ctx) => {
+				ctx.font = font || ctx.font;
+				if (padding) {
+					padding = this.toBoxPixelArray(padding, context);
+					const left = rect.left + padding[3];
+					const top = rect.top + padding[0];
+					const width = rect.width - padding[1] - padding[3];
+					const height = rect.height - padding[0] - padding[2];
+					rect = new Rect(left, top, width, height);
+				}
+				const calculator = this.createCalculator(context);
+				lineHeight = calculator.calcHeight(lineHeight);
+				_multiInlineRect(this._grid, ctx, multilines, rect, col, row,
+						{
+							offset,
+							color,
+							textAlign,
+							textBaseline,
+							font,
+							lineHeight,
 							icons,
 						});
 			});

@@ -76,6 +76,8 @@ class InlineImage extends Inline {
 				offset,
 				offsetLeft,
 				offsetRight,
+				offsetTop,
+				offsetBottom,
 			}) {
 		const img = this._inlineImg;
 		canvashelper.drawInlineImageRect(ctx, img,
@@ -88,6 +90,8 @@ class InlineImage extends Inline {
 					padding: {
 						left: offsetLeft,
 						right: offsetRight,
+						top: offsetTop,
+						bottom: offsetBottom,
 					}
 				});
 
