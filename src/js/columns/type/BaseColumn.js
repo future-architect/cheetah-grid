@@ -1,11 +1,11 @@
 'use strict';
 {
-	const utils = require('./columnUtils');
 	const styleContents = require('../style');
 	const {isPromise, isDef, obj: {setReadonly}} = require('../../internal/utils');
 	const animate = require('../../internal/animate');
 	const BaseStyle = require('../style/Style');
 	const {COLUMN_FADEIN_STATE_ID} = require('../../internal/symbolManager');
+
 
 	function isFadeinWhenCallbackInPromise(column, grid) {
 		if (isDef(column._fadeinWhenCallbackInPromise)) {
@@ -191,7 +191,7 @@
 			
 		}
 		drawMessageInternal(message, context, style, helper, grid, info) {
-			utils.drawMessage(message, context, helper, style);
+			info.messageHandler.drawCellMessage(message, context, style, helper, info);
 		}
 		bindGridEvent(grid, col, util) {
 			return [];

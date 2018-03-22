@@ -897,10 +897,7 @@
 			grid.fireListeners(EVENT_TYPE.KEYDOWN, keyCode, e);
 		});
 		grid[_].selection.listen(EVENT_TYPE.SELECTED_CELL, (data) => {
-			grid.fireListeners(EVENT_TYPE.SELECTED_CELL, {
-				col: data.col,
-				row: data.row,
-			}, data.selected);
+			grid.fireListeners(EVENT_TYPE.SELECTED_CELL, data, data.selected);
 		});
 
 		grid[_].scrollable.onScroll((e) => {
@@ -1238,12 +1235,14 @@
 
 			this._handler.on(this._input, 'compositionstart', (e) => {
 				this._input.classList.add('composition');
+				this._input.style.font = this._grid.font || '16px sans-serif';
 				this._isComposition = true;
 				grid.focus();
 			});
 			this._handler.on(this._input, 'compositionend', (e) => {
 				this._isComposition = false;
 				this._input.classList.remove('composition');
+				this._input.style.font = '';
 				if (!this._input.readOnly) {
 					this.fireListeners('input', this._input.value);
 				}
@@ -1378,6 +1377,7 @@
 			}
 			if (composition) {
 				el.classList.add('composition');
+				el.style.font = this._grid.font || '16px sans-serif';
 			} else {
 				el.classList.remove('composition');
 			}
@@ -1392,7 +1392,8 @@
 			}
 		}
 		setDefaultInputStatus() {
-			this._input.style.font = this._grid.font || '16px sans-serif';
+			// なぜかスクロールが少しずつずれていくことがあるのでここではセットしない。
+			// this._input.style.font = this._grid.font || '16px sans-serif';
 		}
 		get editMode() {
 			return !this._input.readOnly;
@@ -1483,12 +1484,21 @@
 						selected: false,
 					};
 					callback();
-					this.fireListeners(EVENT_TYPE.SELECTED_CELL, before);
-					this.fireListeners(EVENT_TYPE.SELECTED_CELL, {
+					const after = {
 						col: this._sel.col,
 						row: this._sel.row,
-						selected: true
-					});
+						selected: true,
+						before: {
+							col: before.col,
+							row: before.row,
+						}
+					};
+					before.after = {
+						col: after.col,
+						row: after.row,
+					};
+					this.fireListeners(EVENT_TYPE.SELECTED_CELL, before);
+					this.fireListeners(EVENT_TYPE.SELECTED_CELL, after);
 				} finally {
 					this._isWraped = false;
 				}

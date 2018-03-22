@@ -16,7 +16,7 @@ const {
 	isFocusable,
 	findPrevSiblingFocusable,
 	findNextSiblingFocusable,
-} = require('./dom');
+} = require('../../../internal/dom');
 	
 const KEY_TAB = 9;
 const KEY_ENTER = 13;
@@ -151,7 +151,7 @@ function openMenu(grid, editor, col, row, value, menu) {
 	menu.classList.add(SHOWN_CLASSNAME);
 }
 
-function closeMenu(grid, col, row, menu, valueindex) {
+function closeMenu(grid, col, row, menu) {
 	menu.classList.remove(SHOWN_CLASSNAME);
 	menu.classList.add(HIDDEN_CLASSNAME);
 	disableFocus(menu);
@@ -164,10 +164,14 @@ class InlineMenuElement {
 		this._bindMenuEvents();
 	}
 	dispose() {
+		const menu = this._menu;
 		this.detach();
 		this._handler.dispose();
 		this._menu = null;
 		this._beforePropEditor = null;
+		if (menu.parentElement) {
+			menu.parentElement.removeChild(menu);
+		}
 	}
 	attach(grid, editor, col, row, value) {
 		const menu = this._menu;
@@ -183,11 +187,11 @@ class InlineMenuElement {
 		this._activeData = {grid, col, row, editor};
 		this._beforePropEditor = editor;
 	}
-	detach(gridFocus, valueindex) {
+	detach(gridFocus) {
 		if (this._isActive()) {
 			const {grid, col, row} = this._activeData;
 			const menu = this._menu;
-			closeMenu(grid, col, row, menu, valueindex);
+			closeMenu(grid, col, row, menu);
 
 			grid.invalidateCell(col, row);
 			if (gridFocus) {
@@ -201,7 +205,7 @@ class InlineMenuElement {
 			return;
 		}
 		const {grid, col, row, editor} = this._activeData;
-		const value = editor.options[valueindex].value;
+		const {value} = editor.options[valueindex];
 		grid.doChangeValue(col, row, () => value);
 	}
 	_isActive() {
@@ -232,7 +236,7 @@ class InlineMenuElement {
 			}
 			const valueindex = item.dataset.valueindex;
 			this._doChangeValue(item.dataset.valueindex);
-			this.detach(true, valueindex);
+			this.detach(true);
 		});
 		handler.on(menu, 'keydown', (e) => {
 			const item = findItemParents(e.target);
@@ -243,7 +247,7 @@ class InlineMenuElement {
 			if (keyCode === KEY_ENTER) {
 				const valueindex = item.dataset.valueindex;
 				this._doChangeValue(valueindex);
-				this.detach(true, valueindex);
+				this.detach(true);
 				cancelEvent(e);
 			} else if (keyCode === KEY_ESC) {
 				this.detach(true);

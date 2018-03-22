@@ -1,6 +1,6 @@
 'use strict';
 {
-	const {extend, isDef, isPromise, then, obj: {isObject}} = require('./internal/utils');
+	const {isDef, isPromise, then, obj: {isObject}} = require('./internal/utils');
 	const GridCanvasHelper = require('./GridCanvasHelper');
 	const columns = require('./columns');
 	const {BaseStyle} = columns.style;
@@ -10,6 +10,9 @@
 	const {DataSource, CachedDataSource} = require('./data');
 	const themes = require('./themes');
 	const icons = require('./internal/icons');
+	const MessageHandler = require('./columns/message/MessageHandler');
+	const EVENT_TYPE = require('./list-grid/EVENT_TYPE');
+	
 	//protected symbol
 	const {PROTECTED_SYMBOL: _} = require('./internal/symbolManager');
 
@@ -176,6 +179,7 @@
 			getRecord: () => grid.getRowRecord(row),
 			getIcon: () => _getCellIcon(grid, col, row),
 			getMessage: () => _getCellMessage(grid, col, row),
+			messageHandler: grid[_].messageHandler,
 			style,
 			drawCellBase,
 			drawCellBg,
@@ -503,10 +507,6 @@
 		return options;
 	}
 	
-	const EVENT_TYPE = extend(DrawGrid.EVENT_TYPE, {
-		CHANGED_VALUE: 'changed_value',
-	});
-
 	/**
 	 * ListGrid
 	 * @classdesc cheetahGrid.ListGrid
@@ -554,12 +554,17 @@
 			};
 			this[_].gridCanvasHelper = new GridCanvasHelper(this);
 			this[_].theme = themes.of(options.theme);
+			this[_].messageHandler = new MessageHandler(this, (col, row) => _getCellMessage(this, col, row));
 			this.invalidate();
 			this[_].handler.on(window, 'resize', () => {
 				this.updateSize();
 				this.updateScroll();
 				this.invalidate();
 			});
+		}
+		dispose() {
+			this[_].messageHandler.dispose();
+			super.dispose();
 		}
 		/**
 		 * header define
@@ -726,9 +731,9 @@
 			}
 		}
 		bindEventsInternal() {
-			this.listen(EVENT_TYPE.SELECTED_CELL, (cell, selected) => {
-				if (cell.row < this[_].headerMap.rowCount) {
-					const {startCol, endCol, startRow, endRow} = _getHeaderCellRange(this, cell.col, cell.row);
+			this.listen(EVENT_TYPE.SELECTED_CELL, (e) => {
+				if (e.row < this[_].headerMap.rowCount) {
+					const {startCol, endCol, startRow, endRow} = _getHeaderCellRange(this, e.col, e.row);
 					if (startCol !== endCol || startRow !== endRow) {
 						this.invalidateGridRect(startCol, startRow, endCol, endRow);
 					}

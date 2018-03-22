@@ -1,6 +1,6 @@
 'use strict';
 
-const {isDef} = require('../../../internal/utils');
+const {isDef} = require('./utils');
 
 function createElement(tagName, {classList, text, html} = {}) {
 	const element = document.createElement(tagName);

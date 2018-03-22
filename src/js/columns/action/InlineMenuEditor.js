@@ -41,9 +41,9 @@ function attachMenu(grid, cell, editor, value) {
 
 	globalElement.attach(grid, editor, cell.col, cell.row, value);
 }
-function detachMenu() {
+function detachMenu(gridFocus) {
 	if (globalElement) {
-		globalElement.detach();
+		globalElement.detach(gridFocus);
 	}
 }
 
@@ -75,11 +75,11 @@ class InlineMenuEditor extends Editor {
 	}
 	onChangeDisabledInternal() {
 		// cancel input
-		detachMenu();
+		detachMenu(true);
 	}
 	onChangeReadOnlyInternal() {
 		// cancel input
-		detachMenu();
+		detachMenu(true);
 	}
 	bindGridEvent(grid, col, util) {
 		const open = (cell) => {
@@ -114,11 +114,11 @@ class InlineMenuEditor extends Editor {
 					row: sel.row
 				});
 			}),
-			grid.listen(SELECTED_CELL, (cell, selected) => {
+			grid.listen(SELECTED_CELL, (e) => {
 				detachMenu();
 			}),
 			grid.listen(SCROLL, () => {
-				detachMenu();
+				detachMenu(true);
 			}),
 
 			// mouse move
