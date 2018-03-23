@@ -1,5 +1,22 @@
 'use strict';
 {
+	const fontSizeCache = {};
+	function getFontSize(ctx, font) {
+		if (fontSizeCache[font]) {
+			return fontSizeCache[font];
+		}
+		const bk = ctx.font;
+		try {
+			ctx.font = font || ctx.font;
+			const em = ctx.measureText('あ').width;
+			return (fontSizeCache[font] = {
+				width: em,
+				height: em
+			});
+		} finally {
+			ctx.font = bk;
+		}
+	}
 
 	function calcBasePosition(ctx, rect,
 			{
@@ -11,24 +28,6 @@
 					bottom: paddingBottom = 0,
 				} = {},
 			} = {}) {
-		// const textAlign = ctx.textAlign || 'left';
-		// const textBaseline = ctx.textBaseline || 'middle';
-		// ctx.textAlign = textAlign;
-		// ctx.textBaseline = textBaseline;
-
-		// let x = rect.left + offset + paddingLeft;
-		// if (textAlign === 'right' || textAlign === 'end') {
-		// 	x = rect.right - offset - paddingRight;
-		// } else if (textAlign === 'center') {
-		// 	x = rect.left + ((rect.width + paddingLeft - paddingRight) / 2);
-		// }
-		// let y = rect.top + offset;
-		// if (textBaseline === 'bottom' || textBaseline === 'alphabetic' || textBaseline === 'ideographic') {
-		// 	y = rect.bottom - offset;
-		// } else if (textBaseline === 'middle') {
-		// 	y = rect.top + (rect.height / 2);
-		// }
-		// return {x, y};
 		return calcStartPosition(ctx, rect, 0, 0, {
 			offset,
 			padding: {
@@ -72,5 +71,6 @@
 	module.exports = {
 		calcBasePosition,
 		calcStartPosition,
+		getFontSize,
 	};
 }

@@ -4,6 +4,7 @@
 	const {Style} = styleContents;
 	const BaseHeader = require('./BaseHeader');
 	const {isDef} = require('../../internal/utils');
+	const {getFontSize} = require('../../internal/canvases');
 	const {EVENT_TYPE: {
 		CLICK_CELL,
 		MOUSEOVER_CELL,
@@ -38,11 +39,11 @@
 			const state = grid.sortState;
 			let order = undefined;
 			if (this._range.isCellInRange(state.col, this._range.startRow)) {
-				order = state.order;
+				({order} = state);
 			}
 
 			const ctx = context.getContext();
-			const arrowSize = ctx.measureText('あ').width * 1.2;
+			const arrowSize = getFontSize(ctx, font).width * 1.2;
 
 			helper.text(value, context, {
 				textAlign,

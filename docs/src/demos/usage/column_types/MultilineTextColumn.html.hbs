@@ -14,8 +14,14 @@ order: 3000
 
 {{#if lang_ja}}
 複数行テキストを表示する  
+
+プロパティ`columnType`に`multilinetext`を指定することで、  
+セルに複数行テキストを表示することができます。  
 {{else}}
 Show multiline text.  
+
+By specifying `multilinetext` for the `columnType` property,  
+You can display multiple lines of text in a cell.  
 {{/if}}
 
 
@@ -50,6 +56,18 @@ const grid = new cheetahGrid.ListGrid({
 });
 grid.records = [
 	{
+		title: 'multilinetext',
+		description:
+`By specifying 'multilinetext' for the 'columnType' property,
+You can display multiple lines of text in a cell.`
+	},
+	{
+		title: 'multilinetext',
+		description:
+`プロパティ'columnType'に'multilinetext'を指定することで、  
+セルに複数行テキストを表示することができます。  `
+	},
+	{
 		title: 'Cheetah Grid is',
 		description:
 `Cheetah Grid is a high performance JavaScript data table component
@@ -58,19 +76,12 @@ that works on canvas.
 You can 1,000,000 records displayed without stress.`
 	},
 	{
-		title: 'Minimum number of DOMs.',
+		title: 'Cheetah Gridとは',
 		description:
-`It draw the grid with a canvas,
-you can create pages with a minimum number of DOMs..`
-	},
-	{
-		title: 'Using Cheetah Grid',
-		description:
-`using npm
-bash
-> npm install cheetah-grid
-js
-> const cheetahGrid = require("cheetah-grid")`
+`Cheetah Gridは、Canvasで実現する、ハイパフォーマンスな
+JavaScriptグリッドコンポーネントです。
+
+ストレスなく100万レコードを表示できます。`
 	},
 ];
 
@@ -106,6 +117,18 @@ js
 
 const records = [
 	{
+		title: 'multilinetext',
+		description:
+`By specifying 'multilinetext' for the 'columnType' property,
+You can display multiple lines of text in a cell.`
+	},
+	{
+		title: 'multilinetext',
+		description:
+`プロパティ'columnType'に'multilinetext'を指定することで、  
+セルに複数行テキストを表示することができます。  `
+	},
+	{
 		title: 'Cheetah Grid is',
 		description:
 `Cheetah Grid is a high performance JavaScript data table component
@@ -114,19 +137,12 @@ that works on canvas.
 You can 1,000,000 records displayed without stress.`
 	},
 	{
-		title: 'Minimum number of DOMs.',
+		title: 'Cheetah Gridとは',
 		description:
-`It draw the grid with a canvas,
-you can create pages with a minimum number of DOMs..`
-	},
-	{
-		title: 'Using Cheetah Grid',
-		description:
-`using npm
-bash
-> npm install cheetah-grid
-js
-> const cheetahGrid = require("cheetah-grid")`
+`Cheetah Gridは、Canvasで実現する、ハイパフォーマンスな
+JavaScriptグリッドコンポーネントです。
+
+ストレスなく100万レコードを表示できます。`
 	},
 ];
 {

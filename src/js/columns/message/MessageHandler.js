@@ -11,7 +11,53 @@ const ErrorMessage = require('./ErrorMessage');
 const WarningMessage = require('./WarningMessage');
 const InfoMessage = require('./InfoMessage');
 
+const EMPTY_MESSAGE = {
+	type: 'error',
+	message: undefined,
+};
 
+const MESSAGE_INSTANCE_FACTORY = {
+	error(grid) {
+		return new ErrorMessage(grid);
+	},
+	info(grid) {
+		return new InfoMessage(grid);
+	},
+	warning(grid) {
+		return new WarningMessage(grid);
+	}
+};
+
+function normalizeMessage(message) {
+	if (!message || isPromise(message)) {
+		return EMPTY_MESSAGE;
+	}
+	if (typeof message === 'string') {
+		return {
+			type: 'error',
+			message,
+			original: message,
+		};
+	}
+	const type = message.type || 'error';
+	if (type && type in MESSAGE_INSTANCE_FACTORY) {
+		return {
+			type: type.toLowerCase(),
+			message: '' + message.message,
+			original: message,
+		};
+	}
+	return {
+		type: 'error',
+		message: '' + message,
+		original: message,
+	};
+
+
+}
+function hasMessage(message) {
+	return !!normalizeMessage(message).message;
+}
 class MessageHandler {
 	constructor(grid, getMessage) {
 		this._grid = grid;
@@ -27,7 +73,7 @@ class MessageHandler {
 	}
 	drawCellMessage(message, context, style, helper, info) {
 
-		if (!message || isPromise(message)) {
+		if (!hasMessage(message)) {
 			return;
 		}
 		const instance = this._getMessageInstanceOfMessage(message);
@@ -39,7 +85,7 @@ class MessageHandler {
 		if (info && info.instance !== instance) {
 			info.instance.detachMessageElement();
 		}
-		instance.attachMessageElement(col, row, this._toMessageText(message));
+		instance.attachMessageElement(col, row, normalizeMessage(message));
 		this._attachInfo = {col, row, instance};
 	}
 	_move(col, row) {
@@ -62,7 +108,7 @@ class MessageHandler {
 	_bindGridEvent(grid, getMessage) {
 		const onSelectMessage = (sel) => {
 			const message = getMessage(sel.col, sel.row);
-			if (!message || isPromise(message)) {
+			if (!hasMessage(message)) {
 				this._detach();
 			} else {
 				this._attach(sel.col, sel.row, message);
@@ -91,31 +137,9 @@ class MessageHandler {
 		});
 	}
 	_getMessageInstanceOfMessage(message) {
-		message = message || '';
-		if (typeof message === 'string') {
-			return this._createMessageInstance('error', ErrorMessage);
-		}
-		const type = ('' + message.type).toLowerCase();
-		if (type === 'info') {
-			return this._createMessageInstance('info', InfoMessage);
-		} else if (type === 'warning') {
-			return this._createMessageInstance('warning', WarningMessage);
-		}
-		return this._createMessageInstance('error', ErrorMessage);
-	}
-	_toMessageText(message) {
-		message = message || '';
-		if (typeof message === 'string') {
-			return message;
-		}
-		if (message.message) {
-			return message.message;
-		}
-		return '' + message;
-	}
-	_createMessageInstance(name, Message) {
 		const messageInstances = this._messageInstances;
-		return messageInstances[name] || (messageInstances[name] = new Message(this._grid));
+		const {type} = normalizeMessage(message);
+		return messageInstances[type] || (messageInstances[type] = MESSAGE_INSTANCE_FACTORY[type](this._grid));
 	}
 }
 
