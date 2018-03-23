@@ -76,6 +76,7 @@
     "css-loader": "^0.28.10",
     "eslint": "^4.18.1",
     "eslint-plugin-html": "^4.0.1",
+    "font-awesome": "^4.7.0",
     "image-matcher": "^0.1.1",
     "jasmine": "^2.9.0",
     "karma": "^2.0.0",
