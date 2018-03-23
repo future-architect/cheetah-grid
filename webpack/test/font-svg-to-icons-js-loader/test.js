@@ -4,7 +4,6 @@
 const path = require('path');
 const fs = require('fs');
 const loader = require('../../../webpack-loader/font-svg-to-icons-js-loader');
-const UglifyJS = require('uglify-es');
 const babel = require('babel-core');
 
 function buildCode(svgfile) {
@@ -29,9 +28,6 @@ function toIconsJs(svgfile, opt = {}) {
 	fs.writeFileSync(opt.targetPath, script, 'utf-8');
 	if (opt.es5) {
 		script = babel.transform(script, {presets: ['es2015']}).code;
-		if (opt.minify) {
-			script = UglifyJS.minify(script).code;
-		}
 	}
 	
 	return script;
@@ -41,7 +37,6 @@ function toIconsJs(svgfile, opt = {}) {
 	const targetPath = path.resolve(__dirname, './fa_icons.js');
 	const script = toIconsJs('font-awesome/fonts/fontawesome-webfont.svg', {
 		es5: true,
-		minify: true,
 		targetPath,
 	});
 	console.log('write: ', targetPath);
@@ -52,7 +47,6 @@ function toIconsJs(svgfile, opt = {}) {
 	const targetPath = path.resolve(__dirname, './mdi_icons.js');
 	const script = toIconsJs('material-design-icons/iconfont/MaterialIcons-Regular.svg', {
 		es5: true,
-		minify: true,
 		targetPath,
 	});
 	console.log('write: ', targetPath);

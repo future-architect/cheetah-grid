@@ -4,7 +4,6 @@
 const path = require('path');
 const mdiRoot = path.dirname(require.resolve('material-design-icons/package.json'));
 const loader = require('../../../webpack-loader/svg-to-icon-js-loader');
-const UglifyJS = require('uglify-es');
 const babel = require('babel-core');
 
 const fs = require('fs');
@@ -79,11 +78,9 @@ svgsPromise.then((svgs) => {
 	const targetPath = path.resolve(__dirname, './all_mdi_icons.js');
 	const script = buildCode(svgs);
 	const es5 = babel.transform(script, {presets: ['es2015']}).code;
-	// fs.writeFileSync(targetPath + '.es5.js', es5, 'utf-8');
-	const minify = UglifyJS.minify(es5).code;
 
 	console.log('write: ', targetPath);
-	fs.writeFile(targetPath, minify, 'utf-8');
+	fs.writeFile(targetPath, es5, 'utf-8');
 });
 
 
