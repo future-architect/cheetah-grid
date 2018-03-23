@@ -40,6 +40,8 @@ class InlineDrawer extends Inline {
 				offset,
 				offsetLeft,
 				offsetRight,
+				offsetTop,
+				offsetBottom,
 			}) {
 		this._draw({
 			ctx,
@@ -48,6 +50,8 @@ class InlineDrawer extends Inline {
 			offset,
 			offsetLeft,
 			offsetRight,
+			offsetTop,
+			offsetBottom,
 		});
 	}
 }

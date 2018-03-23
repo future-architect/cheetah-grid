@@ -1,0 +1,293 @@
+---
+category:
+    - Usage
+    - Column Types
+    - Classes
+title: MultilineTextColumn
+layout: demo.html
+docVersion: 0.3.0
+order: 3000
+---
+
+{{#marked}}
+## MultilineTextColumn
+
+{{#if lang_ja}}
+複数行テキストを表示する  
+
+プロパティ`columnType`に`multilinetext`を指定することで、  
+セルに複数行テキストを表示することができます。  
+{{else}}
+Show multiline text.  
+
+By specifying `multilinetext` for the `columnType` property,  
+You can display multiple lines of text in a cell.  
+{{/if}}
+
+
+{{/marked}}
+
+<div id="sample1" class="demo-grid small">
+</div>
+<script type="text/javascript">
+//{{#wrapscript}}
+//{{#copy "sample1"}}
+/*global cheetahGrid*/
+'use strict';
+
+const grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#sample1'),
+	header: [
+		{
+			field: 'title',
+			caption: 'title',
+			width: 250,
+		},
+		{
+			field: 'description',
+			caption: 'description',
+			width: 600,
+			columnType: 'multilinetext'
+		},
+	],
+	frozenColCount: 1,
+	defaultRowHeight: 100,
+	headerRowHeight: 40,
+});
+grid.records = [
+	{
+		title: 'multilinetext',
+		description:
+`By specifying 'multilinetext' for the 'columnType' property,
+You can display multiple lines of text in a cell.`
+	},
+	{
+		title: 'multilinetext',
+		description:
+`プロパティ'columnType'に'multilinetext'を指定することで、  
+セルに複数行テキストを表示することができます。  `
+	},
+	{
+		title: 'Cheetah Grid is',
+		description:
+`Cheetah Grid is a high performance JavaScript data table component
+that works on canvas.
+
+You can 1,000,000 records displayed without stress.`
+	},
+	{
+		title: 'Cheetah Gridとは',
+		description:
+`Cheetah Gridは、Canvasで実現する、ハイパフォーマンスな
+JavaScriptグリッドコンポーネントです。
+
+ストレスなく100万レコードを表示できます。`
+	},
+];
+
+//{{/copy}}
+//{{/wrapscript}}
+</script>
+{{> code class="js" code=sample1}}
+
+
+
+{{#marked}}
+## Styles
+
+{{#if lang_ja}}
+{{else}}
+{{/if}}
+
+
+
+### Aligns
+{{/marked}}
+<div id="sample2" class="demo-grid large">
+</div>
+{{#marked}}
+### lineHeight
+{{/marked}}
+<div id="sample3" class="demo-grid large">
+</div>
+<script type="text/javascript">
+//{{#wrapscript}}
+/*global cheetahGrid*/
+'use strict';
+
+const records = [
+	{
+		title: 'multilinetext',
+		description:
+`By specifying 'multilinetext' for the 'columnType' property,
+You can display multiple lines of text in a cell.`
+	},
+	{
+		title: 'multilinetext',
+		description:
+`プロパティ'columnType'に'multilinetext'を指定することで、  
+セルに複数行テキストを表示することができます。  `
+	},
+	{
+		title: 'Cheetah Grid is',
+		description:
+`Cheetah Grid is a high performance JavaScript data table component
+that works on canvas.
+
+You can 1,000,000 records displayed without stress.`
+	},
+	{
+		title: 'Cheetah Gridとは',
+		description:
+`Cheetah Gridは、Canvasで実現する、ハイパフォーマンスな
+JavaScriptグリッドコンポーネントです。
+
+ストレスなく100万レコードを表示できます。`
+	},
+];
+{
+	const grid = new cheetahGrid.ListGrid({
+		parentElement: document.querySelector('#sample2'),
+		//{{#copy "sample2"}}
+		header: [
+			{
+				field: 'title',
+				caption: 'title',
+				width: 250,
+			},
+			//textAlign
+			{
+				field: 'description',
+				caption: 'left',
+				width: 600,
+				columnType: 'multilinetext',
+				style: {textAlign: 'left'}
+			},
+			{
+				field: 'description',
+				caption: 'right',
+				width: 600,
+				columnType: 'multilinetext',
+				style: {textAlign: 'right'}
+			},
+			{
+				field: 'description',
+				caption: 'center',
+				width: 600,
+				columnType: 'multilinetext',
+				style: {textAlign: 'center'}
+			},
+			//textBaseline
+			{
+				field: 'description',
+				caption: 'top',
+				width: 600,
+				columnType: 'multilinetext',
+				style: {textBaseline: 'top'}
+			},
+			{
+				field: 'description',
+				caption: 'middle',
+				width: 600,
+				columnType: 'multilinetext',
+				style: {textBaseline: 'middle'}
+			},
+			{
+				field: 'description',
+				caption: 'bottom',
+				width: 600,
+				columnType: 'multilinetext',
+				style: {textBaseline: 'bottom'}
+			},
+		],
+		//{{/copy}}
+		frozenColCount: 1,
+		defaultRowHeight: 200,
+		headerRowHeight: 40,
+	});
+	grid.records = records;
+}
+{
+	const grid = new cheetahGrid.ListGrid({
+		parentElement: document.querySelector('#sample3'),
+		//{{#copy "sample3"}}
+		header: [
+			{
+				field: 'title',
+				caption: 'title',
+				width: 250,
+			},
+			//textAlign
+			{
+				field: 'description',
+				caption: 'lineHeight=3em left',
+				width: 600,
+				columnType: 'multilinetext',
+				style: {
+					lineHeight: '3em',
+					textAlign: 'left'
+				}
+			},
+			{
+				field: 'description',
+				caption: 'lineHeight=3em right',
+				width: 600,
+				columnType: 'multilinetext',
+				style: {
+					lineHeight: '3em',
+					textAlign: 'right'
+				}
+			},
+			{
+				field: 'description',
+				caption: 'lineHeight=3em center',
+				width: 600,
+				columnType: 'multilinetext',
+				style: {
+					lineHeight: '3em',
+					textAlign: 'center'
+				}
+			},
+			//textBaseline
+			{
+				field: 'description',
+				caption: 'lineHeight=3em top',
+				width: 600,
+				columnType: 'multilinetext',
+				style: {
+					lineHeight: '3em',
+					textBaseline: 'top'
+				}
+			},
+			{
+				field: 'description',
+				caption: 'lineHeight=3em middle',
+				width: 600,
+				columnType: 'multilinetext',
+				style: {
+					lineHeight: '3em',
+					textBaseline: 'middle'
+				}
+			},
+			{
+				field: 'description',
+				caption: 'lineHeight=3em bottom',
+				width: 600,
+				columnType: 'multilinetext',
+				style: {
+					lineHeight: '3em',
+					textBaseline: 'bottom'
+				}
+			},
+		],
+		//{{/copy}}
+		frozenColCount: 1,
+		defaultRowHeight: 300,
+		headerRowHeight: 40,
+	});
+	grid.records = records;
+}
+//{{/wrapscript}}
+</script>
+{{> code class="js" code=sample2}}
+{{> code class="js" code=sample3}}

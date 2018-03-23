@@ -1,6 +1,6 @@
 'use strict';
 {
-	const {calcBasePosition, calcStartPosition} = require('../internal/canvases');
+	const {calcBasePosition, calcStartPosition, getFontSize} = require('../internal/canvases');
 	const {ceil, PI} = Math;
 
 	function strokeColorsRect(ctx, borderColors, left, top, width, height) {
@@ -143,7 +143,7 @@
 	 */
 	function measureCheckbox(ctx) {
 		return {
-			width: ctx.measureText('あ').width
+			width: getFontSize(ctx, null).width
 		};
 	}
 		

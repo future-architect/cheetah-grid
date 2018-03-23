@@ -9,6 +9,7 @@
 	const IconColumn = require('./type/IconColumn');
 	const BranchGraphColumn = require('./type/BranchGraphColumn');
 	const MenuColumn = require('./type/MenuColumn');
+	const MultilineTextColumn = require('./type/MultilineTextColumn');
 
 	/**
 	 * column types
@@ -23,6 +24,7 @@
 			CHECK: new CheckColumn(),
 			BUTTON: new ButtonColumn(),
 			IMAGE: new ImageColumn(),
+			MULTILINETEXT: new MultilineTextColumn(),
 		},
 		get Column() {
 			return Column;
@@ -50,6 +52,9 @@
 		},
 		get MenuColumn() {
 			return MenuColumn;
+		},
+		get MultilineTextColumn() {
+			return MultilineTextColumn;
 		},
 		of(columnType) {
 			if (!columnType) {

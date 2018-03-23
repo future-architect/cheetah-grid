@@ -27,6 +27,8 @@ class Inline {
 		offset,
 		offsetLeft,
 		offsetRight,
+		offsetTop,
+		offsetBottom,
 	}) {
 		canvashelper.fillTextRect(ctx, this._content,
 				rect.left, rect.top, rect.width, rect.height,
@@ -35,6 +37,8 @@ class Inline {
 					padding: {
 						left: offsetLeft,
 						right: offsetRight,
+						top: offsetTop,
+						bottom: offsetBottom,
 					}
 				});
 	}

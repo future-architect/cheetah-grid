@@ -44,7 +44,7 @@
 			const text = this._convertInternal(value);
 			helper.testFontLoad(font, text, context);
 			utils.loadIcons(getIcon(), context, helper, (icons, context) => {
-				const basePadding = helper.toBoxPixelArray(padding || 0, context);
+				const basePadding = helper.toBoxPixelArray(padding || 0, context, font);
 				const textPadding = basePadding.slice(0);
 				textPadding[1] += 26;// icon padding
 				const iconPadding = basePadding.slice(0);

@@ -91,6 +91,8 @@ module.exports = {
 					offset,
 					offsetLeft,
 					offsetRight,
+					offsetTop,
+					offsetBottom,
 				}) {
 					drawRegisteredIcon(ctx, regedIcon,
 							width, width,
@@ -100,6 +102,8 @@ module.exports = {
 								padding: {
 									left: offsetLeft,
 									right: offsetRight,
+									top: offsetTop,
+									bottom: offsetBottom,
 								}
 							});
 				},
