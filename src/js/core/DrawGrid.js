@@ -1881,9 +1881,11 @@
 			this[_].canvas.style.width = '';
 			this[_].canvas.style.height = '';
 			const width = Math.floor(this[_].canvas.offsetWidth ||
-					/*for legacy*/this[_].canvas.parentElement.offsetWidth - style.getScrollBarSize());
+					this[_].canvas.parentElement.offsetWidth - style.getScrollBarSize()/*for legacy*/
+			);
 			const height = Math.floor(this[_].canvas.offsetHeight ||
-					/*for legacy*/this[_].canvas.parentElement.offsetHeight - style.getScrollBarSize());
+					this[_].canvas.parentElement.offsetHeight - style.getScrollBarSize()/*for legacy*/
+			);
 
 			this[_].canvas.width = width;
 			this[_].canvas.height = height;

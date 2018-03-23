@@ -320,7 +320,7 @@ function registerHelpers() {
 		const arg = analyzeArguments(...args);
 		const code = arg.get(this);
 		const result = JSON.parse(code);
-		const option = arg.option;
+		const {option} = arg;
 		arg.args.forEach((name) => {
 			option.data.root[name] = result;
 		});
