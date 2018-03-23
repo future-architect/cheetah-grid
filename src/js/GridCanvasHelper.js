@@ -279,7 +279,19 @@
 			this._grid = grid;
 			this._theme = new Theme(grid);
 		}
-		createCalculator(context) {
+		createCalculator(context, font) {
+			let getEm = () => {
+				const ctx = context.getContext();
+				const bk = ctx.font;
+				try {
+					ctx.font = font || ctx.font;
+					const em = ctx.measureText('あ').width;
+					getEm = () => em;
+					return em;
+				} finally {
+					ctx.font = bk;
+				}
+			};
 			return {
 				calcWidth(width) {
 					return calc.toPx(width, {
@@ -288,8 +300,7 @@
 							return rect.width;
 						},
 						get em() {
-							const ctx = context.getContext();
-							return ctx.measureText('あ').width;
+							return getEm();
 						}
 					});
 				},
@@ -300,8 +311,7 @@
 							return rect.height;
 						},
 						get em() {
-							const ctx = context.getContext();
-							return ctx.measureText('あ').width;
+							return getEm();
 						}
 					});
 				}
@@ -313,9 +323,9 @@
 		toBoxArray(obj) {
 			return toBoxArray(obj);
 		}
-		toBoxPixelArray(value, context) {
+		toBoxPixelArray(value, context, font) {
 			if (typeof value === 'string' || Array.isArray(value)) {
-				const calculator = this.createCalculator(context);
+				const calculator = this.createCalculator(context, font);
 				const box = toBoxArray(value);
 				return [
 					calculator.calcHeight(box[0]),
@@ -404,8 +414,7 @@
 
 			this.drawWithClip(context, (ctx) => {
 				if (padding) {
-					ctx.font = font || ctx.font;
-					padding = this.toBoxPixelArray(padding, context);
+					padding = this.toBoxPixelArray(padding, context, font);
 					const left = rect.left + padding[3];
 					const top = rect.top + padding[0];
 					const width = rect.width - padding[1] - padding[3];
@@ -448,16 +457,15 @@
 			}
 
 			this.drawWithClip(context, (ctx) => {
-				ctx.font = font || ctx.font;
 				if (padding) {
-					padding = this.toBoxPixelArray(padding, context);
+					padding = this.toBoxPixelArray(padding, context, font);
 					const left = rect.left + padding[3];
 					const top = rect.top + padding[0];
 					const width = rect.width - padding[1] - padding[3];
 					const height = rect.height - padding[0] - padding[2];
 					rect = new Rect(left, top, width, height);
 				}
-				const calculator = this.createCalculator(context);
+				const calculator = this.createCalculator(context, font);
 				lineHeight = calculator.calcHeight(lineHeight);
 				_multiInlineRect(this._grid, ctx, multilines, rect, col, row,
 						{
@@ -657,7 +665,7 @@
 
 			this.drawWithClip(context, (ctx) => {
 				const {col, row} = context;
-				padding = this.toBoxPixelArray(padding || rect.height / 8, context);
+				padding = this.toBoxPixelArray(padding || rect.height / 8, context, font);
 				const left = rect.left + padding[3];
 				const top = rect.top + padding[0];
 				const width = rect.width - padding[1] - padding[3];
