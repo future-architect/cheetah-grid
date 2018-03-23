@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="author" content="Cheetah Grid">
+    <meta name="keywords" content="spreadsheet,grid,canvas,table,web-components">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Cheetah Grid - Column Types</title>
+    <link rel="shortcut icon" type="image/x-icon" href="./../../../icon_512x512.ico">
+
+    <link rel="stylesheet" type="text/css" href="./../../css/style.css">
+    <link rel="stylesheet" type="text/css" href="./../../css/highlightjs.css">
+    
+    <!-- <script src="http://localhost:35729/livereload.js"></script> -->
+    
+    <script type="text/javascript" src="https://unpkg.com/cheetah-grid@0.3"></script>
+
+    <style type="text/css">
+        html {
+            height: 100%;
+        }
+        body {
+            height: calc(100% - 100px);
+        }
+        .contents {
+            padding: 30px;
+            box-sizing: border-box;
+        }
+        .demo-grid {
+            width: 100%;
+            height: 300px;
+            box-sizing: border-box;
+            border: solid 1px #ddd;
+        }
+        .demo-grid.large {
+            height: 500px;
+        }
+        .demo-grid.middle {
+            height: 300px;   
+        }
+        .demo-grid.small {
+            height: 240px;   
+        }
+        .log {
+            width: 100%;
+            height: 80px;
+            background-color: #F5F5F5;
+        }
+
+        .hljs { 
+             tab-size: 4;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <nav class="header primary" id="header-nav">
+    	<div class="nav-wrapper">
+    		<a href="./../../../index.html">
+    			<img src="./../../../logo.png" style="width: 100px;padding: 5px;vertical-align: middle;" alt="Cheetah Grid">
+    		</a>
+    
+    		<ul class="right hide-on-med-and-down nav-dropdown-container">
+    			<a href="#" class="primary nav-dropdown-button mobile-only" data-target="all-nav" style="width: 30px;">
+    				<span class="icon-arrow"></span>
+    			</a>
+    			<ul id="all-nav" class="mobile-nav-dropdown right-dropdown primary">
+    				<li><a href="./../../index.html" class="primary">Docoments - TOP</a></li>
+    				<li class="nav-dropdown-container">
+    					<a id="nav-versions" href="#" class="primary nav-dropdown-button" data-target="versions">
+    						version<span class="icon-arrow"></span>
+    					</a>
+    					<ul id="versions" class="nav-dropdown right-dropdown">
+    					</ul>
+    				</li>
+    				<li class="nav-dropdown-container">
+    					<a id="nav-lang" href="#" class="primary nav-dropdown-button" data-target="langs">
+    						lang<span class="icon-arrow"></span>
+    					</a>
+    					<ul id="langs" class="nav-dropdown right-dropdown">
+    						<li><a href="./../../ja/demos/usage/column_types.html" class="primary">日本語</a></li>
+    						<li><a href="./../../demos/usage/column_types.html" class="primary">English</a></li>
+    					</ul>
+    				</li>
+    			</ul>
+    		</ul>
+    	</div>
+    </nav>
+    
+    <script type="text/javascript">
+    	'use strict';
+    	////babel
+    'use strict';
+    
+    function getVersions(callback) {
+    	var xhr = new XMLHttpRequest();
+    	function onError() {
+    		callback(['0.3', '0.0.1']);
+    	}
+    	xhr.onload = function () {
+    		var versions = JSON.parse(xhr.responseText);
+    		callback(versions);
+    	};
+    	xhr.onerror = onError;
+    	xhr.onabort = onError;
+    	try {
+    		xhr.open('GET', './../../../versions.json');
+    		xhr.send();
+    	} catch (e) {
+    		onError();
+    	}
+    }
+    
+    //
+    getVersions(function (versions) {
+    	var myVersion = '0.3';
+    	function getVerLocation(v) {
+    		return location.href.replace(myVersion, v).replace('.devdoc', v);
+    	}
+    	var latest = versions[0];
+    	var versEl = document.getElementById('versions');
+    	versEl.innerHTML = versions.map(function (v, i) {
+    		return '<li><a href="' + getVerLocation(v) + '" class="primary">' + v + (i === 0 ? ' (latest)' : '') + '</a></li>';
+    	}).join('');
+    
+    	if (latest !== myVersion) {
+    		var header = document.getElementById('header-nav');
+    		var a = document.createElement('a');
+    		header.parentElement.insertBefore(a, header.nextSibling);
+    		a.href = getVerLocation(latest);
+    		a.textContent = '<goto the latest version(' + latest + ') document>';
+    	}
+    });
+    //
+    </script>    <h1>Usage &gt; Column Types</h1>
+    <div class="contents">
+        
+
+<h2 id="standard-column-type">Standard Column Type</h2>
+<p>Set the column type by using <code>columnType</code>.</p>
+<table>
+<thead>
+<tr>
+<th>property</th>
+<th>description</th>
+<th>LINK</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>none</td>
+<td>draw text in the cell</td>
+<td>---</td>
+</tr>
+<tr>
+<td>number</td>
+<td>draw number in the cell with comma-separated</td>
+<td><a href="./column_types/NumberColumn.html">NumberColumn</a></td>
+</tr>
+<tr>
+<td>check</td>
+<td>draw checkbox in the cell</td>
+<td>---</td>
+</tr>
+<tr>
+<td>button</td>
+<td>draw button in the cell</td>
+<td><a href="./column_types/ButtonColumn.html">ButtonColumn</a></td>
+</tr>
+<tr>
+<td>image</td>
+<td>draw image in the cell</td>
+<td><a href="./draw_image.html">Draw Image</a></td>
+</tr>
+<tr>
+<td>multilinetext</td>
+<td>draw multiline text in the cell</td>
+<td><a href="./column_types/MultilineTextColumn.html">MultilineTextColumn</a></td>
+</tr>
+</tbody>
+</table>
+
+
+<div id="sample1" class="demo-grid small">
+</div>
+<script type="text/javascript">
+////wrapscript
+(function() {
+//babel
+
+//
+/*global cheetahGrid*/
+'use strict';
+
+var grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#sample1'),
+	header: [{ field: 'no', caption: 'no', width: 50 },
+
+	//default
+	{ field: 'default', caption: 'default', width: 150 }]
+});
+grid.records = [{ no: 1, default: 'sample text' }, { no: 2, default: 'sample text' }, { no: 3, default: 'sample text' }];
+//
+//
+})();
+</script>
+<pre><code class="js hljs javascript"><span class="hljs-comment">/*global cheetahGrid*/</span>
+<span class="hljs-meta">'use strict'</span>;
+<span class="hljs-keyword">const</span> grid = <span class="hljs-keyword">new</span> cheetahGrid.ListGrid({
+	<span class="hljs-attr">parentElement</span>: <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample1'</span>),
+	<span class="hljs-attr">header</span>: [
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'no'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'no'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">50</span>},
+
+		<span class="hljs-comment">//default</span>
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'default'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'default'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">150</span>},
+	],
+});
+grid.records = [
+	{<span class="hljs-attr">no</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">default</span>: <span class="hljs-string">'sample text'</span>},
+	{<span class="hljs-attr">no</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">default</span>: <span class="hljs-string">'sample text'</span>},
+	{<span class="hljs-attr">no</span>: <span class="hljs-number">3</span>, <span class="hljs-attr">default</span>: <span class="hljs-string">'sample text'</span>},
+];
+<span class="hljs-comment">//</span></code></pre>
+<div id="sample2" class="demo-grid small">
+</div>
+<script type="text/javascript">
+////wrapscript
+(function() {
+//babel
+
+//
+/*global cheetahGrid*/
+'use strict';
+
+var grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#sample2'),
+	header: [{ field: 'no', caption: 'no', width: 50 }, { field: 'number', caption: 'number', width: 180, columnType: 'number' }, { field: 'check', caption: 'check', width: 50, columnType: 'check', action: 'check' }, {
+		caption: 'button',
+		width: 100,
+		columnType: new cheetahGrid.columns.type.ButtonColumn({
+			caption: 'show rec'
+		}),
+		action: new cheetahGrid.columns.action.ButtonAction({
+			action: function action(rec) {
+				alert(JSON.stringify(rec));
+			}
+		})
+	}]
+});
+grid.records = [{ no: 1, number: 12345, check: true }, { no: 2, number: 67890, check: false }, { no: 3, number: 1234567890.098, check: true }];
+//
+//
+})();
+</script>
+<pre><code class="js hljs javascript"><span class="hljs-comment">/*global cheetahGrid*/</span>
+<span class="hljs-meta">'use strict'</span>;
+<span class="hljs-keyword">const</span> grid = <span class="hljs-keyword">new</span> cheetahGrid.ListGrid({
+	<span class="hljs-attr">parentElement</span>: <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample2'</span>),
+	<span class="hljs-attr">header</span>: [
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'no'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'no'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">50</span>},
+
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'number'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'number'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">180</span>, <span class="hljs-attr">columnType</span>: <span class="hljs-string">'number'</span>},
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'check'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'check'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">50</span>, <span class="hljs-attr">columnType</span>: <span class="hljs-string">'check'</span>, <span class="hljs-attr">action</span>: <span class="hljs-string">'check'</span>},
+		{
+			<span class="hljs-attr">caption</span>: <span class="hljs-string">'button'</span>,
+			<span class="hljs-attr">width</span>: <span class="hljs-number">100</span>,
+			<span class="hljs-attr">columnType</span>: <span class="hljs-keyword">new</span> cheetahGrid.columns.type.ButtonColumn({
+				<span class="hljs-attr">caption</span>: <span class="hljs-string">'show rec'</span>,
+			}),
+			<span class="hljs-attr">action</span>: <span class="hljs-keyword">new</span> cheetahGrid.columns.action.ButtonAction({
+				action(rec) {
+					alert(<span class="hljs-built_in">JSON</span>.stringify(rec));
+				},
+			}),
+		}
+
+
+	],
+});
+grid.records = [
+	{<span class="hljs-attr">no</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">number</span>: <span class="hljs-number">12345</span>, <span class="hljs-attr">check</span>: <span class="hljs-literal">true</span>},
+	{<span class="hljs-attr">no</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">number</span>: <span class="hljs-number">67890</span>, <span class="hljs-attr">check</span>: <span class="hljs-literal">false</span>},
+	{<span class="hljs-attr">no</span>: <span class="hljs-number">3</span>, <span class="hljs-attr">number</span>: <span class="hljs-number">1234567890.098</span>, <span class="hljs-attr">check</span>: <span class="hljs-literal">true</span>},
+];
+<span class="hljs-comment">//</span></code></pre>
+<h2 id="advanced-column-type">Advanced Column Type</h2>
+<p>You can try kinds of view type by defining <code>columnType</code> property using the instance.  </p>
+<p>Please refer to <a href="./column_types/Classes.html">here</a></p>
+
+    </div>
+    
+    <script type="text/javascript" src="./../../js/doc-common.js"></script>
+
+</body></html>
