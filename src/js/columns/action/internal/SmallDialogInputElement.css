@@ -53,7 +53,9 @@
 }
 .cheetah-grid__small-dialog-input::after {
 	content: '';
+	font-family: Roboto;
 	font-size: 12px;
+	font-size: .75rem;
 	min-height: 1em;
 	line-height: 1;
 	display: block;
@@ -68,11 +70,11 @@
 	color: rgba(0, 0, 0, .87);
 }
 .cheetah-grid__small-dialog-input[data-error-message] input {
-	border-bottom: solid 1px #dd2c00;
-	box-shadow: 0 1px 0 0 #dd2c00;
+	border-bottom: solid 1px #ff1744;
+	box-shadow: 0 1px 0 0 #ff1744;
 }
 .cheetah-grid__small-dialog-input[data-error-message]::after {
 	content: attr(data-error-message);
-	color: #dd2c00;
+	color: #ff1744;
 	text-align: left;
 }
