@@ -263,8 +263,7 @@ function calcCommand(info, command) {
 			const {branch} = cmd;
 			point = commit(info, branch);
 		} else if (cmd.command === 'merge') {
-			const from = cmd.branch.from;
-			const to = cmd.branch.to;
+			const {from, to} = cmd.branch;
 			point = commitMerge(info, from, to);
 		} else if (cmd.command === 'tag') {
 			const {branch, tag} = cmd;

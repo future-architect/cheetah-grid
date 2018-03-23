@@ -22,7 +22,7 @@
 			return this._left;
 		}
 		set left(left) {
-			const right = this.right;
+			const {right} = this;
 			this._left = left;
 			this.right = right;
 		}
@@ -30,7 +30,7 @@
 			return this._top;
 		}
 		set top(top) {
-			const bottom = this.bottom;
+			const {bottom} = this;
 			this._top = top;
 			this.bottom = bottom;
 		}

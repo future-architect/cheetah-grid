@@ -30,9 +30,9 @@ function attachInput(grid, cell, editor, value) {
 
 	globalElement.attach(grid, editor, cell.col, cell.row, value);
 }
-function detachInput() {
+function detachInput(gridFocus) {
 	if (globalElement) {
-		globalElement.detach();
+		globalElement.detach(gridFocus);
 	}
 }
 const BaseInputEditor = require('./BaseInputEditor');
@@ -87,15 +87,15 @@ class SmallDialogInputEditor extends BaseInputEditor {
 	}
 	onGridScrollInternal(grid) {
 		// cancel input
-		detachInput();
+		detachInput(true);
 	}
 	onChangeDisabledInternal() {
 		// cancel input
-		detachInput();
+		detachInput(true);
 	}
 	onChangeReadOnlyInternal() {
 		// cancel input
-		detachInput();
+		detachInput(true);
 	}
 	onSetInputAttrsInternal(grid, cell, input) {
 		SmallDialogInputElement.setInputAttrs(this, grid, input);

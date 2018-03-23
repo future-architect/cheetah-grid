@@ -111,7 +111,6 @@ const newDefaultProps = (opt = {}) => {
 			new webpack.optimize.ModuleConcatenationPlugin(),
 			new webpack.optimize.OccurrenceOrderPlugin(),
 			new webpack.BannerPlugin({banner: BANNER, raw: true, entryOnly: true}),
-			new LiveReloadPlugin(),
 		],
 		devtool: '#source-map',
 	};
@@ -175,10 +174,16 @@ function newEs5MinConfig(opt) {
 	return newEs5Config(opt);
 }
 
+const liveReloadOpt = Object.assign({}, gridOpt);
+liveReloadOpt.plugins = [
+	...(liveReloadOpt.plugins || []),
+	new LiveReloadPlugin(),
+];
+
 
 module.exports = [
 	newEs6Config(gridOpt),
-	newEs5Config(Object.assign({suffix: '.es5'}, gridOpt)),
+	newEs5Config(Object.assign({suffix: '.es5'}, liveReloadOpt)),
 	newEs6MinConfig(Object.assign({suffix: '.min'}, gridOpt)),
 	newEs5MinConfig(Object.assign({suffix: '.es5.min'}, gridOpt)),
 	// newEs5Config(Object.assign({suffix: ''}, extToolsEntriesOpt)),

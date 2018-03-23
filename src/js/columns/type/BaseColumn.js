@@ -6,6 +6,7 @@
 	const BaseStyle = require('../style/Style');
 	const {COLUMN_FADEIN_STATE_ID} = require('../../internal/symbolManager');
 
+
 	function isFadeinWhenCallbackInPromise(column, grid) {
 		if (isDef(column._fadeinWhenCallbackInPromise)) {
 			return column._fadeinWhenCallbackInPromise;
@@ -114,10 +115,19 @@
 						if (!drawRect) {
 							return;
 						}
+						const actStyle = styleContents.of(style, getRecord(), this.StyleClass);
 						this.drawInternal(
 								this.convertInternal(val),
 								currentContext,
-								styleContents.of(style, getRecord(), this.StyleClass),
+								actStyle,
+								helper,
+								grid,
+								info
+						);
+						this.drawMessageInternal(
+								info.getMessage(),
+								context,
+								actStyle,
 								helper,
 								grid,
 								info
@@ -138,10 +148,19 @@
 					}
 				});
 			} else {
+				const actStyle = styleContents.of(style, getRecord(), this.StyleClass);
 				this.drawInternal(
 						this.convertInternal(cellValue),
 						context,
-						styleContents.of(style, getRecord(), this.StyleClass),
+						actStyle,
+						helper,
+						grid,
+						info
+				);
+				this.drawMessageInternal(
+						info.getMessage(),
+						context,
+						actStyle,
 						helper,
 						grid,
 						info
@@ -170,6 +189,9 @@
 		}
 		drawInternal(value, context, style, helper, grid, info) {
 			
+		}
+		drawMessageInternal(message, context, style, helper, grid, info) {
+			info.messageHandler.drawCellMessage(message, context, style, helper, info);
 		}
 		bindGridEvent(grid, col, util) {
 			return [];

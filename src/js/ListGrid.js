@@ -1,6 +1,6 @@
 'use strict';
 {
-	const {extend, isDef, isPromise, then, obj: {isObject}} = require('./internal/utils');
+	const {isDef, isPromise, then, obj: {isObject}} = require('./internal/utils');
 	const GridCanvasHelper = require('./GridCanvasHelper');
 	const columns = require('./columns');
 	const {BaseStyle} = columns.style;
@@ -10,6 +10,9 @@
 	const {DataSource, CachedDataSource} = require('./data');
 	const themes = require('./themes');
 	const icons = require('./internal/icons');
+	const MessageHandler = require('./columns/message/MessageHandler');
+	const EVENT_TYPE = require('./list-grid/EVENT_TYPE');
+	
 	//protected symbol
 	const {PROTECTED_SYMBOL: _} = require('./internal/symbolManager');
 
@@ -65,6 +68,17 @@
 			return isPromise(res) ? res : true;
 		}
 	}
+	function _getCellMessage(grid, col, row) {
+		if (row < grid[_].headerMap.rowCount) {
+			return null;
+		} else {
+			const {message} = grid[_].headerMap.columns[col];
+			if (!message) {
+				return null;
+			}
+			return _getField(grid, message, row);
+		}
+	}
 	function _getCellIcon0(grid, icon, row) {
 		if (!isDef(icon)) {
 			return null;
@@ -90,8 +104,8 @@
 		});
 		return retIcon;
 	}
-	function _getCellIcon(grid, col, row, name) {
-		const {[name]: icon} = grid[_].headerMap.columns[col];
+	function _getCellIcon(grid, col, row) {
+		const {icon} = grid[_].headerMap.columns[col];
 		return _getCellIcon0(grid, icon, row);
 	}
 	function _getField(grid, field, row) {
@@ -119,12 +133,14 @@
 	function _onDrawValue(grid, cellValue, context, {col, row}, style, draw) {
 		const helper = grid[_].gridCanvasHelper;
 
-		const drawCellBase = ({bgColor} = {}) => {
+		const drawCellBg = ({bgColor} = {}) => {
 			const fillOpt = {
 				fillColor: bgColor,
 			};
 			//cell全体を描画
 			helper.fillCellWithState(context, fillOpt);
+		};
+		const drawCellBorder = () => {
 
 			if (context.col === grid.frozenColCount - 1) {
 				//固定列罫線
@@ -153,11 +169,21 @@
 				helper.borderWithState(context);
 			}
 		};
+
+
+		const drawCellBase = ({bgColor} = {}) => {
+			drawCellBg({bgColor});
+			drawCellBorder();
+		};
 		const info = {
 			getRecord: () => grid.getRowRecord(row),
-			getIcon: () => _getCellIcon(grid, col, row, 'icon'),
+			getIcon: () => _getCellIcon(grid, col, row),
+			getMessage: () => _getCellMessage(grid, col, row),
+			messageHandler: grid[_].messageHandler,
 			style,
 			drawCellBase,
+			drawCellBg,
+			drawCellBorder,
 		};
 
 		return draw(cellValue, info, context, grid);
@@ -275,15 +301,13 @@
 		grid.frozenRowCount = grid[_].headerMap.rowCount;
 		for (let col = 0; col < grid[_].headerMap.columns.length; col++) {
 			const column = grid[_].headerMap.columns[col];
-			const width = column.width;
+			const {width, minWidth, maxWidth} = column;
 			if (width && (width > 0 || typeof width === 'string')) {
 				grid.setColWidth(col, width);
 			}
-			const minWidth = column.minWidth;
 			if (minWidth && (minWidth > 0 || typeof minWidth === 'string')) {
 				grid.setMinColWidth(col, minWidth);
 			}
-			const maxWidth = column.maxWidth;
 			if (maxWidth && (maxWidth > 0 || typeof maxWidth === 'string')) {
 				grid.setMaxColWidth(col, maxWidth);
 			}
@@ -443,6 +467,7 @@
 						maxWidth: hd.maxWidth,
 						field: hd.field,
 						icon: hd.icon,
+						message: hd.message,
 						columnType: columns.type.of(hd.columnType),
 						action: columns.action.of(hd.action),
 						style: hd.style,
@@ -482,10 +507,6 @@
 		return options;
 	}
 	
-	const EVENT_TYPE = extend(DrawGrid.EVENT_TYPE, {
-		CHANGED_VALUE: 'changed_value',
-	});
-
 	/**
 	 * ListGrid
 	 * @classdesc cheetahGrid.ListGrid
@@ -533,12 +554,17 @@
 			};
 			this[_].gridCanvasHelper = new GridCanvasHelper(this);
 			this[_].theme = themes.of(options.theme);
+			this[_].messageHandler = new MessageHandler(this, (col, row) => _getCellMessage(this, col, row));
 			this.invalidate();
 			this[_].handler.on(window, 'resize', () => {
 				this.updateSize();
 				this.updateScroll();
 				this.invalidate();
 			});
+		}
+		dispose() {
+			this[_].messageHandler.dispose();
+			super.dispose();
 		}
 		/**
 		 * header define
@@ -555,9 +581,14 @@
 		 * caption: header caption
 		 * field: field name
 		 * width: column width
+		 * minWidth: column min width
+		 * maxWidth: column max width
+		 * icon: icon name
+		 * message: message key name
 		 * columnType: ColumnType
 		 * action: ColumnAction
-		 * style
+		 * style: ColumnStyle
+		 * sort: define sort setting
 		 * -----
 		 *
 		 * multiline header
@@ -644,11 +675,11 @@
 			if (row < this[_].headerMap.rowCount) {
 				const hd = this[_].headerMap.getCell(col, row);
 				draw = hd.headerType.onDrawCell;
-				style = hd.style;
+				({style} = hd);
 				_updateRect(this, col, row, context);
 			} else {
 				draw = column.columnType.onDrawCell;
-				style = column.style;
+				({style} = column);
 			}
 			const cellValue = _getCellValue(this, col, row);
 			return _onDrawValue(this, cellValue, context, {col, row}, style, draw);
@@ -700,9 +731,9 @@
 			}
 		}
 		bindEventsInternal() {
-			this.listen(EVENT_TYPE.SELECTED_CELL, (cell, selected) => {
-				if (cell.row < this[_].headerMap.rowCount) {
-					const {startCol, endCol, startRow, endRow} = _getHeaderCellRange(this, cell.col, cell.row);
+			this.listen(EVENT_TYPE.SELECTED_CELL, (e) => {
+				if (e.row < this[_].headerMap.rowCount) {
+					const {startCol, endCol, startRow, endRow} = _getHeaderCellRange(this, e.col, e.row);
 					if (startCol !== endCol || startRow !== endRow) {
 						this.invalidateGridRect(startCol, startRow, endCol, endRow);
 					}
