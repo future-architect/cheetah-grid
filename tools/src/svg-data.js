@@ -13,7 +13,7 @@ const parser = new DOMParser();
 const ELEMENT_NODE = 1;
 
 function findElement(el, test) {
-	const childNodes = el.childNodes;
+	const {childNodes} = el;
 	for (let i = 0; i < childNodes.length; i++) {
 		const child = childNodes[i];
 		if (child.nodeType !== ELEMENT_NODE) {
@@ -64,7 +64,7 @@ class Svg {
 	}
 	walkAllGlyph(callback) {
 		const walkGlyph = (el) => {
-			const childNodes = el.childNodes;
+			const {childNodes} = el;
 			for (let i = 0; i < childNodes.length; i++) {
 				const child = childNodes[i];
 				if (child.nodeType !== ELEMENT_NODE) {

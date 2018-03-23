@@ -6,7 +6,7 @@ const loaderUtils = require('loader-utils');
 const svgToIcon = require('../tools/src/svg-to-cheetahgrid-icon');
 
 const loader = function(source) {
-	const resource = this.resource;
+	const {resource} = this;
 	const params = loaderUtils.parseQuery(this.resourceQuery || '?') || {};
 	params.resource = resource;
 	return `module.exports = ${svgToIcon.sourceToIconJsObject(source, params)};`;

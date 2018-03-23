@@ -17,7 +17,7 @@ module.exports = {
 	transform(canvas) {
 		const ctx = canvas.getContext('2d');
 
-		const getAttribute = canvas.getAttribute;
+		const {getAttribute, setAttribute} = canvas;
 		canvas.getAttribute = function(name, ...args) {
 			let result = getAttribute.call(this, name, ...args);
 			if (name === 'width' || name === 'height') {
@@ -25,7 +25,6 @@ module.exports = {
 			}
 			return result;
 		};
-		const setAttribute = canvas.setAttribute;
 		canvas.setAttribute = function(name, val, ...args) {
 			const wh = name === 'width' || name === 'height';
 			if (wh) {
@@ -58,7 +57,7 @@ module.exports = {
 			configurable: true,
 			enumerable: true,
 		});
-		const drawImage = ctx.drawImage;
+		const {drawImage} = ctx;
 		ctx.drawImage = function(img, ...args) {
 			if (img !== canvas || ratio === 1) {
 				return drawImage.call(this, img, ...args);

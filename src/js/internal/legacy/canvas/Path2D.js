@@ -36,7 +36,7 @@ class Path2D {
 	}
 }
 
-const CanvasRenderingContext2D = window.CanvasRenderingContext2D;
+const {CanvasRenderingContext2D} = window;
 
 const originalFill = CanvasRenderingContext2D.prototype.fill;
 

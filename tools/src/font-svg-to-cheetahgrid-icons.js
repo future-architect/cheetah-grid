@@ -58,7 +58,7 @@ const svgToIcons = {
 		}, opt));
 	},
 	sourceToIconsJsObject(svgCode, opt = {}) {
-		let resource = opt.resource;
+		let {resource} = opt;
 		let idx = resource.indexOf('\\node_modules\\');
 		if (idx === -1) {
 			idx = resource.indexOf('/node_modules/');

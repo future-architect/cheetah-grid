@@ -64,7 +64,7 @@ function registerHelpers() {
 			categorys = [categorys];
 		}
 
-		const allDemos = opt.data.root.collections.allDemos;
+		const {allDemos} = opt.data.root.collections;
 		const tree = [];
 		
 		return categorys.map((category) => {
@@ -177,7 +177,7 @@ function registerHelpers() {
 	Handlebars.registerHelper('eval', (...args) => {
 		const arg = analyzeArguments(...args);
 		const context = arg.get(this);
-		const option = arg.option;
+		const {option} = arg;
 		const ret = (function() {
 			return eval('(() => {' + // eslint-disable-line no-eval
 				`${context}
@@ -229,7 +229,7 @@ function registerHelpers() {
 		if (contexts.length === 1) {
 			contexts = contexts[0];
 		}
-		const option = arg.option;
+		const {option} = arg;
 		return (option.data.root[name] = contexts);
 	});
 	/**

@@ -10,8 +10,7 @@ module.exports = function(opts) {
 	return (files, metalsmith, done) => {
 
 		const metadata = metalsmith.metadata();
-		metadata.textContents = metadata.textContents || {};
-		const textContents = metadata.textContents;
+		const textContents = metadata.textContents || (metadata.textContents = {});
 		/**
 		 * Find the files in each collection.
 		 */

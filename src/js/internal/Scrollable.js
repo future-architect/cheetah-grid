@@ -10,7 +10,7 @@
 		let domHeight;
 		if (scrollable._height > MAX_SCROLL) {
 			const sbSize = style.getScrollBarSize();
-			const offsetHeight = scrollable._scrollable.offsetHeight;
+			const {offsetHeight} = scrollable._scrollable;
 			const vScrollRange = MAX_SCROLL - offsetHeight + sbSize;
 			const rScrollRange = scrollable._height - offsetHeight + sbSize;
 			scrollable._p = vScrollRange / rScrollRange;

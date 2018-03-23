@@ -1,5 +1,5 @@
 /*global cheetahGrid*/
-/*eslint prefer-rest-params:0, consistent-this:0*/
+/*eslint prefer-rest-params:0, consistent-this:0, prefer-destructuring:0 */
 'use strict';
 (function() {
 	const DrawGrid = cheetahGrid.core.DrawGrid;
@@ -46,7 +46,7 @@
 	TestGrid.prototype._getInitContext = function() {
 		const ctx = DrawGrid.prototype._getInitContext.apply(this, arguments);
 
-		//TODO 描画確認用
+		// 描画確認用
 		function getRandomColor() {
 			const letters = 'ABCDEF';
 			let color = '#';

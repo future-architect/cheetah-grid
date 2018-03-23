@@ -25,7 +25,7 @@
 				arrayFindIndex = (arr, predicate) => Array.prototype.findIndex.call(arr, predicate);
 			} else {
 				arrayFindIndex = (arr, predicate) => {
-					const length = arr.length;
+					const {length} = arr;
 					for (let i = 0; i < length; i++) {
 						const value = arr[i];
 						if (predicate(value, i, arr)) {

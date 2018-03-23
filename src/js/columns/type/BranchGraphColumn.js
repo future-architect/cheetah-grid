@@ -5,7 +5,7 @@ const BaseColumn = require('./BaseColumn');
 const {BRANCH_GRAPH_COLUMN_STATE_ID: _} = require('../../internal/symbolManager');
 
 function getAllColumnData(grid, col, callback) {
-	const dataSource = grid.dataSource;
+	const {dataSource} = grid;
 	let field = grid.getField(col);
 	if (isObject(field) && field.get && field.set) {
 		field = field.get;
