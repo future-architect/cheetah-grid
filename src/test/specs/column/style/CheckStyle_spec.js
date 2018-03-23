@@ -1,6 +1,6 @@
 /*global cheetahGrid*/
 /*eslint-env es6*/
-/*eslint prefer-arrow-callback:"off", object-shorthand:"off", max-len: "off"*/
+/*eslint prefer-arrow-callback:"off", object-shorthand:"off", max-len: "off", prefer-destructuring:"off"*/
 'use strict';
 (function() {
 	let mainEl = document.querySelector('#main');
@@ -101,8 +101,8 @@
 				for (let col = 0; col < 5; col++) {
 					const rect = girdHelper.getRect(col, 1);
 					const boxSize = cheetahGrid.tools.canvashelper.measureCheckbox(ctx).width;
-					const offsetX = (50 - boxSize) / 2;
-					const offsetY = (24 - boxSize) / 2;
+					const offsetX = Math.floor((50 - boxSize) / 2);
+					const offsetY = Math.floor((24 - boxSize) / 2);
 					cheetahGrid.tools.canvashelper.drawCheckbox(
 							ctx, rect.left + offsetX, rect.top + offsetY, false, {}
 					);
@@ -159,8 +159,8 @@
 					for (let col = 0; col < 5; col++) {
 						const rect = girdHelper.getRect(col, 1);
 						const boxSize = cheetahGrid.tools.canvashelper.measureCheckbox(ctx).width;
-						const offsetX = (50 - boxSize) / 2;
-						const offsetY = (24 - boxSize) / 2;
+						const offsetX = Math.floor((50 - boxSize) / 2);
+						const offsetY = Math.floor((24 - boxSize) / 2);
 						cheetahGrid.tools.canvashelper.drawCheckbox(
 								ctx, rect.left + offsetX, rect.top + offsetY, true, {}
 						);
@@ -269,8 +269,8 @@
 				for (let col = 0; col < 5; col++) {
 					const rect = girdHelper.getRect(col, 1);
 					const boxSize = cheetahGrid.tools.canvashelper.measureCheckbox(ctx).width;
-					const offsetX = (50 - boxSize) / 2;
-					const offsetY = (24 - boxSize) / 2;
+					const offsetX = Math.floor((50 - boxSize) / 2);
+					const offsetY = Math.floor((24 - boxSize) / 2);
 					const opt = {
 						uncheckBgColor: '#F00'
 					};
@@ -306,8 +306,8 @@
 					for (let col = 0; col < 5; col++) {
 						const rect = girdHelper.getRect(col, 1);
 						const boxSize = cheetahGrid.tools.canvashelper.measureCheckbox(ctx).width;
-						const offsetX = (50 - boxSize) / 2;
-						const offsetY = (24 - boxSize) / 2;
+						const offsetX = Math.floor((50 - boxSize) / 2);
+						const offsetY = Math.floor((24 - boxSize) / 2);
 						
 						const opt = {
 							uncheckBgColor: '#F00',
@@ -345,8 +345,8 @@
 				for (let col = 0; col < 5; col++) {
 					const rect = girdHelper.getRect(col, 1);
 					const boxSize = cheetahGrid.tools.canvashelper.measureCheckbox(ctx).width;
-					const offsetX = (50 - boxSize) / 2;
-					const offsetY = (24 - boxSize) / 2;
+					const offsetX = Math.floor((50 - boxSize) / 2);
+					const offsetY = Math.floor((24 - boxSize) / 2);
 					const opt = {
 						uncheckBgColor: '#F00',
 						checkBgColor: '#0F0',
