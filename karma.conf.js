@@ -124,6 +124,10 @@ module.exports = function(config) {
 				base: 'ChromeHeadless',
 				flags: ['--enable-logging', '--v=2']
 			},
+			'Chrome_travis_ci': {
+				base: 'ChromeHeadless',
+				flags: ['--no-sandbox']
+			},
 		},
 
 		// Continuous Integration mode

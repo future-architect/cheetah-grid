@@ -46,7 +46,7 @@
 			return Promise.resolve(array);
 		}
 		return new Promise((resolve) => {
-			const length = array.length;
+			const {length} = array;
 			const plist = [];
 			for (let i = 0; i < length; i++) {
 				const record = array[i];

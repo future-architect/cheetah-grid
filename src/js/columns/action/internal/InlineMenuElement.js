@@ -113,7 +113,7 @@ function openMenu(grid, editor, col, row, value, menu) {
 	let offset = 0;
 	let allHeight = 0;
 	for (let i = 0; i < children.length; i++) {
-		const offsetHeight = children[i].offsetHeight;
+		const {offsetHeight} = children[i];
 		if (i < focusIndex) {
 			offset += offsetHeight;
 		}
@@ -234,8 +234,8 @@ class InlineMenuElement {
 			if (!item) {
 				return;
 			}
-			const valueindex = item.dataset.valueindex;
-			this._doChangeValue(item.dataset.valueindex);
+			const {valueindex} = item.dataset;
+			this._doChangeValue(valueindex);
 			this.detach(true);
 		});
 		handler.on(menu, 'keydown', (e) => {
@@ -245,7 +245,7 @@ class InlineMenuElement {
 			}
 			const keyCode = getKeyCode(e);
 			if (keyCode === KEY_ENTER) {
-				const valueindex = item.dataset.valueindex;
+				const {valueindex} = item.dataset;
 				this._doChangeValue(valueindex);
 				this.detach(true);
 				cancelEvent(e);

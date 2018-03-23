@@ -4,7 +4,8 @@
 [![npm](https://img.shields.io/npm/v/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
 [![npm](https://img.shields.io/npm/dm/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
 [![npm](https://img.shields.io/npm/dy/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
-[![npm](https://img.shields.io/npm/dt/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)  
+[![npm](https://img.shields.io/npm/dt/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
+[![Build Status](https://travis-ci.org/ota-meshi/image-matcher.svg?branch=master)](https://travis-ci.org/future-architect/cheetah-grid)  
 [![NPM](https://nodei.co/npm/cheetah-grid.png?downloads=true&stars=true)](https://www.npmjs.com/package/cheetah-grid)
 
 [![Cheetah Grid](https://future-architect.github.io/cheetah-grid/logo.png)](https://future-architect.github.io/cheetah-grid/)  

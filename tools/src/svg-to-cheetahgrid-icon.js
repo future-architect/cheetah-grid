@@ -57,7 +57,7 @@ function elementToPaths(el, resource) {
 		return polylineToPath(el);
 	case 'g':
 		let path = '';
-		const childNodes = el.childNodes;
+		const {childNodes} = el;
 		for (let i = 0; i < childNodes.length; i++) {
 			const child = childNodes[i];
 			if (child.nodeType !== ELEMENT_NODE) {
@@ -188,7 +188,7 @@ function svgToJSON(svgString, resource) {
 	const offsetY = (0 - viewBox[1]) || 0;
 
 	let d = '';
-	const childNodes = svg.childNodes;
+	const {childNodes} = svg;
 	for (let i = 0; i < childNodes.length; i++) {
 		const el = childNodes[i];
 		if (el.nodeType !== ELEMENT_NODE) {
@@ -216,7 +216,7 @@ const svgToIcon = {
 		}, opt));
 	},
 	sourceToIconJsObject(svgCode, opt = {}) {
-		let resource = opt.resource;
+		let {resource} = opt;
 		let idx = resource.indexOf('\\node_modules\\');
 		if (idx === -1) {
 			idx = resource.indexOf('/node_modules/');

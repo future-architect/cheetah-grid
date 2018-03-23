@@ -100,8 +100,8 @@
 				...bindCellKeyAction(grid, col, util, {
 					action: (e) => {
 						const selrange = grid.selection.range;
-						const col = grid.selection.select.col;
-						for (let row = selrange.start.row; row <= selrange.end.row; row++) {
+						const {col} = grid.selection.select;
+						for (let {row} = selrange.start; row <= selrange.end.row; row++) {
 							if (!util.isTarget(col, row)) {
 								continue;
 							}
