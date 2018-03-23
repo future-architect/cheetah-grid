@@ -9,19 +9,19 @@ const MESSAGE_CLASSNAME = CLASSNAME + '__message';
 const HIDDEN_CLASSNAME = CLASSNAME + '--hidden';
 const SHOWN_CLASSNAME = CLASSNAME + '--shown';
 
-function createrootElement() {
+function createMessageDomElement() {
 	require('./MessageElement.css');
-	const element = createElement('div', {classList: [CLASSNAME, HIDDEN_CLASSNAME]});
-	const message = createElement('span', {classList: [MESSAGE_CLASSNAME]});
-	element.appendChild(message);
-	return element;
+	const rootElement = createElement('div', {classList: [CLASSNAME, HIDDEN_CLASSNAME]});
+	const messageElement = createElement('span', {classList: [MESSAGE_CLASSNAME]});
+	rootElement.appendChild(messageElement);
+	return rootElement;
 }
 
 
 class MessageElement {
 	constructor() {
 		this._handler = new EventHandler();
-		const rootElement = this._rootElement = createrootElement();
+		const rootElement = this._rootElement = createMessageDomElement();
 		this._messageElement = rootElement.querySelector(`.${MESSAGE_CLASSNAME}`);
 	}
 	dispose() {
@@ -41,7 +41,7 @@ class MessageElement {
 			rootElement.classList.add(SHOWN_CLASSNAME);
 			rootElement.classList.remove(HIDDEN_CLASSNAME);
 
-			messageElement.textContent = message;
+			messageElement.textContent = message.message;
 		} else {
 			this._detach();
 		}
@@ -76,29 +76,29 @@ class MessageElement {
 		if (row >= frozenRowCount && frozenRowCount > 0) {
 			const {rect: frozenRect} = grid.getAttachCellArea(col, frozenRowCount - 1);
 			if (top < frozenRect.bottom) {
-				return false;
+				return false;//範囲外
 			}
 		} else {
 			if (top < 0) {
-				return false;
+				return false;//範囲外
 			}
 		}
 		if (col >= frozenColCount && frozenColCount > 0) {
 			const {rect: frozenRect} = grid.getAttachCellArea(frozenColCount - 1, row);
 			if (left < frozenRect.right) {
-				return false;
+				return false;//範囲外
 			}
 		} else {
 			if (left < 0) {
-				return false;
+				return false;//範囲外
 			}
 		}
 		const {offsetHeight, offsetWidth} = element;
 		if (offsetHeight < top) {
-			return false;
+			return false;//範囲外
 		}
 		if (offsetWidth < left) {
-			return false;
+			return false;//範囲外
 		}
 
 		rootElement.style.top = top.toFixed() + 'px';

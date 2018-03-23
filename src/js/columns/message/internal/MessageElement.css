@@ -10,10 +10,10 @@
 	user-select: none;
 }
 .cheetah-grid__message-element--hidden {
-	opacity: 0;
 	display: none;
 }
 .cheetah-grid__message-element--shown {
+	display: block;
 }
 .cheetah-grid__message-element__message {
 	font-family: Roboto;
@@ -23,14 +23,8 @@
 	line-height: 1;
 	display: block;
 	width: 100%;
-
 }
 .cheetah-grid__message-element {
 	border-top: solid 1px rgba(0, 0, 0, .87);
 	color: rgba(0, 0, 0, .87);
-}
-.cheetah-grid__message-element__message {
-}
-.cheetah-grid__message-element.helper-text--right-justified {
-	text-align: right;
 }
