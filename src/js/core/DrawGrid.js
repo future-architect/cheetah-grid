@@ -21,6 +21,7 @@
 	const NumberMap = require('../internal/NumberMap');
 	const style = require('../internal/style');
 	const calc = require('../internal/calc');
+	const {getFontSize} = require('../internal/canvases');
 	const hiDPI = require('../internal/hiDPI');
 	//protected symbol
 	const {PROTECTED_SYMBOL: _} = require('../internal/symbolManager');
@@ -1783,7 +1784,7 @@
 					return this._.canvas.width;
 				},
 				get em() {
-					return this._.context.measureText('あ').width;
+					return getFontSize(this._.context, this._.font).width;
 				}
 			};
 

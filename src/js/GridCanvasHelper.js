@@ -1,7 +1,7 @@
 /*eslint no-bitwise:0*/
 'use strict';
 {
-	const {calcStartPosition} = require('./internal/canvases');
+	const {calcStartPosition, getFontSize} = require('./internal/canvases');
 	const inlines = require('./element/inlines');
 	const canvashelper = require('./tools/canvashelper');
 	const themes = require('./themes');
@@ -122,12 +122,12 @@
 		let paddingBottom = lineHeight * (multiInlines.length - 1);
 
 		if (ctx.textBaseline === 'top' || ctx.textBaseline === 'hanging') {
-			const em = ctx.measureText('あ').width;
+			const em = getFontSize(ctx, ctx.font).height;
 			const pad = (lineHeight - em) / 2;
 			paddingTop += pad;
 			paddingBottom -= pad;
 		} else if (ctx.textBaseline === 'bottom' || ctx.textBaseline === 'alphabetic' || ctx.textBaseline === 'ideographic') {
-			const em = ctx.measureText('あ').width;
+			const em = getFontSize(ctx, ctx.font).height;
 			const pad = (lineHeight - em) / 2;
 			paddingTop -= pad;
 			paddingBottom += pad;
@@ -280,18 +280,6 @@
 			this._theme = new Theme(grid);
 		}
 		createCalculator(context, font) {
-			let getEm = () => {
-				const ctx = context.getContext();
-				const bk = ctx.font;
-				try {
-					ctx.font = font || ctx.font;
-					const em = ctx.measureText('あ').width;
-					getEm = () => em;
-					return em;
-				} finally {
-					ctx.font = bk;
-				}
-			};
 			return {
 				calcWidth(width) {
 					return calc.toPx(width, {
@@ -300,7 +288,7 @@
 							return rect.width;
 						},
 						get em() {
-							return getEm();
+							return getFontSize(context.getContext(), font).width;
 						}
 					});
 				},
@@ -311,7 +299,7 @@
 							return rect.height;
 						},
 						get em() {
-							return getEm();
+							return getFontSize(context.getContext(), font).height;
 						}
 					});
 				}
