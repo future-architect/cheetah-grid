@@ -42,10 +42,11 @@
     "webpack-loader/"
   ],
   "scripts": {
-    "test": "karma start --min",
+    "test": "karma start --no-auto-watch --single-run --browsers Chrome_travis_ci",
+    "test:once": "karma start --min  --no-auto-watch --single-run",
+    "test:watch": "karma start --min",
     "build": "npm run webpack",
     "lint": "npm run eslint",
-    "test:once": "karma start --min  --no-auto-watch --single-run",
     "ci": "karma start --no-auto-watch --single-run --browsers PhantomJS",
     "testff": "karma start --browsers Firefox",
     "test-nonopt": "karma start",
