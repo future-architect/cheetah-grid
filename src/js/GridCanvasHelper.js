@@ -260,7 +260,7 @@
 		}
 
 	}
-	
+
 
 	function strokeRect(ctx, color, left, top, width, height) {
 		if (!Array.isArray(color)) {
@@ -526,7 +526,7 @@
 			try {
 				const {col, row} = context;
 				ctx.fillStyle = getColor(fillColor, col, row, this._grid, ctx);
-				
+
 				ctx.beginPath();
 				ctx.rect(rect.left, rect.top, rect.width, rect.height);
 				ctx.fill();
@@ -562,7 +562,7 @@
 			this.drawBorderWithClip(context, (ctx) => {
 				const {col, row} = context;
 				const borderColors = getColor(borderColor, col, row, this._grid, ctx);
-				
+
 				if (lineWidth === 1) {
 					ctx.lineWidth = 1;
 					strokeRect(ctx, borderColors, rect.left - 0.5, rect.top - 0.5, rect.width, rect.height);

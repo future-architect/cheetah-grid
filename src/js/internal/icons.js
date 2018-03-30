@@ -23,7 +23,7 @@ function quote(name) {
 		if (part.indexOf(' ') === -1 && !(/^\d/.test(part))) {
 			quoted.push(part);
 		} else {
-			quoted.push('\'' + part + '\'');
+			quoted.push(`'${part}'`);
 		}
 	}
 	return quoted.join(',');
@@ -50,17 +50,17 @@ function getIconProps(tagName, className) {
 		}
 		let font = beforeStyle.getPropertyValue('font');
 		if (!font) {
-			font = beforeStyle.getPropertyValue('font-style') + ' ' +
-				beforeStyle.getPropertyValue('font-variant') + ' ' +
-				beforeStyle.getPropertyValue('font-weight') + ' ' +
-				beforeStyle.getPropertyValue('font-size') + '/' +
-				beforeStyle.getPropertyValue('line-height') + ' ' +
-				quote(beforeStyle.getPropertyValue('font-family'));
+			font = `${beforeStyle.getPropertyValue('font-style')} ${
+				beforeStyle.getPropertyValue('font-variant')} ${
+				beforeStyle.getPropertyValue('font-weight')} ${
+				beforeStyle.getPropertyValue('font-size')}/${
+				beforeStyle.getPropertyValue('line-height')} ${
+				quote(beforeStyle.getPropertyValue('font-family'))}`;
 		}
 		const color = beforeStyle.getPropertyValue('color');
 		const width = dom.clientWidth;
 		const isLiga = (beforeStyle.getPropertyValue('font-feature-settings') || '').indexOf('liga') > -1;
-		
+
 		return (tagProps[className] = {
 			content,
 			font,

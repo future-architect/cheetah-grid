@@ -1,5 +1,5 @@
 /*global cheetahGrid*/
-/*eslint object-shorthand:0, prefer-arrow-callback:0*/
+/*eslint object-shorthand:0, prefer-arrow-callback:0, prefer-template:0*/
 'use strict';
 (function() {
 	const records = [

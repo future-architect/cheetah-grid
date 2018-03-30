@@ -5,7 +5,7 @@ const MessageElement = require('./internal/MessageElement');
 const messageUtils = require('./messageUtils');
 
 const GREY_L2 = '#e0e0e0';
-	
+
 class InfoMessage extends BaseMessage {
 	createMessageElementInternal() {
 		return new MessageElement();

@@ -18,7 +18,7 @@
 	};
 
 	const getPath = function(url) {
-		const m = url.match('(^.*)[\?#]');
+		const m = url.match('(^.*)[?#]');
 		return m ? m[1] : url;
 	};
 
@@ -132,7 +132,7 @@
 								y = r.top + (r.height / 2);
 							}
 						}
-						
+
 						context.fillText(text, x, y);
 
 						context.restore();
@@ -162,7 +162,7 @@
 						const right = r.right;
 						let bottom = r.bottom;
 
-						
+
 						if (!drawBottom) {
 							top += context.lineWidth / 2;
 							context.beginPath();
@@ -211,7 +211,7 @@
 
 	const ua = navigator.userAgent.toLowerCase();
 	const ver = navigator.appVersion.toLowerCase();
- 
+
 	// IE(11以外)
 	const isMSIE = (ua.indexOf('msie') > -1) && (ua.indexOf('opera') === -1);
 	// IE6
@@ -230,7 +230,7 @@
 	const isIE = isMSIE || isIE11;
 	// Edge
 	const isEdge = (ua.indexOf('edge') > -1);
- 
+
 	// Google Chrome
 	const isChrome = (ua.indexOf('chrome') > -1) && (ua.indexOf('edge') === -1);
 	// Firefox
@@ -242,7 +242,7 @@
 
 	const isPhantomjs = (ua.indexOf('phantomjs') > -1);
 
-	
+
 	if (isIE) {
 		window.userBrowser = 'IE';
 	}
@@ -267,7 +267,7 @@
 	if (isEdge) {
 		window.userBrowser = 'Edge';
 	}
- 
+
 	if (isChrome) {
 		window.userBrowser = 'Chrome';
 	}

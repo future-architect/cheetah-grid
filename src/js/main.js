@@ -6,13 +6,13 @@
 	const columns = require('./columns');
 	const themes = require('./themes');
 	const data = require('./data');
-	
+
 	const ListGrid = require('./ListGrid');
 	const GridCanvasHelper = require('./GridCanvasHelper');
-	
+
 	const icons = require('./icons');
 	const register = require('./register');
-	
+
 	/**
 	 * Cheetah Grid
 	 * @type {Object}

@@ -1,6 +1,6 @@
 /*global cheetahGrid*/
 /*eslint-env es6*/
-/*eslint prefer-arrow-callback:"off", object-shorthand:"off", prefer-destructuring: "off"*/
+/*eslint prefer-arrow-callback:"off", object-shorthand:"off", prefer-destructuring: "off", prefer-template: "off"*/
 'use strict';
 (function() {
 	let mainEl = document.querySelector('#main');

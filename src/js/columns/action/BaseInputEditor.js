@@ -1,6 +1,6 @@
 'use strict';
 {
-	
+
 	const Editor = require('./Editor');
 	const {EVENT_TYPE: {
 		INPUT_CELL,
@@ -122,7 +122,7 @@
 						row: cell.row
 					}, cell.input);
 				}),
-				
+
 			];
 		}
 	}

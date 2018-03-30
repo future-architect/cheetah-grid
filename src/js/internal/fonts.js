@@ -4,15 +4,15 @@
 	const legacy = !document.fonts;
 	const load = legacy ? function(font, testStr, callback) {
 		//for legacy(IE)
-		if (loads[font + ' @ ' + testStr]) {
+		if (loads[`${font} @ ${testStr}`]) {
 			callback();
 			return;
 		}
 		require('./legacy/fontwatch/FontWatchRunner').load(font, testStr, () => {
-			loads[font + ' @ ' + testStr] = true;
+			loads[`${font} @ ${testStr}`] = true;
 			callback();
 		}, () => {
-			loads[font + ' @ ' + testStr] = true;
+			loads[`${font} @ ${testStr}`] = true;
 			callback();
 		});
 	} : function(font, testStr, callback) {
@@ -30,7 +30,7 @@
 	};
 	const check = legacy ? function(font, testStr) {
 		//for legacy(IE)
-		if (loads[font + ' @ ' + testStr]) {
+		if (loads[`${font} @ ${testStr}`]) {
 			return true;
 		}
 		load(font, testStr, () => {});
@@ -46,7 +46,7 @@
 		return true;
 	};
 
-	
+
 	module.exports = {
 		check,
 		load

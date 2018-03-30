@@ -1,6 +1,6 @@
 'use strict';
 {
-	
+
 	const {isPromise, event: {cancel}} = require('../../internal/utils');
 	const {EVENT_TYPE: {
 		CLICK_CELL,

@@ -23,7 +23,7 @@
 	function _generateFadinPointAction(grid, col, row, context, drawInternal, drawCellBase) {
 		return (point) => {
 			const state = getFadinState(grid);
-			const stateKey = col + ':' + row;
+			const stateKey = `${col}:${row}`;
 			if (point === 1) {
 				delete state[stateKey];
 			} else {
@@ -57,7 +57,7 @@
 				_generateFadinPointAction(grid, col, row, context, drawInternal, drawCellBase),
 			];
 			state.activeFadeins = activeFadeins;
-			
+
 			animate(500, (point) => {
 				activeFadeins.forEach((f) => f(point));
 				if (point === 1) {
@@ -167,7 +167,7 @@
 				);
 				//フェードインの場合透過するため背景を透過で上書き
 				const {col, row} = context;
-				const stateKey = col + ':' + row;
+				const stateKey = `${col}:${row}`;
 				const cellState = grid[COLUMN_FADEIN_STATE_ID] && grid[COLUMN_FADEIN_STATE_ID][stateKey];
 				if (cellState) {
 					const ctx = context.getContext();
@@ -188,7 +188,7 @@
 			return isDef(value) ? value : '';
 		}
 		drawInternal(value, context, style, helper, grid, info) {
-			
+
 		}
 		drawMessageInternal(message, context, style, helper, grid, info) {
 			info.messageHandler.drawCellMessage(message, context, style, helper, info);

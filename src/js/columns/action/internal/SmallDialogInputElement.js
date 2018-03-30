@@ -6,16 +6,16 @@ const {
 	},
 	then,
 } = require('../../../internal/utils');
-	
+
 const EventHandler = require('../../../internal/EventHandler');
 const {
 	createElement,
 } = require('../../../internal/dom');
 
 const CLASSNAME = 'cheetah-grid__small-dialog-input';
-const INPUT_CLASSNAME = CLASSNAME + '__input';
-const HIDDEN_CLASSNAME = CLASSNAME + '--hidden';
-const SHOWN_CLASSNAME = CLASSNAME + '--shown';
+const INPUT_CLASSNAME = `${CLASSNAME}__input`;
+const HIDDEN_CLASSNAME = `${CLASSNAME}--hidden`;
+const SHOWN_CLASSNAME = `${CLASSNAME}--shown`;
 
 const KEY_ENTER = 13;
 const KEY_ESC = 27;
@@ -89,7 +89,7 @@ class SmallDialogInputElement {
 	constructor() {
 		this._handler = new EventHandler();
 		this._dialog = createDialogElement();
-		this._input = this._dialog.querySelector('.' + INPUT_CLASSNAME);
+		this._input = this._dialog.querySelector(`.${INPUT_CLASSNAME}`);
 		this._bindDialogEvents();
 	}
 	dispose() {
@@ -118,12 +118,12 @@ class SmallDialogInputElement {
 		input.readonly = false;
 		input.tabIndex = 0;
 		const {element, rect} = grid.getAttachCellArea(col, row);
-		dialog.style.top = rect.top.toFixed() + 'px';
-		dialog.style.left = rect.left.toFixed() + 'px';
-		dialog.style.width = rect.width.toFixed() + 'px';
-		input.style.height = rect.height.toFixed() + 'px';
+		dialog.style.top = `${rect.top.toFixed()}px`;
+		dialog.style.left = `${rect.left.toFixed()}px`;
+		dialog.style.width = `${rect.width.toFixed()}px`;
+		input.style.height = `${rect.height.toFixed()}px`;
 		element.appendChild(dialog);
-			
+
 		input.value = value;
 		input.style.font = grid.font || '16px sans-serif';
 		const activeData = {grid, col, row, editor};
@@ -133,7 +133,7 @@ class SmallDialogInputElement {
 		dialog.classList.remove(HIDDEN_CLASSNAME);
 		input.readonly = true;
 
-		
+
 		bindProps(grid, dialog, input, editor);
 
 		this._activeData = activeData;
@@ -150,7 +150,7 @@ class SmallDialogInputElement {
 			input.tabIndex = -1;
 
 			const {grid, col, row} = this._activeData;
-			
+
 			grid.invalidateCell(col, row);
 			if (gridFocus) {
 				grid.focus();
@@ -193,7 +193,7 @@ class SmallDialogInputElement {
 		handler.on(dialog, 'dblclick', stopPropagationOnly);
 		handler.on(dialog, 'mousedown', stopPropagationOnly);
 		handler.on(dialog, 'touchstart', stopPropagationOnly);
-			
+
 		handler.on(input, 'compositionstart', (e) => {
 			input.classList.add('composition');
 		});

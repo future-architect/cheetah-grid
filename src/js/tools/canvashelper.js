@@ -91,7 +91,7 @@
 				offset,
 				padding
 			});
-			
+
 			ctx.fillText(text, pos.x, pos.y);
 		} finally {
 			ctx.restore();
@@ -125,7 +125,7 @@
 				offset,
 				padding
 			});
-			
+
 			ctx.drawImage(image,
 					srcLeft, srcTop, srcWidth, srcHeight,
 					pos.x, pos.y, destWidth, destHeight
@@ -146,7 +146,7 @@
 			width: getFontSize(ctx, null).width
 		};
 	}
-		
+
 	/**
 	 * draw Checkbox
 	 * @param  {CanvasRenderingContext2D} ctx canvas context
@@ -169,7 +169,7 @@
 		ctx.save();
 		try {
 			ctx.fillStyle = check ? checkBgColor : uncheckBgColor;
-			
+
 			fillRoundRect(
 					ctx,
 					ceil(x) - 1,
@@ -197,7 +197,7 @@
 				const leftTopPos = y + boxSize / 2;
 
 				if (checkPoint < 0.5) {
-					leftWidth = leftWidth * (checkPoint * 2);
+					leftWidth *= (checkPoint * 2);
 				}
 
 				ctx.beginPath();
@@ -205,7 +205,7 @@
 				ctx.lineTo(leftLeftPos + leftWidth, leftTopPos + leftWidth);
 				if (checkPoint > 0.5) {
 					if (checkPoint < 1) {
-						rightWidth = rightWidth * ((checkPoint - 0.5) * 2);
+						rightWidth *= ((checkPoint - 0.5) * 2);
 					}
 					ctx.lineTo(leftLeftPos + leftWidth + rightWidth, leftTopPos + leftWidth - rightWidth);
 				}

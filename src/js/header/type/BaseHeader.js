@@ -28,7 +28,7 @@
 			);
 		}
 		drawInternal(value, context, style, helper, grid, info) {
-			
+
 		}
 		bindGridEvent(grid) {
 			return [];

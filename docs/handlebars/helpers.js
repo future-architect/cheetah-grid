@@ -66,7 +66,7 @@ function registerHelpers() {
 
 		const {allDemos} = opt.data.root.collections;
 		const tree = [];
-		
+
 		return categorys.map((category) => {
 			tree.push(category);
 			const demo = allDemos.find((demo) => {
@@ -79,7 +79,7 @@ function registerHelpers() {
 			const path = Handlebars.helpers.ms_path.call(
 					this, Handlebars.helpers.ms_finalpath.call(this, demo.path, opt), opt
 			);
-			
+
 			return `<a href="${path}">${category}</a>`;
 		}).join(' &gt; ');
 	});
@@ -90,7 +90,7 @@ function registerHelpers() {
 	});
 	Handlebars.registerHelper('includes', (s, search) => s.includes(search));
 
-	
+
 	Handlebars.registerHelper('texttrim', (s) => {
 		if (!s) {
 			return s;
@@ -139,7 +139,7 @@ function registerHelpers() {
 		}
 		return '';
 	});
-	
+
 	Handlebars.registerHelper('range', function(start, end, options) {
 		const list = [];
 		for (let i = start; i <= end; i++) {
@@ -148,7 +148,7 @@ function registerHelpers() {
 		return Handlebars.helpers.each.
 			call(this, list, {fn: options.fn, inverse: options.inverse, hash: options.hash});
 	});
-	
+
 	Handlebars.registerHelper('tree_each', function(context, childrenName, options) {
 
 		function childEach(ctx) {
@@ -279,7 +279,7 @@ function registerHelpers() {
 		const arg = analyzeArguments(...args);
 		const context = arg.get(this);
 		const option = Object.assign({presets: ['es2015']}, arg.hash);
-		return '//babel\n' + babel.transform(context, option).code;
+		return `//babel\n${babel.transform(context, option).code}`;
 	});
 	Handlebars.registerHelper('hbs', function(...args) {
 		const arg = analyzeArguments(...args);
@@ -313,7 +313,7 @@ function registerHelpers() {
 		} else {
 			template = Handlebars.partials.code;
 		}
-		
+
 		return new Handlebars.SafeString(template(option));
 	});
 	Handlebars.registerHelper('json', function(...args) {

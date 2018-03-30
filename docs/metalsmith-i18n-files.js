@@ -11,13 +11,13 @@ module.exports = function({defaultLang = 'en', locales = ['ja']} = {}) {
 		},
 		...locales.map((lang) => ({
 			lang,
-			langDir: lang + '/',
+			langDir: `${lang}/`,
 		}))
 	];
 
 	return (files, metalsmith, done) => {
 
-		
+
 		/**
 		 * Find the files in each collection.
 		 */
@@ -33,7 +33,7 @@ module.exports = function({defaultLang = 'en', locales = ['ja']} = {}) {
 					}
 					return value;
 				});
-				newData['lang_' + lang] = true;
+				newData[`lang_${lang}`] = true;
 				newData.lang = lang;
 				newData.langDir = langDir;
 				newData.originalPath = file.replace(/\\/g, '/');

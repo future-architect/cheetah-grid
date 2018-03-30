@@ -11,8 +11,8 @@
 	}
 
 	const records = [
-		{bool: false, str: 'false', onoff: 'off', 'num': 0, 'numstr': '00'},
-		{bool: false, str: 'false', onoff: 'off', 'num': 0, 'numstr': '000'},
+		{bool: false, str: 'false', onoff: 'off', num: 0, numstr: '00'},
+		{bool: false, str: 'false', onoff: 'off', num: 0, numstr: '000'},
 	];
 
 	const grid = new cheetahGrid.ListGrid({
@@ -39,7 +39,7 @@
 	const theme = {};
 	theme.frozenRowsBgColor = '#d3d3d3';
 	grid.theme = cheetahGrid.themes.choices.BASIC.extends(theme);
-	
+
 
 	describe('CheckColumn', function() {
 
@@ -122,7 +122,7 @@
 			grid.fireListeners(cheetahGrid.ListGrid.EVENT_TYPE.CLICK_CELL, {col: 3, row: 1});
 			grid.fireListeners(cheetahGrid.ListGrid.EVENT_TYPE.CLICK_CELL, {col: 4, row: 1});
 
-			expect(records[0]).toEqual({bool: true, str: 'true', onoff: 'on', 'num': 1, 'numstr': '01'});
+			expect(records[0]).toEqual({bool: true, str: 'true', onoff: 'on', num: 1, numstr: '01'});
 
 			expect(grid.fireListeners('copydata', {
 				start: {
@@ -138,7 +138,7 @@
 				'true	true	on	1	01\n' +
 				'false	false	off	0	000\n'
 			]);
-			
+
 
 			setTimeout(function() {
 				function createAnswerCanvas() {
@@ -209,7 +209,7 @@
 				row: 0,
 			};
 
-			expect(records[0]).toEqual({bool: false, str: 'false', onoff: 'off', 'num': 0, 'numstr': '00'});
+			expect(records[0]).toEqual({bool: false, str: 'false', onoff: 'off', num: 0, numstr: '00'});
 
 		});
 	});

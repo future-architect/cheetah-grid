@@ -2,7 +2,7 @@
 const MessageElement = require('./MessageElement');
 
 const CLASSNAME = 'cheetah-grid__warning-message-element';
-const MESSAGE_CLASSNAME = CLASSNAME + '__message';
+const MESSAGE_CLASSNAME = `${CLASSNAME}__message`;
 
 
 class WarningMessageElement extends MessageElement {

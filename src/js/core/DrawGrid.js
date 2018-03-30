@@ -13,7 +13,7 @@
 			cancel: cancelEvent,
 		}
 	} = require('../internal/utils');
-	
+
 	const EventTarget = require('./EventTarget');
 	const Rect = require('../internal/Rect');
 	const Scrollable = require('../internal/Scrollable');
@@ -290,7 +290,7 @@
 				_drawCell(grid, ctx, col, absoluteLeft, width, row, absoluteTop, height, visibleRect,
 						skipAbsoluteTop, 0,
 						drawLayers);
-					
+
 				absoluteLeft += width;
 				if (drawRight <= absoluteLeft) { //描画範囲外（終了）
 					drawOuter(col, absoluteLeft);
@@ -374,7 +374,7 @@
 		let absoluteTop = initRow.top;
 		for (let {row} = initRow; row < rowCount; row++) {
 			const height = _getRowHeight(grid, row);
-				
+
 			//行の描画
 			_drawRow(grid,
 					ctx, initFrozenCol, initCol, drawRight,
@@ -407,7 +407,7 @@
 		if (!limit) {
 			return orgWidth;
 		}
-		
+
 		if (limit.min) {
 			const min = _toPxWidth(grid, limit.min);
 			if (min > orgWidth) {
@@ -506,7 +506,7 @@
 			//差分再描画
 			grid[_].context.drawImage(grid[_].canvas, -moveX, -moveY);
 
-				
+
 			if (moveX !== 0) {
 				//横移動の再描画範囲を計算
 				const redrawRect = visibleRect.copy();
@@ -622,7 +622,7 @@
 		grid.selection._setFocusCell(col, row, shiftKey);
 		grid.makeVisibleCell(col, row);
 		grid.focusCell(col, row);
-			
+
 		const afterRange = extendRange(grid.selection.range);
 		const afterRect = grid.getCellsRect(
 				afterRange.start.col, afterRange.start.row,
@@ -713,7 +713,7 @@
 		let doubleTapBefore = null;
 		let longTouchId = null;
 		grid[_].handler.on(grid[_].element, 'touchstart', (e) => {
-		
+
 			if (!doubleTapBefore) {
 				doubleTapBefore = getCellEventArgsSet(e).eventArgs;
 				setTimeout(() => {
@@ -812,7 +812,7 @@
 		grid[_].handler.on(grid[_].element, 'mouseleave', (e) => {
 			onMouseleaveCell();
 		});
-			
+
 		grid[_].handler.on(grid[_].element, 'mousemove', (e) => {
 			const eventArgsSet = getCellEventArgsSet(e);
 			const {abstractPos, eventArgs} = eventArgsSet;
@@ -916,14 +916,14 @@
 					if (window.Promise && copyCellValue instanceof window.Promise) {
 						//非同期データは取得できない
 					} else {
-						const strCellValue = '' + copyCellValue;
+						const strCellValue = `${copyCellValue}`;
 						if (strCellValue.match(/^\[object .*\]$/)) {
 							//object は無視
 						} else {
 							copyValue += strCellValue;
 						}
 					}
-						
+
 					if (col < range.end.col) {
 						copyValue += '\t';
 					}
@@ -1206,7 +1206,7 @@
 		}
 		_upInternal(e) {
 			this._grid.updateScroll();
-			
+
 		}
 	}
 
@@ -1350,10 +1350,10 @@
 		}
 		setFocusRect(rect) {
 			const top = this._scrollable.calcTop(rect.top);
-			this._input.style.top = (top - style.getScrollBarSize()).toFixed() + 'px';//position:relative だとずれるが、IEは position:relativeじゃないと最大値まで利用できない
-			this._input.style.left = rect.left.toFixed() + 'px';
-			this._input.style.width = rect.width.toFixed() + 'px';
-			this._input.style.height = rect.height.toFixed() + 'px';
+			this._input.style.top = `${(top - style.getScrollBarSize()).toFixed()}px`;//position:relative だとずれるが、IEは position:relativeじゃないと最大値まで利用できない
+			this._input.style.left = `${rect.left.toFixed()}px`;
+			this._input.style.width = `${rect.width.toFixed()}px`;
+			this._input.style.height = `${rect.height.toFixed()}px`;
 		}
 		set editMode(editMode) {
 			this._input.readOnly = !editMode;
@@ -1361,7 +1361,7 @@
 		resetInputStatus() {
 			const el = this._input;
 			const composition = el.classList.contains('composition');
-			
+
 			const atts = el.attributes;
 			const removeNames = [];
 			for (let i = 0, n = atts.length; i < n; i++) {
@@ -1418,7 +1418,7 @@
 
 			this._sel = {col: 0, row: 0};
 			this._focus = {col: 0, row: 0};
-			
+
 			this._start = {col: 0, row: 0};
 			this._end = {col: 0, row: 0};
 		}
@@ -1681,7 +1681,7 @@
 				);
 			}
 
-			
+
 			if (!rect.intersection(visibleRect)) {
 				return null;
 			}
@@ -2056,16 +2056,16 @@
 			}
 
 			this[_].focusControl.setFocusRect(this.getCellRect(col, row));
-			
+
 			const {col: selCol, row: selRow} = this[_].selection.select;
 			const results = this.fireListeners(
 					EVENT_TYPE.EDITABLEINPUT_CELL,
 					{col: selCol, row: selRow}
 			);
-			
+
 			const editMode = (array.findIndex(results, (v) => !!v) >= 0);
 			this[_].focusControl.editMode = editMode;
-			
+
 			if (editMode) {
 				this[_].focusControl.storeInputStatus();
 				this[_].focusControl.setDefaultInputStatus();
@@ -2089,7 +2089,7 @@
 				endCol += offset;
 				endRow += offset;
 			}
-			
+
 			const visibleRect = _getVisibleRect(this);
 			const cellsRect = this.getCellsRect(startCol, startRow, endCol, endRow);
 			const invalidateTarget = visibleRect.intersection(cellsRect);

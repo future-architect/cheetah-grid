@@ -4,7 +4,7 @@
 	const ButtonStyle = require('../style/ButtonStyle');
 	const {BUTTON_COLUMN_STATE_ID} = require('../../internal/symbolManager');
 	const utils = require('./columnUtils');
-	
+
 
 	class ButtonColumn extends Column {
 		constructor(option = {}) {
@@ -48,7 +48,7 @@
 					active = true;
 				}
 			}
-			
+
 			utils.loadIcons(getIcon(), context, helper, (icons, context) => {
 				helper.button(value, context, {
 					textAlign,

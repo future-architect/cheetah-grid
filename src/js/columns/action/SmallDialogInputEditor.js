@@ -1,6 +1,6 @@
 'use strict';
 const {obj: {setReadonly}} = require('../../internal/utils');
-	
+
 const SmallDialogInputElement = require('./internal/SmallDialogInputElement');
 const {SMALL_DIALOG_INPUT_EDITOR_STATE_ID: _} = require('../../internal/symbolManager');
 

@@ -5,7 +5,7 @@ const BaseInputEditor = require('./BaseInputEditor');
 const InlineInputElement = require('./internal/InlineInputElement');
 const {INLINE_INPUT_EDITOR_STATE_ID: _} = require('../../internal/symbolManager');
 
-	
+
 let globalElement = null;
 let bindGridCount = 0;
 function attachInput(grid, cell, editor, value) {

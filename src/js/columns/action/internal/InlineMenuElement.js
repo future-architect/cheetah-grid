@@ -17,7 +17,7 @@ const {
 	findPrevSiblingFocusable,
 	findNextSiblingFocusable,
 } = require('../../../internal/dom');
-	
+
 const KEY_TAB = 9;
 const KEY_ENTER = 13;
 const KEY_UP = 38;
@@ -25,10 +25,10 @@ const KEY_DOWN = 40;
 const KEY_ESC = 27;
 
 const CLASSNAME = 'cheetah-grid__inline-menu';
-const ITEM_CLASSNAME = CLASSNAME + '__menu-item';
-const HIDDEN_CLASSNAME = CLASSNAME + '--hidden';
-const SHOWN_CLASSNAME = CLASSNAME + '--shown';
-const EMPTY_ITEM_CLASSNAME = ITEM_CLASSNAME + '--empty';
+const ITEM_CLASSNAME = `${CLASSNAME}__menu-item`;
+const HIDDEN_CLASSNAME = `${CLASSNAME}--hidden`;
+const SHOWN_CLASSNAME = `${CLASSNAME}--shown`;
+const EMPTY_ITEM_CLASSNAME = `${ITEM_CLASSNAME}--empty`;
 
 function findItemParents(target) {
 	let el = target;
@@ -46,10 +46,10 @@ function createMenuElement() {
 	return createElement('ul', {classList: CLASSNAME});
 }
 function attachElement(element, rect, menu) {
-	menu.style.top = rect.top.toFixed() + 'px';
-	menu.style.left = rect.left.toFixed() + 'px';
-	menu.style.width = rect.width.toFixed() + 'px';
-	menu.style['line-height'] = rect.height.toFixed() + 'px';
+	menu.style.top = `${rect.top.toFixed()}px`;
+	menu.style.left = `${rect.left.toFixed()}px`;
+	menu.style.width = `${rect.width.toFixed()}px`;
+	menu.style['line-height'] = `${rect.height.toFixed()}px`;
 	element.appendChild(menu);
 }
 
@@ -83,7 +83,7 @@ function openMenu(grid, editor, col, row, value, menu) {
 	menu.style.font = grid.font || '16px sans-serif';
 	let emptyItemEl = null;
 	let valueItemEl = null;
-		
+
 	options.forEach((option, i) => {
 		const item = optionToLi(option, i);
 		menu.appendChild(item);
@@ -143,7 +143,7 @@ function openMenu(grid, editor, col, row, value, menu) {
 		// re update
 		attachElement(element, rect, menu);
 	}
-		
+
 	if (focusEl) {
 		focusEl.focus();
 	}
@@ -223,7 +223,7 @@ class InlineMenuElement {
 		const menu = this._menu;
 
 		const stopPropagationOnly = (e) => e.stopPropagation();// gridにイベントが伝播しないように
-		
+
 		handler.on(menu, 'mousedown', stopPropagationOnly);
 		handler.on(menu, 'touchstart', stopPropagationOnly);
 		handler.on(menu, 'dblclick', stopPropagationOnly);
@@ -267,7 +267,7 @@ class InlineMenuElement {
 			} else if (keyCode === KEY_TAB) {
 				if (!e.shiftKey) {
 					if (!findNextSiblingFocusable(item)) {
-						let n = menu.querySelector('.' + ITEM_CLASSNAME);
+						let n = menu.querySelector(`.${ITEM_CLASSNAME}`);
 						if (!isFocusable(n)) {
 							n = findNextSiblingFocusable(n);
 						}
@@ -278,7 +278,7 @@ class InlineMenuElement {
 					}
 				} else {
 					if (!findPrevSiblingFocusable(item)) {
-						const items = menu.querySelectorAll('.' + ITEM_CLASSNAME);
+						const items = menu.querySelectorAll(`.${ITEM_CLASSNAME}`);
 						let n = items[items.length - 1];
 						if (!isFocusable(n)) {
 							n = findPrevSiblingFocusable(n);

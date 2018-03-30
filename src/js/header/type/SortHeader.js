@@ -29,7 +29,7 @@
 				bgColor,
 				font,
 			} = style;
-			
+
 			if (bgColor) {
 				drawCellBase({
 					bgColor,

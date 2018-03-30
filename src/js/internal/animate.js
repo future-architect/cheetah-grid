@@ -8,7 +8,7 @@
 		y2 *= 3;
 		x3 *= 3;
 		y3 *= 3;
-			
+
 		return function(t) {
 			let p,
 				a,
@@ -20,7 +20,7 @@
 			if (t < 0 || 1 < t) {
 				throw new Error(t);
 			}
-				
+
 			p = step || t;
 
 			do {
@@ -28,7 +28,7 @@
 				b = a * a;
 				c = p * p;
 				d = c * p;
-					
+
 				x = x2 * b * p + x3 * a * c + d;
 				s = t - x;
 				p += s * 0.5;
@@ -48,7 +48,7 @@
 	};
 
 	const raf = window.requestAnimationFrame || setTimeout;
-	
+
 	function now() {
 		return Date.now();
 	}

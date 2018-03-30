@@ -37,7 +37,7 @@ const indexHelper = {
 			content.order = order;
 			content.path = path;
 			content.disabled = disabled;
-			
+
 			if (level === 0) {
 				last.sort((a, b) => data.demoCategorys.indexOf(a.title) - data.demoCategorys.indexOf(b.title));
 			} else {

@@ -44,7 +44,7 @@ function getD(path) {
 }
 
 function elementToPaths(el, resource) {
-	
+
 	switch (el.tagName.toLowerCase()) {
 	case 'path':
 	case 'glyph':
@@ -70,7 +70,7 @@ function elementToPaths(el, resource) {
 		}
 		return path;
 	default:
-		console.warn('unsupported:' + el.tagName, `@ ${resource}\n${el.innerHTML}`);
+		console.warn(`unsupported:${el.tagName}`, `@ ${resource}\n${el.innerHTML}`);
 	}
 	return '';
 }
@@ -115,7 +115,7 @@ function glyphToJSON(svgString, {
 	glyphName,
 	unicode,
 }, resource) {
-	
+
 	const svg = svgData.get(svgString);
 	function findGlyph() {
 		if (glyphName) {
@@ -123,7 +123,7 @@ function glyphToJSON(svgString, {
 		} else {
 			return svg.findGlyphByUnicode(unicode);
 		}
-		
+
 	}
 	const fontFace = svg.fontFaceElement || {getAttribute() {}};
 	const font = svg.fontElement || {getAttribute() {}};
@@ -138,7 +138,7 @@ function glyphToJSON(svgString, {
 	// 	x: bbox[2] - 0,
 	// 	y: bbox[3] - 0,
 	// };
-	
+
 	const fontHorizAdvX = (font.getAttribute('horiz-adv-x') - 0) || 0;
 	const fontVertAdvX = (font.getAttribute('vert-adv-x') - 0) || 0;
 	const horizAdvX = (glyph.getAttribute('horiz-adv-x') - 0) || fontHorizAdvX || 0;
@@ -147,7 +147,7 @@ function glyphToJSON(svgString, {
 	const unitsPerEm = (fontFace.getAttribute('units-per-em') - 0) || 1000;
 	// const ascent = (fontFace.getAttribute('ascent') - 0) || (unitsPerEm - vertAdvX);
 	const descent = (fontFace.getAttribute('descent') - 0) || vertAdvX;
-	
+
 	let size = unitsPerEm;
 	const contentSize = {
 		width: horizAdvX || unitsPerEm,
@@ -164,7 +164,7 @@ function glyphToJSON(svgString, {
 	let offsetY = -descent;
 	offsetX += Math.round((size - contentSize.width) / 2);
 	offsetY += Math.round((size - contentSize.height) / 2);
-	
+
 	const d = elementToPaths(glyph, resource);
 
 	return buildScript({

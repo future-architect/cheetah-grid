@@ -1,6 +1,6 @@
 'use strict';
 {
-	
+
 
 	class BaseAction {
 		constructor(option = {}) {

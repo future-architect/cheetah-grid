@@ -36,7 +36,7 @@ class InlineImage extends Inline {
 		} else {
 			this._loadImage(src);
 		}
-		
+
 	}
 	_loadImage(src) {
 		const img = this._inlineImg = getCacheOrLoad('InlineImage', 50, src);

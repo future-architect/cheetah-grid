@@ -27,7 +27,7 @@
 	function sextupleHexToRGB({1: r1, 2: r2, 3: g1, 4: g2, 5: b1, 6: b2}) {
 		return createRGB(hexToNum(r1 + r2), hexToNum(g1 + g2), hexToNum(b1 + b2));
 	}
-	
+
 	function testRGB({r, g, b, a}) {
 		return 0 <= r && r <= 255 &&
 		0 <= g && g <= 255 &&

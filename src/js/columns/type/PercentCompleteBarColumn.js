@@ -3,7 +3,7 @@
 	const PercentCompleteBarStyle = require('../style/PercentCompleteBarStyle');
 	const {getOrApply, str} = require('../../internal/utils');
 	const Column = require('./Column');
-	
+
 
 	const MARGIN = 2;
 
@@ -28,7 +28,7 @@
 				barHeight,
 			} = style;
 
-			let svalue = value + '';
+			let svalue = `${value}`;
 			if (str.endsWith(svalue, '%')) {
 				svalue = svalue.substr(0, svalue.length - 1);
 			}
@@ -36,7 +36,7 @@
 			const rate = num < this._min ? 0
 				: num > this._max ? 1
 				: (num - this._min) / (this._max - this._min);
-			
+
 			helper.drawWithClip(context, (ctx) => {
 				const rect = context.getRect();
 

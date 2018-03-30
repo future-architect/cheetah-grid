@@ -18,7 +18,7 @@ class Inline {
 		return true;
 	}
 	onReady(fn) {
-		
+
 	}
 	draw({
 		ctx,

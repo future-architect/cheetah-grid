@@ -145,7 +145,7 @@ function newEs5Config(opt) {
 	];
 	opt.mode = opt.mode || 'development';
 
-			
+
 	const es5 = newDefaultProps(opt);
 	// es5.module.loaders[0].query = {
 	// 	presets: ['es2015']
