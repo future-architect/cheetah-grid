@@ -1,6 +1,6 @@
 {
   "name": "cheetah-grid",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Cheetah Grid is a high performance grid engine that works on canvas",
   "keywords": [
     "spreadsheet",
@@ -59,7 +59,6 @@
     "build:doc": "cd docs && npm run build && cd ../",
     "build:all": "npm run build && npm run build:doc",
     "i:doc": "cd docs && npm i && cd ../",
-    "postinstall": "npm run i:doc",
     "prepack": "npm run build:all"
   },
   "directories": {
