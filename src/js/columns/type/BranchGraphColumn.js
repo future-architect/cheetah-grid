@@ -240,10 +240,11 @@ function commitMerge({timeline, branches}, from, to) {
 
 
 	if (joinLine(froms, fromIndex) && fromTargetLine) {
-		fromTargetLine[fromIndex].lines = BranchPoint.mergeLines(fromTargetLine[fromIndex].lines.concat([new BranchLine({
-			fromIndex,
-			colorIndex: fromIndex
-		})]));
+		fromTargetLine[fromIndex].lines = BranchPoint.mergeLines(
+				fromTargetLine[fromIndex].lines.concat([new BranchLine({
+					fromIndex,
+					colorIndex: fromIndex
+				})]));
 	}
 	joinLine(timeline, toIndex);
 
