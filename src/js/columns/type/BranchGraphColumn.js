@@ -238,8 +238,13 @@ function commitMerge({timeline, branches}, from, to) {
 		}));
 	}
 
-	joinLine(froms, fromIndex);
 
+	if (joinLine(froms, fromIndex) && fromTargetLine) {
+		fromTargetLine[fromIndex].lines = BranchPoint.mergeLines(fromTargetLine[fromIndex].lines.concat([new BranchLine({
+			fromIndex,
+			colorIndex: fromIndex
+		})]));
+	}
 	joinLine(timeline, toIndex);
 
 	return result;
