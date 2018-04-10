@@ -42,7 +42,8 @@ function toNodeList(arg) {
 	if (Array.isArray(arg)) {
 		return arg.map(toNode);
 	}
-	return [toNode(arg)];
+	const node = toNode(arg);
+	return Array.isArray(node) ? node : [toNode(arg)];
 }
 
 function appendHtml(dom, inner) {
