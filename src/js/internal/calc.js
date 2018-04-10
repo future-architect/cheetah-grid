@@ -18,12 +18,13 @@ function parse(calcStr) {
 		replace(/(\d*\.\d+)([A-Za-z%]+)/g, replacer);
 	return {
 		eval(context) {
-			return (() => {
+			function fn() {
 				function calc(v) { // eslint-disable-line no-unused-vars
 					return v;
 				}
 				return eval(script);// eslint-disable-line no-eval
-			}).call(context);
+			}
+			return fn.call(context);
 		}
 	};
 }
