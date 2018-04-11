@@ -2,6 +2,7 @@
 /dist
 /coverage
 /report
+/docs/assets
 /docs/node_modules
 /docs/.devdoc
 /docs/0.3
