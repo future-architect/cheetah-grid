@@ -198,11 +198,11 @@
 				grid[_].canvas.height
 		);
 	}
-	function _isCellDrawing(grid, col, row) {
+	function _getCellDrawing(grid, col, row) {
 		if (!grid[_].drawCells[row]) {
-			return false;
+			return null;
 		}
-		return !!grid[_].drawCells[row][col];
+		return grid[_].drawCells[row][col];
 	}
 	function _putCellDrawing(grid, col, row, context) {
 		if (!grid[_].drawCells[row]) {
@@ -238,10 +238,14 @@
 		if (drawRect.height > 0 && drawRect.width > 0) {
 			ctx.save();
 			try {
+				const cellDrawing = _getCellDrawing(grid, col, row);
+				if (cellDrawing) {
+					cellDrawing.cancel();
+				}
 				const dcContext = new DrawCellContext(
 						col, row,
 						ctx, rect, drawRect,
-						_isCellDrawing(grid, col, row),
+						!!cellDrawing,
 						grid[_].selection,
 						drawLayers
 				);
@@ -1442,11 +1446,13 @@
 				},
 			};
 		}
+		get focus() {
+			const {col, row} = this._focus;
+			return {col, row};
+		}
 		get select() {
-			return {
-				col: this._sel.col,
-				row: this._sel.row
-			};
+			const {col, row} = this._sel;
+			return {col, row};
 		}
 		set select(cell = {}) {
 			this._wrapFireSelectedEvent(() => {
@@ -1504,6 +1510,27 @@
 					this._isWraped = false;
 				}
 			}
+		}
+		_updateGridRange() {
+			const {rowCount, colCount} = this._grid;
+			const points = [this._sel, this._focus, this._start, this._end];
+			let needChange = false;
+			for (let i = 0; i < points.length; i++) {
+				if (colCount <= points[i].col || rowCount <= points[i].row) {
+					needChange = true;
+					break;
+				}
+			}
+			if (!needChange) {
+				return false;
+			}
+			this._wrapFireSelectedEvent(() => {
+				points.forEach((p) => {
+					p.col = Math.min(colCount - 1, p.col);
+					p.row = Math.min(rowCount - 1, p.row);
+				});
+			});
+			return true;
 		}
 	}
 
@@ -1566,6 +1593,7 @@
 			this._drawing = drawing;
 			this._selection = selection;
 			this._drawLayers = drawLayers;
+			this._childContexts = [];
 		}
 		get drawing() {
 			if (this._mode === 0) {
@@ -1579,6 +1607,10 @@
 		}
 		get col() {
 			return this._col;
+		}
+		cancel() {
+			this._cancel = true;
+			this._childContexts.forEach((ctx) => { ctx.cancel(); });
 		}
 		/**
 		 * select status.
@@ -1624,12 +1656,23 @@
 		 * @return {Rect} Rectangle of Drawing range.
 		 */
 		getDrawRect() {
+			if (this._cancel) {
+				return null;
+			}
 			if (this._mode === 0) {
 				return this._drawRect;
 			} else {
+				if (this._isOutOfRange()) {
+					return null;
+				}
+
 				const absoluteRect = this._grid.getCellRect(this._col, this._row);
 				return this._toRelativeDrawRect(absoluteRect);
 			}
+		}
+		_isOutOfRange() {
+			const {colCount, rowCount} = this._grid;
+			return colCount <= this._col || rowCount <= this._row;
 		}
 		/**
 		 * get Context of current state
@@ -1641,13 +1684,17 @@
 			} else {
 				const absoluteRect = this._grid.getCellRect(this._col, this._row);
 				const rect = _toRelativeRect(this._grid, absoluteRect);
-				const drawRect = this._toRelativeDrawRect(absoluteRect);
+				const drawRect = this._isOutOfRange() ? null : this._toRelativeDrawRect(absoluteRect);
 				const context = new DrawCellContext(
 						this._col, this._row, this.getContext(), rect, drawRect, this.drawing, this._selection,
 						this._drawLayers
 				);
 				// toCurrentContext は自分の toCurrentContextを呼ばせる
 				context.toCurrentContext = this.toCurrentContext.bind(this);
+				this._childContexts.push(context);
+				if (this._cancel) {
+					context.cancel();
+				}
 				return context;
 			}
 		}
@@ -1823,6 +1870,11 @@
 		set rowCount(rowCount) {
 			this[_].rowCount = rowCount;
 			this.updateScroll();
+			if (this[_].selection._updateGridRange()) {
+				const {col, row} = this[_].selection.focus;
+				this.makeVisibleCell(col, row);
+				this.focusCell(col, row);
+			}
 		}
 		get colCount() {
 			return this[_].colCount;
@@ -1830,6 +1882,11 @@
 		set colCount(colCount) {
 			this[_].colCount = colCount;
 			this.updateScroll();
+			if (this[_].selection._updateGridRange()) {
+				const {col, row} = this[_].selection.focus;
+				this.makeVisibleCell(col, row);
+				this.focusCell(col, row);
+			}
 		}
 		get frozenColCount() {
 			return this[_].frozenColCount;

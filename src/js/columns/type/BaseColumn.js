@@ -90,16 +90,17 @@
 		}
 		onDrawCell(cellValue, info, context, grid) {
 			const {style, getRecord, drawCellBase} = info;
-			delete info.getRecord;
 			delete info.style;
 			const helper = grid.getGridCanvasHelper();
 			drawCellBase();
 
+
+			const record = getRecord();
+			if (isPromise(record)) {
+				return record.then(() => this.onDrawCell(cellValue, info, context, grid));
+			}
 			//文字描画
 			if (isPromise(cellValue)) {
-				if (context.drawing) {
-					return null;
-				}
 				const start = Date.now();
 				return cellValue.then((val) => {
 					const currentContext = context.toCurrentContext();
@@ -115,7 +116,12 @@
 						if (!drawRect) {
 							return;
 						}
-						const actStyle = styleContents.of(style, getRecord(), this.StyleClass);
+						const record = getRecord();
+						if (isPromise(record)) {
+							return;
+						}
+
+						const actStyle = styleContents.of(style, record, this.StyleClass);
 						this.drawInternal(
 								this.convertInternal(val),
 								currentContext,
@@ -148,7 +154,7 @@
 					}
 				});
 			} else {
-				const actStyle = styleContents.of(style, getRecord(), this.StyleClass);
+				const actStyle = styleContents.of(style, record, this.StyleClass);
 				this.drawInternal(
 						this.convertInternal(cellValue),
 						context,

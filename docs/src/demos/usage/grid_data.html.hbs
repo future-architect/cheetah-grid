@@ -1,0 +1,116 @@
+---
+category: Usage
+title: Grid Data
+layout: demo.html
+order: 180
+---
+
+{{#marked}}
+## Grid Data
+{{#if lang_ja}}
+グリッドのデータには`Array`オブジェクトか、`cheetahGrid.data.DataSource`オブジェクトが利用できます。  
+{{else}}
+Can use the `Array` object or `cheetahGrid.data.DataSource` object for grid data.  
+{{/if}}
+
+
+### Using `Array` object
+
+{{/marked}}
+
+<div id="sample1" class="demo-grid middle">
+</div>
+<script type="text/javascript">
+'use strict';
+//{{{babel textContents.demos.[demos/init.parts.js]}}}
+</script>
+<script type="text/javascript">
+//{{#wrapscript}}
+//{{#copy "script1"}}
+/*global cheetahGrid*/
+'use strict';
+
+const grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#sample1'),
+	header: [
+		{field: 'personid', caption: 'ID', width: 100, columnType: 'center'},
+		{field: 'fname', caption: 'First Name', width: 200},
+		{field: 'lname', caption: 'Last Name', width: 200},
+		{field: 'email', caption: 'Email', width: 250},
+	],
+	frozenColCount: 1,
+});
+// set array records
+grid.records = [
+	{'personid': 1, 'fname': 'Sophia', 'lname': 'Hill', 'email': 'sophia_hill@example.com'},
+	{'personid': 2, 'fname': 'Aubrey', 'lname': 'Martin', 'email': 'aubrey_martin@example.com'},
+	{'personid': 3, 'fname': 'Avery', 'lname': 'Jones', 'email': 'avery_jones@example.com'},
+	{'personid': 4, 'fname': 'Joseph', 'lname': 'Rodriguez', 'email': 'joseph_rodriguez@example.com'},
+	{'personid': 5, 'fname': 'Samuel', 'lname': 'Campbell', 'email': 'samuel_campbell@example.com'},
+	{'personid': 6, 'fname': 'Joshua', 'lname': 'Ortiz', 'email': 'joshua_ortiz@example.com'},
+	{'personid': 7, 'fname': 'Mia', 'lname': 'Foster', 'email': 'mia_foster@example.com'},
+	{'personid': 8, 'fname': 'Landon', 'lname': 'Lopez', 'email': 'landon_lopez@example.com'},
+	{'personid': 9, 'fname': 'Audrey', 'lname': 'Cox', 'email': 'audrey_cox@example.com'},
+	{'personid': 10, 'fname': 'Anna', 'lname': 'Ramirez', 'email': 'anna_ramirez@example.com'}
+];
+//{{/copy}}
+//{{/wrapscript}}
+</script>
+{{> code class="js" code=script1}}
+
+
+{{#marked}}
+
+### Using `cheetahGrid.data.DataSource` object
+
+{{/marked}}
+
+<div id="sample2" class="demo-grid middle">
+</div>
+<script type="text/javascript">
+//{{#wrapscript}}
+const getPerson = generatePerson
+//{{#copy "script2"}}
+/*global cheetahGrid, records*/
+'use strict';
+const grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#sample2'),
+	header: [
+		{field: 'personid', caption: 'ID', width: 100, columnType: 'center'},
+		{field: 'fname', caption: 'First Name', width: 200},
+		{field: 'lname', caption: 'Last Name', width: 200},
+		{field: 'email', caption: 'Email', width: 250},
+	],
+	frozenColCount: 1,
+});
+grid.dataSource = new cheetahGrid.data.CachedDataSource({
+	// Get record method
+	get(index) {
+		return getPerson(index);
+	},
+	// Number of records
+	length: 10000,
+});
+//{{/copy}}
+//{{/wrapscript}}
+</script>
+{{> code class="js" code=script2}}
+
+{{#marked}}
+
+{{#if lang_ja}}
+`cheetahGrid.data.DataSource`には、派生クラス `cheetahGrid.data.CachedDataSource` {{#if_v '0.4.0'}}と [`cheetahGrid.data.FilterDataSource`](./datasource/FilterDataSource.html){{/if_v}} が存在します。  
+
+`CachedDataSource`はレコードが`Promise`オブジェクトだった場合に戻り値をキャッシュする機能を持ちます。  
+レコードが`Promise`にならないことが解っている場合、`DataSource`を利用できますが、
+この場合`CachedDataSource`と動作が変わらないので`CachedDataSource`を利用することを推奨します。  
+{{else}}
+`cheetahGrid.data.DataSource` has subclasses
+`cheetahGrid.data.CachedDataSource`{{#if_v '0.4.0'}} and [`cheetahGrid.data.FilterDataSource`](./datasource/FilterDataSource.html){{/if_v}}.
+
+`CachedDataSource` has the ability to cache the return value if the record is a `Promise` object.
+If you know that the record does not become `Promise`, you can use `DataSource`,
+In this case it is recommended to use `CachedDataSource` as `CachedDataSource` does not change in behavior.
+{{/if}}
+
+{{/marked}}

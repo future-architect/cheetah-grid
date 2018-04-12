@@ -92,10 +92,10 @@
 				length: array.length
 			});
 		}
-		constructor({get, length = 0} = {}) {
+		constructor(obj = {}) {
 			super();
-			this._get = get;
-			this._length = length;
+			this._get = obj.get && obj.get.bind(obj) || undefined;
+			this._length = obj.length || 0;
 			this._sortedIndexMap = false;
 		}
 		get(index) {
@@ -136,6 +136,10 @@
 			return this._length;
 		}
 		set length(length) {
+			if (this._length === length) {
+				return;
+			}
+
 			const results = this.fireListeners(EVENT_TYPE.UPDATE_LENGTH, length);
 			if (array.findIndex(results, (v) => !v) >= 0) {
 				return;

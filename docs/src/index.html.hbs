@@ -15,9 +15,10 @@ return this.script.indexHelper.buildDemoContents(this);
 {{#tree_each demoContents 'contents'}}
 	{{#unless disabled}}
 		{{#if (eq level 0)}}
-* **{{#if path}}{{{md_link (ms_finalpath path) title}}}{{else}}{{title}}{{/if}}**
+
+### **{{#if path}}{{{md_link (ms_finalpath path) title}}}{{else}}{{title}}{{/if}}**
 		{{else}}
-{{#range 0 level}}  {{/range}}* {{#if path}}{{{md_link (ms_finalpath path) title}}}{{else}}{{title}}{{/if}}
+{{#range 1 level}}  {{/range}}* {{#if path}}{{{md_link (ms_finalpath path) title}}}{{else}}{{title}}{{/if}}
 		{{/if}}
 	{{/unless}}
 {{/tree_each}}
