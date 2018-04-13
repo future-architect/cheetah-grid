@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="author" content="Cheetah Grid">
+    <meta name="keywords" content="spreadsheet,grid,canvas,table,web-components">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Cheetah Grid - SmallDialogInputEditor</title>
+    <link rel="shortcut icon" type="image/x-icon" href="./../../../../icon_512x512.ico">
+
+    <link rel="stylesheet" type="text/css" href="./../../../css/style.css">
+    <link rel="stylesheet" type="text/css" href="./../../../css/highlightjs.css">
+    
+    <!-- <script src="http://localhost:35729/livereload.js"></script> -->
+    <script src="https://www.promisejs.org/polyfills/promise-7.0.4.min.js"></script>
+    
+    <script type="text/javascript" src="https://unpkg.com/cheetah-grid@0.4"></script>
+
+    <style type="text/css">
+        html {
+            height: 100%;
+        }
+        body {
+            height: calc(100% - 100px);
+        }
+        .contents {
+            padding: 30px;
+            box-sizing: border-box;
+        }
+        .demo-grid {
+            width: 100%;
+            height: 300px;
+            box-sizing: border-box;
+            border: solid 1px #ddd;
+        }
+        .demo-grid.large {
+            height: 500px;
+        }
+        .demo-grid.middle {
+            height: 300px;   
+        }
+        .demo-grid.small {
+            height: 240px;   
+        }
+        .log {
+            width: 100%;
+            height: 80px;
+            background-color: #F5F5F5;
+        }
+
+        .hljs { 
+             tab-size: 4;
+        }
+
+        .al-right input {
+	text-align: right;
+}
+
+    </style>
+</head>
+<body>
+    <nav class="header primary" id="header-nav">
+    	<div class="nav-wrapper">
+    		<a href="./../../../../index.html">
+    			<img src="./../../../../logo.png" style="width: 100px;padding: 5px;vertical-align: middle;" alt="Cheetah Grid">
+    		</a>
+    
+    		<ul class="right hide-on-med-and-down nav-dropdown-container">
+    			<a href="#" class="primary nav-dropdown-button mobile-only" data-target="all-nav" style="width: 30px;">
+    				<span class="icon-arrow"></span>
+    			</a>
+    			<ul id="all-nav" class="mobile-nav-dropdown right-dropdown primary">
+    				<li><a href="./../../../index.html" class="primary">Docoments - TOP</a></li>
+    				<li class="nav-dropdown-container">
+    					<a id="nav-versions" href="#" class="primary nav-dropdown-button" data-target="versions">
+    						version<span class="icon-arrow"></span>
+    					</a>
+    					<ul id="versions" class="nav-dropdown right-dropdown">
+    					</ul>
+    				</li>
+    				<li class="nav-dropdown-container">
+    					<a id="nav-lang" href="#" class="primary nav-dropdown-button" data-target="langs">
+    						lang<span class="icon-arrow"></span>
+    					</a>
+    					<ul id="langs" class="nav-dropdown right-dropdown">
+    						<li><a href="./../../../ja/demos/usage/column_actions/SmallDialogInputEditor.html" class="primary">日本語</a></li>
+    						<li><a href="./../../../demos/usage/column_actions/SmallDialogInputEditor.html" class="primary">English</a></li>
+    					</ul>
+    				</li>
+    			</ul>
+    		</ul>
+    	</div>
+    </nav>
+    
+    <script type="text/javascript">
+    	'use strict';
+    	////babel
+    'use strict';
+    
+    function getVersions(callback) {
+    	var xhr = new XMLHttpRequest();
+    	function onError() {
+    		callback(['0.4', '0.0.1']);
+    	}
+    	xhr.onload = function () {
+    		var versions = JSON.parse(xhr.responseText);
+    		callback(versions);
+    	};
+    	xhr.onerror = onError;
+    	xhr.onabort = onError;
+    	try {
+    		xhr.open('GET', './../../../../versions.json');
+    		xhr.send();
+    	} catch (e) {
+    		onError();
+    	}
+    }
+    
+    //
+    getVersions(function (versions) {
+    	var myVersion = '0.4';
+    	function getVerLocation(v) {
+    		return location.href.replace(myVersion, v).replace('.devdoc', v);
+    	}
+    	var latest = versions[0];
+    	var versEl = document.getElementById('versions');
+    	versEl.innerHTML = versions.map(function (v, i) {
+    		return '<li><a href="' + getVerLocation(v) + '" class="primary">' + v + (i === 0 ? ' (latest)' : '') + '</a></li>';
+    	}).join('');
+    
+    	if (latest !== myVersion) {
+    		var header = document.getElementById('header-nav');
+    		var a = document.createElement('a');
+    		header.parentElement.insertBefore(a, header.nextSibling);
+    		a.href = getVerLocation(latest);
+    		a.textContent = '<goto the latest version(' + latest + ') document>';
+    	}
+    });
+    //
+    </script>    <h1><a href="./../../.././index.html#-usage-">Usage</a> &gt; <a href="./../../../demos/usage/column_actions.html">Column Actions</a> &gt; <a href="./../../../demos/usage/column_actions/Classes.html">Classes</a> &gt; SmallDialogInputEditor</h1>
+    <div class="contents">
+        
+<h2 id="smalldialoginputeditor">SmallDialogInputEditor</h2>
+<p>入力によるデータ編集を可能にします。  </p>
+<p>列の<code>action</code>に<code>SmallDialogInputEditor</code>クラスのインスタンスを利用すると、<code>readOnly</code>・<code>disabled</code>プロパティの制御を動的に行うことができますが、<br>文字列<code>'input'</code>と定義した場合は、<code>readOnly</code>・<code>disabled</code>プロパティを制御出来ません。  </p>
+
+<div id="sample1" class="demo-grid small">
+</div>
+
+<label>change action properties : </label>
+<select id="sample1mode">
+    <option value="" selected="true">both false</option>
+    <option value="readOnly">readOnly = true</option>
+    <option value="disabled">disabled = true</option>
+</select> <span id="sample1modememo"></span>
+
+<script type="text/javascript">
+////wrapscript
+(function() {
+//babel
+
+//
+/*global cheetahGrid*/
+'use strict';
+
+var inputEditor = new cheetahGrid.columns.action.SmallDialogInputEditor();
+var grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#sample1'),
+	header: [{ field: 'text1', caption: 'defined by string', width: 220, action: 'input' },
+
+	//
+	{ field: 'text2', caption: 'defined by class instance', width: 220, action: inputEditor }, {
+		caption: 'show',
+		width: 100,
+		columnType: new cheetahGrid.columns.type.ButtonColumn({
+			caption: 'SHOW'
+		}),
+		action: new cheetahGrid.columns.action.ButtonAction({
+			action: function action(rec) {
+				alert(JSON.stringify(rec, null, '  '));
+			}
+		})
+	}]
+});
+grid.records = [{ text1: 'text', text2: 'text' }, { text1: 'text', text2: 'text' }, { text1: 'text', text2: 'text' }, { text1: 'text', text2: 'text' }, { text1: 'text', text2: 'text' }, { text1: 'text', text2: 'text' }, { text1: 'text', text2: 'text' }, { text1: 'text', text2: 'text' }, { text1: 'text', text2: 'text' }, { text1: 'text', text2: 'text' }];
+
+document.querySelector('#sample1mode').onchange = function () {
+	//change action properties
+	if (this.value === 'readOnly') {
+		inputEditor.readOnly = true;
+		inputEditor.disabled = false;
+		document.querySelector('#sample1modememo').textContent = 'It will not toggle';
+	} else if (this.value === 'disabled') {
+		inputEditor.readOnly = false;
+		inputEditor.disabled = true;
+		document.querySelector('#sample1modememo').textContent = 'It will not toggle and does not respond when hovering the mouse';
+	} else {
+		inputEditor.readOnly = false;
+		inputEditor.disabled = false;
+		document.querySelector('#sample1modememo').textContent = 'both false';
+	}
+};
+//
+//
+})();
+</script>
+<pre><code class="js hljs javascript"><span class="hljs-comment">/*global cheetahGrid*/</span>
+<span class="hljs-meta">'use strict'</span>;
+<span class="hljs-keyword">const</span> inputEditor = <span class="hljs-keyword">new</span> cheetahGrid.columns.action.SmallDialogInputEditor();
+<span class="hljs-keyword">const</span> grid = <span class="hljs-keyword">new</span> cheetahGrid.ListGrid({
+	<span class="hljs-attr">parentElement</span>: <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample1'</span>),
+	<span class="hljs-attr">header</span>: [
+
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'text1'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'defined by string'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">220</span>, <span class="hljs-attr">action</span>: <span class="hljs-string">'input'</span>},
+
+		<span class="hljs-comment">//</span>
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'text2'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'defined by class instance'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">220</span>, <span class="hljs-attr">action</span>: inputEditor},
+
+		{
+			<span class="hljs-attr">caption</span>: <span class="hljs-string">'show'</span>,
+			<span class="hljs-attr">width</span>: <span class="hljs-number">100</span>,
+			<span class="hljs-attr">columnType</span>: <span class="hljs-keyword">new</span> cheetahGrid.columns.type.ButtonColumn({
+				<span class="hljs-attr">caption</span>: <span class="hljs-string">'SHOW'</span>,
+			}),
+			<span class="hljs-attr">action</span>: <span class="hljs-keyword">new</span> cheetahGrid.columns.action.ButtonAction({
+				action(rec) {
+					alert(<span class="hljs-built_in">JSON</span>.stringify(rec, <span class="hljs-literal">null</span>, <span class="hljs-string">'  '</span>));
+				},
+			}),
+		}
+
+
+	],
+});
+grid.records = [
+	{<span class="hljs-attr">text1</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">text2</span>: <span class="hljs-string">'text'</span>},
+	{<span class="hljs-attr">text1</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">text2</span>: <span class="hljs-string">'text'</span>},
+	{<span class="hljs-attr">text1</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">text2</span>: <span class="hljs-string">'text'</span>},
+	{<span class="hljs-attr">text1</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">text2</span>: <span class="hljs-string">'text'</span>},
+	{<span class="hljs-attr">text1</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">text2</span>: <span class="hljs-string">'text'</span>},
+	{<span class="hljs-attr">text1</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">text2</span>: <span class="hljs-string">'text'</span>},
+	{<span class="hljs-attr">text1</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">text2</span>: <span class="hljs-string">'text'</span>},
+	{<span class="hljs-attr">text1</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">text2</span>: <span class="hljs-string">'text'</span>},
+	{<span class="hljs-attr">text1</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">text2</span>: <span class="hljs-string">'text'</span>},
+	{<span class="hljs-attr">text1</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">text2</span>: <span class="hljs-string">'text'</span>},
+];
+
+<span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample1mode'</span>).onchange = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+	<span class="hljs-comment">//change action properties</span>
+	<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.value === <span class="hljs-string">'readOnly'</span>) {
+		inputEditor.readOnly = <span class="hljs-literal">true</span>;
+		inputEditor.disabled = <span class="hljs-literal">false</span>;
+		<span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample1modememo'</span>).textContent = <span class="hljs-string">'It will not toggle'</span>;
+	} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.value === <span class="hljs-string">'disabled'</span>) {
+		inputEditor.readOnly = <span class="hljs-literal">false</span>;
+		inputEditor.disabled = <span class="hljs-literal">true</span>;
+		<span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample1modememo'</span>).textContent = <span class="hljs-string">'It will not toggle and does not respond when hovering the mouse'</span>;
+	} <span class="hljs-keyword">else</span> {
+		inputEditor.readOnly = <span class="hljs-literal">false</span>;
+		inputEditor.disabled = <span class="hljs-literal">false</span>;
+		<span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample1modememo'</span>).textContent = <span class="hljs-string">'both false'</span>;
+	}
+};
+<span class="hljs-comment">//</span></code></pre>
+
+<h3 id="-">プロパティ</h3>
+<p><code>SmallDialogInputEditor</code>のコンストラクタ引数で以下プロパティを指定できます。  </p>
+<table>
+<thead>
+<tr>
+<th>property</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>type</code></td>
+<td><code>&lt;input&gt;</code>要素の<code>type</code>属性を指定します。</td>
+</tr>
+<tr>
+<td><code>classList</code></td>
+<td>ダイアログの要素の<code>class</code>を指定します。</td>
+</tr>
+<tr>
+<td><code>helperText</code></td>
+<td>ヘルパーテキストを指定します。関数を指定することもできます。</td>
+</tr>
+<tr>
+<td><code>validator</code></td>
+<td>入力値確定前のvalidation関数を指定します。エラーがある場合は関数でメッセージ文字列を返してください。</td>
+</tr>
+<tr>
+<td><code>inputValidator</code></td>
+<td><code>&lt;input&gt;</code>の入力値のvalidation関数を指定します。エラーがある場合は関数でメッセージ文字列を返してください。</td>
+</tr>
+</tbody>
+</table>
+
+<div id="sample2" class="demo-grid small">
+</div>
+<script type="text/javascript">
+////wrapscript
+(function() {
+//babel
+
+//
+/*global cheetahGrid*/
+'use strict';
+
+var grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#sample2'),
+	header: [{
+		field: 'number',
+		caption: 'type & classList',
+		width: 220,
+		columnType: 'number',
+		action: new cheetahGrid.columns.action.SmallDialogInputEditor({
+			type: 'number',
+			classList: ['al-right']
+		})
+	}, {
+		field: 'text',
+		caption: 'validator & helperText',
+		width: 220,
+		action: new cheetahGrid.columns.action.SmallDialogInputEditor({
+			classList: 'helper-text--right-justified',
+			helperText: function helperText(value) {
+				return value.length + '/20';
+			},
+			inputValidator: function inputValidator(value) {
+				return value.length > 20 ? 'over the max length. ' + value.length : null;
+			},
+			validator: function validator(value) {
+				return value.match(/^[a-zA-Z]*$/) ? null : 'Please only alphabet.';
+			}
+		})
+	}, {
+		field: 'code',
+		caption: 'async validator',
+		width: 220,
+		action: new cheetahGrid.columns.action.SmallDialogInputEditor({
+			helperText: 'enter code. /^[A-Z]\\d{3}$/',
+			validator: function validator(value) {
+				return new Promise(function (r) {
+					setTimeout(function () {
+						r(value.match(/^[A-Z]\d{3}$/) ? null : 'Invalid code.');
+					}, 500);
+				});
+			}
+		})
+	}, {
+		caption: 'show',
+		width: 100,
+		columnType: new cheetahGrid.columns.type.ButtonColumn({
+			caption: 'SHOW'
+		}),
+		action: new cheetahGrid.columns.action.ButtonAction({
+			action: function action(rec) {
+				alert(JSON.stringify(rec, null, '  '));
+			}
+		})
+	}]
+});
+grid.records = [{ number: 1234, text: 'a', code: 'A001' }, { number: 1234.123, text: 'b', code: 'A002' }, { number: -1234.123, text: 'c', code: 'A003' }];
+//
+//
+})();
+</script>
+<pre><code class="lang-css hljs">    <span class="hljs-selector-class">.al-right</span> <span class="hljs-selector-tag">input</span> {
+        <span class="hljs-attribute">text-align</span>: right;
+    }
+</code></pre>
+<pre><code class="js hljs javascript"><span class="hljs-comment">/*global cheetahGrid*/</span>
+<span class="hljs-meta">'use strict'</span>;
+<span class="hljs-keyword">const</span> grid = <span class="hljs-keyword">new</span> cheetahGrid.ListGrid({
+	<span class="hljs-attr">parentElement</span>: <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample2'</span>),
+	<span class="hljs-attr">header</span>: [
+		{
+			<span class="hljs-attr">field</span>: <span class="hljs-string">'number'</span>,
+			<span class="hljs-attr">caption</span>: <span class="hljs-string">'type &amp; classList'</span>,
+			<span class="hljs-attr">width</span>: <span class="hljs-number">220</span>,
+			<span class="hljs-attr">columnType</span>: <span class="hljs-string">'number'</span>,
+			<span class="hljs-attr">action</span>: <span class="hljs-keyword">new</span> cheetahGrid.columns.action.SmallDialogInputEditor({
+				<span class="hljs-attr">type</span>: <span class="hljs-string">'number'</span>,
+				<span class="hljs-attr">classList</span>: [<span class="hljs-string">'al-right'</span>]
+			})
+		},
+		{
+			<span class="hljs-attr">field</span>: <span class="hljs-string">'text'</span>,
+			<span class="hljs-attr">caption</span>: <span class="hljs-string">'validator &amp; helperText'</span>,
+			<span class="hljs-attr">width</span>: <span class="hljs-number">220</span>,
+			<span class="hljs-attr">action</span>: <span class="hljs-keyword">new</span> cheetahGrid.columns.action.SmallDialogInputEditor({
+				<span class="hljs-attr">classList</span>: <span class="hljs-string">'helper-text--right-justified'</span>,
+				helperText(value) {
+					<span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${value.length}</span>/20`</span>;
+				},
+				inputValidator(value) {
+					<span class="hljs-keyword">return</span> value.length &gt; <span class="hljs-number">20</span> ? <span class="hljs-string">`over the max length. <span class="hljs-subst">${value.length}</span>`</span> : <span class="hljs-literal">null</span>;
+				},
+				validator(value) {
+					<span class="hljs-keyword">return</span> value.match(<span class="hljs-regexp">/^[a-zA-Z]*$/</span>) ? <span class="hljs-literal">null</span> : <span class="hljs-string">'Please only alphabet.'</span>;
+				}
+			})
+		},
+		{
+			<span class="hljs-attr">field</span>: <span class="hljs-string">'code'</span>,
+			<span class="hljs-attr">caption</span>: <span class="hljs-string">'async validator'</span>,
+			<span class="hljs-attr">width</span>: <span class="hljs-number">220</span>,
+			<span class="hljs-attr">action</span>: <span class="hljs-keyword">new</span> cheetahGrid.columns.action.SmallDialogInputEditor({
+				<span class="hljs-attr">helperText</span>: <span class="hljs-string">'enter code. /^[A-Z]\\d{3}$/'</span>,
+				validator(value) {
+					<span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">r</span>) =&gt;</span> {
+						setTimeout(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+							r(value.match(<span class="hljs-regexp">/^[A-Z]\d{3}$/</span>) ? <span class="hljs-literal">null</span> : <span class="hljs-string">'Invalid code.'</span>);
+						}, <span class="hljs-number">500</span>);
+					});
+				}
+			})
+		},
+		{
+			<span class="hljs-attr">caption</span>: <span class="hljs-string">'show'</span>,
+			<span class="hljs-attr">width</span>: <span class="hljs-number">100</span>,
+			<span class="hljs-attr">columnType</span>: <span class="hljs-keyword">new</span> cheetahGrid.columns.type.ButtonColumn({
+				<span class="hljs-attr">caption</span>: <span class="hljs-string">'SHOW'</span>,
+			}),
+			<span class="hljs-attr">action</span>: <span class="hljs-keyword">new</span> cheetahGrid.columns.action.ButtonAction({
+				action(rec) {
+					alert(<span class="hljs-built_in">JSON</span>.stringify(rec, <span class="hljs-literal">null</span>, <span class="hljs-string">'  '</span>));
+				},
+			}),
+		}
+
+
+	],
+});
+grid.records = [
+	{<span class="hljs-attr">number</span>: <span class="hljs-number">1234</span>, <span class="hljs-attr">text</span>: <span class="hljs-string">'a'</span>, <span class="hljs-attr">code</span>: <span class="hljs-string">'A001'</span>},
+	{<span class="hljs-attr">number</span>: <span class="hljs-number">1234.123</span>, <span class="hljs-attr">text</span>: <span class="hljs-string">'b'</span>, <span class="hljs-attr">code</span>: <span class="hljs-string">'A002'</span>},
+	{<span class="hljs-attr">number</span>: <span class="hljs-number">-1234.123</span>, <span class="hljs-attr">text</span>: <span class="hljs-string">'c'</span>, <span class="hljs-attr">code</span>: <span class="hljs-string">'A003'</span>},
+];
+<span class="hljs-comment">//</span></code></pre>
+    </div>
+    
+    <script type="text/javascript" src="./../../../js/doc-common.js"></script>
+
+</body></html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="author" content="Cheetah Grid">
+    <meta name="keywords" content="spreadsheet,grid,canvas,table,web-components">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Cheetah Grid - IconColumn</title>
+    <link rel="shortcut icon" type="image/x-icon" href="./../../../../icon_512x512.ico">
+
+    <link rel="stylesheet" type="text/css" href="./../../../css/style.css">
+    <link rel="stylesheet" type="text/css" href="./../../../css/highlightjs.css">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    
+    <!-- <script src="http://localhost:35729/livereload.js"></script> -->
+    
+    <script type="text/javascript" src="https://unpkg.com/cheetah-grid@0.4"></script>
+
+    <style type="text/css">
+        html {
+            height: 100%;
+        }
+        body {
+            height: calc(100% - 100px);
+        }
+        .contents {
+            padding: 30px;
+            box-sizing: border-box;
+        }
+        .demo-grid {
+            width: 100%;
+            height: 300px;
+            box-sizing: border-box;
+            border: solid 1px #ddd;
+        }
+        .demo-grid.large {
+            height: 500px;
+        }
+        .demo-grid.middle {
+            height: 300px;   
+        }
+        .demo-grid.small {
+            height: 240px;   
+        }
+        .log {
+            width: 100%;
+            height: 80px;
+            background-color: #F5F5F5;
+        }
+
+        .hljs { 
+             tab-size: 4;
+        }
+
+        .fa {
+	width: 16px;	
+}
+
+    </style>
+</head>
+<body>
+    <nav class="header primary" id="header-nav">
+    	<div class="nav-wrapper">
+    		<a href="./../../../../index.html">
+    			<img src="./../../../../logo.png" style="width: 100px;padding: 5px;vertical-align: middle;" alt="Cheetah Grid">
+    		</a>
+    
+    		<ul class="right hide-on-med-and-down nav-dropdown-container">
+    			<a href="#" class="primary nav-dropdown-button mobile-only" data-target="all-nav" style="width: 30px;">
+    				<span class="icon-arrow"></span>
+    			</a>
+    			<ul id="all-nav" class="mobile-nav-dropdown right-dropdown primary">
+    				<li><a href="./../../../index.html" class="primary">Docoments - TOP</a></li>
+    				<li class="nav-dropdown-container">
+    					<a id="nav-versions" href="#" class="primary nav-dropdown-button" data-target="versions">
+    						version<span class="icon-arrow"></span>
+    					</a>
+    					<ul id="versions" class="nav-dropdown right-dropdown">
+    					</ul>
+    				</li>
+    				<li class="nav-dropdown-container">
+    					<a id="nav-lang" href="#" class="primary nav-dropdown-button" data-target="langs">
+    						lang<span class="icon-arrow"></span>
+    					</a>
+    					<ul id="langs" class="nav-dropdown right-dropdown">
+    						<li><a href="./../../../ja/demos/usage/column_types/IconColumn.html" class="primary">日本語</a></li>
+    						<li><a href="./../../../demos/usage/column_types/IconColumn.html" class="primary">English</a></li>
+    					</ul>
+    				</li>
+    			</ul>
+    		</ul>
+    	</div>
+    </nav>
+    
+    <script type="text/javascript">
+    	'use strict';
+    	////babel
+    'use strict';
+    
+    function getVersions(callback) {
+    	var xhr = new XMLHttpRequest();
+    	function onError() {
+    		callback(['0.4', '0.0.1']);
+    	}
+    	xhr.onload = function () {
+    		var versions = JSON.parse(xhr.responseText);
+    		callback(versions);
+    	};
+    	xhr.onerror = onError;
+    	xhr.onabort = onError;
+    	try {
+    		xhr.open('GET', './../../../../versions.json');
+    		xhr.send();
+    	} catch (e) {
+    		onError();
+    	}
+    }
+    
+    //
+    getVersions(function (versions) {
+    	var myVersion = '0.4';
+    	function getVerLocation(v) {
+    		return location.href.replace(myVersion, v).replace('.devdoc', v);
+    	}
+    	var latest = versions[0];
+    	var versEl = document.getElementById('versions');
+    	versEl.innerHTML = versions.map(function (v, i) {
+    		return '<li><a href="' + getVerLocation(v) + '" class="primary">' + v + (i === 0 ? ' (latest)' : '') + '</a></li>';
+    	}).join('');
+    
+    	if (latest !== myVersion) {
+    		var header = document.getElementById('header-nav');
+    		var a = document.createElement('a');
+    		header.parentElement.insertBefore(a, header.nextSibling);
+    		a.href = getVerLocation(latest);
+    		a.textContent = '<goto the latest version(' + latest + ') document>';
+    	}
+    });
+    //
+    </script>    <h1><a href="./../../.././index.html#-usage-">Usage</a> &gt; <a href="./../../../demos/usage/column_types.html">Column Types</a> &gt; <a href="./../../../demos/usage/column_types/Classes.html">Classes</a> &gt; IconColumn</h1>
+    <div class="contents">
+        
+<h2 id="iconcolumn">IconColumn</h2>
+<p>Show ICON using Web Font.<br>Number of ICONs can be set at field.  </p>
+<p>※When showing ICON to ordinal column, please refer to <a href="../draw_icon.html">here</a></p>
+
+<div id="sample1" class="demo-grid middle">
+</div>
+
+<p>※ICON in sample uses <a href="https://material.io/icons/">Material icons</a></p>
+<pre><code class="lang-html hljs xml"><span class="hljs-comment">&lt;!-- Material Icons:  https://material.io/icons/ --&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">"stylesheet"</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/css"</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"https://fonts.googleapis.com/icon?family=Material+Icons"</span>&gt;</span>
+</code></pre>
+
+<script type="text/javascript">
+////wrapscript
+(function() {
+//babel
+
+//
+/*global cheetahGrid*/
+'use strict';
+
+var grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#sample1'),
+	header: [{
+		field: 'value',
+		caption: 'value',
+		width: 100
+	}, {
+		field: 'value',
+		caption: 'icon',
+		width: 130,
+		columnType: new cheetahGrid.columns.type.IconColumn({
+			className: 'material-icons',
+			content: '\uE885' // https://material.io/icons/#ic_grade
+		}),
+		style: {
+			color: 'gold'
+		}
+	}]
+});
+grid.records = [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }, { value: 5 }];
+
+//
+//
+})();
+</script>
+
+
+<pre><code class="js hljs javascript"><span class="hljs-comment">/*global cheetahGrid*/</span>
+<span class="hljs-meta">'use strict'</span>;
+
+<span class="hljs-keyword">const</span> grid = <span class="hljs-keyword">new</span> cheetahGrid.ListGrid({
+	<span class="hljs-attr">parentElement</span>: <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample1'</span>),
+	<span class="hljs-attr">header</span>: [
+		{
+			<span class="hljs-attr">field</span>: <span class="hljs-string">'value'</span>,
+			<span class="hljs-attr">caption</span>: <span class="hljs-string">'value'</span>,
+			<span class="hljs-attr">width</span>: <span class="hljs-number">100</span>,
+		},
+		{
+			<span class="hljs-attr">field</span>: <span class="hljs-string">'value'</span>,
+			<span class="hljs-attr">caption</span>: <span class="hljs-string">'icon'</span>,
+			<span class="hljs-attr">width</span>: <span class="hljs-number">130</span>,
+			<span class="hljs-attr">columnType</span>: <span class="hljs-keyword">new</span> cheetahGrid.columns.type.IconColumn({
+				<span class="hljs-attr">className</span>: <span class="hljs-string">'material-icons'</span>,
+				<span class="hljs-attr">content</span>: <span class="hljs-string">'\uE885'</span>, <span class="hljs-comment">// https://material.io/icons/#ic_grade</span>
+			}),
+			<span class="hljs-attr">style</span>: {
+				<span class="hljs-attr">color</span>: <span class="hljs-string">'gold'</span>
+			}
+		},
+	],
+});
+grid.records = [
+	{<span class="hljs-attr">value</span>: <span class="hljs-number">1</span>},
+	{<span class="hljs-attr">value</span>: <span class="hljs-number">2</span>},
+	{<span class="hljs-attr">value</span>: <span class="hljs-number">3</span>},
+	{<span class="hljs-attr">value</span>: <span class="hljs-number">4</span>},
+	{<span class="hljs-attr">value</span>: <span class="hljs-number">5</span>},
+];
+
+<span class="hljs-comment">//</span></code></pre>
+
+    </div>
+    
+    <script type="text/javascript" src="./../../../js/doc-common.js"></script>
+
+</body></html>

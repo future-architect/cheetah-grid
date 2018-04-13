@@ -24,7 +24,7 @@ The fastest open-source web component of data table.
 [![npm](https://img.shields.io/npm/v/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
 
 ```html
-<script src="https://unpkg.com/cheetah-grid@0.3.x"></script>
+<script src="https://unpkg.com/cheetah-grid@0.4.x"></script>
 ```
 
 ### Downloading Cheetah Grid using npm
@@ -41,10 +41,10 @@ const cheetahGrid = require("cheetah-grid")
 ### Downloading Cheetah Grid source code
 [![npm](https://img.shields.io/npm/v/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
 
-[cheetahGrid.es5.min.js](https://unpkg.com/cheetah-grid@0.3.x/dist/cheetahGrid.es5.min.js)  
+[cheetahGrid.es5.min.js](https://unpkg.com/cheetah-grid@0.4.x/dist/cheetahGrid.es5.min.js)  
 
 SourceMap  
-[cheetahGrid.es5.min.js.map](https://unpkg.com/cheetah-grid@0.3.x/dist/cheetahGrid.es5.min.js.map)  
+[cheetahGrid.es5.min.js.map](https://unpkg.com/cheetah-grid@0.4.x/dist/cheetahGrid.es5.min.js.map)  
 
 
 ### Downloading Cheetah Grid using GitHub
