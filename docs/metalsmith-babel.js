@@ -17,7 +17,7 @@ module.exports = function() {
 			if (JS_FILENAME_REGEXP.test(file)) {
 				data = files[file];
 
-				const option = {presets: ['es2015']};
+				const option = {presets: ['env']};
 				data.contents = Buffer.from(babel.transform(data.contents.toString(), option).code);
 			}
 		}
