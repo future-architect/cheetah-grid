@@ -285,7 +285,7 @@ function registerHelpers() {
 	Handlebars.registerHelper('babel', function(...args) {
 		const arg = analyzeArguments(...args);
 		const context = arg.get(this);
-		const option = Object.assign({presets: ['es2015']}, arg.hash);
+		const option = Object.assign({presets: ['env']}, arg.hash);
 		return `//babel\n${babel.transform(context, option).code}`;
 	});
 	Handlebars.registerHelper('hbs', function(...args) {

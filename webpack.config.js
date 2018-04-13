@@ -134,7 +134,7 @@ function newEs5Config(opt) {
 		}),
 		new BabelPlugin({
 			test: /\.js$/,
-			presets: ['es2015'],
+			presets: ['env'],
 			sourceMaps: true
 		}),
 		new WrapperPlugin({
