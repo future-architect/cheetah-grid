@@ -79,7 +79,7 @@ function registerHelpers() {
 							this, Handlebars.helpers.ms_finalpath.call(this, './index.html', opt), opt
 					);
 					const hash = (`${category}`).toLowerCase().replace(' ', '-');
-					return `<a href="${path}#-${hash}-">${category}</a>`;
+					return `<a href="${path}#${hash}">${category}</a>`;
 				}
 				return category;
 			}

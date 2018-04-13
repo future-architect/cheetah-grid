@@ -134,7 +134,7 @@
     	}
     });
     //
-    </script>    <h1><a href="./../../.././index.html#-usage-">Usage</a> &gt; Grid Data</h1>
+    </script>    <h1><a href="./../../.././index.html#usage">Usage</a> &gt; Grid Data</h1>
     <div class="contents">
         
 <h2 id="grid-data">Grid Data</h2>
@@ -246,7 +246,10 @@ grid.records = [
 //babel
 'use strict';
 
-var getPerson = generatePerson;
+var array = [];
+var getPerson = function getPerson(index) {
+	return array[index] || (array[index] = generatePerson(index));
+};
 //
 /*global cheetahGrid, records*/
 'use strict';

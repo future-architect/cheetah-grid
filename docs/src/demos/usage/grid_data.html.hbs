@@ -69,7 +69,8 @@ grid.records = [
 </div>
 <script type="text/javascript">
 //{{#wrapscript}}
-const getPerson = generatePerson
+const array = [];
+const getPerson = (index) => array[index] || (array[index] = generatePerson(index));
 //{{#copy "script2"}}
 /*global cheetahGrid, records*/
 'use strict';
