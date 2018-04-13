@@ -55,7 +55,7 @@ class BranchPoint {
 	}
 	static mergeLines(lines) {
 		const result = lines.filter(((l) => isDef(l.fromIndex) && isDef(l.toIndex)));
-		
+
 		const froms = lines.filter(((l) => isDef(l.fromIndex) && !isDef(l.toIndex)));
 		const tos = lines.filter(((l) => !isDef(l.fromIndex) && isDef(l.toIndex)));
 
@@ -124,7 +124,7 @@ function branch({timeline, branches}, from, to) {
 		toIndex = branches.length;
 		branches.push(to);
 	}
-	
+
 	function findBranchRootIndex() {
 		for (let index = timeline.length - 1; index >= 0; index--) {
 			const tl = timeline[index];
@@ -170,7 +170,7 @@ function branch({timeline, branches}, from, to) {
 		})]));
 		return result;
 	}
-	
+
 }
 
 function commit({timeline, branches}, name) {
@@ -182,7 +182,7 @@ function commit({timeline, branches}, name) {
 		index,
 		commit: true,
 	});
-		
+
 	if (joinLine(timeline, index)) {
 		result.lines = BranchPoint.mergeLines(result.lines.concat([new BranchLine({
 			fromIndex: index,
@@ -451,7 +451,7 @@ class BranchGraphColumn extends BaseColumn {
 	drawInternal(value, context, style, helper, grid, {drawCellBase}) {
 		const {col, row} = context;
 		const {timeline, branches} = (this._cache && grid[_]) ? grid[_][col] : calcBranchesInfo(this._start, grid, col);
-		
+
 		const {upLineIndexKey, downLineIndexKey} = this._start !== 'top' ? {upLineIndexKey: 'toIndex', downLineIndexKey: 'fromIndex'} : {upLineIndexKey: 'fromIndex', downLineIndexKey: 'toIndex'};
 		const data = this._start !== 'top' ? timeline[timeline.length - (row - grid.frozenRowCount) - 1] : timeline[row - grid.frozenRowCount];
 
@@ -468,7 +468,7 @@ class BranchGraphColumn extends BaseColumn {
 				bgColor,
 			});
 		}
-		
+
 		const rect = context.getRect();
 		const radius = circleSize / 2;
 		const width = rect.width - margin * 2;
@@ -477,7 +477,7 @@ class BranchGraphColumn extends BaseColumn {
 			ctx.textAlign = 'left';
 			ctx.textBaseline = 'middle';
 			const branchXPoints = calcBranchXPoints(ctx, rect.left + margin, width, radius, branches, timeline);
-			
+
 			const y = rect.top + rect.height / 2;
 
 			// draw join lines

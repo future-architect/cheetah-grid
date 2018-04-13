@@ -12,7 +12,7 @@
 	const icons = require('./internal/icons');
 	const MessageHandler = require('./columns/message/MessageHandler');
 	const EVENT_TYPE = require('./list-grid/EVENT_TYPE');
-	
+
 	//protected symbol
 	const {PROTECTED_SYMBOL: _} = require('./internal/symbolManager');
 
@@ -162,7 +162,7 @@
 					}
 				});
 			}
-				
+
 			if (context.row < grid[_].headerMap.rowCount) {
 				_headerBorderWithState(grid, helper, context);
 			} else {
@@ -506,7 +506,7 @@
 		}
 		return options;
 	}
-	
+
 	/**
 	 * ListGrid
 	 * @classdesc cheetahGrid.ListGrid

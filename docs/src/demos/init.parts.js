@@ -197,7 +197,7 @@ const generatePerson = (function() {
 			personid: index + 1,
 			fname,
 			lname,
-			email: (fname.replace('-', '_') + '_' + lname.replace('-', '_') + '@example.com').toLowerCase(),
+			email: (`${fname.replace('-', '_')}_${lname.replace('-', '_')}@example.com`).toLowerCase(),
 			birthday,
 		};
 	};

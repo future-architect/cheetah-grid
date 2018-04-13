@@ -18,7 +18,6 @@ module.exports = {
 	'plugins': ['html'],
 	'rules': {
 		'no-console': 'off',
-		'no-extra-boolean-cast': 'off',
 		'no-extra-parens': 'off',
 		'no-irregular-whitespace': [
 			'error',
@@ -27,15 +26,12 @@ module.exports = {
 		'no-prototype-builtins': 'off',
 		'no-template-curly-in-string': 'off',
 		'valid-jsdoc': 'off',
-		'array-callback-return': 'off',
 		'class-methods-use-this': 'off',
 		'consistent-return': 1,
 		'guard-for-in': 'off',
-		'no-alert': 'off',
 		'no-case-declarations': 'off',
 		'no-else-return': 'off',
 		'no-empty-function': 'off',
-		'no-extra-label': 'off',
 		'no-implicit-coercion': [
 			'error',
 			{'boolean': false, 'number': true, 'string': false}
@@ -44,25 +40,16 @@ module.exports = {
 		'no-invalid-this': 'off',
 		'no-loop-func': 'off',
 		'no-magic-numbers': 'off',
-		'no-new': 'off',
 		'no-param-reassign': 'off',
-		'no-restricted-properties': 'off',
-		'no-return-await': 'off',
-		'no-unmodified-loop-condition': 'off',
-		'no-unused-labels': 'off',
-		'no-useless-concat': 'off',
-		'no-useless-escape': 'off',
 		'no-warning-comments': 'warn',
-		'require-await': 'off',
 		'vars-on-top': 'off',
-		'wrap-iife': 'off',
+		'wrap-iife': ['error', 'any'],
 		'yoda': [
 			'error',
 			'never',
 			{'onlyEquality': true}
 		],
 		'init-declarations': 'off',
-		'no-restricted-globals': 'off',
 		'no-shadow': 'off',
 		'no-undef-init': 'off',
 		'no-undefined': 'off',
@@ -70,9 +57,9 @@ module.exports = {
 			'error',
 			{'vars': 'all', 'args': 'none'}
 		],
-		'no-use-before-define': 'off',
+		'no-use-before-define': ['error', {'functions': false, 'classes': false}],
 		'callback-return': 'off',
-		'global-require': 'off',
+		'global-require': 'off', //TODO
 		'no-process-env': 'off',
 		'brace-style': [
 			'error',
@@ -90,10 +77,8 @@ module.exports = {
 			'self'
 		],
 		'eol-last': 'off',
-		'func-name-matching': 'off',
 		'func-names': 'off',
 		'func-style': 'off',
-		'id-blacklist': 'off',
 		'id-length': 'off',
 		'indent': [
 			'error',
@@ -105,7 +90,6 @@ module.exports = {
 				'flatTernaryExpressions': true
 			}
 		],
-		'jsx-quotes': 'off',
 		'key-spacing': [
 			'error',
 			{'afterColon': true}
@@ -113,10 +97,9 @@ module.exports = {
 		'line-comment-position': 'off',
 		'linebreak-style': 'off',
 		'lines-around-comment': 'off',
-		'lines-around-directive': 'off',
 		'max-len': [
 			'error',
-			{'code': 120, 'tabWidth': 4, 'ignoreComments': true, 'ignoreTrailingComments': true, 'ignoreStrings': true, 'ignoreRegExpLiterals': true, ignoreTemplateLiterals: true}
+			{'code': 120, 'tabWidth': 4, 'ignoreComments': true, 'ignoreTrailingComments': true, 'ignoreStrings': true, 'ignoreRegExpLiterals': true, 'ignoreTemplateLiterals': true}
 		],
 		'max-lines': 'off',
 		'max-params': 'off',
@@ -126,9 +109,6 @@ module.exports = {
 			200
 		],
 		'multiline-ternary': 'off',
-		'new-cap': 'off',
-		'newline-after-var': 'off',
-		'newline-before-return': 'off',
 		'newline-per-chained-call': 'off',
 		'no-continue': 'off',
 		'no-inline-comments': 'off',
@@ -143,21 +123,17 @@ module.exports = {
 		],
 		'no-tabs': 'off',
 		'no-ternary': 'off',
-		'no-trailing-spaces': [
-			'error',
-			{'skipBlankLines': true}
-		],
+		'no-trailing-spaces': 'error',
 		'no-underscore-dangle': 'off',
 		'object-curly-newline': 'off',
 		'object-property-newline': [
 			'error',
 			{'allowMultiplePropertiesPerLine': true}
 		],
-		'one-var-declaration-per-line': 'off',
 		'one-var': 'off',
-		'operator-assignment': 'off',
+		// TODO 'padded-blocks': ['error', 'never'],
 		'padded-blocks': 'off',
-		'quote-props': 'off',
+		'quote-props': ['error', 'consistent'],
 		'require-jsdoc': 'off',
 		'sort-keys': 'off',
 		'sort-vars': 'off',
@@ -165,8 +141,7 @@ module.exports = {
 			'error',
 			'never'
 		],
-		'spaced-comment': 'off',
-		'unicode-bom': 'off',
+		'spaced-comment': 'off', // TODO
 		'wrap-regex': 'off',
 		//
 		'multiline-comment-style': [
@@ -202,7 +177,7 @@ module.exports = {
 
 		// ECMAScript 6
 		'no-confusing-arrow': 'off',
-		'prefer-template': 'off',
+		// 'prefer-template': 'off',
 
 	}
 

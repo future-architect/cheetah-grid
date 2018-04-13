@@ -37,8 +37,8 @@ const demos = {
 };
 const docScript = require('./src/script/script');
 
-Metalsmith(__dirname).
-			
+Metalsmith(__dirname).//eslint-disable-line new-cap
+
 	metadata({
 		demoCategorys: [
 			'Sample',
@@ -113,4 +113,4 @@ Metalsmith(__dirname).
 		if (err) { throw err; } // error handling is required
 	});
 
-	
+

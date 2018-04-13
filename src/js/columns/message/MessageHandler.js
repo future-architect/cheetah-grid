@@ -43,13 +43,13 @@ function normalizeMessage(message) {
 	if (type && type in MESSAGE_INSTANCE_FACTORY) {
 		return {
 			type: type.toLowerCase(),
-			message: '' + message.message,
+			message: `${message.message}`,
 			original: message,
 		};
 	}
 	return {
 		type: 'error',
-		message: '' + message,
+		message: `${message}`,
 		original: message,
 	};
 

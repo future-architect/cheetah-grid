@@ -17,7 +17,7 @@ const watchRunners = {};
 class FontWatchRunner {
 	static load(font, testStr, activeCallback, inactiveCallback) {
 		const c = watchRunners[font] || (watchRunners[font] = {});
-		testStr = testStr + '';
+		testStr += '';
 		let runner;
 		if (c[testStr]) {
 			runner = c[testStr];
@@ -32,10 +32,10 @@ class FontWatchRunner {
 		this.status = null;
 		this.lastResortWidths_ = {};
 
-		this.fontRulerA_ = new FontRuler(font + ',' + LastResortFonts.SERIF, testStr);
-		this.fontRulerB_ = new FontRuler(font + ',' + LastResortFonts.SANS_SERIF, testStr);
-		const lastResortRulerA = new FontRuler('4px ' + LastResortFonts.SERIF, testStr);
-		const lastResortRulerB = new FontRuler('4px ' + LastResortFonts.SANS_SERIF, testStr);
+		this.fontRulerA_ = new FontRuler(`${font},${LastResortFonts.SERIF}`, testStr);
+		this.fontRulerB_ = new FontRuler(`${font},${LastResortFonts.SANS_SERIF}`, testStr);
+		const lastResortRulerA = new FontRuler(`4px ${LastResortFonts.SERIF}`, testStr);
+		const lastResortRulerB = new FontRuler(`4px ${LastResortFonts.SANS_SERIF}`, testStr);
 
 		//start
 		this.lastResortWidths_[LastResortFonts.SERIF] = lastResortRulerA.getWidth();
@@ -59,7 +59,7 @@ class FontWatchRunner {
 			this.activeCallbacks.push(activeCallback);
 			this.inactiveCallbacks.push(inactiveCallback);
 		}
-		
+
 	}
 	check_() {
 		const widthA = this.fontRulerA_.getWidth();

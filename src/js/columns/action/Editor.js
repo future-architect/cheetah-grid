@@ -1,6 +1,6 @@
 'use strict';
 {
-	
+
 	const BaseAction = require('./BaseAction');
 	class Editor extends BaseAction {
 		constructor(option = {}) {

@@ -38,7 +38,7 @@
 			return arrayFindIndex;
 		},
 	};
-	
+
 	function isDef(data) {
 		return data !== null && typeof data !== 'undefined';
 	}
@@ -135,7 +135,7 @@
 			}
 			return e.which;//left or no
 		}
-		
+
 		if (e.button === 0 || e.button === 1) {
 			return 1;//candidate left
 		}

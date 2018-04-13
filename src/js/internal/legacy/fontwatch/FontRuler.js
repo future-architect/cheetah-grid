@@ -3,14 +3,14 @@
 //see https://github.com/typekit/webfontloader
 function computeStyle(font) {
 	return [{
-		display: 'block',
-		position: 'absolute',
-		top: '-9999px',
-		left: '-9999px',
-		width: 'auto',
-		height: 'auto',
-		margin: '0',
-		padding: '0',
+		'display': 'block',
+		'position': 'absolute',
+		'top': '-9999px',
+		'left': '-9999px',
+		'width': 'auto',
+		'height': 'auto',
+		'margin': '0',
+		'padding': '0',
 		'white-space': 'nowrap',
 		font,
 	}, {

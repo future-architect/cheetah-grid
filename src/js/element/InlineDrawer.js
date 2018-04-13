@@ -12,7 +12,7 @@ class InlineDrawer extends Inline {
 				color,
 			}) {
 		super();
-		
+
 		this._draw = draw;
 		this._width = width;
 		this._height = height;

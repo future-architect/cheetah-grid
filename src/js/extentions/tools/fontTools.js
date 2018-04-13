@@ -57,7 +57,7 @@ class SvgInfo {
 		svg.style.top = '-9999px';
 		svg.style.left = '-9999px';
 		const text = svg.querySelector('text');
-		
+
 		document.body.appendChild(svg);//
 
 		text.setAttribute('style', `font-feature-settings:'liga' 0;font: ${this.font};`);
@@ -103,7 +103,7 @@ const svgInfoCache = new LRUCache(50);
 let fontsCssLoader;
 
 function getSvgInfo({font, content, color}) {
-	const key = font + '@' + content + ' color=' + color;
+	const key = `${font}@${content} color=${color}`;
 	let infoThenable = svgInfoCache.get(key);
 	if (infoThenable) {
 		return infoThenable;

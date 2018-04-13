@@ -1,7 +1,7 @@
 'use strict';
 const {obj: {setReadonly}} = require('../../internal/utils');
 const {normalize} = require('../../internal/menu-items');
-	
+
 const Editor = require('./Editor');
 const {EVENT_TYPE: {
 	SELECTED_CELL,
@@ -14,7 +14,7 @@ const {EVENT_TYPE: {
 }} = require('../../core/DrawGrid');
 const InlineMenuElement = require('./internal/InlineMenuElement');
 const {INLINE_MENU_EDITOR_STATE_ID: _} = require('../../internal/symbolManager');
-	
+
 let globalElement = null;
 let bindGridCount = 0;
 function attachMenu(grid, cell, editor, value) {

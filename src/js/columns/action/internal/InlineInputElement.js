@@ -5,7 +5,7 @@ const {
 		cancel: cancelEvent,
 	},
 } = require('../../../internal/utils');
-	
+
 const EventHandler = require('../../../internal/EventHandler');
 const {
 	createElement,
@@ -56,10 +56,10 @@ class InlineInputElement {
 		input.style.font = grid.font || '16px sans-serif';
 
 		const {element, rect} = grid.getAttachCellArea(col, row);
-		input.style.top = rect.top.toFixed() + 'px';
-		input.style.left = rect.left.toFixed() + 'px';
-		input.style.width = rect.width.toFixed() + 'px';
-		input.style.height = rect.height.toFixed() + 'px';
+		input.style.top = `${rect.top.toFixed()}px`;
+		input.style.left = `${rect.left.toFixed()}px`;
+		input.style.width = `${rect.width.toFixed()}px`;
+		input.style.height = `${rect.height.toFixed()}px`;
 		element.appendChild(input);
 
 		setInputAttrs(editor, grid, input);
@@ -134,7 +134,7 @@ class InlineInputElement {
 		handler.on(input, 'mousedown', stopPropagationOnly);
 		handler.on(input, 'touchstart', stopPropagationOnly);
 		handler.on(input, 'dblclick', stopPropagationOnly);
-		
+
 		handler.on(input, 'compositionstart', (e) => {
 			input.classList.add('composition');
 		});

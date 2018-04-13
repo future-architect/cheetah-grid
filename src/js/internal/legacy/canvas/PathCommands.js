@@ -1,13 +1,14 @@
+/*eslint new-cap: "off"*/
 'use strict';
 
 function mag(v) {
 	return Math.sqrt(Math.pow(v[0], 2) + Math.pow(v[1], 2));
 }
-    
+
 function dot(u, v) {
 	return (u[0] * v[0] + u[1] * v[1]);
 }
-    
+
 function ratio(u, v) {
 	return dot(u, v) / (mag(u) * mag(v));
 }
@@ -15,7 +16,7 @@ function ratio(u, v) {
 function clamp(value, min, max) {
 	return Math.min(Math.max(value, min), max);
 }
-    
+
 function angle(u, v) {
 	let sign = 1.0;
 	if ((u[0] * v[1] - u[1] * v[0]) < 0) {
@@ -23,35 +24,35 @@ function angle(u, v) {
 	}
 	return sign * Math.acos(clamp(ratio(u, v)), -1, 1);
 }
-    
+
 function rotClockwise(v, angle) {
 	const cost = Math.cos(angle);
 	const sint = Math.sin(angle);
 	return [cost * v[0] + sint * v[1], -1 * sint * v[0] + cost * v[1]];
 }
-    
+
 function rotCounterClockwise(v, angle) {
 	const cost = Math.cos(angle);
 	const sint = Math.sin(angle);
 	return [cost * v[0] - sint * v[1], sint * v[0] + cost * v[1]];
 }
-    
+
 function midPoint(u, v) {
 	return [(u[0] - v[0]) / 2.0, (u[1] - v[1]) / 2.0];
 }
-    
+
 function meanVec(u, v) {
 	return [(u[0] + v[0]) / 2.0, (u[1] + v[1]) / 2.0];
 }
-    
+
 function pointMul(u, v) {
 	return [u[0] * v[0], u[1] * v[1]];
 }
-    
+
 function scale(c, v) {
 	return [c * v[0], c * v[1]];
 }
-    
+
 function sum(u, v) {
 	return [u[0] + v[0], u[1] + v[1]];
 }
@@ -69,14 +70,14 @@ function ellipseFromEllipticalArc(ctx, x1, y1, rx, ry, phi, fA, fS, x2, y2) {
 		ctx.lineTo(x2, x1);
 		return;
 	}
-	phi = phi * (Math.PI / 180.0);
+	phi *= (Math.PI / 180.0);
 	rx = Math.abs(rx);
 	ry = Math.abs(ry);
 	const xPrime = rotClockwise(midPoint(x1, x2), phi); // F.6.5.1
 	const xPrime2 = pointMul(xPrime, xPrime);
 	let rx2 = Math.pow(rx, 2);
 	let ry2 = Math.pow(ry, 2);
-    
+
 	const lambda = Math.sqrt(xPrime2[0] / rx2 + xPrime2[1] / ry2);
 	if (lambda > 1) {
 		rx *= lambda;
@@ -207,7 +208,7 @@ class PathCommands {
 		//a rx ry x-axis-rotation large-arc-flag sweep-flag dx dy
 		this.a = (rx, ry, xAxisRotation, largeArcFlag, sweepFlag, px, py) => this.A(
 				rx, ry, xAxisRotation, largeArcFlag, sweepFlag, px + lx, py + ly);
-		
+
 	}
 }
 

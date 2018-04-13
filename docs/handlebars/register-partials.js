@@ -51,4 +51,4 @@ function readPartialFiles(metalsmithpath, partials) {
 	return result;
 }
 
-	
+

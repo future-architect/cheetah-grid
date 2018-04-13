@@ -16,7 +16,7 @@
 				font,
 				bgColor,
 			} = style;
-			
+
 			if (bgColor) {
 				drawCellBase({
 					bgColor,

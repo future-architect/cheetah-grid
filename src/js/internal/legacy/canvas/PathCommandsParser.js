@@ -77,7 +77,7 @@ function command(builder, cmd, argsProvider) {
 		return cmd;
 	} else {
 		// https://developer.mozilla.org/ja/docs/Web/SVG/Tutorial/Paths
-		console.warn('unsupported:' + cmd);
+		console.warn(`unsupported:${cmd}`);
 	}
 	return null;
 }
@@ -115,7 +115,7 @@ class PathCommandsParser {
 	command(name, ...args) {
 		args = args || [];
 		for (let i = 0; i < args.length; i++) {
-			args[i] = args[i] - 0;
+			args[i] -= 0;
 		}
 		this._commands[name](...(args));
 	}
@@ -143,7 +143,7 @@ class PathCommandsParser {
 				}
 			}
 		} catch (e) {
-			console.log('Error: ' + d);
+			console.log(`Error: ${d}`);
 			throw e;
 		}
 		return ops;

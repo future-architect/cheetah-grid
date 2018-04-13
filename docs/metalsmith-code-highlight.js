@@ -43,7 +43,7 @@ const highlightFile = function(html) {
 	Array.prototype.forEach.call(blocks, highlightjs.highlightBlock);
 
 	if (docType) {
-		return docType + '\n' + container.getElementsByTagName('html')[0].outerHTML;
+		return `${docType}\n${container.getElementsByTagName('html')[0].outerHTML}`;
 	} else {
 		return container.innerHTML;
 	}

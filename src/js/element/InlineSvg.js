@@ -5,7 +5,7 @@ const {then} = require('../internal/utils');
 
 function buildSvgDataUrl(svg) {
 	const data = (typeof svg === 'string') ? svg : new XMLSerializer().serializeToString(svg);
-	const url = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(data); //svgデータをbase64に変換
+	const url = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(data)}`; //svgデータをbase64に変換
 	return url;
 }
 function getSvgElement(svg) {

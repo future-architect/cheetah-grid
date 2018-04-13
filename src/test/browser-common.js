@@ -1,3 +1,4 @@
+/*eslint prefer-template: "off"*/
 'use strict';
 (function() {
 
@@ -7,7 +8,7 @@
 	};
 
 	const getPath = function(url) {
-		const m = url.match('(^.*)[\?#]');
+		const m = url.match('(^.*)[?#]');
 		return m ? m[1] : url;
 	};
 	const getAbsolutePath = function(path) {

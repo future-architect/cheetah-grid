@@ -1,5 +1,5 @@
 /*global cheetahGrid*/
-/*eslint prefer-rest-params:0, consistent-this:0, prefer-destructuring:0 */
+/*eslint prefer-rest-params:0, consistent-this:0, prefer-destructuring:0, prefer-template:0 */
 'use strict';
 (function() {
 	const DrawGrid = cheetahGrid.core.DrawGrid;
@@ -31,7 +31,7 @@
 	TestGrid.prototype.getGridCanvasHelper = function() {
 		return this._gridCanvasHelper || (this._gridCanvasHelper = new GridCanvasHelper(this));
 	};
-	
+
 	TestGrid.prototype.onDrawCell = function(col, row, context) {
 		const helper = this.getGridCanvasHelper();
 		//cell全体を描画

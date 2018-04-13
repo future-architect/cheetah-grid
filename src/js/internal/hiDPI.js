@@ -66,11 +66,11 @@ module.exports = {
 			try {
 				this.scale(1 / ratio, 1 / ratio);
 				if (args.length > 4) {
-					args[4] = args[4] * ratio;
-					args[5] = args[5] * ratio;
+					args[4] *= ratio;
+					args[5] *= ratio;
 				} else {
-					args[0] = args[0] * ratio;
-					args[1] = args[1] * ratio;
+					args[0] *= ratio;
+					args[1] *= ratio;
 				}
 				return drawImage.call(this, img, ...args);
 			} finally {

@@ -39,7 +39,7 @@
 			return getValue(field(record), setPromiseBack);
 		}
 
-		const ss = (field + '').split('.');
+		const ss = (`${field}`).split('.');
 		if (ss.length <= 1) {
 			return getValue(record[field], setPromiseBack);
 		}
@@ -51,7 +51,7 @@
 		} else if (typeof field === 'function') {
 			return field(record, value);
 		} else if (typeof field === 'string') {
-			const ss = (field + '').split('.');
+			const ss = (`${field}`).split('.');
 			let obj = record;
 			const {length} = ss;
 			for (let i = 0; i < length; i++) {

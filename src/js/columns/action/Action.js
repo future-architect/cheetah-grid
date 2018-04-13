@@ -1,6 +1,6 @@
 'use strict';
 {
-	
+
 	const {bindCellClickAction, bindCellKeyAction} = require('./actionBind');
 
 	const BaseAction = require('./BaseAction');

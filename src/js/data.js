@@ -2,7 +2,7 @@
 {
 	const DataSource = require('./data/DataSource');
 	const CachedDataSource = require('./data/CachedDataSource');
-	
+
 
 	/**
 	 * data modules

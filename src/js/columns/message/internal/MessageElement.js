@@ -5,9 +5,9 @@ const {
 } = require('../../../internal/dom');
 
 const CLASSNAME = 'cheetah-grid__message-element';
-const MESSAGE_CLASSNAME = CLASSNAME + '__message';
-const HIDDEN_CLASSNAME = CLASSNAME + '--hidden';
-const SHOWN_CLASSNAME = CLASSNAME + '--shown';
+const MESSAGE_CLASSNAME = `${CLASSNAME}__message`;
+const HIDDEN_CLASSNAME = `${CLASSNAME}--hidden`;
+const SHOWN_CLASSNAME = `${CLASSNAME}--shown`;
 
 function createMessageDomElement() {
 	require('./MessageElement.css');
@@ -101,9 +101,9 @@ class MessageElement {
 			return false;//範囲外
 		}
 
-		rootElement.style.top = top.toFixed() + 'px';
-		rootElement.style.left = left.toFixed() + 'px';
-		rootElement.style.width = width.toFixed() + 'px';
+		rootElement.style.top = `${top.toFixed()}px`;
+		rootElement.style.left = `${left.toFixed()}px`;
+		rootElement.style.width = `${width.toFixed()}px`;
 		if (rootElement.parentElement !== element) {
 			element.appendChild(rootElement);
 		}

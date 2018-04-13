@@ -11,8 +11,8 @@
 	}
 
 	const records = [
-		{bool: false, str: 'false', onoff: 'off', 'num': 0, 'numstr': '00'},
-		{bool: false, str: 'false', onoff: 'off', 'num': 0, 'numstr': '000'},
+		{bool: false, str: 'false', onoff: 'off', num: 0, numstr: '00'},
+		{bool: false, str: 'false', onoff: 'off', num: 0, numstr: '000'},
 	];
 	const style = {};
 	const action = new cheetahGrid.columns.action.CheckEditor();
@@ -41,7 +41,7 @@
 	const theme = {};
 	theme.frozenRowsBgColor = '#d3d3d3';
 	grid.theme = cheetahGrid.themes.choices.BASIC.extends(theme);
-	
+
 
 	describe('CheckStyle', function() {
 
@@ -118,7 +118,7 @@
 				expect(grid.canvas).toMatchImage(canvas, {tolerance: 50, delta: '15%', blurLevel: 1});
 				done();
 			}, 200);
-			
+
 		});
 
 		it('toggle', function(done) {
@@ -128,7 +128,7 @@
 			grid.fireListeners(cheetahGrid.ListGrid.EVENT_TYPE.CLICK_CELL, {col: 3, row: 1});
 			grid.fireListeners(cheetahGrid.ListGrid.EVENT_TYPE.CLICK_CELL, {col: 4, row: 1});
 
-			expect(records[0]).toEqual({bool: true, str: 'true', onoff: 'on', 'num': 1, 'numstr': '01'});
+			expect(records[0]).toEqual({bool: true, str: 'true', onoff: 'on', num: 1, numstr: '01'});
 
 			expect(grid.fireListeners('copydata', {
 				start: {
@@ -144,7 +144,7 @@
 				'true	true	on	1	01\n' +
 				'false	false	off	0	000\n'
 			]);
-			
+
 
 			setTimeout(function() {
 				function createAnswerCanvas() {
@@ -215,7 +215,7 @@
 				row: 0,
 			};
 
-			expect(records[0]).toEqual({bool: false, str: 'false', onoff: 'off', 'num': 0, 'numstr': '00'});
+			expect(records[0]).toEqual({bool: false, str: 'false', onoff: 'off', num: 0, numstr: '00'});
 
 			setTimeout(function() {
 				done();
@@ -308,7 +308,7 @@
 						const boxSize = cheetahGrid.tools.canvashelper.measureCheckbox(ctx).width;
 						const offsetX = Math.floor((50 - boxSize) / 2);
 						const offsetY = Math.floor((24 - boxSize) / 2);
-						
+
 						const opt = {
 							uncheckBgColor: '#F00',
 							checkBgColor: '#0F0',

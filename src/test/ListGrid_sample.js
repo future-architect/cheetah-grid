@@ -1,5 +1,5 @@
 /*global cheetahGrid*/
-/*eslint object-shorthand:0, prefer-arrow-callback:0*/
+/*eslint object-shorthand:0, prefer-arrow-callback:0, prefer-template: "off"*/
 'use strict';
 function generate(num) {
 	const fnames = ['Sophia', 'Emma', 'Olivia', 'Isabella', 'Ava', 'Mia', 'Emily', 'Abigail', 'Madison', 'Elizabeth', 'Charlotte', 'Avery', 'Sofia', 'Chloe', 'Ella', 'Harper', 'Amelia', 'Aubrey', 'Addison', 'Evelyn', 'Natalie', 'Grace', 'Hannah', 'Zoey', 'Victoria', 'Lillian', 'Lily', 'Brooklyn', 'Samantha', 'Layla', 'Zoe', 'Audrey', 'Leah', 'Allison', 'Anna', 'Aaliyah', 'Savannah', 'Gabriella', 'Camila', 'Aria', 'Noah', 'Liam', 'Jacob', 'Mason', 'William', 'Ethan', 'Michael', 'Alexander', 'Jayden', 'Daniel', 'Elijah', 'Aiden', 'James', 'Benjamin', 'Matthew', 'Jackson', 'Logan', 'David', 'Anthony', 'Joseph', 'Joshua', 'Andrew', 'Lucas', 'Gabriel', 'Samuel', 'Christopher', 'John', 'Dylan', 'Isaac', 'Ryan', 'Nathan', 'Carter', 'Caleb', 'Luke', 'Christian', 'Hunter', 'Henry', 'Owen', 'Landon', 'Jack'];
@@ -141,7 +141,7 @@ function generate(num) {
 								}),
 								action: new columnAction.ButtonAction({
 									action: function(rec) {
-										alert('ID:' + rec.personid + ' ' + JSON.stringify(rec));
+										alert('ID:' + rec.personid + ' ' + JSON.stringify(rec));//eslint-disable-line
 									},
 								}),
 							}

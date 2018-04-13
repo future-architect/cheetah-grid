@@ -23,7 +23,7 @@ function charToHexCodeStr(c) {
 	if (/[!#-&(-[\]-_a-~]/.test(c)) {
 		return c;
 	}
-	return '\\u' + ('0000' + c.charCodeAt(0).toString(16)).slice(-4);
+	return `\\u${(`0000${c.charCodeAt(0).toString(16)}`).slice(-4)}`;
 }
 
 function toCodeString(code) {

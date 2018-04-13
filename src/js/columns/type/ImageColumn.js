@@ -51,7 +51,7 @@
 					});
 				}
 				helper.drawWithClip(context, (ctx) => {
-					
+
 					ctx.textAlign = textAlign;
 					ctx.textBaseline = textBaseline;
 					const rect = context.getRect();

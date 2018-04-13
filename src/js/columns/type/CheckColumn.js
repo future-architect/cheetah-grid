@@ -3,7 +3,7 @@
 	const BaseColumn = require('./BaseColumn');
 	const CheckStyle = require('../style/CheckStyle');
 	const {CHECK_COLUMN_STATE_ID} = require('../../internal/symbolManager');
-	
+
 
 	function toBoolean(val) {
 		if (typeof val === 'string') {
@@ -44,9 +44,9 @@
 			}
 
 			const {col, row} = context;
-			const key = col + ':' + row;
+			const key = `${col}:${row}`;
 			const state = grid[CHECK_COLUMN_STATE_ID] && grid[CHECK_COLUMN_STATE_ID][key];
-			
+
 			const opt = {
 				textAlign,
 				textBaseline,

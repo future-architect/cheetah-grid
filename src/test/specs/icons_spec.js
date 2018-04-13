@@ -1,6 +1,6 @@
 /*global cheetahGrid*/
 /*eslint-env es6*/
-/*eslint prefer-arrow-callback:"off", object-shorthand:"off", prefer-destructuring: "off"*/
+/*eslint prefer-arrow-callback:"off", object-shorthand:"off", prefer-destructuring: "off", prefer-template: "off"*/
 'use strict';
 (function() {
 	let mainEl = document.querySelector('#main');
@@ -45,7 +45,7 @@
 				ctx.stroke();
 				path2DManager.fill(icons[k], ctx, x, y + textHeight, iconSize, iconSize);
 				x += 100;
-				
+
 
 				if (x > (width - 100)) {
 					x = 0;

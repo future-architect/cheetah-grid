@@ -3,7 +3,7 @@
 const Rect = require('../../internal/Rect');
 module.exports = {
 	drawExclamationMarkBox(context, style, helper) {
-		
+
 		const {bgColor, color} = style;
 		const ctx = context.getContext();
 		const rect = context.getRect();
@@ -25,7 +25,7 @@ module.exports = {
 				context, {fillColor});
 	},
 	drawInfomationMarkBox(context, style, helper) {
-		
+
 		const {bgColor, color} = style;
 		const ctx = context.getContext();
 		const rect = context.getRect();

@@ -44,16 +44,16 @@
 				setReadonly(grid, CHECK_COLUMN_STATE_ID, {});
 			}
 			const state = grid[CHECK_COLUMN_STATE_ID];
-			
+
 			const action = (cell) => {
-				const key = cell.col + ':' + cell.row;
-				const blockKey = key + '::block';
+				const key = `${cell.col}:${cell.row}`;
+				const blockKey = `${key}::block`;
 				if (this.readOnly || this.disabled || state[blockKey]) {
 					return;
 				}
 				const ret = grid.doChangeValue(cell.col, cell.row, toggleValue);
 				if (ret) {
-					
+
 					const onChange = () => {
 						// checkbox animation
 						animate(200, (point) => {

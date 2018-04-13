@@ -9,12 +9,12 @@ const AllFontsLoader = require('./AllFontsLoader');
 const Thenable = require('../Thenable');
 
 function escape(string) {
-	return string.replace(/([.*+?^${}()|\[\]\/\\])/g, '\\$1');
+	return string.replace(/([.*+?^${}()|[\]/\\])/g, '\\$1');
 }
 
 
 function parseExtension(url) {
-	const match = /\.([^\.\/]*?)$/g.exec(url);
+	const match = /\.([^./]*?)$/g.exec(url);
 	if (match) { return match[1]; } else { return ''; }
 }
 function mimes() {
@@ -37,7 +37,7 @@ function mimes() {
 	};
 }
 function dataAsUrl(content, type) {
-	return 'data:' + type + ';base64,' + content;
+	return `data:${type};base64,${content}`;
 }
 
 function mimeType(url) {
@@ -49,11 +49,11 @@ function mimeType(url) {
 	return mimes()[extension] || '';
 }
 function urlAsRegex(url) {
-	return new RegExp('(url\\([\'"]?)(' + escape(url) + ')([\'"]?\\))', 'g');
+	return new RegExp(`(url\\(['"]?)(${escape(url)})(['"]?\\))`, 'g');
 }
 
 function replaceUrl(fontCss, srcUrl, dataUrl) {
-	return fontCss.replace(urlAsRegex(srcUrl), '$1\'' + dataUrl + '\'$3');
+	return fontCss.replace(urlAsRegex(srcUrl), `$1'${dataUrl}'$3`);
 }
 
 function buildDataUrl(data, srcUrl) {
@@ -64,7 +64,8 @@ function buildDataUrl(data, srcUrl) {
 function base64Encode(str) {
 	const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 	const len = str.length;
-	let out = '', i = 0;
+	let out = '',
+		i = 0;
 	while (i < len) {
 		const c1 = str.charCodeAt(i++) & 0xff;
 		if (i === len) {

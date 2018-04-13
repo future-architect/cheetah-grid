@@ -29,7 +29,7 @@ function toIconsJs(svgfile, opt = {}) {
 	if (opt.es5) {
 		script = babel.transform(script, {presets: ['es2015']}).code;
 	}
-	
+
 	return script;
 }
 

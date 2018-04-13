@@ -44,7 +44,7 @@
 				if (this._iconWidth) {
 					icon.width = this._iconWidth;
 				}
-				
+
 				info.getIcon = () => repeatArray(icon, num);
 			} else {
 				info.getIcon = () => null;

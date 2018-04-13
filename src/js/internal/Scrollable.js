@@ -3,7 +3,7 @@
 	const EventHandler = require('./EventHandler');
 	const style = require('./style');
 	const {browser} = require('./utils');
-	
+
 	const MAX_SCROLL = browser.heightLimit - 1000;
 
 	function _update(scrollable) {
@@ -20,9 +20,9 @@
 			domHeight = scrollable._height;
 		}
 
-		scrollable._endPointElement.style.top = domHeight.toFixed() + 'px';
-		scrollable._endPointElement.style.left = scrollable._width.toFixed() + 'px';
-		
+		scrollable._endPointElement.style.top = `${domHeight.toFixed()}px`;
+		scrollable._endPointElement.style.left = `${scrollable._width.toFixed()}px`;
+
 	}
 
 	class Scrollable {
