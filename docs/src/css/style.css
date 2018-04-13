@@ -1,3 +1,23 @@
+body {
+    margin: 8px;
+}
+.share-buttons {
+    text-align: right;
+    margin: -8px -8px 0 -8px;
+    padding: 5px 5px 12px;
+}
+.header {
+    margin: -8px -8px 0 -8px;
+    padding: 8px;
+}
+.share-buttons>* {
+    line-height: 20px;
+}
+
+.share-buttons>*>* {
+    vertical-align: bottom;
+}
+
 .primary {
     background-color: #284060;
     color: #fff;
@@ -60,10 +80,21 @@ td {
 }
 
 code {
-    border: .1rem solid #E5E5E5;
+    border: 1px solid #E5E5E5;
     margin: 0 .3rem;
     padding: .2rem .4rem;
     background-color: #F4F9F9;
+}
+
+h1 code, h2 code, h3 code, h4 code, h5 code, h6 code {
+    font-size: 100%;
+    margin: 0;
+    font-family: Meiryo;
+    font-family: inherit;
+    padding-left: 0.1em;
+    padding-right: 0.1em;
+    display: inline-block;
+    line-height: 1em;
 }
 
 .contents h1, .contents h2 {
@@ -73,19 +104,6 @@ code {
 
 .right {
     float: right !important;
-}
-
-.share-buttons>* {
-    line-height: 20px;
-}
-
-.share-buttons>*>* {
-    vertical-align: bottom;
-}
-
-.share-buttons {
-    text-align: right;
-    padding: 5px;
 }
 
 .icon-arrow {

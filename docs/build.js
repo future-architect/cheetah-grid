@@ -83,6 +83,11 @@ Metalsmith(__dirname).//eslint-disable-line new-cap
 					data.disabled = true;
 				}
 			}
+			if (data.docAbolishedVersion) {
+				if (isEnabledVersion(data.docAbolishedVersion)) {
+					data.disabled = true;
+				}
+			}
 		});
 		done();
 	}).

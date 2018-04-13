@@ -74,6 +74,13 @@ function registerHelpers() {
 				return arraysEqual([...demoCategorys, demo.title], tree);
 			});
 			if (!demo || !demo.path) {
+				if (tree.length === 1) {
+					const path = Handlebars.helpers.ms_path.call(
+							this, Handlebars.helpers.ms_finalpath.call(this, './index.html', opt), opt
+					);
+					const hash = (`${category}`).toLowerCase().replace(' ', '-');
+					return `<a href="${path}#-${hash}-">${category}</a>`;
+				}
 				return category;
 			}
 			const path = Handlebars.helpers.ms_path.call(

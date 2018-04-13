@@ -2,6 +2,7 @@
 {
 	const DataSource = require('./data/DataSource');
 	const CachedDataSource = require('./data/CachedDataSource');
+	const FilterDataSource = require('./data/FilterDataSource');
 
 
 	/**
@@ -12,6 +13,7 @@
 	 */
 	module.exports = {
 		DataSource,
-		CachedDataSource
+		CachedDataSource,
+		FilterDataSource
 	};
 }

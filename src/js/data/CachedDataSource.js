@@ -8,7 +8,7 @@
 		recCache[field] = value;
 	}
 	/**
-	 * grid data source
+	 * grid data source for caching Promise data
 	 *
 	 * @classdesc cheetahGrid.data.CachedDataSource
 	 * @extends cheetahGrid.data.DataSource
