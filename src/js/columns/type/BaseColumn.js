@@ -90,7 +90,6 @@
 		}
 		onDrawCell(cellValue, info, context, grid) {
 			const {style, getRecord, drawCellBase} = info;
-			delete info.style;
 			const helper = grid.getGridCanvasHelper();
 			drawCellBase();
 
