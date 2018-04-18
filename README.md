@@ -2,11 +2,11 @@
 
 [![npm](https://img.shields.io/npm/l/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
 [![npm](https://img.shields.io/npm/v/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
-[![npm](https://img.shields.io/badge/dynamic/json.svg?label=downloads&colorB=green&prefix=&suffix=/day&query=$.downloads&uri=https://api.npmjs.org//downloads/point/last-day/cheetah-grid&maxAge=3600)](https://www.npmjs.com/package/cheetah-grid)
-[![npm](https://img.shields.io/npm/dw/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
-[![npm](https://img.shields.io/npm/dm/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
-[![npm](https://img.shields.io/npm/dy/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
-[![npm](https://img.shields.io/npm/dt/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
+[![npm](https://img.shields.io/badge/dynamic/json.svg?label=downloads&colorB=green&prefix=&suffix=/day&query=$.downloads&uri=https://api.npmjs.org//downloads/point/last-day/cheetah-grid&maxAge=3600)](http://www.npmtrends.com/cheetah-grid)
+[![npm](https://img.shields.io/npm/dw/cheetah-grid.svg)](http://www.npmtrends.com/cheetah-grid)
+[![npm](https://img.shields.io/npm/dm/cheetah-grid.svg)](http://www.npmtrends.com/cheetah-grid)
+[![npm](https://img.shields.io/npm/dy/cheetah-grid.svg)](http://www.npmtrends.com/cheetah-grid)
+[![npm](https://img.shields.io/npm/dt/cheetah-grid.svg)](http://www.npmtrends.com/cheetah-grid)
 [![Build Status](https://travis-ci.org/future-architect/cheetah-grid.svg?branch=master)](https://travis-ci.org/future-architect/cheetah-grid)  
 [![NPM](https://nodei.co/npm/cheetah-grid.png?downloads=true&stars=true)](https://www.npmjs.com/package/cheetah-grid)
 
