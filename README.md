@@ -72,7 +72,7 @@ built file is created in the `./dist` directory
             // Header definition
             header: [
                 {field: 'check', caption: '', width: 50, columnType: 'check', action: 'check'},
-                {field: 'personid', caption: 'ID', width: 100, columnType: 'center'},
+                {field: 'personid', caption: 'ID', width: 100},
                 {field: 'fname', caption: 'First Name', width: 200},
                 {field: 'lname', caption: 'Last Name', width: 200},
                 {field: 'email', caption: 'Email', width: 250},
