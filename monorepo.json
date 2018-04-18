@@ -1,0 +1,4 @@
+{
+  "adapter": "npm",
+  "packages": ["packages/*"]
+}

@@ -1,17 +1,23 @@
 {
-  "name": "cheetah-grid-doc",
-  "version": "0.0.1",
+  "name": "cheetah-grid-docs",
+  "private": true,
+  "version": "0.4.1",
   "scripts": {
+    "test": "exit 0",
+    "lint": "npm run eslint",
     "build": "npm run build:documents && npm run jsdoc && npm run winproc",
-    "jsdoc": "jsdoc ../src/js -c jsdoc-conf.js",
+    "jsdoc": "jsdoc ./../cheetah-grid/src/js -c jsdoc-conf.js",
     "build:documents": "node build.js",
     "watch": "node build.js --watch",
     "build:dev": "node build.js --dev",
+    "eslint": "eslint .",
+    "eslint:fix": "eslint . --fix",
     "winproc": "node winProc.js"
   },
-  "dependencies": {},
   "devDependencies": {
     "babel-preset-env": "^1.6.1",
+    "eslint": "^4.19.1",
+    "eslint-plugin-html": "^4.0.3",
     "handlebars": "^4.0.10",
     "highlight.js": "^9.12.0",
     "jsdoc": "^3.5.5",

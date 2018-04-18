@@ -11,7 +11,7 @@ for (let i = 0; i < process.argv.length; i++) {
 	}
 }
 
-const packageVersion = require('../package.json').version;
+const packageVersion = require('../cheetah-grid/package.json').version;
 // const latestVersion = require('./versions.json')[0];
 function versionCompare(v1, v2) {
 	const v1parts = v1.split('.');
