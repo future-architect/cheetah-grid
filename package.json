@@ -47,14 +47,13 @@
     "lint": "monorepo run lint",
     "echo:v": "echo $npm_package_version",
     "check": "node ./scripts/check_readme.js && node ./scripts/check_versions.js",
-    "patch": "node ./patch/patch.js",
     "publish:all": "node ./scripts/publish_all.js",
-    "postinstall": "npm run patch && monorepo install"
+    "postinstall": "monorepo install"
   },
   "dependencies": {},
   "devDependencies": {
     "eslint": "^4.19.1",
-    "monorepo": "^1.2.2",
+    "monorepo": "git+https://github.com/ota-meshi/monorepo#custom",
     "shelljs": "^0.8.1"
   }
 }
