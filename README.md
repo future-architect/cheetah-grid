@@ -61,7 +61,7 @@ $ npm install
 $ npm run build
 ```
 
-built file is created in the `./dist` directory
+built file is created in the `./packages/cheetah-grid/dist` directory
 
 ## Usage
 
