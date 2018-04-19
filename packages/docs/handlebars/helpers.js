@@ -6,6 +6,8 @@ const Handlebars = require('handlebars');
 const marked = require('marked');
 const babel = require('babel-core');
 const highlightjs = require('highlight.js');
+const vueCompiler = require('vue-template-compiler');
+const crypto = require('crypto');
 
 module.exports = registerHelpers;
 
@@ -78,7 +80,7 @@ function registerHelpers() {
 					const path = Handlebars.helpers.ms_path.call(
 							this, Handlebars.helpers.ms_finalpath.call(this, './index.html', opt), opt
 					);
-					const hash = (`${category}`).toLowerCase().replace(' ', '-');
+					const hash = (`${category}`).toLowerCase().replace(/ /g, '-');
 					return `<a href="${path}#${hash}">${category}</a>`;
 				}
 				return category;
@@ -287,6 +289,32 @@ function registerHelpers() {
 		const context = arg.get(this);
 		const option = Object.assign({presets: ['env']}, arg.hash);
 		return `//babel\n${babel.transform(context, option).code}`;
+	});
+	Handlebars.registerHelper('vue', function(...args) {
+		const arg = analyzeArguments(...args);
+		const context = arg.get(this);
+		const output = vueCompiler.parseComponent(context, {pad: 'line'});
+		const template = output.template.content;
+		const script = babel.transform(output.script.content, {presets: ['env']}).code;
+
+		const md5hash = crypto.createHash('md5');
+		md5hash.update(`${template}/${script}`, 'binary');
+		const id = `vue${md5hash.digest('hex')}`;
+		return new Handlebars.SafeString(`
+<div id="${id}"></div>
+<script type="text/javascript">
+(function() {
+	var exports = {};
+	(function(exports) {
+		${script}
+	})(exports)
+	var obj = exports.default || exports
+	obj.template = ${JSON.stringify(template)}
+	var vm = new Vue(obj);
+	vm.$mount('#${id}')
+})();
+</script>
+`);
 	});
 	Handlebars.registerHelper('hbs', function(...args) {
 		const arg = analyzeArguments(...args);

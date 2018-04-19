@@ -29,6 +29,7 @@
     "metalsmith-in-place": "^3.0.1",
     "metalsmith-layouts": "^1.8.1",
     "metalsmith-static": "0.0.5",
-    "metalsmith-watch": "^1.0.3"
+    "metalsmith-watch": "^1.0.3",
+    "vue-template-compiler": "^2.5.16"
   }
 }

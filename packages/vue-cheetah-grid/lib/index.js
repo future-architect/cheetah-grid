@@ -13,9 +13,11 @@ export {CGrid, CGridColumn, CGridButtonColumn, CGridPercentCompleteBarColumn, CG
 
 export default CGrid
 
-CGrid.install = (Vue) => {
+export function install (Vue) {
   const components = {CGrid, CGridColumn, CGridButtonColumn, CGridPercentCompleteBarColumn, CGridIconColumn, CGridColumnGroup, CGridInputColumn, CGridLinkColumn, CGridMenuColumn}
   for (const name in components) {
     Vue.component(name, components[name])
   }
 }
+
+CGrid.install = install

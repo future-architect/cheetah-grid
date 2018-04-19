@@ -86,3 +86,7 @@ built file is created in the `./packages/cheetah-grid/dist` directory
 
 Please refer to the [documents](https://future-architect.github.io/cheetah-grid/) for details
 
+## Using the Vue Component of Cheetah Grid
+
+Please refer to the [`vue-cheetah-grid`](https://www.npmjs.com/package/vue-cheetah-grid)  
+

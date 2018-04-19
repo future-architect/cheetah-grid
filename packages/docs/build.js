@@ -44,6 +44,7 @@ Metalsmith(__dirname).//eslint-disable-line new-cap
 			'Sample',
 			'Getting Started',
 			'Usage',
+			'Usage Vue Component',
 			'FAQ',
 		],
 		script: docScript,

@@ -24,9 +24,13 @@ function deepObjectEquals (a, b) {
   if (aKeys.toString() !== bKeys.toString()) {
     return false
   }
-  return aKeys.findIndex((value) => {
-    return !deepObjectEquals(a[value], b[value])
-  }) === -1
+  for (let i = 0; i < aKeys.length; i++) {
+    const value = aKeys[i]
+    if (!deepObjectEquals(a[value], b[value])) {
+      return false
+    }
+  }
+  return true
 }
 
 function _setGridData (grid, data, filter) {
