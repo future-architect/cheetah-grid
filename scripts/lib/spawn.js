@@ -5,24 +5,33 @@ const chalk = require('chalk');
 const nodeSpawn = require('child_process').spawn;
 const prefixedStream = require('./prefixedStream');
 
-module.exports = function spawn(scope, script, args, opts) {
+module.exports = function spawn(scope, script, args, opts, outOpt) {
+	outOpt = outOpt || {}
 	return new Promise((resolve, reject) => {
 		const p = nodeSpawn(/^win/.test(process.platform) ? `${script}.cmd` : script, args, {cwd: opts.cwd});
 
+		let result = '';
 		if (!opts.quiet) {
 			const stderr = prefixedStream.create({prefix: `${chalk.red(scope)} `});
 			const stdout = prefixedStream.create({prefix: `${chalk.green(scope)} `});
 
 			p.stderr.pipe(stderr).pipe(process.stderr);
-			p.stdout.pipe(stdout).pipe(process.stdout);
+			if (outOpt.log !== false) {
+				p.stdout.pipe(stdout).pipe(process.stdout);
+			}
+			p.stdout.on('data', (data) => {
+				result += data;
+			});
 		}
 
 		p.on('exit', (code) => {
 			if (code === 0) {
 				if (!opts.quiet) {
-					console.log(`${chalk.green(scope)} OK`);
+					if (outOpt.log !== false) {
+						console.log(`${chalk.green(scope)} OK`);
+					}
 				}
-				resolve();
+				resolve(result);
 			} else {
 				const err = new Error('Script failure');
 				if (!opts.quiet) {
