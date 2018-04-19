@@ -16,7 +16,7 @@ const mstatic = require('metalsmith-static');
 const registerHbsPartials = require('./handlebars/register-partials');
 const registerHbsHelpers = require('./handlebars/helpers');
 
-const {isEnabledVersion, getDocumentVersion, packageVersion, watchMode, devMode} = require('./buildcommon');
+const {isEnabledVersion, getDocumentVersion, packageVersion, packageVersionX, watchMode, devMode} = require('./buildcommon');
 
 const hbs = {
 	directory: 'hbs/layouts',
@@ -48,6 +48,7 @@ Metalsmith(__dirname).//eslint-disable-line new-cap
 		],
 		script: docScript,
 		packageVersion,
+		packageVersionX,
 		docLinkVersion: getDocumentVersion(),
 		debug: watchMode || devMode,
 	}).

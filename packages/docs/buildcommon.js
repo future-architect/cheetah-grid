@@ -62,6 +62,10 @@ const com = {
 		return versionCompare(v, packageVersion) <= 0;
 	},
 	packageVersion,
+	get packageVersionX() {
+		const p = packageVersion.split('.');
+		return `${p[0]}.${p[1]}.x`;
+	},
 	watchMode,
 	devMode,
 };
