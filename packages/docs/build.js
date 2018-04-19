@@ -52,7 +52,7 @@ Metalsmith(__dirname).//eslint-disable-line new-cap
 		debug: watchMode || devMode,
 	}).
 	source('./src').
-	destination(`./${getDocumentVersion()}`).
+	destination(`../../docs/${getDocumentVersion()}`).
 
 	clean(true).
 	use(watchMode ? watch({

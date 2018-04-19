@@ -10,7 +10,7 @@ if (!isWin) {
 const {getDocumentVersion} = require('./buildcommon');
 
 
-const rootDir = `./${getDocumentVersion()}/`;
+const rootDir = `../../docs/${getDocumentVersion()}/`;
 const files = readFiles(rootDir).
 	filter((name) => name.endsWith('.html') || name.endsWith('.css') || name.endsWith('.txt') || name.endsWith('.svg') || name.endsWith('.js'));
 

@@ -25,8 +25,8 @@ module.exports = {
 	},
 	opts: {
 		encoding: 'utf8',
-		destination: `./${getDocumentVersion()}/jsdoc/`,
+		destination: `../../docs/${getDocumentVersion()}/jsdoc/`,
 		recurse: true,
-		readme: '../README.md'
+		readme: '../../README.md'
 	}
 };
