@@ -18,11 +18,11 @@ order: 100
 | `<c-grid>` | グリッド本体 | --- | --- |
 | `<c-grid-column>` | グリッドに表示するカラム定義 | --- | --- |
 | `<c-grid-column-group>` | ヘッダを階層表示にする際のカラムグループの定義 | --- | --- |
-| `<c-grid-column-button>` | ボタンカラム定義 | ボタン用カラム定義のシンタックスシュガー | --- |
-| `<c-grid-column-input>` | 入力カラム定義 | 入力用カラム定義のシンタックスシュガー | --- |
-| `<c-grid-column-menu>` | メニューカラム定義 | メニュー用カラム定義のシンタックスシュガー | --- |
-| `<c-grid-column-link>` | リンクカラム定義 | リンク用カラム定義のシンタックスシュガー | --- |
-| `<c-grid-column-icon>` | アイコンカラム定義 | アイコン用カラム定義のシンタックスシュガー | --- |
+| `<c-grid-button-column>` | ボタンカラム定義 | ボタン用カラム定義のシンタックスシュガー | --- |
+| `<c-grid-input-column>` | 入力カラム定義 | 入力用カラム定義のシンタックスシュガー | --- |
+| `<c-grid-menu-column>` | メニューカラム定義 | メニュー用カラム定義のシンタックスシュガー | --- |
+| `<c-grid-link-column>` | リンクカラム定義 | リンク用カラム定義のシンタックスシュガー | --- |
+| `<c-grid-icon-column>` | アイコンカラム定義 | アイコン用カラム定義のシンタックスシュガー | --- |
 | `<c-grid-percent-complete-bar-column>` | パーセントバーカラム定義 | パーセントバー用カラム定義のシンタックスシュガー | --- |
 {{else}}
 ### Available `Vue Component` tag names
@@ -32,11 +32,11 @@ order: 100
 | `<c-grid>` | Grid body | --- | --- |
 | `<c-grid-column>` | Column definition to display in the grid | --- | --- |
 | `<c-grid-column-group>` | Definition of column group when multiple header is displayed | --- | --- |
-| `<c-grid-column-button>` | Button column definition | Syntax sugar for button column definition | --- |
-| `<c-grid-column-input>` | Input column definition | Syntax sugar for input column definition | --- |
-| `<c-grid-column-menu>` | Menu column definition | Syntax sugar for menu column definition | --- |
-| `<c-grid-column-link>` | Link column definition | Syntax sugar for linkable column definition | --- |
-| `<c-grid-column-icon>` | Icon column definition | Syntax sugar for icon column definition | --- |
+| `<c-grid-button-column>` | Button column definition | Syntax sugar for button column definition | --- |
+| `<c-grid-input-column>` | Input column definition | Syntax sugar for input column definition | --- |
+| `<c-grid-menu-column>` | Menu column definition | Syntax sugar for menu column definition | --- |
+| `<c-grid-link-column>` | Link column definition | Syntax sugar for linkable column definition | --- |
+| `<c-grid-icon-column>` | Icon column definition | Syntax sugar for icon column definition | --- |
 | `<c-grid-percent-complete-bar-column>` | Percent complete bar column definition | Syntax sugar for Percent complete bar column definition | --- |
 {{/if}}
 
@@ -67,6 +67,7 @@ const records = generatePersons(10000);
       >
         ID
       </c-grid-column>
+      <!-- multiple header -->
       <c-grid-column-group
         caption="Name">
         <c-grid-input-column
@@ -84,6 +85,7 @@ const records = generatePersons(10000);
           Last Name
         </c-grid-input-column>
       </c-grid-column-group>
+      <!-- button -->
       <c-grid-button-column
         caption="SHOW REC"
         width="120"
@@ -107,4 +109,4 @@ export default {
 {{/copy}}
 {{/vue}}
 
-{{> code class="html" code=vue1}}
+{{> code class="vue" code=vue1}}
