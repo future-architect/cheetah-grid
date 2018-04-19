@@ -1,9 +1,9 @@
 'use strict';
 const chalk = require('chalk');
-const opts = {cwd: process.cwd()};
-const findConfig = require('find-config');
 const spawn = require('./lib/spawn');
 const packages = require('./lib/packages');
+
+const opts = {cwd: process.cwd()};
 
 const SUPPORTED_COMMANDS = ['install', 'publish'];
 
@@ -21,8 +21,8 @@ publish(opts, handleDone);
 function publish(opts, cb) {
 	try {
 		packages(opts, cb).
-			then((files) => Promise.all(
-					files.map((dirPath) => npm(dirPath, 'publish', {}, opts))
+			then((pkgs) => Promise.all(
+					pkgs.list.map((pkg) => npm(pkg, 'publish', {}, opts))
 			)).
 			then(() => {
 				cb(null);
@@ -34,16 +34,11 @@ function publish(opts, cb) {
 }
 
 
-function npm(dirPath, command, flags, opts) {
+function npm(pkg, command, flags, opts) {
 	if (SUPPORTED_COMMANDS.indexOf(command) === -1) {
 		return Promise.reject(new Error(`Unsupported npm command: ${command}`));
 	}
-
-	const pkgPath = findConfig('package.json', {cwd: dirPath});
-
-	if (!pkgPath) { return Promise.resolve(); } // not a package
-
-	const pkg = findConfig.require('package.json', {cwd: dirPath});
+	if (!pkg.name) { return Promise.resolve(); } // not a package
 
 	if (pkg.private) {
 		console.log(`${chalk.green('skip private package')} ${pkg.name}`);
@@ -56,7 +51,7 @@ function npm(dirPath, command, flags, opts) {
 	}, []);
 
 	return spawn(pkg.name, 'npm', [command].concat(params), {
-		cwd: dirPath,
+		cwd: pkg.rootDir,
 		quiet: opts.quiet
 	});
 }
