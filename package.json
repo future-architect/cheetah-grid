@@ -56,6 +56,7 @@
     "eslint": "^4.19.1",
     "eslint-plugin-html": "^4.0.3",
     "monorepo": "git+https://github.com/ota-meshi/monorepo#custom",
-    "shelljs": "^0.8.1"
+    "shelljs": "^0.8.1",
+    "toposort": "^1.0.6"
   }
 }

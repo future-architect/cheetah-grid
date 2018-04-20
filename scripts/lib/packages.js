@@ -1,15 +1,17 @@
 'use strict';
 
 
+const toposort = require('toposort');
+const findConfig = require('find-config');
+const path = require('path');
+const glob = require('bluebird').promisify(require('glob'));
+
+
 const dependenciesKeys = ['dependencies',
 	'devDependencies',
 	'peerDependencies',
 	'optionalDependencies',
 	'bundledDependencies'];
-
-const findConfig = require('find-config');
-const path = require('path');
-const glob = require('bluebird').promisify(require('glob'));
 
 module.exports = function packages(opts, cb) {
 	const pkgPath = findConfig('package.json', {cwd: opts.cwd});
@@ -57,7 +59,8 @@ function getPackageInfo(dir) {
 	return pkg;
 }
 
-function getInternalDependencies(pkg, pkgs) {
+function getInternalDependencies(name, pkgs) {
+	const pkg = pkgs[name];
 	if (pkg._internalDependencies) {
 		return pkg._internalDependencies;
 	}
@@ -65,21 +68,21 @@ function getInternalDependencies(pkg, pkgs) {
 	const set = new Set();
 	dependenciesKeys.forEach((depsName) => {
 		const dependencies = pkg[depsName];
-		for (const name in dependencies) {
-			const dep = pkgs[name];
+		for (const nm in dependencies) {
+			const dep = pkgs[nm];
 			if (!dep) {
 				continue;
 			}
-			set.add(name);
-			getInternalDependencies(dep, pkgs).forEach((n) => set.add(n));
+			set.add(nm);
+			getInternalDependencies(nm, pkgs).forEach((n) => set.add(n));
 		}
 	});
 	return (pkg._internalDependencies = Array.from(set));
 }
 
 function compareDep(a, b, pkgs) {
-	const adeps = getInternalDependencies(a, pkgs);
-	const bdeps = getInternalDependencies(b, pkgs);
+	const adeps = getInternalDependencies(a.name, pkgs);
+	const bdeps = getInternalDependencies(b.name, pkgs);
 
 	if (bdeps.indexOf(a.name) > -1) {
 		return -1;
@@ -87,24 +90,26 @@ function compareDep(a, b, pkgs) {
 	if (adeps.indexOf(b.name) > -1) {
 		return 1;
 	}
-	return adeps.length - bdeps.length;
+	return 0;
 
 }
 
 function makeTree(pkgs) {
-	const list = [...pkgs.list];
-	list.sort((a, b) => compareDep(a, b, pkgs));
+	const graph = [...pkgs.list].map((pkg) => pkg.name).
+		map((name) => [name, ...getInternalDependencies(name, pkgs)]);
+
+	const list = toposort(graph).filter((n) => n).reverse().map((name) => pkgs[name]);
+	console.log(list.map((p) => p.name));
+
 	const tree = [];
-	let pre = list[0];
-	let group = [pre];
+	let group = [list[0]];
 	tree.push(group);
 	for (let i = 1; i < list.length; i++) {
 		const e = list[i];
-		if (compareDep(pre, e, pkgs) === 0) {
+		if (group.every((pre) => compareDep(pre, e, pkgs) === 0)) {
 			group.push(e);
 		} else {
-			pre = e;
-			group = [pre];
+			group = [e];
 			tree.push(group);
 		}
 	}

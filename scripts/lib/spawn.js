@@ -6,7 +6,7 @@ const nodeSpawn = require('child_process').spawn;
 const prefixedStream = require('./prefixedStream');
 
 module.exports = function spawn(scope, script, args, opts, outOpt) {
-	outOpt = outOpt || {}
+	outOpt = outOpt || {};
 	return new Promise((resolve, reject) => {
 		const p = nodeSpawn(/^win/.test(process.platform) ? `${script}.cmd` : script, args, {cwd: opts.cwd});
 
