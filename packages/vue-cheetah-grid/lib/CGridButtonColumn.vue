@@ -8,10 +8,22 @@ import ColumnMixin from './c-grid/ColumnMixin.vue'
 import StdColumnMixin from './c-grid/StdColumnMixin.vue'
 import {cheetahGrid, filterToFn} from './c-grid/utils'
 
+/**
+ * @mixin column-mixin
+ * @mixin std-column-mixin
+ */
 export default {
   name: 'CGridButtonColumn',
   mixins: [ColumnMixin, StdColumnMixin],
-  props: {},
+  props: {
+    /**
+     * Defines a button caption
+     */
+    caption: {
+      type: [String],
+      default: ''
+    }
+  },
   methods: {
     /**
      * @private

@@ -8,6 +8,10 @@ import ColumnMixin from './c-grid/ColumnMixin.vue'
 import StdColumnMixin from './c-grid/StdColumnMixin.vue'
 import {filterToFn, normalizeColumnType, normalizeAction} from './c-grid/utils'
 
+/**
+ * @mixin column-mixin
+ * @mixin std-column-mixin
+ */
 export default {
   name: 'CGridColumn',
   mixins: [ColumnMixin, StdColumnMixin],

@@ -8,6 +8,10 @@ import ColumnMixin from './c-grid/ColumnMixin.vue'
 import StdColumnMixin from './c-grid/StdColumnMixin.vue'
 import {cheetahGrid, filterToFn} from './c-grid/utils'
 
+/**
+ * @mixin column-mixin
+ * @mixin std-column-mixin
+ */
 export default {
   name: 'CGridMenuColumn',
   mixins: [ColumnMixin, StdColumnMixin],

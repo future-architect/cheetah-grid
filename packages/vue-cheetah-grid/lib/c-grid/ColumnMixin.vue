@@ -4,6 +4,9 @@
  */
 export default {
   props: {
+    /**
+     * Defines a header caption
+     */
     caption: {
       type: [String],
       default: ''

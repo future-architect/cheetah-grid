@@ -7,6 +7,9 @@
 import ColumnMixin from './c-grid/ColumnMixin.vue'
 import {slotsToHeaderOptions} from './c-grid/header-utils'
 
+/**
+ * @mixin column-mixin
+ */
 export default {
   name: 'CGridColumnGroup',
   mixins: [ColumnMixin],
