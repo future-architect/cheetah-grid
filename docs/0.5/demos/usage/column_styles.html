@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="author" content="Cheetah Grid">
+    <meta name="keywords" content="spreadsheet,grid,canvas,table,web-components">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Cheetah Grid - Column Styles</title>
+    <link rel="shortcut icon" type="image/x-icon" href="./../../../icon_512x512.ico">
+
+    <link rel="stylesheet" type="text/css" href="./../../css/style.css">
+    <link rel="stylesheet" type="text/css" href="./../../css/highlightjs.css">
+    
+    <!-- <script src="http://localhost:35729/livereload.js"></script> -->
+    
+    <script type="text/javascript" src="https://unpkg.com/cheetah-grid@0.5"></script>
+
+    <style type="text/css">
+        html {
+            height: 100%;
+        }
+        body {
+            height: calc(100% - 100px);
+        }
+        .contents {
+            padding: 30px;
+            box-sizing: border-box;
+        }
+        .demo-grid {
+            width: 100%;
+            height: 300px;
+            box-sizing: border-box;
+            border: solid 1px #ddd;
+        }
+        .demo-grid.large {
+            height: 500px;
+        }
+        .demo-grid.middle {
+            height: 300px;   
+        }
+        .demo-grid.small {
+            height: 240px;   
+        }
+        .log {
+            width: 100%;
+            height: 80px;
+            background-color: #F5F5F5;
+        }
+
+        .hljs { 
+             tab-size: 4;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <nav class="header primary" id="header-nav">
+    	<div class="nav-wrapper">
+    		<a href="./../../../index.html">
+    			<img src="./../../../logo.png" style="width: 100px;padding: 5px;vertical-align: middle;" alt="Cheetah Grid">
+    		</a>
+    
+    		<ul class="right hide-on-med-and-down nav-dropdown-container">
+    			<a href="#" class="primary nav-dropdown-button mobile-only" data-target="all-nav" style="width: 30px;">
+    				<span class="icon-arrow"></span>
+    			</a>
+    			<ul id="all-nav" class="mobile-nav-dropdown right-dropdown primary">
+    				<li><a href="./../../index.html" class="primary">Docoments - TOP</a></li>
+    				<li class="nav-dropdown-container">
+    					<a id="nav-versions" href="#" class="primary nav-dropdown-button" data-target="versions">
+    						version<span class="icon-arrow"></span>
+    					</a>
+    					<ul id="versions" class="nav-dropdown right-dropdown">
+    					</ul>
+    				</li>
+    				<li class="nav-dropdown-container">
+    					<a id="nav-lang" href="#" class="primary nav-dropdown-button" data-target="langs">
+    						lang<span class="icon-arrow"></span>
+    					</a>
+    					<ul id="langs" class="nav-dropdown right-dropdown">
+    						<li><a href="./../../ja/demos/usage/column_styles.html" class="primary">日本語</a></li>
+    						<li><a href="./../../demos/usage/column_styles.html" class="primary">English</a></li>
+    					</ul>
+    				</li>
+    			</ul>
+    		</ul>
+    	</div>
+    </nav>
+    
+    <script type="text/javascript">
+    	'use strict';
+    	////babel
+    'use strict';
+    
+    function getVersions(callback) {
+    	var xhr = new XMLHttpRequest();
+    	function onError() {
+    		callback(['0.5', '0.0.1']);
+    	}
+    	xhr.onload = function () {
+    		var versions = JSON.parse(xhr.responseText);
+    		callback(versions);
+    	};
+    	xhr.onerror = onError;
+    	xhr.onabort = onError;
+    	try {
+    		xhr.open('GET', './../../../versions.json');
+    		xhr.send();
+    	} catch (e) {
+    		onError();
+    	}
+    }
+    
+    //
+    getVersions(function (versions) {
+    	var myVersion = '0.5';
+    	function getVerLocation(v) {
+    		return location.href.replace(myVersion, v).replace('.devdoc', v);
+    	}
+    	var latest = versions[0];
+    	var versEl = document.getElementById('versions');
+    	versEl.innerHTML = versions.map(function (v, i) {
+    		return '<li><a href="' + getVerLocation(v) + '" class="primary">' + v + (i === 0 ? ' (latest)' : '') + '</a></li>';
+    	}).join('');
+    
+    	if (latest !== myVersion) {
+    		var header = document.getElementById('header-nav');
+    		var a = document.createElement('a');
+    		header.parentElement.insertBefore(a, header.nextSibling);
+    		a.href = getVerLocation(latest);
+    		a.textContent = '<goto the latest version(' + latest + ') document>';
+    	}
+    });
+    //
+    </script>    <h1><a href="./../.././index.html#usage">Usage</a> &gt; Column Styles</h1>
+    <div class="contents">
+        
+<h2 id="standard-column-style">Standard Column Style</h2>
+<p>Define column style by using <code>style</code> property.  </p>
+<p>Properties below are prepared in standard.  </p>
+<table>
+<thead>
+<tr>
+<th>property</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>color</td>
+<td>define color of cell</td>
+</tr>
+<tr>
+<td>textAlign</td>
+<td>define horizontal position of text in cell</td>
+</tr>
+<tr>
+<td>textBaseline</td>
+<td>define vertical position of text in cell</td>
+</tr>
+<tr>
+<td>bgColor</td>
+<td>define background color of cell</td>
+</tr>
+</tbody>
+</table>
+
+<div id="sample1" class="demo-grid small">
+</div>
+<script type="text/javascript">
+////wrapscript
+(function() {
+//babel
+
+//
+/*global cheetahGrid*/
+'use strict';
+
+var grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#sample1'),
+	header: [{ field: 'no', caption: 'no', width: 50 },
+
+	//default
+	{ field: 'text', caption: 'default', width: 150 },
+
+	//color
+	{ field: 'text', caption: 'color', width: 150, style: { color: 'red' } },
+	//textAlign
+	{ field: 'text', caption: 'right', width: 150, style: { textAlign: 'right' } }, { field: 'text', caption: 'center', width: 150, style: { textAlign: 'center' } },
+	//textBaseline
+	{ field: 'text', caption: 'top', width: 150, style: { textBaseline: 'top' } }, { field: 'text', caption: 'bottom', width: 150, style: { textBaseline: 'bottom' } },
+
+	//bgColor
+	{ field: 'text', caption: 'bgColor', width: 150, style: { bgColor: '#5f5' } }]
+});
+grid.records = [{ no: 1, text: 'sample text' }, { no: 2, text: 'sample text' }, { no: 3, text: 'sample text' }];
+//
+//
+})();
+</script>
+<pre><code class="js hljs javascript"><span class="hljs-comment">/*global cheetahGrid*/</span>
+<span class="hljs-meta">'use strict'</span>;
+<span class="hljs-keyword">const</span> grid = <span class="hljs-keyword">new</span> cheetahGrid.ListGrid({
+	<span class="hljs-attr">parentElement</span>: <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample1'</span>),
+	<span class="hljs-attr">header</span>: [
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'no'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'no'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">50</span>},
+
+		<span class="hljs-comment">//default</span>
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'default'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">150</span>},
+
+		<span class="hljs-comment">//color</span>
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'color'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">150</span>, <span class="hljs-attr">style</span>: {<span class="hljs-attr">color</span>: <span class="hljs-string">'red'</span>}},
+		<span class="hljs-comment">//textAlign</span>
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'right'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">150</span>, <span class="hljs-attr">style</span>: {<span class="hljs-attr">textAlign</span>: <span class="hljs-string">'right'</span>}},
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'center'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">150</span>, <span class="hljs-attr">style</span>: {<span class="hljs-attr">textAlign</span>: <span class="hljs-string">'center'</span>}},
+		<span class="hljs-comment">//textBaseline</span>
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'top'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">150</span>, <span class="hljs-attr">style</span>: {<span class="hljs-attr">textBaseline</span>: <span class="hljs-string">'top'</span>}},
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'bottom'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">150</span>, <span class="hljs-attr">style</span>: {<span class="hljs-attr">textBaseline</span>: <span class="hljs-string">'bottom'</span>}},
+
+		<span class="hljs-comment">//bgColor</span>
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'bgColor'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">150</span>, <span class="hljs-attr">style</span>: {<span class="hljs-attr">bgColor</span>: <span class="hljs-string">'#5f5'</span>}},
+	],
+});
+grid.records = [
+	{<span class="hljs-attr">no</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">text</span>: <span class="hljs-string">'sample text'</span>},
+	{<span class="hljs-attr">no</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">text</span>: <span class="hljs-string">'sample text'</span>},
+	{<span class="hljs-attr">no</span>: <span class="hljs-number">3</span>, <span class="hljs-attr">text</span>: <span class="hljs-string">'sample text'</span>},
+];
+<span class="hljs-comment">//</span></code></pre>
+<h2 id="advanced-column-style">Advanced Column Style</h2>
+<p><code>style</code> property can be used by the advanced ways below.  </p>
+<ul>
+<li>change style by each record</li>
+</ul>
+<p>This can be done by functions below.  </p>
+<ul>
+<li>use the function</li>
+<li>use the instance of Style class</li>
+</ul>
+
+<div id="sample2" class="demo-grid small">
+</div>
+<label>change background color of text</label>
+<select id="sample2theme">
+    <option value="" selected="true">default</option>
+    <option value="red">red</option>
+    <option value="#DFF">#DFF</option>
+</select>
+<script type="text/javascript">
+////wrapscript
+(function() {
+//babel
+
+//
+/*global cheetahGrid*/
+'use strict';
+
+var textFieldStyle = new cheetahGrid.columns.style.Style();
+var grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#sample2'),
+	header: [{ field: 'no', caption: 'no', width: 50 }, {
+		field: 'value',
+		caption: 'value',
+		width: 150,
+		columnType: 'number',
+		//function
+		style: function style(rec) {
+			return {
+				color: rec.value <= 0 ? 'red' : undefined
+			};
+		}
+	}, {
+		field: 'text',
+		caption: 'text',
+		width: 150,
+		//Style instance
+		style: textFieldStyle
+	}]
+});
+grid.records = [{ no: 1, text: 'sample text', value: 100 }, { no: 2, text: 'sample text', value: 50 }, { no: 3, text: 'sample text', value: 0 }, { no: 4, text: 'sample text', value: -50 }];
+
+var themeSelect = document.querySelector('#sample2theme');
+themeSelect.onchange = function () {
+	//change bg color
+	if (themeSelect.value === 'default') {
+		textFieldStyle.bgColor = null;
+	} else {
+		textFieldStyle.bgColor = themeSelect.value;
+	}
+};
+//
+//
+})();
+</script>
+<pre><code class="js hljs javascript"><span class="hljs-comment">/*global cheetahGrid*/</span>
+<span class="hljs-meta">'use strict'</span>;
+<span class="hljs-keyword">const</span> textFieldStyle = <span class="hljs-keyword">new</span> cheetahGrid.columns.style.Style();
+<span class="hljs-keyword">const</span> grid = <span class="hljs-keyword">new</span> cheetahGrid.ListGrid({
+	<span class="hljs-attr">parentElement</span>: <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample2'</span>),
+	<span class="hljs-attr">header</span>: [
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'no'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'no'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">50</span>},
+		
+		{
+			<span class="hljs-attr">field</span>: <span class="hljs-string">'value'</span>,
+			<span class="hljs-attr">caption</span>: <span class="hljs-string">'value'</span>,
+			<span class="hljs-attr">width</span>: <span class="hljs-number">150</span>,
+			<span class="hljs-attr">columnType</span>: <span class="hljs-string">'number'</span>,
+			<span class="hljs-comment">//function</span>
+			style(rec) {
+				<span class="hljs-keyword">return</span> {
+					<span class="hljs-attr">color</span>: rec.value &lt;= <span class="hljs-number">0</span> ? <span class="hljs-string">'red'</span> : <span class="hljs-literal">undefined</span>,
+				};
+			}
+		},
+
+		{
+			<span class="hljs-attr">field</span>: <span class="hljs-string">'text'</span>,
+			<span class="hljs-attr">caption</span>: <span class="hljs-string">'text'</span>,
+			<span class="hljs-attr">width</span>: <span class="hljs-number">150</span>,
+			<span class="hljs-comment">//Style instance</span>
+			style: textFieldStyle
+		},
+	],
+});
+grid.records = [
+	{<span class="hljs-attr">no</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">text</span>: <span class="hljs-string">'sample text'</span>, <span class="hljs-attr">value</span>: <span class="hljs-number">100</span>},
+	{<span class="hljs-attr">no</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">text</span>: <span class="hljs-string">'sample text'</span>, <span class="hljs-attr">value</span>: <span class="hljs-number">50</span>},
+	{<span class="hljs-attr">no</span>: <span class="hljs-number">3</span>, <span class="hljs-attr">text</span>: <span class="hljs-string">'sample text'</span>, <span class="hljs-attr">value</span>: <span class="hljs-number">0</span>},
+	{<span class="hljs-attr">no</span>: <span class="hljs-number">4</span>, <span class="hljs-attr">text</span>: <span class="hljs-string">'sample text'</span>, <span class="hljs-attr">value</span>: <span class="hljs-number">-50</span>},
+];
+
+<span class="hljs-keyword">const</span> themeSelect = <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample2theme'</span>);
+themeSelect.onchange = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+	<span class="hljs-comment">//change bg color</span>
+	<span class="hljs-keyword">if</span> (themeSelect.value === <span class="hljs-string">'default'</span>) {
+		textFieldStyle.bgColor = <span class="hljs-literal">null</span>;
+	} <span class="hljs-keyword">else</span> {
+		textFieldStyle.bgColor = themeSelect.value;
+	}
+};
+<span class="hljs-comment">//</span></code></pre>
+
+    </div>
+    
+    <script type="text/javascript" src="./../../js/doc-common.js"></script>
+
+</body></html>

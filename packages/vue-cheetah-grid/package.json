@@ -1,6 +1,6 @@
 {
   "name": "vue-cheetah-grid",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "Cheetah Grid for Vue.js",
   "main": "dist/vueCheetahGrid.js",
   "files": [
@@ -78,7 +78,7 @@
     "webpack-cli": "^2.0.14"
   },
   "peerDependencies": {
-    "cheetah-grid": "^0.4.1",
+    "cheetah-grid": "^0.5.0",
     "vue": "^2.5.16"
   }
 }

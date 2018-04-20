@@ -1,7 +1,7 @@
 {
   "name": "cheetah-grid-manager",
   "private": true,
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "Cheetah Grid is a high performance grid engine that works on canvas",
   "keywords": [
     "spreadsheet",
@@ -42,7 +42,7 @@
   ],
   "scripts": {
     "test": "monorepo run test",
-    "build": "monorepo run build",
+    "build": "node ./scripts/build_all.js",
     "prune:all": "monorepo run prune",
     "lint": "monorepo run lint",
     "echo:v": "echo $npm_package_version",
