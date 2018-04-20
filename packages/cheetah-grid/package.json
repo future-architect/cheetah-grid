@@ -74,7 +74,7 @@
     "font-awesome": "^4.7.0",
     "image-matcher": "^0.1.4",
     "jasmine": "^2.99.0",
-    "karma": "^2.0.0",
+    "karma": "^2.0.2",
     "karma-babel-preprocessor": "^7.0.0",
     "karma-chrome-launcher": "^2.2.0",
     "karma-cli": "^1.0.1",

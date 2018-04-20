@@ -99,7 +99,6 @@ function makeTree(pkgs) {
 		map((name) => [name, ...getInternalDependencies(name, pkgs)]);
 
 	const list = toposort(graph).filter((n) => n).reverse().map((name) => pkgs[name]);
-	console.log(list.map((p) => p.name));
 
 	const tree = [];
 	let group = [list[0]];
