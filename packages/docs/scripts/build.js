@@ -41,8 +41,7 @@ Metalsmith(__dirname).//eslint-disable-line new-cap
 
 	metadata({
 		demoCategorys: [
-			'Sample',
-			'Getting Started',
+			'Introduction',
 			'Usage',
 			'Usage Vue Component',
 			'FAQ',
