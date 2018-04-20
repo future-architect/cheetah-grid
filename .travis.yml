@@ -17,9 +17,7 @@ before_script:
 deploy:
   skip_cleanup: true
   provider: script
-  script:
-    - npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
-    - npm run publish:all
+  script: sh $TRAVIS_BUILD_DIR/deploy.sh
   on:
     tags: true
 
