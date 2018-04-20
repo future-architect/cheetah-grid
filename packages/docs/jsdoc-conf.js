@@ -1,6 +1,6 @@
 'use strict';
 
-const {getDocumentVersion} = require('./buildcommon');
+const {getDocumentVersion} = require('./scripts/buildcommon');
 
 module.exports = {
 	tags: {
