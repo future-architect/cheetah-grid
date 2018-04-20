@@ -4,6 +4,10 @@ const packages = require('./lib/packages');
 const {version} = require('../package.json');
 const opts = {cwd: process.cwd()};
 
+function minorVersion(v) {
+	const a = v.split('.');
+	return `${a[0]}.${a[1]}`;
+}
 
 function handleDone(err) {
 	if (err) {
@@ -34,7 +38,7 @@ function checkPackageJsons(opts, cb) {
 function checkPackageJson(pkg, pkgs) {
 	const errors = [];
 	// check root version
-	if (pkg.version !== version) {
+	if (minorVersion(pkg.version) !== minorVersion(version)) {
 		const message = `Invalid version. ${pkg.name}:${pkg.version}  root:${version}`;
 		console.error(message);
 		errors.push(Promise.reject(new Error(message)));

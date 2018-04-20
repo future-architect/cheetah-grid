@@ -1,0 +1,131 @@
+---
+category: 
+  - Introduction
+  - Getting Started
+title: Download Vue.js Component
+layout: demo.html
+docVersion: 0.5.0
+order: 100
+---
+
+{{#marked}}
+# Downloading Cheetah Grid for Vue.js
+
+{{#if lang_ja}}
+## CDNからの利用
+{{else}}
+## Using Cheetah Grid for Vue.js with a CDN
+{{/if}}
+[![npm](https://img.shields.io/npm/v/vue-cheetah-grid.svg)](https://www.npmjs.com/package/vue-cheetah-grid)
+
+```html
+<script src="https://unpkg.com/cheetah-grid@{{packageVersionX}}"></script>
+<script src="https://unpkg.com/vue-cheetah-grid@{{packageVersionX}}"></script>
+```
+
+```js
+Vue.use(vueCheetahGrid)
+```
+
+{{#if lang_ja}}
+## npmから取得する
+{{else}}
+## Downloading Cheetah Grid for Vue.js using npm
+{{/if}}
+[![npm](https://img.shields.io/npm/v/vue-cheetah-grid.svg)](https://www.npmjs.com/package/vue-cheetah-grid)
+
+```bash
+$ npm install cheetah-grid vue-cheetah-grid
+```
+
+```js
+import CGrid from 'vue-cheetah-grid'
+
+Vue.use(CGrid)
+```
+# Vue Instance & Template
+
+{{#if lang_ja}}
+詳細は[他のドキュメント](../../index.html#usage-vue-component)を参照してください。
+{{else}}
+Please refer to the [more documents](../../index.html#usage-vue-component) for details
+{{/if}}
+
+```html
+{{#copy "html1"}}
+<div id="app" class="demo-grid middle">
+  <c-grid
+    ref="grid"
+    :data="records"
+    :frozen-col-count="1">
+    <c-grid-column
+      :width="50"
+      field="check"
+      column-type="check"
+      action="check">
+    </c-grid-column>
+    <c-grid-column
+      field="personid"
+      width= "85"
+    >
+      ID
+    </c-grid-column>
+    <c-grid-column-group
+      caption="Name">
+      <c-grid-input-column
+        field= "fname"
+        width= "20%"
+        min-width="150"
+      >
+        First Name
+      </c-grid-input-column>
+      <c-grid-input-column
+        field="lname"
+        width= "20%"
+        min-width="150"
+      >
+        Last Name
+      </c-grid-input-column>
+    </c-grid-column-group>
+    <c-grid-button-column
+      caption="SHOW REC"
+      width="120"
+      @click="onClickRecord"
+    />
+  </c-grid>
+</div>
+{{/copy}}
+```
+
+{{/marked}}
+
+<script type="text/javascript">
+'use strict';
+//{{{babel textContents.demos.[demos/init.parts.js]}}}
+function load() {
+//{{#wrapscript}}
+/*global cheetahGrid,generatePersons*/
+	const personsData = generatePersons(10000);
+	//{{#copy "script1"}}
+	const app = new Vue({
+		el: '#app',
+		data: {
+			records: personsData
+		},
+		methods: {
+			onClickRecord(rec) { alert(JSON.stringify(rec)) }
+		}
+
+	});
+	//{{/copy}}
+//{{/wrapscript}}
+}
+</script>
+{{> code class="js" code=script1}}
+
+{{{html1}}}
+
+<script type="text/javascript">
+'use strict';
+load();
+</script>

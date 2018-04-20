@@ -7,7 +7,7 @@ const hyphenate = (str) => str.replace(hyphenateRE, '-$1').toLowerCase()
 function vnodeToColumn (vnode) {
   if (vnode.componentInstance &&
     vnode.componentOptions &&
-    hyphenate(vnode.componentOptions.tag).startsWith('c-grid') &&
+    hyphenate(vnode.componentOptions.tag).indexOf('c-grid') === 0 &&
     typeof vnode.componentInstance.createColumn === 'function') {
     return vnode.componentInstance.createColumn()
   }
@@ -17,7 +17,7 @@ function vnodeToColumn (vnode) {
 function vnodeToColumnProp (vnode) {
   if (vnode.componentInstance &&
     vnode.componentOptions &&
-    hyphenate(vnode.componentOptions.tag).startsWith('c-grid') &&
+    hyphenate(vnode.componentOptions.tag).indexOf('c-grid') === 0 &&
     typeof vnode.componentInstance.createColumn === 'function') {
     return vnode.componentInstance.$_CGridColumn_getProps()
   }

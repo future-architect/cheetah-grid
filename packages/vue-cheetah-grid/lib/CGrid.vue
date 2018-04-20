@@ -1,5 +1,6 @@
 <template>
   <div class="c-grid">
+    <!-- Use this slot to set the columns definition -->
     <div class="define"><slot /></div>
   </div>
 </template>
@@ -24,9 +25,13 @@ function deepObjectEquals (a, b) {
   if (aKeys.toString() !== bKeys.toString()) {
     return false
   }
-  return aKeys.findIndex((value) => {
-    return !deepObjectEquals(a[value], b[value])
-  }) === -1
+  for (let i = 0; i < aKeys.length; i++) {
+    const value = aKeys[i]
+    if (!deepObjectEquals(a[value], b[value])) {
+      return false
+    }
+  }
+  return true
 }
 
 function _setGridData (grid, data, filter) {
@@ -87,18 +92,30 @@ function _initGrid (v) {
 export default {
   name: 'CGrid',
   props: {
+    /**
+     * Defines a records or data source.
+     */
     data: {
       type: [Array, Object],
       default: undefined
     },
+    /**
+     * Defines a raw options for Cheetah Grid
+     */
     options: {
       type: Object,
       default: undefined
     },
+    /**
+     * Defines a frozen col Count
+     */
     frozenColCount: {
       type: [Number, String],
       default: 0
     },
+    /**
+     * Defines a records filter
+     */
     filter: {
       type: [Function],
       default: undefined
@@ -140,11 +157,17 @@ export default {
     this.$_CGrid_update()
   },
   methods: {
+    /**
+     * Redraw
+     */
     invalidate () {
       if (this.rawGrid) {
         this.rawGrid.invalidate()
       }
     },
+    /**
+     * @private
+     */
     $_CGrid_update () {
       if (this.rawGrid) {
         const gridProps = _buildGridProps(this)

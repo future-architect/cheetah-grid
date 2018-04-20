@@ -5,6 +5,8 @@ module.exports = function (config) {
     frameworks: ['mocha'],
 
     files: [
+      require.resolve('promise-polyfills'),
+      'test/polyfill.js',
       'test/**/*.spec.js'
     ],
 
@@ -24,8 +26,12 @@ module.exports = function (config) {
       ]
     },
 
-    browsers: ['Chrome'],
+    browsers: ['Chrome', 'IE_no_addons'],
     customLaunchers: {
+      'IE_no_addons': {
+        base: 'IE',
+        flags: ['-extoff']
+      },
       'Chrome_travis_ci': {
         base: 'ChromeHeadless',
         flags: ['--no-sandbox']

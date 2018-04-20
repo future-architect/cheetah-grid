@@ -7,10 +7,10 @@ const watch = require('metalsmith-watch');
 //const markdown = require('metalsmith-markdown');
 //const permalinks = require('metalsmith-permalinks');
 const inPlace = require('metalsmith-in-place');
-const codeHighlight = require('./metalsmith-code-highlight');
-const textContents = require('./metalsmith-text-contents');
-const babel = require('./metalsmith-babel');
-const i18n = require('./metalsmith-i18n-files');
+const codeHighlight = require('./metalsmith/metalsmith-code-highlight');
+const textContents = require('./metalsmith/metalsmith-text-contents');
+const babel = require('./metalsmith/metalsmith-babel');
+const i18n = require('./metalsmith/metalsmith-i18n-files');
 const mstatic = require('metalsmith-static');
 
 const registerHbsPartials = require('./handlebars/register-partials');
@@ -19,8 +19,8 @@ const registerHbsHelpers = require('./handlebars/helpers');
 const {isEnabledVersion, getDocumentVersion, packageVersion, packageVersionX, watchMode, devMode} = require('./buildcommon');
 
 const hbs = {
-	directory: 'hbs/layouts',
-	partials: 'hbs/partials',
+	directory: '../hbs/layouts',
+	partials: '../hbs/partials',
 };
 
 registerHbsPartials({
@@ -35,15 +35,15 @@ const demos = {
 		sortBy: 'order'
 	},
 };
-const docScript = require('./src/script/script');
+const docScript = require('../src/script/script');
 
 Metalsmith(__dirname).//eslint-disable-line new-cap
 
 	metadata({
 		demoCategorys: [
-			'Sample',
-			'Getting Started',
+			'Introduction',
 			'Usage',
+			'Usage Vue Component',
 			'FAQ',
 		],
 		script: docScript,
@@ -52,8 +52,8 @@ Metalsmith(__dirname).//eslint-disable-line new-cap
 		docLinkVersion: getDocumentVersion(),
 		debug: watchMode || devMode,
 	}).
-	source('./src').
-	destination(`../../docs/${getDocumentVersion()}`).
+	source('../src').
+	destination(`../../../docs/${getDocumentVersion()}`).
 
 	clean(true).
 	use(watchMode ? watch({
@@ -64,7 +64,7 @@ Metalsmith(__dirname).//eslint-disable-line new-cap
 		livereload: true,
 	}) : (files, metalsmith, done) => done()).
 	use(mstatic({
-		src: path.relative(path.resolve('.'), require.resolve('highlight.js/styles/kimbie.dark.css')),
+		src: path.relative(path.resolve(__dirname), require.resolve('highlight.js/styles/kimbie.dark.css')),
 		dest: 'css/highlightjs.css'
 	})).
 	// use(assets(

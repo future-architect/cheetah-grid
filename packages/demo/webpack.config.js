@@ -4,7 +4,7 @@ const fs = require('fs')
 const webpack = require('webpack')
 
 function getVueCheetahGridPath () {
-  const vcgPath = path.resolve(__dirname, '../vue-cheetah-grid')
+  const vcgPath = path.resolve(__dirname, '../vue-cheetah-grid/dist/vueCheetahGrid.js')
   try {
     fs.statSync(vcgPath)
     return vcgPath
@@ -36,7 +36,7 @@ module.exports = (env, argv) => {
       app: ['babel-polyfill', './src/main.js']
     },
     output: {
-      path: path.resolve(__dirname, '../../docs'),
+      path: path.resolve(__dirname, '../../docs/assets'),
       filename: '[name].js',
       publicPath: './',
       devtoolModuleFilenameTemplate,
@@ -55,7 +55,7 @@ module.exports = (env, argv) => {
         'vue$': 'vue/dist/vue.esm.js',
         'cheetah-grid': production ? 'cheetah-grid' : getCheetahGridPath(),
         // 'cheetah-grid': cheetahGridAliasPath,
-        'vue-cheetah-grid': argv.mode === 'production' ? 'vue-cheetah-grid' : getVueCheetahGridPath()
+        'vue-cheetah-grid': getVueCheetahGridPath()
       }
     },
     module: {

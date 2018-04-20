@@ -5,7 +5,6 @@ const fs = require('fs');
 function buildCdnVersion(v) {
 	const a = v.split('.');
 	return `${a[0]}.${a[1]}.x`;
-
 }
 const cdnVersion = buildCdnVersion(require('../package.json').version);
 

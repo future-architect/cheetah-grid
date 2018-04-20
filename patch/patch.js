@@ -3,6 +3,12 @@
 require('shelljs/global');
 const chalk = require('chalk');
 const fs = require('fs');
+const path = require('path');
+const opts = {cwd: process.cwd()};
+
+function resolve(dir) {
+	return path.resolve(opts.cwd, dir);
+}
 
 const eslintPluginVuePatches = [
 	// https://github.com/vuejs/eslint-plugin-vue/pull/397
@@ -18,11 +24,11 @@ const eslintPluginVuePatches = [
 ];
 
 eslintPluginVuePatches.forEach((patch) => {
-	cp(`./patch/eslint-plugin-vue/rules/${patch}.js`, './node_modules/eslint-plugin-vue/lib/rules/');
+	cp(path.resolve(__dirname, `./eslint-plugin-vue/rules/${patch}.js`), resolve('./node_modules/eslint-plugin-vue/lib/rules/'));
 });
 
 try {
-	const eslintPluginVueIndexFilePath = require.resolve('eslint-plugin-vue/lib/index.js');
+	const eslintPluginVueIndexFilePath = resolve('./node_modules/eslint-plugin-vue/lib/index.js');
 	const eslintPluginVueIndex = fs.readFileSync(eslintPluginVueIndexFilePath, 'utf8');
 	fs.writeFileSync(
 			eslintPluginVueIndexFilePath,
@@ -41,15 +47,7 @@ try {
 			)
 	);
 } catch (e) {
-
+	// console.log(e)
 }
-
-const monorepoPatches = [
-	'monorepo/src/lib/spawn.js',
-];
-
-monorepoPatches.forEach((patch) => {
-	cp(`./patch/${patch}`, './node_modules/monorepo/src/lib/');
-});
 
 console.log(chalk.green('Patch complete.\n'));

@@ -5,16 +5,20 @@
   "scripts": {
     "test": "exit 0",
     "lint": "npm run eslint",
-    "build": "npm run build:documents && npm run jsdoc && npm run winproc",
+    "build": "npm run build:documents && npm run jsdoc && npm run vuedoc && npm run winproc",
     "jsdoc": "jsdoc ./../cheetah-grid/src/js -c jsdoc-conf.js",
-    "build:documents": "node build.js",
-    "watch": "node build.js --watch",
-    "build:dev": "node build.js --dev",
+    "vuedoc": "node ./scripts/vuedoc/build.js",
+    "build:documents": "node ./scripts/build.js",
+    "watch": "node ./scripts/build.js --watch",
+    "build:dev": "npm run build:documents:dev && npm run vuedoc:dev",
+    "build:documents:dev": "node ./scripts/build.js --dev",
+    "vuedoc:dev": "node ./scripts/vuedoc/build.js --dev",
     "eslint": "eslint .",
     "eslint:fix": "eslint . --fix",
-    "winproc": "node winProc.js"
+    "winproc": "node ./scripts/winProc.js"
   },
   "devDependencies": {
+    "@vuedoc/md": "git+https://github.com/ota-meshi/md#custom",
     "babel-preset-env": "^1.6.1",
     "eslint": "^4.19.1",
     "eslint-plugin-html": "^4.0.3",
@@ -29,6 +33,7 @@
     "metalsmith-in-place": "^3.0.1",
     "metalsmith-layouts": "^1.8.1",
     "metalsmith-static": "0.0.5",
-    "metalsmith-watch": "^1.0.3"
+    "metalsmith-watch": "^1.0.3",
+    "vue-template-compiler": "^2.5.16"
   }
 }

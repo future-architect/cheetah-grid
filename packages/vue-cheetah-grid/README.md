@@ -1,5 +1,4 @@
-# vue-cheetah-grid(beta)
-
+# Cheetah Grid - Vue Component
 
 [![npm](https://img.shields.io/npm/l/vue-cheetah-grid.svg)](https://www.npmjs.com/package/vue-cheetah-grid)
 [![npm](https://img.shields.io/npm/v/vue-cheetah-grid.svg)](https://www.npmjs.com/package/vue-cheetah-grid)
@@ -8,10 +7,16 @@
 [![npm](https://img.shields.io/npm/dm/vue-cheetah-grid.svg)](http://www.npmtrends.com/vue-cheetah-grid)
 [![npm](https://img.shields.io/npm/dy/vue-cheetah-grid.svg)](http://www.npmtrends.com/vue-cheetah-grid)
 [![npm](https://img.shields.io/npm/dt/vue-cheetah-grid.svg)](http://www.npmtrends.com/vue-cheetah-grid)
-[![Build Status](https://travis-ci.org/ota-meshi/vue-cheetah-grid.svg?branch=master)](https://travis-ci.org/ota-meshi/vue-cheetah-grid)  
+[![Build Status](https://travis-ci.org/future-architect/cheetah-grid.svg?branch=master)](https://travis-ci.org/future-architect/cheetah-grid)  
 [![NPM](https://nodei.co/npm/vue-cheetah-grid.png?downloads=true&stars=true)](https://www.npmjs.com/package/vue-cheetah-grid)  
 
-## example
+## Install using npm
+
+```sh
+$ npm install cheetah-grid vue-cheetah-grid
+```
+
+## Usage Examples
 
 ### `<template>`
 
@@ -28,9 +33,32 @@
       action="check" />
     <c-grid-column
       field="personid"
-      width= "85">
+      width= "85"
+    >
       ID
     </c-grid-column>
+    <c-grid-column-group
+      caption="Name">
+      <c-grid-input-column
+        field= "fname"
+        width= "20%"
+        min-width="150"
+      >
+        First Name
+      </c-grid-input-column>
+      <c-grid-input-column
+        field="lname"
+        width= "20%"
+        min-width="150"
+      >
+        Last Name
+      </c-grid-input-column>
+    </c-grid-column-group>
+    <c-grid-button-column
+      caption="SHOW REC"
+      width="120"
+      @click="onClickRecord"
+    />
   </c-grid>
 </template>
 ```
@@ -58,3 +86,5 @@ export default {
 }
 </script>
 ```
+
+Please refer to the [documents](https://future-architect.github.io/cheetah-grid/) for details

@@ -21,9 +21,20 @@
     {{/if}}
     
     {{#if debug}}
-    <script type="text/javascript" src="{{ms_path '../../dist/cheetahGrid.es5.js'}}"></script>
+    <script type="text/javascript" src="{{ms_path '../../packages/cheetah-grid/dist/cheetahGrid.es5.js'}}"></script>
     {{else}}
     <script type="text/javascript" src="https://unpkg.com/cheetah-grid@{{docLinkVersion}}"></script>
+    {{/if}}
+    {{#if (includes contents 'Vue')}}
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    {{#if debug}}
+    <script type="text/javascript" src="{{ms_path '../../packages/vue-cheetah-grid/dist/vueCheetahGrid.js'}}"></script>
+    {{else}}
+    <script type="text/javascript" src="https://unpkg.com/vue-cheetah-grid@{{docLinkVersion}}"></script>
+    {{/if}}
+    <script type="text/javascript">
+        Vue.use(vueCheetahGrid)
+    </script>
     {{/if}}
     {{#each scriptpath}}
     <script type="text/javascript" src="{{ms_path this}}"></script>

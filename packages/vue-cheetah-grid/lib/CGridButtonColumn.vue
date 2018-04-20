@@ -1,15 +1,21 @@
 <template>
+  <!-- Use this slot to set the header caption -->
   <div class="c-grid-button-column"><slot /></div>
 </template>
 
 <script>
-import {cheetahGrid, filterToFn, columnMixin, columnStdMixin} from './c-grid/utils'
+import ColumnMixin from './c-grid/ColumnMixin.vue'
+import StdColumnMixin from './c-grid/StdColumnMixin.vue'
+import {cheetahGrid, filterToFn} from './c-grid/utils'
 
 export default {
   name: 'CGridButtonColumn',
-  mixins: [columnMixin, columnStdMixin],
+  mixins: [ColumnMixin, StdColumnMixin],
   props: {},
   methods: {
+    /**
+     * @private
+     */
     createColumn () {
       const field = this.filter ? filterToFn(this, this.field, this.filter) : this.field
       return {
@@ -27,7 +33,12 @@ export default {
           caption: this.caption
         }),
         action: new cheetahGrid.columns.action.ButtonAction({
-          action: (...args) => this.$emit('click', ...args)
+          action: (...args) => {
+            /**
+             * Fired when a click on cell.
+             */
+            this.$emit('click', ...args)
+          }
         })
       }
     }

@@ -1,13 +1,16 @@
 <template>
+  <!-- Use this slot to set the header caption -->
   <div class="c-grid-column"><slot /></div>
 </template>
 
 <script>
-import {filterToFn, normalizeColumnType, normalizeAction, columnMixin, columnStdMixin} from './c-grid/utils'
+import ColumnMixin from './c-grid/ColumnMixin.vue'
+import StdColumnMixin from './c-grid/StdColumnMixin.vue'
+import {filterToFn, normalizeColumnType, normalizeAction} from './c-grid/utils'
 
 export default {
   name: 'CGridColumn',
-  mixins: [columnMixin, columnStdMixin],
+  mixins: [ColumnMixin, StdColumnMixin],
   props: {
     columnType: {
       type: [Object, String, Function],
@@ -19,6 +22,9 @@ export default {
     }
   },
   methods: {
+    /**
+     * @private
+     */
     createColumn () {
       const columnType = normalizeColumnType(this.columnType)
       const action = normalizeAction(this.action)

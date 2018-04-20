@@ -50,7 +50,7 @@ describe('c-grid-column filter', () => {
       :data="data">
       <c-grid-column
         field="text"
-        :filter="t => t + t"
+        :filter="function(t) { return t + t }"
         caption="test"/>
     </c-grid>
   `,
@@ -79,8 +79,8 @@ describe('c-grid-column filter', () => {
       ref="grid"
       :data="data">
       <c-grid-column
-        :field="{get(r) {return r.text},set(rec, v) {rec.text = v}}"
-        :filter="t => t + t"
+        :field="{get: function(r) {return r.text},set: function(rec, v) {rec.text = v}}"
+        :filter="function(t) { return t + t }"
         caption="test"/>
     </c-grid>
   `,
