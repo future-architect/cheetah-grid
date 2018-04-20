@@ -1,13 +1,16 @@
 <template>
+  <!-- Use this slot to set the header caption -->
   <div class="c-grid-input-column"><slot /></div>
 </template>
 
 <script>
-import {cheetahGrid, filterToFn, normalizeColumnType, columnMixin, columnStdMixin} from './c-grid/utils'
+import ColumnMixin from './c-grid/ColumnMixin.vue'
+import StdColumnMixin from './c-grid/StdColumnMixin.vue'
+import {cheetahGrid, filterToFn, normalizeColumnType} from './c-grid/utils'
 
 export default {
   name: 'CGridInputColumn',
-  mixins: [columnMixin, columnStdMixin],
+  mixins: [ColumnMixin, StdColumnMixin],
   props: {
     columnType: {
       type: [Object, String, Function],
@@ -35,6 +38,9 @@ export default {
     }
   },
   methods: {
+    /**
+     * @private
+     */
     createColumn () {
       const columnType = normalizeColumnType(this.columnType)
       const action = new cheetahGrid.columns.action.SmallDialogInputEditor({

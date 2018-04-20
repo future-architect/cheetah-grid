@@ -46,7 +46,7 @@
     "prune:all": "monorepo run prune",
     "lint": "monorepo run lint",
     "echo:v": "echo $npm_package_version",
-    "check": "node ./scripts/check_readme.js && node ./scripts/check_versions.js",
+    "check": "node ./scripts/check_doclink_versions.js && node ./scripts/check_readme.js && node ./scripts/check_versions.js",
     "publish:all": "node ./scripts/publish_all.js",
     "update:all": "node ./scripts/update_all.js",
     "postinstall": "monorepo install"

@@ -1,13 +1,16 @@
 <template>
+  <!-- Use this slot to set the header caption -->
   <div class="c-grid-percent-complete-bar-column"><slot /></div>
 </template>
 
 <script>
-import {cheetahGrid, normalizeAction, filterToFn, columnMixin, columnStdMixin} from './c-grid/utils'
+import ColumnMixin from './c-grid/ColumnMixin.vue'
+import StdColumnMixin from './c-grid/StdColumnMixin.vue'
+import {cheetahGrid, normalizeAction, filterToFn} from './c-grid/utils'
 
 export default {
   name: 'CGridPercentCompleteBarColumn',
-  mixins: [columnMixin, columnStdMixin],
+  mixins: [ColumnMixin, StdColumnMixin],
   props: {
     formatter: {
       type: [Function],
@@ -27,6 +30,9 @@ export default {
     }
   },
   methods: {
+    /**
+     * @private
+     */
     createColumn () {
       const columnType = new cheetahGrid.columns.type.PercentCompleteBarColumn({
         min: this.min,

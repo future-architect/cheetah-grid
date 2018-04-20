@@ -8,6 +8,7 @@ const babel = require('babel-core');
 const highlightjs = require('highlight.js');
 const vueCompiler = require('vue-template-compiler');
 const crypto = require('crypto');
+const {isEnabledVersion} = require('../buildcommon');
 
 module.exports = registerHelpers;
 
@@ -382,7 +383,6 @@ function registerHelpers() {
 	 * バージョン判定ブロック
 	 */
 	Handlebars.registerHelper('if_v', function(v, ...args) {
-		const {isEnabledVersion} = require('../buildcommon');
 		return Handlebars.helpers.if.call(this, isEnabledVersion(v), ...args);
 	});
 }

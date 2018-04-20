@@ -1,14 +1,15 @@
 <template>
+  <!-- Use this slot to set the children columns definition -->
   <div class="c-grid-column-group"><slot /></div>
 </template>
 
 <script>
+import ColumnMixin from './c-grid/ColumnMixin.vue'
 import {slotsToHeaderOptions} from './c-grid/header-utils'
-import {columnMixin} from './c-grid/utils'
 
 export default {
   name: 'CGridColumnGroup',
-  mixins: [columnMixin],
+  mixins: [ColumnMixin],
   props: {
     headerStyle: {
       type: [Object, String, Function],
@@ -16,6 +17,9 @@ export default {
     }
   },
   methods: {
+    /**
+     * @private
+     */
     createColumn () {
       return {
         caption: this.caption,

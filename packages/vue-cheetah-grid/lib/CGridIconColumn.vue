@@ -1,13 +1,16 @@
 <template>
+  <!-- Use this slot to set the header caption -->
   <div class="c-grid-icon-column"><slot /></div>
 </template>
 
 <script>
-import {cheetahGrid, filterToFn, normalizeAction, columnMixin, columnStdMixin} from './c-grid/utils'
+import ColumnMixin from './c-grid/ColumnMixin.vue'
+import StdColumnMixin from './c-grid/StdColumnMixin.vue'
+import {cheetahGrid, filterToFn, normalizeAction} from './c-grid/utils'
 
 export default {
   name: 'CGridIconColumn',
-  mixins: [columnMixin, columnStdMixin],
+  mixins: [ColumnMixin, StdColumnMixin],
   props: {
     iconTagName: {
       type: [String, Function],
@@ -35,6 +38,9 @@ export default {
     }
   },
   methods: {
+    /**
+     * @private
+     */
     createColumn () {
       const columnType = new cheetahGrid.columns.type.IconColumn({
         tagName: this.iconTagName,

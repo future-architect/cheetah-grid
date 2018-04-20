@@ -1,13 +1,16 @@
 <template>
+  <!-- Use this slot to set the header caption -->
   <div class="c-grid-menu-column"><slot /></div>
 </template>
 
 <script>
-import {cheetahGrid, filterToFn, columnMixin, columnStdMixin} from './c-grid/utils'
+import ColumnMixin from './c-grid/ColumnMixin.vue'
+import StdColumnMixin from './c-grid/StdColumnMixin.vue'
+import {cheetahGrid, filterToFn} from './c-grid/utils'
 
 export default {
   name: 'CGridMenuColumn',
-  mixins: [columnMixin, columnStdMixin],
+  mixins: [ColumnMixin, StdColumnMixin],
   props: {
     options: {
       type: [Object, Array],
@@ -23,6 +26,9 @@ export default {
     }
   },
   methods: {
+    /**
+     * @private
+     */
     createColumn () {
       const dispOpt = this.displayOptions || this.options
       const columnType = new cheetahGrid.columns.type.MenuColumn({options: dispOpt})
