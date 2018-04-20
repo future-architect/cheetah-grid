@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="author" content="Cheetah Grid">
+    <meta name="keywords" content="spreadsheet,grid,canvas,table,web-components">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Cheetah Grid - Template</title>
+    <link rel="shortcut icon" type="image/x-icon" href="./../../../icon_512x512.ico">
+
+    <link rel="stylesheet" type="text/css" href="./../../css/style.css">
+    <link rel="stylesheet" type="text/css" href="./../../css/highlightjs.css">
+    
+    <!-- <script src="http://localhost:35729/livereload.js"></script> -->
+    
+    <script type="text/javascript" src="https://unpkg.com/cheetah-grid@0.5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script type="text/javascript" src="https://unpkg.com/vue-cheetah-grid@0.5"></script>
+    <script type="text/javascript">
+        Vue.use(vueCheetahGrid)
+    </script>
+
+    <style type="text/css">
+        html {
+            height: 100%;
+        }
+        body {
+            height: calc(100% - 100px);
+        }
+        .contents {
+            padding: 30px;
+            box-sizing: border-box;
+        }
+        .demo-grid {
+            width: 100%;
+            height: 300px;
+            box-sizing: border-box;
+            border: solid 1px #ddd;
+        }
+        .demo-grid.large {
+            height: 500px;
+        }
+        .demo-grid.middle {
+            height: 300px;   
+        }
+        .demo-grid.small {
+            height: 240px;   
+        }
+        .log {
+            width: 100%;
+            height: 80px;
+            background-color: #F5F5F5;
+        }
+
+        .hljs { 
+             tab-size: 4;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <nav class="header primary" id="header-nav">
+    	<div class="nav-wrapper">
+    		<a href="./../../../index.html">
+    			<img src="./../../../logo.png" style="width: 100px;padding: 5px;vertical-align: middle;" alt="Cheetah Grid">
+    		</a>
+    
+    		<ul class="right hide-on-med-and-down nav-dropdown-container">
+    			<a href="#" class="primary nav-dropdown-button mobile-only" data-target="all-nav" style="width: 30px;">
+    				<span class="icon-arrow"></span>
+    			</a>
+    			<ul id="all-nav" class="mobile-nav-dropdown right-dropdown primary">
+    				<li><a href="./../../index.html" class="primary">Docoments - TOP</a></li>
+    				<li class="nav-dropdown-container">
+    					<a id="nav-versions" href="#" class="primary nav-dropdown-button" data-target="versions">
+    						version<span class="icon-arrow"></span>
+    					</a>
+    					<ul id="versions" class="nav-dropdown right-dropdown">
+    					</ul>
+    				</li>
+    				<li class="nav-dropdown-container">
+    					<a id="nav-lang" href="#" class="primary nav-dropdown-button" data-target="langs">
+    						lang<span class="icon-arrow"></span>
+    					</a>
+    					<ul id="langs" class="nav-dropdown right-dropdown">
+    						<li><a href="./../../ja/demos/usagevue/template.html" class="primary">日本語</a></li>
+    						<li><a href="./../../demos/usagevue/template.html" class="primary">English</a></li>
+    					</ul>
+    				</li>
+    			</ul>
+    		</ul>
+    	</div>
+    </nav>
+    
+    <script type="text/javascript">
+    	'use strict';
+    	////babel
+    'use strict';
+    
+    function getVersions(callback) {
+    	var xhr = new XMLHttpRequest();
+    	function onError() {
+    		callback(['0.5', '0.0.1']);
+    	}
+    	xhr.onload = function () {
+    		var versions = JSON.parse(xhr.responseText);
+    		callback(versions);
+    	};
+    	xhr.onerror = onError;
+    	xhr.onabort = onError;
+    	try {
+    		xhr.open('GET', './../../../versions.json');
+    		xhr.send();
+    	} catch (e) {
+    		onError();
+    	}
+    }
+    
+    //
+    getVersions(function (versions) {
+    	var myVersion = '0.5';
+    	function getVerLocation(v) {
+    		return location.href.replace(myVersion, v).replace('.devdoc', v);
+    	}
+    	var latest = versions[0];
+    	var versEl = document.getElementById('versions');
+    	versEl.innerHTML = versions.map(function (v, i) {
+    		return '<li><a href="' + getVerLocation(v) + '" class="primary">' + v + (i === 0 ? ' (latest)' : '') + '</a></li>';
+    	}).join('');
+    
+    	if (latest !== myVersion) {
+    		var header = document.getElementById('header-nav');
+    		var a = document.createElement('a');
+    		header.parentElement.insertBefore(a, header.nextSibling);
+    		a.href = getVerLocation(latest);
+    		a.textContent = '<goto the latest version(' + latest + ') document>';
+    	}
+    });
+    //
+    </script>    <h1><a href="./../.././index.html#usage-vue-component">Usage Vue Component</a> &gt; Template</h1>
+    <div class="contents">
+        
+<h2 id="template">Template</h2>
+<h3 id="available-vue-component-tag-names">Available <code>Vue Component</code> tag names</h3>
+<table>
+<thead>
+<tr>
+<th>Component Tag Name</th>
+<th>Function</th>
+<th>Others</th>
+<th>LINK</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;c-grid&gt;</code></td>
+<td>Grid body</td>
+<td>---</td>
+<td>---</td>
+</tr>
+<tr>
+<td><code>&lt;c-grid-column&gt;</code></td>
+<td>Column definition to display in the grid</td>
+<td>---</td>
+<td>---</td>
+</tr>
+<tr>
+<td><code>&lt;c-grid-column-group&gt;</code></td>
+<td>Definition of column group when multiple header is displayed</td>
+<td>---</td>
+<td>---</td>
+</tr>
+<tr>
+<td><code>&lt;c-grid-button-column&gt;</code></td>
+<td>Button column definition</td>
+<td>Syntax sugar for button column definition</td>
+<td>---</td>
+</tr>
+<tr>
+<td><code>&lt;c-grid-input-column&gt;</code></td>
+<td>Input column definition</td>
+<td>Syntax sugar for input column definition</td>
+<td>---</td>
+</tr>
+<tr>
+<td><code>&lt;c-grid-menu-column&gt;</code></td>
+<td>Menu column definition</td>
+<td>Syntax sugar for menu column definition</td>
+<td>---</td>
+</tr>
+<tr>
+<td><code>&lt;c-grid-link-column&gt;</code></td>
+<td>Link column definition</td>
+<td>Syntax sugar for linkable column definition</td>
+<td>---</td>
+</tr>
+<tr>
+<td><code>&lt;c-grid-icon-column&gt;</code></td>
+<td>Icon column definition</td>
+<td>Syntax sugar for icon column definition</td>
+<td>---</td>
+</tr>
+<tr>
+<td><code>&lt;c-grid-percent-complete-bar-column&gt;</code></td>
+<td>Percent complete bar column definition</td>
+<td>Syntax sugar for Percent complete bar column definition</td>
+<td>---</td>
+</tr>
+</tbody>
+</table>
+<p>Please refer also to the <a href="https://github.com/future-architect/cheetah-grid/tree/master/docs/0.5/vuedoc">vuedoc</a></p>
+
+
+<script type="text/javascript">
+'use strict';
+////babel
+'use strict';
+
+var generatePerson = function () {
+	var fnames = ['Sophia', 'Emma', 'Olivia', 'Isabella', 'Ava', 'Mia', 'Emily', 'Abigail', 'Madison', 'Elizabeth', 'Charlotte', 'Avery', 'Sofia', 'Chloe', 'Ella', 'Harper', 'Amelia', 'Aubrey', 'Addison', 'Evelyn', 'Natalie', 'Grace', 'Hannah', 'Zoey', 'Victoria', 'Lillian', 'Lily', 'Brooklyn', 'Samantha', 'Layla', 'Zoe', 'Audrey', 'Leah', 'Allison', 'Anna', 'Aaliyah', 'Savannah', 'Gabriella', 'Camila', 'Aria', 'Noah', 'Liam', 'Jacob', 'Mason', 'William', 'Ethan', 'Michael', 'Alexander', 'Jayden', 'Daniel', 'Elijah', 'Aiden', 'James', 'Benjamin', 'Matthew', 'Jackson', 'Logan', 'David', 'Anthony', 'Joseph', 'Joshua', 'Andrew', 'Lucas', 'Gabriel', 'Samuel', 'Christopher', 'John', 'Dylan', 'Isaac', 'Ryan', 'Nathan', 'Carter', 'Caleb', 'Luke', 'Christian', 'Hunter', 'Henry', 'Owen', 'Landon', 'Jack'];
+	var lnames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Miller', 'Davis', 'Garcia', 'Rodriguez', 'Wilson', 'Martinez', 'Anderson', 'Taylor', 'Thomas', 'Hernandez', 'Moore', 'Martin', 'Jackson', 'Thompson', 'White', 'Lopez', 'Lee', 'Gonzalez', 'Harris', 'Clark', 'Lewis', 'Robinson', 'Walker', 'Perez', 'Hall', 'Young', 'Allen', 'Sanchez', 'Wright', 'King', 'Scott', 'Green', 'Baker', 'Adams', 'Nelson', 'Hill', 'Ramirez', 'Campbell', 'Mitchell', 'Roberts', 'Carter', 'Phillips', 'Evans', 'Turner', 'Torres', 'Parker', 'Collins', 'Edwards', 'Stewart', 'Flores', 'Morris', 'Nguyen', 'Murphy', 'Rivera', 'Cook', 'Rogers', 'Morgan', 'Peterson', 'Cooper', 'Reed', 'Bailey', 'Bell', 'Gomez', 'Kelly', 'Howard', 'Ward', 'Cox', 'Diaz', 'Richardson', 'Wood', 'Watson', 'Brooks', 'Bennett', 'Gray', 'James', 'Reyes', 'Cruz', 'Hughes', 'Price', 'Myers', 'Long', 'Foster', 'Sanders', 'Ross', 'Morales', 'Powell', 'Sullivan', 'Russell', 'Ortiz', 'Jenkins', 'Gutierrez', 'Perry', 'Butler', 'Barnes', 'Fisher'];
+	var msOfYear = 365 * 24 * 60 * 60 * 1000;
+	return function (index) {
+		var fname = fnames[Math.floor(Math.random() * fnames.length)];
+		var lname = lnames[Math.floor(Math.random() * lnames.length)];
+		var birthday = new Date(Date.now() - 20 * msOfYear - Math.floor(Math.random() * 15 * msOfYear));
+		birthday = new Date(birthday.getFullYear(), birthday.getMonth(), birthday.getDate(), 0, 0, 0, 0);
+		return {
+			personid: index + 1,
+			fname: fname,
+			lname: lname,
+			email: (fname.replace('-', '_') + '_' + lname.replace('-', '_') + '@example.com').toLowerCase(),
+			birthday: birthday
+		};
+	};
+}();
+
+function generatePersons(num) {
+	var initId = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+
+	var records = [];
+	for (var i = 0; i < num; i++) {
+		records.push(generatePerson(initId + i - 1));
+	}
+	return records;
+}
+
+function generatePersonsDataSource(num) {
+	var array = new Array(num);
+	return new cheetahGrid.data.CachedDataSource({
+		get: function get(index) {
+			return array[index] ? array[index] : array[index] = generatePerson(index);
+		},
+
+		length: num
+	});
+}
+const records = generatePersons(10000);
+</script>
+
+
+<div id="vue03d7c7df4343fa5c9d2f355501cb78e7"></div>
+<script type="text/javascript">
+(function() {
+	var exports = {};
+	(function(exports) {
+		'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+exports.default = {
+	name: 'App',
+	data: {
+		records: records
+	},
+	methods: {
+		onClickRecord: function onClickRecord(rec) {
+			alert(JSON.stringify(rec));
+		}
+	}
+};
+	})(exports)
+	var obj = exports.default || exports
+	obj.template = "\n<div class=\"demo-grid middle\">\n  <c-grid\n    :data=\"records\"\n    :frozen-col-count=\"1\">\n    <c-grid-column\n      :width=\"50\"\n      field=\"check\"\n      column-type=\"check\"\n      action=\"check\" />\n    <c-grid-column\n      field=\"personid\"\n      width= \"85\"\n    >\n      ID\n    </c-grid-column>\n    <!-- multiple header -->\n    <c-grid-column-group\n      caption=\"Name\">\n      <c-grid-input-column\n        field= \"fname\"\n        width= \"20%\"\n        min-width=\"150\"\n      >\n        First Name\n      </c-grid-input-column>\n      <c-grid-input-column\n        field=\"lname\"\n        width= \"20%\"\n        min-width=\"150\"\n      >\n        Last Name\n      </c-grid-input-column>\n    </c-grid-column-group>\n    <!-- button -->\n    <c-grid-button-column\n      caption=\"SHOW REC\"\n      width=\"120\"\n      @click=\"onClickRecord\"\n    />\n  </c-grid>\n</div>\n"
+	var vm = new Vue(obj);
+	vm.$mount('#vue03d7c7df4343fa5c9d2f355501cb78e7')
+})();
+</script>
+
+<pre><code class="vue hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">template</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"demo-grid middle"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">c-grid</span>
+      <span class="hljs-attr">:data</span>=<span class="hljs-string">"records"</span>
+      <span class="hljs-attr">:frozen-col-count</span>=<span class="hljs-string">"1"</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">c-grid-column</span>
+        <span class="hljs-attr">:width</span>=<span class="hljs-string">"50"</span>
+        <span class="hljs-attr">field</span>=<span class="hljs-string">"check"</span>
+        <span class="hljs-attr">column-type</span>=<span class="hljs-string">"check"</span>
+        <span class="hljs-attr">action</span>=<span class="hljs-string">"check"</span> /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">c-grid-column</span>
+        <span class="hljs-attr">field</span>=<span class="hljs-string">"personid"</span>
+        <span class="hljs-attr">width</span>= <span class="hljs-string">"85"</span>
+      &gt;</span>
+        ID
+      <span class="hljs-tag">&lt;/<span class="hljs-name">c-grid-column</span>&gt;</span>
+      <span class="hljs-comment">&lt;!-- multiple header --&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">c-grid-column-group</span>
+        <span class="hljs-attr">caption</span>=<span class="hljs-string">"Name"</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">c-grid-input-column</span>
+          <span class="hljs-attr">field</span>= <span class="hljs-string">"fname"</span>
+          <span class="hljs-attr">width</span>= <span class="hljs-string">"20%"</span>
+          <span class="hljs-attr">min-width</span>=<span class="hljs-string">"150"</span>
+        &gt;</span>
+          First Name
+        <span class="hljs-tag">&lt;/<span class="hljs-name">c-grid-input-column</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">c-grid-input-column</span>
+          <span class="hljs-attr">field</span>=<span class="hljs-string">"lname"</span>
+          <span class="hljs-attr">width</span>= <span class="hljs-string">"20%"</span>
+          <span class="hljs-attr">min-width</span>=<span class="hljs-string">"150"</span>
+        &gt;</span>
+          Last Name
+        <span class="hljs-tag">&lt;/<span class="hljs-name">c-grid-input-column</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">c-grid-column-group</span>&gt;</span>
+      <span class="hljs-comment">&lt;!-- button --&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">c-grid-button-column</span>
+        <span class="hljs-attr">caption</span>=<span class="hljs-string">"SHOW REC"</span>
+        <span class="hljs-attr">width</span>=<span class="hljs-string">"120"</span>
+        @<span class="hljs-attr">click</span>=<span class="hljs-string">"onClickRecord"</span>
+      /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">c-grid</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+	<span class="hljs-attr">name</span>: <span class="hljs-string">'App'</span>,
+	<span class="hljs-attr">data</span>: {
+		records
+	},
+	<span class="hljs-attr">methods</span>: {
+		onClickRecord(rec) { alert(<span class="hljs-built_in">JSON</span>.stringify(rec)) }
+	}
+}
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+    </div>
+    
+    <script type="text/javascript" src="./../../js/doc-common.js"></script>
+
+</body></html>

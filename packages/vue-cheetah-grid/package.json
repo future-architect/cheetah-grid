@@ -1,6 +1,6 @@
 {
   "name": "vue-cheetah-grid",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "Cheetah Grid for Vue.js",
   "main": "dist/vueCheetahGrid.js",
   "files": [
@@ -47,7 +47,7 @@
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-3": "^6.24.1",
     "chai": "^4.1.2",
-    "cheetah-grid": "^0.4.1",
+    "cheetah-grid": "*",
     "cross-env": "^5.1.4",
     "css-loader": "^0.28.11",
     "eslint": "^4.19.1",
@@ -58,7 +58,7 @@
     "eslint-plugin-promise": "^3.7.0",
     "eslint-plugin-standard": "^3.0.1",
     "eslint-plugin-vue": "^4.5.0",
-    "karma": "^2.0.0",
+    "karma": "^2.0.2",
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^2.2.0",
     "karma-coverage": "^1.1.1",
@@ -78,7 +78,7 @@
     "webpack-cli": "^2.0.14"
   },
   "peerDependencies": {
-    "cheetah-grid": "^0.4.1",
+    "cheetah-grid": "^0.5.0",
     "vue": "^2.5.16"
   }
 }

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Home</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Home</h1>
+
+    
+
+
+
+    
+
+
+    <h3> </h3>
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    <section>
+        <article><h1>Cheetah Grid</h1><p><a href="https://www.npmjs.com/package/cheetah-grid"><img src="https://img.shields.io/npm/l/cheetah-grid.svg" alt="npm"></a>
+<a href="https://www.npmjs.com/package/cheetah-grid"><img src="https://img.shields.io/npm/v/cheetah-grid.svg" alt="npm"></a>
+<a href="http://www.npmtrends.com/cheetah-grid"><img src="https://img.shields.io/badge/dynamic/json.svg?label=downloads&amp;colorB=green&amp;prefix=&amp;suffix=/day&amp;query=$.downloads&amp;uri=https://api.npmjs.org//downloads/point/last-day/cheetah-grid&amp;maxAge=3600" alt="npm"></a>
+<a href="http://www.npmtrends.com/cheetah-grid"><img src="https://img.shields.io/npm/dw/cheetah-grid.svg" alt="npm"></a>
+<a href="http://www.npmtrends.com/cheetah-grid"><img src="https://img.shields.io/npm/dm/cheetah-grid.svg" alt="npm"></a>
+<a href="http://www.npmtrends.com/cheetah-grid"><img src="https://img.shields.io/npm/dy/cheetah-grid.svg" alt="npm"></a>
+<a href="http://www.npmtrends.com/cheetah-grid"><img src="https://img.shields.io/npm/dt/cheetah-grid.svg" alt="npm"></a>
+<a href="https://travis-ci.org/future-architect/cheetah-grid"><img src="https://travis-ci.org/future-architect/cheetah-grid.svg?branch=master" alt="Build Status"></a><br><a href="https://www.npmjs.com/package/cheetah-grid"><img src="https://nodei.co/npm/cheetah-grid.png?downloads=true&amp;stars=true" alt="NPM"></a></p>
+<p><a href="https://future-architect.github.io/cheetah-grid/"><img src="https://future-architect.github.io/cheetah-grid/logo.png" alt="Cheetah Grid"></a>  </p>
+<p>The fastest open-source web component of data table.</p>
+<p><a href="https://future-architect.github.io/cheetah-grid/"><img src="https://github.com/future-architect/cheetah-grid/raw/master/images/capture.png" alt="capture.png"></a></p>
+<p><a href="https://future-architect.github.io/cheetah-grid/">DEMO &amp; Documents</a></p>
+<h2>Downloading Cheetah Grid</h2><h3>Using Cheetah Grid with a CDN</h3><p><a href="https://www.npmjs.com/package/cheetah-grid"><img src="https://img.shields.io/npm/v/cheetah-grid.svg" alt="npm"></a></p>
+<pre class="prettyprint source lang-html"><code>&lt;script src=&quot;https://unpkg.com/cheetah-grid@0.5.x&quot;>&lt;/script></code></pre><h3>Downloading Cheetah Grid using npm</h3><p><a href="https://www.npmjs.com/package/cheetah-grid"><img src="https://img.shields.io/npm/v/cheetah-grid.svg" alt="npm"></a></p>
+<pre class="prettyprint source lang-sh"><code>$ npm install cheetah-grid</code></pre><pre class="prettyprint source lang-js"><code>const cheetahGrid = require(&quot;cheetah-grid&quot;)</code></pre><h3>Downloading Cheetah Grid source code</h3><p><a href="https://www.npmjs.com/package/cheetah-grid"><img src="https://img.shields.io/npm/v/cheetah-grid.svg" alt="npm"></a></p>
+<p><a href="https://unpkg.com/cheetah-grid@0.5.x/dist/cheetahGrid.es5.min.js">cheetahGrid.es5.min.js</a>  </p>
+<p>SourceMap<br><a href="https://unpkg.com/cheetah-grid@0.5.x/dist/cheetahGrid.es5.min.js.map">cheetahGrid.es5.min.js.map</a>  </p>
+<h3>Downloading Cheetah Grid using GitHub</h3><p><a href="https://github.com/future-architect/cheetah-grid"><img src="https://img.shields.io/github/package-json/v/future-architect/cheetah-grid.svg" alt="GitHub package version"></a></p>
+<h4>git clone</h4><pre class="prettyprint source lang-bash"><code>$ git clone https://github.com/future-architect/cheetah-grid.git</code></pre><h4>npm install &amp; build</h4><pre class="prettyprint source lang-bash"><code>$ npm install
+$ npm run build</code></pre><p>built file is created in the <code>./packages/cheetah-grid/dist</code> directory</p>
+<h2>Usage</h2><pre class="prettyprint source lang-js"><code>        grid = new cheetahGrid.ListGrid({
+            // Parent element on which to place the grid
+            parentElement: document.querySelector('#parent'),
+            // Header definition
+            header: [
+                {field: 'check', caption: '', width: 50, columnType: 'check', action: 'check'},
+                {field: 'personid', caption: 'ID', width: 100},
+                {field: 'fname', caption: 'First Name', width: 200},
+                {field: 'lname', caption: 'Last Name', width: 200},
+                {field: 'email', caption: 'Email', width: 250},
+            ],
+            // Array data to be displayed on the grid
+            records,
+            // Column fixed position
+            frozenColCount: 2,
+        });</code></pre><p>Please refer to the <a href="https://future-architect.github.io/cheetah-grid/">documents</a> for details</p>
+<h2>Using the Vue Component of Cheetah Grid</h2><p>Please refer to the <a href="https://www.npmjs.com/package/vue-cheetah-grid"><code>vue-cheetah-grid</code></a>  </p></article>
+    </section>
+
+
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="cheetahGrid.columns.type.BranchGraphColumn.html">BranchGraphColumn</a></li><li><a href="cheetahGrid.core.DrawGrid.html">DrawGrid</a></li><li><a href="cheetahGrid.data.CachedDataSource.html">CachedDataSource</a></li><li><a href="cheetahGrid.data.DataSource.html">DataSource</a></li><li><a href="cheetahGrid.data.FilterDataSource.html">FilterDataSource</a></li><li><a href="cheetahGrid.ListGrid.html">ListGrid</a></li><li><a href="DrawCellContext.html">DrawCellContext</a></li><li><a href="DrawLayers.html">DrawLayers</a></li><li><a href="EventTarget.html">EventTarget</a></li><li><a href="Selection.html">Selection</a></li></ul><h3>Namespaces</h3><ul><li><a href="cheetahGrid.html">cheetahGrid</a></li><li><a href="cheetahGrid.columns.html">columns</a></li><li><a href="cheetahGrid.columns.action.html">action</a></li><li><a href="cheetahGrid.columns.style.html">style</a></li><li><a href="cheetahGrid.columns.type.html">type</a></li><li><a href="cheetahGrid.core.html">core</a></li><li><a href="cheetahGrid.data.html">data</a></li><li><a href="cheetahGrid.themes.html">themes</a></li><li><a href="cheetahGrid.themes.choices.html">choices</a></li><li><a href="cheetahGrid.themes.theme.html">theme</a></li><li><a href="cheetahGrid.tools.html">tools</a></li><li><a href="cheetahGrid.tools.canvashelper.html">canvashelper</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

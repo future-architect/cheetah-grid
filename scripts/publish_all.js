@@ -19,9 +19,16 @@ publish(opts, handleDone);
 function publish(opts, cb) {
 	try {
 		packages(opts, cb).
-			then((pkgs) => Promise.all(
-					pkgs.list.map((pkg) => npmPublish(pkg, opts))
-			)).
+			then((pkgs) => {
+
+				const tree = [...pkgs.tree];
+				let queue = Promise.resolve();
+				tree.forEach((group) => {
+					console.log(`publish:${group.map((p) => p.name).join(' ')}`);
+					queue = queue.then(() => Promise.all(group.map((pkg) => npmPublish(pkg, opts))));
+				});
+				return queue;
+			}).
 			then(() => {
 				cb(null);
 			}).

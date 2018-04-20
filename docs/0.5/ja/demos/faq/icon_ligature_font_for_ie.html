@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="author" content="Cheetah Grid">
+    <meta name="keywords" content="spreadsheet,grid,canvas,table,web-components">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Cheetah Grid - Icon Ligature Font(for IE)</title>
+    <link rel="shortcut icon" type="image/x-icon" href="./../../../../icon_512x512.ico">
+
+    <link rel="stylesheet" type="text/css" href="./../../../css/style.css">
+    <link rel="stylesheet" type="text/css" href="./../../../css/highlightjs.css">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    
+    <!-- <script src="http://localhost:35729/livereload.js"></script> -->
+    <script src="https://www.promisejs.org/polyfills/promise-7.0.4.min.js"></script>
+    
+    <script type="text/javascript" src="https://unpkg.com/cheetah-grid@0.5"></script>
+    <script type="text/javascript" src="./../../../../../dist/extentions/tools/fontTools.js"></script>
+
+    <style type="text/css">
+        html {
+            height: 100%;
+        }
+        body {
+            height: calc(100% - 100px);
+        }
+        .contents {
+            padding: 30px;
+            box-sizing: border-box;
+        }
+        .demo-grid {
+            width: 100%;
+            height: 300px;
+            box-sizing: border-box;
+            border: solid 1px #ddd;
+        }
+        .demo-grid.large {
+            height: 500px;
+        }
+        .demo-grid.middle {
+            height: 300px;   
+        }
+        .demo-grid.small {
+            height: 240px;   
+        }
+        .log {
+            width: 100%;
+            height: 80px;
+            background-color: #F5F5F5;
+        }
+
+        .hljs { 
+             tab-size: 4;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <nav class="header primary" id="header-nav">
+    	<div class="nav-wrapper">
+    		<a href="./../../../../index.html">
+    			<img src="./../../../../logo.png" style="width: 100px;padding: 5px;vertical-align: middle;" alt="Cheetah Grid">
+    		</a>
+    
+    		<ul class="right hide-on-med-and-down nav-dropdown-container">
+    			<a href="#" class="primary nav-dropdown-button mobile-only" data-target="all-nav" style="width: 30px;">
+    				<span class="icon-arrow"></span>
+    			</a>
+    			<ul id="all-nav" class="mobile-nav-dropdown right-dropdown primary">
+    				<li><a href="./../../../ja/index.html" class="primary">Docoments - TOP</a></li>
+    				<li class="nav-dropdown-container">
+    					<a id="nav-versions" href="#" class="primary nav-dropdown-button" data-target="versions">
+    						version<span class="icon-arrow"></span>
+    					</a>
+    					<ul id="versions" class="nav-dropdown right-dropdown">
+    					</ul>
+    				</li>
+    				<li class="nav-dropdown-container">
+    					<a id="nav-lang" href="#" class="primary nav-dropdown-button" data-target="langs">
+    						lang<span class="icon-arrow"></span>
+    					</a>
+    					<ul id="langs" class="nav-dropdown right-dropdown">
+    						<li><a href="./../../../ja/demos/faq/icon_ligature_font_for_ie.html" class="primary">日本語</a></li>
+    						<li><a href="./../../../demos/faq/icon_ligature_font_for_ie.html" class="primary">English</a></li>
+    					</ul>
+    				</li>
+    			</ul>
+    		</ul>
+    	</div>
+    </nav>
+    
+    <script type="text/javascript">
+    	'use strict';
+    	////babel
+    'use strict';
+    
+    function getVersions(callback) {
+    	var xhr = new XMLHttpRequest();
+    	function onError() {
+    		callback(['0.5', '0.0.1']);
+    	}
+    	xhr.onload = function () {
+    		var versions = JSON.parse(xhr.responseText);
+    		callback(versions);
+    	};
+    	xhr.onerror = onError;
+    	xhr.onabort = onError;
+    	try {
+    		xhr.open('GET', './../../../../versions.json');
+    		xhr.send();
+    	} catch (e) {
+    		onError();
+    	}
+    }
+    
+    //
+    getVersions(function (versions) {
+    	var myVersion = '0.5';
+    	function getVerLocation(v) {
+    		return location.href.replace(myVersion, v).replace('.devdoc', v);
+    	}
+    	var latest = versions[0];
+    	var versEl = document.getElementById('versions');
+    	versEl.innerHTML = versions.map(function (v, i) {
+    		return '<li><a href="' + getVerLocation(v) + '" class="primary">' + v + (i === 0 ? ' (latest)' : '') + '</a></li>';
+    	}).join('');
+    
+    	if (latest !== myVersion) {
+    		var header = document.getElementById('header-nav');
+    		var a = document.createElement('a');
+    		header.parentElement.insertBefore(a, header.nextSibling);
+    		a.href = getVerLocation(latest);
+    		a.textContent = '<goto the latest version(' + latest + ') document>';
+    	}
+    });
+    //
+    </script>    <h1><a href="./../../.././index.html#faq">FAQ</a> &gt; Icon Ligature Font(for IE)</h1>
+    <div class="contents">
+        
+<h2 id="icon-ligature-font-for-ie-">Icon Ligature Font(for IE)</h2>
+<p>IE11を利用して、Web Font ICONを描画する際
+ICONを合字から取得する方法</p>
+<p>注1: IEなどPromise未対応ブラウザでは<a href="https://www.npmjs.com/package/es6-promise">es6-promise</a>などのpolyfillを読み込ませる必要があります。</p>
+
+<div id="sample1" class="demo-grid small" style="height: 200px;">
+</div>
+<script type="text/javascript">
+////wrapscript
+(function() {
+//babel
+
+//
+/*global cheetahGrid*/
+'use strict';
+
+// create cheetahGrid
+
+var grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#sample1'),
+	header: [{ field: 'label', caption: 'Label', width: 150 }, {
+		field: 'mdi',
+		icon: {
+			svg: function svg(rec) {
+				return cheetahGrid.extentions.tools.fontTools.fontContentToSvg({
+					font: '16px \'Material Icons\'',
+					content: rec.mdi // Ligature Symbols
+				});
+			},
+
+			width: 16
+		},
+		caption: 'Material Icons 1',
+		width: 150
+	}, {
+		field: 'mdi',
+		icon: {
+			svg: function svg(rec) {
+				var _cheetahGrid$extentio = cheetahGrid.extentions.tools.fontTools.classNameToFont('material-icons'),
+				    font = _cheetahGrid$extentio.font,
+				    color = _cheetahGrid$extentio.color; // Compute font from className
+
+
+				return cheetahGrid.extentions.tools.fontTools.fontContentToSvg({
+					font: font,
+					color: color,
+					content: rec.mdi // Ligature Symbols
+				});
+			}
+		},
+		caption: 'Material Icons 2',
+		width: 150
+	}],
+	frozenColCount: 1
+});
+grid.records = [{ label: 'grade', mdi: 'grade' }, { label: 'autorenew', mdi: 'autorenew' }, { label: 'thumb_up', mdi: 'thumb_up' }, { label: 'slideshow', mdi: 'slideshow' }, {
+	label: 'multi',
+	mdi: ['grade', 'autorenew', 'thumb_up', 'slideshow']
+}];
+
+//
+//
+})();
+</script>
+<p>この機能を利用するには<code>fontTools.js</code>を追加で読み込んでください。</p>
+<p>※サンプルで表示しているICONは<a href="https://material.io/icons/">Material icons</a>を利用しています。</p>
+<pre><code class="lang-html hljs xml"><span class="hljs-comment">&lt;!-- extention tool --&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"./../../../../dist/extentions/tools/fontTools.js"</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+
+<span class="hljs-comment">&lt;!-- Material Icons:  https://material.io/icons/ --&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">"stylesheet"</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/css"</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"https://fonts.googleapis.com/icon?family=Material+Icons"</span>&gt;</span>
+</code></pre>
+
+<pre><code class="js hljs javascript"><span class="hljs-comment">/*global cheetahGrid*/</span>
+<span class="hljs-meta">'use strict'</span>;
+
+<span class="hljs-comment">// create cheetahGrid</span>
+<span class="hljs-keyword">const</span> grid = <span class="hljs-keyword">new</span> cheetahGrid.ListGrid({
+	<span class="hljs-attr">parentElement</span>: <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample1'</span>),
+	<span class="hljs-attr">header</span>: [
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'label'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'Label'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">150</span>},
+		{
+			<span class="hljs-attr">field</span>: <span class="hljs-string">'mdi'</span>,
+			<span class="hljs-attr">icon</span>: {
+				svg(rec) {
+					<span class="hljs-keyword">return</span> cheetahGrid.extentions.tools.fontTools.fontContentToSvg({
+						<span class="hljs-attr">font</span>: <span class="hljs-string">'16px \'Material Icons\''</span>,
+						<span class="hljs-attr">content</span>: rec.mdi, <span class="hljs-comment">// Ligature Symbols</span>
+					});
+				},
+				<span class="hljs-attr">width</span>: <span class="hljs-number">16</span>,
+			},
+			<span class="hljs-attr">caption</span>: <span class="hljs-string">'Material Icons 1'</span>,
+			<span class="hljs-attr">width</span>: <span class="hljs-number">150</span>,
+		},
+		{
+			<span class="hljs-attr">field</span>: <span class="hljs-string">'mdi'</span>,
+			<span class="hljs-attr">icon</span>: {
+				svg(rec) {
+					<span class="hljs-keyword">const</span> {font, color} = cheetahGrid.extentions.tools.fontTools.classNameToFont(<span class="hljs-string">'material-icons'</span>);<span class="hljs-comment">// Compute font from className</span>
+					<span class="hljs-keyword">return</span> cheetahGrid.extentions.tools.fontTools.fontContentToSvg({
+						font,
+						color,
+						<span class="hljs-attr">content</span>: rec.mdi, <span class="hljs-comment">// Ligature Symbols</span>
+					});
+				},
+			},
+			<span class="hljs-attr">caption</span>: <span class="hljs-string">'Material Icons 2'</span>,
+			<span class="hljs-attr">width</span>: <span class="hljs-number">150</span>,
+		},
+	],
+	<span class="hljs-attr">frozenColCount</span>: <span class="hljs-number">1</span>
+});
+grid.records = [
+	{<span class="hljs-attr">label</span>: <span class="hljs-string">'grade'</span>, <span class="hljs-attr">mdi</span>: <span class="hljs-string">'grade'</span>},
+	{<span class="hljs-attr">label</span>: <span class="hljs-string">'autorenew'</span>, <span class="hljs-attr">mdi</span>: <span class="hljs-string">'autorenew'</span>},
+	{<span class="hljs-attr">label</span>: <span class="hljs-string">'thumb_up'</span>, <span class="hljs-attr">mdi</span>: <span class="hljs-string">'thumb_up'</span>},
+	{<span class="hljs-attr">label</span>: <span class="hljs-string">'slideshow'</span>, <span class="hljs-attr">mdi</span>: <span class="hljs-string">'slideshow'</span>},
+	{
+		<span class="hljs-attr">label</span>: <span class="hljs-string">'multi'</span>,
+		<span class="hljs-attr">mdi</span>: [<span class="hljs-string">'grade'</span>, <span class="hljs-string">'autorenew'</span>, <span class="hljs-string">'thumb_up'</span>, <span class="hljs-string">'slideshow'</span>],
+	},
+];
+
+<span class="hljs-comment">//</span></code></pre>
+    </div>
+    
+    <script type="text/javascript" src="./../../../js/doc-common.js"></script>
+
+</body></html>
