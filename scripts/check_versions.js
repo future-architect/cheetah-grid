@@ -1,6 +1,6 @@
 'use strict';
 const chalk = require('chalk');
-const packages = require('./lib/packages');
+const packages = require('mrpm/lib/packages');
 const {version} = require('../package.json');
 const opts = {cwd: process.cwd()};
 

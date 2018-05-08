@@ -18,14 +18,14 @@
     "winproc": "node ./scripts/winProc.js"
   },
   "devDependencies": {
-    "@vuedoc/md": "git+https://github.com/ota-meshi/md.git#custom",
+    "@vuedoc/md": "^1.2.2",
     "babel-preset-env": "^1.6.1",
     "eslint": "^4.19.1",
     "eslint-plugin-html": "^4.0.3",
     "handlebars": "^4.0.10",
     "highlight.js": "^9.12.0",
     "jsdoc": "^3.5.5",
-    "jsdom": "^11.7.0",
+    "jsdom": "^11.10.0",
     "jstransformer-handlebars": "^1.1.0",
     "marked": "^0.3.19",
     "metalsmith": "^2.3.0",
