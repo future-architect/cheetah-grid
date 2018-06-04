@@ -138,6 +138,12 @@ class SmallDialogInputElement {
 
 		this._activeData = activeData;
 		this._beforePropEditor = editor;
+
+
+		this._attaching = true;
+		setTimeout(() => {
+			delete this._attaching;
+		});
 	}
 	detach(gridFocus) {
 		if (this._isActive()) {
@@ -217,7 +223,7 @@ class SmallDialogInputElement {
 			if (keyCode === KEY_ESC) {
 				this.detach(true);
 				cancelEvent(e);
-			} else if (keyCode === KEY_ENTER) {
+			} else if (keyCode === KEY_ENTER && !this._attaching) {
 				const input = this._input;
 				const {value} = input;
 				then(this._doChangeValue(), (r) => {

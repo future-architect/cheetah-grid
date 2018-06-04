@@ -1242,16 +1242,32 @@
 				this._input.classList.add('composition');
 				this._input.style.font = this._grid.font || '16px sans-serif';
 				this._isComposition = true;
+				if (this._compositionEnd) {
+					clearTimeout(this._compositionEnd);
+					delete this._compositionEnd;
+				}
 				grid.focus();
 			});
-			this._handler.on(this._input, 'compositionend', (e) => {
+
+			const handleCompositionEnd = () => {
 				this._isComposition = false;
 				this._input.classList.remove('composition');
 				this._input.style.font = '';
-				if (!this._input.readOnly) {
-					this.fireListeners('input', this._input.value);
-				}
+				const {value} = this._input;
+
 				setSafeInputValue(this._input, '');
+
+				if (!this._input.readOnly) {
+					this.fireListeners('input', value);
+				}
+
+				if (this._compositionEnd) {
+					clearTimeout(this._compositionEnd);
+					delete this._compositionEnd;
+				}
+			};
+			this._handler.on(this._input, 'compositionend', (e) => {
+				this._compositionEnd = setTimeout(handleCompositionEnd);
 			});
 			this._handler.on(this._input, 'keypress', (e) => {
 				if (this._isComposition) {
@@ -1269,6 +1285,10 @@
 			});
 			this._handler.on(this._input, 'keydown', (e) => {
 				if (this._isComposition) {
+					if (this._compositionEnd) {
+						handleCompositionEnd();
+						cancelEvent(e);
+					}
 					return;
 				}
 				const keyCode = getKeyCode(e);
@@ -1287,9 +1307,16 @@
 				}
 				setSafeInputValue(this._input, '');
 			};
+			this._handler.on(this._input, 'keyup', (e) => {
+				if (this._isComposition) {
+					if (this._compositionEnd) {
+						handleCompositionEnd();
+					}
+				}
+				inputClear(e);
+			});
 
 			this._handler.on(this._input, 'input', inputClear);
-			this._handler.on(this._input, 'keyup', inputClear);
 			this._handler.on(document, 'keydown', (e) => {
 				if (!browser.IE) {
 					return;
