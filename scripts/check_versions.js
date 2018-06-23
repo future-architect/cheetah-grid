@@ -57,7 +57,7 @@ function checkPackageJson(pkg, pkgs) {
 				continue;
 			}
 			const v = dependencies[name].match(/(\d+\.\d+\.\d+)/g)[0];
-			if (v !== pkgs[name].version) {
+			if (minorVersion(v) !== minorVersion(pkgs[name].version)) {
 
 				const message = `${name} version numbers do not match. ${pkg.name}.${depsName}.${name}:${dependencies[name]}  expect:${pkgs[name].version}`;
 				console.error(message);
