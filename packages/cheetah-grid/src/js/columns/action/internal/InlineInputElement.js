@@ -92,6 +92,11 @@ class InlineInputElement {
 		handler.tryWithOffEvents(input, 'blur', () => {
 			focus();
 		});
+
+		this._attaching = true;
+		setTimeout(() => {
+			delete this._attaching;
+		});
 	}
 	detach(gridFocus) {
 		if (this._isActive()) {
@@ -146,7 +151,7 @@ class InlineInputElement {
 				return;
 			}
 			if (getKeyCode(e) === KEY_ENTER) {
-				if (!this._isActive()) {
+				if (!this._isActive() || this._attaching) {
 					return;
 				}
 				const {grid} = this._activeData;

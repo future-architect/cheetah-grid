@@ -175,7 +175,7 @@ const personsDataSource = (() => {
 
 const starsValidateMessage = (rec) => rec.stars ? null : 'Please select.'
 const firstNameValidateMessage = rec => rec.fname ? null : 'Please enter First Name.'
-const lastNameValidateMessage = rec => rec.fname ? null : 'Please enter Last Name.'
+const lastNameValidateMessage = rec => rec.lname ? null : 'Please enter Last Name.'
 const progressValidateMessage = rec => rec.progress > 0 ? null : 'Please enter progress.'
 const emailValidateMessage = rec => {
   const {email} = rec
