@@ -72,7 +72,7 @@ const getRecordsWithAjax = (startIndex, num) => new Promise((resolve) => {
 		log.value += `\nAcquire ${num} data from index ${startIndex}.`;
 		log.value = log.value.trim();
 		log.scrollTop = log.scrollHeight;
-		
+
 		resolve(records);
 	}, 500);
 });
@@ -181,7 +181,7 @@ const getPersonDeptWithAjax = (personid) => new Promise((resolve) => {
 		log.value += `\nAcquire department data of personid: ${personid}. => department: ${dept}`;
 		log.value = log.value.trim();
 		log.scrollTop = log.scrollHeight;
-		
+
 		resolve(dept);
 	}, 500);
 });

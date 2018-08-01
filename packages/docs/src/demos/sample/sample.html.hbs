@@ -38,6 +38,7 @@ Cheetah Grid is a high performance JavaScript data table component that works on
 <div id="sample" class="demo-grid large">
 </div>
 <script type="text/javascript">
+/*eslint no-alert:0*/
 'use strict';
 //{{#wrapscript}}
 //{{#copy "script1"}}
@@ -63,7 +64,7 @@ const grid = new cheetahGrid.ListGrid({
 			/* callback field */
 			field(rec) {
 				const d = rec.birthday;
-				return d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate();
+				return `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`;
 			},
 			caption: 'birthday',
 			width: 100
@@ -88,7 +89,7 @@ grid.dataSource = personsDataSource;
 
 const endTime = new Date();
 
-document.getElementById('time').textContent = endTime - startTime + 'ms';
+document.getElementById('time').textContent = `${endTime - startTime}ms`;
 //{{/copy}}
 window.grid = grid;
 
@@ -129,6 +130,7 @@ for (const name in cheetahGrid.themes.choices) {
 <div id="sample2" class="demo-grid middle">
 </div>
 <script type="text/javascript">
+/*eslint no-alert:0*/
 'use strict';
 //Use Promise
 //{{#wrapscript}}
@@ -204,7 +206,7 @@ function reload() {
 
 		const endTime = new Date();
 
-		document.getElementById('time2').textContent = endTime - startTime + 'ms';
+		document.getElementById('time2').textContent = `${endTime - startTime}ms`;
 	});
 }
 document.querySelector('#reload').onclick = reload;

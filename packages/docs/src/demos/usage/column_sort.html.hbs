@@ -25,7 +25,7 @@ Please define function if you want to sort by your own logic.
 //{{#copy "sample1"}}
 /*global cheetahGrid*/
 'use strict';
-let records = [
+const records = [
 	{
 		no: 1,
 		name: 'Asian',
@@ -62,7 +62,7 @@ const grid = new cheetahGrid.ListGrid({
 			field: 'name',
 			caption: 'name',
 			width: 200,
-			sort: function(order, col, grid) {
+			sort(order, col, grid) {
 				const compare = order === 'desc'
 					? (v1, v2) => v1 === v2 ? 0 : v1 > v2 ? 1 : -1
 					: (v1, v2) => v1 === v2 ? 0 : v1 < v2 ? 1 : -1;

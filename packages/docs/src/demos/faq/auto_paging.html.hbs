@@ -42,7 +42,7 @@ const getRecordsWithAjax = (startIndex, num) => new Promise((resolve) => {
 		log.value += `\nAcquire ${num} data from index ${startIndex}.`;
 		log.value = log.value.trim();
 		log.scrollTop = log.scrollHeight;
-	
+
 		if (last && records.length) {
 			const lastData = records[records.length - 1];
 			lastData.fname = 'Cheetah';

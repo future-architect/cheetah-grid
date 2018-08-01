@@ -53,7 +53,7 @@ const grid = new cheetahGrid.ListGrid({
 			columnType: new cheetahGrid.columns.type.PercentCompleteBarColumn({
 				min: 10,
 				max: 20,
-				formatter: (v) => v + 'pt',
+				formatter: (v) => `${v}pt`,
 			}),
 		},
 		{
