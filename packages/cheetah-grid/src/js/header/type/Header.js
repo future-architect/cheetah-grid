@@ -15,6 +15,7 @@ class Header extends BaseHeader {
 			color,
 			font,
 			bgColor,
+			textOverflow,
 		} = style;
 
 		if (bgColor) {
@@ -28,6 +29,7 @@ class Header extends BaseHeader {
 			textBaseline,
 			color,
 			font,
+			textOverflow,
 		});
 	}
 	bindGridEvent(grid) {

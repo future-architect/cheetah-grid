@@ -42,5 +42,8 @@ class Inline {
 					}
 				});
 	}
+	toString() {
+		return this._content || '';
+	}
 }
 module.exports = Inline;

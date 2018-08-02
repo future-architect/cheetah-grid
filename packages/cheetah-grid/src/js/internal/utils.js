@@ -119,6 +119,15 @@ function endsWith(str, searchString, position) {
 	const lastIndex = subjectString.lastIndexOf(searchString, position);
 	return lastIndex !== -1 && lastIndex === position;
 }
+function toChars(s) {
+	// Surrogate Code Point
+	// [\uD800-\uDBFF]
+	// Variation Selectors
+	// FVS [\u180B-\u180D]
+	// VS1～VS16 [\uFE00-\uFE0F]
+	// VS17～VS256 \uDB40[\uDD00-\uDDEF]
+	return s.match(/([\uD800-\uDBFF][\uDC00-\uDFFF]|\r\n|[^\uD800-\uDFFF])([\u180B-\u180D]|[\s\S][\uFE00-\uFE0F]|\uDB40[\uDD00-\uDDEF])?/g) || [];
+}
 const isPromise = (data) => data && typeof data.then === 'function';
 const then = (result, callback) => isPromise(result) ? result.then((r) => callback(r)) : callback(result);
 function getMouseButtons(e) {
@@ -219,7 +228,8 @@ module.exports = {
 		isObject,
 	},
 	str: {
-		endsWith
+		endsWith,
+		toChars
 	},
 	event: {
 		getMouseButtons,

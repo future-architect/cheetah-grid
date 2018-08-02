@@ -28,6 +28,7 @@ class SortHeader extends BaseHeader {
 			color,
 			bgColor,
 			font,
+			textOverflow,
 		} = style;
 
 		if (bgColor) {
@@ -50,6 +51,7 @@ class SortHeader extends BaseHeader {
 			textBaseline,
 			color,
 			font,
+			textOverflow,
 			icons: [{
 				name: isDef(order) ? (order === 'asc' ? 'arrow_downward' : 'arrow_upward') : null,
 				width: arrowSize,

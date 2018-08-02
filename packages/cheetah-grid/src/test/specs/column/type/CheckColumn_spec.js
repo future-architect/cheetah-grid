@@ -30,7 +30,7 @@
 			{field: 'str', caption: 'str', width: 50, columnType: 'check', action: 'check'},
 			{field: 'onoff', caption: 'onoff', width: 50, columnType: 'check', action: 'check'},
 			{field: 'num', caption: 'num', width: 50, columnType: 'check', action: 'check'},
-			{field: 'numstr', caption: 'numstr', width: 50, columnType: 'check', action: 'check'},
+			{field: 'numstr', caption: 'nstr', width: 50, columnType: 'check', action: 'check'},
 		],
 		records: records,
 	});
@@ -78,7 +78,7 @@
 			girdHelper.text('str', 1, 0, textOpt);
 			girdHelper.text('onoff', 2, 0, textOpt);
 			girdHelper.text('num', 3, 0, textOpt);
-			girdHelper.text('numstr', 4, 0, textOpt);
+			girdHelper.text('nstr', 4, 0, textOpt);
 
 			return {
 				canvasHelper: canvasHelper,
@@ -134,7 +134,7 @@
 					row: 2,
 				},
 			})).toEqual([
-				'bool	str	onoff	num	numstr\n' +
+				'bool	str	onoff	num	nstr\n' +
 				'true	true	on	1	01\n' +
 				'false	false	off	0	000\n'
 			]);
@@ -166,7 +166,7 @@
 					return canvas;
 				}
 				const canvas = createAnswerCanvas();
-				expect(grid.canvas).toMatchImage(canvas, {tolerance: 20, delta: '20%', blurLevel: 1});
+				expect(grid.canvas).toMatchImage(canvas, {tolerance: 30, delta: '20%', blurLevel: 1});
 
 				done();
 

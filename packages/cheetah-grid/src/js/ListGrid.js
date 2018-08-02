@@ -11,6 +11,7 @@ const {DataSource, CachedDataSource} = require('./data');
 const themes = require('./themes');
 const icons = require('./internal/icons');
 const MessageHandler = require('./columns/message/MessageHandler');
+const TooltipHandler = require('./tooltip/TooltipHandler');
 const EVENT_TYPE = require('./list-grid/EVENT_TYPE');
 
 //protected symbol
@@ -555,6 +556,7 @@ class ListGrid extends DrawGrid {
 		this[_].gridCanvasHelper = new GridCanvasHelper(this);
 		this[_].theme = themes.of(options.theme);
 		this[_].messageHandler = new MessageHandler(this, (col, row) => _getCellMessage(this, col, row));
+		this[_].tooltipHandler = new TooltipHandler(this);
 		this.invalidate();
 		this[_].handler.on(window, 'resize', () => {
 			this.updateSize();
@@ -564,6 +566,7 @@ class ListGrid extends DrawGrid {
 	}
 	dispose() {
 		this[_].messageHandler.dispose();
+		this[_].tooltipHandler.dispose();
 		super.dispose();
 	}
 	/**

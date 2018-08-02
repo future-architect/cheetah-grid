@@ -43,6 +43,7 @@
   "scripts": {
     "test": "mrpm run test",
     "build": "mrpm run build",
+    "build:ci": "mrpm run build:ci",
     "prune:all": "mrpm prune",
     "lint": "mrpm run lint",
     "echo:v": "echo $npm_package_version",

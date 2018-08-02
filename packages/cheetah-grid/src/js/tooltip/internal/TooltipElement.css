@@ -1,0 +1,44 @@
+@keyframes cheetah-grid__tooltip-element--shown-animation {
+	0% {
+		opacity: 0;
+		transform: scale(.8) translateX(-60%);
+	}
+	100% {
+		opacity: 1;
+		transform: scale(1) translateX(-50%);
+	}
+}
+
+.cheetah-grid__tooltip-element {
+	position: absolute;
+	box-sizing: border-box;
+	border-radius: 3px;
+	background-color: #232F34;
+	padding: 8px;
+
+	pointer-events: none;
+	user-select: none;
+}
+.cheetah-grid__tooltip-element--hidden {
+	opacity: 0;
+	transform: translateX(-50%);
+	transition: opacity 75ms linear;
+}
+.cheetah-grid__tooltip-element--shown {
+	opacity: 1;
+	transform: translateX(-50%);
+	animation: cheetah-grid__tooltip-element--shown-animation 150ms ease-out;
+}
+.cheetah-grid__tooltip-element__content {
+	font-family: Roboto;
+	font-size: 12px;
+	font-size: .75rem;
+	min-height: 1em;
+	line-height: 1;
+	display: block;
+	width: 100%;
+	margin: 0;
+}
+.cheetah-grid__tooltip-element {
+	color: #FFFFFF;
+}

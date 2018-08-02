@@ -55,7 +55,8 @@
     "eslint:fix": "eslint . --fix",
     "test:font-svg-to-icons-js-loader": "node webpack/test/font-svg-to-icons-js-loader/test.js",
     "test:svg-to-icon-js-loader": "node webpack/test/svg-to-icon-js-loader/test.js",
-    "test:loader": "npm run test:font-svg-to-icons-js-loader && npm run test:svg-to-icon-js-loader"
+    "test:loader": "npm run test:font-svg-to-icons-js-loader && npm run test:svg-to-icon-js-loader",
+    "build:ci": "npm run build"
   },
   "directories": {
     "src": "src/js",

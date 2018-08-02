@@ -32,6 +32,7 @@ class MenuColumn extends BaseColumn {
 			font,
 			bgColor,
 			padding,
+			textOverflow,
 		} = style;
 		let {
 			color,
@@ -57,8 +58,9 @@ class MenuColumn extends BaseColumn {
 				textBaseline,
 				color,
 				font,
-				icons,
 				padding: textPadding,
+				textOverflow,
+				icons,
 			});
 			// draw icon
 			helper.text('', context, {
