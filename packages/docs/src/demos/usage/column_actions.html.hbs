@@ -35,6 +35,7 @@ Please select suitable Action class for `columnType` of same column.
 <div id="sample1" class="demo-grid small">
 </div>
 <script type="text/javascript">
+/*eslint no-alert:0*/
 //{{#wrapscript}}
 //{{#copy "sample1"}}
 /*global cheetahGrid*/
@@ -46,7 +47,7 @@ const grid = new cheetahGrid.ListGrid({
 		// action: 'check'
 		{field: 'check', caption: 'check', width: 60, columnType: 'check', action: 'check'},
 		//{{#if_v '0.2.0'}} action: 'input'
-		{field: 'text', caption: 'input', width: 120, action: 'input'},//{{/if_v}}
+		{field: 'text', caption: 'input', width: 120, action: 'input'}, //{{/if_v}}
 		{
 			caption: 'button',
 			width: 100,

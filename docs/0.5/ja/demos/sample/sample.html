@@ -199,6 +199,7 @@ function generatePersonsDataSource(num) {
 <div id="sample" class="demo-grid large">
 </div>
 <script type="text/javascript">
+/*eslint no-alert:0*/
 'use strict';
 ////wrapscript
 (function() {
@@ -288,7 +289,7 @@ for (var name in cheetahGrid.themes.choices) {
 			<span class="hljs-comment">/* callback field */</span>
 			field(rec) {
 				<span class="hljs-keyword">const</span> d = rec.birthday;
-				<span class="hljs-keyword">return</span> d.getFullYear() + <span class="hljs-string">'/'</span> + (d.getMonth() + <span class="hljs-number">1</span>) + <span class="hljs-string">'/'</span> + d.getDate();
+				<span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${d.getFullYear()}</span>/<span class="hljs-subst">${d.getMonth() + <span class="hljs-number">1</span>}</span>/<span class="hljs-subst">${d.getDate()}</span>`</span>;
 			},
 			<span class="hljs-attr">caption</span>: <span class="hljs-string">'birthday'</span>,
 			<span class="hljs-attr">width</span>: <span class="hljs-number">100</span>
@@ -313,7 +314,7 @@ grid.dataSource = personsDataSource;
 
 <span class="hljs-keyword">const</span> endTime = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>();
 
-<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'time'</span>).textContent = endTime - startTime + <span class="hljs-string">'ms'</span>;
+<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'time'</span>).textContent = <span class="hljs-string">`<span class="hljs-subst">${endTime - startTime}</span>ms`</span>;
 <span class="hljs-comment">//</span></code></pre>
 <hr>
 <h1 id="a-simple-example">A simple example</h1>
@@ -326,6 +327,7 @@ grid.dataSource = personsDataSource;
 <div id="sample2" class="demo-grid middle">
 </div>
 <script type="text/javascript">
+/*eslint no-alert:0*/
 'use strict';
 //Use Promise
 ////wrapscript

@@ -248,7 +248,7 @@ grid.records = [{ percent: '100%', value: 20 }, { percent: '80%', value: 18 }, {
 			<span class="hljs-attr">columnType</span>: <span class="hljs-keyword">new</span> cheetahGrid.columns.type.PercentCompleteBarColumn({
 				<span class="hljs-attr">min</span>: <span class="hljs-number">10</span>,
 				<span class="hljs-attr">max</span>: <span class="hljs-number">20</span>,
-				<span class="hljs-attr">formatter</span>: <span class="hljs-function">(<span class="hljs-params">v</span>) =&gt;</span> v + <span class="hljs-string">'pt'</span>,
+				<span class="hljs-attr">formatter</span>: <span class="hljs-function">(<span class="hljs-params">v</span>) =&gt;</span> <span class="hljs-string">`<span class="hljs-subst">${v}</span>pt`</span>,
 			}),
 		},
 		{

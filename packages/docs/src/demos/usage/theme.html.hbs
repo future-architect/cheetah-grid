@@ -1,0 +1,252 @@
+---
+category: Usage
+title: Theme
+layout: demo.html
+order: 250
+---
+
+{{#marked}}
+## Theme
+
+{{#if lang_ja}}
+Cheetah Gridにテーマを設定することができます。  
+Gridインスタンスごとの設定と、グローバルでの設定が可能です。
+{{else}}
+Can set theme to Cheetah Grid.  
+Can settings for grid instance or global.
+{{/if}}
+
+### Grid instance
+
+{{#if lang_ja}}
+グリッドインスタンスの`theme`プロパティにテーマを設定します。  
+Cheetah Gridに内蔵しているテーマは`MATERIAL_DESIGN`と`BASIC`です。
+{{else}}
+Set a theme to the `theme` property of the grid instance.  
+Built-in themes are `MATERIAL_DESIGN` and `BASIC`.
+{{/if}}
+
+{{/marked}}
+
+<script type="text/javascript">
+/*eslint no-alert:0*/
+'use strict';
+/*global cheetahGrid,generatePersons*/
+//{{{babel textContents.demos.[demos/init.parts.js]}}}
+//{{#wrapscript}}
+window.girdInstances = [];
+function createGrid(parentElement) {
+	const records = generatePersons(100);
+
+	const grid = new cheetahGrid.ListGrid({
+		parentElement,
+		header: [
+			{field: 'check', caption: '', width: 50, columnType: 'check', action: 'check'},
+			{field: 'personid', caption: 'ID', width: 100, columnType: 'center'},
+			{ /* multiple header */
+				caption: 'name',
+				columns: [
+					{field: 'fname', caption: 'First Name', width: 200},
+					{field: 'lname', caption: 'Last Name', width: 200},
+				],
+			},
+			{field: 'email', caption: 'Email', width: 250},
+			{
+			/* callback field */
+				field(rec) {
+					const d = rec.birthday;
+					return `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`;
+				},
+				caption: 'birthday',
+				width: 100
+			},
+			{
+				caption: 'button',
+				width: 120,
+				/* button column */
+				columnType: new cheetahGrid.columns.type.ButtonColumn({
+					caption: 'SHOW REC',
+				}),
+				action: new cheetahGrid.columns.action.ButtonAction({
+					action(rec) {
+						alert(JSON.stringify(rec));
+					},
+				}),
+			}
+		],
+		frozenColCount: 2,
+		records
+	});
+	window.girdInstances.push(grid);
+	return grid;
+}
+window.createGrid = createGrid;
+//{{/wrapscript}}
+</script>
+
+<label>theme</label>
+<select id="theme-select1">
+    <option value="" selected="true">unset</option>
+    <option value="MATERIAL_DESIGN">MATERIAL_DESIGN</option>
+    <option value="BASIC">BASIC</option>
+</select>
+<div id="sample1" class="demo-grid small">
+</div>
+<script type="text/javascript">
+'use strict';
+//{{#wrapscript}}
+/*global cheetahGrid*/
+
+const grid = window.createGrid(document.querySelector('#sample1'));
+
+//{{#copy "script1"}}
+const themeSelect = document.querySelector('#theme-select1');
+themeSelect.onchange = function() {
+	grid.theme = cheetahGrid.themes.choices[themeSelect.value];
+
+	/* The `theme` property of the grid instance can also be set as a string. */
+	// grid.theme = themeSelect.value;
+};
+//{{/copy}}
+themeSelect.onchange();
+//{{/wrapscript}}
+</script>
+
+
+{{> code class="js" code=script1}}
+
+{{#marked}}
+```html
+<select id="theme-select1">
+    <option value="" selected="true">default</option>
+    <option value="MATERIAL_DESIGN">MATERIAL_DESIGN</option>
+    <option value="BASIC">BASIC</option>
+</select>
+```
+{{/marked}}
+
+{{#marked}}
+
+### Global
+
+{{#if lang_ja}}
+`cheetahGrid.themes.default`プロパティにテーマを設定します。
+{{else}}
+Set a theme to the `cheetahGrid.themes.default` property.
+(default MATERIAL_DESIGN.)
+{{/if}}
+
+{{/marked}}
+
+
+<label>theme</label>
+<select id="theme-select2">
+    <option value="MATERIAL_DESIGN" selected="true">MATERIAL_DESIGN</option>
+    <option value="BASIC">BASIC</option>
+</select>
+<div id="sample2" class="demo-grid small">
+</div>
+<script type="text/javascript">
+/*eslint no-alert:0*/
+'use strict';
+//{{#wrapscript}}
+/*global cheetahGrid*/
+window.createGrid(document.querySelector('#sample2'));
+
+
+//{{#copy "script2"}}
+const themeSelect = document.querySelector('#theme-select2');
+themeSelect.onchange = function() {
+	cheetahGrid.themes.default = cheetahGrid.themes.choices[themeSelect.value];
+
+	// redraw all the grids
+	window.girdInstances.forEach((grid) => grid.invalidate());
+};
+//{{/copy}}
+themeSelect.onchange();
+//{{/wrapscript}}
+</script>
+
+
+{{> code class="js" code=script2}}
+
+{{#marked}}
+```html
+<select id="theme-select2">
+    <option value="MATERIAL_DESIGN" selected="true">MATERIAL_DESIGN</option>
+    <option value="BASIC">BASIC</option>
+</select>
+```
+{{/marked}}
+
+{{#marked}}
+
+### Extend theme
+
+{{#if lang_ja}}
+テーマを拡張するには以下のようにします。
+{{else}}
+To extend the theme, do as follows.
+{{/if}}
+
+{{/marked}}
+
+<div id="sample3" class="demo-grid small">
+</div>
+<script type="text/javascript">
+/*eslint no-alert:0*/
+'use strict';
+//{{#wrapscript}}
+/*global cheetahGrid*/
+const grid = window.createGrid(document.querySelector('#sample3'));
+
+
+//{{#copy "script3"}}
+const srcTheme = cheetahGrid.themes.choices.MATERIAL_DESIGN;
+grid.theme = srcTheme.extends({
+	color: 'red',
+	defaultBgColor: '#FDD',
+	underlayBackgroundColor: '#FEE',
+	frozenRowsBgColor: '#EAA',
+	hiliteBorderColor: '#FD5',
+	selectionBgColor: '#FDA',
+	// You can also change the theme apply in the state by using callback.
+	frozenRowsBorderColor(args) {
+		const {
+			row,
+			grid: {frozenRowCount}
+		} = args;
+		if (frozenRowCount - 1 === row) {
+			return ['#F88'/*top*/, '#F88'/*right and left*/, 'red'/*bottom*/];
+		} else {
+			return '#F88';
+		}
+	},
+	borderColor(args) {
+		const {
+			col,
+			grid: {colCount}
+		} = args;
+		if (colCount - 1 === col) {
+			return ['red'/*top*/, '#F88'/*right*/, 'red'/*bottom*/, null/*left*/];
+		} else {
+			return ['red'/*top and bottom*/, null/*right and left*/];
+		}
+	},
+	checkbox: {
+		uncheckBgColor: '#FDD',
+		checkBgColor: 'rgb(255, 73, 72)',
+		borderColor: 'red',
+	},
+	button: {
+		color: '#FDD',
+		bgColor: '#F55',
+	},
+	font: '16px sans-serif'
+});
+//{{/copy}}
+//{{/wrapscript}}
+</script>
+
+
+{{> code class="js" code=script3}}

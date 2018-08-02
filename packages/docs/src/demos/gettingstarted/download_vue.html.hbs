@@ -100,11 +100,12 @@ Please refer to the [more documents](../../index.html#usage-vue-component) for d
 {{/marked}}
 
 <script type="text/javascript">
+/*eslint no-alert:0, no-unused-vars:0*/
 'use strict';
 //{{{babel textContents.demos.[demos/init.parts.js]}}}
 function load() {
 //{{#wrapscript}}
-/*global cheetahGrid,generatePersons*/
+/*global Vue, generatePersons*/
 	const personsData = generatePersons(10000);
 	//{{#copy "script1"}}
 	const app = new Vue({
@@ -113,13 +114,14 @@ function load() {
 			records: personsData
 		},
 		methods: {
-			onClickRecord(rec) { alert(JSON.stringify(rec)) }
+			onClickRecord(rec) { alert(JSON.stringify(rec)); }
 		}
 
 	});
 	//{{/copy}}
 //{{/wrapscript}}
 }
+window.load = load;
 </script>
 {{> code class="js" code=script1}}
 
@@ -127,5 +129,5 @@ function load() {
 
 <script type="text/javascript">
 'use strict';
-load();
+window.load();
 </script>

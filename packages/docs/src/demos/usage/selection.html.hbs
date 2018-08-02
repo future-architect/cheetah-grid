@@ -37,7 +37,7 @@ You can get the area selected by the user from the `selection` property.
 
 //{{{babel textContents.demos.[demos/init.parts.js]}}}
 //{{#wrapscript}}
-/*global generatePerson*/
+/*global cheetahGrid, generatePersons*/
 /*eslint-disable no-unused-vars*/
 'use strict';
 const lang = navigator.language || navigator.userLanguage || navigator.browserLanguage;
@@ -62,9 +62,8 @@ const grid = new cheetahGrid.ListGrid({
 });
 //{{#copy "sample1"}}
 document.querySelector('#button').addEventListener('click', () => {
-	const select = grid.selection.select;
-	const range = grid.selection.range;
-	
+	const {select, range} = grid.selection;
+
 	document.querySelector('#result').textContent = `
 select:
 ---

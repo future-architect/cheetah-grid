@@ -241,6 +241,8 @@ grid.records = [
 <div id="sample2" class="demo-grid middle">
 </div>
 <script type="text/javascript">
+'use strict';
+/*global cheetahGrid, generatePerson*/
 ////wrapscript
 (function() {
 //babel
@@ -251,8 +253,6 @@ var getPerson = function getPerson(index) {
 	return array[index] || (array[index] = generatePerson(index));
 };
 //
-/*global cheetahGrid, records*/
-'use strict';
 var grid = new cheetahGrid.ListGrid({
 	parentElement: document.querySelector('#sample2'),
 	header: [{ field: 'personid', caption: 'ID', width: 100, columnType: 'center' }, { field: 'fname', caption: 'First Name', width: 200 }, { field: 'lname', caption: 'Last Name', width: 200 }, { field: 'email', caption: 'Email', width: 250 }],
@@ -271,9 +271,7 @@ grid.dataSource = new cheetahGrid.data.CachedDataSource({
 //
 })();
 </script>
-<pre><code class="js hljs javascript"><span class="hljs-comment">/*global cheetahGrid, records*/</span>
-<span class="hljs-meta">'use strict'</span>;
-<span class="hljs-keyword">const</span> grid = <span class="hljs-keyword">new</span> cheetahGrid.ListGrid({
+<pre><code class="js hljs javascript"><span class="hljs-keyword">const</span> grid = <span class="hljs-keyword">new</span> cheetahGrid.ListGrid({
 	<span class="hljs-attr">parentElement</span>: <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample2'</span>),
 	<span class="hljs-attr">header</span>: [
 		{<span class="hljs-attr">field</span>: <span class="hljs-string">'personid'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'ID'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">100</span>, <span class="hljs-attr">columnType</span>: <span class="hljs-string">'center'</span>},

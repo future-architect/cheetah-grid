@@ -92,6 +92,7 @@ Please refer to the [more documents](../../index.html) for details
 
 
 <script type="text/javascript">
+/* eslint no-unused-vars:0 */
 'use strict';
 //{{{babel textContents.demos.[demos/init.parts.js]}}}
 function load() {
@@ -119,6 +120,7 @@ function load() {
 //{{/copy}}
 //{{/wrapscript}}
 }
+window.load = load;
 </script>
 {{> code class="js" code=script1}}
 
@@ -127,5 +129,5 @@ function load() {
 
 <script type="text/javascript">
 'use strict';
-load();
+window.load();
 </script>

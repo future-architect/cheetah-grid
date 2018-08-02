@@ -68,12 +68,12 @@ grid.records = [
 <div id="sample2" class="demo-grid middle">
 </div>
 <script type="text/javascript">
+'use strict';
+/*global cheetahGrid, generatePerson*/
 //{{#wrapscript}}
 const array = [];
 const getPerson = (index) => array[index] || (array[index] = generatePerson(index));
 //{{#copy "script2"}}
-/*global cheetahGrid, records*/
-'use strict';
 const grid = new cheetahGrid.ListGrid({
 	parentElement: document.querySelector('#sample2'),
 	header: [

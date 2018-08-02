@@ -29,6 +29,7 @@ Filtering the data to be displayed using `FilterDataSource`.
 <div id="sample1" class="demo-grid large">
 </div>
 <script type="text/javascript">
+/*eslint no-alert:0*/
 'use strict';
 //{{#wrapscript}}
 //{{#copy "script1"}}
@@ -51,7 +52,7 @@ const grid = new cheetahGrid.ListGrid({
 		{
 			field(rec) {
 				const d = rec.birthday;
-				return d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate();
+				return `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`;
 			},
 			caption: 'birthday',
 			width: 100
@@ -81,7 +82,7 @@ input.addEventListener('input', () => {
 	filterDataSource.filter = filterValue ? (record) => {
 		// filtering method
 		for (const k in record) {
-			if (('' + record[k]).indexOf(filterValue) >= 0) {
+			if ((`${record[k]}`).indexOf(filterValue) >= 0) {
 				return true;
 			}
 		}
@@ -115,6 +116,7 @@ This feature is available even if record data is `Promise`.
 <div id="sample2" class="demo-grid large">
 </div>
 <script type="text/javascript">
+/*eslint no-alert:0*/
 'use strict';
 //{{#wrapscript}}
 //{{#copy "script2"}}
@@ -123,7 +125,7 @@ This feature is available even if record data is `Promise`.
 const personsDataSource = new cheetahGrid.data.CachedDataSource({
 	get(index) {
 		return new Promise((resolve) => {
-			console.log('get record:' + index);
+			console.log(`get record:${index}`);
 			setTimeout(() => { resolve(generatePerson(index)); }, 300);
 		});
 	},
@@ -146,7 +148,7 @@ const grid = new cheetahGrid.ListGrid({
 		{
 			field(rec) {
 				const d = rec.birthday;
-				return d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate();
+				return `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`;
 			},
 			caption: 'birthday',
 			width: 100
@@ -176,7 +178,7 @@ input.addEventListener('input', () => {
 	filterDataSource.filter = filterValue ? (record) => {
 		// filtering method
 		for (const k in record) {
-			if (('' + record[k]).indexOf(filterValue) >= 0) {
+			if ((`${record[k]}`).indexOf(filterValue) >= 0) {
 				return true;
 			}
 		}

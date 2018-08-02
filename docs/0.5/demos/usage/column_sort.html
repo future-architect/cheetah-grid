@@ -201,7 +201,7 @@ grid.records = records;
 </script>
 <pre><code class="js hljs javascript"><span class="hljs-comment">/*global cheetahGrid*/</span>
 <span class="hljs-meta">'use strict'</span>;
-<span class="hljs-keyword">let</span> records = [
+<span class="hljs-keyword">const</span> records = [
 	{
 		<span class="hljs-attr">no</span>: <span class="hljs-number">1</span>,
 		<span class="hljs-attr">name</span>: <span class="hljs-string">'Asian'</span>,
@@ -238,7 +238,7 @@ grid.records = records;
 			<span class="hljs-attr">field</span>: <span class="hljs-string">'name'</span>,
 			<span class="hljs-attr">caption</span>: <span class="hljs-string">'name'</span>,
 			<span class="hljs-attr">width</span>: <span class="hljs-number">200</span>,
-			<span class="hljs-attr">sort</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">order, col, grid</span>) </span>{
+			sort(order, col, grid) {
 				<span class="hljs-keyword">const</span> compare = order === <span class="hljs-string">'desc'</span>
 					? <span class="hljs-function">(<span class="hljs-params">v1, v2</span>) =&gt;</span> v1 === v2 ? <span class="hljs-number">0</span> : v1 &gt; v2 ? <span class="hljs-number">1</span> : <span class="hljs-number">-1</span>
 					: <span class="hljs-function">(<span class="hljs-params">v1, v2</span>) =&gt;</span> v1 === v2 ? <span class="hljs-number">0</span> : v1 &lt; v2 ? <span class="hljs-number">1</span> : <span class="hljs-number">-1</span>;

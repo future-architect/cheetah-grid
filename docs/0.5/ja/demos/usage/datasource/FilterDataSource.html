@@ -190,6 +190,7 @@ function generatePersonsDataSource(num) {
 <div id="sample1" class="demo-grid large">
 </div>
 <script type="text/javascript">
+/*eslint no-alert:0*/
 'use strict';
 ////wrapscript
 (function() {
@@ -273,7 +274,7 @@ window.grid = grid;
 		{
 			field(rec) {
 				<span class="hljs-keyword">const</span> d = rec.birthday;
-				<span class="hljs-keyword">return</span> d.getFullYear() + <span class="hljs-string">'/'</span> + (d.getMonth() + <span class="hljs-number">1</span>) + <span class="hljs-string">'/'</span> + d.getDate();
+				<span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${d.getFullYear()}</span>/<span class="hljs-subst">${d.getMonth() + <span class="hljs-number">1</span>}</span>/<span class="hljs-subst">${d.getDate()}</span>`</span>;
 			},
 			<span class="hljs-attr">caption</span>: <span class="hljs-string">'birthday'</span>,
 			<span class="hljs-attr">width</span>: <span class="hljs-number">100</span>
@@ -303,7 +304,7 @@ input.addEventListener(<span class="hljs-string">'input'</span>, () =&gt; {
 	filterDataSource.filter = filterValue ? <span class="hljs-function">(<span class="hljs-params">record</span>) =&gt;</span> {
 		<span class="hljs-comment">// filtering method</span>
 		<span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> k <span class="hljs-keyword">in</span> record) {
-			<span class="hljs-keyword">if</span> ((<span class="hljs-string">''</span> + record[k]).indexOf(filterValue) &gt;= <span class="hljs-number">0</span>) {
+			<span class="hljs-keyword">if</span> ((<span class="hljs-string">`<span class="hljs-subst">${record[k]}</span>`</span>).indexOf(filterValue) &gt;= <span class="hljs-number">0</span>) {
 				<span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
 			}
 		}
@@ -322,6 +323,7 @@ input.addEventListener(<span class="hljs-string">'input'</span>, () =&gt; {
 <div id="sample2" class="demo-grid large">
 </div>
 <script type="text/javascript">
+/*eslint no-alert:0*/
 'use strict';
 ////wrapscript
 (function() {
@@ -403,7 +405,7 @@ window.grid = grid;
 <span class="hljs-keyword">const</span> personsDataSource = <span class="hljs-keyword">new</span> cheetahGrid.data.CachedDataSource({
 	get(index) {
 		<span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve</span>) =&gt;</span> {
-			<span class="hljs-built_in">console</span>.log(<span class="hljs-string">'get record:'</span> + index);
+			<span class="hljs-built_in">console</span>.log(<span class="hljs-string">`get record:<span class="hljs-subst">${index}</span>`</span>);
 			setTimeout(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> { resolve(generatePerson(index)); }, <span class="hljs-number">300</span>);
 		});
 	},
@@ -426,7 +428,7 @@ window.grid = grid;
 		{
 			field(rec) {
 				<span class="hljs-keyword">const</span> d = rec.birthday;
-				<span class="hljs-keyword">return</span> d.getFullYear() + <span class="hljs-string">'/'</span> + (d.getMonth() + <span class="hljs-number">1</span>) + <span class="hljs-string">'/'</span> + d.getDate();
+				<span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${d.getFullYear()}</span>/<span class="hljs-subst">${d.getMonth() + <span class="hljs-number">1</span>}</span>/<span class="hljs-subst">${d.getDate()}</span>`</span>;
 			},
 			<span class="hljs-attr">caption</span>: <span class="hljs-string">'birthday'</span>,
 			<span class="hljs-attr">width</span>: <span class="hljs-number">100</span>
@@ -456,7 +458,7 @@ input.addEventListener(<span class="hljs-string">'input'</span>, () =&gt; {
 	filterDataSource.filter = filterValue ? <span class="hljs-function">(<span class="hljs-params">record</span>) =&gt;</span> {
 		<span class="hljs-comment">// filtering method</span>
 		<span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> k <span class="hljs-keyword">in</span> record) {
-			<span class="hljs-keyword">if</span> ((<span class="hljs-string">''</span> + record[k]).indexOf(filterValue) &gt;= <span class="hljs-number">0</span>) {
+			<span class="hljs-keyword">if</span> ((<span class="hljs-string">`<span class="hljs-subst">${record[k]}</span>`</span>).indexOf(filterValue) &gt;= <span class="hljs-number">0</span>) {
 				<span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
 			}
 		}

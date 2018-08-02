@@ -203,6 +203,7 @@ Vue.use(CGrid)
 </code></pre>
 
 <script type="text/javascript">
+/*eslint no-alert:0, no-unused-vars:0*/
 'use strict';
 ////babel
 'use strict';
@@ -252,7 +253,7 @@ function load() {
 //babel
 'use strict';
 
-/*global cheetahGrid,generatePersons*/
+/*global Vue, generatePersons*/
 var personsData = generatePersons(10000);
 //
 var app = new Vue({
@@ -271,6 +272,7 @@ var app = new Vue({
 //
 })();
 }
+window.load = load;
 </script>
 <pre><code class="js hljs javascript">	<span class="hljs-keyword">const</span> app = <span class="hljs-keyword">new</span> Vue({
 		<span class="hljs-attr">el</span>: <span class="hljs-string">'#app'</span>,
@@ -278,7 +280,7 @@ var app = new Vue({
 			<span class="hljs-attr">records</span>: personsData
 		},
 		<span class="hljs-attr">methods</span>: {
-			onClickRecord(rec) { alert(<span class="hljs-built_in">JSON</span>.stringify(rec)) }
+			onClickRecord(rec) { alert(<span class="hljs-built_in">JSON</span>.stringify(rec)); }
 		}
 
 	});
@@ -305,7 +307,7 @@ var app = new Vue({
 
 <script type="text/javascript">
 'use strict';
-load();
+window.load();
 </script>
     </div>
     
