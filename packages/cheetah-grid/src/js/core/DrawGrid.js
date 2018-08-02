@@ -1884,6 +1884,10 @@
 		get canvas() {
 			return this[_].canvas;
 		}
+		/**
+		 * Focus the grid.
+		 * @return {void}
+		 */
 		focus() {
 			const {col, row} = this[_].selection.select;
 			this.focusCell(col, row);
@@ -1960,6 +1964,10 @@
 			}
 			return cfg[name];
 		}
+		/**
+		 * Apply the changed size.
+		 * @return {void}
+		 */
 		updateSize() {
 			//スタイルをクリアしてサイズ値を取得
 			this[_].canvas.style.width = '';
@@ -1981,6 +1989,10 @@
 			const sel = this[_].selection.select;
 			this[_].focusControl.setFocusRect(this.getCellRect(sel.col, sel.row));
 		}
+		/**
+		 * Apply the changed scroll size.
+		 * @return {void}
+		 */
 		updateScroll() {
 			this[_].scrollable.setScrollSize(_getScrollWidth(this), _getScrollHeight(this));
 			this[_].scroll = {
@@ -1988,32 +2000,76 @@
 				top: this[_].scrollable.scrollTop,
 			};
 		}
+		/**
+		 * Get the row height of the given the row index.
+		 * @param  {number} row The row index
+		 * @return {number} The row height
+		 */
 		getRowHeight(row) {
 			return _getRowHeight(this, row);
 		}
+		/**
+		 * Set the row height of the given the row index.
+		 * @param  {number} row The row index
+		 * @param  {number} height The row height
+		 * @return {void}
+		 */
 		setRowHeight(row, height) {
 			_setRowHeight(this, row, height);
 			this.updateScroll();
 		}
+		/**
+		 * Get the column width of the given the column index.
+		 * @param  {number} col The column index
+		 * @return {number} The column width
+		 */
 		getColWidth(col) {
 			return _getColWidth(this, col);
 		}
+		/**
+		 * Set the column widtht of the given the column index.
+		 * @param  {number} col The column index
+		 * @param  {number} width The column width
+		 * @return {void}
+		 */
 		setColWidth(col, width) {
 			_setColWidth(this, col, width);
 			this.updateScroll();
 		}
+		/**
+		 * Get the column max width of the given the column index.
+		 * @param  {number} col The column index
+		 * @return {number} The column max width
+		 */
 		getMaxColWidth(col) {
 			const obj = this[_].colWidthsLimit[col];
 			return obj && obj.max || undefined;
 		}
+		/**
+		 * Set the column max widtht of the given the column index.
+		 * @param  {number} col The column index
+		 * @param  {number} maxwidth The column max width
+		 * @return {void}
+		 */
 		setMaxColWidth(col, maxwidth) {
 			const obj = this[_].colWidthsLimit[col] || (this[_].colWidthsLimit[col] = {});
 			obj.max = maxwidth;
 		}
+		/**
+		 * Get the column min width of the given the column index.
+		 * @param  {number} col The column index
+		 * @return {number} The column min width
+		 */
 		getMinColWidth(col) {
 			const obj = this[_].colWidthsLimit[col];
 			return obj && obj.min || undefined;
 		}
+		/**
+		 * Set the column min widtht of the given the column index.
+		 * @param  {number} col The column index
+		 * @param  {number} minwidth The column min width
+		 * @return {void}
+		 */
 		setMinColWidth(col, minwidth) {
 			const obj = this[_].colWidthsLimit[col] || (this[_].colWidthsLimit[col] = {});
 			obj.min = minwidth;
@@ -2108,6 +2164,12 @@
 				col: this.getColAt(absoluteX),
 			};
 		}
+		/**
+		 * Scroll to where cell is visible.
+		 * @param  {number} col The column index.
+		 * @param  {number} row The row index
+		 * @return {void}
+		 */
 		makeVisibleCell(col, row) {
 			const isFrozenCell = this.isFrozenCell(col, row);
 			if (isFrozenCell && isFrozenCell.col && isFrozenCell.row) {
@@ -2133,6 +2195,12 @@
 				}
 			}
 		}
+		/**
+		 * Focus the cell.
+		 * @param  {number} col The column index.
+		 * @param  {number} row The row index
+		 * @return {void}
+		 */
 		focusCell(col, row) {
 			const oldEditMode = this[_].focusControl.editMode;
 			if (oldEditMode) {
@@ -2162,6 +2230,12 @@
 			// Failure occurs in IE if focus is not last
 			this[_].focusControl.focus();
 		}
+		/**
+		 * Invalidate the cell.
+		 * @param  {number} col The column index.
+		 * @param  {number} row The row index
+		 * @return {void}
+		 */
 		invalidateCell(col, row) {
 			this.invalidateGridRect(col, row);
 		}
@@ -2196,6 +2270,10 @@
 				_invalidateRect(this, invalidateTarget);
 			}
 		}
+		/**
+		 * Invalidate the whole grid.
+		 * @return {void}
+		 */
 		invalidate() {
 			const visibleRect = _getVisibleRect(this);
 			_invalidateRect(this, visibleRect);

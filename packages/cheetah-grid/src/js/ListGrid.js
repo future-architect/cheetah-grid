@@ -645,15 +645,69 @@
 		set sortState(sortState) {
 			this[_].sortState = sortState;
 		}
+		/**
+		 * Get the field of the given column index.
+		 * @param  {number} col The column index.
+		 * @return {*} The field object.
+		 */
 		getField(col) {
 			return this[_].headerMap.columns[col].field;
 		}
+		/**
+		 * Get the record of the given row index.
+		 * @param  {number} row The row index.
+		 * @return {object} The record.
+		 */
 		getRowRecord(row) {
 			if (row < this[_].headerMap.rowCount) {
 				return undefined;
 			} else {
 				return this[_].dataSource.get(_getRowRecordIndex(this, row));
 			}
+		}
+		/**
+		 * Get the column index of the given field.
+		 * @param  {*} field The field.
+		 * @return {number} The column index.
+		 */
+		getColumnIndexByField(field) {
+			for (const columnIndex in this[_].headerMap.columns) {
+				if (this[_].headerMap.columns[columnIndex].field === field) {
+					return columnIndex - 0;
+				}
+			}
+			return null;
+		}
+		/**
+		 * Focus the cell.
+		 * @param  {*} field The field.
+		 * @param  {number} index The record index
+		 * @return {void}
+		 */
+		focusGridCell(field, index) {
+			const {
+				start: {col: startCol, row: startRow},
+				end: {col: endCol, row: endRow}
+			} = this.selection.range;
+
+			const newCol = this.getColumnIndexByField(field);
+			const newRow = index + this[_].headerMap.rowCount;
+			this.focusCell(newCol, newRow);
+			this.selection.select = {
+				col: newCol,
+				row: newRow
+			};
+			this.invalidateGridRect(startCol, startRow, endCol, endRow);
+			this.invalidateCell(newCol, newRow);
+		}
+		/**
+		 * Scroll to where cell is visible.
+		 * @param  {*} field The field.
+		 * @param  {number} index The record index
+		 * @return {void}
+		 */
+		makeVisibleGridCell(field, index) {
+			this.makeVisibleCell(this.getColumnIndexByField(field), index + this[_].headerMap.rowCount);
 		}
 		getGridCanvasHelper() {
 			return this[_].gridCanvasHelper;
@@ -770,33 +824,6 @@
 		}
 		getOffsetInvalidateCells() {
 			return 1;
-		}
-		getColumnIndexByField(field) {
-			for (const columnIndex in this[_].headerMap.columns) {
-				if (this[_].headerMap.columns[columnIndex].field === field) {
-					return columnIndex - 0;
-				}
-			}
-			return null;
-		}
-		focusGridCell(field, index) {
-			const {
-				start: {col: startCol, row: startRow},
-				end: {col: endCol, row: endRow}
-			} = this.selection.range;
-
-			const newCol = this.getColumnIndexByField(field);
-			const newRow = index + this[_].headerMap.rowCount;
-			this.focusCell(newCol, newRow);
-			this.selection.select = {
-				col: newCol,
-				row: newRow
-			};
-			this.invalidateGridRect(startCol, startRow, endCol, endRow);
-			this.invalidateCell(newCol, newRow);
-		}
-		makeVisibleGridCell(field, index) {
-			this.makeVisibleCell(this.getColumnIndexByField(field), index + this[_].headerMap.rowCount);
 		}
 	}
 	module.exports = ListGrid;
