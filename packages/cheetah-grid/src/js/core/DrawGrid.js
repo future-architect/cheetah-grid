@@ -1006,9 +1006,9 @@ function _toRelativeRect(grid, absoluteRect) {
 //
 
 /**
-	 * managing mouse down moving
-	 * @private
-	 */
+ * managing mouse down moving
+ * @private
+ */
 class BaseMouseDownMover {
 	constructor(grid) {
 		this._grid = grid;
@@ -1087,9 +1087,9 @@ class BaseMouseDownMover {
 }
 
 /**
-	 * managing cell selection operation with mouse
-	 * @private
-	 */
+ * managing cell selection operation with mouse
+ * @private
+ */
 class CellSelector extends BaseMouseDownMover {
 	start(e) {
 		const cell = this._getTargetCell(e);
@@ -1160,9 +1160,9 @@ class CellSelector extends BaseMouseDownMover {
 	}
 }
 /**
-	 * managing row width changing operation with mouse
-	 * @private
-	 */
+ * managing row width changing operation with mouse
+ * @private
+ */
 class ColumnResizer extends BaseMouseDownMover {
 	constructor(grid) {
 		super(grid);
@@ -1224,9 +1224,9 @@ function setSafeInputValue(input, value) {
 }
 
 /**
-	 * Manage focus
-	 * @private
-	 */
+ * Manage focus
+ * @private
+ */
 class FocusControl extends EventTarget {
 	constructor(grid, parentElement, scrollable) {
 		super();
@@ -1440,8 +1440,8 @@ class FocusControl extends EventTarget {
 }
 
 /**
-	 * Selected area management
-	 */
+ * Selected area management
+ */
 class Selection extends EventTarget {
 	constructor(grid) {
 		super();
@@ -1562,8 +1562,8 @@ class Selection extends EventTarget {
 }
 
 /**
-	 * This class manages the drawing process for each layer
-	 */
+ * This class manages the drawing process for each layer
+ */
 class DrawLayers {
 	constructor() {
 		this._layers = {};
@@ -1604,12 +1604,12 @@ class DrawLayer {
 	}
 }
 /**
-	 * Context of cell drawing
-	 */
+ * Context of cell drawing
+ */
 class DrawCellContext {
 	/**
-		 * @private
-		 */
+	 * @private
+	 */
 	constructor(col, row, ctx, rect, drawRect, drawing, selection, drawLayers) {
 		this._col = col;
 		this._row = row;
@@ -1640,9 +1640,9 @@ class DrawCellContext {
 		this._childContexts.forEach((ctx) => { ctx.cancel(); });
 	}
 	/**
-		 * select status.
-		 * @return {object} select status
-		 */
+	 * select status.
+	 * @return {object} select status
+	 */
 	getSelectState() {
 		const sel = this._selection.select;
 		return {
@@ -1651,9 +1651,9 @@ class DrawCellContext {
 		};
 	}
 	/**
-		 * Canvas context.
-		 * @return {CanvasRenderingContext2D} Canvas context.
-		 */
+	 * Canvas context.
+	 * @return {CanvasRenderingContext2D} Canvas context.
+	 */
 	getContext() {
 		if (this._mode === 0) {
 			return this._ctx;
@@ -1662,9 +1662,9 @@ class DrawCellContext {
 		}
 	}
 	/**
-		 * Rectangle of cell.
-		 * @return {Rect} rect Rectangle of cell.
-		 */
+	 * Rectangle of cell.
+	 * @return {Rect} rect Rectangle of cell.
+	 */
 	getRect() {
 		if (this._mode === 0) {
 			return this._rect;
@@ -1679,9 +1679,9 @@ class DrawCellContext {
 		this._rect = rect;
 	}
 	/**
-		 * Rectangle of Drawing range.
-		 * @return {Rect} Rectangle of Drawing range.
-		 */
+	 * Rectangle of Drawing range.
+	 * @return {Rect} Rectangle of Drawing range.
+	 */
 	getDrawRect() {
 		if (this._cancel) {
 			return null;
@@ -1702,9 +1702,9 @@ class DrawCellContext {
 		return colCount <= this._col || rowCount <= this._row;
 	}
 	/**
-		 * get Context of current state
-		 * @return {DrawCellContext} current DrawCellContext.
-		 */
+	 * get Context of current state
+	 * @return {DrawCellContext} current DrawCellContext.
+	 */
 	toCurrentContext() {
 		if (this._mode === 0) {
 			return this;
@@ -1773,9 +1773,9 @@ class DrawCellContext {
 		this._onTerminate = onTerminate;
 	}
 	/**
-		 * terminate
-		 * @return {void}
-		 */
+	 * terminate
+	 * @return {void}
+	 */
 	terminate() {
 		if (this._mode !== 0) {
 			this._onTerminate();
@@ -1783,36 +1783,36 @@ class DrawCellContext {
 	}
 }
 /**
-	 * DrawGrid
-	 * @classdesc cheetahGrid.core.DrawGrid
-	 * @extends EventTarget
-	 * @memberof cheetahGrid.core
-	 */
+ * DrawGrid
+ * @classdesc cheetahGrid.core.DrawGrid
+ * @extends EventTarget
+ * @memberof cheetahGrid.core
+ */
 class DrawGrid extends EventTarget {
 	static get EVENT_TYPE() {
 		return EVENT_TYPE;
 	}
 	/**
-		 * constructor
-		 *
-		 * <pre>
-		 * Constructor options
-		 * -----
-		 * rowCount: grid row count.default 10
-		 * colCount: grid col count.default 10
-		 * frozenColCount: default 0
-		 * frozenRowCount: default 0
-		 * defaultRowHeight: default grid row height. default 40
-		 * defaultColWidth: default grid col width. default 80
-		 * parentElement: canvas parentElement
-		 * font: default font
-		 * underlayBackgroundColor: underlay background color
-		 * -----
-		 * </pre>
-		 *
-		 * @constructor
-		 * @param  {Object} options Constructor options
-		 */
+	 * constructor
+	 *
+	 * <pre>
+	 * Constructor options
+	 * -----
+	 * rowCount: grid row count.default 10
+	 * colCount: grid col count.default 10
+	 * frozenColCount: default 0
+	 * frozenRowCount: default 0
+	 * defaultRowHeight: default grid row height. default 40
+	 * defaultColWidth: default grid col width. default 80
+	 * parentElement: canvas parentElement
+	 * font: default font
+	 * underlayBackgroundColor: underlay background color
+	 * -----
+	 * </pre>
+	 *
+	 * @constructor
+	 * @param  {Object} options Constructor options
+	 */
 	constructor(
 			{
 				rowCount = 10,
@@ -1885,9 +1885,9 @@ class DrawGrid extends EventTarget {
 		return this[_].canvas;
 	}
 	/**
-		 * Focus the grid.
-		 * @return {void}
-		 */
+	 * Focus the grid.
+	 * @return {void}
+	 */
 	focus() {
 		const {col, row} = this[_].selection.select;
 		this.focusCell(col, row);
@@ -1965,9 +1965,9 @@ class DrawGrid extends EventTarget {
 		return cfg[name];
 	}
 	/**
-		 * Apply the changed size.
-		 * @return {void}
-		 */
+	 * Apply the changed size.
+	 * @return {void}
+	 */
 	updateSize() {
 		//スタイルをクリアしてサイズ値を取得
 		this[_].canvas.style.width = '';
@@ -1990,9 +1990,9 @@ class DrawGrid extends EventTarget {
 		this[_].focusControl.setFocusRect(this.getCellRect(sel.col, sel.row));
 	}
 	/**
-		 * Apply the changed scroll size.
-		 * @return {void}
-		 */
+	 * Apply the changed scroll size.
+	 * @return {void}
+	 */
 	updateScroll() {
 		this[_].scrollable.setScrollSize(_getScrollWidth(this), _getScrollHeight(this));
 		this[_].scroll = {
@@ -2001,75 +2001,75 @@ class DrawGrid extends EventTarget {
 		};
 	}
 	/**
-		 * Get the row height of the given the row index.
-		 * @param  {number} row The row index
-		 * @return {number} The row height
-		 */
+	 * Get the row height of the given the row index.
+	 * @param  {number} row The row index
+	 * @return {number} The row height
+	 */
 	getRowHeight(row) {
 		return _getRowHeight(this, row);
 	}
 	/**
-		 * Set the row height of the given the row index.
-		 * @param  {number} row The row index
-		 * @param  {number} height The row height
-		 * @return {void}
-		 */
+	 * Set the row height of the given the row index.
+	 * @param  {number} row The row index
+	 * @param  {number} height The row height
+	 * @return {void}
+	 */
 	setRowHeight(row, height) {
 		_setRowHeight(this, row, height);
 		this.updateScroll();
 	}
 	/**
-		 * Get the column width of the given the column index.
-		 * @param  {number} col The column index
-		 * @return {number} The column width
-		 */
+	 * Get the column width of the given the column index.
+	 * @param  {number} col The column index
+	 * @return {number} The column width
+	 */
 	getColWidth(col) {
 		return _getColWidth(this, col);
 	}
 	/**
-		 * Set the column widtht of the given the column index.
-		 * @param  {number} col The column index
-		 * @param  {number} width The column width
-		 * @return {void}
-		 */
+	 * Set the column widtht of the given the column index.
+	 * @param  {number} col The column index
+	 * @param  {number} width The column width
+	 * @return {void}
+	 */
 	setColWidth(col, width) {
 		_setColWidth(this, col, width);
 		this.updateScroll();
 	}
 	/**
-		 * Get the column max width of the given the column index.
-		 * @param  {number} col The column index
-		 * @return {number} The column max width
-		 */
+	 * Get the column max width of the given the column index.
+	 * @param  {number} col The column index
+	 * @return {number} The column max width
+	 */
 	getMaxColWidth(col) {
 		const obj = this[_].colWidthsLimit[col];
 		return obj && obj.max || undefined;
 	}
 	/**
-		 * Set the column max widtht of the given the column index.
-		 * @param  {number} col The column index
-		 * @param  {number} maxwidth The column max width
-		 * @return {void}
-		 */
+	 * Set the column max widtht of the given the column index.
+	 * @param  {number} col The column index
+	 * @param  {number} maxwidth The column max width
+	 * @return {void}
+	 */
 	setMaxColWidth(col, maxwidth) {
 		const obj = this[_].colWidthsLimit[col] || (this[_].colWidthsLimit[col] = {});
 		obj.max = maxwidth;
 	}
 	/**
-		 * Get the column min width of the given the column index.
-		 * @param  {number} col The column index
-		 * @return {number} The column min width
-		 */
+	 * Get the column min width of the given the column index.
+	 * @param  {number} col The column index
+	 * @return {number} The column min width
+	 */
 	getMinColWidth(col) {
 		const obj = this[_].colWidthsLimit[col];
 		return obj && obj.min || undefined;
 	}
 	/**
-		 * Set the column min widtht of the given the column index.
-		 * @param  {number} col The column index
-		 * @param  {number} minwidth The column min width
-		 * @return {void}
-		 */
+	 * Set the column min widtht of the given the column index.
+	 * @param  {number} col The column index
+	 * @param  {number} minwidth The column min width
+	 * @return {void}
+	 */
 	setMinColWidth(col, minwidth) {
 		const obj = this[_].colWidthsLimit[col] || (this[_].colWidthsLimit[col] = {});
 		obj.min = minwidth;
@@ -2165,11 +2165,11 @@ class DrawGrid extends EventTarget {
 		};
 	}
 	/**
-		 * Scroll to where cell is visible.
-		 * @param  {number} col The column index.
-		 * @param  {number} row The row index
-		 * @return {void}
-		 */
+	 * Scroll to where cell is visible.
+	 * @param  {number} col The column index.
+	 * @param  {number} row The row index
+	 * @return {void}
+	 */
 	makeVisibleCell(col, row) {
 		const isFrozenCell = this.isFrozenCell(col, row);
 		if (isFrozenCell && isFrozenCell.col && isFrozenCell.row) {
@@ -2196,11 +2196,11 @@ class DrawGrid extends EventTarget {
 		}
 	}
 	/**
-		 * Focus the cell.
-		 * @param  {number} col The column index.
-		 * @param  {number} row The row index
-		 * @return {void}
-		 */
+	 * Focus the cell.
+	 * @param  {number} col The column index.
+	 * @param  {number} row The row index
+	 * @return {void}
+	 */
 	focusCell(col, row) {
 		const oldEditMode = this[_].focusControl.editMode;
 		if (oldEditMode) {
@@ -2231,11 +2231,11 @@ class DrawGrid extends EventTarget {
 		this[_].focusControl.focus();
 	}
 	/**
-		 * Invalidate the cell.
-		 * @param  {number} col The column index.
-		 * @param  {number} row The row index
-		 * @return {void}
-		 */
+	 * Invalidate the cell.
+	 * @param  {number} col The column index.
+	 * @param  {number} row The row index
+	 * @return {void}
+	 */
 	invalidateCell(col, row) {
 		this.invalidateGridRect(col, row);
 	}
@@ -2271,39 +2271,39 @@ class DrawGrid extends EventTarget {
 		}
 	}
 	/**
-		 * Invalidate the whole grid.
-		 * @return {void}
-		 */
+	 * Invalidate the whole grid.
+	 * @return {void}
+	 */
 	invalidate() {
 		const visibleRect = _getVisibleRect(this);
 		_invalidateRect(this, visibleRect);
 	}
 	/**
-		 * get cell value at copy action
-		 * <p>
-		 * Please implement
-		 * </p>
-		 *
-		 * @protected
-		 * @param  {number} col Column index of cell.
-		 * @param  {number} row Row index of cell.
-		 * @return {string}
-		 */
+	 * get cell value at copy action
+	 * <p>
+	 * Please implement
+	 * </p>
+	 *
+	 * @protected
+	 * @param  {number} col Column index of cell.
+	 * @param  {number} row Row index of cell.
+	 * @return {string}
+	 */
 	getCopyCellValue(col, row) {
 		//Please implement get cell value!!
 	}
 	/**
-		 * Draw a cell
-		 * <p>
-		 * Please implement cell drawing.
-		 * </p>
-		 *
-		 * @protected
-		 * @param  {number} col Column index of cell.
-		 * @param  {number} row Row index of cell.
-		 * @param  {DrawCellContext} context context of cell drawing.
-		 * @return {void}
-		 */
+	 * Draw a cell
+	 * <p>
+	 * Please implement cell drawing.
+	 * </p>
+	 *
+	 * @protected
+	 * @param  {number} col Column index of cell.
+	 * @param  {number} row Row index of cell.
+	 * @param  {DrawCellContext} context context of cell drawing.
+	 * @return {void}
+	 */
 	onDrawCell(col, row, context) {
 		//Please implement cell drawing!!
 	}
