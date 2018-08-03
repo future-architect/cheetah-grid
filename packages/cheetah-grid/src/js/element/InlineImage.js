@@ -96,6 +96,12 @@ class InlineImage extends Inline {
 				});
 
 	}
+	canBreak() {
+		return false;
+	}
+	toString() {
+		return '';
+	}
 }
 
 module.exports = InlineImage;

@@ -7,7 +7,7 @@ const canvashelper = require('./tools/canvashelper');
 const themes = require('./themes');
 const {colorToRGB} = require('./internal/color');
 const Rect = require('./internal/Rect');
-const {getChainSafe, getOrApply, style: {toBoxArray}, str: {toChars}} = require('./internal/utils');
+const {getChainSafe, getOrApply, style: {toBoxArray}} = require('./internal/utils');
 const fonts = require('./internal/fonts');
 const calc = require('./internal/calc');
 
@@ -86,44 +86,20 @@ function buildInlines(icons, inline) {
 	return inlineUtils.buildInlines(icons, inline);
 }
 
-function buildInlinesForChars(icons, inline) {
-	if (typeof inline === 'string') {
-		return buildInlines(
-				icons,
-				toChars(inline).map((s) => inlineUtils.of(s))
-		);
-	}
-	return buildInlines(icons, inline);
-}
+// function buildInlinesForChars(icons, inline) {
+// 	if (typeof inline === 'string') {
+// 		return buildInlines(
+// 				icons,
+// 				toChars(inline).map((s) => inlineUtils.of(s))
+// 		);
+// 	}
+// 	return buildInlines(icons, inline);
+// }
 
 function inlineToString(inline) {
 	return inlineUtils.string(inline);
 }
 
-function _isOverflowInlines(ctx, inlines, width) {
-	return _trancWidthInlines(ctx, inlines, width).overflow;
-}
-
-function _trancWidthInlines(ctx, inlines, width) {
-	let lineWidth = 0;
-	for (let i = 0; i < inlines.length; i++) {
-		const inline = inlines[i];
-		const inlineWidth = (inline.width({ctx}) || 0) - 0;
-		if (lineWidth + inlineWidth > width - 3/*buffer*/ && lineWidth > 0) {
-			return {
-				inlines: inlines.slice(0, i),
-				width: lineWidth,
-				overflow: true,
-			};
-		}
-		lineWidth += inlineWidth;
-	}
-	return {
-		inlines,
-		width: lineWidth,
-		overflow: lineWidth > width - 3,
-	};
-}
 
 function getOverflowInline(textOverflow) {
 	if (!isAllowOverflow(textOverflow) || textOverflow === 'ellipsis') {
@@ -140,25 +116,81 @@ function isAllowOverflow(textOverflow) {
 	return textOverflow && textOverflow !== 'clip' && typeof textOverflow === 'string';
 }
 
-function _ellipsisInlines(ctx, inlines, width, option) {
-	const overflowInline = getOverflowInline(option);
-	const {inlines: newInlines, width: lineWidth, overflow} = _trancWidthInlines(ctx, inlines, width);
-	let newLineWidth = lineWidth;
-	if (overflow) {
-		const ellipsisWidth = overflowInline.width({ctx});
-		while (newLineWidth + ellipsisWidth > width && newInlines.length) {
-			newLineWidth -= newInlines.pop().width({ctx}) || 0;
+function _isOverflowInlines(ctx, inlines, width) {
+	const maxWidth = width - 3/*buffer*/;
+	let lineWidth = 0;
+	for (let i = 0; i < inlines.length; i++) {
+		const inline = inlines[i];
+		const inlineWidth = (inline.width({ctx}) || 0) - 0;
+		if (lineWidth + inlineWidth > maxWidth) {
+			return true;
 		}
-		return {
-			inlines: newInlines.concat(overflowInline),
-			overflow: true,
-		};
+		lineWidth += inlineWidth;
+	}
+	return lineWidth > width - 3;
+}
+
+function _trancWidthInlines(ctx, inlines, width) {
+	const maxWidth = width - 3/*buffer*/;
+	let lineWidth = 0;
+	for (let i = 0; i < inlines.length; i++) {
+		const inline = inlines[i];
+		const inlineWidth = (inline.width({ctx}) || 0) - 0;
+		if (lineWidth + inlineWidth > maxWidth) {
+			const result = inlines.slice(0, i);
+			const overflowInlines = [];
+			if (inline.canBreak()) {
+				const remWidth = maxWidth - lineWidth;
+				const {before, after} = inline.breakAll(ctx, remWidth);
+				result.push(before);
+				overflowInlines.push(after);
+				overflowInlines.push(...inlines.slice(i + 1));
+			} else {
+				overflowInlines.push(...inlines.slice(i));
+			}
+			return {
+				inlines: result,
+				overflow: true,
+				overflowInlines,
+			};
+		}
+		lineWidth += inlineWidth;
 	}
 	return {
 		inlines,
 		overflow: false,
+		overflowInlines: [],
 	};
+}
 
+
+function _ellipsisInlines(ctx, inlines, width, option) {
+	const maxWidth = width - 3/*buffer*/;
+	const result = [];
+	let lineWidth = 0;
+	for (let i = 0; i < inlines.length; i++) {
+		const inline = inlines[i];
+		const inlineWidth = (inline.width({ctx}) || 0) - 0;
+		if (lineWidth + inlineWidth > maxWidth) {
+			const overflowInline = getOverflowInline(option);
+			const ellipsisWidth = overflowInline.width({ctx});
+			const remWidth = width - lineWidth - ellipsisWidth;
+			if (inline.canBreak()) {
+				result.push(inline.breakAll(ctx, remWidth).before);
+			}
+			result.push(overflowInline);
+			return {
+				inlines: result,
+				overflow: true,
+			};
+		}
+		lineWidth += inlineWidth;
+		result.push(inline);
+	}
+	return {
+		inlines: result,
+		overflow: false,
+	};
 }
 
 function _inlineRect(grid, ctx, inline, rect, col, row,
@@ -180,13 +212,13 @@ function _inlineRect(grid, ctx, inline, rect, col, row,
 
 	let inlines = buildInlines(icons, inline);
 	if (isAllowOverflow(textOverflow) && _isOverflowInlines(ctx, inlines, rect.width)) {
-		const {inlines: line, overflow} = _ellipsisInlines(
+		const {inlines: ellipsisInlines, overflow} = _ellipsisInlines(
 				ctx,
-				buildInlinesForChars(icons, inline),
+				inlines,
 				rect.width,
 				textOverflow
 		);
-		inlines = line;
+		inlines = ellipsisInlines;
 		grid.setCellOverflowText(col, row, overflow && inlineToString(inline));
 	} else {
 		grid.setCellOverflowText(col, row, false);
@@ -249,9 +281,14 @@ function _multiInlineRect(grid, ctx, multiInlines, rect, col, row,
 						if (!procLineClamp(inlines, hasNext)) {
 							return false;
 						}
-						const {inlines: line} = _trancWidthInlines(ctx, inlines, width);
-						buildedMultiInlines.push(line);
-						inlines = inlines.slice(line.length);
+						const {inlines: trancInlines, overflowInlines} = _trancWidthInlines(ctx, inlines, width);
+						if (trancInlines.length) {
+							buildedMultiInlines.push(trancInlines);
+							inlines = overflowInlines;
+						} else {
+							buildedMultiInlines.push(inlines.slice(0, 1));
+							inlines = inlines.slice(1);
+						}
 					}
 					return true;
 				}
@@ -281,7 +318,7 @@ function _multiInlineRect(grid, ctx, multiInlines, rect, col, row,
 		grid.setCellOverflowText(col, row, false);
 		for (let lineRow = 0; lineRow < multiInlines.length; lineRow++) {
 			const inline = multiInlines[lineRow];
-			const buildedInline = buildInlinesForChars(lineRow === 0 ? icons : undefined, inline);
+			const buildedInline = buildInlines(lineRow === 0 ? icons : undefined, inline);
 			if (!procLine(buildedInline, lineRow + 1 < multiInlines.length)) {
 				break;
 			}

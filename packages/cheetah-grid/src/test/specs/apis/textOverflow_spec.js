@@ -117,12 +117,12 @@
 				};
 				girdHelper.text('TES\u2026', 0, 0, textOpt);
 				girdHelper.text('VAL\u2026', 0, 1, {
-					offset: 4,
+					offset: 3,
 					textBaseline: 'middle',
 					textAlign: 'left',
 				});
 				girdHelper.text('VAL\u2026', 0, 2, {
-					offset: 4,
+					offset: 3,
 					textBaseline: 'middle',
 					textAlign: 'left',
 				});
@@ -243,49 +243,51 @@
 					textAlign: 'left',
 				};
 				girdHelper.text('TES\u2026', 0, 0, textOpt);
+
+				const valTop = 62;
 				girdHelper.text('VALU', 0, 1, {
-					y: 61,
-					offset: 4,
+					y: valTop,
+					offset: 3,
 					textBaseline: 'middle',
 					textAlign: 'left',
 				});
 				girdHelper.text('E', 0, 1, {
-					y: 61 + em,
-					offset: 4,
+					y: valTop + em,
+					offset: 3,
 					textBaseline: 'middle',
 					textAlign: 'left',
 				});
 				if (lineClamp === 3) {
 					girdHelper.text('VAL\u2026', 0, 1, {
-						y: 61 + em + em,
-						offset: 4,
+						y: valTop + em * 2,
+						offset: 3,
 						textBaseline: 'middle',
 						textAlign: 'left',
 					});
 				} else {
 					girdHelper.text('VALU', 0, 1, {
-						y: 61 + em + em,
-						offset: 4,
+						y: valTop + em * 2,
+						offset: 3,
 						textBaseline: 'middle',
 						textAlign: 'left',
 					});
 					if (lineClamp === 4) {
 						girdHelper.text('E\u2026', 0, 1, {
-							y: 61 + em + em + em,
-							offset: 4,
+							y: valTop + em * 3,
+							offset: 3,
 							textBaseline: 'middle',
 							textAlign: 'left',
 						});
 					} else {
 						girdHelper.text('E', 0, 1, {
-							y: 61 + em + em + em,
-							offset: 4,
+							y: valTop + em * 3,
+							offset: 3,
 							textBaseline: 'middle',
 							textAlign: 'left',
 						});
 						girdHelper.text('VAL\u2026', 0, 1, {
-							y: 61 + em + em + em + em,
-							offset: 4,
+							y: valTop + em * 4,
+							offset: 3,
 							textBaseline: 'middle',
 							textAlign: 'left',
 						});
@@ -295,7 +297,7 @@
 			}
 			const canvas = createAnswerCanvas();
 			setTimeout(function() {
-				expect(grid.canvas).toMatchImage(canvas, {tolerance: 210, delta: '25%', blurLevel: 1});
+				expect(grid.canvas).toMatchImage(canvas, {tolerance: 210, delta: '25%', blurLevel: 1, log: true});
 				expect(grid.getCellOverflowText(0, 1)).toBe('VALUE\nVALUE\nVALUE');
 				done();
 			}, 200);
