@@ -508,36 +508,36 @@ function adjustListGridOption(options) {
 }
 
 /**
-	 * ListGrid
-	 * @classdesc cheetahGrid.ListGrid
-	 * @extends cheetahGrid.core.DrawGrid
-	 * @memberof cheetahGrid
-	 */
+ * ListGrid
+ * @classdesc cheetahGrid.ListGrid
+ * @extends cheetahGrid.core.DrawGrid
+ * @memberof cheetahGrid
+ */
 class ListGrid extends DrawGrid {
 	static get EVENT_TYPE() {
 		return EVENT_TYPE;
 	}
 	/**
-		 * constructor
-		 *
-		 * <pre>
-		 * Constructor options
-		 * -----
-		 * header: see header property
-		 * records {array}: records data
-		 * dataSource {DataSource}: records data source
-		 * frozenColCount {number}: default 0
-		 * defaultRowHeight {number}: default grid row height. default 40
-		 * defaultColWidth {number}: default grid col width. default 80
-		 * borderColor: border color
-		 * parentElement {Element}: canvas parentElement
-		 * theme {object}: theme
-		 * -----
-		 * </pre>
-		 *
-		 * @constructor
-		 * @param  {Object} options Constructor options
-		 */
+	 * constructor
+	 *
+	 * <pre>
+	 * Constructor options
+	 * -----
+	 * header: see header property
+	 * records {array}: records data
+	 * dataSource {DataSource}: records data source
+	 * frozenColCount {number}: default 0
+	 * defaultRowHeight {number}: default grid row height. default 40
+	 * defaultColWidth {number}: default grid col width. default 80
+	 * borderColor: border color
+	 * parentElement {Element}: canvas parentElement
+	 * theme {object}: theme
+	 * -----
+	 * </pre>
+	 *
+	 * @constructor
+	 * @param  {Object} options Constructor options
+	 */
 	constructor(options = {}) {
 		super(adjustListGridOption(options));
 		this[_].header = options.header || [];
@@ -567,39 +567,39 @@ class ListGrid extends DrawGrid {
 		super.dispose();
 	}
 	/**
-		 * header define
-		 * @type {Array}
-		 */
+	 * header define
+	 * @type {Array}
+	 */
 	get header() {
 		return this[_].header;
 	}
 	/**
-		 * header define
-		 * <pre>
-		 * column options
-		 * -----
-		 * caption: header caption
-		 * field: field name
-		 * width: column width
-		 * minWidth: column min width
-		 * maxWidth: column max width
-		 * icon: icon name
-		 * message: message key name
-		 * columnType: ColumnType
-		 * action: ColumnAction
-		 * style: ColumnStyle
-		 * sort: define sort setting
-		 * -----
-		 *
-		 * multiline header
-		 * -----
-		 * caption: header caption
-		 * columns: columns define
-		 * -----
-		 * </pre>
-		 *
-		 * @type {Array}
-		 */
+	 * header define
+	 * <pre>
+	 * column options
+	 * -----
+	 * caption: header caption
+	 * field: field name
+	 * width: column width
+	 * minWidth: column min width
+	 * maxWidth: column max width
+	 * icon: icon name
+	 * message: message key name
+	 * columnType: ColumnType
+	 * action: ColumnAction
+	 * style: ColumnStyle
+	 * sort: define sort setting
+	 * -----
+	 *
+	 * multiline header
+	 * -----
+	 * caption: header caption
+	 * columns: columns define
+	 * -----
+	 * </pre>
+	 *
+	 * @type {Array}
+	 */
 	set header(header) {
 		this[_].header = header;
 		_refreshHeader(this);
@@ -646,18 +646,18 @@ class ListGrid extends DrawGrid {
 		this[_].sortState = sortState;
 	}
 	/**
-		 * Get the field of the given column index.
-		 * @param  {number} col The column index.
-		 * @return {*} The field object.
-		 */
+	 * Get the field of the given column index.
+	 * @param  {number} col The column index.
+	 * @return {*} The field object.
+	 */
 	getField(col) {
 		return this[_].headerMap.columns[col].field;
 	}
 	/**
-		 * Get the record of the given row index.
-		 * @param  {number} row The row index.
-		 * @return {object} The record.
-		 */
+	 * Get the record of the given row index.
+	 * @param  {number} row The row index.
+	 * @return {object} The record.
+	 */
 	getRowRecord(row) {
 		if (row < this[_].headerMap.rowCount) {
 			return undefined;
@@ -666,10 +666,10 @@ class ListGrid extends DrawGrid {
 		}
 	}
 	/**
-		 * Get the column index of the given field.
-		 * @param  {*} field The field.
-		 * @return {number} The column index.
-		 */
+	 * Get the column index of the given field.
+	 * @param  {*} field The field.
+	 * @return {number} The column index.
+	 */
 	getColumnIndexByField(field) {
 		for (const columnIndex in this[_].headerMap.columns) {
 			if (this[_].headerMap.columns[columnIndex].field === field) {
@@ -679,11 +679,11 @@ class ListGrid extends DrawGrid {
 		return null;
 	}
 	/**
-		 * Focus the cell.
-		 * @param  {*} field The field.
-		 * @param  {number} index The record index
-		 * @return {void}
-		 */
+	 * Focus the cell.
+	 * @param  {*} field The field.
+	 * @param  {number} index The record index
+	 * @return {void}
+	 */
 	focusGridCell(field, index) {
 		const {
 			start: {col: startCol, row: startRow},
@@ -701,11 +701,11 @@ class ListGrid extends DrawGrid {
 		this.invalidateCell(newCol, newRow);
 	}
 	/**
-		 * Scroll to where cell is visible.
-		 * @param  {*} field The field.
-		 * @param  {number} index The record index
-		 * @return {void}
-		 */
+	 * Scroll to where cell is visible.
+	 * @param  {*} field The field.
+	 * @param  {number} index The record index
+	 * @return {void}
+	 */
 	makeVisibleGridCell(field, index) {
 		this.makeVisibleCell(this.getColumnIndexByField(field), index + this[_].headerMap.rowCount);
 	}
