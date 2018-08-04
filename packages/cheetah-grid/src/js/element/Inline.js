@@ -48,7 +48,22 @@ class Inline {
 				});
 	}
 	canBreak() {
-		return true;
+		return !!this._content;
+	}
+	splitIndex(index) {
+		const content = this._content;
+		const itr = genChars(content);
+		const chars = [];
+		let ret = itr.next();
+		for (let i = 0; i < index && ret !== null; i++, ret = itr.next()) {
+			chars.push(ret);
+		}
+		const beforeContent = chars.join('');
+		const afterContent = content.slice(beforeContent.length);
+		return {
+			before: beforeContent ? new Inline(beforeContent) : null,
+			after: afterContent ? new Inline(afterContent) : null,
+		};
 	}
 	breakAll(ctx, width) {
 		const content = this._content;
@@ -83,8 +98,8 @@ class Inline {
 		const beforeContent = chars.join('');
 		const afterContent = content.slice(beforeContent.length);
 		return {
-			before: new Inline(beforeContent),
-			after: new Inline(afterContent),
+			before: beforeContent ? new Inline(beforeContent) : null,
+			after: afterContent ? new Inline(afterContent) : null,
 		};
 	}
 	toString() {

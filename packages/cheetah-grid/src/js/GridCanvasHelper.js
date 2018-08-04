@@ -141,12 +141,22 @@ function breakWidthInlines(ctx, inlines, width) {
 	const beforeInlines = inlines.slice(0, index);
 	const afterInlines = [];
 	if (inline.canBreak()) {
-		const {before, after} = inline.breakAll(ctx, remWidth);
-		beforeInlines.push(before);
-		afterInlines.push(after);
+		let {before, after} = inline.breakAll(ctx, remWidth);
+		if (!before && !beforeInlines.length) { // Always return one char
+			({before, after} = inline.splitIndex(1));
+		}
+		if (before) {
+			beforeInlines.push(before);
+		}
+		if (after) {
+			afterInlines.push(after);
+		}
 		afterInlines.push(...inlines.slice(index + 1));
 	} else {
-		afterInlines.push(...inlines.slice(index));
+		if (!beforeInlines.length) { // Always return one char
+			beforeInlines.push(inline);
+		}
+		afterInlines.push(...inlines.slice(beforeInlines.length));
 	}
 	return {
 		beforeInlines,
@@ -171,7 +181,10 @@ function truncateInlines(ctx, inlines, width, option) {
 	const remWidth = width - lineWidth - ellipsisWidth;
 	const result = inlines.slice(0, index);
 	if (inline.canBreak()) {
-		result.push(inline.breakAll(ctx, remWidth).before);
+		const {before} = inline.breakAll(ctx, remWidth);
+		if (before) {
+			result.push(before);
+		}
 	}
 	result.push(overflowInline);
 	return {
@@ -269,13 +282,8 @@ function _multiInlineRect(grid, ctx, multiInlines, rect, col, row,
 							return false;
 						}
 						const {beforeInlines, afterInlines} = breakWidthInlines(ctx, inlines, width);
-						if (beforeInlines.length) {
-							buildedMultiInlines.push(beforeInlines);
-							inlines = afterInlines;
-						} else {
-							buildedMultiInlines.push(inlines.slice(0, 1));
-							inlines = inlines.slice(1);
-						}
+						buildedMultiInlines.push(beforeInlines);
+						inlines = afterInlines;
 					}
 					return true;
 				}
