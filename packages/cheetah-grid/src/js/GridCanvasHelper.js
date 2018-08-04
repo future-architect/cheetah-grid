@@ -86,20 +86,9 @@ function buildInlines(icons, inline) {
 	return inlineUtils.buildInlines(icons, inline);
 }
 
-// function buildInlinesForChars(icons, inline) {
-// 	if (typeof inline === 'string') {
-// 		return buildInlines(
-// 				icons,
-// 				toChars(inline).map((s) => inlineUtils.of(s))
-// 		);
-// 	}
-// 	return buildInlines(icons, inline);
-// }
-
 function inlineToString(inline) {
 	return inlineUtils.string(inline);
 }
-
 
 function getOverflowInline(textOverflow) {
 	if (!isAllowOverflow(textOverflow) || textOverflow === 'ellipsis') {
@@ -116,80 +105,78 @@ function isAllowOverflow(textOverflow) {
 	return textOverflow && textOverflow !== 'clip' && typeof textOverflow === 'string';
 }
 
-function _isOverflowInlines(ctx, inlines, width) {
+function getOverflowInlinesIndex(ctx, inlines, width) {
 	const maxWidth = width - 3/*buffer*/;
 	let lineWidth = 0;
 	for (let i = 0; i < inlines.length; i++) {
 		const inline = inlines[i];
 		const inlineWidth = (inline.width({ctx}) || 0) - 0;
 		if (lineWidth + inlineWidth > maxWidth) {
-			return true;
-		}
-		lineWidth += inlineWidth;
-	}
-	return lineWidth > width - 3;
-}
-
-function _trancWidthInlines(ctx, inlines, width) {
-	const maxWidth = width - 3/*buffer*/;
-	let lineWidth = 0;
-	for (let i = 0; i < inlines.length; i++) {
-		const inline = inlines[i];
-		const inlineWidth = (inline.width({ctx}) || 0) - 0;
-		if (lineWidth + inlineWidth > maxWidth) {
-			const result = inlines.slice(0, i);
-			const overflowInlines = [];
-			if (inline.canBreak()) {
-				const remWidth = maxWidth - lineWidth;
-				const {before, after} = inline.breakAll(ctx, remWidth);
-				result.push(before);
-				overflowInlines.push(after);
-				overflowInlines.push(...inlines.slice(i + 1));
-			} else {
-				overflowInlines.push(...inlines.slice(i));
-			}
 			return {
-				inlines: result,
-				overflow: true,
-				overflowInlines,
+				index: i,
+				lineWidth,
+				remWidth: maxWidth - lineWidth
 			};
 		}
 		lineWidth += inlineWidth;
 	}
+	return null;
+}
+
+function isOverflowInlines(ctx, inlines, width) {
+	return !!getOverflowInlinesIndex(ctx, inlines, width);
+}
+
+function breakWidthInlines(ctx, inlines, width) {
+	const indexData = getOverflowInlinesIndex(ctx, inlines, width);
+	if (!indexData) {
+		return {
+			beforeInlines: inlines,
+			overflow: false,
+			afterInlines: [],
+		};
+	}
+	const {index, remWidth} = indexData;
+	const inline = inlines[index];
+	const beforeInlines = inlines.slice(0, index);
+	const afterInlines = [];
+	if (inline.canBreak()) {
+		const {before, after} = inline.breakAll(ctx, remWidth);
+		beforeInlines.push(before);
+		afterInlines.push(after);
+		afterInlines.push(...inlines.slice(index + 1));
+	} else {
+		afterInlines.push(...inlines.slice(index));
+	}
 	return {
-		inlines,
-		overflow: false,
-		overflowInlines: [],
+		beforeInlines,
+		overflow: true,
+		afterInlines,
 	};
 }
 
 
-function _ellipsisInlines(ctx, inlines, width, option) {
-	const maxWidth = width - 3/*buffer*/;
-	const result = [];
-	let lineWidth = 0;
-	for (let i = 0; i < inlines.length; i++) {
-		const inline = inlines[i];
-		const inlineWidth = (inline.width({ctx}) || 0) - 0;
-		if (lineWidth + inlineWidth > maxWidth) {
-			const overflowInline = getOverflowInline(option);
-			const ellipsisWidth = overflowInline.width({ctx});
-			const remWidth = width - lineWidth - ellipsisWidth;
-			if (inline.canBreak()) {
-				result.push(inline.breakAll(ctx, remWidth).before);
-			}
-			result.push(overflowInline);
-			return {
-				inlines: result,
-				overflow: true,
-			};
-		}
-		lineWidth += inlineWidth;
-		result.push(inline);
+function truncateInlines(ctx, inlines, width, option) {
+	const indexData = getOverflowInlinesIndex(ctx, inlines, width);
+	if (!indexData) {
+		return {
+			inlines,
+			overflow: false,
+		};
 	}
+	const {index, lineWidth} = indexData;
+	const inline = inlines[index];
+	const overflowInline = getOverflowInline(option);
+	const ellipsisWidth = overflowInline.width({ctx});
+	const remWidth = width - lineWidth - ellipsisWidth;
+	const result = inlines.slice(0, index);
+	if (inline.canBreak()) {
+		result.push(inline.breakAll(ctx, remWidth).before);
+	}
+	result.push(overflowInline);
 	return {
 		inlines: result,
-		overflow: false,
+		overflow: true,
 	};
 }
 
@@ -211,14 +198,14 @@ function _inlineRect(grid, ctx, inline, rect, col, row,
 	ctx.font = font || ctx.font;
 
 	let inlines = buildInlines(icons, inline);
-	if (isAllowOverflow(textOverflow) && _isOverflowInlines(ctx, inlines, rect.width)) {
-		const {inlines: ellipsisInlines, overflow} = _ellipsisInlines(
+	if (isAllowOverflow(textOverflow) && isOverflowInlines(ctx, inlines, rect.width)) {
+		const {inlines: truncInlines, overflow} = truncateInlines(
 				ctx,
 				inlines,
 				rect.width,
 				textOverflow
 		);
-		inlines = ellipsisInlines;
+		inlines = truncInlines;
 		grid.setCellOverflowText(col, row, overflow && inlineToString(inline));
 	} else {
 		grid.setCellOverflowText(col, row, false);
@@ -260,10 +247,10 @@ function _multiInlineRect(grid, ctx, multiInlines, rect, col, row,
 					buildedMultiInlines.push([getOverflowInline(textOverflow)]);
 					grid.setCellOverflowText(col, row, multiInlines.map(inlineToString).join('\n'));
 				} else {
-					const {inlines: line, overflow} = _ellipsisInlines(ctx, inlines, width, textOverflow);
+					const {inlines: truncInlines, overflow} = truncateInlines(ctx, inlines, width, textOverflow);
 					buildedMultiInlines.push(hasNext && !overflow
-						? line.concat([getOverflowInline(textOverflow)])
-						: line);
+						? truncInlines.concat([getOverflowInline(textOverflow)])
+						: truncInlines);
 					if (overflow || hasNext) {
 						grid.setCellOverflowText(col, row, multiInlines.map(inlineToString).join('\n'));
 					}
@@ -281,10 +268,10 @@ function _multiInlineRect(grid, ctx, multiInlines, rect, col, row,
 						if (!procLineClamp(inlines, hasNext)) {
 							return false;
 						}
-						const {inlines: trancInlines, overflowInlines} = _trancWidthInlines(ctx, inlines, width);
-						if (trancInlines.length) {
-							buildedMultiInlines.push(trancInlines);
-							inlines = overflowInlines;
+						const {beforeInlines, afterInlines} = breakWidthInlines(ctx, inlines, width);
+						if (beforeInlines.length) {
+							buildedMultiInlines.push(beforeInlines);
+							inlines = afterInlines;
 						} else {
 							buildedMultiInlines.push(inlines.slice(0, 1));
 							inlines = inlines.slice(1);
@@ -296,13 +283,13 @@ function _multiInlineRect(grid, ctx, multiInlines, rect, col, row,
 					if (!procLineClamp(inlines, hasNext)) {
 						return false;
 					}
-					const {inlines: line, overflow} = _ellipsisInlines(
+					const {inlines: truncInlines, overflow} = truncateInlines(
 							ctx,
 							inlines,
 							width,
 							textOverflow
 					);
-					buildedMultiInlines.push(line);
+					buildedMultiInlines.push(truncInlines);
 					if (overflow) {
 						grid.setCellOverflowText(col, row, multiInlines.map(inlineToString).join('\n'));
 					}
