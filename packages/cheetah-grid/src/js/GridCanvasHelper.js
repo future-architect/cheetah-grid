@@ -141,7 +141,10 @@ function breakWidthInlines(ctx, inlines, width) {
 	const beforeInlines = inlines.slice(0, index);
 	const afterInlines = [];
 	if (inline.canBreak()) {
-		let {before, after} = inline.breakAll(ctx, remWidth);
+		let {before, after} = inline.breakWord(ctx, remWidth);
+		if (!before && !beforeInlines.length) {
+			({before, after} = inline.breakAll(ctx, remWidth));
+		}
 		if (!before && !beforeInlines.length) { // Always return one char
 			({before, after} = inline.splitIndex(1));
 		}

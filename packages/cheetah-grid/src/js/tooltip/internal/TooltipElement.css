@@ -35,8 +35,9 @@
 	font-size: .75rem;
 	min-height: 1em;
 	line-height: 1;
-	display: block;
 	width: 100%;
+	display: block;
+	white-space: pre-wrap;
 	margin: 0;
 }
 .cheetah-grid__tooltip-element {

@@ -1,9 +1,43 @@
 'use strict';
 
-const {isDef, str: {genChars}} = require('../internal/utils');
+const {isDef, str: {genChars, genWords}} = require('../internal/utils');
 
 function getWidth(ctx, content) {
 	return ctx.measureText(content).width;
+}
+
+function breakWidth(ctx, content, itr, candidateIndex, width) {
+	const chars = [];
+	let ret = itr.next();
+	for (let i = 0; i < candidateIndex && ret !== null; i++, ret = itr.next()) {
+		chars.push(ret);
+	}
+	let beforeWidth = getWidth(ctx, chars.join(''));
+	if (beforeWidth > width) {
+		while (chars.length) {
+			const c = chars.pop();
+			beforeWidth -= getWidth(ctx, c);
+			if (beforeWidth <= width) {
+				break;
+			}
+		}
+	} else if (beforeWidth < width) {
+		while (ret !== null) {
+			const charWidth = getWidth(ctx, ret);
+			if (beforeWidth + charWidth > width) {
+				break;
+			}
+			chars.push(ret);
+			beforeWidth += charWidth;
+			ret = itr.next();
+		}
+	}
+	const beforeContent = chars.join('').replace(/\s+$/, '');
+	const afterContent = content.slice(beforeContent.length).replace(/^\s+/, '');
+	return {
+		before: beforeContent ? new Inline(beforeContent) : null,
+		after: afterContent ? new Inline(afterContent) : null,
+	};
 }
 
 class Inline {
@@ -65,42 +99,19 @@ class Inline {
 			after: afterContent ? new Inline(afterContent) : null,
 		};
 	}
+	breakWord(ctx, width) {
+		const content = this._content;
+		const allWidth = this.width({ctx});
+		const candidate = Math.floor(this._content.length * width / allWidth);
+		const itr = genWords(content);
+		return breakWidth(ctx, content, itr, candidate, width);
+	}
 	breakAll(ctx, width) {
 		const content = this._content;
 		const allWidth = this.width({ctx});
 		const candidate = Math.floor(this._content.length * width / allWidth);
 		const itr = genChars(content);
-		const chars = [];
-		let ret = itr.next();
-		for (let i = 0; i < candidate && ret !== null; i++, ret = itr.next()) {
-			chars.push(ret);
-		}
-		let beforeWidth = getWidth(ctx, chars.join(''));
-		if (beforeWidth > width) {
-			while (chars.length) {
-				const c = chars.pop();
-				beforeWidth -= getWidth(ctx, c);
-				if (beforeWidth <= width) {
-					break;
-				}
-			}
-		} else if (beforeWidth < width) {
-			while (ret !== null) {
-				const charWidth = getWidth(ctx, ret);
-				if (beforeWidth + charWidth > width) {
-					break;
-				}
-				chars.push(ret);
-				beforeWidth += charWidth;
-				ret = itr.next();
-			}
-		}
-		const beforeContent = chars.join('');
-		const afterContent = content.slice(beforeContent.length);
-		return {
-			before: beforeContent ? new Inline(beforeContent) : null,
-			after: afterContent ? new Inline(afterContent) : null,
-		};
+		return breakWidth(ctx, content, itr, candidate, width);
 	}
 	toString() {
 		return this._content;
