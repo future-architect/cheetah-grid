@@ -67,6 +67,12 @@ class InlineIcon extends Inline {
 					});
 		}
 	}
+	canBreak() {
+		return false;
+	}
+	toString() {
+		return '';
+	}
 }
 
 module.exports = InlineIcon;

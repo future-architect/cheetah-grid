@@ -54,6 +54,12 @@ class InlineDrawer extends Inline {
 			offsetBottom,
 		});
 	}
+	canBreak() {
+		return false;
+	}
+	toString() {
+		return '';
+	}
 }
 
 module.exports = InlineDrawer;

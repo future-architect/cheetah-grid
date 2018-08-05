@@ -39,6 +39,12 @@ class InlineSvg extends InlineImage {
 			imageHeight: elmHeight,
 		});
 	}
+	canBreak() {
+		return false;
+	}
+	toString() {
+		return '';
+	}
 }
 
 module.exports = InlineSvg;

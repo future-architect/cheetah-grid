@@ -14,10 +14,15 @@ order: 120
 
 |property|説明|
 |---|---|
-|color|セルのテキスト色を指定できます|
-|textAlign|セルのテキスト横位置を指定できます|
-|textBaseline|セルのテキスト縦位置を指定できます|
-|bgColor|セルの背景色を指定できます|
+|color|セルのテキスト色を指定できます。|
+|textAlign|セルのテキスト横位置を指定できます。|
+|textBaseline|セルのテキスト縦位置を指定できます。|
+|bgColor|セルの背景色を指定できます。|
+|font|フォントを指定できます。|
+|padding|パディングを指定できます。|
+{{#if_v '0.6.0'}}
+|textOverflow|テキストがセルをオーバーフローした場合の表示方法を指定できます。`clip`・`ellipsis`が利用できます。|
+{{/if_v }}
 {{else}}
 Define column style by using `style` property.  
 
@@ -25,11 +30,16 @@ Properties below are prepared in standard.
 
 |property|description|
 |---|---|
-|color|define color of cell|
-|textAlign|define horizontal position of text in cell|
-|textBaseline|define vertical position of text in cell|
-|bgColor|define background color of cell|
+|color|define color of cell.|
+|textAlign|define horizontal position of text in cell.|
+|textBaseline|define vertical position of text in cell.|
+|bgColor|define background color of cell.|
+|font|define font of cell.|
+|padding|define padding of cell. if you set 4 values separately, please set the `Array`.|
 {{/if}}
+{{#if_v '0.6.0'}}
+|textOverflow|define how to display when text overflows the area of a cell. `clip` or `ellipsis` is available.|
+{{/if_v }}
 {{/marked}}
 
 <div id="sample1" class="demo-grid small">
@@ -44,20 +54,23 @@ const grid = new cheetahGrid.ListGrid({
 	header: [
 		{field: 'no', caption: 'no', width: 50},
 
-		//default
+		// default
 		{field: 'text', caption: 'default', width: 150},
 
-		//color
+		// color
 		{field: 'text', caption: 'color', width: 150, style: {color: 'red'}},
-		//textAlign
+		// textAlign
 		{field: 'text', caption: 'right', width: 150, style: {textAlign: 'right'}},
 		{field: 'text', caption: 'center', width: 150, style: {textAlign: 'center'}},
-		//textBaseline
+		// textBaseline
 		{field: 'text', caption: 'top', width: 150, style: {textBaseline: 'top'}},
 		{field: 'text', caption: 'bottom', width: 150, style: {textBaseline: 'bottom'}},
 
-		//bgColor
+		// bgColor
 		{field: 'text', caption: 'bgColor', width: 150, style: {bgColor: '#5f5'}},
+
+		// font
+		{field: 'text', caption: 'font', width: 150, style: {font: '9px sans-serif'}},
 	],
 });
 grid.records = [
@@ -69,6 +82,43 @@ grid.records = [
 //{{/wrapscript}}
 </script>
 {{> code class="js" code=script1}}
+
+
+<div id="sample2" class="demo-grid middle">
+</div>
+<script type="text/javascript">
+//{{#wrapscript}}
+//{{#copy "script2"}}
+/*global cheetahGrid*/
+'use strict';
+const grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#sample2'),
+	header: [
+		{field: 'no', caption: 'no', width: 50},
+
+		// default
+		{field: 'text', caption: 'default', width: 150},
+
+		// padding
+		{field: 'text', caption: 'padding', width: 150, style: {padding: 20}},
+		{field: 'text', caption: 'padding', width: 150, style: {padding: [0/*top*/, 10/*right*/, 15/*bottom*/, 20/*left*/]}},
+
+		//{{#if_v '0.6.0'}} textOverflow
+		{field: 'longText', caption: 'textOverflow', width: 150, style: {textOverflow: 'ellipsis'}},
+		//{{/if_v }}
+	],
+	defaultRowHeight: 80,
+	headerRowHeight: 24,
+});
+grid.records = [
+	{no: 1, text: 'sample text', longText: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'},
+	{no: 2, text: 'sample text', longText: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'},
+	{no: 3, text: 'sample text', longText: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'},
+];
+//{{/copy}}
+//{{/wrapscript}}
+</script>
+{{> code class="js" code=script2}}
 
 {{#marked}}
 
@@ -93,22 +143,22 @@ This can be done by functions below.
 {{/if}}
 {{/marked}}
 
-<div id="sample2" class="demo-grid small">
+<div id="sample3" class="demo-grid small">
 </div>
 <label>change background color of text</label>
-<select id="sample2theme">
+<select id="sample3theme">
     <option value="" selected="true">default</option>
     <option value="red">red</option>
     <option value="#DFF">#DFF</option>
 </select>
 <script type="text/javascript">
 //{{#wrapscript}}
-//{{#copy "script2"}}
+//{{#copy "script3"}}
 /*global cheetahGrid*/
 'use strict';
 const textFieldStyle = new cheetahGrid.columns.style.Style();
 const grid = new cheetahGrid.ListGrid({
-	parentElement: document.querySelector('#sample2'),
+	parentElement: document.querySelector('#sample3'),
 	header: [
 		{field: 'no', caption: 'no', width: 50},
 
@@ -141,7 +191,7 @@ grid.records = [
 	{no: 4, text: 'sample text', value: -50},
 ];
 
-const themeSelect = document.querySelector('#sample2theme');
+const themeSelect = document.querySelector('#sample3theme');
 themeSelect.onchange = function() {
 	//change bg color
 	if (themeSelect.value === 'default') {
@@ -153,5 +203,5 @@ themeSelect.onchange = function() {
 //{{/copy}}
 //{{/wrapscript}}
 </script>
-{{> code class="js" code=script2}}
+{{> code class="js" code=script3}}
 

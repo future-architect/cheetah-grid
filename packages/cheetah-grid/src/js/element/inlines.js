@@ -137,5 +137,8 @@ module.exports = {
 			}
 		}
 		return result;
+	},
+	string(inline) {
+		return this.buildInlines(undefined, inline).join('');
 	}
 };

@@ -1866,6 +1866,7 @@ class DrawGrid extends EventTarget {
 		this[_].cellSelector = new CellSelector(this);
 
 		this[_].drawCells = {};
+		this[_].cellTextOverflows = {};
 
 		this[_].element.appendChild(this[_].canvas);
 		this[_].element.appendChild(this[_].scrollable.getElement());
@@ -2306,6 +2307,31 @@ class DrawGrid extends EventTarget {
 	 */
 	onDrawCell(col, row, context) {
 		//Please implement cell drawing!!
+	}
+	/**
+	 * Get the overflowed text in the cell rectangle, from the given cell.
+	 * @param  {number} col The column index.
+	 * @param  {number} row The row index
+	 * @return {string | null} The text overflowing the cell rect.
+	 */
+	getCellOverflowText(col, row) {
+		const key = `${col}:${row}`;
+		return this[_].cellTextOverflows[key] || null;
+	}
+	/**
+	 * Set the overflowed text in the cell rectangle, to the given cell.
+	 * @param  {number} col The column index.
+	 * @param  {number} row The row index
+	 * @param  {boolean} overflowText The overflowed text in the cell rectangle.
+	 * @return {void}
+	 */
+	setCellOverflowText(col, row, overflowText) {
+		const key = `${col}:${row}`;
+		if (overflowText) {
+			this[_].cellTextOverflows[key] = typeof overflowText === 'string' ? overflowText.trim() : overflowText;
+		} else {
+			delete this[_].cellTextOverflows[key];
+		}
 	}
 	addDisposable(disposable) {
 		if (!disposable || !disposable.dispose || typeof disposable.dispose !== 'function') {

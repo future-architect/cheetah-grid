@@ -35,7 +35,8 @@
         <c-grid-icon-column
           :width="150"
           :column-style="{
-            color: 'gold'
+            color: 'gold',
+            textOverflow: 'ellipsis'
           }"
           :action="{
             actionName: 'InlineMenuEditor',
@@ -61,6 +62,9 @@
             :helper-text="value => { return `${value.length}/20` }"
             :input-validator="value => { return value.length > 20 ? `over the max length. ${value.length}` : null }"
             :message="firstNameValidateMessage"
+            :column-style="{
+              textOverflow: 'ellipsis'
+            }"
             input-class-list= "helper-text--right-justified"
             field= "fname"
             width= "20%"
@@ -71,6 +75,9 @@
             :helper-text="value => { return `${value.length}/20` }"
             :input-validator="value => { return value.length > 20 ? `over the max length. ${value.length}` : null }"
             :message="lastNameValidateMessage"
+            :column-style="{
+              textOverflow: 'ellipsis'
+            }"
             input-class-list= "helper-text--right-justified"
             field="lname"
             width= "20%"
@@ -84,7 +91,8 @@
           :formatter="v => { return v ? `${v}%` : '' }"
           :column-style="{
             textAlign: 'right',
-            padding: [0, 10, 0, 0]
+            padding: [0, 10, 0, 0],
+            textOverflow: 'ellipsis'
           }"
           :action="{
             actionName: 'SmallDialogInputEditor',
@@ -110,6 +118,9 @@
             return ret ? null : 'Please enter email addr.'
           }"
           :message="emailValidateMessage"
+          :column-style="{
+            textOverflow: 'ellipsis'
+          }"
           helper-text="Email"
           field="email"
           width="calc(50% - 505px - 20px)"
@@ -128,6 +139,9 @@
           }"
           :validator="value => { return isNaN(new Date(value)) ? 'Please enter date.' : null }"
           :message="birthdayValidateMessage"
+          :column-style="{
+            textOverflow: 'ellipsis'
+          }"
           helper-text="birthday"
           width="100"
           filter="dateFormat('yyyy/m/d')"
@@ -136,6 +150,9 @@
         </c-grid-input-column>
         <c-grid-button-column
           :width="120"
+          :column-style="{
+            textOverflow: 'ellipsis'
+          }"
           caption="SHOW REC"
           @click="clickRec"
         />

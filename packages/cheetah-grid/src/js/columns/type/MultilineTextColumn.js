@@ -1,5 +1,4 @@
 'use strict';
-
 const MultilineTextStyle = require('../style/MultilineTextStyle');
 const BaseColumn = require('./BaseColumn');
 const utils = require('./columnUtils');
@@ -22,6 +21,9 @@ class MultilineTextColumn extends BaseColumn {
 			bgColor,
 			padding,
 			lineHeight,
+			autoWrapText,
+			lineClamp,
+			textOverflow
 		} = style;
 		if (bgColor) {
 			drawCellBase({
@@ -36,9 +38,12 @@ class MultilineTextColumn extends BaseColumn {
 				textBaseline,
 				color,
 				font,
-				icons,
 				padding,
 				lineHeight,
+				autoWrapText,
+				lineClamp,
+				textOverflow,
+				icons,
 			});
 		});
 	}

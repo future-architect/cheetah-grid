@@ -16,7 +16,8 @@
     "watch": "webpack --watch --mode development",
     "lint": "npm run eslint",
     "eslint": "eslint .",
-    "eslint:fix": "eslint . --fix"
+    "eslint:fix": "eslint . --fix",
+    "build:ci": "npm run build"
   },
   "repository": {
     "type": "git",

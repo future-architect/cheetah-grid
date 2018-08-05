@@ -19,6 +19,7 @@ class Column extends BaseColumn {
 			font,
 			bgColor,
 			padding,
+			textOverflow,
 		} = style;
 		if (bgColor) {
 			drawCellBase({
@@ -32,8 +33,9 @@ class Column extends BaseColumn {
 				textBaseline,
 				color,
 				font,
-				icons,
 				padding,
+				textOverflow,
+				icons,
 			});
 		});
 	}

@@ -11,6 +11,7 @@ class Style extends StdBaseStyle {
 		this._color = style.color;
 		this._font = style.font;
 		this._padding = style.padding;
+		this._textOverflow = style.textOverflow || 'clip';
 	}
 	get color() {
 		return this._color;
@@ -31,6 +32,13 @@ class Style extends StdBaseStyle {
 	}
 	set padding(padding) {
 		this._padding = padding;
+		this.doChangeStyle();
+	}
+	get textOverflow() {
+		return this._textOverflow;
+	}
+	set textOverflow(textOverflow) {
+		this._textOverflow = textOverflow;
 		this.doChangeStyle();
 	}
 	clone() {

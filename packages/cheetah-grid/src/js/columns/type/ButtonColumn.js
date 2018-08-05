@@ -29,7 +29,16 @@ class ButtonColumn extends Column {
 		return this._caption || value;
 	}
 	drawInternal(value, context, style, helper, grid, {drawCellBase, getIcon}) {
-		const {textAlign, textBaseline, bgColor, color, buttonBgColor, font, padding} = style;
+		const {
+			textAlign,
+			textBaseline,
+			bgColor,
+			color,
+			buttonBgColor,
+			font,
+			padding,
+			textOverflow
+		} = style;
 		if (bgColor) {
 			drawCellBase({
 				bgColor,
@@ -62,6 +71,7 @@ class ButtonColumn extends Column {
 					blur: 6,
 					offsetY: 3,
 				} : true,
+				textOverflow,
 				icons,
 			});
 		});

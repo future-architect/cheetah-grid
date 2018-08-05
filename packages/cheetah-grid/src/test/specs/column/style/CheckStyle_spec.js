@@ -32,7 +32,7 @@
 			{field: 'str', caption: 'str', width: 50, columnType: 'check', style: style, action: action},
 			{field: 'onoff', caption: 'onoff', width: 50, columnType: 'check', style: style, action: action},
 			{field: 'num', caption: 'num', width: 50, columnType: 'check', style: style, action: action},
-			{field: 'numstr', caption: 'numstr', width: 50, columnType: 'check', style: style, action: action},
+			{field: 'numstr', caption: 'nstr', width: 50, columnType: 'check', style: style, action: action},
 		],
 		records: records,
 	});
@@ -80,7 +80,7 @@
 			girdHelper.text('str', 1, 0, textOpt);
 			girdHelper.text('onoff', 2, 0, textOpt);
 			girdHelper.text('num', 3, 0, textOpt);
-			girdHelper.text('numstr', 4, 0, textOpt);
+			girdHelper.text('nstr', 4, 0, textOpt);
 
 			return {
 				canvasHelper: canvasHelper,
@@ -140,7 +140,7 @@
 					row: 2,
 				},
 			})).toEqual([
-				'bool	str	onoff	num	numstr\n' +
+				'bool	str	onoff	num	nstr\n' +
 				'true	true	on	1	01\n' +
 				'false	false	off	0	000\n'
 			]);

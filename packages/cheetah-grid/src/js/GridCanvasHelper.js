@@ -2,7 +2,7 @@
 'use strict';
 
 const {calcStartPosition, getFontSize} = require('./internal/canvases');
-const inlines = require('./element/inlines');
+const inlineUtils = require('./element/inlines');
 const canvashelper = require('./tools/canvashelper');
 const themes = require('./themes');
 const {colorToRGB} = require('./internal/color');
@@ -10,6 +10,9 @@ const Rect = require('./internal/Rect');
 const {getChainSafe, getOrApply, style: {toBoxArray}} = require('./internal/utils');
 const fonts = require('./internal/fonts');
 const calc = require('./internal/calc');
+
+
+const INLINE_ELLIPSIS = inlineUtils.of('\u2026');
 
 function invalidateCell(context, grid) {
 	const {col, row} = context;
@@ -79,6 +82,120 @@ function drawInlines(ctx, inlines, rect, offset, offsetTop, offsetBottom, col, r
 	}
 }
 
+function buildInlines(icons, inline) {
+	return inlineUtils.buildInlines(icons, inline);
+}
+
+function inlineToString(inline) {
+	return inlineUtils.string(inline);
+}
+
+function getOverflowInline(textOverflow) {
+	if (!isAllowOverflow(textOverflow) || textOverflow === 'ellipsis') {
+		return INLINE_ELLIPSIS;
+	}
+	textOverflow = textOverflow.trim();
+	if (textOverflow.length === 1) {
+		return inlineUtils.of(textOverflow[0]);
+	}
+	return INLINE_ELLIPSIS;
+}
+
+function isAllowOverflow(textOverflow) {
+	return textOverflow && textOverflow !== 'clip' && typeof textOverflow === 'string';
+}
+
+function getOverflowInlinesIndex(ctx, inlines, width) {
+	const maxWidth = width - 3/*buffer*/;
+	let lineWidth = 0;
+	for (let i = 0; i < inlines.length; i++) {
+		const inline = inlines[i];
+		const inlineWidth = (inline.width({ctx}) || 0) - 0;
+		if (lineWidth + inlineWidth > maxWidth) {
+			return {
+				index: i,
+				lineWidth,
+				remWidth: maxWidth - lineWidth
+			};
+		}
+		lineWidth += inlineWidth;
+	}
+	return null;
+}
+
+function isOverflowInlines(ctx, inlines, width) {
+	return !!getOverflowInlinesIndex(ctx, inlines, width);
+}
+
+function breakWidthInlines(ctx, inlines, width) {
+	const indexData = getOverflowInlinesIndex(ctx, inlines, width);
+	if (!indexData) {
+		return {
+			beforeInlines: inlines,
+			overflow: false,
+			afterInlines: [],
+		};
+	}
+	const {index, remWidth} = indexData;
+	const inline = inlines[index];
+	const beforeInlines = inlines.slice(0, index);
+	const afterInlines = [];
+	if (inline.canBreak()) {
+		let {before, after} = inline.breakWord(ctx, remWidth);
+		if (!before && !beforeInlines.length) {
+			({before, after} = inline.breakAll(ctx, remWidth));
+		}
+		if (!before && !beforeInlines.length) { // Always return one char
+			({before, after} = inline.splitIndex(1));
+		}
+		if (before) {
+			beforeInlines.push(before);
+		}
+		if (after) {
+			afterInlines.push(after);
+		}
+		afterInlines.push(...inlines.slice(index + 1));
+	} else {
+		if (!beforeInlines.length) { // Always return one char
+			beforeInlines.push(inline);
+		}
+		afterInlines.push(...inlines.slice(beforeInlines.length));
+	}
+	return {
+		beforeInlines,
+		overflow: true,
+		afterInlines,
+	};
+}
+
+
+function truncateInlines(ctx, inlines, width, option) {
+	const indexData = getOverflowInlinesIndex(ctx, inlines, width);
+	if (!indexData) {
+		return {
+			inlines,
+			overflow: false,
+		};
+	}
+	const {index, lineWidth} = indexData;
+	const inline = inlines[index];
+	const overflowInline = getOverflowInline(option);
+	const ellipsisWidth = overflowInline.width({ctx});
+	const remWidth = width - lineWidth - ellipsisWidth;
+	const result = inlines.slice(0, index);
+	if (inline.canBreak()) {
+		const {before} = inline.breakAll(ctx, remWidth);
+		if (before) {
+			result.push(before);
+		}
+	}
+	result.push(overflowInline);
+	return {
+		inlines: result,
+		overflow: true,
+	};
+}
+
 function _inlineRect(grid, ctx, inline, rect, col, row,
 		{
 			offset,
@@ -86,6 +203,7 @@ function _inlineRect(grid, ctx, inline, rect, col, row,
 			textAlign,
 			textBaseline,
 			font,
+			textOverflow,
 			icons,
 		} = {}) {
 
@@ -95,8 +213,21 @@ function _inlineRect(grid, ctx, inline, rect, col, row,
 	ctx.textBaseline = textBaseline;
 	ctx.font = font || ctx.font;
 
-	const actInlines = inlines.buildInlines(icons, inline);
-	drawInlines(ctx, actInlines, rect, offset, 0, 0, col, row, grid);
+	let inlines = buildInlines(icons, inline);
+	if (isAllowOverflow(textOverflow) && isOverflowInlines(ctx, inlines, rect.width)) {
+		const {inlines: truncInlines, overflow} = truncateInlines(
+				ctx,
+				inlines,
+				rect.width,
+				textOverflow
+		);
+		inlines = truncInlines;
+		grid.setCellOverflowText(col, row, overflow && inlineToString(inline));
+	} else {
+		grid.setCellOverflowText(col, row, false);
+	}
+
+	drawInlines(ctx, inlines, rect, offset, 0, 0, col, row, grid);
 }
 
 function _multiInlineRect(grid, ctx, multiInlines, rect, col, row,
@@ -107,6 +238,9 @@ function _multiInlineRect(grid, ctx, multiInlines, rect, col, row,
 			textBaseline,
 			font,
 			lineHeight,
+			autoWrapText,
+			lineClamp,
+			textOverflow,
 			icons,
 		} = {}) {
 	//文字style
@@ -115,11 +249,87 @@ function _multiInlineRect(grid, ctx, multiInlines, rect, col, row,
 	ctx.textBaseline = textBaseline;
 	ctx.font = font || ctx.font;
 
-	multiInlines = [...multiInlines];
+	if (lineClamp === 'auto') {
+		lineClamp = Math.max(Math.floor(rect.height / lineHeight), 1);
+	}
+
+	let buildedMultiInlines;
+	if (autoWrapText || lineClamp > 0 || isAllowOverflow(textOverflow)) {
+		const {width} = rect;
+		buildedMultiInlines = [];
+		const procLineClamp = lineClamp > 0 ? (inlines, hasNext) => {
+			if (buildedMultiInlines.length + 1 >= lineClamp) {
+				if (inlines.length === 0 && hasNext) {
+					buildedMultiInlines.push([getOverflowInline(textOverflow)]);
+					grid.setCellOverflowText(col, row, multiInlines.map(inlineToString).join('\n'));
+				} else {
+					const {inlines: truncInlines, overflow} = truncateInlines(ctx, inlines, width, textOverflow);
+					buildedMultiInlines.push(hasNext && !overflow
+						? truncInlines.concat([getOverflowInline(textOverflow)])
+						: truncInlines);
+					if (overflow || hasNext) {
+						grid.setCellOverflowText(col, row, multiInlines.map(inlineToString).join('\n'));
+					}
+				}
+				return false;
+			}
+			return true;
+		} : () => true;
+		const procLine =
+				autoWrapText ? (inlines, hasNext) => {
+					if (!procLineClamp(inlines, hasNext)) {
+						return false;
+					}
+					while (inlines.length) {
+						if (!procLineClamp(inlines, hasNext)) {
+							return false;
+						}
+						const {beforeInlines, afterInlines} = breakWidthInlines(ctx, inlines, width);
+						buildedMultiInlines.push(beforeInlines);
+						inlines = afterInlines;
+					}
+					return true;
+				}
+				: isAllowOverflow(textOverflow) ? (inlines, hasNext) => {
+					if (!procLineClamp(inlines, hasNext)) {
+						return false;
+					}
+					const {inlines: truncInlines, overflow} = truncateInlines(
+							ctx,
+							inlines,
+							width,
+							textOverflow
+					);
+					buildedMultiInlines.push(truncInlines);
+					if (overflow) {
+						grid.setCellOverflowText(col, row, multiInlines.map(inlineToString).join('\n'));
+					}
+					return true;
+				}
+				: (inlines, hasNext) => {
+					if (!procLineClamp(inlines, hasNext)) {
+						return false;
+					}
+					buildedMultiInlines.push(inlines);
+					return true;
+				};
+		grid.setCellOverflowText(col, row, false);
+		for (let lineRow = 0; lineRow < multiInlines.length; lineRow++) {
+			const inline = multiInlines[lineRow];
+			const buildedInline = buildInlines(lineRow === 0 ? icons : undefined, inline);
+			if (!procLine(buildedInline, lineRow + 1 < multiInlines.length)) {
+				break;
+			}
+		}
+	} else {
+		grid.setCellOverflowText(col, row, false);
+		buildedMultiInlines = multiInlines.
+			map((inline, lineRow) => buildInlines(lineRow === 0 ? icons : undefined, inline));
+	}
 
 
 	let paddingTop = 0;
-	let paddingBottom = lineHeight * (multiInlines.length - 1);
+	let paddingBottom = lineHeight * (buildedMultiInlines.length - 1);
 
 	if (ctx.textBaseline === 'top' || ctx.textBaseline === 'hanging') {
 		const em = getFontSize(ctx, ctx.font).height;
@@ -132,19 +342,11 @@ function _multiInlineRect(grid, ctx, multiInlines, rect, col, row,
 		paddingTop -= pad;
 		paddingBottom += pad;
 	}
-	const line = multiInlines.shift() || '';
-	const actInlines = inlines.buildInlines(icons, line);
-	drawInlines(ctx, actInlines, rect, offset, paddingTop, paddingBottom, col, row, grid);
-	paddingTop += lineHeight;
-	paddingBottom -= lineHeight;
-	while (multiInlines.length) {
-		const line = multiInlines.shift();
-		const actInlines = inlines.buildInlines(undefined, line);
-		drawInlines(ctx, actInlines, rect, offset, paddingTop, paddingBottom, col, row, grid);
+	buildedMultiInlines.forEach((buildedInline) => {
+		drawInlines(ctx, buildedInline, rect, offset, paddingTop, paddingBottom, col, row, grid);
 		paddingTop += lineHeight;
 		paddingBottom -= lineHeight;
-	}
-
+	});
 }
 
 
@@ -385,6 +587,7 @@ class GridCanvasHelper {
 				textAlign = 'left',
 				textBaseline = 'middle',
 				font,
+				textOverflow = 'clip',
 				icons,
 			} = {}) {
 		let rect = context.getRect();
@@ -416,6 +619,7 @@ class GridCanvasHelper {
 						textAlign,
 						textBaseline,
 						font,
+						textOverflow,
 						icons,
 					});
 		});
@@ -429,6 +633,9 @@ class GridCanvasHelper {
 				textBaseline = 'middle',
 				font,
 				lineHeight = '1em',
+				autoWrapText = false,
+				lineClamp = 0,
+				textOverflow = 'clip',
 				icons,
 			} = {}) {
 		let rect = context.getRect();
@@ -463,6 +670,9 @@ class GridCanvasHelper {
 						textBaseline,
 						font,
 						lineHeight,
+						autoWrapText,
+						lineClamp,
+						textOverflow,
 						icons,
 					});
 		});
@@ -647,6 +857,7 @@ class GridCanvasHelper {
 				textBaseline = 'middle',
 				shadow,
 				font,
+				textOverflow = 'clip',
 				icons,
 			} = {}) {
 		const rect = context.getRect();
@@ -673,6 +884,7 @@ class GridCanvasHelper {
 						textAlign,
 						textBaseline,
 						font,
+						textOverflow,
 						icons,
 					});
 		});

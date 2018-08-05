@@ -68,6 +68,12 @@ class InlinePath2D extends Inline {
 			ctx.restore();
 		}
 	}
+	canBreak() {
+		return false;
+	}
+	toString() {
+		return '';
+	}
 }
 
 module.exports = InlinePath2D;

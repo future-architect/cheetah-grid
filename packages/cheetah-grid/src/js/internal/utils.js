@@ -119,6 +119,30 @@ function endsWith(str, searchString, position) {
 	const lastIndex = subjectString.lastIndexOf(searchString, position);
 	return lastIndex !== -1 && lastIndex === position;
 }
+function genChars(s) {
+	// Surrogate Code Point
+	// [\uD800-\uDBFF]
+	// Variation Selectors
+	// FVS [\u180B-\u180D]
+	// VS1～VS16 [\uFE00-\uFE0F]
+	// VS17～VS256 \uDB40[\uDD00-\uDDEF]
+	const re = /([\uD800-\uDBFF][\uDC00-\uDFFF]|\r\n|[^\uD800-\uDFFF])([\u180B-\u180D]|[\uFE00-\uFE0F]|\uDB40[\uDD00-\uDDEF])?/g;
+	return {
+		next() {
+			const res = re.exec(s);
+			return res !== null ? res[0] : null;
+		}
+	};
+}
+function genWords(s) {
+	const re = /[!-~]+|[^!-~\s]+|\s+/g;
+	return {
+		next() {
+			const res = re.exec(s);
+			return res !== null ? res[0] : null;
+		}
+	};
+}
 const isPromise = (data) => data && typeof data.then === 'function';
 const then = (result, callback) => isPromise(result) ? result.then((r) => callback(r)) : callback(result);
 function getMouseButtons(e) {
@@ -219,7 +243,9 @@ module.exports = {
 		isObject,
 	},
 	str: {
-		endsWith
+		endsWith,
+		genChars,
+		genWords
 	},
 	event: {
 		getMouseButtons,
