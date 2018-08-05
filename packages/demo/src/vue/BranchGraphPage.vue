@@ -6,10 +6,12 @@
     </div>
     <br>
     <div
-      class="grid">
+      class="grid"
+    >
       <c-grid
         ref="grid"
-        :data="data">
+        :data="data"
+      >
         <c-grid-column
           :width="200"
           :column-type="{

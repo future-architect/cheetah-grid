@@ -60,7 +60,7 @@ const EVENT_TYPE = {
 	SCROLL: 'scroll',
 };
 
-	//private methods
+//private methods
 function _vibrate(e) {
 	if (navigator.vibrate && isTouchEvent(e)) {
 		navigator.vibrate(50);

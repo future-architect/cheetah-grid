@@ -16,14 +16,23 @@ export default {
   name: 'CGridLinkColumn',
   mixins: [ColumnMixin, StdColumnMixin],
   props: {
+    /**
+     * Defines a column type
+     */
     columnType: {
       type: [Object, String, Function],
       default: undefined
     },
+    /**
+     * Defines a href
+     */
     href: {
       type: [String, Function],
       default: undefined
     },
+    /**
+     * Defines an anchor target
+     */
     target: {
       type: [String],
       default: undefined

@@ -1,12 +1,13 @@
 'use strict';
+
+const semver = require('semver');
 const chalk = require('chalk');
 const packages = require('mrpm/lib/packages');
 const {version} = require('../package.json');
 const opts = {cwd: process.cwd()};
 
 function minorVersion(v) {
-	const a = v.split('.');
-	return `${a[0]}.${a[1]}`;
+	return `${semver.major(v)}.${semver.minor(v)}`;
 }
 
 function handleDone(err) {

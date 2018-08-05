@@ -1,9 +1,9 @@
 'use strict';
+const semver = require('semver');
 const chalk = require('chalk');
 
 function minorVersion(v) {
-	const a = v.split('.');
-	return `${a[0]}.${a[1]}`;
+	return `${semver.major(v)}.${semver.minor(v)}`;
 }
 const linkVersion = minorVersion(require('../package.json').version);
 

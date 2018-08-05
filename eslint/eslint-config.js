@@ -174,10 +174,15 @@ module.exports = {
 		'array-element-newline': 'off',
 		'function-paren-newline': 'off',
 		'array-bracket-newline': 'off',
+		// v5
+		'max-lines-per-function': 'off',
+		'max-classes-per-file': 'off',
 
-		// ECMAScript 6
+		// ECMAScript 6+
 		'no-confusing-arrow': 'off',
 		// 'prefer-template': 'off',
+		'require-unicode-regexp': 'off',
+		'prefer-object-spread': 'off',
 
 	}
 

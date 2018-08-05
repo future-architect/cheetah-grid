@@ -1,10 +1,11 @@
 'use strict';
+
+const semver = require('semver');
 const chalk = require('chalk');
 const fs = require('fs');
 
 function buildCdnVersion(v) {
-	const a = v.split('.');
-	return `${a[0]}.${a[1]}.x`;
+	return `${semver.major(v)}.${semver.minor(v)}.x`;
 }
 const cdnVersion = buildCdnVersion(require('../package.json').version);
 

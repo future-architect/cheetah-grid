@@ -16,18 +16,30 @@ export default {
   name: 'CGridPercentCompleteBarColumn',
   mixins: [ColumnMixin, StdColumnMixin],
   props: {
+    /**
+     * Defines a formatter
+     */
     formatter: {
       type: [Function],
       default: undefined
     },
+    /**
+     * Defines a min value
+     */
     min: {
       type: [Number, String],
       default: undefined
     },
+    /**
+     * Defines a max value
+     */
     max: {
       type: [Number, String],
       default: undefined
     },
+    /**
+     * Defines an action
+     */
     action: {
       type: [Object, String, Function],
       default: undefined

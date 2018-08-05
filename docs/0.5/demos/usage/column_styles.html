@@ -149,19 +149,27 @@
 <tbody>
 <tr>
 <td>color</td>
-<td>define color of cell</td>
+<td>define color of cell.</td>
 </tr>
 <tr>
 <td>textAlign</td>
-<td>define horizontal position of text in cell</td>
+<td>define horizontal position of text in cell.</td>
 </tr>
 <tr>
 <td>textBaseline</td>
-<td>define vertical position of text in cell</td>
+<td>define vertical position of text in cell.</td>
 </tr>
 <tr>
 <td>bgColor</td>
-<td>define background color of cell</td>
+<td>define background color of cell.</td>
+</tr>
+<tr>
+<td>font</td>
+<td>define font of cell.</td>
+</tr>
+<tr>
+<td>padding</td>
+<td>define padding of cell. if you set 4 values separately, please set the <code>Array</code>.</td>
 </tr>
 </tbody>
 </table>
@@ -181,18 +189,21 @@ var grid = new cheetahGrid.ListGrid({
 	parentElement: document.querySelector('#sample1'),
 	header: [{ field: 'no', caption: 'no', width: 50 },
 
-	//default
+	// default
 	{ field: 'text', caption: 'default', width: 150 },
 
-	//color
+	// color
 	{ field: 'text', caption: 'color', width: 150, style: { color: 'red' } },
-	//textAlign
+	// textAlign
 	{ field: 'text', caption: 'right', width: 150, style: { textAlign: 'right' } }, { field: 'text', caption: 'center', width: 150, style: { textAlign: 'center' } },
-	//textBaseline
+	// textBaseline
 	{ field: 'text', caption: 'top', width: 150, style: { textBaseline: 'top' } }, { field: 'text', caption: 'bottom', width: 150, style: { textBaseline: 'bottom' } },
 
-	//bgColor
-	{ field: 'text', caption: 'bgColor', width: 150, style: { bgColor: '#5f5' } }]
+	// bgColor
+	{ field: 'text', caption: 'bgColor', width: 150, style: { bgColor: '#5f5' } },
+
+	// font
+	{ field: 'text', caption: 'font', width: 150, style: { font: '9px sans-serif' } }]
 });
 grid.records = [{ no: 1, text: 'sample text' }, { no: 2, text: 'sample text' }, { no: 3, text: 'sample text' }];
 //
@@ -206,26 +217,83 @@ grid.records = [{ no: 1, text: 'sample text' }, { no: 2, text: 'sample text' }, 
 	<span class="hljs-attr">header</span>: [
 		{<span class="hljs-attr">field</span>: <span class="hljs-string">'no'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'no'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">50</span>},
 
-		<span class="hljs-comment">//default</span>
+		<span class="hljs-comment">// default</span>
 		{<span class="hljs-attr">field</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'default'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">150</span>},
 
-		<span class="hljs-comment">//color</span>
+		<span class="hljs-comment">// color</span>
 		{<span class="hljs-attr">field</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'color'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">150</span>, <span class="hljs-attr">style</span>: {<span class="hljs-attr">color</span>: <span class="hljs-string">'red'</span>}},
-		<span class="hljs-comment">//textAlign</span>
+		<span class="hljs-comment">// textAlign</span>
 		{<span class="hljs-attr">field</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'right'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">150</span>, <span class="hljs-attr">style</span>: {<span class="hljs-attr">textAlign</span>: <span class="hljs-string">'right'</span>}},
 		{<span class="hljs-attr">field</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'center'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">150</span>, <span class="hljs-attr">style</span>: {<span class="hljs-attr">textAlign</span>: <span class="hljs-string">'center'</span>}},
-		<span class="hljs-comment">//textBaseline</span>
+		<span class="hljs-comment">// textBaseline</span>
 		{<span class="hljs-attr">field</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'top'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">150</span>, <span class="hljs-attr">style</span>: {<span class="hljs-attr">textBaseline</span>: <span class="hljs-string">'top'</span>}},
 		{<span class="hljs-attr">field</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'bottom'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">150</span>, <span class="hljs-attr">style</span>: {<span class="hljs-attr">textBaseline</span>: <span class="hljs-string">'bottom'</span>}},
 
-		<span class="hljs-comment">//bgColor</span>
+		<span class="hljs-comment">// bgColor</span>
 		{<span class="hljs-attr">field</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'bgColor'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">150</span>, <span class="hljs-attr">style</span>: {<span class="hljs-attr">bgColor</span>: <span class="hljs-string">'#5f5'</span>}},
+
+		<span class="hljs-comment">// font</span>
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'font'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">150</span>, <span class="hljs-attr">style</span>: {<span class="hljs-attr">font</span>: <span class="hljs-string">'9px sans-serif'</span>}},
 	],
 });
 grid.records = [
 	{<span class="hljs-attr">no</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">text</span>: <span class="hljs-string">'sample text'</span>},
 	{<span class="hljs-attr">no</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">text</span>: <span class="hljs-string">'sample text'</span>},
 	{<span class="hljs-attr">no</span>: <span class="hljs-number">3</span>, <span class="hljs-attr">text</span>: <span class="hljs-string">'sample text'</span>},
+];
+<span class="hljs-comment">//</span></code></pre>
+
+<div id="sample2" class="demo-grid middle">
+</div>
+<script type="text/javascript">
+////wrapscript
+(function() {
+//babel
+
+//
+/*global cheetahGrid*/
+'use strict';
+
+var grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#sample2'),
+	header: [{ field: 'no', caption: 'no', width: 50 },
+
+	// default
+	{ field: 'text', caption: 'default', width: 150 },
+
+	// padding
+	{ field: 'text', caption: 'padding', width: 150, style: { padding: 20 } }, { field: 'text', caption: 'padding', width: 150, style: { padding: [0 /*top*/, 10 /*right*/, 15 /*bottom*/, 20 /*left*/] } }],
+	defaultRowHeight: 80,
+	headerRowHeight: 24
+});
+grid.records = [{ no: 1, text: 'sample text', longText: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ' }, { no: 2, text: 'sample text', longText: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ' }, { no: 3, text: 'sample text', longText: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ' }];
+//
+//
+})();
+</script>
+<pre><code class="js hljs javascript"><span class="hljs-comment">/*global cheetahGrid*/</span>
+<span class="hljs-meta">'use strict'</span>;
+<span class="hljs-keyword">const</span> grid = <span class="hljs-keyword">new</span> cheetahGrid.ListGrid({
+	<span class="hljs-attr">parentElement</span>: <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample2'</span>),
+	<span class="hljs-attr">header</span>: [
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'no'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'no'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">50</span>},
+
+		<span class="hljs-comment">// default</span>
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'default'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">150</span>},
+
+		<span class="hljs-comment">// padding</span>
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'padding'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">150</span>, <span class="hljs-attr">style</span>: {<span class="hljs-attr">padding</span>: <span class="hljs-number">20</span>}},
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'padding'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">150</span>, <span class="hljs-attr">style</span>: {<span class="hljs-attr">padding</span>: [<span class="hljs-number">0</span><span class="hljs-comment">/*top*/</span>, <span class="hljs-number">10</span><span class="hljs-comment">/*right*/</span>, <span class="hljs-number">15</span><span class="hljs-comment">/*bottom*/</span>, <span class="hljs-number">20</span><span class="hljs-comment">/*left*/</span>]}},
+
+		<span class="hljs-comment">//</span>
+	],
+	<span class="hljs-attr">defaultRowHeight</span>: <span class="hljs-number">80</span>,
+	<span class="hljs-attr">headerRowHeight</span>: <span class="hljs-number">24</span>,
+});
+grid.records = [
+	{<span class="hljs-attr">no</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">text</span>: <span class="hljs-string">'sample text'</span>, <span class="hljs-attr">longText</span>: <span class="hljs-string">'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'</span>},
+	{<span class="hljs-attr">no</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">text</span>: <span class="hljs-string">'sample text'</span>, <span class="hljs-attr">longText</span>: <span class="hljs-string">'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'</span>},
+	{<span class="hljs-attr">no</span>: <span class="hljs-number">3</span>, <span class="hljs-attr">text</span>: <span class="hljs-string">'sample text'</span>, <span class="hljs-attr">longText</span>: <span class="hljs-string">'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'</span>},
 ];
 <span class="hljs-comment">//</span></code></pre>
 <h2 id="advanced-column-style">Advanced Column Style</h2>
@@ -239,10 +307,10 @@ grid.records = [
 <li>use the instance of Style class</li>
 </ul>
 
-<div id="sample2" class="demo-grid small">
+<div id="sample3" class="demo-grid small">
 </div>
 <label>change background color of text</label>
-<select id="sample2theme">
+<select id="sample3theme">
     <option value="" selected="true">default</option>
     <option value="red">red</option>
     <option value="#DFF">#DFF</option>
@@ -258,7 +326,7 @@ grid.records = [
 
 var textFieldStyle = new cheetahGrid.columns.style.Style();
 var grid = new cheetahGrid.ListGrid({
-	parentElement: document.querySelector('#sample2'),
+	parentElement: document.querySelector('#sample3'),
 	header: [{ field: 'no', caption: 'no', width: 50 }, {
 		field: 'value',
 		caption: 'value',
@@ -280,7 +348,7 @@ var grid = new cheetahGrid.ListGrid({
 });
 grid.records = [{ no: 1, text: 'sample text', value: 100 }, { no: 2, text: 'sample text', value: 50 }, { no: 3, text: 'sample text', value: 0 }, { no: 4, text: 'sample text', value: -50 }];
 
-var themeSelect = document.querySelector('#sample2theme');
+var themeSelect = document.querySelector('#sample3theme');
 themeSelect.onchange = function () {
 	//change bg color
 	if (themeSelect.value === 'default') {
@@ -297,7 +365,7 @@ themeSelect.onchange = function () {
 <span class="hljs-meta">'use strict'</span>;
 <span class="hljs-keyword">const</span> textFieldStyle = <span class="hljs-keyword">new</span> cheetahGrid.columns.style.Style();
 <span class="hljs-keyword">const</span> grid = <span class="hljs-keyword">new</span> cheetahGrid.ListGrid({
-	<span class="hljs-attr">parentElement</span>: <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample2'</span>),
+	<span class="hljs-attr">parentElement</span>: <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample3'</span>),
 	<span class="hljs-attr">header</span>: [
 		{<span class="hljs-attr">field</span>: <span class="hljs-string">'no'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'no'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">50</span>},
 
@@ -330,7 +398,7 @@ grid.records = [
 	{<span class="hljs-attr">no</span>: <span class="hljs-number">4</span>, <span class="hljs-attr">text</span>: <span class="hljs-string">'sample text'</span>, <span class="hljs-attr">value</span>: <span class="hljs-number">-50</span>},
 ];
 
-<span class="hljs-keyword">const</span> themeSelect = <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample2theme'</span>);
+<span class="hljs-keyword">const</span> themeSelect = <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample3theme'</span>);
 themeSelect.onchange = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
 	<span class="hljs-comment">//change bg color</span>
 	<span class="hljs-keyword">if</span> (themeSelect.value === <span class="hljs-string">'default'</span>) {

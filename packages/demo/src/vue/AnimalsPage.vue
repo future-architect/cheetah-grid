@@ -5,15 +5,18 @@
     </div>
     <br>
     <div
-      class="grid">
+      class="grid"
+    >
       <c-grid
         :data="data"
-        :frozen-col-count="2">
+        :frozen-col-count="2"
+      >
         <c-grid-column
           :width="60"
           field="check"
           column-type="check"
-          action="check" />
+          action="check"
+        />
         <c-grid-column
           :column-style="{textAlign: 'center'}"
           :sort= "true"

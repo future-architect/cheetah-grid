@@ -11,11 +11,6 @@ function resolve(dir) {
 }
 
 const eslintPluginVuePatches = [
-	// https://github.com/vuejs/eslint-plugin-vue/pull/397
-	'component-name-in-template-casing',
-	// https://github.com/vuejs/eslint-plugin-vue/pull/406
-	'no-use-v-if-with-v-for',
-
 	// https://github.com/ota-meshi/eslint-plugin-vue/blob/develop/add-component-tags-order/lib/rules/component-tags-order.js
 	'component-tags-order',
 
@@ -36,9 +31,7 @@ try {
 					/rules: {\r?\n/,
 					() => {
 						const addRuleList = [
-							'component-name-in-template-casing',
 							'component-tags-order',
-							'no-use-v-if-with-v-for',
 							'html-content-newline'
 						].filter((rule) => !eslintPluginVueIndex.includes(rule)).
 							map((rule) => `    '${rule}': require('./rules/${rule}'),\n`);

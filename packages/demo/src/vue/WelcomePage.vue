@@ -8,7 +8,8 @@
     <br>
     <div
       ref="grid"
-      class="grid" />
+      class="grid"
+    />
   </div>
 </template>
 <script>
