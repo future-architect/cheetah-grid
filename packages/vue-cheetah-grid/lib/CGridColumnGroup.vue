@@ -14,6 +14,9 @@ export default {
   name: 'CGridColumnGroup',
   mixins: [ColumnMixin],
   props: {
+    /**
+     * Defines a header style
+     */
     headerStyle: {
       type: [Object, String, Function],
       default: undefined

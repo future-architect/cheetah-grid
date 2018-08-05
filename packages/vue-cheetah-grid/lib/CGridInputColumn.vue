@@ -16,26 +16,44 @@ export default {
   name: 'CGridInputColumn',
   mixins: [ColumnMixin, StdColumnMixin],
   props: {
+    /**
+     * Defines a column type
+     */
     columnType: {
       type: [Object, String, Function],
       default: undefined
     },
+    /**
+     * Defines a helper text ganarator
+     */
     helperText: {
       type: [String, Function],
       default: undefined
     },
+    /**
+     * Defines an input validator
+     */
     inputValidator: {
       type: [Function],
       default: undefined
     },
+    /**
+     * Defines a validator
+     */
     validator: {
       type: [Function],
       default: undefined
     },
+    /**
+     * Defines an input class name
+     */
     inputClassList: {
       type: [Array, String, Function],
       default: undefined
     },
+    /**
+     * Defines an input type
+     */
     inputType: {
       type: [String, Function],
       default: undefined

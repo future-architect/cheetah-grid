@@ -16,10 +16,16 @@ export default {
   name: 'CGridColumn',
   mixins: [ColumnMixin, StdColumnMixin],
   props: {
+    /**
+     * Defines a column type
+     */
     columnType: {
       type: [Object, String, Function],
       default: undefined
     },
+    /**
+     * Defines an action
+     */
     action: {
       type: [Object, String, Function],
       default: undefined

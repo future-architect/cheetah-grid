@@ -11,6 +11,9 @@ export default {
       type: [String],
       default: ''
     },
+    /**
+     * Defines a sort
+     */
     sort: {
       type: [String, Function, Boolean],
       default: undefined

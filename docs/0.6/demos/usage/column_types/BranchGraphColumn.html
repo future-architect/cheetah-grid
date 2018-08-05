@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="author" content="Cheetah Grid">
+    <meta name="keywords" content="spreadsheet,grid,canvas,table,web-components">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Cheetah Grid - BranchGraphColumn</title>
+    <link rel="shortcut icon" type="image/x-icon" href="./../../../../icon_512x512.ico">
+
+    <link rel="stylesheet" type="text/css" href="./../../../css/style.css">
+    <link rel="stylesheet" type="text/css" href="./../../../css/highlightjs.css">
+    
+    <!-- <script src="http://localhost:35729/livereload.js"></script> -->
+    
+    <script type="text/javascript" src="https://unpkg.com/cheetah-grid@0.6"></script>
+
+    <style type="text/css">
+        html {
+            height: 100%;
+        }
+        body {
+            height: calc(100% - 100px);
+        }
+        .contents {
+            padding: 30px;
+            box-sizing: border-box;
+        }
+        .demo-grid {
+            width: 100%;
+            height: 300px;
+            box-sizing: border-box;
+            border: solid 1px #ddd;
+        }
+        .demo-grid.large {
+            height: 500px;
+        }
+        .demo-grid.middle {
+            height: 300px;   
+        }
+        .demo-grid.small {
+            height: 240px;   
+        }
+        .log {
+            width: 100%;
+            height: 80px;
+            background-color: #F5F5F5;
+        }
+
+        .hljs { 
+             tab-size: 4;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <nav class="header primary" id="header-nav">
+    	<div class="nav-wrapper">
+    		<a href="./../../../../index.html">
+    			<img src="./../../../../logo.png" style="width: 100px;padding: 5px;vertical-align: middle;" alt="Cheetah Grid">
+    		</a>
+    
+    		<ul class="right hide-on-med-and-down nav-dropdown-container">
+    			<a href="#" class="primary nav-dropdown-button mobile-only" data-target="all-nav" style="width: 30px;">
+    				<span class="icon-arrow"></span>
+    			</a>
+    			<ul id="all-nav" class="mobile-nav-dropdown right-dropdown primary">
+    				<li><a href="./../../../index.html" class="primary">Docoments - TOP</a></li>
+    				<li class="nav-dropdown-container">
+    					<a id="nav-versions" href="#" class="primary nav-dropdown-button" data-target="versions">
+    						version<span class="icon-arrow"></span>
+    					</a>
+    					<ul id="versions" class="nav-dropdown right-dropdown">
+    					</ul>
+    				</li>
+    				<li class="nav-dropdown-container">
+    					<a id="nav-lang" href="#" class="primary nav-dropdown-button" data-target="langs">
+    						lang<span class="icon-arrow"></span>
+    					</a>
+    					<ul id="langs" class="nav-dropdown right-dropdown">
+    						<li><a href="./../../../ja/demos/usage/column_types/BranchGraphColumn.html" class="primary">日本語</a></li>
+    						<li><a href="./../../../demos/usage/column_types/BranchGraphColumn.html" class="primary">English</a></li>
+    					</ul>
+    				</li>
+    			</ul>
+    		</ul>
+    	</div>
+    </nav>
+    
+    <script type="text/javascript">
+    	'use strict';
+    	////babel
+    'use strict';
+    
+    function getVersions(callback) {
+    	var xhr = new XMLHttpRequest();
+    	function onError() {
+    		callback(['0.6', '0.0.1']);
+    	}
+    	xhr.onload = function () {
+    		var versions = JSON.parse(xhr.responseText);
+    		callback(versions);
+    	};
+    	xhr.onerror = onError;
+    	xhr.onabort = onError;
+    	try {
+    		xhr.open('GET', './../../../../versions.json');
+    		xhr.send();
+    	} catch (e) {
+    		onError();
+    	}
+    }
+    
+    //
+    getVersions(function (versions) {
+    	var myVersion = '0.6';
+    	function getVerLocation(v) {
+    		return location.href.replace(myVersion, v).replace('.devdoc', v);
+    	}
+    	var latest = versions[0];
+    	var versEl = document.getElementById('versions');
+    	versEl.innerHTML = versions.map(function (v, i) {
+    		return '<li><a href="' + getVerLocation(v) + '" class="primary">' + v + (i === 0 ? ' (latest)' : '') + '</a></li>';
+    	}).join('');
+    
+    	if (latest !== myVersion) {
+    		var header = document.getElementById('header-nav');
+    		var a = document.createElement('a');
+    		header.parentElement.insertBefore(a, header.nextSibling);
+    		a.href = getVerLocation(latest);
+    		a.textContent = '<goto the latest version(' + latest + ') document>';
+    	}
+    });
+    //
+    </script>    <h1><a href="./../../.././index.html#usage">Usage</a> &gt; <a href="./../../../demos/usage/column_types.html">Column Types</a> &gt; <a href="./../../../demos/usage/column_types/Classes.html">Classes</a> &gt; BranchGraphColumn</h1>
+    <div class="contents">
+        
+<h2 id="branchgraphcolumn">BranchGraphColumn</h2>
+<p>Show branch graph.</p>
+<h3 id="constructor-properties">constructor properties</h3>
+<table>
+<thead>
+<tr>
+<th>property</th>
+<th>description</th>
+<th>default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>start</code></td>
+<td>set the moving direction by setting the beggining point. <code>'top'</code> or <code>'bottom'</code></td>
+<td><code>'bottom'</code></td>
+</tr>
+<tr>
+<td><code>cache</code></td>
+<td>set <code>true</code> when caching the calculation result of the branch structure. Please call <code>clearCache(grid)</code> when deleting the cahced data.</td>
+<td><code>false</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="style-properties">style properties</h3>
+<table>
+<thead>
+<tr>
+<th>property</th>
+<th>description</th>
+<th>default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>branchColors</code></td>
+<td>set the function which returns the color of branch you want to use. arguments: (branch name, <code>index</code>)</td>
+<td>the function which returns following colors in turn. <code>'#979797'</code>,<code>'#008fb5'</code>,<code>'#f1c109'</code></td>
+</tr>
+<tr>
+<td><code>margin</code></td>
+<td>set the margin of side.</td>
+<td><code>4</code></td>
+</tr>
+<tr>
+<td><code>circleSize</code></td>
+<td>set the size of point which express <code>commit</code>.</td>
+<td><code>16</code></td>
+</tr>
+<tr>
+<td><code>branchLineWidth</code></td>
+<td>set the width of branch lines.</td>
+<td><code>4</code></td>
+</tr>
+<tr>
+<td><code>mergeStyle</code></td>
+<td>set the way to express the merge line. <code>'bezier'</code> or <code>'straight'</code></td>
+<td><code>'bezier'</code></td>
+</tr>
+</tbody>
+</table>
+
+<div id="sample1" class="demo-grid large">
+</div>
+<div>
+	<label style="vertical-align: top;">data:</label>
+	<textarea id="command" style="width: calc(100% - 100px);height: 300px; vertical-align: top;" wrap="off">[
+	[
+		{
+			command: 'branch',
+			branch: 'mastar'
+		},
+		{
+			command: 'commit',
+			branch: 'mastar'
+		}
+	],
+	[
+		{
+			command: 'commit',
+			branch: 'mastar'
+		}
+	],
+	[
+		{
+			command: 'branch',
+			branch: {
+				from: 'mastar',
+				to: 'develop'
+			}
+		},
+		{
+			command: 'commit',
+			branch: 'develop'
+		}
+	],
+	
+]</textarea><br>
+	<button id="update" style="vertical-align: top;">update</button>
+</div>
+<script type="text/javascript">
+////wrapscript
+(function() {
+//babel
+
+//
+/*global cheetahGrid*/
+'use strict';
+
+var grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#sample1'),
+	header: [{
+		field: function field(rec) {
+			return rec;
+		},
+		caption: 'BranchGraph',
+		width: 200,
+		columnType: new cheetahGrid.columns.type.BranchGraphColumn({
+			start: 'top', // Specify the start and indicate the direction to proceed. 'top' or 'bottom'. default 'bottom'
+			cache: false // cache enable. default false
+		})
+	}, {
+		field: function field(rec) {
+			return JSON.stringify(rec) + ',';
+		},
+
+		caption: 'command',
+		width: 1000
+	}],
+	frozenColCount: 1
+});
+grid.records = [[
+// new branch 'mastar'
+{
+	command: 'branch',
+	branch: 'mastar'
+},
+// and commit 'mastar' branch
+{
+	command: 'commit',
+	branch: 'mastar'
+}], [
+// commit 'mastar' branch
+{
+	command: 'commit',
+	branch: 'mastar'
+}], [
+// new branch 'develop'. from 'mastar'
+{
+	command: 'branch',
+	branch: {
+		from: 'mastar',
+		to: 'develop'
+	}
+}], [
+// commit 'develop' branch
+{
+	command: 'commit',
+	branch: 'develop'
+}], [
+// merge 'develop' branch into 'master' branch
+{
+	command: 'merge',
+	branch: {
+		from: 'develop',
+		to: 'mastar'
+	}
+},
+// and tag with v.0.0.1
+{
+	command: 'tag',
+	branch: 'mastar',
+	tag: 'v1.0.0'
+}], [null // not doing
+],
+//-------------------------
+[{
+	command: 'branch',
+	branch: {
+		from: 'develop',
+		to: 'develop2'
+	}
+}, {
+	command: 'commit',
+	branch: 'develop2'
+}], [{
+	command: 'branch',
+	branch: {
+		from: 'develop',
+		to: 'develop3'
+	}
+}, {
+	command: 'commit',
+	branch: 'develop3'
+}, {
+	command: 'merge',
+	branch: {
+		from: 'develop2',
+		to: 'mastar'
+	}
+}], [{
+	command: 'commit',
+	branch: 'develop2'
+}], [{
+	command: 'branch',
+	branch: {
+		from: 'develop2',
+		to: 'develop4'
+	}
+}, {
+	command: 'commit',
+	branch: 'develop4'
+}, {
+	command: 'branch',
+	branch: {
+		from: 'develop2',
+		to: 'develop5'
+	}
+}, {
+	command: 'commit',
+	branch: 'develop5'
+}], [{
+	command: 'commit',
+	branch: 'develop2'
+}], [{
+	command: 'tag',
+	branch: 'mastar',
+	tag: 'v1.1.0'
+}, {
+	command: 'commit',
+	branch: 'mastar'
+}, {
+	command: 'commit',
+	branch: 'develop4'
+}], {
+	command: 'commit',
+	branch: 'develop3'
+}];
+
+//
+document.querySelector('#update').onclick = function () {
+	grid.records = eval('(function() {return ' + document.querySelector('#command').value + ';})()');
+};
+
+//
+})();
+</script>
+<pre><code class="js hljs javascript"><span class="hljs-comment">/*global cheetahGrid*/</span>
+<span class="hljs-meta">'use strict'</span>;
+
+<span class="hljs-keyword">const</span> grid = <span class="hljs-keyword">new</span> cheetahGrid.ListGrid({
+	<span class="hljs-attr">parentElement</span>: <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample1'</span>),
+	<span class="hljs-attr">header</span>: [
+		{
+			<span class="hljs-attr">field</span>: <span class="hljs-function">(<span class="hljs-params">rec</span>) =&gt;</span> rec,
+			<span class="hljs-attr">caption</span>: <span class="hljs-string">'BranchGraph'</span>,
+			<span class="hljs-attr">width</span>: <span class="hljs-number">200</span>,
+			<span class="hljs-attr">columnType</span>: <span class="hljs-keyword">new</span> cheetahGrid.columns.type.BranchGraphColumn({
+				<span class="hljs-attr">start</span>: <span class="hljs-string">'top'</span>, <span class="hljs-comment">// Specify the start and indicate the direction to proceed. 'top' or 'bottom'. default 'bottom'</span>
+				cache: <span class="hljs-literal">false</span> <span class="hljs-comment">// cache enable. default false</span>
+			}),
+		},
+		{
+			field(rec) {
+				<span class="hljs-keyword">return</span> <span class="hljs-built_in">JSON</span>.stringify(rec) + <span class="hljs-string">','</span>;
+			},
+			<span class="hljs-attr">caption</span>: <span class="hljs-string">'command'</span>,
+			<span class="hljs-attr">width</span>: <span class="hljs-number">1000</span>
+		},
+	],
+	<span class="hljs-attr">frozenColCount</span>: <span class="hljs-number">1</span>
+});
+grid.records = [
+
+	[
+		<span class="hljs-comment">// new branch 'mastar'</span>
+		{
+			<span class="hljs-attr">command</span>: <span class="hljs-string">'branch'</span>,
+			<span class="hljs-attr">branch</span>: <span class="hljs-string">'mastar'</span>
+		}, 
+		<span class="hljs-comment">// and commit 'mastar' branch</span>
+		{
+			<span class="hljs-attr">command</span>: <span class="hljs-string">'commit'</span>,
+			<span class="hljs-attr">branch</span>: <span class="hljs-string">'mastar'</span>
+		}
+	],
+	[
+		<span class="hljs-comment">// commit 'mastar' branch</span>
+		{
+			<span class="hljs-attr">command</span>: <span class="hljs-string">'commit'</span>,
+			<span class="hljs-attr">branch</span>: <span class="hljs-string">'mastar'</span>
+		},
+	],
+	[
+		<span class="hljs-comment">// new branch 'develop'. from 'mastar'</span>
+		{
+			<span class="hljs-attr">command</span>: <span class="hljs-string">'branch'</span>,
+			<span class="hljs-attr">branch</span>: {
+				<span class="hljs-attr">from</span>: <span class="hljs-string">'mastar'</span>,
+				<span class="hljs-attr">to</span>: <span class="hljs-string">'develop'</span>
+			}
+		},
+	],
+	[
+		<span class="hljs-comment">// commit 'develop' branch</span>
+		{
+			<span class="hljs-attr">command</span>: <span class="hljs-string">'commit'</span>,
+			<span class="hljs-attr">branch</span>: <span class="hljs-string">'develop'</span>
+		},
+	],
+	[
+		<span class="hljs-comment">// merge 'develop' branch into 'master' branch</span>
+		{
+			<span class="hljs-attr">command</span>: <span class="hljs-string">'merge'</span>,
+			<span class="hljs-attr">branch</span>: {
+				<span class="hljs-attr">from</span>: <span class="hljs-string">'develop'</span>,
+				<span class="hljs-attr">to</span>: <span class="hljs-string">'mastar'</span>
+			}
+		},
+		<span class="hljs-comment">// and tag with v.0.0.1</span>
+		{
+			<span class="hljs-attr">command</span>: <span class="hljs-string">'tag'</span>,
+			<span class="hljs-attr">branch</span>: <span class="hljs-string">'mastar'</span>,
+			<span class="hljs-attr">tag</span>: <span class="hljs-string">'v1.0.0'</span>
+		},
+	],
+	[
+		<span class="hljs-literal">null</span> <span class="hljs-comment">// not doing</span>
+	],
+	<span class="hljs-comment">//-------------------------</span>
+	[
+		{
+			<span class="hljs-attr">command</span>: <span class="hljs-string">'branch'</span>,
+			<span class="hljs-attr">branch</span>: {
+				<span class="hljs-attr">from</span>: <span class="hljs-string">'develop'</span>,
+				<span class="hljs-attr">to</span>: <span class="hljs-string">'develop2'</span>
+			}
+		}, {
+			<span class="hljs-attr">command</span>: <span class="hljs-string">'commit'</span>,
+			<span class="hljs-attr">branch</span>: <span class="hljs-string">'develop2'</span>
+		}
+	],
+	[
+		{
+			<span class="hljs-attr">command</span>: <span class="hljs-string">'branch'</span>,
+			<span class="hljs-attr">branch</span>: {
+				<span class="hljs-attr">from</span>: <span class="hljs-string">'develop'</span>,
+				<span class="hljs-attr">to</span>: <span class="hljs-string">'develop3'</span>
+			}
+		}, {
+			<span class="hljs-attr">command</span>: <span class="hljs-string">'commit'</span>,
+			<span class="hljs-attr">branch</span>: <span class="hljs-string">'develop3'</span>
+		},
+		{
+			<span class="hljs-attr">command</span>: <span class="hljs-string">'merge'</span>,
+			<span class="hljs-attr">branch</span>: {
+				<span class="hljs-attr">from</span>: <span class="hljs-string">'develop2'</span>,
+				<span class="hljs-attr">to</span>: <span class="hljs-string">'mastar'</span>
+			}
+		},
+	],
+	[
+		{
+			<span class="hljs-attr">command</span>: <span class="hljs-string">'commit'</span>,
+			<span class="hljs-attr">branch</span>: <span class="hljs-string">'develop2'</span>
+		}
+	],
+	[
+		{
+			<span class="hljs-attr">command</span>: <span class="hljs-string">'branch'</span>,
+			<span class="hljs-attr">branch</span>: {
+				<span class="hljs-attr">from</span>: <span class="hljs-string">'develop2'</span>,
+				<span class="hljs-attr">to</span>: <span class="hljs-string">'develop4'</span>
+			}
+		}, {
+			<span class="hljs-attr">command</span>: <span class="hljs-string">'commit'</span>,
+			<span class="hljs-attr">branch</span>: <span class="hljs-string">'develop4'</span>
+		},
+		{
+			<span class="hljs-attr">command</span>: <span class="hljs-string">'branch'</span>,
+			<span class="hljs-attr">branch</span>: {
+				<span class="hljs-attr">from</span>: <span class="hljs-string">'develop2'</span>,
+				<span class="hljs-attr">to</span>: <span class="hljs-string">'develop5'</span>
+			}
+		}, {
+			<span class="hljs-attr">command</span>: <span class="hljs-string">'commit'</span>,
+			<span class="hljs-attr">branch</span>: <span class="hljs-string">'develop5'</span>
+		},
+	],
+	[
+		{
+			<span class="hljs-attr">command</span>: <span class="hljs-string">'commit'</span>,
+			<span class="hljs-attr">branch</span>: <span class="hljs-string">'develop2'</span>
+		}
+	],
+	[
+		{
+			<span class="hljs-attr">command</span>: <span class="hljs-string">'tag'</span>,
+			<span class="hljs-attr">branch</span>: <span class="hljs-string">'mastar'</span>,
+			<span class="hljs-attr">tag</span>: <span class="hljs-string">'v1.1.0'</span>
+		},
+		{
+			<span class="hljs-attr">command</span>: <span class="hljs-string">'commit'</span>,
+			<span class="hljs-attr">branch</span>: <span class="hljs-string">'mastar'</span>
+		},
+		{
+			<span class="hljs-attr">command</span>: <span class="hljs-string">'commit'</span>,
+			<span class="hljs-attr">branch</span>: <span class="hljs-string">'develop4'</span>
+		}
+	],
+	{
+			<span class="hljs-attr">command</span>: <span class="hljs-string">'commit'</span>,
+			<span class="hljs-attr">branch</span>: <span class="hljs-string">'develop3'</span>
+	}
+];
+
+<span class="hljs-comment">//</span></code></pre>
+
+    </div>
+    
+    <script type="text/javascript" src="./../../../js/doc-common.js"></script>
+
+</body></html>

@@ -1,7 +1,7 @@
 {
   "name": "cheetah-grid-docs",
   "private": true,
-  "version": "0.5.0",
+  "version": "0.6.0",
   "scripts": {
     "test": "exit 0",
     "lint": "npm run eslint",
@@ -20,8 +20,8 @@
   "devDependencies": {
     "@vuedoc/md": "^1.2.2",
     "babel-preset-env": "^1.6.1",
-    "eslint": "^4.19.1",
-    "eslint-plugin-html": "^4.0.3",
+    "eslint": "^5.3.0",
+    "eslint-plugin-html": "^4.0.5",
     "handlebars": "^4.0.10",
     "highlight.js": "^9.12.0",
     "jsdoc": "^3.5.5",

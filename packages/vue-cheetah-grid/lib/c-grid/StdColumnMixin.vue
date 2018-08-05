@@ -5,34 +5,58 @@
  */
 export default {
   props: {
+    /**
+     * Defines a column data field
+     */
     field: {
       type: [Object, String, Function],
       default: undefined
     },
+    /**
+     * Defines a vue filter name
+     */
     filter: {
       type: [String, Function],
       default: undefined
     },
+    /**
+     * Defines a default column width
+     */
     width: {
       type: [Number, String],
       default: undefined
     },
+    /**
+     * Defines a column min width
+     */
     minWidth: {
       type: [Number, String],
       default: undefined
     },
+    /**
+     * Defines a column max width
+     */
     maxWidth: {
       type: [Number, String],
       default: undefined
     },
+    /**
+     * Defines a column style
+     */
     columnStyle: {
       type: [Object, String, Function],
       default: undefined
     },
+    /**
+     * Defines an icon
+     */
     icon: {
       type: [Object, String, Function],
       default: undefined
     },
+    /**
+     * Defines a Message generation method
+     */
     message: {
       type: [Object, String, Function],
       default: undefined

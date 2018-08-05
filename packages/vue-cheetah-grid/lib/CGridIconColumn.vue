@@ -16,26 +16,44 @@ export default {
   name: 'CGridIconColumn',
   mixins: [ColumnMixin, StdColumnMixin],
   props: {
+    /**
+     * Defines an icon tag name
+     */
     iconTagName: {
       type: [String, Function],
       default: undefined
     },
+    /**
+     * Defines an icon class name
+     */
     iconClassName: {
       type: [String, Function],
       default: undefined
     },
+    /**
+     * Defines an icon content
+     */
     iconContent: {
       type: [String, Function],
       default: undefined
     },
+    /**
+     * Defines an icon name
+     */
     iconName: {
       type: [String, Function],
       default: undefined
     },
+    /**
+     * Defines an icon width
+     */
     iconWidth: {
       type: [Number, String, Function],
       default: undefined
     },
+    /**
+     * Defines an action
+     */
     action: {
       type: [Object, String, Function],
       default: undefined

@@ -6,30 +6,36 @@
     <input
       v-model="filterText"
       placeholder="Filter keyword"
-      class="filter-input">
+      class="filter-input"
+    >
     <label>
       <input
         v-model="filterErrorOnly"
         type="checkbox"
-        class="filter-checkbox">
+        class="filter-checkbox"
+      >
       <span>Display only error records</span>
     </label>
     <div
-      class="grid">
+      class="grid"
+    >
       <c-grid
         ref="grid"
         :data="data"
         :frozen-col-count="1"
         :filter="dataFilter"
-        @changed-value="onChangedValue">
+        @changed-value="onChangedValue"
+      >
         <c-grid-column
           :width="50"
           field="check"
           column-type="check"
-          action="check" />
+          action="check"
+        />
         <c-grid-column
           field="personid"
-          width= "85">
+          width= "85"
+        >
           ID
         </c-grid-column>
         <c-grid-icon-column
@@ -56,7 +62,8 @@
           Class
         </c-grid-icon-column>
         <c-grid-column-group
-          caption="Name">
+          caption="Name"
+        >
           <c-grid-input-column
             :min-width="150"
             :helper-text="value => { return `${value.length}/20` }"

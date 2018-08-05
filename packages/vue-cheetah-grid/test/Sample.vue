@@ -3,40 +3,47 @@
     <c-grid
       ref="grid"
       :data="data"
-      :frozen-col-count="1">
+      :frozen-col-count="1"
+    >
       <c-grid-column
         :width="50"
         field="check"
         column-type="check"
-        action="check" />
+        action="check"
+      />
       <c-grid-column
         field="id"
-        width="85">
+        width="85"
+      >
         ID
       </c-grid-column>
       <c-grid-column-group caption="GROUP">
         <c-grid-button-column
           caption="BUTTON"
           width="100"
-          @click="onClick">
+          @click="onClick"
+        >
           BUTTON
         </c-grid-button-column>
         <c-grid-icon-column
           field="stars"
           icon-name="star"
-          width="75">
+          width="75"
+        >
           ICON
         </c-grid-icon-column>
       </c-grid-column-group>
       <c-grid-input-column
         :width="75"
-        field="text">
+        field="text"
+      >
         INPUT
       </c-grid-input-column>
       <c-grid-link-column
         :width="75"
         :href="onLink"
-        field="link">
+        field="link"
+      >
         LINK
       </c-grid-link-column>
       <c-grid-menu-column
@@ -46,12 +53,14 @@
           {value: 1, caption:'Opt1'},
           {value: 2, caption:'Opt2'}
         ]"
-        field="menu">
+        field="menu"
+      >
         MENU
       </c-grid-menu-column>
       <c-grid-percent-complete-bar-column
         :width="90"
-        field="percent">
+        field="percent"
+      >
         PERCENT
       </c-grid-percent-complete-bar-column>
     </c-grid>

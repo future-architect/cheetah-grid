@@ -16,14 +16,23 @@ export default {
   name: 'CGridMenuColumn',
   mixins: [ColumnMixin, StdColumnMixin],
   props: {
+    /**
+     * Defines a menu options
+     */
     options: {
       type: [Object, Array],
       default: undefined
     },
+    /**
+     * Defines a menu options for display
+     */
     displayOptions: {
       type: [Object, Array],
       default: undefined
     },
+    /**
+     * Defines a menu options for popup
+     */
     editorOptions: {
       type: [Object, Array],
       default: undefined
