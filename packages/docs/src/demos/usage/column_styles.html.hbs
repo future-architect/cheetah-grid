@@ -205,3 +205,54 @@ themeSelect.onchange = function() {
 </script>
 {{> code class="js" code=script3}}
 
+
+{{#marked}}
+
+## Header Style
+{{#if lang_ja}}
+プロパティ`headerStyle`を利用して、列ヘッダのスタイルを指定できます。  
+{{else}}
+Define column header style by using `headerStyle` property.  
+{{/if}}
+{{/marked}}
+
+
+<div id="sample4" class="demo-grid small">
+</div>
+<script type="text/javascript">
+//{{#wrapscript}}
+//{{#copy "script4"}}
+/*global cheetahGrid*/
+'use strict';
+const grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#sample4'),
+	header: [
+		{field: 'no', caption: 'no', width: 50},
+
+		// default
+		{field: 'text', caption: 'default', width: 150},
+
+		// color
+		{field: 'text', caption: 'color', width: 150, headerStyle: {color: 'red'}},
+		// textAlign
+		{field: 'text', caption: 'center', width: 150, headerStyle: {textAlign: 'center'}},
+		// textBaseline
+		{field: 'text', caption: 'bottom', width: 150, headerStyle: {textBaseline: 'bottom'}},
+		// bgColor
+		{field: 'text', caption: 'bgColor', width: 150, headerStyle: {bgColor: '#5f5'}},
+		// font
+		{field: 'text', caption: 'font', width: 150, headerStyle: {font: '9px sans-serif'}},
+		// textOverflow
+		{field: 'text', caption: 'textOverflow clip', width: 150, headerStyle: {textOverflow: 'clip'}},
+		{field: 'text', caption: 'textOverflow ellipsis', width: 150, headerStyle: {textOverflow: 'ellipsis'/*In the header this is the default*/}},
+	],
+});
+grid.records = [
+	{no: 1, text: 'data'},
+	{no: 2, text: 'data'},
+	{no: 3, text: 'data'},
+];
+//{{/copy}}
+//{{/wrapscript}}
+</script>
+{{> code class="js" code=script4}}
