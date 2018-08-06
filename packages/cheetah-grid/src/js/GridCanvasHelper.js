@@ -250,7 +250,8 @@ function _multiInlineRect(grid, ctx, multiInlines, rect, col, row,
 	ctx.font = font || ctx.font;
 
 	if (lineClamp === 'auto') {
-		lineClamp = Math.max(Math.floor(rect.height / lineHeight), 1);
+		const rectHeight = rect.height - offset * 2 - 2/*offset added by Inline#draw*/;
+		lineClamp = Math.max(Math.floor(rectHeight / lineHeight), 1);
 	}
 
 	let buildedMultiInlines;
