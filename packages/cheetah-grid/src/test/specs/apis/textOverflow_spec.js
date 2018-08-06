@@ -233,7 +233,7 @@
 
 				const em = ctx.measureText('あ').width;
 
-				const lineClamp = Math.floor(50 / em);
+				const lineClamp = Math.floor((50 - 6) / em);
 
 				//TEXT
 				ctx.fillStyle = '#000';
