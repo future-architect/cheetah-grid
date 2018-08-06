@@ -194,24 +194,24 @@
 'use strict';
 
 var grid = new cheetahGrid.ListGrid({
-	parentElement: document.querySelector('#sample1'),
-	header: [{ field: 'no', caption: 'no', width: 50 },
+		parentElement: document.querySelector('#sample1'),
+		header: [{ field: 'no', caption: 'no', width: 50 },
 
-	// default
-	{ field: 'text', caption: 'default', width: 150 },
+		// default
+		{ field: 'text', caption: 'default', width: 150 },
 
-	// color
-	{ field: 'text', caption: 'color', width: 150, style: { color: 'red' } },
-	// textAlign
-	{ field: 'text', caption: 'right', width: 150, style: { textAlign: 'right' } }, { field: 'text', caption: 'center', width: 150, style: { textAlign: 'center' } },
-	// textBaseline
-	{ field: 'text', caption: 'top', width: 150, style: { textBaseline: 'top' } }, { field: 'text', caption: 'bottom', width: 150, style: { textBaseline: 'bottom' } },
+		// color
+		{ field: 'text', caption: 'color', width: 150, style: { color: 'red' } },
+		// textAlign
+		{ field: 'text', caption: 'right', width: 150, style: { textAlign: 'right' } }, { field: 'text', caption: 'center', width: 150, style: { textAlign: 'center' } },
+		// textBaseline
+		{ field: 'text', caption: 'top', width: 150, style: { textBaseline: 'top' } }, { field: 'text', caption: 'bottom', width: 150, style: { textBaseline: 'bottom' } },
 
-	// bgColor
-	{ field: 'text', caption: 'bgColor', width: 150, style: { bgColor: '#5f5' } },
+		// bgColor
+		{ field: 'text', caption: 'bgColor', width: 150, style: { bgColor: '#5f5' } },
 
-	// font
-	{ field: 'text', caption: 'font', width: 150, style: { font: '9px sans-serif' } }]
+		// font
+		{ field: 'text', caption: 'font', width: 150, style: { font: '9px sans-serif' } }]
 });
 grid.records = [{ no: 1, text: 'sample text' }, { no: 2, text: 'sample text' }, { no: 3, text: 'sample text' }];
 //
@@ -423,6 +423,77 @@ themeSelect.onchange = <span class="hljs-function"><span class="hljs-keyword">fu
 };
 <span class="hljs-comment">//</span></code></pre>
 
+<h2 id="header-style">Header Style</h2>
+<p>プロパティ<code>headerStyle</code>を利用して、列ヘッダのスタイルを指定できます。  </p>
+
+
+<div id="sample4" class="demo-grid small">
+</div>
+<script type="text/javascript">
+////wrapscript
+(function() {
+//babel
+
+//
+/*global cheetahGrid*/
+'use strict';
+
+var grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#sample4'),
+	header: [{ field: 'no', caption: 'no', width: 50 },
+
+	// default
+	{ field: 'text', caption: 'default', width: 150 },
+
+	// color
+	{ field: 'text', caption: 'color', width: 150, headerStyle: { color: 'red' } },
+	// textAlign
+	{ field: 'text', caption: 'center', width: 150, headerStyle: { textAlign: 'center' } },
+	// textBaseline
+	{ field: 'text', caption: 'bottom', width: 150, headerStyle: { textBaseline: 'bottom' } },
+	// bgColor
+	{ field: 'text', caption: 'bgColor', width: 150, headerStyle: { bgColor: '#5f5' } },
+	// font
+	{ field: 'text', caption: 'font', width: 150, headerStyle: { font: '9px sans-serif' } },
+	// textOverflow
+	{ field: 'text', caption: 'textOverflow clip', width: 150, headerStyle: { textOverflow: 'clip' } }, { field: 'text', caption: 'textOverflow ellipsis', width: 150, headerStyle: { textOverflow: 'ellipsis' /*In the header this is the default*/ } }]
+});
+grid.records = [{ no: 1, text: 'data' }, { no: 2, text: 'data' }, { no: 3, text: 'data' }];
+//
+//
+})();
+</script>
+<pre><code class="js hljs javascript"><span class="hljs-comment">/*global cheetahGrid*/</span>
+<span class="hljs-meta">'use strict'</span>;
+<span class="hljs-keyword">const</span> grid = <span class="hljs-keyword">new</span> cheetahGrid.ListGrid({
+	<span class="hljs-attr">parentElement</span>: <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample4'</span>),
+	<span class="hljs-attr">header</span>: [
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'no'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'no'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">50</span>},
+
+		<span class="hljs-comment">// default</span>
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'default'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">150</span>},
+
+		<span class="hljs-comment">// color</span>
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'color'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">150</span>, <span class="hljs-attr">headerStyle</span>: {<span class="hljs-attr">color</span>: <span class="hljs-string">'red'</span>}},
+		<span class="hljs-comment">// textAlign</span>
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'center'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">150</span>, <span class="hljs-attr">headerStyle</span>: {<span class="hljs-attr">textAlign</span>: <span class="hljs-string">'center'</span>}},
+		<span class="hljs-comment">// textBaseline</span>
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'bottom'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">150</span>, <span class="hljs-attr">headerStyle</span>: {<span class="hljs-attr">textBaseline</span>: <span class="hljs-string">'bottom'</span>}},
+		<span class="hljs-comment">// bgColor</span>
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'bgColor'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">150</span>, <span class="hljs-attr">headerStyle</span>: {<span class="hljs-attr">bgColor</span>: <span class="hljs-string">'#5f5'</span>}},
+		<span class="hljs-comment">// font</span>
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'font'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">150</span>, <span class="hljs-attr">headerStyle</span>: {<span class="hljs-attr">font</span>: <span class="hljs-string">'9px sans-serif'</span>}},
+		<span class="hljs-comment">// textOverflow</span>
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'textOverflow clip'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">150</span>, <span class="hljs-attr">headerStyle</span>: {<span class="hljs-attr">textOverflow</span>: <span class="hljs-string">'clip'</span>}},
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'textOverflow ellipsis'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">150</span>, <span class="hljs-attr">headerStyle</span>: {<span class="hljs-attr">textOverflow</span>: <span class="hljs-string">'ellipsis'</span><span class="hljs-comment">/*In the header this is the default*/</span>}},
+	],
+});
+grid.records = [
+	{<span class="hljs-attr">no</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">text</span>: <span class="hljs-string">'data'</span>},
+	{<span class="hljs-attr">no</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">text</span>: <span class="hljs-string">'data'</span>},
+	{<span class="hljs-attr">no</span>: <span class="hljs-number">3</span>, <span class="hljs-attr">text</span>: <span class="hljs-string">'data'</span>},
+];
+<span class="hljs-comment">//</span></code></pre>
     </div>
     
     <script type="text/javascript" src="./../../../js/doc-common.js"></script>
