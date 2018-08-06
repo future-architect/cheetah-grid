@@ -755,13 +755,15 @@ class GridCanvasHelper {
 		const {col, row} = context;
 		if (!state.selected && state.selection) {
 			return this.theme.selectionBgColor;
-		} else {
-			const isFrozenCell = this._grid.isFrozenCell(col, row);
-			if (isFrozenCell && isFrozenCell.row) {
-				return this.theme.frozenRowsBgColor;
-			}
 		}
-		return option.fillColor || this.theme.defaultBgColor;
+		if (option.fillColor) {
+			return option.fillColor;
+		}
+		const isFrozenCell = this._grid.isFrozenCell(col, row);
+		if (isFrozenCell && isFrozenCell.row) {
+			return this.theme.frozenRowsBgColor;
+		}
+		return this.theme.defaultBgColor;
 	}
 	border(context,
 			{
