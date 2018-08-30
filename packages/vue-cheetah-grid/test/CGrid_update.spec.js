@@ -21,7 +21,7 @@ describe('c-grid update', () => {
       data () {
         return {
           data: [
-            {text: 'text'}
+            { text: 'text' }
           ]
         }
       },
@@ -37,7 +37,7 @@ describe('c-grid update', () => {
       ...wrapper.vm.data,
       ...wrapper.vm.data
     ]
-    const {rawGrid} = wrapper.vm.$refs.grid
+    const { rawGrid } = wrapper.vm.$refs.grid
     expect(rawGrid.records.length).to.equal(2)
   })
   it('CGrid update header', () => {
@@ -58,7 +58,7 @@ describe('c-grid update', () => {
       data () {
         return {
           data: [
-            {text: 'text'}
+            { text: 'text' }
           ],
           showButton: false
         }
@@ -71,11 +71,11 @@ describe('c-grid update', () => {
       localVue,
       attachToDocument: true
     })
-    let {rawGrid} = wrapper.vm.$refs.grid
+    let { rawGrid } = wrapper.vm.$refs.grid
     expect(rawGrid.header.length).to.equal(1)
 
     wrapper.vm.showButton = true;
-    ({rawGrid} = wrapper.vm.$refs.grid)
+    ({ rawGrid } = wrapper.vm.$refs.grid)
     expect(rawGrid.header.length).to.equal(2)
   })
   it('CGrid no update header', () => {
@@ -97,7 +97,7 @@ describe('c-grid update', () => {
       data () {
         return {
           data: [
-            {text: 'text'}
+            { text: 'text' }
           ],
           showButton: true,
           caption: 'testCaption'
@@ -111,15 +111,15 @@ describe('c-grid update', () => {
       localVue,
       attachToDocument: true
     })
-    let {rawGrid} = wrapper.vm.$refs.grid
+    let { rawGrid } = wrapper.vm.$refs.grid
     const before = rawGrid.header
 
     wrapper.vm.showButton = 1234;
-    ({rawGrid} = wrapper.vm.$refs.grid)
+    ({ rawGrid } = wrapper.vm.$refs.grid)
     expect(rawGrid.header).to.equal(before)
 
     wrapper.vm.caption = 'testCaption';
-    ({rawGrid} = wrapper.vm.$refs.grid)
+    ({ rawGrid } = wrapper.vm.$refs.grid)
     expect(rawGrid.header).to.equal(before)
   })
   it('CGrid update frozen-col-count', () => {
@@ -140,7 +140,7 @@ describe('c-grid update', () => {
       data () {
         return {
           data: [
-            {text: 'text'}
+            { text: 'text' }
           ],
           frozenColCount: 1
         }
@@ -153,11 +153,11 @@ describe('c-grid update', () => {
       localVue,
       attachToDocument: true
     })
-    let {rawGrid} = wrapper.vm.$refs.grid
+    let { rawGrid } = wrapper.vm.$refs.grid
     expect(rawGrid.frozenColCount).to.equal(1)
 
     wrapper.vm.frozenColCount = 2;
-    ({rawGrid} = wrapper.vm.$refs.grid)
+    ({ rawGrid } = wrapper.vm.$refs.grid)
     expect(rawGrid.frozenColCount).to.equal(2)
   })
   it('CGrid update filter', () => {
@@ -176,8 +176,8 @@ describe('c-grid update', () => {
       data () {
         return {
           data: [
-            {text: 'text1'},
-            {text: 'text2'}
+            { text: 'text1' },
+            { text: 'text2' }
           ],
           filter: undefined
         }
@@ -190,11 +190,11 @@ describe('c-grid update', () => {
       localVue,
       attachToDocument: true
     })
-    let {rawGrid} = wrapper.vm.$refs.grid
+    let { rawGrid } = wrapper.vm.$refs.grid
     expect(rawGrid.dataSource.length).to.equal(2)
 
     wrapper.vm.filter = (rec) => rec.text === 'text1';
-    ({rawGrid} = wrapper.vm.$refs.grid)
+    ({ rawGrid } = wrapper.vm.$refs.grid)
     expect(rawGrid.dataSource.length).to.equal(1)
   })
   it('CGrid update class & textContent', () => {
@@ -213,7 +213,7 @@ describe('c-grid update', () => {
       data () {
         return {
           data: [
-            {text: 'text'}
+            { text: 'text' }
           ],
           classData: {},
           context: ''
@@ -227,12 +227,12 @@ describe('c-grid update', () => {
       localVue,
       attachToDocument: true
     })
-    let {rawGrid} = wrapper.vm.$refs.grid
+    let { rawGrid } = wrapper.vm.$refs.grid
     const before = rawGrid.header
 
     wrapper.vm.classData = ['test']
     wrapper.vm.context = 'context';
-    ({rawGrid} = wrapper.vm.$refs.grid)
+    ({ rawGrid } = wrapper.vm.$refs.grid)
     expect(rawGrid.header).to.equal(before)
   })
 })

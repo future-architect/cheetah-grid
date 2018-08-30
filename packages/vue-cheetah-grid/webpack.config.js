@@ -12,7 +12,7 @@ const BANNER = `/*!
  * [Vue.js](https://vuejs.org)
  */`
 
-const devtoolModuleFilenameTemplate = ({resourcePath}) => {
+const devtoolModuleFilenameTemplate = ({ resourcePath }) => {
   if (resourcePath.indexOf('node_modules') >= 0) {
     resourcePath = resourcePath.substr(resourcePath.indexOf('node_modules'))
   }
@@ -76,7 +76,7 @@ module.exports = (env, argv) => {
       ]
     },
     plugins: [
-      new webpack.BannerPlugin({banner: BANNER, raw: true, entryOnly: true}),
+      new webpack.BannerPlugin({ banner: BANNER, raw: true, entryOnly: true }),
       new webpack.DefinePlugin(argv.mode === 'production' ? {
         'process.env': {
           NODE_ENV: '"production"'

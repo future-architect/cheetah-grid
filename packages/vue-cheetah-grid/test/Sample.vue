@@ -73,9 +73,9 @@ export default {
   data () {
     return {
       data: [
-        {check: true, id: 1, stars: 1, text: 'text', link: 'link', menu: '', percent: 10},
-        {check: false, id: 2, stars: 2, text: 'text', link: 'link', menu: 1, percent: 50},
-        {check: true, id: 3, stars: 3, text: 'text', link: 'link', menu: 2, percent: 90}
+        { check: true, id: 1, stars: 1, text: 'text', link: 'link', menu: '', percent: 10 },
+        { check: false, id: 2, stars: 2, text: 'text', link: 'link', menu: 1, percent: 50 },
+        { check: true, id: 3, stars: 3, text: 'text', link: 'link', menu: 2, percent: 90 }
       ]
     }
   },

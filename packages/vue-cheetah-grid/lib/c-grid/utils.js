@@ -1,6 +1,6 @@
 import cheetahGrid from 'cheetah-grid'
 
-export {cheetahGrid}
+export { cheetahGrid }
 
 function isDef (data) {
   return data !== null && typeof data !== 'undefined'

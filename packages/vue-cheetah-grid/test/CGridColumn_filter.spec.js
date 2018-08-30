@@ -27,7 +27,7 @@ describe('c-grid-column filter', () => {
       data () {
         return {
           data: [
-            {text: '12345'}
+            { text: '12345' }
           ]
         }
       },
@@ -38,7 +38,7 @@ describe('c-grid-column filter', () => {
       localVue,
       attachToDocument: true
     })
-    const {rawGrid} = wrapper.vm.$refs.grid
+    const { rawGrid } = wrapper.vm.$refs.grid
     const value = rawGrid.getCopyCellValue(0, 1)
     expect(value).to.equal('54321')
   })
@@ -57,7 +57,7 @@ describe('c-grid-column filter', () => {
       data () {
         return {
           data: [
-            {text: 'text'}
+            { text: 'text' }
           ]
         }
       },
@@ -68,7 +68,7 @@ describe('c-grid-column filter', () => {
       localVue,
       attachToDocument: true
     })
-    const {rawGrid} = wrapper.vm.$refs.grid
+    const { rawGrid } = wrapper.vm.$refs.grid
     const value = rawGrid.getCopyCellValue(0, 1)
     expect(value).to.equal('texttext')
   })
@@ -87,7 +87,7 @@ describe('c-grid-column filter', () => {
       data () {
         return {
           data: [
-            {text: 'text'}
+            { text: 'text' }
           ]
         }
       },
@@ -98,7 +98,7 @@ describe('c-grid-column filter', () => {
       localVue,
       attachToDocument: true
     })
-    const {rawGrid} = wrapper.vm.$refs.grid
+    const { rawGrid } = wrapper.vm.$refs.grid
     const value = rawGrid.getCopyCellValue(0, 1)
     expect(value).to.equal('texttext')
   })
@@ -117,7 +117,7 @@ describe('c-grid-column filter', () => {
       data () {
         return {
           data: [
-            {text: 'text'}
+            { text: 'text' }
           ]
         }
       },
@@ -128,7 +128,7 @@ describe('c-grid-column filter', () => {
       localVue,
       attachToDocument: true
     })
-    const {rawGrid} = wrapper.vm.$refs.grid
+    const { rawGrid } = wrapper.vm.$refs.grid
     const value = rawGrid.getCopyCellValue(0, 1)
     expect(value).to.equal('text_suffix')
   })
@@ -147,7 +147,7 @@ describe('c-grid-column filter', () => {
       data () {
         return {
           data: [
-            {get text () { return Promise.resolve('12345') }}
+            { get text () { return Promise.resolve('12345') } }
           ]
         }
       },
@@ -158,7 +158,7 @@ describe('c-grid-column filter', () => {
       localVue,
       attachToDocument: true
     })
-    const {rawGrid} = wrapper.vm.$refs.grid
+    const { rawGrid } = wrapper.vm.$refs.grid
     const value = rawGrid.getCopyCellValue(0, 1)
     return value.then((v) => {
       expect(v).to.equal('54321')
@@ -179,7 +179,7 @@ describe('c-grid-column filter', () => {
       data () {
         return {
           data: {
-            get: () => Promise.resolve({text: '12345'}),
+            get: () => Promise.resolve({ text: '12345' }),
             length: 1
           }
         }
@@ -191,7 +191,7 @@ describe('c-grid-column filter', () => {
       localVue,
       attachToDocument: true
     })
-    const {rawGrid} = wrapper.vm.$refs.grid
+    const { rawGrid } = wrapper.vm.$refs.grid
     const value = rawGrid.getCopyCellValue(0, 1)
     return value.then((v) => {
       expect(v).to.equal('54321')
@@ -212,7 +212,7 @@ describe('c-grid-column filter', () => {
       data () {
         return {
           data: [
-            {c: {text: '12345'}}
+            { c: { text: '12345' } }
           ]
         }
       },
@@ -223,7 +223,7 @@ describe('c-grid-column filter', () => {
       localVue,
       attachToDocument: true
     })
-    const {rawGrid} = wrapper.vm.$refs.grid
+    const { rawGrid } = wrapper.vm.$refs.grid
     const value = rawGrid.getCopyCellValue(0, 1)
     expect(value).to.equal('54321')
   })
@@ -253,7 +253,7 @@ describe('c-grid-column filter', () => {
       localVue,
       attachToDocument: true
     })
-    const {rawGrid} = wrapper.vm.$refs.grid
+    const { rawGrid } = wrapper.vm.$refs.grid
     const value = rawGrid.getCopyCellValue(0, 1)
     expect(value).to.equal(undefined)
   })

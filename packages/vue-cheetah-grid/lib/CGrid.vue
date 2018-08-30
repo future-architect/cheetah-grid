@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import {cheetahGrid} from './c-grid/utils'
-import {slotsToHeaderOptions, slotsToHeaderProps} from './c-grid/header-utils'
+import { cheetahGrid } from './c-grid/utils'
+import { slotsToHeaderOptions, slotsToHeaderProps } from './c-grid/header-utils'
 
 function deepObjectEquals (a, b) {
   if (a === b) {
@@ -73,12 +73,12 @@ function _bindEvents (v, grid) {
 function _buildGridProps (v) {
   return Object.assign({
     frozenColCount: v.frozenColCount - 0
-  }, {header: slotsToHeaderProps(v.$slots.default)}, v.options)
+  }, { header: slotsToHeaderProps(v.$slots.default) }, v.options)
 }
 function _buildGridOption (v) {
   return Object.assign({
     frozenColCount: v.frozenColCount - 0
-  }, {header: slotsToHeaderOptions(v.$slots.default)}, v.options)
+  }, { header: slotsToHeaderOptions(v.$slots.default) }, v.options)
 }
 function _initGrid (v) {
   v._beforeGridProps = _buildGridProps(v)
@@ -185,7 +185,7 @@ export default {
         if (deepObjectEquals(beforeGridProps, newProps)) {
           // 操作可能なoptionのみの変更。インスタンス再作成はしない
           const options = _buildGridOption(this)
-          const {header, frozenColCount} = options
+          const { header, frozenColCount } = options
           this.rawGrid.header = header
           this.rawGrid.frozenColCount = frozenColCount
           this.rawGrid.invalidate()
@@ -198,7 +198,6 @@ export default {
     }
   }
 }
-
 </script>
 
 <style scoped>

@@ -5,7 +5,7 @@ import CGrid from '../lib/index'
 import cheetahGrid from 'cheetah-grid'
 import sinonChai from 'sinon-chai'
 chai.use(sinonChai)
-const {expect} = chai
+const { expect } = chai
 
 const localVue = createLocalVue()
 localVue.use(CGrid)
@@ -28,7 +28,7 @@ describe('c-grid-column ColumnType', () => {
       data () {
         return {
           data: [
-            {num: '12345'}
+            { num: '12345' }
           ],
           colType: {
             typeName: 'NumberColumn',
@@ -43,7 +43,7 @@ describe('c-grid-column ColumnType', () => {
       localVue,
       attachToDocument: true
     })
-    const {rawGrid} = wrapper.vm.$refs.grid
+    const { rawGrid } = wrapper.vm.$refs.grid
     expect(rawGrid.header.length).to.equal(1)
     const [col] = rawGrid.header
     expect(col.columnType).to.be.an.instanceof(cheetahGrid.columns.type.NumberColumn)
@@ -72,7 +72,7 @@ describe('c-grid-column ColumnType', () => {
       data () {
         return {
           data: [
-            {num: '12345'}
+            { num: '12345' }
           ],
           colType
         }
@@ -82,7 +82,7 @@ describe('c-grid-column ColumnType', () => {
       localVue,
       attachToDocument: true
     })
-    const {rawGrid} = wrapper.vm.$refs.grid
+    const { rawGrid } = wrapper.vm.$refs.grid
     expect(rawGrid.header.length).to.equal(1)
     expect(colType).have.been.callCount(1)
     const [col] = rawGrid.header
@@ -106,7 +106,7 @@ describe('c-grid-column ColumnType', () => {
       data () {
         return {
           data: [
-            {num: '12345'}
+            { num: '12345' }
           ],
           colType
         }
@@ -116,7 +116,7 @@ describe('c-grid-column ColumnType', () => {
       localVue,
       attachToDocument: true
     })
-    const {rawGrid} = wrapper.vm.$refs.grid
+    const { rawGrid } = wrapper.vm.$refs.grid
     expect(rawGrid.header.length).to.equal(1)
     expect(colType).have.been.callCount(1)
     const [col] = rawGrid.header

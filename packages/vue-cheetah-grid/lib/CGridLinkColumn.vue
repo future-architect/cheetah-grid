@@ -6,7 +6,7 @@
 <script>
 import ColumnMixin from './c-grid/ColumnMixin.vue'
 import StdColumnMixin from './c-grid/StdColumnMixin.vue'
-import {cheetahGrid, filterToFn, normalizeColumnType} from './c-grid/utils'
+import { cheetahGrid, filterToFn, normalizeColumnType } from './c-grid/utils'
 
 /**
  * @mixin column-mixin
@@ -45,7 +45,7 @@ export default {
     createColumn () {
       const columnType = normalizeColumnType(this.columnType)
 
-      const {href, target = '_blank'} = this
+      const { href, target = '_blank' } = this
       const action = typeof href === 'function'
         ? new cheetahGrid.columns.action.Action({
           action: href
@@ -59,6 +59,7 @@ export default {
       const field = this.filter ? filterToFn(this, this.field, this.filter) : this.field
       return {
         caption: this.caption || this.$el.textContent.trim(),
+        headerStyle: this.headerStyle,
         field,
         columnType,
         width: this.width,
@@ -73,7 +74,6 @@ export default {
     }
   }
 }
-
 </script>
 
 <style scoped>

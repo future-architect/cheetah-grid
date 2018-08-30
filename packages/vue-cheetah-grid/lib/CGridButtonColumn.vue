@@ -6,7 +6,7 @@
 <script>
 import ColumnMixin from './c-grid/ColumnMixin.vue'
 import StdColumnMixin from './c-grid/StdColumnMixin.vue'
-import {cheetahGrid, filterToFn} from './c-grid/utils'
+import { cheetahGrid, filterToFn } from './c-grid/utils'
 
 /**
  * @mixin column-mixin
@@ -32,6 +32,7 @@ export default {
       const field = this.filter ? filterToFn(this, this.field, this.filter) : this.field
       return {
         caption: this.$el.textContent.trim(),
+        headerStyle: this.headerStyle,
         field,
         width: this.width,
         minWidth: this.minWidth,
@@ -56,7 +57,6 @@ export default {
     }
   }
 }
-
 </script>
 
 <style scoped>

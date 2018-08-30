@@ -14,7 +14,7 @@ module.exports = function (config) {
       '**/*.js': ['webpack', 'sourcemap']
     },
 
-    webpack: webpackConfig({}, {mode: 'development', test: true}),
+    webpack: webpackConfig({}, { mode: 'development', test: true }),
 
     reporters: ['spec', 'coverage'],
 
