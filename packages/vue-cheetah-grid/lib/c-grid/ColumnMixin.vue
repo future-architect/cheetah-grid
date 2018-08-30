@@ -17,6 +17,13 @@ export default {
     sort: {
       type: [String, Function, Boolean],
       default: undefined
+    },
+    /**
+     * Defines a column header style
+     */
+    headerStyle: {
+      type: [Object, String, Function],
+      default: undefined
     }
   },
   mounted () {

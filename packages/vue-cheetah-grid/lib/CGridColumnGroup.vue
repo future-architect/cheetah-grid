@@ -5,7 +5,7 @@
 
 <script>
 import ColumnMixin from './c-grid/ColumnMixin.vue'
-import {slotsToHeaderOptions} from './c-grid/header-utils'
+import { slotsToHeaderOptions } from './c-grid/header-utils'
 
 /**
  * @mixin column-mixin
@@ -14,13 +14,6 @@ export default {
   name: 'CGridColumnGroup',
   mixins: [ColumnMixin],
   props: {
-    /**
-     * Defines a header style
-     */
-    headerStyle: {
-      type: [Object, String, Function],
-      default: undefined
-    }
   },
   methods: {
     /**
@@ -36,7 +29,6 @@ export default {
     }
   }
 }
-
 </script>
 
 <style scoped>

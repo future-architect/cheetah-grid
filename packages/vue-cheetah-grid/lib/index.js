@@ -9,12 +9,12 @@ import CGridInputColumn from './CGridInputColumn.vue'
 import CGridLinkColumn from './CGridLinkColumn.vue'
 import CGridMenuColumn from './CGridMenuColumn.vue'
 
-export {CGrid, CGridColumn, CGridButtonColumn, CGridPercentCompleteBarColumn, CGridIconColumn, CGridColumnGroup, CGridInputColumn, CGridLinkColumn, CGridMenuColumn}
+export { CGrid, CGridColumn, CGridButtonColumn, CGridPercentCompleteBarColumn, CGridIconColumn, CGridColumnGroup, CGridInputColumn, CGridLinkColumn, CGridMenuColumn }
 
 export default CGrid
 
 export function install (Vue) {
-  const components = {CGrid, CGridColumn, CGridButtonColumn, CGridPercentCompleteBarColumn, CGridIconColumn, CGridColumnGroup, CGridInputColumn, CGridLinkColumn, CGridMenuColumn}
+  const components = { CGrid, CGridColumn, CGridButtonColumn, CGridPercentCompleteBarColumn, CGridIconColumn, CGridColumnGroup, CGridInputColumn, CGridLinkColumn, CGridMenuColumn }
   for (const name in components) {
     Vue.component(name, components[name])
   }
