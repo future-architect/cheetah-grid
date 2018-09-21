@@ -22,7 +22,7 @@ function deepObjectEquals (a, b) {
   }
   const aKeys = Object.keys(a).sort()
   const bKeys = Object.keys(b).sort()
-  if (aKeys.toString() !== bKeys.toString()) {
+  if (aKeys.length !== bKeys.length) {
     return false
   }
   for (let i = 0; i < aKeys.length; i++) {
