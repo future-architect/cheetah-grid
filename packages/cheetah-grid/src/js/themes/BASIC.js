@@ -51,7 +51,7 @@ module.exports = {
 	color: '#000',
 	defaultBgColor: DEFAULT_BG_COLOR,
 	frozenRowsBgColor: FROZEN_ROWS_BG_COLOR,
-	hiliteBorderColor: '#5E9ED6',
+	highlightBorderColor: '#5E9ED6',
 	selectionBgColor: '#CCE0FF',
 	borderColor: '#000',
 	checkbox: {

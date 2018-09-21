@@ -433,8 +433,8 @@ class Theme {
 	get frozenRowsBorderColor() {
 		return getThemeColor(this._grid, 'frozenRowsBorderColor');
 	}
-	get hiliteBorderColor() {
-		return getThemeColor(this._grid, 'hiliteBorderColor');
+	get highlightBorderColor() {
+		return getThemeColor(this._grid, 'highlightBorderColor');
 	}
 	get checkbox() {
 		const grid = this._grid;
@@ -801,7 +801,7 @@ class GridCanvasHelper {
 
 		//罫線
 		if (state.selected) {
-			option.borderColor = this.theme.hiliteBorderColor;
+			option.borderColor = this.theme.highlightBorderColor;
 			option.lineWidth = 2;
 			this.border(context, option);
 		} else {
@@ -820,7 +820,7 @@ class GridCanvasHelper {
 				//右が選択されている
 				this.drawBorderWithClip(context, (ctx) => {
 					const borderColors = toBoxArray(
-							getColor(this.theme.hiliteBorderColor, sel.col, sel.row, this._grid, ctx)
+							getColor(this.theme.highlightBorderColor, sel.col, sel.row, this._grid, ctx)
 					);
 					ctx.lineWidth = 1;
 					ctx.strokeStyle = borderColors[1];
@@ -833,7 +833,7 @@ class GridCanvasHelper {
 				//上が選択されている
 				this.drawBorderWithClip(context, (ctx) => {
 					const borderColors = toBoxArray(
-							getColor(this.theme.hiliteBorderColor, sel.col, sel.row, this._grid, ctx)
+							getColor(this.theme.highlightBorderColor, sel.col, sel.row, this._grid, ctx)
 					);
 					ctx.lineWidth = 1;
 					ctx.strokeStyle = borderColors[0];

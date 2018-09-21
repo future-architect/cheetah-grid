@@ -206,7 +206,7 @@ function _headerBorderWithState(grid, helper, context) {
 	const {id: selId} = grid[_].headerMap.getCell(sel.col, sel.row);
 	//罫線
 	if (selId === id) {
-		option.borderColor = helper.theme.hiliteBorderColor;
+		option.borderColor = helper.theme.highlightBorderColor;
 		option.lineWidth = 2;
 		helper.border(context, option);
 	} else {
@@ -223,7 +223,7 @@ function _headerBorderWithState(grid, helper, context) {
 			//右が選択されている
 			helper.drawBorderWithClip(context, (ctx) => {
 				const borderColors = helper.toBoxArray(
-						helper.getColor(helper.theme.hiliteBorderColor, sel.col, sel.row, ctx)
+						helper.getColor(helper.theme.highlightBorderColor, sel.col, sel.row, ctx)
 				);
 				if (borderColors[1]) {
 					ctx.lineWidth = 1;
@@ -239,7 +239,7 @@ function _headerBorderWithState(grid, helper, context) {
 			//上が選択されている
 			helper.drawBorderWithClip(context, (ctx) => {
 				const borderColors = helper.toBoxArray(
-						helper.getColor(helper.theme.hiliteBorderColor, sel.col, sel.row, ctx)
+						helper.getColor(helper.theme.highlightBorderColor, sel.col, sel.row, ctx)
 				);
 				if (borderColors[0]) {
 					ctx.lineWidth = 1;

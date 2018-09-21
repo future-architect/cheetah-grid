@@ -34,7 +34,7 @@ module.exports = {
 	defaultBgColor: '#FFF',
 	frozenRowsBgColor: '#FFF',
 	frozenRowsColor: 'rgba(0, 0, 0, 0.54)',
-	hiliteBorderColor: '#5E9ED6',
+	highlightBorderColor: '#5E9ED6',
 	selectionBgColor: '#CCE0FF',
 	borderColor: BORDER_COLOR,
 	frozenRowsBorderColor: FROZEN_ROWS_BORDER_COLOR,

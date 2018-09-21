@@ -10,6 +10,12 @@ function getProp(obj, superObj, names, defNames) {
 		getChainSafe(superObj, ...names);
 }
 function createTheme(obj = {}, superTheme = defaultTheme) {
+	if (obj.hiliteBorderColor && !obj.highlightBorderColor) {
+		// https://github.com/future-architect/cheetah-grid/issues/83
+		console.warn('Please use highlightBorderColor instead of hiliteBorderColor. cheetah-grid@>=0.7');
+		obj.highlightBorderColor = obj.hiliteBorderColor;
+	}
+
 	return {
 		get font() {
 			return getProp(obj, superTheme, ['font']);
@@ -41,8 +47,8 @@ function createTheme(obj = {}, superTheme = defaultTheme) {
 		get frozenRowsBorderColor() {
 			return getProp(obj, superTheme, ['frozenRowsBorderColor'], ['borderColor']);
 		},
-		get hiliteBorderColor() {
-			return getProp(obj, superTheme, ['hiliteBorderColor'], ['borderColor']);
+		get highlightBorderColor() {
+			return getProp(obj, superTheme, ['highlightBorderColor'], ['borderColor']);
 		},
 		get checkbox() {
 			return this._checkbox || (this._checkbox = {
