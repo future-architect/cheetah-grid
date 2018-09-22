@@ -39,8 +39,10 @@ module.exports = {
 		'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
 
 		// Uncategorized Rules
-		'vue/prop-name-casing': 'error',
-		'vue/html-closing-bracket-spacing': 'error'
+		'vue/component-name-in-template-casing': ['error', 'kebab-case'],
+
+		'vue/multiline-html-element-content-newline': 'error',
+		'vue/no-spaces-around-equal-signs-in-attribute': 'error',
 	},
 	'globals': {
 	}

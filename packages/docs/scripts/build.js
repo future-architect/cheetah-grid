@@ -74,6 +74,7 @@ Metalsmith(__dirname).//eslint-disable-line new-cap
 		directory: hbs.directory,
 		partials: hbs.partials,
 		pattern: ['**/*.dummy'],
+		suppressNoFilesError: true,
 	})).
 	use((files, metalsmith, done) => {
 		// 非表示ドキュメントはdisabledフラグを立てる
@@ -110,7 +111,11 @@ Metalsmith(__dirname).//eslint-disable-line new-cap
 		engine: 'handlebars',
 		directory: hbs.directory,
 		// partials: hbs.partials,
-		pattern: ['**/*.html', '**/*.svg'],
+		// pattern: ['**/*.html', '**/*.svg'],
+		pattern: '**/*.html',
+		engineOptions: {
+			cache: false
+		}
 		// default: '{{{contents}}}',
 	})).
 	use(codeHighlight()).

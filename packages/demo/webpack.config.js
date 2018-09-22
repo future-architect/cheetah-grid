@@ -21,7 +21,7 @@ function getCheetahGridPath () {
     return 'cheetah-grid'
   }
 }
-const devtoolModuleFilenameTemplate = ({resourcePath}) => {
+const devtoolModuleFilenameTemplate = ({ resourcePath }) => {
   if (resourcePath.indexOf('node_modules') >= 0) {
     resourcePath = resourcePath.substr(resourcePath.indexOf('node_modules'))
   }
@@ -79,7 +79,6 @@ module.exports = (env, argv) => {
           test: /\.js$/,
           loader: 'babel-loader',
           query: {
-            presets: ['babel-preset-es2015', 'babel-preset-stage-2'].map(require.resolve),
             comments: true
             // compact: true
           },

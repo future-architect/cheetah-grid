@@ -98,14 +98,15 @@
     <main class="main">
       <router-view />
     </main>
-    <footer class="footer">© 2017 - 2018 Future architect inc. Author Yosuke Ota. Code licensed under the MIT License.
+    <footer class="footer">
+      © 2017 - 2018 Future Corporation. Author Yosuke Ota. Code licensed under the MIT License.
     </footer>
   </div>
 </template>
 
 <script>
 import router from './router'
-const {routes} = router.options
+const { routes } = router.options
 export default {
   name: 'App',
   components: {

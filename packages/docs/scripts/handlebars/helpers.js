@@ -4,7 +4,7 @@
 const path = require('path');
 const Handlebars = require('handlebars');
 const marked = require('marked');
-const babel = require('babel-core');
+const babel = require('@babel/core');
 const highlightjs = require('highlight.js');
 const vueCompiler = require('vue-template-compiler');
 const crypto = require('crypto');
@@ -288,7 +288,7 @@ function registerHelpers() {
 	Handlebars.registerHelper('babel', function(...args) {
 		const arg = analyzeArguments(...args);
 		const context = arg.get(this);
-		const option = Object.assign({presets: ['env']}, arg.hash);
+		const option = Object.assign({presets: ['@babel/preset-env']}, arg.hash);
 		return `//babel\n${babel.transform(context, option).code}`;
 	});
 	Handlebars.registerHelper('vue', function(...args) {
@@ -296,7 +296,7 @@ function registerHelpers() {
 		const context = arg.get(this);
 		const output = vueCompiler.parseComponent(context, {pad: 'line'});
 		const template = output.template.content;
-		const script = babel.transform(output.script.content, {presets: ['env']}).code;
+		const script = babel.transform(output.script.content, {presets: ['@babel/preset-env']}).code;
 
 		const md5hash = crypto.createHash('md5');
 		md5hash.update(`${template}/${script}`, 'binary');
