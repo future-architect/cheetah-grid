@@ -18,7 +18,7 @@ let result;
 while ((result = re.exec(readme)) !== null) {
 	const rmVersion = result[1];
 	if (cdnVersion !== rmVersion) {
-		const msg = `Invalid cdn version. act:${rmVersion} @ README.md`;
+		const msg = `Invalid cdn version. act:${rmVersion} @ "./README.md"`;
 		console.error(chalk.red(msg));
 		process.exit(1);//eslint-disable-line
 	}

@@ -23,6 +23,9 @@ const com = {
 		}
 		return `${semver.major(packageVersion)}.${semver.minor(packageVersion)}`;
 	},
+	getFailbackVersion() {
+		return `${semver.major(packageVersion)}.${semver.minor(packageVersion) - 1}`;
+	},
 	isEnabledVersion(v) {
 		return semver.lte(v, packageVersion);
 	},

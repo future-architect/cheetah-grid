@@ -37,7 +37,7 @@
 	function getVersions(callback) {
 		const xhr = new XMLHttpRequest();
 		function onError() {
-			callback([`{{docLinkVersion}}${''}`, '0.0.1']);
+			callback(['{{docLinkVersion}}', '0.0.1']);
 		}
 		xhr.onload = () => {
 			const versions = JSON.parse(xhr.responseText);
@@ -46,7 +46,7 @@
 		xhr.onerror = onError;
 		xhr.onabort = onError;
 		try {
-			xhr.open('GET', `{{ms_path '../versions.json'}}${''}`);
+			xhr.open('GET', `{{ms_path '../versions.json'}}`);// eslint-disable-line quotes
 			xhr.send();
 		} catch (e) {
 			onError();
@@ -55,7 +55,7 @@
 
 	//
 	getVersions((versions) => {
-		const myVersion = `{{docLinkVersion}}${''}`;
+		const myVersion = '{{docLinkVersion}}';
 		function getVerLocation(v) {
 			return location.href.replace(myVersion, v).replace('.devdoc', v);
 		}

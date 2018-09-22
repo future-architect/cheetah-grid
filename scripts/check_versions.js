@@ -40,7 +40,7 @@ function checkPackageJson(pkg, pkgs) {
 	const errors = [];
 	// check root version
 	if (minorVersion(pkg.version) !== minorVersion(version)) {
-		const message = `Invalid version. ${pkg.name}:${pkg.version}  root:${version}`;
+		const message = `Invalid version. ${pkg.name}@${pkg.version}  root:${version} @ "${pkg.rootDir}/package.json"`;
 		console.error(message);
 		errors.push(Promise.reject(new Error(message)));
 	}
@@ -60,7 +60,7 @@ function checkPackageJson(pkg, pkgs) {
 			const v = dependencies[name].match(/(\d+\.\d+\.\d+)/g)[0];
 			if (minorVersion(v) !== minorVersion(pkgs[name].version)) {
 
-				const message = `${name} version numbers do not match. ${pkg.name}.${depsName}.${name}:${dependencies[name]}  expect:${pkgs[name].version}`;
+				const message = `${name} version numbers do not match. expect:${pkgs[name].version} "${pkg.rootDir}/package.json".${depsName}.${name}:"${dependencies[name]}" `;
 				console.error(message);
 				errors.push(Promise.reject(new Error(message)));
 			}

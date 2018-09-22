@@ -23,14 +23,14 @@
     {{#if debug}}
     <script type="text/javascript" src="{{ms_path '../../packages/cheetah-grid/dist/cheetahGrid.es5.js'}}"></script>
     {{else}}
-    <script type="text/javascript" src="https://unpkg.com/cheetah-grid@{{docLinkVersion}}"></script>
+    <script type="text/javascript" src="https://unpkg.com/cheetah-grid@{{docLinkVersion}}||{{failbackVersion}}"></script>
     {{/if}}
     {{#if (includes contents 'Vue')}}
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     {{#if debug}}
     <script type="text/javascript" src="{{ms_path '../../packages/vue-cheetah-grid/dist/vueCheetahGrid.js'}}"></script>
     {{else}}
-    <script type="text/javascript" src="https://unpkg.com/vue-cheetah-grid@{{docLinkVersion}}"></script>
+    <script type="text/javascript" src="https://unpkg.com/vue-cheetah-grid@{{docLinkVersion}}||{{failbackVersion}}"></script>
     {{/if}}
     <script type="text/javascript">
         /*global Vue, vueCheetahGrid*/
