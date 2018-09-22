@@ -28,7 +28,7 @@ You can use `%` mode by setting value as `string`.
 //{{#babel}}
 /*global generatePersons*/
 /*eslint-disable no-unused-vars*/
-'use strict';
+
 const records = generatePersons(100);
 //{{/babel}}
 </script>
@@ -36,7 +36,7 @@ const records = generatePersons(100);
 //{{#wrapscript}}
 //{{#copy "script1"}}
 /*global cheetahGrid, records*/
-'use strict';
+
 const grid = new cheetahGrid.ListGrid({
 	parentElement: document.querySelector('#sample1'),
 	header: [

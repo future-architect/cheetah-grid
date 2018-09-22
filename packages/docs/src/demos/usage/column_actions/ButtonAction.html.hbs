@@ -41,10 +41,11 @@ You can control the property of `disabled` and `action` by manipulating the inst
 </select> <span>Once you have changed, please try to click</span>
 
 <script type="text/javascript">
+/*eslint no-alert:0*/
 //{{#wrapscript}}
 //{{#copy "sample1"}}
 /*global cheetahGrid*/
-'use strict';
+
 
 const buttonAction = new cheetahGrid.columns.action.ButtonAction({
 	action(rec) {

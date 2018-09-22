@@ -25,7 +25,7 @@ Real time loading by scroll action
 //{{#babel}}
 /*global generatePerson*/
 /*eslint-disable no-unused-vars*/
-'use strict';
+
 const getRecordsWithAjax = (startIndex, num) => new Promise((resolve) => {
 	const loadedCount = startIndex + num;
 	let last = false;
@@ -58,7 +58,7 @@ const getRecordsWithAjax = (startIndex, num) => new Promise((resolve) => {
 //{{#wrapscript}}
 //{{#copy "script_sample"}}
 /*global cheetahGrid, getRecordsWithAjax*/
-'use strict';
+
 // create DataSource
 const GET_RECORDS_SIZE = 100;
 const BUFFER_RECORDS_SIZE = (Math.floor(GET_RECORDS_SIZE / 2) || 1);

@@ -1,3 +1,14 @@
 'use strict'
 
-module.exports = require('../../eslint/eslint-config.js')
+const conf = Object.assign({}, require('../../eslint/eslint-config.js'))
+
+conf.overrides= [
+  {
+    "files": ["*.hbs"],
+    "parserOptions": {
+      "sourceType": "module"
+    }
+  }
+]
+
+module.exports = conf

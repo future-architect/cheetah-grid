@@ -38,7 +38,7 @@ css: >
 //{{#wrapscript}}
 //{{#copy "sample1"}}
 /*global cheetahGrid*/
-'use strict';
+
 const inputEditor = new cheetahGrid.columns.action.InlineInputEditor();
 const grid = new cheetahGrid.ListGrid({
 	parentElement: document.querySelector('#sample1'),
@@ -113,7 +113,7 @@ document.querySelector('#sample1mode').onchange = function() {
 //{{#wrapscript}}
 //{{#copy "sample2"}}
 /*global cheetahGrid*/
-'use strict';
+
 const grid = new cheetahGrid.ListGrid({
 	parentElement: document.querySelector('#sample2'),
 	header: [

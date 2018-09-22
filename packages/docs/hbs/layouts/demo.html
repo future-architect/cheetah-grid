@@ -33,7 +33,9 @@
     <script type="text/javascript" src="https://unpkg.com/vue-cheetah-grid@{{docLinkVersion}}"></script>
     {{/if}}
     <script type="text/javascript">
-        Vue.use(vueCheetahGrid)
+        'use strict';
+        /*global Vue, vueCheetahGrid*/
+        Vue.use(vueCheetahGrid);
     </script>
     {{/if}}
     {{#each scriptpath}}
@@ -85,7 +87,7 @@
     <div class="contents">
         {{{ contents }}}
     </div>
-    {{#if debug}}<script type="text/javascript">window.debugMode = true;</script>{{/if}}
+    {{#if debug}}<script type="text/javascript">'use strict'; window.debugMode = true;</script>{{/if}}
     <script type="text/javascript" src="{{ms_path 'js/doc-common.js'}}"></script>
 </body>
 </html>
