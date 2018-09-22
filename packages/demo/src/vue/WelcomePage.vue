@@ -14,7 +14,7 @@
 </template>
 <script>
 import cheetahGrid from 'cheetah-grid'
-import {generatePersonsDataSource} from './common'
+import { generatePersonsDataSource } from './common'
 
 function createGrid (el, v) {
   const personsDataSource = generatePersonsDataSource(1000000)
@@ -24,8 +24,8 @@ function createGrid (el, v) {
   const grid = new cheetahGrid.ListGrid({
     parentElement: el,
     header: [
-      {field: 'check', caption: '', width: 50, columnType: 'check', action: 'check'},
-      {field: 'personid', caption: 'ID', width: 85, columnType: 'center'},
+      { field: 'check', caption: '', width: 50, columnType: 'check', action: 'check' },
+      { field: 'personid', caption: 'ID', width: 85, columnType: 'center' },
       {
         field: 'stars',
         caption: 'Class',
@@ -36,18 +36,18 @@ function createGrid (el, v) {
         style: {
           color: 'gold'
         },
-        action: new cheetahGrid.columns.action.InlineMenuEditor({options: [
-          {value: 1, classList: 'stars', html: '<i class="material-icons">star</i>'},
-          {value: 2, classList: 'stars', html: '<i class="material-icons">star</i>'.repeat(2)},
-          {value: 3, classList: 'stars', html: '<i class="material-icons">star</i>'.repeat(3)},
-          {value: 4, classList: 'stars', html: '<i class="material-icons">star</i>'.repeat(4)},
-          {value: 5, classList: 'stars', html: '<i class="material-icons">star</i>'.repeat(5)}
-        ]})
+        action: new cheetahGrid.columns.action.InlineMenuEditor({ options: [
+          { value: 1, classList: 'stars', html: '<i class="material-icons">star</i>' },
+          { value: 2, classList: 'stars', html: '<i class="material-icons">star</i>'.repeat(2) },
+          { value: 3, classList: 'stars', html: '<i class="material-icons">star</i>'.repeat(3) },
+          { value: 4, classList: 'stars', html: '<i class="material-icons">star</i>'.repeat(4) },
+          { value: 5, classList: 'stars', html: '<i class="material-icons">star</i>'.repeat(5) }
+        ] })
       },
       {
         caption: 'Name',
         columns: [
-          {field: 'fname',
+          { field: 'fname',
             caption: 'First Name',
             width: '20%',
             minWidth: 150,
@@ -61,7 +61,7 @@ function createGrid (el, v) {
               }
             })
           },
-          {field: 'lname',
+          { field: 'lname',
             caption: 'Last Name',
             width: '20%',
             minWidth: 150,

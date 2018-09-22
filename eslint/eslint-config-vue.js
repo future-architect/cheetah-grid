@@ -40,7 +40,7 @@ module.exports = {
 
 		// Uncategorized Rules
 		'vue/prop-name-casing': 'error',
-		'vue/html-closing-bracket-spacing': 'error'
+		'vue/html-closing-bracket-spacing': 'error',
 	},
 	'globals': {
 	}

@@ -105,7 +105,7 @@
 
 <script>
 import router from './router'
-const {routes} = router.options
+const { routes } = router.options
 export default {
   name: 'App',
   components: {

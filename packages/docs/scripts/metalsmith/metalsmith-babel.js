@@ -1,6 +1,6 @@
 'use strict';
 
-const babel = require('babel-core');
+const babel = require('@babel/core');
 
 const JS_FILENAME_REGEXP = /\.js$/;
 
@@ -17,7 +17,7 @@ module.exports = function() {
 			if (JS_FILENAME_REGEXP.test(file)) {
 				data = files[file];
 
-				const option = {presets: ['env']};
+				const option = {presets: ['@babel/preset-env']};
 				data.contents = Buffer.from(babel.transform(data.contents.toString(), option).code);
 			}
 		}

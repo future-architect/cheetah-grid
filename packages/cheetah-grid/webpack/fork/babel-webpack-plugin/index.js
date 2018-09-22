@@ -3,7 +3,7 @@ const SourceMapSource = require("webpack-sources").SourceMapSource;
 const OriginalSource = require("webpack-sources").OriginalSource;
 const ModuleFilenameHelpers = require("webpack/lib/ModuleFilenameHelpers");
 const RequestShortener = require("webpack/lib/RequestShortener");
-const babel = require("babel-core");
+const babel = require("@babel/core");
 
 class BabelPlugin {
 	constructor(options) {

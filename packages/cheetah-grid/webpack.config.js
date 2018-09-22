@@ -134,7 +134,7 @@ function newEs5Config(opt) {
 		}),
 		new BabelPlugin({
 			test: /\.js$/,
-			presets: ['env'],
+			presets: ['@babel/env'],
 			sourceMaps: true
 		}),
 		new WrapperPlugin({

@@ -46,57 +46,57 @@
 const records = [
 
   {
-    command: [{'command': 'commit', 'branch': 'mastar'}, {'command': 'tag', 'branch': 'mastar', 'tag': 'v1.1.0'}],
+    command: [{ 'command': 'commit', 'branch': 'mastar' }, { 'command': 'tag', 'branch': 'mastar', 'tag': 'v1.1.0' }],
     comment: 'release 1.1.0',
     user: 'user1'
   },
   {
-    command: [{'command': 'commit', 'branch': 'develop2'}],
+    command: [{ 'command': 'commit', 'branch': 'develop2' }],
     comment: 'Update A for B',
     user: 'user2'
   },
   {
-    command: [{'command': 'merge', 'branch': {'from': 'mastar', 'to': 'develop2'}}],
+    command: [{ 'command': 'merge', 'branch': { 'from': 'mastar', 'to': 'develop2' } }],
     comment: 'merge',
     user: 'user2'
   },
   {
-    command: [{'command': 'merge', 'branch': {'from': 'develop3', 'to': 'mastar'}}],
+    command: [{ 'command': 'merge', 'branch': { 'from': 'develop3', 'to': 'mastar' } }],
     comment: 'merge',
     user: 'user1'
   },
   {
-    command: [{'command': 'commit', 'branch': 'develop2'}],
+    command: [{ 'command': 'commit', 'branch': 'develop2' }],
     comment: 'Fix for A',
     user: 'user2'
   },
   {
-    command: [{'command': 'branch', 'branch': {'from': 'mastar', 'to': 'develop3'}}, {'command': 'commit', 'branch': 'develop3'}],
+    command: [{ 'command': 'branch', 'branch': { 'from': 'mastar', 'to': 'develop3' } }, { 'command': 'commit', 'branch': 'develop3' }],
     comment: 'Fix A to B',
     user: 'user3'
   },
   {
-    command: [{'command': 'branch', 'branch': {'from': 'mastar', 'to': 'develop2'}}],
+    command: [{ 'command': 'branch', 'branch': { 'from': 'mastar', 'to': 'develop2' } }],
     comment: 'fork user2',
     user: 'user2'
   },
   {
-    command: [{'command': 'merge', 'branch': {'from': 'develop', 'to': 'mastar'}}],
+    command: [{ 'command': 'merge', 'branch': { 'from': 'develop', 'to': 'mastar' } }],
     comment: 'merge',
     user: 'user2'
   },
   {
-    command: [{'command': 'commit', 'branch': 'develop'}],
+    command: [{ 'command': 'commit', 'branch': 'develop' }],
     comment: 'Add A for B',
     user: 'user2'
   },
   {
-    command: [{'command': 'commit', 'branch': 'mastar'}, {'command': 'tag', 'branch': 'mastar', 'tag': 'v1.0.0'}, {'command': 'branch', 'branch': {'from': 'mastar', 'to': 'develop'}}],
+    command: [{ 'command': 'commit', 'branch': 'mastar' }, { 'command': 'tag', 'branch': 'mastar', 'tag': 'v1.0.0' }, { 'command': 'branch', 'branch': { 'from': 'mastar', 'to': 'develop' } }],
     comment: 'release 1.0.0',
     user: 'user1'
   },
   {
-    command: [{'command': 'branch', 'branch': 'mastar'}, {'command': 'commit', 'branch': 'mastar'}],
+    command: [{ 'command': 'branch', 'branch': 'mastar' }, { 'command': 'commit', 'branch': 'mastar' }],
     comment: 'initial commit',
     user: 'user1'
   }
@@ -105,7 +105,7 @@ const records = [
 export default {
   name: 'BranchGraph',
   data () {
-    return {data: records}
+    return { data: records }
   }
 }
 </script>

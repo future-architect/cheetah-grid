@@ -168,7 +168,7 @@
   </div>
 </template>
 <script>
-import {generatePersonsDataSource} from './common'
+import { generatePersonsDataSource } from './common'
 
 const personsDataSource = (() => {
   const baseDataSource = generatePersonsDataSource(1000000)
@@ -202,7 +202,7 @@ const firstNameValidateMessage = rec => rec.fname ? null : 'Please enter First N
 const lastNameValidateMessage = rec => rec.lname ? null : 'Please enter Last Name.'
 const progressValidateMessage = rec => rec.progress > 0 ? null : 'Please enter progress.'
 const emailValidateMessage = rec => {
-  const {email} = rec
+  const { email } = rec
   if (!email) {
     return {
       type: 'error',
