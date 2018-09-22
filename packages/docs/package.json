@@ -13,7 +13,7 @@
     "build:dev": "npm run build:documents:dev && npm run vuedoc:dev",
     "build:documents:dev": "node ./scripts/build.js --dev",
     "vuedoc:dev": "node ./scripts/vuedoc/build.js --dev",
-    "eslint": "eslint .",
+    "eslint": "eslint . --ext .js,.html,.hbs",
     "eslint:fix": "eslint . --fix",
     "winproc": "node ./scripts/winProc.js"
   },

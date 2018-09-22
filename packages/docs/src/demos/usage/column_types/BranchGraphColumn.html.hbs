@@ -94,10 +94,11 @@ Show branch graph.
 	<button id="update" style="vertical-align: top;">update</button>
 </div>
 <script type="text/javascript">
+/*eslint no-eval:0*/
 //{{#wrapscript}}
 //{{#copy "sample1"}}
 /*global cheetahGrid*/
-'use strict';
+
 
 const grid = new cheetahGrid.ListGrid({
 	parentElement: document.querySelector('#sample1'),
@@ -113,7 +114,7 @@ const grid = new cheetahGrid.ListGrid({
 		},
 		{
 			field(rec) {
-				return JSON.stringify(rec) + ',';
+				return `${JSON.stringify(rec)},`;
 			},
 			caption: 'command',
 			width: 1000
@@ -128,7 +129,7 @@ grid.records = [
 		{
 			command: 'branch',
 			branch: 'mastar'
-		}, 
+		},
 		// and commit 'mastar' branch
 		{
 			command: 'commit',
@@ -260,14 +261,14 @@ grid.records = [
 		}
 	],
 	{
-			command: 'commit',
-			branch: 'develop3'
+		command: 'commit',
+		branch: 'develop3'
 	}
 ];
 
 //{{/copy}}
 document.querySelector('#update').onclick = () => {
-	grid.records = eval('(function() {return ' + document.querySelector('#command').value + ';})()');
+	grid.records = eval(`(function() {return ${document.querySelector('#command').value};})()`);
 };
 
 //{{/wrapscript}}

@@ -54,7 +54,7 @@ Each object consists of following properties.
 //{{#babel}}
 /*global generatePersons*/
 /*eslint-disable no-unused-vars*/
-'use strict';
+
 const records = generatePersons(100);
 //{{/babel}}
 </script>
@@ -62,7 +62,7 @@ const records = generatePersons(100);
 //{{#wrapscript}}
 //{{#copy "script1"}}
 /*global cheetahGrid, records*/
-'use strict';
+
 const grid = new cheetahGrid.ListGrid({
 	parentElement: document.querySelector('#sample1'),
 	header: [
@@ -110,7 +110,7 @@ To use multiple header, set the hierarchical structured Object to the `header` p
 //{{#wrapscript}}
 //{{#copy "script2"}}
 /*global cheetahGrid, records*/
-'use strict';
+
 const grid = new cheetahGrid.ListGrid({
 	parentElement: document.querySelector('#sample2'),
 	header: [

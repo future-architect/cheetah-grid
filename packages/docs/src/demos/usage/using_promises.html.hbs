@@ -61,7 +61,7 @@ In this example grid shows 1,000 recors as a whole. Getting 100 records by each 
 //{{#babel}}
 /*global generatePerson*/
 /*eslint-disable no-unused-vars*/
-'use strict';
+
 const getRecordsWithAjax = (startIndex, num) => new Promise((resolve) => {
 	setTimeout(() => {
 		const records = [];
@@ -82,7 +82,7 @@ const getRecordsWithAjax = (startIndex, num) => new Promise((resolve) => {
 //{{#wrapscript}}
 //{{#copy "script_rec_sample"}}
 /*global cheetahGrid, getRecordsWithAjax*/
-'use strict';
+
 // create DataSource
 const loadedData = {};
 const dataSource = new cheetahGrid.data.CachedDataSource({
@@ -152,7 +152,7 @@ Example below shows Person data. Department informations are shown later by ajax
 //{{#babel}}
 /*global generatePersons*/
 /*eslint-disable no-unused-vars*/
-'use strict';
+
 const records = generatePersons(1000);
 const depts = [
 	'General Affairs',
@@ -191,7 +191,7 @@ const getPersonDeptWithAjax = (personid) => new Promise((resolve) => {
 //{{#wrapscript}}
 //{{#copy "script_cell_sample"}}
 /*global cheetahGrid, records, getPersonDeptWithAjax*/
-'use strict';
+
 const grid = new cheetahGrid.ListGrid({
 	parentElement: document.querySelector('#cell_sample'),
 	header: [

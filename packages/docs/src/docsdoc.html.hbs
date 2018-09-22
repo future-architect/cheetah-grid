@@ -62,7 +62,6 @@ ES6で記述したjsコードをES5にトランスパイルするBlock helper。
 {{{{copy "babel"}}}}
 <script type="text/javascript">
 //{{#babel}}
-'use strict';
 const str = 'handlebars';
 const data = `hello ${str}!`;// template literal
 const obj = {data};// object literal
@@ -89,7 +88,6 @@ jsコードをfunctionでwrapしてスコープを限定するBlock helper。
 {{#code class="hbs"}}
 {{{{copy "wrapscript"}}}}
 <script type="text/javascript">
-'use strict';
 //{{#wrapscript}}
 const str = 'handlebars';
 const data = `hello ${str}!`;

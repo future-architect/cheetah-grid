@@ -30,7 +30,7 @@ Built-in themes are `MATERIAL_DESIGN` and `BASIC`.
 
 <script type="text/javascript">
 /*eslint no-alert:0*/
-'use strict';
+
 /*global cheetahGrid,generatePersons*/
 //{{{babel textContents.demos.[demos/init.parts.js]}}}
 //{{#wrapscript}}
@@ -46,11 +46,11 @@ function createGrid(parentElement) {
 			{ /* multiple header */
 				caption: 'name',
 				columns: [
-					{field: 'fname', caption: 'First Name', width: 200, sort:true},
-					{field: 'lname', caption: 'Last Name', width: 200, sort:true},
+					{field: 'fname', caption: 'First Name', width: 200, sort: true},
+					{field: 'lname', caption: 'Last Name', width: 200, sort: true},
 				],
 			},
-			{field: 'email', caption: 'Email', width: 250, sort:true},
+			{field: 'email', caption: 'Email', width: 250, sort: true},
 			{
 			/* callback field */
 				field(rec) {
@@ -93,7 +93,7 @@ window.createGrid = createGrid;
 <div id="sample1" class="demo-grid small">
 </div>
 <script type="text/javascript">
-'use strict';
+
 //{{#wrapscript}}
 /*global cheetahGrid*/
 
@@ -148,7 +148,7 @@ Set a theme to the `cheetahGrid.themes.default` property.
 </div>
 <script type="text/javascript">
 /*eslint no-alert:0*/
-'use strict';
+
 //{{#wrapscript}}
 /*global cheetahGrid*/
 window.createGrid(document.querySelector('#sample2'));
@@ -195,7 +195,7 @@ To extend the theme, do as follows.
 </div>
 <script type="text/javascript">
 /*eslint no-alert:0*/
-'use strict';
+
 //{{#wrapscript}}
 /*global cheetahGrid*/
 const grid = window.createGrid(document.querySelector('#sample3'));

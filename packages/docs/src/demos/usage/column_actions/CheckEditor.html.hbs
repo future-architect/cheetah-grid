@@ -41,10 +41,11 @@ But if you define `'check'`, as string, to `action` of the column, you can't con
 </select> <span id="sample1modememo"></span>
 
 <script type="text/javascript">
+/*eslint no-alert:0*/
 //{{#wrapscript}}
 //{{#copy "sample1"}}
 /*global cheetahGrid*/
-'use strict';
+
 const checkEditorAction = new cheetahGrid.columns.action.CheckEditor();
 const grid = new cheetahGrid.ListGrid({
 	parentElement: document.querySelector('#sample1'),
@@ -147,10 +148,11 @@ In this case, the original number will not be restored when switching again.
 <div id="sample2" class="demo-grid small">
 </div>
 <script type="text/javascript">
+/*eslint no-alert:0*/
 //{{#wrapscript}}
 //{{#copy "sample2"}}
 /*global cheetahGrid*/
-'use strict';
+
 const grid = new cheetahGrid.ListGrid({
 	parentElement: document.querySelector('#sample2'),
 	header: [
