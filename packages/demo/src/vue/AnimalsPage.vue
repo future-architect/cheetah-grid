@@ -19,15 +19,15 @@
         />
         <c-grid-column
           :column-style="{textAlign: 'center'}"
-          :sort= "true"
+          :sort="true"
           :width="70"
-          field= "no"
+          field="no"
         >
           No
         </c-grid-column>
         <c-grid-column
           :width="300"
-          :sort= "true"
+          :sort="true"
           :icon="{
             src: 'icon',
             width: 26
@@ -37,25 +37,25 @@
           Name
         </c-grid-column>
         <c-grid-column
-          :width= "300"
+          :width="300"
           :icon="{
             src: 'habitat',
             width: 26
           }"
-          field= "area"
+          field="area"
         >
           Habitat
         </c-grid-column>
 
         <c-grid-percent-complete-bar-column
           :sort="true"
-          :min= "0"
-          :max= "120"
+          :min="0"
+          :max="120"
           :formatter="s => { return '' }"
           :column-style="{
             barHeight: 25
           }"
-          field= "speed"
+          field="speed"
           width="400"
         >
           Speed
@@ -68,24 +68,24 @@
             barColor: '#F48FB1'
           }"
           :formatter="s => { return `${s}cm` }"
-          :min= "0"
-          :max= "5500"
+          :min="0"
+          :max="5500"
           field="length"
           width="200"
         >
           Length
         </c-grid-percent-complete-bar-column>
         <c-grid-percent-complete-bar-column
-          :sort= "true"
+          :sort="true"
           :formatter="s => { return `${s}kg` }"
           :column-style="{
             barHeight: 5,
             barColor: '#7986CB'
           }"
-          :min= "0"
-          :max= "5400"
+          :min="0"
+          :max="5400"
           field="weight"
-          width= "200"
+          width="200"
         >
           Weight
         </c-grid-percent-complete-bar-column>

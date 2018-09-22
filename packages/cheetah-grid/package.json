@@ -13,7 +13,8 @@
     "datagrid",
     "datatable"
   ],
-  "main": "dist/cheetahGrid.es5.min.js",
+  "main": "dist/cheetahGrid.es5.js",
+  "unpkg": "dist/cheetahGrid.es5.min.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/future-architect/cheetah-grid.git"

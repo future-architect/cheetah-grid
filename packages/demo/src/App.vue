@@ -98,7 +98,8 @@
     <main class="main">
       <router-view />
     </main>
-    <footer class="footer">© 2017 - 2018 Future architect inc. Author Yosuke Ota. Code licensed under the MIT License.
+    <footer class="footer">
+      © 2017 - 2018 Future Corporation. Author Yosuke Ota. Code licensed under the MIT License.
     </footer>
   </div>
 </template>

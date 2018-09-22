@@ -34,7 +34,7 @@
         />
         <c-grid-column
           field="personid"
-          width= "85"
+          width="85"
         >
           ID
         </c-grid-column>
@@ -57,7 +57,7 @@
           }"
           :message="starsValidateMessage"
           icon-name="star"
-          field= "stars"
+          field="stars"
         >
           Class
         </c-grid-icon-column>
@@ -72,9 +72,9 @@
             :column-style="{
               textOverflow: 'ellipsis'
             }"
-            input-class-list= "helper-text--right-justified"
-            field= "fname"
-            width= "20%"
+            input-class-list="helper-text--right-justified"
+            field="fname"
+            width="20%"
           >
             First Name
           </c-grid-input-column>
@@ -85,9 +85,9 @@
             :column-style="{
               textOverflow: 'ellipsis'
             }"
-            input-class-list= "helper-text--right-justified"
+            input-class-list="helper-text--right-justified"
             field="lname"
-            width= "20%"
+            width="20%"
             min-width="150"
           >
             Last Name
@@ -113,8 +113,8 @@
             }
           }"
           :message="progressValidateMessage"
-          field= "progress"
-          width= "10%"
+          field="progress"
+          width="10%"
           min-width="50"
         >
           Progress

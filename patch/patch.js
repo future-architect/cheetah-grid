@@ -12,10 +12,7 @@ function resolve(dir) {
 
 const eslintPluginVuePatches = [
 	// https://github.com/ota-meshi/eslint-plugin-vue/blob/develop/add-component-tags-order/lib/rules/component-tags-order.js
-	'component-tags-order',
-
-	// https://github.com/vuejs/eslint-plugin-vue/pull/445
-	'html-content-newline'
+	'component-tags-order'
 ];
 
 eslintPluginVuePatches.forEach((patch) => {
@@ -31,8 +28,7 @@ try {
 					/rules: {\r?\n/,
 					() => {
 						const addRuleList = [
-							'component-tags-order',
-							'html-content-newline'
+							'component-tags-order'
 						].filter((rule) => !eslintPluginVueIndex.includes(rule)).
 							map((rule) => `    '${rule}': require('./rules/${rule}'),\n`);
 						return `rules: {\n${addRuleList.join('')}`;
