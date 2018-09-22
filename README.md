@@ -1,13 +1,13 @@
 # Cheetah Grid
 
-[![npm](https://img.shields.io/npm/l/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
+[![GitHub](https://img.shields.io/github/license/future-architect/cheetah-grid.svg)](https://github.com/future-architect/cheetah-grid)
 [![npm](https://img.shields.io/npm/v/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
 [![npm](https://img.shields.io/npm/dw/cheetah-grid.svg)](http://www.npmtrends.com/cheetah-grid)
 [![npm](https://img.shields.io/npm/dm/cheetah-grid.svg)](http://www.npmtrends.com/cheetah-grid)
 [![npm](https://img.shields.io/npm/dy/cheetah-grid.svg)](http://www.npmtrends.com/cheetah-grid)
 [![npm](https://img.shields.io/npm/dt/cheetah-grid.svg)](http://www.npmtrends.com/cheetah-grid)
 [![Build Status](https://travis-ci.org/future-architect/cheetah-grid.svg?branch=master)](https://travis-ci.org/future-architect/cheetah-grid)  
-[![NPM](https://nodei.co/npm/cheetah-grid.png?downloads=true&stars=true)](https://www.npmjs.com/package/cheetah-grid)
+[![NPM](https://nodei.co/npm/cheetah-grid.png?downloads=true)](https://www.npmjs.com/package/cheetah-grid)
 
 [![Cheetah Grid](https://future-architect.github.io/cheetah-grid/logo.png)](https://future-architect.github.io/cheetah-grid/)  
 
@@ -23,7 +23,7 @@ The fastest open-source web component of data table.
 [![npm](https://img.shields.io/npm/v/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
 
 ```html
-<script src="https://unpkg.com/cheetah-grid@0.6.x"></script>
+<script src="https://unpkg.com/cheetah-grid@0.7.x"></script>
 ```
 
 ### Downloading Cheetah Grid using npm
@@ -40,10 +40,10 @@ const cheetahGrid = require("cheetah-grid")
 ### Downloading Cheetah Grid source code
 [![npm](https://img.shields.io/npm/v/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
 
-[cheetahGrid.es5.min.js](https://unpkg.com/cheetah-grid@0.6.x/dist/cheetahGrid.es5.min.js)  
+[cheetahGrid.es5.min.js](https://unpkg.com/cheetah-grid@0.7.x/dist/cheetahGrid.es5.min.js)  
 
 SourceMap  
-[cheetahGrid.es5.min.js.map](https://unpkg.com/cheetah-grid@0.6.x/dist/cheetahGrid.es5.min.js.map)  
+[cheetahGrid.es5.min.js.map](https://unpkg.com/cheetah-grid@0.7.x/dist/cheetahGrid.es5.min.js.map)  
 
 
 ### Downloading Cheetah Grid using GitHub

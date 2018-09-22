@@ -1,8 +1,7 @@
 # Cheetah Grid - Vue Component
 
-[![npm](https://img.shields.io/npm/l/vue-cheetah-grid.svg)](https://www.npmjs.com/package/vue-cheetah-grid)
+[![GitHub](https://img.shields.io/github/license/future-architect/cheetah-grid.svg)](https://github.com/future-architect/cheetah-grid)
 [![npm](https://img.shields.io/npm/v/vue-cheetah-grid.svg)](https://www.npmjs.com/package/vue-cheetah-grid)
-[![npm](https://img.shields.io/badge/dynamic/json.svg?label=downloads&colorB=green&prefix=&suffix=/day&query=$.downloads&uri=https://api.npmjs.org//downloads/point/last-day/vue-cheetah-grid&maxAge=3600)](http://www.npmtrends.com/vue-cheetah-grid)
 [![npm](https://img.shields.io/npm/dw/vue-cheetah-grid.svg)](http://www.npmtrends.com/vue-cheetah-grid)
 [![npm](https://img.shields.io/npm/dm/vue-cheetah-grid.svg)](http://www.npmtrends.com/vue-cheetah-grid)
 [![npm](https://img.shields.io/npm/dy/vue-cheetah-grid.svg)](http://www.npmtrends.com/vue-cheetah-grid)
