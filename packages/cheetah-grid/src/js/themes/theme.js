@@ -73,6 +73,13 @@ function createTheme(obj = {}, superTheme = defaultTheme) {
 				},
 			});
 		},
+		get header() {
+			return this._header || (this._header = {
+				get sortArrowColor() {
+					return getProp(obj, superTheme, ['header', 'sortArrowColor']);
+				},
+			});
+		},
 		extends(obj) {
 			return createTheme(obj, this);
 		}

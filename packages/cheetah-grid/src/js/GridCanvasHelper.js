@@ -461,7 +461,14 @@ class Theme {
 			},
 		});
 	}
-
+	get header() {
+		const grid = this._grid;
+		return this._header || (this._header = {
+			get sortArrowColor() {
+				return getThemeColor(grid, 'header', 'sortArrowColor');
+			},
+		});
+	}
 }
 
 

@@ -46,11 +46,11 @@ function createGrid(parentElement) {
 			{ /* multiple header */
 				caption: 'name',
 				columns: [
-					{field: 'fname', caption: 'First Name', width: 200},
-					{field: 'lname', caption: 'Last Name', width: 200},
+					{field: 'fname', caption: 'First Name', width: 200, sort:true},
+					{field: 'lname', caption: 'Last Name', width: 200, sort:true},
 				],
 			},
-			{field: 'email', caption: 'Email', width: 250},
+			{field: 'email', caption: 'Email', width: 250, sort:true},
 			{
 			/* callback field */
 				field(rec) {
@@ -242,7 +242,10 @@ grid.theme = srcTheme.extends({
 		color: '#FDD',
 		bgColor: '#F55',
 	},
-	font: '16px sans-serif'
+	font: '16px sans-serif',
+	header: {
+		sortArrowColor: '#D00'
+	}
 });
 //{{/copy}}
 //{{/wrapscript}}

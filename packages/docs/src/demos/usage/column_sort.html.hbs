@@ -50,18 +50,11 @@ const records = [
 const grid = new cheetahGrid.ListGrid({
 	parentElement: document.querySelector('#sample1'),
 	header: [
-		// use inner sort logic
 		{
 			field: 'no',
 			caption: 'no',
 			width: 50,
-			sort: true
-		},
-		// define custom sort logic
-		{
-			field: 'name',
-			caption: 'name',
-			width: 200,
+			// define custom sort logic
 			sort(order, col, grid) {
 				const compare = order === 'desc'
 					? (v1, v2) => v1 === v2 ? 0 : v1 > v2 ? 1 : -1
@@ -69,6 +62,13 @@ const grid = new cheetahGrid.ListGrid({
 				records.sort((r1, r2) => compare(r1.name, r2.name));
 				grid.records = records;
 			}
+		},
+		{
+			field: 'name',
+			caption: 'name',
+			width: 200,
+			// use inner sort logic
+			sort: true
 		}
 	],
 });
@@ -77,3 +77,77 @@ grid.records = records;
 //{{/wrapscript}}
 </script>
 {{> code class="js" code=sample1}}
+
+
+{{#marked}}
+## Color of sort arrow 
+{{#if lang_ja}}
+ソート矢印の色を変更するには以下のように実装します。
+{{else}}
+In order to change the color of the sort arrow you implement as follows. 
+{{/if}}
+{{/marked}}
+
+<div id="sample2" class="demo-grid middle">
+</div>
+<script type="text/javascript">
+//{{#wrapscript}}
+/*global cheetahGrid*/
+'use strict';
+const records = [
+	{
+		no: 1,
+		name: 'Asian',
+	},
+	{
+		no: 2,
+		name: 'South African',
+	},
+	{
+		no: 3,
+		name: 'Tanzanian',
+	},
+	{
+		no: 4,
+		name: 'Sudan',
+	},
+	{
+		no: 5,
+		name: 'King',
+	},
+];
+//{{#copy "sample2"}}
+const grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#sample2'),
+	header: [
+		{
+			field: 'no',
+			caption: 'no',
+			width: 50,
+			sort(order, col, grid) {
+				const compare = order === 'desc'
+					? (v1, v2) => v1 === v2 ? 0 : v1 > v2 ? 1 : -1
+					: (v1, v2) => v1 === v2 ? 0 : v1 < v2 ? 1 : -1;
+				records.sort((r1, r2) => compare(r1.name, r2.name));
+				grid.records = records;
+			},
+			// define color of sort arrow 
+			headerStyle: {sortArrowColor: 'red'}
+		},
+		{
+			field: 'name',
+			caption: 'name',
+			width: 200,
+			sort: true,
+			// define color of sort arrow 
+			headerStyle() {
+				return {sortArrowColor: 'blue'}
+			} 
+		}
+	],
+});
+grid.records = records;
+//{{/copy}}
+//{{/wrapscript}}
+</script>
+{{> code class="js" code=sample2}}

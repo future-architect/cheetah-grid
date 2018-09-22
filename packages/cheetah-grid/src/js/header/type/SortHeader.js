@@ -1,7 +1,7 @@
 'use strict';
 
 const styleContents = require('../style');
-const {Style} = styleContents;
+const {SortHeaderStyle} = styleContents;
 const BaseHeader = require('./BaseHeader');
 const {isDef} = require('../../internal/utils');
 const {getFontSize} = require('../../internal/canvases');
@@ -19,7 +19,7 @@ class SortHeader extends BaseHeader {
 		this._range = headerCell.range;
 	}
 	get StyleClass() {
-		return Style;
+		return SortHeaderStyle;
 	}
 	drawInternal(value, context, style, helper, grid, {drawCellBase}) {
 		const {
@@ -29,6 +29,7 @@ class SortHeader extends BaseHeader {
 			bgColor,
 			font,
 			textOverflow,
+			sortArrowColor,
 		} = style;
 
 		if (bgColor) {
@@ -44,6 +45,7 @@ class SortHeader extends BaseHeader {
 		}
 
 		const ctx = context.getContext();
+		const {col, row} = context;
 		const arrowSize = getFontSize(ctx, font).width * 1.2;
 
 		helper.text(value, context, {
@@ -55,7 +57,7 @@ class SortHeader extends BaseHeader {
 			icons: [{
 				name: isDef(order) ? (order === 'asc' ? 'arrow_downward' : 'arrow_upward') : null,
 				width: arrowSize,
-				color: 'rgba(0, 0, 0, 0.38)',
+				color: helper.getColor(sortArrowColor || helper.theme.header.sortArrowColor, col, row, ctx) || 'rgba(0, 0, 0, 0.38)',
 			}],
 		});
 	}

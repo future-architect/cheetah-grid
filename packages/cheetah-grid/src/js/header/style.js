@@ -2,6 +2,7 @@
 
 const BaseStyle = require('./style/BaseStyle');
 const Style = require('./style/Style');
+const SortHeaderStyle = require('./style/SortHeaderStyle');
 
 const style = {
 	get BaseStyle() {
@@ -9,6 +10,9 @@ const style = {
 	},
 	get Style() {
 		return Style;
+	},
+	get SortHeaderStyle() {
+		return SortHeaderStyle;
 	},
 	of(columnStyle, StyleClass) {
 		if (columnStyle) {
