@@ -158,11 +158,30 @@ export default {
   },
   methods: {
     /**
-     * Redraw
+     * Redraws the whole grid.
+     * @return {void}
      */
     invalidate () {
       if (this.rawGrid) {
         this.rawGrid.invalidate()
+      }
+    },
+    /**
+     * Apply the changed size.
+     * @return {void}
+     */
+    updateSize () {
+      if (this.rawGrid) {
+        this.rawGrid.updateSize()
+      }
+    },
+    /**
+     * Apply the changed scroll size.
+     * @return {void}
+     */
+    updateScroll () {
+      if (this.rawGrid) {
+        this.rawGrid.updateScroll()
       }
     },
     /**
