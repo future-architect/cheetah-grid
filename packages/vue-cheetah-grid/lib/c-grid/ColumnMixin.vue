@@ -27,14 +27,10 @@ export default {
     }
   },
   mounted () {
-    if (this.$parent && this.$parent.$_CGrid_update) {
-      this.$parent.$_CGrid_update()
-    }
+    this.$_CGrid_update()
   },
   updated () {
-    if (this.$parent && this.$parent.$_CGrid_update) {
-      this.$parent.$_CGrid_update()
-    }
+    this.$_CGrid_update()
   },
   methods: {
     /**
@@ -44,6 +40,15 @@ export default {
       const props = Object.assign({}, this.$props)
       props.textContent = this.$el.textContent.trim()
       return props
+    },
+
+    /**
+     * @private
+     */
+    $_CGrid_update () {
+      if (this.$parent && this.$parent.$_CGrid_update) {
+        this.$parent.$_CGrid_update()
+      }
     }
   }
 }
