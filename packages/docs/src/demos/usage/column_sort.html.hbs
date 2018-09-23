@@ -59,7 +59,7 @@ const grid = new cheetahGrid.ListGrid({
 				const compare = order === 'desc'
 					? (v1, v2) => v1 === v2 ? 0 : v1 > v2 ? 1 : -1
 					: (v1, v2) => v1 === v2 ? 0 : v1 < v2 ? 1 : -1;
-				records.sort((r1, r2) => compare(r1.name, r2.name));
+				records.sort((r1, r2) => compare(r1.no, r2.no));
 				grid.records = records;
 			}
 		},
@@ -78,7 +78,7 @@ grid.records = records;
 </script>
 {{> code class="js" code=sample1}}
 
-
+{{#if_v '0.7.0'}}
 {{#marked}}
 ## Color of sort arrow 
 {{#if lang_ja}}
@@ -128,7 +128,7 @@ const grid = new cheetahGrid.ListGrid({
 				const compare = order === 'desc'
 					? (v1, v2) => v1 === v2 ? 0 : v1 > v2 ? 1 : -1
 					: (v1, v2) => v1 === v2 ? 0 : v1 < v2 ? 1 : -1;
-				records.sort((r1, r2) => compare(r1.name, r2.name));
+				records.sort((r1, r2) => compare(r1.no, r2.no));
 				grid.records = records;
 			},
 			// define color of sort arrow
@@ -151,3 +151,81 @@ grid.records = records;
 //{{/wrapscript}}
 </script>
 {{> code class="js" code=sample2}}
+
+
+{{#marked}}
+## reset 
+{{#if lang_ja}}
+ソート状態をリセットするには`sortState`にnullを設定します。
+{{else}}
+If you set `sortState` property to `null`, the sort state is initialized.  
+(only the arrow icon of the header is initialized.)
+{{/if}}
+{{/marked}}
+
+
+<div id="sample3" class="demo-grid middle">
+</div>
+<button id="sample3-reset">Reset</button>
+<script type="text/javascript">
+//{{#wrapscript}}
+/*global cheetahGrid*/
+
+const records = [
+	{
+		no: 1,
+		name: 'Asian',
+	},
+	{
+		no: 2,
+		name: 'South African',
+	},
+	{
+		no: 3,
+		name: 'Tanzanian',
+	},
+	{
+		no: 4,
+		name: 'Sudan',
+	},
+	{
+		no: 5,
+		name: 'King',
+	},
+];
+const grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#sample3'),
+	header: [
+		{
+			field: 'no',
+			caption: 'no',
+			width: 50,
+			sort(order, col, grid) {
+				const compare = order === 'desc'
+					? (v1, v2) => v1 === v2 ? 0 : v1 > v2 ? 1 : -1
+					: (v1, v2) => v1 === v2 ? 0 : v1 < v2 ? 1 : -1;
+				records.sort((r1, r2) => compare(r1.no, r2.no));
+				grid.records = records;
+			}
+		},
+		{
+			field: 'name',
+			caption: 'name',
+			width: 200,
+			sort: true
+		}
+	],
+});
+grid.records = records;
+//{{#copy "sample3"}}
+const button = document.querySelector('#sample3-reset');
+button.onclick = () => {
+	grid.sortState = null;
+	// does not redraw automatically, please call `invalidate`.
+	grid.invalidate();
+};
+//{{/copy}}
+//{{/wrapscript}}
+</script>
+{{> code class="js" code=sample3}}
+{{/if_v}}

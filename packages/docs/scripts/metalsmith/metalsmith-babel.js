@@ -7,9 +7,10 @@ const JS_FILENAME_REGEXP = /\.js$/;
 module.exports = function() {
 
 	/**
-	 * @param {Object} files
-	 * @param {Metalsmith} metalsmith
-	 * @param {Function} done
+	 * @param {Object} files files
+	 * @param {Metalsmith} metalsmith metalsmith
+	 * @param {Function} done done
+	 * @returns {void}
 	 */
 	return function(files, metalsmith, done) {
 		let file, data;

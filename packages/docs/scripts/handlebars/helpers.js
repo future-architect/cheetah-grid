@@ -105,17 +105,10 @@ function registerHelpers() {
 		if (!s) {
 			return s;
 		}
-		const ss = s.split(/\r\n|\r|\n/);
-		if (ss.length === 1) {
-			return s.trim();
-		}
-		while (ss.length && !ss[0].trim()) {
-			ss.shift();
-		}
-		while (ss.length && !ss[ss.length - 1].trim()) {
-			ss.pop();
-		}
-		return ss.join('\n');
+		s = s.replace(/(\r\n|\r|\n)\s*\/\/\s*(\r\n|\r|\n|$)/g, '$1');
+		s = s.replace(/^\s*(\r\n|\r|\n)/, '');
+		s = s.replace(/(\r\n|\r|\n)\s*$/, '$1');
+		return s;
 	});
 	Handlebars.registerHelper('lookups', (obj, ...props) => {
 		props.pop();

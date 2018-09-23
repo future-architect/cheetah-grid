@@ -25,7 +25,6 @@ module.exports = {
 		],
 		'no-prototype-builtins': 'off',
 		'no-template-curly-in-string': 'off',
-		'valid-jsdoc': 'off',
 		'class-methods-use-this': 'off',
 		'consistent-return': 1,
 		'guard-for-in': 'off',

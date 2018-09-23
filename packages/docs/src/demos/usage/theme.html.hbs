@@ -208,7 +208,11 @@ grid.theme = srcTheme.extends({
 	defaultBgColor: '#FDD',
 	underlayBackgroundColor: '#FEE',
 	frozenRowsBgColor: '#EAA',
+	//{{#if_v '0.7.0'}}
 	highlightBorderColor: '#FD5',
+	//{{else}}
+	hiliteBorderColor: '#FD5',
+	//{{/if_v}}
 	selectionBgColor: '#FDA',
 	// You can also change the theme apply in the state by using callback.
 	frozenRowsBorderColor(args) {
@@ -243,9 +247,11 @@ grid.theme = srcTheme.extends({
 		bgColor: '#F55',
 	},
 	font: '16px sans-serif',
+	//{{#if_v '0.7.0'}}
 	header: {
 		sortArrowColor: '#D00'
 	}
+	//{{/if_v}}
 });
 //{{/copy}}
 //{{/wrapscript}}
