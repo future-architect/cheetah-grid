@@ -63,7 +63,7 @@ export function filterToFn (instance, field, filter) {
   } else {
     const name = filter.slice(0, i)
     const args = filter.slice(i + 1, filter.length - 1)
-    const props = eval(`[${args}]`)// eslint-disable-line no-eval
+    const props = Function(`"use strict";return [${args}]`).call(instance.$vnode.context) // eslint-disable-line no-new-func
     return (rec) => {
       return applyFilter(getField(rec, field), (v) => Vue.filter(name)(v, ...props))
     }

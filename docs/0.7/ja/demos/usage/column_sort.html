@@ -186,7 +186,7 @@ var grid = new cheetahGrid.ListGrid({
         return v1 === v2 ? 0 : v1 < v2 ? 1 : -1;
       };
       records.sort(function (r1, r2) {
-        return compare(r1.name, r2.name);
+        return compare(r1.no, r2.no);
       });
       grid.records = records;
     }
@@ -238,7 +238,7 @@ grid.records = records; //
 				<span class="hljs-keyword">const</span> compare = order === <span class="hljs-string">'desc'</span>
 					? <span class="hljs-function">(<span class="hljs-params">v1, v2</span>) =&gt;</span> v1 === v2 ? <span class="hljs-number">0</span> : v1 &gt; v2 ? <span class="hljs-number">1</span> : <span class="hljs-number">-1</span>
 					: <span class="hljs-function">(<span class="hljs-params">v1, v2</span>) =&gt;</span> v1 === v2 ? <span class="hljs-number">0</span> : v1 &lt; v2 ? <span class="hljs-number">1</span> : <span class="hljs-number">-1</span>;
-				records.sort(<span class="hljs-function">(<span class="hljs-params">r1, r2</span>) =&gt;</span> compare(r1.name, r2.name));
+				records.sort(<span class="hljs-function">(<span class="hljs-params">r1, r2</span>) =&gt;</span> compare(r1.no, r2.no));
 				grid.records = records;
 			}
 		},
@@ -252,8 +252,7 @@ grid.records = records; //
 	],
 });
 grid.records = records;
-<span class="hljs-comment">//</span></code></pre>
-
+</code></pre>
 <h2 id="color-of-sort-arrow">Color of sort arrow</h2>
 <p>ソート矢印の色を変更するには以下のように実装します。</p>
 
@@ -296,7 +295,7 @@ var grid = new cheetahGrid.ListGrid({
         return v1 === v2 ? 0 : v1 < v2 ? 1 : -1;
       };
       records.sort(function (r1, r2) {
-        return compare(r1.name, r2.name);
+        return compare(r1.no, r2.no);
       });
       grid.records = records;
     },
@@ -332,7 +331,7 @@ grid.records = records; //
 				<span class="hljs-keyword">const</span> compare = order === <span class="hljs-string">'desc'</span>
 					? <span class="hljs-function">(<span class="hljs-params">v1, v2</span>) =&gt;</span> v1 === v2 ? <span class="hljs-number">0</span> : v1 &gt; v2 ? <span class="hljs-number">1</span> : <span class="hljs-number">-1</span>
 					: <span class="hljs-function">(<span class="hljs-params">v1, v2</span>) =&gt;</span> v1 === v2 ? <span class="hljs-number">0</span> : v1 &lt; v2 ? <span class="hljs-number">1</span> : <span class="hljs-number">-1</span>;
-				records.sort(<span class="hljs-function">(<span class="hljs-params">r1, r2</span>) =&gt;</span> compare(r1.name, r2.name));
+				records.sort(<span class="hljs-function">(<span class="hljs-params">r1, r2</span>) =&gt;</span> compare(r1.no, r2.no));
 				grid.records = records;
 			},
 			<span class="hljs-comment">// define color of sort arrow</span>
@@ -351,7 +350,81 @@ grid.records = records; //
 	],
 });
 grid.records = records;
-<span class="hljs-comment">//</span></code></pre>
+</code></pre>
+
+<h2 id="reset">reset</h2>
+<p>ソート状態をリセットするには<code>sortState</code>にnullを設定します。</p>
+
+
+<div id="sample3" class="demo-grid middle">
+</div>
+<button id="sample3-reset">Reset</button>
+<script type="text/javascript">
+////wrapscript
+(function() {
+//babel
+"use strict";
+
+/*global cheetahGrid*/
+var records = [{
+  no: 1,
+  name: 'Asian'
+}, {
+  no: 2,
+  name: 'South African'
+}, {
+  no: 3,
+  name: 'Tanzanian'
+}, {
+  no: 4,
+  name: 'Sudan'
+}, {
+  no: 5,
+  name: 'King'
+}];
+var grid = new cheetahGrid.ListGrid({
+  parentElement: document.querySelector('#sample3'),
+  header: [{
+    field: 'no',
+    caption: 'no',
+    width: 50,
+    sort: function sort(order, col, grid) {
+      var compare = order === 'desc' ? function (v1, v2) {
+        return v1 === v2 ? 0 : v1 > v2 ? 1 : -1;
+      } : function (v1, v2) {
+        return v1 === v2 ? 0 : v1 < v2 ? 1 : -1;
+      };
+      records.sort(function (r1, r2) {
+        return compare(r1.no, r2.no);
+      });
+      grid.records = records;
+    }
+  }, {
+    field: 'name',
+    caption: 'name',
+    width: 200,
+    sort: true
+  }]
+});
+grid.records = records; //
+
+var button = document.querySelector('#sample3-reset');
+
+button.onclick = function () {
+  grid.sortState = null; // does not redraw automatically, please call `invalidate`.
+
+  grid.invalidate();
+}; //
+//
+})();
+</script>
+<pre><code class="js hljs javascript"><span class="hljs-keyword">const</span> button = <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample3-reset'</span>);
+button.onclick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+	grid.sortState = <span class="hljs-literal">null</span>;
+	<span class="hljs-comment">// does not redraw automatically, please call `invalidate`.</span>
+	grid.invalidate();
+};
+</code></pre>
     </div>
     
     <script type="text/javascript" src="./../../../js/doc-common.js"></script>

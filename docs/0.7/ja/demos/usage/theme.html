@@ -306,7 +306,7 @@ themeSelect.onchange = <span class="hljs-function"><span class="hljs-keyword">fu
 	<span class="hljs-comment">/* The `theme` property of the grid instance can also be set as a string. */</span>
 	<span class="hljs-comment">// grid.theme = themeSelect.value;</span>
 };
-<span class="hljs-comment">//</span></code></pre>
+</code></pre>
 <pre><code class="language-html hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">select</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"theme-select1"</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">""</span> <span class="hljs-attr">selected</span>=<span class="hljs-string">"true"</span>&gt;</span>default<span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">"MATERIAL_DESIGN"</span>&gt;</span>MATERIAL_DESIGN<span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
@@ -358,7 +358,7 @@ themeSelect.onchange = <span class="hljs-function"><span class="hljs-keyword">fu
 	<span class="hljs-comment">// redraw all the grids</span>
 	<span class="hljs-built_in">window</span>.girdInstances.forEach(<span class="hljs-function">(<span class="hljs-params">grid</span>) =&gt;</span> grid.invalidate());
 };
-<span class="hljs-comment">//</span></code></pre>
+</code></pre>
 <pre><code class="language-html hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">select</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"theme-select2"</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">"MATERIAL_DESIGN"</span> <span class="hljs-attr">selected</span>=<span class="hljs-string">"true"</span>&gt;</span>MATERIAL_DESIGN<span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">"BASIC"</span>&gt;</span>BASIC<span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
@@ -386,7 +386,9 @@ grid.theme = srcTheme.extends({
   defaultBgColor: '#FDD',
   underlayBackgroundColor: '#FEE',
   frozenRowsBgColor: '#EAA',
+  //
   highlightBorderColor: '#FD5',
+  //
   selectionBgColor: '#FDA',
   // You can also change the theme apply in the state by using callback.
   frozenRowsBorderColor: function frozenRowsBorderColor(args) {
@@ -437,8 +439,10 @@ grid.theme = srcTheme.extends({
     bgColor: '#F55'
   },
   font: '16px sans-serif',
+  //
   header: {
-    sortArrowColor: '#D00'
+    sortArrowColor: '#D00' //
+
   }
 }); //
 //
@@ -491,7 +495,7 @@ grid.theme = srcTheme.extends({
 		<span class="hljs-attr">sortArrowColor</span>: <span class="hljs-string">'#D00'</span>
 	}
 });
-<span class="hljs-comment">//</span></code></pre>
+</code></pre>
     </div>
     
     <script type="text/javascript" src="./../../../js/doc-common.js"></script>

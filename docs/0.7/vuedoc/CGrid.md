@@ -26,5 +26,22 @@
 
 - `invalidate()` 
 
-  Redraw 
+  Redraws the whole grid. 
 
+   **return value:** 
+
+     - **Any** - {void} 
+- `updateSize()` 
+
+  Apply the changed size. 
+
+   **return value:** 
+
+     - **Any** - {void} 
+- `updateScroll()` 
+
+  Apply the changed scroll size. 
+
+   **return value:** 
+
+     - **Any** - {void} 

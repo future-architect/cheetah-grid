@@ -166,7 +166,8 @@
 ### 例
 * リスト  
 * リスト  
-</span><span class="hljs-template-tag">{{/<span class="hljs-name">marked</span>}}</span><span class="xml"></span></code></pre><strong>↓</strong>
+</span><span class="hljs-template-tag">{{/<span class="hljs-name">marked</span>}}</span><span class="xml">
+</span></code></pre><strong>↓</strong>
 <div class="result">
 <h3 id="-">例</h3>
 <ul>
@@ -191,7 +192,8 @@
 <span class="hljs-keyword">const</span> {<span class="hljs-attr">data</span>: res} = obj;<span class="hljs-comment">// destructuring assignment</span>
 <span class="hljs-built_in">console</span>.log(<span class="hljs-built_in">JSON</span>.stringify(res));
 <span class="hljs-comment">//</span></span></span><span class="hljs-template-tag">{{/<span class="hljs-name">babel</span>}}</span><span class="xml"><span class="undefined">
-</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span></code></pre><strong>↓</strong>
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</span></code></pre><strong>↓</strong>
 <pre><code class="html hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span>&gt;</span><span class="javascript">
 <span class="hljs-comment">////babel</span>
 <span class="hljs-meta">"use strict"</span>;
@@ -206,7 +208,8 @@
 <span class="hljs-keyword">var</span> res = obj.data; <span class="hljs-comment">// destructuring assignment</span>
 
 <span class="hljs-built_in">console</span>.log(<span class="hljs-built_in">JSON</span>.stringify(res)); <span class="hljs-comment">//</span>
-</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre>
 <h4 id="-wrapscript-">{{wrapscript}}</h4>
 <p>jsコードをfunctionでwrapしてスコープを限定するBlock helper。  </p>
 <h5 id="params">Params</h5>
@@ -220,7 +223,8 @@
 <span class="hljs-keyword">const</span> data = <span class="hljs-string">`hello <span class="hljs-subst">${str}</span>!`</span>;
 <span class="hljs-built_in">console</span>.log(data);
 <span class="hljs-comment">//</span></span></span><span class="hljs-template-tag">{{/<span class="hljs-name">wrapscript</span>}}</span><span class="xml"><span class="undefined">
-</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span></code></pre><strong>↓</strong>
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</span></code></pre><strong>↓</strong>
 <pre><code class="html hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span>&gt;</span><span class="javascript">
 <span class="hljs-comment">////wrapscript</span>
 (<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
@@ -231,7 +235,8 @@
 <span class="hljs-keyword">var</span> data = <span class="hljs-string">"hello "</span>.concat(str, <span class="hljs-string">"!"</span>);
 <span class="hljs-built_in">console</span>.log(data); <span class="hljs-comment">//</span>
 })();
-</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre>
 <h4 id="-var-">{{var}}</h4>
 <p>内容を変数に格納する  </p>
 <h5 id="params">Params</h5>
@@ -245,7 +250,8 @@
 <span class="hljs-tag">&lt;<span class="hljs-name">label</span> <span class="hljs-attr">style</span>=<span class="hljs-string">"color: red;"</span>&gt;</span>VAR<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
 </span><span class="hljs-template-tag">{{/<span class="hljs-name">var</span>}}</span><span class="xml">
 </span><span class="hljs-template-variable">{{html_varname}}</span><span class="xml">
-</span><span class="hljs-template-variable">{{{html_varname}}</span><span class="xml">}</span></code></pre><strong>↓</strong>
+</span><span class="hljs-template-variable">{{{html_varname}}</span><span class="xml">}
+</span></code></pre><strong>↓</strong>
 <div class="result">
 &lt;label style="color: red;"&gt;VAR&lt;/label&gt;
 
@@ -267,7 +273,8 @@
 <span class="hljs-tag">&lt;<span class="hljs-name">label</span> <span class="hljs-attr">style</span>=<span class="hljs-string">"color: red;"</span>&gt;</span>COPY<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
 </span><span class="hljs-template-tag">{{/<span class="hljs-name">copy</span>}}</span><span class="xml">
 </span><span class="hljs-template-variable">{{html_varname}}</span><span class="xml">
-</span><span class="hljs-template-variable">{{{html_varname}}</span><span class="xml">}</span></code></pre><strong>↓</strong>
+</span><span class="hljs-template-variable">{{{html_varname}}</span><span class="xml">}
+</span></code></pre><strong>↓</strong>
 <div class="result">
 <label style="color: red;">COPY</label>
 &lt;label style="color: red;"&gt;COPY&lt;/label&gt;
@@ -294,12 +301,14 @@ text　ghi
 
 
 </span><span class="hljs-template-tag">{{/<span class="hljs-name">var</span>}}</span><span class="xml">
-</span><span class="hljs-template-variable">{{texttrim text}}</span><span class="xml"></span></code></pre><strong>↓</strong>
+</span><span class="hljs-template-variable">{{texttrim text}}</span><span class="xml">
+</span></code></pre><strong>↓</strong>
 <div class="result">
 <pre>text　abc
 text　def
 
 text　ghi
+
 </pre>
 </div>
 
@@ -312,7 +321,8 @@ text　ghi
 <li>returns {String}    </li>
 </ul>
 
-<pre><code class="hbs hljs handlebars"><span class="xml"></span><span class="hljs-template-variable">{{concat "text1"　"text2" "text3"}}</span><span class="xml"></span></code></pre><strong>↓</strong>
+<pre><code class="hbs hljs handlebars"><span class="xml"></span><span class="hljs-template-variable">{{concat "text1"　"text2" "text3"}}</span><span class="xml">
+</span></code></pre><strong>↓</strong>
 <div class="result">
 text1text2text3
 
@@ -329,7 +339,8 @@ text1text2text3
 <pre><code class="hbs hljs handlebars"><span class="xml"></span><span class="hljs-template-tag">{{#<span class="hljs-name">json</span> <span class="hljs-string">"data"</span>}}</span><span class="xml">
 	{"a": {"b": {"c": 1}}}
 </span><span class="hljs-template-tag">{{/<span class="hljs-name">json</span>}}</span><span class="xml">
-</span><span class="hljs-template-variable">{{data.a.b.c}}</span><span class="xml"></span></code></pre><strong>↓</strong>
+</span><span class="hljs-template-variable">{{data.a.b.c}}</span><span class="xml">
+</span></code></pre><strong>↓</strong>
 <div class="result">
 1
 
@@ -348,7 +359,8 @@ text1text2text3
 </span><span class="hljs-template-tag">{{#<span class="hljs-name">json</span> <span class="hljs-string">"data"</span>}}</span><span class="xml">
 	{"a": {"b": {"c": 1}}}
 </span><span class="hljs-template-tag">{{/<span class="hljs-name">json</span>}}</span><span class="xml">
-</span><span class="hljs-template-variable">{{lookups data "a" key "c"}}</span><span class="xml"></span></code></pre><strong>↓</strong>
+</span><span class="hljs-template-variable">{{lookups data "a" key "c"}}</span><span class="xml">
+</span></code></pre><strong>↓</strong>
 <div class="result">
 
 1
@@ -363,7 +375,8 @@ text1text2text3
 <li>returns {*}   </li>
 </ul>
 
-<pre><code class="hbs hljs handlebars"><span class="xml"></span><span class="hljs-template-variable">{{or "" 0 false "A" "B"}}</span><span class="xml"></span></code></pre><strong>↓</strong>
+<pre><code class="hbs hljs handlebars"><span class="xml"></span><span class="hljs-template-variable">{{or "" 0 false "A" "B"}}</span><span class="xml">
+</span></code></pre><strong>↓</strong>
 <div class="result">
 A
 
@@ -378,7 +391,8 @@ A
 <li>returns {String}   </li>
 </ul>
 
-<pre><code class="hbs hljs handlebars"><span class="xml"></span><span class="hljs-template-variable">{{link　"./index.html" "インデックス"}}</span><span class="xml"></span></code></pre><strong>↓</strong>
+<pre><code class="hbs hljs handlebars"><span class="xml"></span><span class="hljs-template-variable">{{link　"./index.html" "インデックス"}}</span><span class="xml">
+</span></code></pre><strong>↓</strong>
 <div class="result">
 <a href="./index.html">インデックス</a>
 
@@ -393,7 +407,8 @@ A
 <li>returns {String}   </li>
 </ul>
 
-<pre><code class="hbs hljs handlebars"><span class="xml"></span><span class="hljs-template-variable">{{md_link "./index.html" "インデックス"}}</span><span class="xml"></span></code></pre><strong>↓</strong>
+<pre><code class="hbs hljs handlebars"><span class="xml"></span><span class="hljs-template-variable">{{md_link "./index.html" "インデックス"}}</span><span class="xml">
+</span></code></pre><strong>↓</strong>
 <div class="result">
 [インデックス](./index.html)
 

@@ -1636,6 +1636,15 @@ class DrawLayer {
  */
 class DrawCellContext {
 	/**
+	 * constructor
+	 * @param {number} col index of column
+	 * @param {number} row index of row
+	 * @param {CanvasRenderingContext2D} ctx context
+	 * @param {Rect} rect rect of cell area
+	 * @param {Rect} drawRect rect of drawing area
+	 * @param {boolean} drawing `true` if drawing is in progress
+	 * @param {object} selection the selection
+	 * @param {Array} drawLayers array of draw layers
 	 * @private
 	 */
 	constructor(col, row, ctx, rect, drawRect, drawing, selection, drawLayers) {
@@ -1907,9 +1916,17 @@ class DrawGrid extends EventTarget {
 		}
 		_bindEvents(this);
 	}
+	/**
+	 * Get root element.
+	 * @returns {HTMLElement} root element
+	 */
 	getElement() {
 		return this[_].element;
 	}
+	/**
+	 * Get canvas element.
+	 * @type {HTMLCanvasElement}
+	 */
 	get canvas() {
 		return this[_].canvas;
 	}
@@ -1921,12 +1938,25 @@ class DrawGrid extends EventTarget {
 		const {col, row} = this[_].selection.select;
 		this.focusCell(col, row);
 	}
+	/**
+	 * Get the selection instance.
+	 * @type {Selection}
+	 */
 	get selection() {
 		return this[_].selection;
 	}
+	/**
+	 * Get the number of rows.
+	 * @type {number}
+	 */
 	get rowCount() {
 		return this[_].rowCount;
 	}
+	/**
+	 * Set the number of rows.
+	 * @param {number} rowCount the number of rows to set
+	 * @type {number}
+	 */
 	set rowCount(rowCount) {
 		this[_].rowCount = rowCount;
 		this.updateScroll();
@@ -1936,9 +1966,18 @@ class DrawGrid extends EventTarget {
 			this.focusCell(col, row);
 		}
 	}
+	/**
+	 * Get the number of columns.
+	 * @type {number}
+	 */
 	get colCount() {
 		return this[_].colCount;
 	}
+	/**
+	 * Set the number of columns.
+	 * @param {number} colCount the number of columns to set
+	 * @type {number}
+	 */
 	set colCount(colCount) {
 		this[_].colCount = colCount;
 		this.updateScroll();
@@ -1948,41 +1987,96 @@ class DrawGrid extends EventTarget {
 			this.focusCell(col, row);
 		}
 	}
+	/**
+	 * Get the number of frozen columns.
+	 * @type {number}
+	 */
 	get frozenColCount() {
 		return this[_].frozenColCount;
 	}
+	/**
+	 * Set the number of frozen columns.
+	 * @param {number} frozenColCount the number of frozen columns to set
+	 * @type {number}
+	 */
 	set frozenColCount(frozenColCount) {
 		this[_].frozenColCount = frozenColCount;
 	}
+	/**
+	 * Get the number of frozen rows.
+	 * @type {number}
+	 */
 	get frozenRowCount() {
 		return this[_].frozenRowCount;
 	}
+	/**
+	 * Set the number of frozen rows.
+	 * @param {number} frozenRowCount the number of frozen rows to set
+	 * @type {number}
+	 */
 	set frozenRowCount(frozenRowCount) {
 		this[_].frozenRowCount = frozenRowCount;
 	}
+	/**
+	 * Get the default row height.
+	 * @type {number}
+	 *
+	 */
 	get defaultRowHeight() {
 		return this[_].rowCount;
 	}
+	/**
+	 * Set the default row height.
+	 * @param {number} defaultRowHeight the default row height to set
+	 * @type {number}
+	 */
 	set defaultRowHeight(defaultRowHeight) {
 		this[_].defaultRowHeight = defaultRowHeight;
 		this.updateScroll();
 	}
+	/**
+	 * Get the default column width.
+	 * @type {number}
+	 */
 	get defaultColWidth() {
 		return this[_].defaultColWidth;
 	}
+	/**
+	 * Set the default column width.
+	 * @param {number} defaultColWidth the default column width to set
+	 * @type {number}
+	 */
 	set defaultColWidth(defaultColWidth) {
 		this[_].defaultColWidth = defaultColWidth;
 		this.updateScroll();
 	}
+	/**
+	 * Get the font definition as a string.
+	 * @type {string}
+	 */
 	get font() {
 		return this[_].font;
 	}
+	/**
+	 * Set the font definition with the given string.
+	 * @param {string} font the font definition to set
+	 * @type {string}
+	 */
 	set font(font) {
 		this[_].font = font;
 	}
+	/**
+	 * Get the background color of the underlay.
+	 * @type {*}
+	 */
 	get underlayBackgroundColor() {
 		return this[_].underlayBackgroundColor;
 	}
+	/**
+	 * Set the background color of the underlay.
+	 * @param {*} underlayBackgroundColor the background color of the underlay to set
+	 * @type {*}
+	 */
 	set underlayBackgroundColor(underlayBackgroundColor) {
 		this[_].underlayBackgroundColor = underlayBackgroundColor;
 	}
@@ -2103,6 +2197,12 @@ class DrawGrid extends EventTarget {
 		const obj = this[_].colWidthsLimit[col] || (this[_].colWidthsLimit[col] = {});
 		obj.min = minwidth;
 	}
+	/**
+	 * Get the rect of the cell.
+	 * @param {number} col index of column, of the cell
+	 * @param {number} row index of row, of the cell
+	 * @returns {Rect} the rect of the cell.
+	 */
 	getCellRect(col, row) {
 		const isFrozenCell = this.isFrozenCell(col, row);
 
@@ -2124,9 +2224,23 @@ class DrawGrid extends EventTarget {
 				height
 		);
 	}
+	/**
+	 * Get the relative rectangle of the cell.
+	 * @param {number} col index of column, of the cell
+	 * @param {number} row index of row, of the cell
+	 * @returns {Rect} the rect of the cell.
+	 */
 	getCellRelativeRect(col, row) {
 		return _toRelativeRect(this, this.getCellRect(col, row));
 	}
+	/**
+	 * Get the rectangle of the cells area.
+	 * @param {number} startCol index of the starting column, of the cell
+	 * @param {number} startRow index of the starting row, of the cell
+	 * @param {number} endCol index of the ending column, of the cell
+	 * @param {number} endRow index of the ending row, of the cell
+	 * @returns {Rect} the rect of the cells.
+	 */
 	getCellsRect(startCol, startRow, endCol, endRow) {
 		const isFrozenStartCell = this.isFrozenCell(startCol, startRow);
 		const isFrozenEndCell = this.isFrozenCell(endCol, endRow);
@@ -2260,14 +2374,22 @@ class DrawGrid extends EventTarget {
 		this[_].focusControl.focus();
 	}
 	/**
-	 * Invalidate the cell.
-	 * @param  {number} col The column index.
-	 * @param  {number} row The row index
+	 * Redraws the range of the given cell.
+	 * @param  {number} col The column index of cell.
+	 * @param  {number} row The row index of cell.
 	 * @return {void}
 	 */
 	invalidateCell(col, row) {
 		this.invalidateGridRect(col, row);
 	}
+	/**
+	 * Redraws the range of the given cells.
+	 * @param {number} startCol index of the starting column, of the cell
+	 * @param {number} startRow index of the starting row, of the cell
+	 * @param {number} endCol index of the ending column, of the cell
+	 * @param {number} endRow index of the ending row, of the cell
+	 * @return {void}
+	 */
 	invalidateGridRect(startCol, startRow, endCol = startCol, endRow = startRow) {
 		const offset = this.getOffsetInvalidateCells();
 		if (offset > 0) {
@@ -2300,7 +2422,7 @@ class DrawGrid extends EventTarget {
 		}
 	}
 	/**
-	 * Invalidate the whole grid.
+	 * Redraws the whole grid.
 	 * @return {void}
 	 */
 	invalidate() {
@@ -2308,7 +2430,7 @@ class DrawGrid extends EventTarget {
 		_invalidateRect(this, visibleRect);
 	}
 	/**
-	 * get cell value at copy action
+	 * Get the value of cell with the copy action.
 	 * &lt;p>
 	 * Please implement
 	 * &lt;/p>
@@ -2316,7 +2438,7 @@ class DrawGrid extends EventTarget {
 	 * @protected
 	 * @param  {number} col Column index of cell.
 	 * @param  {number} row Row index of cell.
-	 * @return {string}
+	 * @return {string} the value of cell
 	 */
 	getCopyCellValue(col, row) {
 		//Please implement get cell value!!
@@ -2368,6 +2490,10 @@ class DrawGrid extends EventTarget {
 		const disposables = this[_].disposables = this[_].disposables || [];
 		disposables.push(disposable);
 	}
+	/**
+	 * Dispose the grid instance.
+	 * @returns {void}
+	 */
 	dispose() {
 		super.dispose();
 		this[_].handler.dispose();
