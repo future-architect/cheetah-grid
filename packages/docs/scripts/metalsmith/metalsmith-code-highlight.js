@@ -10,7 +10,7 @@ const HTML_FILENAME_REGEXP = /\.html$/,
 	DOCTYPE_TAG_REGEXP = /^[\s]*<!DOCTYPE ([^>]*)>/i;
 
 /**
- * @param {!string} html
+ * @param {!string} html html
  * @return {?string} Null if not found
  */
 const getDocType = function(html) {
@@ -22,7 +22,7 @@ const getDocType = function(html) {
 };
 
 /**
- * @param {!string} html
+ * @param {!string} html html
  * @return {!string} New HTML with code highlighted
  */
 const highlightFile = function(html) {
@@ -53,9 +53,10 @@ module.exports = function(options = {}) {
 	highlightjs.configure(options);
 
 	/**
-	 * @param {Object} files
-	 * @param {Metalsmith} metalsmith
-	 * @param {Function} done
+	 * @param {Object} files files
+	 * @param {Metalsmith} metalsmith metalsmith
+	 * @param {Function} done done
+	 * @returns {void}
 	 */
 	return function(files, metalsmith, done) {
 		let file, data;

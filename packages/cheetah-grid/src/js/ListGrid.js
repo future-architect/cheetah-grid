@@ -564,20 +564,24 @@ class ListGrid extends DrawGrid {
 			this.invalidate();
 		});
 	}
+	/**
+	 * Dispose the grid instance.
+	 * @returns {void}
+	 */
 	dispose() {
 		this[_].messageHandler.dispose();
 		this[_].tooltipHandler.dispose();
 		super.dispose();
 	}
 	/**
-	 * header define
+	 * Gets the define of the header.
 	 * @type {Array}
 	 */
 	get header() {
 		return this[_].header;
 	}
 	/**
-	 * header define
+	 * Sets the define of the header with the given data.
 	 * <pre>
 	 * column options
 	 * -----
@@ -601,52 +605,116 @@ class ListGrid extends DrawGrid {
 	 * -----
 	 * </pre>
 	 *
+	 * @param {Array} header the define of the header to set
 	 * @type {Array}
 	 */
 	set header(header) {
 		this[_].header = header;
 		_refreshHeader(this);
 	}
+	/**
+	 * Get the records.
+	 * @type {Array}
+	 */
 	get records() {
 		return this[_].records;
 	}
+	/**
+	 * Set the records from given
+	 * @param {Array} records records to set
+	 * @type {Array}
+	 */
 	set records(records) {
 		_setRecords(this, records);
 		_refreshRowCount(this);
 		this.invalidate();
 	}
+	/**
+	 * Get the data source.
+	 * @type {DataSource}
+	 */
 	get dataSource() {
 		return this[_].dataSource;
 	}
+	/**
+	 * Set the data source from given
+	 * @param {DataSource} dataSource data source to set
+	 * @type {DataSource}
+	 */
 	set dataSource(dataSource) {
 		_setDataSource(this, dataSource);
 		_refreshRowCount(this);
 		this.invalidate();
 	}
+	/**
+	 * Get the theme.
+	 * @type {object}
+	 */
 	get theme() {
 		return this[_].theme;
 	}
+	/**
+	 * Set the theme from given
+	 * @param {object} theme theme to set
+	 * @type {object}
+	 */
 	set theme(theme) {
 		this[_].theme = themes.of(theme);
 		this.invalidate();
 	}
+	/**
+	 * Get the font definition as a string.
+	 * @override
+	 * @type {string}
+	 */
 	get font() {
 		return super.font || this[_].gridCanvasHelper.theme.font;
 	}
+	/**
+	 * Set the font definition with the given string.
+	 * @override
+	 * @param {string} font the font definition to set
+	 * @type {string}
+	 */
 	set font(font) {
 		super.font = font;
 	}
+	/**
+	 * Get the background color of the underlay.
+	 * @override
+	 * @type {*}
+	 */
 	get underlayBackgroundColor() {
 		return super.underlayBackgroundColor || this[_].gridCanvasHelper.theme.underlayBackgroundColor;
 	}
+	/**
+	 * Set the background color of the underlay.
+	 * @override
+	 * @param {*} underlayBackgroundColor the background color of the underlay to set
+	 * @type {*}
+	 */
 	set underlayBackgroundColor(underlayBackgroundColor) {
 		super.underlayBackgroundColor = underlayBackgroundColor;
 	}
+	/**
+	 * Get the sort state.
+	 * @type {object}
+	 */
 	get sortState() {
 		return this[_].sortState;
 	}
+	/**
+	 * Sets the sort state.
+	 * If `null` to set, the sort state is initialized.
+	 *
+	 * @param {object} sortState the sort state to set
+	 * @type {object}
+	 */
 	set sortState(sortState) {
-		this[_].sortState = sortState;
+		this[_].sortState = isDef(sortState) ? sortState : {
+			col: -1,
+			order: undefined,
+		};
 	}
 	/**
 	 * Get the field of the given column index.

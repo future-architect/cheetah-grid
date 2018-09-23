@@ -58,8 +58,8 @@ function now() {
 	 * </pre>
 	 * @function
 	 * @param {number} duration animation time.
-	 * @param {function} step
-	 * @param {function|string} easing
+	 * @param {function} step step
+	 * @param {function|string} easing easing
 	 * @returns {object} Deferred object.
 	 */
 module.exports = (duration, step, easing) => {
