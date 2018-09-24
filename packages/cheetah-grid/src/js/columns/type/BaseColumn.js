@@ -95,13 +95,16 @@ class BaseColumn {
 
 
 		const record = getRecord();
+		let promise;
 		if (isPromise(record)) {
-			return record.then(() => this.onDrawCell(cellValue, info, context, grid));
+			promise = record.then(() => cellValue);
+		} else if (isPromise(cellValue)) {
+			promise = cellValue;
 		}
 		//文字描画
-		if (isPromise(cellValue)) {
+		if (promise) {
 			const start = Date.now();
-			return cellValue.then((val) => {
+			return promise.then((val) => {
 				const currentContext = context.toCurrentContext();
 				const drawRect = currentContext.getDrawRect();
 				if (!drawRect) {
