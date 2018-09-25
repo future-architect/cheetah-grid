@@ -9,6 +9,7 @@
     "build": "webpack --mode production",
     "lint": "npm run eslint",
     "watch": "webpack --watch --mode development",
+    "build:dev": "webpack --mode development",
     "eslint": "eslint . --ext .js,.vue",
     "eslint:fix": "eslint . --fix --ext .js,.vue",
     "patch": "node ../../patch/patch.js",
