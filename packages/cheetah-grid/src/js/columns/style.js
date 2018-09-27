@@ -9,6 +9,7 @@ const ImageStyle = require('./style/ImageStyle');
 const IconStyle = require('./style/IconStyle');
 const PercentCompleteBarStyle = require('./style/PercentCompleteBarStyle');
 const MultilineTextStyle = require('./style/MultilineTextStyle');
+const MenuStyle = require('./style/MenuStyle');
 
 /**
  * column styles
@@ -46,6 +47,9 @@ const style = {
 	},
 	get MultilineTextStyle() {
 		return MultilineTextStyle;
+	},
+	get MenuStyle() {
+		return MenuStyle;
 	},
 	of(columnStyle, record, StyleClass) {
 		if (columnStyle) {
