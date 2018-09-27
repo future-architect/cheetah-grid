@@ -3,7 +3,7 @@
 const {normalize} = require('../../internal/menu-items');
 const {isDef} = require('../../internal/utils');
 const BaseColumn = require('./BaseColumn');
-const Style = require('../style/Style');
+const MenuStyle = require('../style/MenuStyle');
 const utils = require('./columnUtils');
 
 class MenuColumn extends BaseColumn {
@@ -12,7 +12,7 @@ class MenuColumn extends BaseColumn {
 		this._options = normalize(option.options);
 	}
 	get StyleClass() {
-		return Style;
+		return MenuStyle;
 	}
 	clone() {
 		return new MenuColumn(this);
@@ -33,6 +33,7 @@ class MenuColumn extends BaseColumn {
 			bgColor,
 			padding,
 			textOverflow,
+			appearance,
 		} = style;
 		let {
 			color,
@@ -62,20 +63,24 @@ class MenuColumn extends BaseColumn {
 				textOverflow,
 				icons,
 			});
-			// draw icon
-			helper.text('', context, {
-				textAlign: 'right',
-				textBaseline,
-				color,
-				font,
-				icons: [{
-					path: 'M0 2 5 7 10 2z',
-					width: 10,
-					color: 'rgba(0, 0, 0, .54)',
-				}],
-				padding: iconPadding,
-			});
 
+			if (appearance === 'menulist-button') {
+				// draw dropdown arrow icon
+				helper.text('', context, {
+					textAlign: 'right',
+					textBaseline,
+					color,
+					font,
+					icons: [{
+						path: 'M0 2 5 7 10 2z',
+						width: 10,
+						color: 'rgba(0, 0, 0, .54)',
+					}],
+					padding: iconPadding,
+				});
+			} else if (appearance !== 'none') {
+				console.warn(`unsupported appearance:${appearance}`);
+			}
 		});
 	}
 	convertInternal(value) {

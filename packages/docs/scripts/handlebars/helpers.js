@@ -245,7 +245,7 @@ function registerHelpers() {
 	Handlebars.registerHelper('marked', function(...args) {
 		const arg = analyzeArguments(...args);
 		const context = arg.get(this);
-		const option = Object.assign({sanitize: true}, arg.hash);
+		const option = Object.assign({sanitize: false}, arg.hash);
 		return new Handlebars.SafeString(marked(context, option));
 	});
 	/**

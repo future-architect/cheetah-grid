@@ -111,9 +111,11 @@ Metalsmith(__dirname).//eslint-disable-line new-cap
 	})).
 	use(inPlace({
 		pattern: '*.hbs',
+		suppressNoFilesError: true,
 	})).
 	use(inPlace({
 		pattern: '**/*.hbs',
+		suppressNoFilesError: true,
 	})).
 	use(layouts({
 		engine: 'handlebars',
