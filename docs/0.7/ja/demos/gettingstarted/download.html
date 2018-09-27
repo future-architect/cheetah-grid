@@ -5,7 +5,7 @@
     <meta name="author" content="Cheetah Grid">
     <meta name="keywords" content="spreadsheet,grid,canvas,table,web-components">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Cheetah Grid - Download</title>
+    <title>Cheetah Grid - Download &amp; Script</title>
     <link rel="shortcut icon" type="image/x-icon" href="./../../../../icon_512x512.ico">
 
     <link rel="stylesheet" type="text/css" href="./../../../css/style.css">
@@ -139,7 +139,7 @@
         a.textContent = "<goto the latest version(".concat(latest, ") document>");
       }
     }); //
-    </script>    <h1><a href="./../../.././index.html#introduction">Introduction</a> &gt; Getting Started &gt; Download</h1>
+    </script>    <h1><a href="./../../.././index.html#introduction">Introduction</a> &gt; Getting Started &gt; Download &amp; Script</h1>
     <div class="contents">
         
 <h1 id="downloading-cheetah-grid">Downloading Cheetah Grid</h1>
@@ -169,10 +169,10 @@
 <pre><code class="language-bash hljs">$ npm install
 $ npm run build</code></pre>
 <p>ビルド後のファイルは<code>./packages/cheetah-grid/dist</code>のディレクトリに生成されます</p>
-<h1 id="javascript">JavaScript</h1>
+<h1 id="javascript-html">JavaScript &amp; HTML</h1>
 <p>詳細は<a href="../../index.html">他のドキュメント</a>を参照してください。</p>
-
-
+<pre><code class="language-html hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"sample1"</span> <span class="hljs-attr">style</span>=<span class="hljs-string">"height: 300px; border: solid 1px #ddd;"</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
 
 <script type="text/javascript">
 /* eslint no-unused-vars:0 */
@@ -267,6 +267,7 @@ var grid = new cheetahGrid.ListGrid({
 }
 window.load = load;
 </script>
+
 <pre><code class="js hljs javascript">	<span class="hljs-comment">// initialize</span>
 	<span class="hljs-keyword">const</span> grid = <span class="hljs-keyword">new</span> cheetahGrid.ListGrid({
 	<span class="hljs-comment">// Parent element on which to place the grid</span>
@@ -285,8 +286,9 @@ window.load = load;
 		frozenColCount: <span class="hljs-number">2</span>,
 	});
 </code></pre>
-<div id="sample1" class="demo-grid middle">
+<div id="sample1" style="height: 300px; border: solid 1px #ddd;">
 </div>
+
 
 <script type="text/javascript">
 

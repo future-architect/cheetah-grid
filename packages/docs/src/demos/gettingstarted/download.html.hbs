@@ -2,7 +2,7 @@
 category:
   - Introduction
   - Getting Started
-title: Download
+title: Download & Script
 layout: demo.hbs
 order: 1
 ---
@@ -79,7 +79,7 @@ $ npm run build
 built file is created in the `./packages/cheetah-grid/dist` directory
 {{/if}}
 
-# JavaScript
+# JavaScript & HTML
 
 {{#if lang_ja}}
 詳細は[他のドキュメント](../../index.html)を参照してください。
@@ -87,9 +87,13 @@ built file is created in the `./packages/cheetah-grid/dist` directory
 Please refer to the [more documents](../../index.html) for details
 {{/if}}
 
+```html
+{{#copy "html1"}}
+<div id="sample1" style="height: 300px; border: solid 1px #ddd;">
+</div>
+{{/copy}}
+```
 {{/marked}}
-
-
 
 <script type="text/javascript">
 /* eslint no-unused-vars:0 */
@@ -122,10 +126,10 @@ function load() {
 }
 window.load = load;
 </script>
+
 {{> code class="js" code=script1}}
 
-<div id="sample1" class="demo-grid middle">
-</div>
+{{{html1}}}
 
 <script type="text/javascript">
 
