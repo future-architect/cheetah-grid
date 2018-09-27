@@ -147,8 +147,9 @@
     <div class="contents">
         
 <h2 id="smalldialoginputeditor">SmallDialogInputEditor</h2>
-<p>入力によるデータ編集を可能にします。  </p>
-<p>列の<code>action</code>に<code>SmallDialogInputEditor</code>クラスのインスタンスを利用すると、<code>readOnly</code>・<code>disabled</code>プロパティの制御を動的に行うことができますが、<br>文字列<code>'input'</code>と定義した場合は、<code>readOnly</code>・<code>disabled</code>プロパティを制御出来ません。  </p>
+<p>Enables data editing by input.</p>
+<p>You can dynamically control the <code>readOnly</code> and <code>disabled</code> property by defining an instance of the <code>SmallDialogInputEditor</code> class to the <code>action</code> column.
+If defined with the string <code>'input'</code>, you can not control <code>readOnly</code> and <code>disabled</code> property.</p>
 
 <div id="sample1" class="demo-grid small">
 </div>
@@ -305,34 +306,34 @@ grid.records = [
 };
 </code></pre>
 
-<h3 id="-">プロパティ</h3>
-<p><code>SmallDialogInputEditor</code>のコンストラクタ引数で以下プロパティを指定できます。  </p>
+<h3 id="properties">Properties</h3>
+<p>The following properties can be set with the constructor argument of <code>SmallDialogInputEditor</code>.</p>
 <table>
 <thead>
 <tr>
 <th>property</th>
-<th>説明</th>
+<th>descrition</th>
 </tr>
 </thead>
 <tbody><tr>
 <td><code>type</code></td>
-<td><code>&lt;input&gt;</code>要素の<code>type</code>属性を指定します。</td>
+<td>Specify the <code>type</code> attribute of the <code>&lt;input&gt;</code> element.</td>
 </tr>
 <tr>
 <td><code>classList</code></td>
-<td>ダイアログの要素の<code>class</code>を指定します。</td>
+<td>Specify <code>class</code> of the dialog element.</td>
 </tr>
 <tr>
 <td><code>helperText</code></td>
-<td>ヘルパーテキストを指定します。関数を指定することもできます。</td>
+<td>Specify helper text. You can also specify a function.</td>
 </tr>
 <tr>
 <td><code>validator</code></td>
-<td>入力値確定前のvalidation関数を指定します。エラーがある場合は関数でメッセージ文字列を返してください。</td>
+<td>Specify the validation function to be call before confirming the input value. If there is an error, please use the function to return the message.</td>
 </tr>
 <tr>
 <td><code>inputValidator</code></td>
-<td><code>&lt;input&gt;</code>の入力値のvalidation関数を指定します。エラーがある場合は関数でメッセージ文字列を返してください。</td>
+<td>Specify the validation function of the value of <code>&lt;input&gt;</code>. If there is an error, please use the function to return the message.</td>
 </tr>
 </tbody></table>
 

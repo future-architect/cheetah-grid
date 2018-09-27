@@ -19,7 +19,12 @@ css: >
 <span class="warn">{{#if lang_ja}}InlineInputEditorは実験段階の機能です{{else}}InlineInputEditor is an experiment stage{{/if}}</span>
 
 {{#marked}}
+
+{{#if lang_ja}}
 入力によるデータ編集を可能にします。  
+{{else}}
+Enables data editing by input.
+{{/if}}
 
 {{/marked}}
 
@@ -97,12 +102,23 @@ document.querySelector('#sample1mode').onchange = function() {
 
 
 {{#marked}}
+
+
+{{#if lang_ja}}
 ### プロパティ
 
 |property|説明|
 |---|---|
 |`type`|`<input>`要素の`type`属性を指定します。|
 |`classList`|`<input>`要素の`class`を指定します。|
+{{else}}
+### Properties
+
+|property|descrition|
+|---|---|
+|`type`|Specify the `type` attribute of the `<input>` element.|
+|`classList`|Specify `class` of the `<input>` element.|
+{{/if}}
 
 {{/marked}}
 

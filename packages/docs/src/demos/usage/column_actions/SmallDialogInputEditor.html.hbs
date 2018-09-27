@@ -16,11 +16,17 @@ css: >
 {{#marked}}
 ## SmallDialogInputEditor
 
+{{#if lang_ja}}
 入力によるデータ編集を可能にします。  
 
 列の`action`に`SmallDialogInputEditor`クラスのインスタンスを利用すると、`readOnly`・`disabled`プロパティの制御を動的に行うことができますが、  
 文字列`'input'`と定義した場合は、`readOnly`・`disabled`プロパティを制御出来ません。  
+{{else}}
+Enables data editing by input.
 
+You can dynamically control the `readOnly` and `disabled` property by defining an instance of the `SmallDialogInputEditor` class to the `action` column.
+If defined with the string `'input'`, you can not control `readOnly` and `disabled` property.
+{{/if}}
 {{/marked}}
 
 <div id="sample1" class="demo-grid small">
@@ -101,6 +107,7 @@ document.querySelector('#sample1mode').onchange = function() {
 
 
 {{#marked}}
+{{#if lang_ja}}
 ### プロパティ
 `SmallDialogInputEditor`のコンストラクタ引数で以下プロパティを指定できます。  
 
@@ -111,6 +118,18 @@ document.querySelector('#sample1mode').onchange = function() {
 |`helperText`|ヘルパーテキストを指定します。関数を指定することもできます。|
 |`validator`|入力値確定前のvalidation関数を指定します。エラーがある場合は関数でメッセージ文字列を返してください。|
 |`inputValidator`|`<input>`の入力値のvalidation関数を指定します。エラーがある場合は関数でメッセージ文字列を返してください。|
+{{else}}
+### Properties
+The following properties can be set with the constructor argument of `SmallDialogInputEditor`.
+
+|property|descrition|
+|---|---|
+|`type`|Specify the `type` attribute of the `<input>` element.|
+|`classList`|Specify `class` of the dialog element.|
+|`helperText`|Specify helper text. You can also specify a function.|
+|`validator`|Specify the validation function to be call before confirming the input value. If there is an error, please use the function to return the message.|
+|`inputValidator`|Specify the validation function of the value of `<input>`. If there is an error, please use the function to return the message.|
+{{/if}}
 
 {{/marked}}
 
