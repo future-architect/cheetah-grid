@@ -5,7 +5,7 @@
     <meta name="author" content="Cheetah Grid">
     <meta name="keywords" content="spreadsheet,grid,canvas,table,web-components">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Cheetah Grid - Download Vue.js Component</title>
+    <title>Cheetah Grid - Download Vue.js Component &amp; Template</title>
     <link rel="shortcut icon" type="image/x-icon" href="./../../../icon_512x512.ico">
 
     <link rel="stylesheet" type="text/css" href="./../../css/style.css">
@@ -145,7 +145,7 @@
         a.textContent = "<goto the latest version(".concat(latest, ") document>");
       }
     }); //
-    </script>    <h1><a href="./../.././index.html#introduction">Introduction</a> &gt; Getting Started &gt; Download Vue.js Component</h1>
+    </script>    <h1><a href="./../.././index.html#introduction">Introduction</a> &gt; Getting Started &gt; Download Vue.js Component &amp; Template</h1>
     <div class="contents">
         
 <h1 id="downloading-cheetah-grid-for-vue-js">Downloading Cheetah Grid for Vue.js</h1>
@@ -162,7 +162,7 @@
 Vue.use(CGrid)</code></pre>
 <h1 id="vue-instance-template">Vue Instance &amp; Template</h1>
 <p>Please refer to the <a href="../../index.html#usage-vue-component">more documents</a> for details</p>
-<pre><code class="language-html hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"app"</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"demo-grid middle"</span>&gt;</span>
+<pre><code class="language-html hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"app"</span> <span class="hljs-attr">style</span>=<span class="hljs-string">"height: 300px; border: solid 1px #ddd;"</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">c-grid</span>
     <span class="hljs-attr">ref</span>=<span class="hljs-string">"grid"</span>
     <span class="hljs-attr">:data</span>=<span class="hljs-string">"records"</span>
@@ -285,7 +285,7 @@ window.load = load;
 
 	});
 </code></pre>
-<div id="app" class="demo-grid middle">
+<div id="app" style="height: 300px; border: solid 1px #ddd;">
   <c-grid ref="grid" :data="records" :frozen-col-count="1">
     <c-grid-column :width="50" field="check" column-type="check" action="check">
     </c-grid-column>
