@@ -5,6 +5,7 @@ const chalk = require('chalk');
 const packages = require('mrpm/lib/packages');
 const {version} = require('../package.json');
 const opts = {cwd: process.cwd()};
+const callNpm = require('mrpm/lib/callNpm');
 
 function minorVersion(v) {
 	return `${semver.major(v)}.${semver.minor(v)}`;
@@ -46,11 +47,13 @@ function checkPackageJson(pkg, pkgs) {
 	}
 
 	// check dependencies
-	const dependenciesKeys = ['dependencies',
-		// 'devDependencies',
+	const dependenciesKeys = [
+		'dependencies',
+		'devDependencies',
 		'peerDependencies',
 		'optionalDependencies',
-		'bundledDependencies'];
+		'bundledDependencies'
+	];
 	for (const depsName of dependenciesKeys) {
 		const dependencies = pkg[depsName];
 		for (const name in dependencies) {
@@ -59,10 +62,15 @@ function checkPackageJson(pkg, pkgs) {
 			}
 			const v = dependencies[name].match(/(\d+\.\d+\.\d+)/g)[0];
 			if (minorVersion(v) !== minorVersion(pkgs[name].version)) {
-
-				const message = `${name} version numbers do not match. expect:${pkgs[name].version} "${pkg.rootDir}/package.json".${depsName}.${name}:"${dependencies[name]}" `;
-				console.error(message);
-				errors.push(Promise.reject(new Error(message)));
+				errors.push(callNpm(pkgs[name], 'info', [name, 'versions', '--json'], opts).then((vers) => {
+					vers = JSON.parse(vers);
+					if (vers.indexOf(pkgs[name].version) >= 0) {
+						const message = `${name} version numbers do not match. expect:${pkgs[name].version} "${pkg.rootDir}/package.json".${depsName}.${name}:"${dependencies[name]}" `;
+						console.error(message);
+						return Promise.reject(new Error(message));
+					}
+					return undefined;
+				}));
 			}
 		}
 	}

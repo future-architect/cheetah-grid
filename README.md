@@ -17,20 +17,22 @@ The fastest open-source web component of data table.
 
 [DEMO & Documents](https://future-architect.github.io/cheetah-grid/)
 
-## Downloading Cheetah Grid 
+## Downloading Cheetah Grid
 
 ### Using Cheetah Grid with a CDN
+
 [![npm](https://img.shields.io/npm/v/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
 
 ```html
-<script src="https://unpkg.com/cheetah-grid@0.7.x"></script>
+<script src="https://unpkg.com/cheetah-grid@0.8.x"></script>
 ```
 
 ### Downloading Cheetah Grid using npm
+
 [![npm](https://img.shields.io/npm/v/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
 
 ```sh
-$ npm install cheetah-grid
+npm install cheetah-grid
 ```
 
 ```js
@@ -38,26 +40,30 @@ const cheetahGrid = require("cheetah-grid")
 ```
 
 ### Downloading Cheetah Grid source code
+
 [![npm](https://img.shields.io/npm/v/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
 
-[cheetahGrid.es5.min.js](https://unpkg.com/cheetah-grid@0.7.x/dist/cheetahGrid.es5.min.js)  
+[cheetahGrid.es5.min.js](https://unpkg.com/cheetah-grid@0.8.x/dist/cheetahGrid.es5.min.js)  
 
 SourceMap  
-[cheetahGrid.es5.min.js.map](https://unpkg.com/cheetah-grid@0.7.x/dist/cheetahGrid.es5.min.js.map)  
+[cheetahGrid.es5.min.js.map](https://unpkg.com/cheetah-grid@0.8.x/dist/cheetahGrid.es5.min.js.map)  
 
 
 ### Downloading Cheetah Grid using GitHub
+
 [![GitHub package version](https://img.shields.io/github/package-json/v/future-architect/cheetah-grid.svg)](https://github.com/future-architect/cheetah-grid)
 
 #### git clone
+
 ```bash
-$ git clone https://github.com/future-architect/cheetah-grid.git
+git clone https://github.com/future-architect/cheetah-grid.git
 ```
 
 #### npm install & build
+
 ```bash
-$ npm install
-$ npm run build
+npm install
+npm run build
 ```
 
 built file is created in the `./packages/cheetah-grid/dist` directory
