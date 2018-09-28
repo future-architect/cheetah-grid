@@ -5,11 +5,9 @@
       :data="data"
       :frozen-col-count="1"
     >
-      <c-grid-column
+      <c-grid-check-column
         :width="50"
         field="check"
-        column-type="check"
-        action="check"
       />
       <c-grid-column
         field="id"

@@ -1,4 +1,6 @@
 <script>
+import { girdUpdateWatcher } from './utils'
+
 /**
  * The Mixin for `<c-grid-column>` components.
  */
@@ -26,28 +28,51 @@ export default {
       default: undefined
     }
   },
+  watch: {
+    caption: girdUpdateWatcher,
+    sort: girdUpdateWatcher,
+    headerStyle: girdUpdateWatcher
+  },
   mounted () {
-    this.$_CGrid_update()
+    this.$_CGrid_nextTickUpdate()
   },
   updated () {
-    this.$_CGrid_update()
+    this.$_CGrid_nextTickUpdate()
   },
   methods: {
     /**
-     * @private
+     * Redraws the whole grid.
+     * @return {void}
      */
-    $_CGridColumn_getProps () {
+    invalidate () {
+      if (this.$parent && this.$parent.invalidate) {
+        this.$parent.invalidate()
+      }
+    },
+    /**
+     * Returns the property Object to judge the change.
+     * @protected
+     * @returns {object}
+     */
+    getPropsObjectInternal () {
       const props = Object.assign({}, this.$props)
       props.textContent = this.$el.textContent.trim()
       return props
     },
-
     /**
      * @private
      */
     $_CGrid_update () {
       if (this.$parent && this.$parent.$_CGrid_update) {
         this.$parent.$_CGrid_update()
+      }
+    },
+    /**
+     * @private
+     */
+    $_CGrid_nextTickUpdate () {
+      if (this.$parent && this.$parent.$_CGrid_nextTickUpdate) {
+        this.$parent.$_CGrid_nextTickUpdate()
       }
     }
   }

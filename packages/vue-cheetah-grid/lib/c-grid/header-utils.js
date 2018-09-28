@@ -23,7 +23,7 @@ function vnodeToColumnProp (vnode) {
   }
   if (vnode.componentInstance &&
     typeof vnode.componentInstance.createColumn === 'function') {
-    return vnode.componentInstance.$_CGridColumn_getProps()
+    return vnode.componentInstance.getPropsObjectInternal()
   }
   // before instantiation?
   return undefined

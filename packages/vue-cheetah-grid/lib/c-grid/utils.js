@@ -93,3 +93,10 @@ export function normalizeAction (action) {
   }
   return action
 }
+
+export const girdUpdateWatcher = {
+  handler () {
+    this.$_CGrid_nextTickUpdate()
+  },
+  deep: true
+}

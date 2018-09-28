@@ -6,7 +6,7 @@
 <script>
 import ColumnMixin from './c-grid/ColumnMixin.vue'
 import StdColumnMixin from './c-grid/StdColumnMixin.vue'
-import { cheetahGrid, filterToFn, normalizeColumnType } from './c-grid/utils'
+import { cheetahGrid, filterToFn, normalizeColumnType, girdUpdateWatcher } from './c-grid/utils'
 
 /**
  * @mixin column-mixin
@@ -57,21 +57,63 @@ export default {
     inputType: {
       type: [String, Function],
       default: undefined
+    },
+    /**
+     * Defines disabled
+     */
+    disabled: {
+      type: Boolean
+    },
+    /**
+     * Defines readonly
+     */
+    readonly: {
+      type: Boolean
+    }
+  },
+  watch: {
+    columnType: girdUpdateWatcher,
+    helperText: girdUpdateWatcher,
+    inputValidator: girdUpdateWatcher,
+    validator: girdUpdateWatcher,
+    inputClassList: girdUpdateWatcher,
+    inputType: girdUpdateWatcher,
+    disabled (disabled) {
+      if (this._action) {
+        this._action.disabled = disabled
+      }
+    },
+    readonly (readonly) {
+      if (this._action) {
+        this._action.readOnly = readonly
+      }
     }
   },
   methods: {
     /**
      * @private
+     * @override
+     */
+    getPropsObjectInternal () {
+      const props = ColumnMixin.methods.getPropsObjectInternal.apply(this)
+      delete props.disabled
+      delete props.readonly
+      return props
+    },
+    /**
+     * @private
      */
     createColumn () {
-      const columnType = normalizeColumnType(this.columnType)
-      const action = new cheetahGrid.columns.action.SmallDialogInputEditor({
+      const action = this._action = new cheetahGrid.columns.action.SmallDialogInputEditor({
         helperText: this.helperText,
         inputValidator: this.inputValidator,
         validator: this.validator,
         classList: this.inputClassList,
-        type: this.inputType
+        type: this.inputType,
+        disabled: this.disabled,
+        readOnly: this.readonly
       })
+      const columnType = normalizeColumnType(this.columnType)
       const field = this.filter ? filterToFn(this, this.field, this.filter) : this.field
       return {
         caption: this.caption || this.$el.textContent.trim(),

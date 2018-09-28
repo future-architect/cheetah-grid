@@ -22,13 +22,44 @@ export default {
     caption: {
       type: [String],
       default: ''
+    },
+    /**
+     * Defines disabled
+     */
+    disabled: {
+      type: Boolean
+    }
+  },
+  watch: {
+    disabled (disabled) {
+      if (this._action) {
+        this._action.disabled = disabled
+      }
     }
   },
   methods: {
     /**
      * @private
+     * @override
+     */
+    getPropsObjectInternal () {
+      const props = ColumnMixin.methods.getPropsObjectInternal.apply(this)
+      delete props.disabled
+      return props
+    },
+    /**
+     * @private
      */
     createColumn () {
+      const action = this._action = new cheetahGrid.columns.action.ButtonAction({
+        action: (...args) => {
+          /**
+             * Fired when a click on cell.
+             */
+          this.$emit('click', ...args)
+        },
+        disabled: this.disabled
+      })
       const field = this.filter ? filterToFn(this, this.field, this.filter) : this.field
       return {
         caption: this.$el.textContent.trim(),
@@ -45,14 +76,7 @@ export default {
         columnType: new cheetahGrid.columns.type.ButtonColumn({
           caption: this.caption
         }),
-        action: new cheetahGrid.columns.action.ButtonAction({
-          action: (...args) => {
-            /**
-             * Fired when a click on cell.
-             */
-            this.$emit('click', ...args)
-          }
-        })
+        action
       }
     }
   }

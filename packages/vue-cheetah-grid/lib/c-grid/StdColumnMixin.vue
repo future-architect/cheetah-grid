@@ -1,4 +1,6 @@
 <script>
+import { girdUpdateWatcher } from './utils'
+
 /**
  * The Mixin for `<c-grid-column>` components.
  * It is used except for `<c-grid-column-group>`.
@@ -61,6 +63,16 @@ export default {
       type: [Object, String, Function],
       default: undefined
     }
+  },
+  watch: {
+    field: girdUpdateWatcher,
+    filter: girdUpdateWatcher,
+    width: girdUpdateWatcher,
+    minWidth: girdUpdateWatcher,
+    maxWidth: girdUpdateWatcher,
+    columnStyle: girdUpdateWatcher,
+    icon: girdUpdateWatcher,
+    message: girdUpdateWatcher
   }
 }
 </script>

@@ -74,9 +74,12 @@ describe('c-grid update', () => {
     let { rawGrid } = wrapper.vm.$refs.grid
     expect(rawGrid.header.length).to.equal(1)
 
-    wrapper.vm.showButton = true;
-    ({ rawGrid } = wrapper.vm.$refs.grid)
-    expect(rawGrid.header.length).to.equal(2)
+    wrapper.vm.showButton = true
+    return wrapper.vm.$nextTick()
+      .then(() => {
+        ({ rawGrid } = wrapper.vm.$refs.grid)
+        expect(rawGrid.header.length).to.equal(2)
+      })
   })
   it('CGrid no update header', () => {
     const Component = {

@@ -13,7 +13,8 @@ describe('sample', () => {
   it('header config', () => {
     expect(rawGrid.header.length).to.equal(7)
     const [check, id, group, input, link, menu, percent] = rawGrid.header
-    expect(check).to.own.include({ 'caption': '', 'field': 'check', 'columnType': 'check', 'width': 50, 'action': 'check' })
+    expect(check).to.own.include({ 'caption': '', 'field': 'check', 'columnType': 'check', 'width': 50 })
+    expect(check.action).to.be.an.instanceof(cheetahGrid.columns.action.CheckEditor)
     expect(id).to.own.include({ 'caption': 'ID', 'field': 'id', 'width': '85' })
     //
     expect(group.caption).to.equal('GROUP')

@@ -18,9 +18,10 @@ export default {
   methods: {
     /**
      * @private
+     * @override
      */
-    $_CGridColumn_getProps () {
-      const props = ColumnMixin.methods.$_CGridColumn_getProps.apply(this)
+    getPropsObjectInternal () {
+      const props = ColumnMixin.methods.getPropsObjectInternal.apply(this)
       props.columns = slotsToHeaderProps(this.$slots.default)
       return props
     },
