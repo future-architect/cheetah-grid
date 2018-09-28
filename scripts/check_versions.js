@@ -62,17 +62,33 @@ function checkPackageJson(pkg, pkgs) {
 			}
 			const v = dependencies[name].match(/(\d+\.\d+\.\d+)/g)[0];
 			if (minorVersion(v) !== minorVersion(pkgs[name].version)) {
-				errors.push(callNpm(pkgs[name], 'info', [name, 'versions', '--json'], opts).then((vers) => {
-					vers = JSON.parse(vers);
-					if (vers.indexOf(pkgs[name].version) >= 0) {
-						const message = `${name} version numbers do not match. expect:${pkgs[name].version} "${pkg.rootDir}/package.json".${depsName}.${name}:"${dependencies[name]}" `;
-						console.error(message);
-						return Promise.reject(new Error(message));
-					}
-					return undefined;
-				}));
+				const p = checkPublished(pkg, name, pkgs[name].version).
+					then((isPublished) => {
+						if (isPublished) {
+							let install;
+							if (depsName === 'dependencies' || depsName === 'devDependencies') {
+								install = callNpm(pkg, 'i', [depsName === 'dependencies' ? '-S' : '-D', `${name}@latest`], opts);
+							} else {
+								install = Promise.resolve();
+							}
+							return install.then(() => {
+								const message = `${name} version numbers do not match. expect:${pkgs[name].version} "${pkg.rootDir}/package.json".${depsName}.${name}:"${dependencies[name]}" `;
+								console.error(message);
+								return Promise.reject(new Error(message));
+							});
+						}
+						return undefined;
+					});
+				errors.push(p);
 			}
 		}
 	}
 	return Promise.all(errors);
+}
+
+function checkPublished(pkg, name, actVer) {
+	return callNpm(pkg, 'info', [name, 'versions', '--json'], opts).then((vers) => {
+		vers = JSON.parse(vers);
+		return (vers.indexOf(actVer) >= 0);
+	});
 }
