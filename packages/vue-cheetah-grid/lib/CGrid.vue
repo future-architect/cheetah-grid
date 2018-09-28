@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { cheetahGrid } from './c-grid/utils'
+import { cheetahGrid, girdUpdateWatcher } from './c-grid/utils'
 import { slotsToHeaderOptions, slotsToHeaderProps } from './c-grid/header-utils'
 
 function deepObjectEquals (a, b) {
@@ -89,6 +89,8 @@ function _initGrid (v) {
   _bindEvents(v, grid)
 }
 
+let seq = 0
+
 export default {
   name: 'CGrid',
   props: {
@@ -138,9 +140,11 @@ export default {
       if (this.rawGrid) {
         this.rawGrid.frozenColCount = frozenColCount
       }
-    }
+    },
+    options: girdUpdateWatcher
   },
   mounted () {
+    this.$_CGrid_cancelNextTickUpdate()
     if (this.rawGrid) {
       this.rawGrid.dispose()
       this.rawGrid = null
@@ -148,13 +152,14 @@ export default {
     _initGrid(this)
   },
   destroyed () {
+    this.$_CGrid_cancelNextTickUpdate()
     if (this.rawGrid) {
       this.rawGrid.dispose()
       this.rawGrid = null
     }
   },
   updated () {
-    this.$_CGrid_update()
+    this.$_CGrid_nextTickUpdate()
   },
   methods: {
     /**
@@ -163,6 +168,7 @@ export default {
      */
     invalidate () {
       if (this.rawGrid) {
+        this.$_CGrid_ifDelayingForceUpdate()
         this.rawGrid.invalidate()
       }
     },
@@ -172,6 +178,7 @@ export default {
      */
     updateSize () {
       if (this.rawGrid) {
+        this.$_CGrid_ifDelayingForceUpdate()
         this.rawGrid.updateSize()
       }
     },
@@ -181,13 +188,41 @@ export default {
      */
     updateScroll () {
       if (this.rawGrid) {
+        this.$_CGrid_ifDelayingForceUpdate()
         this.rawGrid.updateScroll()
       }
     },
     /**
      * @private
      */
+    $_CGrid_nextTickUpdate () {
+      const id = ++seq
+      this._nextTickUpdateId = id
+      this.$nextTick(() => {
+        if (this._nextTickUpdateId === id) {
+          this.$_CGrid_update()
+        }
+      })
+    },
+    /**
+     * @private
+     */
+    $_CGrid_cancelNextTickUpdate () {
+      this._nextTickUpdateId = undefined
+    },
+    /**
+     * @private
+     */
+    $_CGrid_ifDelayingForceUpdate () {
+      if (this._nextTickUpdateId) {
+        this.$_CGrid_update()
+      }
+    },
+    /**
+     * @private
+     */
     $_CGrid_update () {
+      this.$_CGrid_cancelNextTickUpdate()
       if (this.rawGrid) {
         const gridProps = _buildGridProps(this)
         const beforeGridProps = Object.assign({}, this._beforeGridProps)

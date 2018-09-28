@@ -6,7 +6,7 @@
 <script>
 import ColumnMixin from './c-grid/ColumnMixin.vue'
 import StdColumnMixin from './c-grid/StdColumnMixin.vue'
-import { cheetahGrid, filterToFn } from './c-grid/utils'
+import { cheetahGrid, filterToFn, girdUpdateWatcher } from './c-grid/utils'
 
 /**
  * @mixin column-mixin
@@ -36,17 +36,62 @@ export default {
     editorOptions: {
       type: [Object, Array],
       default: undefined
+    },
+    /**
+     * Defines disabled
+     */
+    disabled: {
+      type: Boolean
+    },
+    /**
+     * Defines readonly
+     */
+    readonly: {
+      type: Boolean
+    }
+  },
+  watch: {
+    options: girdUpdateWatcher,
+    displayOptions: girdUpdateWatcher,
+    editorOptions: girdUpdateWatcher,
+    disabled (disabled) {
+      if (this._action) {
+        this._action.disabled = disabled
+        // apply style
+        this.invalidate()
+      }
+    },
+    readonly (readonly) {
+      if (this._action) {
+        this._action.readOnly = readonly
+        // apply style
+        this.invalidate()
+      }
     }
   },
   methods: {
     /**
      * @private
+     * @override
+     */
+    getPropsObjectInternal () {
+      const props = ColumnMixin.methods.getPropsObjectInternal.apply(this)
+      delete props.disabled
+      delete props.readonly
+      return props
+    },
+    /**
+     * @private
      */
     createColumn () {
       const dispOpt = this.displayOptions || this.options
-      const columnType = new cheetahGrid.columns.type.MenuColumn({ options: dispOpt })
       const actionOpt = this.editorOptions || this.options
-      const action = actionOpt ? new cheetahGrid.columns.action.InlineMenuEditor({ options: actionOpt }) : undefined
+      const action = this._action = actionOpt ? new cheetahGrid.columns.action.InlineMenuEditor({
+        options: actionOpt,
+        disabled: this.disabled,
+        readOnly: this.readonly
+      }) : undefined
+      const columnType = new cheetahGrid.columns.type.MenuColumn({ options: dispOpt })
       const field = this.filter ? filterToFn(this, this.field, this.filter) : this.field
       return {
         caption: this.caption || this.$el.textContent.trim(),
@@ -57,7 +102,25 @@ export default {
         minWidth: this.minWidth,
         maxWidth: this.maxWidth,
         action,
-        style: this.columnStyle,
+        style: (...args) => {
+          let style = this.columnStyle
+          if (typeof style === 'function') {
+            style = style(...args)
+          }
+          if (this.disabled || this.readonly) {
+            if (style) {
+              if (style.clone) {
+                style = style.clone()
+              } else {
+                style = Object.assign({}, style)
+              }
+              style.appearance = 'none'
+            } else {
+              style = { appearance: 'none' }
+            }
+          }
+          return style
+        },
         sort: this.sort,
         icon: this.icon,
         message: this.message

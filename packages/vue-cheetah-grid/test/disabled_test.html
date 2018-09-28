@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html class="mdc-typography">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <meta content="IE=edge" http-equiv="X-UA-Compatible">
+  <title>Loading...</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+  <script src="../../cheetah-grid/dist/cheetahGrid.es5.min.js"></script>
+  <script src="../../vue-cheetah-grid/dist/vueCheetahGrid.js"></script>
+</head>
+<body>
+  <div id="app" style="height:300px;">
+    <c-grid
+      :data="data">
+      <c-grid-input-column
+        field="text"
+        :disabled="disabled"
+      >
+        INPUT
+      </c-grid-input-column>
+      <c-grid-menu-column
+        field="menu"
+        :options="options"
+        :disabled="disabled"
+      >
+        MENU
+      </c-grid-menu-column>
+      <c-grid-check-column
+        field="check"
+        :disabled="disabled"
+      >
+        CHECK
+      </c-grid-check-column>
+      <c-grid-button-column
+        @click="onClick"
+        caption="CLICK"
+        :disabled="disabled"
+      >
+        BUTTON
+      </c-grid-button-column>
+      <c-grid-button-column
+        @click="onToggleDisabled"
+        caption="TOGGLE DISABLED"
+      >
+        BUTTON
+      </c-grid-button-column>
+
+    </c-grid>
+  </div>
+  <script src="./disabled_test.js"></script>
+</body>
+</html>
