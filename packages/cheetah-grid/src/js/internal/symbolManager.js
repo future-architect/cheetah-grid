@@ -1,13 +1,20 @@
 'use strict';
 
 const Symbol = window.Symbol ? window.Symbol : (() => {
-	let nextId = 1;
+	function random() {
+		const c = 'abcdefghijklmnopqrstuvwxyz0123456789';
+		const cl = c.length;
+		let r = '';
+		for (let i = 0; i < 10; i++) {
+			r += c[Math.floor(Math.random() * cl)];
+		}
+		return r;
+	}
 	return (name) => {
-		const id = nextId++;
 		if (name) {
-			return ` $$$ ${name} - ${id} $$$ `;
+			return `#${name}_${random()}`;
 		} else {
-			return ` $$$ ${id} $$$ `;
+			return `#_${random()}`;
 		}
 	};
 })();
