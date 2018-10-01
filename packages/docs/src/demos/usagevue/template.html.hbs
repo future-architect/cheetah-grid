@@ -18,26 +18,32 @@ order: 100
 | `<c-grid>` | グリッド本体 | --- | --- |
 | `<c-grid-column>` | グリッドに表示するカラム定義 | --- | --- |
 | `<c-grid-column-group>` | ヘッダを階層表示にする際のカラムグループの定義 | --- | --- |
-| `<c-grid-button-column>` | ボタンカラム定義 | ボタン用カラム定義のシンタックスシュガー | --- |
-| `<c-grid-input-column>` | 入力カラム定義 | 入力用カラム定義のシンタックスシュガー | --- |
-| `<c-grid-menu-column>` | メニューカラム定義 | メニュー用カラム定義のシンタックスシュガー | --- |
-| `<c-grid-link-column>` | リンクカラム定義 | リンク用カラム定義のシンタックスシュガー | --- |
-| `<c-grid-icon-column>` | アイコンカラム定義 | アイコン用カラム定義のシンタックスシュガー | --- |
-| `<c-grid-percent-complete-bar-column>` | パーセントバーカラム定義 | パーセントバー用カラム定義のシンタックスシュガー | --- |
+| `<c-grid-button-column>` | ボタンカラム定義 | ボタン用カラム定義 | --- |
+{{#if_v '0.8.0'}}
+| `<c-grid-check-column>` | チェックボックスカラム定義 | チェックボックスカラム定義 | --- |
+{{/if_v}}
+| `<c-grid-input-column>` | 入力カラム定義 | 入力用カラム定義 | --- |
+| `<c-grid-menu-column>` | メニューカラム定義 | メニュー用カラム定義 | --- |
+| `<c-grid-link-column>` | リンクカラム定義 | リンク用カラム定義 | --- |
+| `<c-grid-icon-column>` | アイコンカラム定義 | アイコン用カラム定義 | --- |
+| `<c-grid-percent-complete-bar-column>` | パーセントバーカラム定義 | パーセントバー用カラム定義 | --- |
 {{else}}
 ### Available `Vue Component` tag names
 
-| Component Tag Name | Function | Others | LINK |
+| Component Tag Name | Function | Note | LINK |
 |----------|-----|---|---|
-| `<c-grid>` | Grid body | --- | --- |
+| `<c-grid>` | Grid | --- | --- |
 | `<c-grid-column>` | Column definition to display in the grid | --- | --- |
 | `<c-grid-column-group>` | Definition of column group when multiple header is displayed | --- | --- |
-| `<c-grid-button-column>` | Button column definition | Syntax sugar for button column definition | --- |
-| `<c-grid-input-column>` | Input column definition | Syntax sugar for input column definition | --- |
-| `<c-grid-menu-column>` | Menu column definition | Syntax sugar for menu column definition | --- |
-| `<c-grid-link-column>` | Link column definition | Syntax sugar for linkable column definition | --- |
-| `<c-grid-icon-column>` | Icon column definition | Syntax sugar for icon column definition | --- |
-| `<c-grid-percent-complete-bar-column>` | Percent complete bar column definition | Syntax sugar for Percent complete bar column definition | --- |
+| `<c-grid-button-column>` | Button column definition | component for button column definition | --- |
+{{#if_v '0.8.0'}}
+| `<c-grid-check-column>` | Checkbox column definition | component for checkbox column definition | --- |
+{{/if_v}}
+| `<c-grid-input-column>` | Input column definition | component for input column definition | --- |
+| `<c-grid-menu-column>` | Menu column definition | component for menu column definition | --- |
+| `<c-grid-link-column>` | Link column definition | component for linkable column definition | --- |
+| `<c-grid-icon-column>` | Icon column definition | component for icon column definition | --- |
+| `<c-grid-percent-complete-bar-column>` | Percent complete bar column definition | component for Percent complete bar column definition | --- |
 {{/if}}
 
 
