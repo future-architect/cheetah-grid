@@ -180,37 +180,43 @@
 <tr>
 <td><code>&lt;c-grid-button-column&gt;</code></td>
 <td>ボタンカラム定義</td>
-<td>ボタン用カラム定義のシンタックスシュガー</td>
+<td>ボタン用カラム定義</td>
+<td>---</td>
+</tr>
+<tr>
+<td><code>&lt;c-grid-check-column&gt;</code></td>
+<td>チェックボックスカラム定義</td>
+<td>チェックボックスカラム定義</td>
 <td>---</td>
 </tr>
 <tr>
 <td><code>&lt;c-grid-input-column&gt;</code></td>
 <td>入力カラム定義</td>
-<td>入力用カラム定義のシンタックスシュガー</td>
+<td>入力用カラム定義</td>
 <td>---</td>
 </tr>
 <tr>
 <td><code>&lt;c-grid-menu-column&gt;</code></td>
 <td>メニューカラム定義</td>
-<td>メニュー用カラム定義のシンタックスシュガー</td>
+<td>メニュー用カラム定義</td>
 <td>---</td>
 </tr>
 <tr>
 <td><code>&lt;c-grid-link-column&gt;</code></td>
 <td>リンクカラム定義</td>
-<td>リンク用カラム定義のシンタックスシュガー</td>
+<td>リンク用カラム定義</td>
 <td>---</td>
 </tr>
 <tr>
 <td><code>&lt;c-grid-icon-column&gt;</code></td>
 <td>アイコンカラム定義</td>
-<td>アイコン用カラム定義のシンタックスシュガー</td>
+<td>アイコン用カラム定義</td>
 <td>---</td>
 </tr>
 <tr>
 <td><code>&lt;c-grid-percent-complete-bar-column&gt;</code></td>
 <td>パーセントバーカラム定義</td>
-<td>パーセントバー用カラム定義のシンタックスシュガー</td>
+<td>パーセントバー用カラム定義</td>
 <td>---</td>
 </tr>
 </tbody></table>
@@ -267,7 +273,7 @@ const records = generatePersons(10000);
 </script>
 
 
-<div id="vued2321d8794910fdcb84c2ead900d92ad"></div>
+<div id="vuee0da778cd01911f33a923154dcbd340c"></div>
 <script type="text/javascript">
 (function() {
 	var exports = {};
@@ -340,9 +346,9 @@ var _default = {
 exports.default = _default;
 	})(exports)
 	var obj = exports.default || exports
-	obj.template = "\n<div class=\"demo-grid middle\">\n  <c-grid\n    :data=\"records\"\n    :frozen-col-count=\"1\">\n    <c-grid-column\n      :width=\"50\"\n      field=\"check\"\n      column-type=\"check\"\n      action=\"check\" />\n    <c-grid-column\n      field=\"personid\"\n      width= \"85\"\n    >\n      ID\n    </c-grid-column>\n    <!-- multiple header -->\n    <c-grid-column-group\n      caption=\"Name\">\n      <c-grid-input-column\n        field= \"fname\"\n        width= \"20%\"\n        min-width=\"150\"\n      >\n        First Name\n      </c-grid-input-column>\n      <c-grid-input-column\n        field=\"lname\"\n        width= \"20%\"\n        min-width=\"150\"\n      >\n        Last Name\n      </c-grid-input-column>\n    </c-grid-column-group>\n    <!-- button -->\n    <c-grid-button-column\n      caption=\"SHOW REC\"\n      width=\"120\"\n      @click=\"onClickRecord\"\n    />\n  </c-grid>\n</div>\n"
+	obj.template = "\n<div class=\"demo-grid middle\">\n  <c-grid\n    :data=\"records\"\n    :frozen-col-count=\"1\">\n    <c-grid-column\n      field=\"check\"\n      width=\"50\"\n      column-type=\"check\"\n      action=\"check\" />\n    <c-grid-column\n      field=\"personid\"\n      width= \"85\"\n    >\n      ID\n    </c-grid-column>\n    <!-- multiple header -->\n    <c-grid-column-group\n      caption=\"Name\">\n      <c-grid-input-column\n        field=\"fname\"\n        width=\"20%\"\n        min-width=\"150\"\n      >\n        First Name\n      </c-grid-input-column>\n      <c-grid-input-column\n        field=\"lname\"\n        width= \"20%\"\n        min-width=\"150\"\n      >\n        Last Name\n      </c-grid-input-column>\n    </c-grid-column-group>\n    <!-- button -->\n    <c-grid-button-column\n      caption=\"SHOW REC\"\n      width=\"120\"\n      @click=\"onClickRecord\"\n    />\n  </c-grid>\n</div>\n"
 	var vm = new Vue(obj);
-	vm.$mount('#vued2321d8794910fdcb84c2ead900d92ad')
+	vm.$mount('#vuee0da778cd01911f33a923154dcbd340c')
 })();
 </script>
 
@@ -352,8 +358,8 @@ exports.default = _default;
       <span class="hljs-attr">:data</span>=<span class="hljs-string">"records"</span>
       <span class="hljs-attr">:frozen-col-count</span>=<span class="hljs-string">"1"</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-name">c-grid-column</span>
-        <span class="hljs-attr">:width</span>=<span class="hljs-string">"50"</span>
         <span class="hljs-attr">field</span>=<span class="hljs-string">"check"</span>
+        <span class="hljs-attr">width</span>=<span class="hljs-string">"50"</span>
         <span class="hljs-attr">column-type</span>=<span class="hljs-string">"check"</span>
         <span class="hljs-attr">action</span>=<span class="hljs-string">"check"</span> /&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-name">c-grid-column</span>
@@ -366,8 +372,8 @@ exports.default = _default;
       <span class="hljs-tag">&lt;<span class="hljs-name">c-grid-column-group</span>
         <span class="hljs-attr">caption</span>=<span class="hljs-string">"Name"</span>&gt;</span>
         <span class="hljs-tag">&lt;<span class="hljs-name">c-grid-input-column</span>
-          <span class="hljs-attr">field</span>= <span class="hljs-string">"fname"</span>
-          <span class="hljs-attr">width</span>= <span class="hljs-string">"20%"</span>
+          <span class="hljs-attr">field</span>=<span class="hljs-string">"fname"</span>
+          <span class="hljs-attr">width</span>=<span class="hljs-string">"20%"</span>
           <span class="hljs-attr">min-width</span>=<span class="hljs-string">"150"</span>
         &gt;</span>
           First Name

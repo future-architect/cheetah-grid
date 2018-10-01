@@ -14,6 +14,12 @@
     <!-- <script src="http://localhost:35729/livereload.js"></script> -->
     
     <script type="text/javascript" src="https://unpkg.com/cheetah-grid@0.8||0.7"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script type="text/javascript" src="https://unpkg.com/vue-cheetah-grid@0.8||0.7"></script>
+    <script type="text/javascript">
+        /*global Vue, vueCheetahGrid*/
+        Vue.use(vueCheetahGrid);
+    </script>
 
     <style type="text/css">
         html {
@@ -380,8 +386,7 @@ themeSelect.onchange = <span class="hljs-function"><span class="hljs-keyword">fu
 /*global cheetahGrid*/
 var grid = window.createGrid(document.querySelector('#sample3')); //
 
-var srcTheme = cheetahGrid.themes.choices.MATERIAL_DESIGN;
-grid.theme = srcTheme.extends({
+var userTheme = {
   color: 'red',
   defaultBgColor: '#FDD',
   underlayBackgroundColor: '#FEE',
@@ -444,14 +449,17 @@ grid.theme = srcTheme.extends({
     sortArrowColor: '#D00' //
 
   }
-}); //
+}; //
+
+grid.theme = userTheme; //
 //
+
+window.userTheme = userTheme; //
 })();
 </script>
 
 
-<pre><code class="js hljs javascript"><span class="hljs-keyword">const</span> srcTheme = cheetahGrid.themes.choices.MATERIAL_DESIGN;
-grid.theme = srcTheme.extends({
+<pre><code class="js hljs javascript"><span class="hljs-keyword">const</span> userTheme = {
 	<span class="hljs-attr">color</span>: <span class="hljs-string">'red'</span>,
 	<span class="hljs-attr">defaultBgColor</span>: <span class="hljs-string">'#FDD'</span>,
 	<span class="hljs-attr">underlayBackgroundColor</span>: <span class="hljs-string">'#FEE'</span>,
@@ -494,7 +502,134 @@ grid.theme = srcTheme.extends({
 	<span class="hljs-attr">header</span>: {
 		<span class="hljs-attr">sortArrowColor</span>: <span class="hljs-string">'#D00'</span>
 	}
+};
+grid.theme = userTheme;
+</code></pre>
+
+<h3 id="vue-component">Vue component</h3>
+<p>Vueコンポーネントでは、次のように設定します。</p>
+<script type="text/javascript">
+/*global generatePersons*/
+/*eslint no-unused-vars:0*/
+
+const records = generatePersons(100);
+</script>
+
+
+<div id="vue18227b3418250b72b9c78090811dbd1d"></div>
+<script type="text/javascript">
+(function() {
+	var exports = {};
+	(function(exports) {
+		"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
+exports.default = void 0;
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/*eslint no-alert:0*/
+
+/*global records*/
+var _default = {
+  name: 'App',
+  data: function data() {
+    return {
+      records: records,
+      // you can set the theme name or object.
+      // userTheme: 'BASIC',
+      userTheme: {
+        color: '#2c3e50',
+        frozenRowsBgColor: '#40b883',
+        borderColor: '#35495e',
+        checkbox: {
+          checkBgColor: '#35495e',
+          borderColor: '#35495e'
+        },
+        button: {
+          color: '#FFF',
+          bgColor: '#2c3e50'
+        }
+      }
+    };
+  },
+  methods: {
+    onClickRecord: function onClickRecord(rec) {
+      alert(JSON.stringify(rec));
+    }
+  }
+};
+exports.default = _default;
+	})(exports)
+	var obj = exports.default || exports
+	obj.template = "\n<div class=\"demo-grid middle\">\n  <c-grid\n    :data=\"records\"\n    :theme=\"userTheme\"> <!-- set theme -->\n    <c-grid-check-column field=\"check\" :width=\"50\"/>\n    <c-grid-column field=\"personid\" width= \"85\">ID</c-grid-column>\n    <c-grid-column-group caption=\"Name\">\n      <c-grid-input-column field=\"fname\" width=\"20%\" min-width=\"150\">First Name</c-grid-input-column>\n      <c-grid-input-column field=\"lname\" width=\"20%\" min-width=\"150\">Last Name</c-grid-input-column>\n    </c-grid-column-group>\n    <c-grid-button-column caption=\"SHOW REC\" width=\"120\" @click=\"onClickRecord\" />\n  </c-grid>\n</div>\n"
+	var vm = new Vue(obj);
+	vm.$mount('#vue18227b3418250b72b9c78090811dbd1d')
+})();
+</script>
+
+<pre><code class="vue hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">template</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"demo-grid middle"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">c-grid</span>
+      <span class="hljs-attr">:data</span>=<span class="hljs-string">"records"</span>
+      <span class="hljs-attr">:theme</span>=<span class="hljs-string">"userTheme"</span>&gt;</span> <span class="hljs-comment">&lt;!-- set theme --&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">c-grid-check-column</span> <span class="hljs-attr">field</span>=<span class="hljs-string">"check"</span> <span class="hljs-attr">:width</span>=<span class="hljs-string">"50"</span>/&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">c-grid-column</span> <span class="hljs-attr">field</span>=<span class="hljs-string">"personid"</span> <span class="hljs-attr">width</span>= <span class="hljs-string">"85"</span>&gt;</span>ID<span class="hljs-tag">&lt;/<span class="hljs-name">c-grid-column</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">c-grid-column-group</span> <span class="hljs-attr">caption</span>=<span class="hljs-string">"Name"</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">c-grid-input-column</span> <span class="hljs-attr">field</span>=<span class="hljs-string">"fname"</span> <span class="hljs-attr">width</span>=<span class="hljs-string">"20%"</span> <span class="hljs-attr">min-width</span>=<span class="hljs-string">"150"</span>&gt;</span>First Name<span class="hljs-tag">&lt;/<span class="hljs-name">c-grid-input-column</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">c-grid-input-column</span> <span class="hljs-attr">field</span>=<span class="hljs-string">"lname"</span> <span class="hljs-attr">width</span>=<span class="hljs-string">"20%"</span> <span class="hljs-attr">min-width</span>=<span class="hljs-string">"150"</span>&gt;</span>Last Name<span class="hljs-tag">&lt;/<span class="hljs-name">c-grid-input-column</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">c-grid-column-group</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">c-grid-button-column</span> <span class="hljs-attr">caption</span>=<span class="hljs-string">"SHOW REC"</span> <span class="hljs-attr">width</span>=<span class="hljs-string">"120"</span> @<span class="hljs-attr">click</span>=<span class="hljs-string">"onClickRecord"</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">c-grid</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+<span class="hljs-comment">/*eslint no-alert:0*/</span>
+<span class="hljs-comment">/*global records*/</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+	<span class="hljs-attr">name</span>: <span class="hljs-string">'App'</span>,
+	data() {
+		<span class="hljs-keyword">return</span> {
+			records,
+			<span class="hljs-comment">// you can set the theme name or object.</span>
+			<span class="hljs-comment">// userTheme: 'BASIC',</span>
+			userTheme: {
+				<span class="hljs-attr">color</span>: <span class="hljs-string">'#2c3e50'</span>,
+				<span class="hljs-attr">frozenRowsBgColor</span>: <span class="hljs-string">'#40b883'</span>,
+				<span class="hljs-attr">borderColor</span>: <span class="hljs-string">'#35495e'</span>,
+				<span class="hljs-attr">checkbox</span>: {
+					<span class="hljs-attr">checkBgColor</span>: <span class="hljs-string">'#35495e'</span>,
+					<span class="hljs-attr">borderColor</span>: <span class="hljs-string">'#35495e'</span>,
+				},
+				<span class="hljs-attr">button</span>: {
+					<span class="hljs-attr">color</span>: <span class="hljs-string">'#FFF'</span>,
+					<span class="hljs-attr">bgColor</span>: <span class="hljs-string">'#2c3e50'</span>,
+				},
+			}
+		};
+	},
+	<span class="hljs-attr">methods</span>: {
+		onClickRecord(rec) { alert(<span class="hljs-built_in">JSON</span>.stringify(rec)); }
+	}
+};
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 </code></pre>
     </div>
     

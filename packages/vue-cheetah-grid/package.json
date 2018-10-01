@@ -1,6 +1,6 @@
 {
   "name": "vue-cheetah-grid",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "description": "Cheetah Grid for Vue.js",
   "main": "dist/vueCheetahGrid.js",
   "files": [
@@ -17,8 +17,7 @@
     "lint": "npm run eslint",
     "eslint": "eslint . --ext .js,.vue",
     "eslint:fix": "eslint . --fix  --ext .js,.vue",
-    "build:ci": "npm run build",
-    "prepare": "delay 30 && npm i -S cheetah-grid@latest"
+    "build:ci": "npm run build"
   },
   "repository": {
     "type": "git",
