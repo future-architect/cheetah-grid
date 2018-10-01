@@ -5,7 +5,7 @@
     <meta name="author" content="Cheetah Grid">
     <meta name="keywords" content="spreadsheet,grid,canvas,table,web-components">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Cheetah Grid - MenuColumn</title>
+    <title>Cheetah Grid - CheckColumn</title>
     <link rel="shortcut icon" type="image/x-icon" href="./../../../../../icon_512x512.ico">
 
     <link rel="stylesheet" type="text/css" href="./../../../../css/style.css">
@@ -79,8 +79,8 @@
     						lang<span class="icon-arrow"></span>
     					</a>
     					<ul id="langs" class="nav-dropdown right-dropdown">
-    						<li><a href="./../../../../ja/demos/usage/column_types/MenuColumn.html" class="primary">日本語</a></li>
-    						<li><a href="./../../../../demos/usage/column_types/MenuColumn.html" class="primary">English</a></li>
+    						<li><a href="./../../../../ja/demos/usage/column_types/CheckColumn.html" class="primary">日本語</a></li>
+    						<li><a href="./../../../../demos/usage/column_types/CheckColumn.html" class="primary">English</a></li>
     					</ul>
     				</li>
     			</ul>
@@ -139,25 +139,12 @@
         a.textContent = "<goto the latest version(".concat(latest, ") document>");
       }
     }); //
-    </script>    <h1><a href="./../../../.././index.html#usage">Usage</a> &gt; <a href="./../../../../demos/usage/column_types.html">Column Types</a> &gt; <a href="./../../../../demos/usage/column_types/Classes.html">Classes</a> &gt; MenuColumn</h1>
+    </script>    <h1><a href="./../../../.././index.html#usage">Usage</a> &gt; <a href="./../../../../demos/usage/column_types.html">Column Types</a> &gt; <a href="./../../../../demos/usage/column_types/Classes.html">Classes</a> &gt; CheckColumn</h1>
     <div class="contents">
         
-<h2 id="menucolumn">MenuColumn</h2>
-<p><code>value</code>から<code>caption</code>をマッピングして表示します。</p>
-<p>編集可能にしたい場合は、<a href="../column_actions/InlineMenuEditor.html">InlineMenuEditor</a>を利用てください。</p>
-<h3 id="constructor-properties">constructor properties</h3>
-<table>
-<thead>
-<tr>
-<th>property</th>
-<th>説明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>options</code></td>
-<td>マッピングオプションを定義します。</td>
-</tr>
-</tbody></table>
+<h2 id="checkcolumn">CheckColumn</h2>
+<p>チェックボックスを表示します。</p>
+<p>編集可能にしたい場合は、<a href="../column_actions/CheckEditor.html">CheckEditor</a>を利用てください。</p>
 <h3 id="style-properties">style properties</h3>
 <table>
 <thead>
@@ -168,15 +155,36 @@
 </tr>
 </thead>
 <tbody><tr>
-<td><code>appearance</code></td>
-<td>ドロップダウン矢印を表示するかどうかを定義します。（<code>'menulist-button'</code>または<code>'none'</code>を設定することができます）</td>
-<td><code>'menulist-button'</code></td>
+<td><code>checkBgColor</code></td>
+<td>チェック時のcheckbox背景色を指定できます。</td>
+<td>テーマで指定されます</td>
+</tr>
+<tr>
+<td><code>uncheckBgColor</code></td>
+<td>未チェック時のcheckbox背景色を指定できます。</td>
+<td>テーマで指定されます</td>
+</tr>
+<tr>
+<td><code>borderColor</code></td>
+<td>checkboxの罫線色を指定できます。</td>
+<td>テーマで指定されます</td>
+</tr>
+<tr>
+<td><code>textAlign</code></td>
+<td>セルのcheckbox横位置を指定できます。</td>
+<td><code>'center'</code></td>
+</tr>
+<tr>
+<td><code>textBaseline</code></td>
+<td>セルのcheckbox縦位置を指定できます。</td>
+<td>--</td>
+</tr>
+<tr>
+<td><code>bgColor</code></td>
+<td>セルの背景色を指定できます。</td>
+<td>テーマで指定されます</td>
 </tr>
 </tbody></table>
-<p>この他に、標準のスタイルが利用できます。</p>
-<ul>
-<li><a href="../column_styles.html">Standard Column Style</a></li>
-</ul>
 
 <div id="sample1" class="demo-grid small">
 </div>
@@ -191,49 +199,23 @@
 //
 
 /*global cheetahGrid*/
-var options = [{
-  value: '',
-  caption: 'Empty'
-}, {
-  value: '1',
-  caption: 'Option 1'
-}, {
-  value: '2',
-  caption: 'Option 2'
-}, {
-  value: '3',
-  caption: 'Option 3'
-}, {
-  value: '4',
-  caption: 'Option 4'
-}, {
-  value: '5',
-  caption: 'Option 5'
-}, {
-  value: '6',
-  caption: 'Option 6'
-}, {
-  value: '7',
-  caption: 'Option 7'
-}];
 var grid = new cheetahGrid.ListGrid({
   parentElement: document.querySelector('#sample1'),
   header: [{
-    field: 'sel',
-    caption: 'MenuColumn',
-    width: 260,
-    columnType: new cheetahGrid.columns.type.MenuColumn({
-      options: options
-    })
+    field: 'c1',
+    caption: 'check',
+    width: 100,
+    columnType: 'check' // or `new cheetahGrid.columns.type.CheckColumn()`
+
   }, {
-    field: 'sel2',
+    field: 'c2',
     caption: 'style',
-    width: 260,
-    columnType: new cheetahGrid.columns.type.MenuColumn({
-      options: options
-    }),
+    width: 100,
+    columnType: 'check',
     style: {
-      appearance: 'none'
+      uncheckBgColor: '#FDD',
+      checkBgColor: 'rgb(255, 73, 72)',
+      borderColor: 'red'
     }
   }, {
     caption: 'show',
@@ -249,74 +231,61 @@ var grid = new cheetahGrid.ListGrid({
   }]
 });
 grid.records = [{
-  sel: '',
-  sel2: ''
+  c1: true,
+  c2: false
 }, {
-  sel: '1',
-  sel2: '1'
+  c1: false,
+  c2: true
 }, {
-  sel: '2',
-  sel2: '2'
+  c1: true,
+  c2: false
 }, {
-  sel: '3',
-  sel2: '3'
+  c1: false,
+  c2: true
 }, {
-  sel: '',
-  sel2: ''
+  c1: true,
+  c2: false
 }, {
-  sel: '1',
-  sel2: '1'
+  c1: false,
+  c2: true
 }, {
-  sel: '2',
-  sel2: '2'
+  c1: true,
+  c2: false
 }, {
-  sel: '3',
-  sel2: '3'
+  c1: false,
+  c2: true
 }, {
-  sel: '',
-  sel2: ''
+  c1: true,
+  c2: false
 }, {
-  sel: '1',
-  sel2: '1'
-}, {
-  sel: '2',
-  sel2: '2'
-}, {
-  sel: '3',
-  sel2: '3'
+  c1: false,
+  c2: true
 }]; //
 //
 })();
 </script>
 <pre><code class="js hljs javascript"><span class="hljs-comment">/*global cheetahGrid*/</span>
 
-<span class="hljs-keyword">const</span> options = [
-	{<span class="hljs-attr">value</span>: <span class="hljs-string">''</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'Empty'</span>},
-	{<span class="hljs-attr">value</span>: <span class="hljs-string">'1'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'Option 1'</span>},
-	{<span class="hljs-attr">value</span>: <span class="hljs-string">'2'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'Option 2'</span>},
-	{<span class="hljs-attr">value</span>: <span class="hljs-string">'3'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'Option 3'</span>},
-	{<span class="hljs-attr">value</span>: <span class="hljs-string">'4'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'Option 4'</span>},
-	{<span class="hljs-attr">value</span>: <span class="hljs-string">'5'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'Option 5'</span>},
-	{<span class="hljs-attr">value</span>: <span class="hljs-string">'6'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'Option 6'</span>},
-	{<span class="hljs-attr">value</span>: <span class="hljs-string">'7'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'Option 7'</span>},
-];
 <span class="hljs-keyword">const</span> grid = <span class="hljs-keyword">new</span> cheetahGrid.ListGrid({
 	<span class="hljs-attr">parentElement</span>: <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample1'</span>),
 	<span class="hljs-attr">header</span>: [
 		{
-			<span class="hljs-attr">field</span>: <span class="hljs-string">'sel'</span>,
-			<span class="hljs-attr">caption</span>: <span class="hljs-string">'MenuColumn'</span>,
-			<span class="hljs-attr">width</span>: <span class="hljs-number">260</span>,
-			<span class="hljs-attr">columnType</span>: <span class="hljs-keyword">new</span> cheetahGrid.columns.type.MenuColumn({options}),
+			<span class="hljs-attr">field</span>: <span class="hljs-string">'c1'</span>,
+			<span class="hljs-attr">caption</span>: <span class="hljs-string">'check'</span>,
+			<span class="hljs-attr">width</span>: <span class="hljs-number">100</span>,
+			<span class="hljs-attr">columnType</span>: <span class="hljs-string">'check'</span>, <span class="hljs-comment">// or `new cheetahGrid.columns.type.CheckColumn()`</span>
 		},
 		{
-			<span class="hljs-attr">field</span>: <span class="hljs-string">'sel2'</span>,
+			<span class="hljs-attr">field</span>: <span class="hljs-string">'c2'</span>,
 			<span class="hljs-attr">caption</span>: <span class="hljs-string">'style'</span>,
-			<span class="hljs-attr">width</span>: <span class="hljs-number">260</span>,
-			<span class="hljs-attr">columnType</span>: <span class="hljs-keyword">new</span> cheetahGrid.columns.type.MenuColumn({options}),
-			<span class="hljs-attr">style</span>: {<span class="hljs-attr">appearance</span>: <span class="hljs-string">'none'</span>},
+			<span class="hljs-attr">width</span>: <span class="hljs-number">100</span>,
+			<span class="hljs-attr">columnType</span>: <span class="hljs-string">'check'</span>,
+			<span class="hljs-attr">style</span>: {
+				<span class="hljs-attr">uncheckBgColor</span>: <span class="hljs-string">'#FDD'</span>,
+				<span class="hljs-attr">checkBgColor</span>: <span class="hljs-string">'rgb(255, 73, 72)'</span>,
+				<span class="hljs-attr">borderColor</span>: <span class="hljs-string">'red'</span>,
+			},
 		},
-
 		{
 			<span class="hljs-attr">caption</span>: <span class="hljs-string">'show'</span>,
 			<span class="hljs-attr">width</span>: <span class="hljs-number">100</span>,
@@ -334,18 +303,16 @@ grid.records = [{
 	],
 });
 grid.records = [
-	{<span class="hljs-attr">sel</span>: <span class="hljs-string">''</span>, <span class="hljs-attr">sel2</span>: <span class="hljs-string">''</span>},
-	{<span class="hljs-attr">sel</span>: <span class="hljs-string">'1'</span>, <span class="hljs-attr">sel2</span>: <span class="hljs-string">'1'</span>},
-	{<span class="hljs-attr">sel</span>: <span class="hljs-string">'2'</span>, <span class="hljs-attr">sel2</span>: <span class="hljs-string">'2'</span>},
-	{<span class="hljs-attr">sel</span>: <span class="hljs-string">'3'</span>, <span class="hljs-attr">sel2</span>: <span class="hljs-string">'3'</span>},
-	{<span class="hljs-attr">sel</span>: <span class="hljs-string">''</span>, <span class="hljs-attr">sel2</span>: <span class="hljs-string">''</span>},
-	{<span class="hljs-attr">sel</span>: <span class="hljs-string">'1'</span>, <span class="hljs-attr">sel2</span>: <span class="hljs-string">'1'</span>},
-	{<span class="hljs-attr">sel</span>: <span class="hljs-string">'2'</span>, <span class="hljs-attr">sel2</span>: <span class="hljs-string">'2'</span>},
-	{<span class="hljs-attr">sel</span>: <span class="hljs-string">'3'</span>, <span class="hljs-attr">sel2</span>: <span class="hljs-string">'3'</span>},
-	{<span class="hljs-attr">sel</span>: <span class="hljs-string">''</span>, <span class="hljs-attr">sel2</span>: <span class="hljs-string">''</span>},
-	{<span class="hljs-attr">sel</span>: <span class="hljs-string">'1'</span>, <span class="hljs-attr">sel2</span>: <span class="hljs-string">'1'</span>},
-	{<span class="hljs-attr">sel</span>: <span class="hljs-string">'2'</span>, <span class="hljs-attr">sel2</span>: <span class="hljs-string">'2'</span>},
-	{<span class="hljs-attr">sel</span>: <span class="hljs-string">'3'</span>, <span class="hljs-attr">sel2</span>: <span class="hljs-string">'3'</span>},
+	{<span class="hljs-attr">c1</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">c2</span>: <span class="hljs-literal">false</span>},
+	{<span class="hljs-attr">c1</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">c2</span>: <span class="hljs-literal">true</span>},
+	{<span class="hljs-attr">c1</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">c2</span>: <span class="hljs-literal">false</span>},
+	{<span class="hljs-attr">c1</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">c2</span>: <span class="hljs-literal">true</span>},
+	{<span class="hljs-attr">c1</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">c2</span>: <span class="hljs-literal">false</span>},
+	{<span class="hljs-attr">c1</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">c2</span>: <span class="hljs-literal">true</span>},
+	{<span class="hljs-attr">c1</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">c2</span>: <span class="hljs-literal">false</span>},
+	{<span class="hljs-attr">c1</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">c2</span>: <span class="hljs-literal">true</span>},
+	{<span class="hljs-attr">c1</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">c2</span>: <span class="hljs-literal">false</span>},
+	{<span class="hljs-attr">c1</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">c2</span>: <span class="hljs-literal">true</span>},
 ];
 </code></pre>
 

@@ -10,10 +10,6 @@
 
   Defines a records or data source. 
 
-- `options` ***Object*** (*optional*) `default: undefined` 
-
-  Defines a raw options for Cheetah Grid 
-
 - `frozen-col-count` ***Number|String*** (*optional*) 
 
   Defines a frozen col Count 
@@ -21,6 +17,14 @@
 - `filter` ***Function*** (*optional*) `default: undefined` 
 
   Defines a records filter 
+
+- `theme` ***Object|String*** (*optional*) `default: undefined` 
+
+  Defines the grid theme 
+
+- `options` ***Object*** (*optional*) `default: undefined` 
+
+  Defines a raw options for Cheetah Grid 
 
 ## methods 
 

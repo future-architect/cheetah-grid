@@ -30,15 +30,16 @@
 
 const {extend, getIgnoreCase} = require('./internal/utils');
 const theme = require('./themes/theme');
+const {Theme} = theme;
 const plugins = require('./plugins/themes');
-const BASIC = theme.create(require('./themes/BASIC'));
-const MATERIAL_DESIGN = theme.create(require('./themes/MATERIAL_DESIGN'));
+const BASIC = new Theme(require('./themes/BASIC'));
+const MATERIAL_DESIGN = new Theme(require('./themes/MATERIAL_DESIGN'));
 
 const builtin = {
 	BASIC,
 	MATERIAL_DESIGN,
 };
-let defTheme = theme.create({});
+let defTheme = new Theme({});
 /**
  * themes
  * @type {Object}
@@ -50,21 +51,24 @@ const themes = {
 		return defTheme;
 	},
 	set default(defaultTheme) {
-		defTheme = defaultTheme;
+		defTheme = themes.of(defaultTheme);
 	},
 	theme,
 	of(value) {
 		if (!value) {
-			return null;
+			return defTheme;
 		}
 		if (typeof value === 'string') {
 			const t = getIgnoreCase(themes.choices, value);
 			if (t) {
 				return t;
 			}
-			return null;
+			return defTheme;
 		}
-		return value;
+		if (value instanceof Theme) {
+			return value;
+		}
+		return defTheme.extends(value);
 	},
 	/**
 	 * @namespace cheetahGrid.themes.choices

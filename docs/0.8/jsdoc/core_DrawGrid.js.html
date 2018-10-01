@@ -1237,8 +1237,10 @@ class ColumnResizer extends BaseMouseDownMover {
 		return true;
 	}
 	_upInternal(e) {
-		this._grid.updateScroll();
-
+		const grid = this._grid;
+		if (grid.updateScroll()) {
+			grid.invalidate();
+		}
 	}
 }
 
@@ -2114,14 +2116,21 @@ class DrawGrid extends EventTarget {
 	}
 	/**
 	 * Apply the changed scroll size.
-	 * @return {void}
+	 * @return {boolean} `true` if there was a change in the scroll size
 	 */
 	updateScroll() {
+		const {scrollable} = this[_];
+		const newHeight = _getScrollHeight(this);
+		const newWidth = _getScrollWidth(this);
+		if (newHeight === scrollable.scrollHeight &amp;&amp; newWidth === scrollable.scrollWidth) {
+			return false;
+		}
 		this[_].scrollable.setScrollSize(_getScrollWidth(this), _getScrollHeight(this));
 		this[_].scroll = {
 			left: this[_].scrollable.scrollLeft,
 			top: this[_].scrollable.scrollTop,
 		};
+		return true;
 	}
 	/**
 	 * Get the row height of the given the row index.
