@@ -200,10 +200,8 @@ To extend the theme, do as follows.
 /*global cheetahGrid*/
 const grid = window.createGrid(document.querySelector('#sample3'));
 
-
 //{{#copy "script3"}}
-const srcTheme = cheetahGrid.themes.choices.MATERIAL_DESIGN;
-grid.theme = srcTheme.extends({
+const userTheme = {
 	color: 'red',
 	defaultBgColor: '#FDD',
 	underlayBackgroundColor: '#FEE',
@@ -252,10 +250,89 @@ grid.theme = srcTheme.extends({
 		sortArrowColor: '#D00'
 	}
 	//{{/if_v}}
-});
+};
+//{{#if_v '0.9.0'}}
+grid.theme = userTheme;
+//{{else}}
+grid.theme = cheetahGrid.themes.choices.MATERIAL_DESIGN.extends(userTheme);
+//{{/if_v}}
 //{{/copy}}
+window.userTheme = userTheme;
 //{{/wrapscript}}
 </script>
 
 
 {{> code class="js" code=script3}}
+
+
+{{#if_v '0.9.0'}}
+{{#marked}}
+### Vue component
+
+{{#if lang_ja}}
+Vueコンポーネントでは、次のように設定します。
+{{else}}
+In the Vue component, set it as follows.
+{{/if}}
+
+{{/marked}}
+<script type="text/javascript">
+/*global generatePersons*/
+/*eslint no-unused-vars:0*/
+
+const records = generatePersons(100);
+</script>
+
+{{#vue}}
+{{#copy "vue1"}}
+<template>
+  <div class="demo-grid middle">
+    <c-grid
+      :data="records"
+      :theme="userTheme"> <!-- set theme -->
+      <c-grid-check-column field="check" :width="50"/>
+      <c-grid-column field="personid" width= "85">ID</c-grid-column>
+      <c-grid-column-group caption="Name">
+        <c-grid-input-column field="fname" width="20%" min-width="150">First Name</c-grid-input-column>
+        <c-grid-input-column field="lname" width="20%" min-width="150">Last Name</c-grid-input-column>
+      </c-grid-column-group>
+      <c-grid-button-column caption="SHOW REC" width="120" @click="onClickRecord" />
+    </c-grid>
+  </div>
+</template>
+
+<script>
+/*eslint no-alert:0*/
+/*global records*/
+export default {
+	name: 'App',
+	data() {
+		return {
+			records,
+			// you can set the theme name or object.
+			// userTheme: 'BASIC',
+			userTheme: {
+				color: '#2c3e50',
+				frozenRowsBgColor: '#40b883',
+				borderColor: '#35495e',
+				checkbox: {
+					checkBgColor: '#35495e',
+					borderColor: '#35495e',
+				},
+				button: {
+					color: '#FFF',
+					bgColor: '#2c3e50',
+				},
+			}
+		};
+	},
+	methods: {
+		onClickRecord(rec) { alert(JSON.stringify(rec)); }
+	}
+};
+</script>
+{{/copy}}
+{{/vue}}
+
+{{> code class="vue" code=vue1}}
+{{/if_v}}

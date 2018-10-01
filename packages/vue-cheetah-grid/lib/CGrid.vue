@@ -72,12 +72,14 @@ function _bindEvents (v, grid) {
 }
 function _buildGridProps (v) {
   return Object.assign({
-    frozenColCount: v.frozenColCount - 0
+    frozenColCount: v.frozenColCount - 0,
+    theme: v.theme || null
   }, { header: slotsToHeaderProps(v.$slots.default) }, v.options)
 }
 function _buildGridOption (v) {
   return Object.assign({
-    frozenColCount: v.frozenColCount - 0
+    frozenColCount: v.frozenColCount - 0,
+    theme: v.theme || null
   }, { header: slotsToHeaderOptions(v.$slots.default) }, v.options)
 }
 function _initGrid (v) {
@@ -102,13 +104,6 @@ export default {
       default: undefined
     },
     /**
-     * Defines a raw options for Cheetah Grid
-     */
-    options: {
-      type: Object,
-      default: undefined
-    },
-    /**
      * Defines a frozen col Count
      */
     frozenColCount: {
@@ -120,6 +115,20 @@ export default {
      */
     filter: {
       type: [Function],
+      default: undefined
+    },
+    /**
+     * Defines the grid theme
+     */
+    theme: {
+      type: [Object, String],
+      default: undefined
+    },
+    /**
+     * Defines a raw options for Cheetah Grid
+     */
+    options: {
+      type: Object,
       default: undefined
     }
   },
@@ -236,12 +245,15 @@ export default {
         delete newProps.header
         delete beforeGridProps.frozenColCount
         delete newProps.frozenColCount
+        delete beforeGridProps.theme
+        delete newProps.theme
         if (deepObjectEquals(beforeGridProps, newProps)) {
           // 操作可能なoptionのみの変更。インスタンス再作成はしない
           const options = _buildGridOption(this)
-          const { header, frozenColCount } = options
+          const { header, frozenColCount, theme } = options
           this.rawGrid.header = header
           this.rawGrid.frozenColCount = frozenColCount
+          this.rawGrid.theme = theme
           this.rawGrid.invalidate()
           this._beforeGridProps = Object.assign({}, gridProps)
           return

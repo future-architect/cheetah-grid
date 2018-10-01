@@ -72,8 +72,8 @@ const records = generatePersons(10000);
       :data="records"
       :frozen-col-count="1">
       <c-grid-column
-        :width="50"
         field="check"
+        width="50"
         column-type="check"
         action="check" />
       <c-grid-column
@@ -86,8 +86,8 @@ const records = generatePersons(10000);
       <c-grid-column-group
         caption="Name">
         <c-grid-input-column
-          field= "fname"
-          width= "20%"
+          field="fname"
+          width="20%"
           min-width="150"
         >
           First Name
