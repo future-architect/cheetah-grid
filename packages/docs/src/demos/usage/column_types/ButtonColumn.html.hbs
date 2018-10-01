@@ -5,7 +5,7 @@ category:
     - Classes
 title: ButtonColumn
 layout: demo.hbs
-order: 300
+order: 400
 ---
 
 {{#marked}}
@@ -16,6 +16,38 @@ order: 300
 {{else}}
 Show the button
 {{/if}}
+
+### constructor properties
+
+{{#if lang_ja}}
+|property|説明|
+|---|---|
+|`caption`|ボタンのキャプションを定義します。|
+{{else}}
+|property|description|
+|---|---|
+|`caption`|Define button caption.|
+{{/if}}
+
+### style properties
+
+{{#if lang_ja}}
+|property|説明|default|
+|---|---|---|
+|`buttonBgColor`|ボタンの背景色を指定できます。|テーマで指定されます|
+{{else}}
+|property|description|default|
+|---|---|---|
+|`buttonBgColor`|define background color of botton.|resolve by the theme.|
+{{/if}}
+
+{{#if lang_ja}}
+この他に、標準のスタイルが利用できます。
+{{else}}
+In addition to this, the Standard styles is available.
+{{/if}}
+
+- [Standard Column Style](../column_styles.html)
 
 {{/marked}}
 

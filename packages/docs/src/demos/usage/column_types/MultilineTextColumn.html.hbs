@@ -6,7 +6,7 @@ category:
 title: MultilineTextColumn
 layout: demo.hbs
 docVersion: 0.3.0
-order: 3000
+order: 800
 ---
 
 {{#marked}}
@@ -24,6 +24,29 @@ By specifying `multilinetext` for the `columnType` property,
 You can display multiple lines of text in a cell.  
 {{/if}}
 
+### style properties
+
+{{#if lang_ja}}
+|property|説明|default|
+|---|---|---|
+| `lineHeight` |行に使われるスペースの量を定義します。| -- |
+| `autoWrapText` |自動的に折り返すかどうかを定義します。| -- |
+| `lineClamp` | 指定した行数でテキストを切り捨てます。| -- |
+{{else}}
+|property|description|default|
+|---|---|---|
+|`lineHeight`|define the amount of space used for lines|--|
+|`autoWrapText`|define whether to wrap automatically.|--|
+|`lineClamp`|define truncates text at a specific number of lines.|--|
+{{/if}}
+
+{{#if lang_ja}}
+この他に、標準のスタイルが利用できます。
+{{else}}
+In addition to this, the Standard styles is available.
+{{/if}}
+
+- [Standard Column Style](../column_styles.html)
 
 {{/marked}}
 

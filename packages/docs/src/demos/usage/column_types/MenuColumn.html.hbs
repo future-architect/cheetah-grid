@@ -5,7 +5,7 @@ category:
     - Classes
 title: MenuColumn
 layout: demo.hbs
-order: 400
+order: 300
 ---
 
 {{#marked}}
@@ -33,8 +33,9 @@ To make it editable, please use [InlineMenuEditor](../column_actions/InlineMenuE
 |`options`|Define mapping options.|
 {{/if}}
 
-{{#if_v '0.8.0'}}
 ### style properties
+
+{{#if_v '0.8.0'}}
 
 {{#if lang_ja}}
 |property|説明|default|
@@ -46,6 +47,15 @@ To make it editable, please use [InlineMenuEditor](../column_actions/InlineMenuE
 |`appearance`|Defines whether to display a dropdown arrow. (you can set `'menulist-button'` or `'none'`) |`'menulist-button'`|
 {{/if}}
 {{/if_v}}
+
+{{#if lang_ja}}
+{{#if_v '0.8.0'}}この他に、{{/if_v}}標準のスタイルが利用できます。
+{{else}}
+{{#if_v '0.8.0'}}In addition to this, {{/if_v}}Standard styles is available.
+{{/if}}
+
+- [Standard Column Style](../column_styles.html)
+
 
 {{/marked}}
 
