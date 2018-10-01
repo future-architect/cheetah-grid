@@ -105,8 +105,13 @@ function registerHelpers() {
 		if (!s) {
 			return s;
 		}
-		s = s.replace(/(\r\n|\r|\n)\s*\/\/\s*(\r\n|\r|\n|$)/g, '$1');
+		//remove unless inline comment
+		while (/(\r\n|\r|\n)\s*\/\/\s*(\r\n|\r|\n|$)/g.test(s)) {
+			s = s.replace(/(\r\n|\r|\n)\s*\/\/\s*(\r\n|\r|\n|$)/g, '$1');
+		}
+		//remove before empty lines
 		s = s.replace(/^\s*(\r\n|\r|\n)/, '');
+		//remove after empty lines
 		s = s.replace(/(\r\n|\r|\n)\s*$/, '$1');
 		return s;
 	});
