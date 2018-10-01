@@ -1,6 +1,6 @@
 {
   "name": "vue-cheetah-grid",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "description": "Cheetah Grid for Vue.js",
   "main": "dist/vueCheetahGrid.js",
   "files": [
@@ -41,7 +41,7 @@
   },
   "homepage": "https://github.com/future-architect/cheetah-grid/tree/master/packages/vue-cheetah-grid",
   "dependencies": {
-    "cheetah-grid": "^0.8.0"
+    "cheetah-grid": "^0.8.2"
   },
   "devDependencies": {
     "@babel/core": "^7.1.0",
