@@ -5,7 +5,7 @@ category:
     - Classes
 title: PercentCompleteBarColumn
 layout: demo.hbs
-order: 500
+order: 600
 ---
 
 {{#marked}}
@@ -16,6 +16,46 @@ order: 500
 {{else}}
 Show the percent complete bar.
 {{/if}}
+
+### constructor properties
+
+{{#if lang_ja}}
+|property|説明|
+|---|---|
+| `min` |バーの最小値を定義します。|
+| `max` |バーの最大値を定義します。|
+| `formatter` |値の表示フォーマットを定義します。|
+{{else}}
+|property|description|
+|---|---|
+| `min` | Defines the minimum value of the bar. |
+| `max` | Defines the maximum value of the bar. |
+| `formatter` | Define the value display format. |
+{{/if}}
+
+### style properties
+
+{{#if lang_ja}}
+|property|説明|default|
+|---|---|---|
+|`barColor`|バーの色を指定できます。値から色を返すfunctionを設定できます。|--|
+|`barBgColor`|バーの背景色を指定できます。|--|
+|`barHeight`|バーの高さを指定できます。|--|
+{{else}}
+|property|description|default|
+|---|---|---|
+|`barColor`|define color of bar. you can set a function that returns color from the value.|--|
+|`barBgColor`|define background color of bar.|--|
+|`barHeight`|define height of bar.|--|
+{{/if}}
+
+{{#if lang_ja}}
+この他に、標準のスタイルが利用できます。
+{{else}}
+In addition to this, the Standard styles is available.
+{{/if}}
+
+- [Standard Column Style](../column_styles.html)
 
 {{/marked}}
 
