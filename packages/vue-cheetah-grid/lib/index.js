@@ -1,4 +1,5 @@
 
+import { cheetahGrid } from './c-grid/utils'
 import CGrid from './CGrid.vue'
 import CGridColumn from './CGridColumn.vue'
 import CGridColumnGroup from './CGridColumnGroup.vue'
@@ -20,7 +21,8 @@ export {
   CGridIconColumn,
   CGridInputColumn,
   CGridLinkColumn,
-  CGridMenuColumn
+  CGridMenuColumn,
+  cheetahGrid
 }
 
 export default CGrid

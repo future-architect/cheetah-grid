@@ -49,18 +49,27 @@ function FROZEN_ROWS_BG_COLOR(args) {
  */
 module.exports = {
 	color: '#000',
+	// frozenRowsColor: '#000',
+
 	defaultBgColor: DEFAULT_BG_COLOR,
 	frozenRowsBgColor: FROZEN_ROWS_BG_COLOR,
-	highlightBorderColor: '#5E9ED6',
 	selectionBgColor: '#CCE0FF',
+
 	borderColor: '#000',
+	// frozenRowsBorderColor: '#000',
+	highlightBorderColor: '#5E9ED6',
+
 	checkbox: {
 		uncheckBgColor: '#FFF',
 		checkBgColor: 'rgb(76, 73, 72)',
+		// borderColor: '#000',
 	},
 	button: {
 		color: '#FFF',
 		bgColor: '#2196F3',
+	},
+	header: {
+		sortArrowColor: 'rgba(0, 0, 0, 0.38)',
 	},
 	underlayBackgroundColor: '#F6F6F6',
 };

@@ -7,7 +7,7 @@ const canvashelper = require('./tools/canvashelper');
 const themes = require('./themes');
 const {colorToRGB} = require('./internal/color');
 const Rect = require('./internal/Rect');
-const {getChainSafe, getOrApply, style: {toBoxArray}} = require('./internal/utils');
+const {getChainSafe, getOrApply, style: {toBoxArray}, isDef} = require('./internal/utils');
 const fonts = require('./internal/fonts');
 const calc = require('./internal/calc');
 
@@ -27,7 +27,25 @@ function getColor(color, col, row, grid, context) {
 	});
 }
 function getThemeColor(grid, ...names) {
-	return getChainSafe(grid.theme, ...names) || getChainSafe(themes.default, ...names);
+	const gridThemeColor = getChainSafe(grid.theme, ...names);
+	if (!isDef(gridThemeColor)) {
+		// use default theme
+		return getChainSafe(themes.default, ...names);
+	}
+	if (typeof gridThemeColor !== 'function') {
+		return gridThemeColor;
+	}
+	let defaultThemeColor;
+	return (...args) => {
+		const color = gridThemeColor(...args);
+		if (isDef(color)) {
+			// use grid theme
+			return color;
+		}
+		// use default theme
+		defaultThemeColor = (defaultThemeColor || getChainSafe(themes.default, ...names));
+		return	getOrApply(defaultThemeColor, ...args);
+	};
 }
 function testFontLoad(font, value, context, grid) {
 	if (font) {
@@ -351,7 +369,7 @@ function _multiInlineRect(grid, ctx, multiInlines, rect, col, row,
 }
 
 
-function drawCheckbox(ctx, rect, check, helper,
+function drawCheckbox(ctx, rect, col, row, check, helper,
 		{
 			animElapsedTime = 1,
 			uncheckBgColor = helper.theme.checkbox.uncheckBgColor,
@@ -359,11 +377,15 @@ function drawCheckbox(ctx, rect, check, helper,
 			borderColor = helper.theme.checkbox.borderColor,
 			textAlign = 'center',
 			textBaseline = 'middle',
-		} = {}) {
+		} = {}
+) {
 	const boxWidth = canvashelper.measureCheckbox(ctx).width;
 	ctx.textAlign = textAlign;
 	ctx.textBaseline = textBaseline;
 	const pos = calcStartPosition(ctx, rect, boxWidth + 1/*罫線分+1*/, boxWidth + 1/*罫線分+1*/);
+	uncheckBgColor = helper.getColor(uncheckBgColor, col, row, ctx);
+	checkBgColor = helper.getColor(checkBgColor, col, row, ctx);
+	borderColor = helper.getColor(borderColor, col, row, ctx);
 	if (0 < animElapsedTime && animElapsedTime < 1) {
 		const uncheckBgRGB = colorToRGB(uncheckBgColor);
 		const checkBgRGB = colorToRGB(checkBgColor);
@@ -396,7 +418,7 @@ function drawCheckbox(ctx, rect, check, helper,
 	});
 }
 
-class Theme {
+class ThemeResolver {
 	constructor(grid) {
 		this._grid = grid;
 	}
@@ -487,7 +509,7 @@ function strokeRect(ctx, color, left, top, width, height) {
 class GridCanvasHelper {
 	constructor(grid) {
 		this._grid = grid;
-		this._theme = new Theme(grid);
+		this._theme = new ThemeResolver(grid);
 	}
 	createCalculator(context, font) {
 		return {
@@ -854,7 +876,8 @@ class GridCanvasHelper {
 	}
 	checkbox(check, context, option = {}) {
 		this.drawWithClip(context, (ctx) => {
-			drawCheckbox(ctx, context.getRect(), check, this, option);
+			const {col, row} = context;
+			drawCheckbox(ctx, context.getRect(), col, row, check, this, option);
 		});
 	}
 	button(caption, context,

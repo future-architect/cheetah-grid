@@ -11,7 +11,7 @@ const builtin = {
 	BASIC,
 	MATERIAL_DESIGN,
 };
-let defTheme = new Theme({});
+let defTheme = MATERIAL_DESIGN;
 /**
  * themes
  * @type {Object}
@@ -24,6 +24,12 @@ const themes = {
 	},
 	set default(defaultTheme) {
 		defTheme = themes.of(defaultTheme) || defTheme;
+	},
+	get MATERIAL_DESIGN() {
+		return MATERIAL_DESIGN;
+	},
+	get BASIC() {
+		return BASIC;
 	},
 	theme,
 	of(value) {
@@ -40,7 +46,7 @@ const themes = {
 		if (value instanceof Theme) {
 			return value;
 		}
-		return defTheme.extends(value);
+		return new Theme(value);
 	},
 	/**
 	 * @namespace cheetahGrid.themes.choices

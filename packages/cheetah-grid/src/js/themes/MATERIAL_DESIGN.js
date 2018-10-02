@@ -15,13 +15,16 @@ function FROZEN_ROWS_BORDER_COLOR(args) {
 function BORDER_COLOR(args) {
 	const {
 		col,
-		grid: {colCount}
+		grid: {colCount, frozenColCount}
 	} = args;
+	if (frozenColCount - 1 === col) {
+		return ['#ccc7c7', '#f2f2f2', '#ccc7c7', null];
+	}
 	if (colCount - 1 === col) {
 		return ['#ccc7c7', '#f2f2f2', '#ccc7c7', null];
-	} else {
-		return ['#ccc7c7', null];
 	}
+	return ['#ccc7c7', null];
+
 }
 /**
  * material design theme
@@ -31,21 +34,27 @@ function BORDER_COLOR(args) {
  */
 module.exports = {
 	color: 'rgba(0, 0, 0, 0.87)',
-	defaultBgColor: '#FFF',
-	frozenRowsBgColor: '#FFF',
 	frozenRowsColor: 'rgba(0, 0, 0, 0.54)',
-	highlightBorderColor: '#5E9ED6',
+
+	defaultBgColor: '#FFF',
+	// frozenRowsBgColor: '#FFF',
 	selectionBgColor: '#CCE0FF',
+
 	borderColor: BORDER_COLOR,
 	frozenRowsBorderColor: FROZEN_ROWS_BORDER_COLOR,
+	highlightBorderColor: '#5E9ED6',
+
 	checkbox: {
-		uncheckBgColor: '#FFF',
+		// uncheckBgColor: '#FFF',
 		checkBgColor: 'rgb(76, 73, 72)',
 		borderColor: 'rgba(0, 0, 0, 0.26)',
 	},
 	button: {
 		color: '#FFF',
 		bgColor: '#2196F3',
+	},
+	header: {
+		sortArrowColor: 'rgba(0, 0, 0, 0.38)',
 	},
 	underlayBackgroundColor: '#FFF',
 };
