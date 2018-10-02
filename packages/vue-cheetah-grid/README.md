@@ -12,52 +12,53 @@
 ## Install using npm
 
 ```sh
-$ npm install cheetah-grid vue-cheetah-grid
+npm install -S vue-cheetah-grid
 ```
 
 ## Usage Examples
 
 ### `<template>`
 
-```vue
+```html
 <template>
   <c-grid
-    ref="grid"
-    :data="data"
+    :data="records"
     :frozen-col-count="1">
-    <c-grid-column
-      :width="50"
+    <!-- define checkbox -->
+    <c-grid-check-column
       field="check"
-      column-type="check"
-      action="check" />
+      width="50">
+    </c-grid-check-column>
     <c-grid-column
       field="personid"
-      width= "85"
+      width="85"
     >
       ID
     </c-grid-column>
+    <!-- multiple headers -->
     <c-grid-column-group
       caption="Name">
       <c-grid-input-column
-        field= "fname"
-        width= "20%"
+        field="fname"
+        width="20%"
         min-width="150"
       >
         First Name
       </c-grid-input-column>
       <c-grid-input-column
         field="lname"
-        width= "20%"
+        width="20%"
         min-width="150"
       >
         Last Name
       </c-grid-input-column>
     </c-grid-column-group>
+    <!-- define button -->
     <c-grid-button-column
       caption="SHOW REC"
       width="120"
-      @click="onClickRecord"
-    />
+      @click="onClickRecord">
+    </c-grid-button-column>
   </c-grid>
 </template>
 ```
@@ -87,3 +88,28 @@ export default {
 ```
 
 Please refer to the [documents](https://future-architect.github.io/cheetah-grid/) for details
+
+### Available `Vue Component` tag names
+
+| Component Tag Name | Function | Note |
+|----------|-----|---|
+| `<c-grid>` | Grid | --- |
+| `<c-grid-column>` | Column definition to display in the grid | --- |
+| `<c-grid-column-group>` | Definition of column group when multiple header is displayed | --- |
+| `<c-grid-button-column>` | Button column definition | component for button column definition |
+| `<c-grid-check-column>` | Checkbox column definition | component for checkbox column definition |
+| `<c-grid-input-column>` | Input column definition | component for input column definition |
+| `<c-grid-menu-column>` | Menu column definition | component for menu column definition |
+| `<c-grid-link-column>` | Link column definition | component for linkable column definition |
+| `<c-grid-icon-column>` | Icon column definition | component for icon column definition |
+| `<c-grid-percent-complete-bar-column>` | Percent complete bar column definition | component for Percent complete bar column definition |
+
+Please refer also to the [vuedoc](https://github.com/future-architect/cheetah-grid/tree/master/docs/0.9/vuedoc)
+
+---
+
+Please refer to the [documents](https://future-architect.github.io/cheetah-grid/) for details
+
+## License
+
+See the [LICENSE](LICENSE) file for license rights and limitations (MIT).

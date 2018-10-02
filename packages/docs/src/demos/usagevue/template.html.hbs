@@ -71,11 +71,10 @@ const records = generatePersons(10000);
     <c-grid
       :data="records"
       :frozen-col-count="1">
-      <c-grid-column
+      <!-- define checkbox -->
+      <c-grid-check-column
         field="check"
-        width="50"
-        column-type="check"
-        action="check" />
+        width="50" />
       <c-grid-column
         field="personid"
         width= "85"
