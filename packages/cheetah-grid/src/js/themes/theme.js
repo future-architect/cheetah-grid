@@ -2,18 +2,18 @@
 'use strict';
 
 const {getChainSafe} = require('../internal/utils');
-const defaultTheme = require('./MATERIAL_DESIGN');
 //private symbol
 const _ = require('../internal/symbolManager').get();
 
 function getProp(obj, superObj, names, defNames) {
 	return getChainSafe(obj, ...names) ||
+		getChainSafe(superObj, ...names) ||
 		(defNames && getChainSafe(obj, ...defNames)) ||
-		getChainSafe(superObj, ...names);
+		(defNames && getChainSafe(superObj, ...defNames));
 }
 
 class Theme {
-	constructor(obj = {}, superTheme = defaultTheme) {
+	constructor(obj = {}, superTheme = {}) {
 		if (obj.hiliteBorderColor && !obj.highlightBorderColor) {
 			// https://github.com/future-architect/cheetah-grid/issues/83
 			console.warn('Please use highlightBorderColor instead of hiliteBorderColor. cheetah-grid@>=0.7');
@@ -96,7 +96,7 @@ class Theme {
 		const {obj, superTheme} = this[_];
 		return this._header || (this._header = {
 			get sortArrowColor() {
-				return getProp(obj, superTheme, ['header', 'sortArrowColor']);
+				return getProp(obj, superTheme, ['header', 'sortArrowColor'], ['color']);
 			},
 		});
 	}
@@ -113,8 +113,5 @@ class Theme {
  * @memberof cheetahGrid.themes
  */
 module.exports = {
-	create(obj) {
-		return new Theme(obj);
-	},
 	Theme
 };

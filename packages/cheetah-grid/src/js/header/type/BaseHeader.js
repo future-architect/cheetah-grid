@@ -1,6 +1,7 @@
 'use strict';
 
 const styleContents = require('../style');
+const {isDef} = require('../../internal/utils');
 const {Style} = styleContents;
 
 class BaseHeader {
@@ -19,13 +20,16 @@ class BaseHeader {
 		drawCellBase();
 		//文字描画
 		this.drawInternal(
-				cellValue,
+				this.convertInternal(cellValue),
 				context,
 				styleContents.of(style, this.StyleClass),
 				helper,
 				grid,
 				info
 		);
+	}
+	convertInternal(value) {
+		return isDef(value) ? value : '';
 	}
 	drawInternal(value, context, style, helper, grid, info) {
 

@@ -203,15 +203,11 @@ const grid = window.createGrid(document.querySelector('#sample3'));
 //{{#copy "script3"}}
 const userTheme = {
 	color: 'red',
+	frozenRowsColor: 'red',
 	defaultBgColor: '#FDD',
-	underlayBackgroundColor: '#FEE',
 	frozenRowsBgColor: '#EAA',
-	//{{#if_v '0.7.0'}}
-	highlightBorderColor: '#FD5',
-	//{{else}}
-	hiliteBorderColor: '#FD5',
-	//{{/if_v}}
 	selectionBgColor: '#FDA',
+	underlayBackgroundColor: '#FEE',
 	// You can also change the theme apply in the state by using callback.
 	frozenRowsBorderColor(args) {
 		const {
@@ -235,6 +231,11 @@ const userTheme = {
 			return ['red'/*top and bottom*/, null/*right and left*/];
 		}
 	},
+	//{{#if_v '0.7.0'}}
+	highlightBorderColor: '#FD5',
+	//{{else}}
+	hiliteBorderColor: '#FD5',
+	//{{/if_v}}
 	checkbox: {
 		uncheckBgColor: '#FDD',
 		checkBgColor: 'rgb(255, 73, 72)',
@@ -293,8 +294,8 @@ const records = generatePersons(100);
       <c-grid-check-column field="check" :width="50"/>
       <c-grid-column field="personid" width= "85">ID</c-grid-column>
       <c-grid-column-group caption="Name">
-        <c-grid-input-column field="fname" width="20%" min-width="150">First Name</c-grid-input-column>
-        <c-grid-input-column field="lname" width="20%" min-width="150">Last Name</c-grid-input-column>
+        <c-grid-input-column field="fname" width="20%" min-width="150" :sort="true">First Name</c-grid-input-column>
+        <c-grid-input-column field="lname" width="20%" min-width="150" :sort="true">Last Name</c-grid-input-column>
       </c-grid-column-group>
       <c-grid-button-column caption="SHOW REC" width="120" @click="onClickRecord" />
     </c-grid>
@@ -313,8 +314,10 @@ export default {
 			// userTheme: 'BASIC',
 			userTheme: {
 				color: '#2c3e50',
+				frozenRowsColor: '#2c3e50',
 				frozenRowsBgColor: '#40b883',
 				borderColor: '#35495e',
+				frozenRowsBorderColor: '#35495e',
 				checkbox: {
 					checkBgColor: '#35495e',
 					borderColor: '#35495e',
