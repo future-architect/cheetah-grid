@@ -23,19 +23,19 @@ const themes = {
 		return defTheme;
 	},
 	set default(defaultTheme) {
-		defTheme = themes.of(defaultTheme);
+		defTheme = themes.of(defaultTheme) || defTheme;
 	},
 	theme,
 	of(value) {
 		if (!value) {
-			return defTheme;
+			return null;
 		}
 		if (typeof value === 'string') {
 			const t = getIgnoreCase(themes.choices, value);
 			if (t) {
 				return t;
 			}
-			return defTheme;
+			return null;
 		}
 		if (value instanceof Theme) {
 			return value;
