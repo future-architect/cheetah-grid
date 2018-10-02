@@ -14,12 +14,12 @@ order: 110
 |property|説明|LINK|
 |---|---|---|
 |指定なし|テキストをセルに描画します|---|
-|number|数値をカンマ区切りでセルに描画します| [NumberColumn](./column_types/NumberColumn.html) |
-|check|チェックボックスをセルに描画します|---|
-|button|ボタンをセルに描画します| [ButtonColumn](./column_types/ButtonColumn.html) |
-|image|画像をセルに描画します| [Draw Image](./draw_image.html) |
+|`'number'`|数値をカンマ区切りでセルに描画します| [NumberColumn](./column_types/NumberColumn.html) |
+|`'check'`|チェックボックスをセルに描画します|---|
+|`'button'`|ボタンをセルに描画します| [ButtonColumn](./column_types/ButtonColumn.html) |
+|`'image'`|画像をセルに描画します| [Draw Image](./draw_image.html) |
 {{#if_v '0.3.0'}}
-|multilinetext|複数行テキストをセルに描画します| [MultilineTextColumn](./column_types/MultilineTextColumn.html) |
+|`'multilinetext'`|複数行テキストをセルに描画します| [MultilineTextColumn](./column_types/MultilineTextColumn.html) |
 {{/if_v}}
 {{else}}
 Set the column type by using `columnType`.
@@ -27,12 +27,12 @@ Set the column type by using `columnType`.
 |property|description|LINK|
 |---|---|---|
 |none|draw text in the cell|---|
-|number|draw number in the cell with comma-separated| [NumberColumn](./column_types/NumberColumn.html) |
-|check|draw checkbox in the cell|---|
-|button|draw button in the cell| [ButtonColumn](./column_types/ButtonColumn.html) |
-|image|draw image in the cell| [Draw Image](./draw_image.html) |
+|`'number'`|draw number in the cell with comma-separated| [NumberColumn](./column_types/NumberColumn.html) |
+|`'check'`|draw checkbox in the cell|---|
+|`'button'`|draw button in the cell| [ButtonColumn](./column_types/ButtonColumn.html) |
+|`'image'`|draw image in the cell| [Draw Image](./draw_image.html) |
 {{#if_v '0.3.0'}}
-|multilinetext|draw multiline text in the cell| [MultilineTextColumn](./column_types/MultilineTextColumn.html) |
+|`'multilinetext'`|draw multiline text in the cell| [MultilineTextColumn](./column_types/MultilineTextColumn.html) |
 {{/if_v}}
 {{/if}}
 {{/marked}}

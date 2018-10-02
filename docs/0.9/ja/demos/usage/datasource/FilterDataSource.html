@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="author" content="Cheetah Grid">
+    <meta name="keywords" content="spreadsheet,grid,canvas,table,web-components">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Cheetah Grid - FilterDataSource</title>
+    <link rel="shortcut icon" type="image/x-icon" href="./../../../../../icon_512x512.ico">
+
+    <link rel="stylesheet" type="text/css" href="./../../../../css/style.css">
+    <link rel="stylesheet" type="text/css" href="./../../../../css/highlightjs.css">
+    
+    <!-- <script src="http://localhost:35729/livereload.js"></script> -->
+    <script src="https://www.promisejs.org/polyfills/promise-7.0.4.min.js"></script>
+    
+    <script type="text/javascript" src="https://unpkg.com/cheetah-grid@0.9||0.8"></script>
+
+    <style type="text/css">
+        html {
+            height: 100%;
+        }
+        body {
+            height: calc(100% - 100px);
+        }
+        .contents {
+            padding: 30px;
+            box-sizing: border-box;
+        }
+        .demo-grid {
+            width: 100%;
+            height: 300px;
+            box-sizing: border-box;
+            border: solid 1px #ddd;
+        }
+        .demo-grid.large {
+            height: 500px;
+        }
+        .demo-grid.middle {
+            height: 300px;   
+        }
+        .demo-grid.small {
+            height: 240px;   
+        }
+        .log {
+            width: 100%;
+            height: 80px;
+            background-color: #F5F5F5;
+        }
+
+        .hljs { 
+             tab-size: 4;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <nav class="header primary" id="header-nav">
+    	<div class="nav-wrapper">
+    		<a href="./../../../../../index.html">
+    			<img src="./../../../../../logo.png" style="width: 100px;padding: 5px;vertical-align: middle;" alt="Cheetah Grid">
+    		</a>
+    
+    		<ul class="right hide-on-med-and-down nav-dropdown-container">
+    			<a href="#" class="primary nav-dropdown-button mobile-only" data-target="all-nav" style="width: 30px;">
+    				<span class="icon-arrow"></span>
+    			</a>
+    			<ul id="all-nav" class="mobile-nav-dropdown right-dropdown primary">
+    				<li><a href="./../../../../ja/index.html" class="primary">Docoments - TOP</a></li>
+    				<li class="nav-dropdown-container">
+    					<a id="nav-versions" href="#" class="primary nav-dropdown-button" data-target="versions">
+    						version<span class="icon-arrow"></span>
+    					</a>
+    					<ul id="versions" class="nav-dropdown right-dropdown">
+    					</ul>
+    				</li>
+    				<li class="nav-dropdown-container">
+    					<a id="nav-lang" href="#" class="primary nav-dropdown-button" data-target="langs">
+    						lang<span class="icon-arrow"></span>
+    					</a>
+    					<ul id="langs" class="nav-dropdown right-dropdown">
+    						<li><a href="./../../../../ja/demos/usage/datasource/FilterDataSource.html" class="primary">日本語</a></li>
+    						<li><a href="./../../../../demos/usage/datasource/FilterDataSource.html" class="primary">English</a></li>
+    					</ul>
+    				</li>
+    			</ul>
+    		</ul>
+    	</div>
+    </nav>
+    
+    <script type="text/javascript">
+    	'use strict';
+    	////babel
+    "use strict";
+    
+    function getVersions(callback) {
+      var xhr = new XMLHttpRequest();
+    
+      function onError() {
+        callback(['0.9', '0.0.1']);
+      }
+    
+      xhr.onload = function () {
+        var versions = JSON.parse(xhr.responseText);
+        callback(versions);
+      };
+    
+      xhr.onerror = onError;
+      xhr.onabort = onError;
+    
+      try {
+        xhr.open('GET', "./../../../../../versions.json"); // eslint-disable-line quotes
+    
+        xhr.send();
+      } catch (e) {
+        onError();
+      }
+    } //
+    
+    
+    getVersions(function (versions) {
+      var myVersion = '0.9';
+    
+      function getVerLocation(v) {
+        return location.href.replace(myVersion, v).replace('.devdoc', v);
+      }
+    
+      var latest = versions[0];
+      var versEl = document.getElementById('versions');
+      versEl.innerHTML = versions.map(function (v, i) {
+        return "<li><a href=\"".concat(getVerLocation(v), "\" class=\"primary\">").concat(v).concat(i === 0 ? ' (latest)' : '', "</a></li>");
+      }).join('');
+    
+      if (latest !== myVersion) {
+        var header = document.getElementById('header-nav');
+        var a = document.createElement('a');
+        header.parentElement.insertBefore(a, header.nextSibling);
+        a.href = getVerLocation(latest);
+        a.textContent = "<goto the latest version(".concat(latest, ") document>");
+      }
+    }); //
+    </script>    <h1><a href="./../../../.././index.html#usage">Usage</a> &gt; <a href="./../../../../demos/usage/grid_data.html">Grid Data</a> &gt; DataSource &gt; FilterDataSource</h1>
+    <div class="contents">
+        
+<h2 id="filterdatasource">FilterDataSource</h2>
+<p><code>FilterDataSource</code>を利用して表示するデータをフィルタリングします。</p>
+
+<script type="text/javascript">
+
+////babel
+'use strict';
+
+var generatePerson = function () {
+  var fnames = ['Sophia', 'Emma', 'Olivia', 'Isabella', 'Ava', 'Mia', 'Emily', 'Abigail', 'Madison', 'Elizabeth', 'Charlotte', 'Avery', 'Sofia', 'Chloe', 'Ella', 'Harper', 'Amelia', 'Aubrey', 'Addison', 'Evelyn', 'Natalie', 'Grace', 'Hannah', 'Zoey', 'Victoria', 'Lillian', 'Lily', 'Brooklyn', 'Samantha', 'Layla', 'Zoe', 'Audrey', 'Leah', 'Allison', 'Anna', 'Aaliyah', 'Savannah', 'Gabriella', 'Camila', 'Aria', 'Noah', 'Liam', 'Jacob', 'Mason', 'William', 'Ethan', 'Michael', 'Alexander', 'Jayden', 'Daniel', 'Elijah', 'Aiden', 'James', 'Benjamin', 'Matthew', 'Jackson', 'Logan', 'David', 'Anthony', 'Joseph', 'Joshua', 'Andrew', 'Lucas', 'Gabriel', 'Samuel', 'Christopher', 'John', 'Dylan', 'Isaac', 'Ryan', 'Nathan', 'Carter', 'Caleb', 'Luke', 'Christian', 'Hunter', 'Henry', 'Owen', 'Landon', 'Jack'];
+  var lnames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Miller', 'Davis', 'Garcia', 'Rodriguez', 'Wilson', 'Martinez', 'Anderson', 'Taylor', 'Thomas', 'Hernandez', 'Moore', 'Martin', 'Jackson', 'Thompson', 'White', 'Lopez', 'Lee', 'Gonzalez', 'Harris', 'Clark', 'Lewis', 'Robinson', 'Walker', 'Perez', 'Hall', 'Young', 'Allen', 'Sanchez', 'Wright', 'King', 'Scott', 'Green', 'Baker', 'Adams', 'Nelson', 'Hill', 'Ramirez', 'Campbell', 'Mitchell', 'Roberts', 'Carter', 'Phillips', 'Evans', 'Turner', 'Torres', 'Parker', 'Collins', 'Edwards', 'Stewart', 'Flores', 'Morris', 'Nguyen', 'Murphy', 'Rivera', 'Cook', 'Rogers', 'Morgan', 'Peterson', 'Cooper', 'Reed', 'Bailey', 'Bell', 'Gomez', 'Kelly', 'Howard', 'Ward', 'Cox', 'Diaz', 'Richardson', 'Wood', 'Watson', 'Brooks', 'Bennett', 'Gray', 'James', 'Reyes', 'Cruz', 'Hughes', 'Price', 'Myers', 'Long', 'Foster', 'Sanders', 'Ross', 'Morales', 'Powell', 'Sullivan', 'Russell', 'Ortiz', 'Jenkins', 'Gutierrez', 'Perry', 'Butler', 'Barnes', 'Fisher'];
+  var msOfYear = 365 * 24 * 60 * 60 * 1000;
+  return function (index) {
+    var fname = fnames[Math.floor(Math.random() * fnames.length)];
+    var lname = lnames[Math.floor(Math.random() * lnames.length)];
+    var birthday = new Date(Date.now() - 20 * msOfYear - Math.floor(Math.random() * 15 * msOfYear));
+    birthday = new Date(birthday.getFullYear(), birthday.getMonth(), birthday.getDate(), 0, 0, 0, 0);
+    return {
+      personid: index + 1,
+      fname: fname,
+      lname: lname,
+      email: "".concat(fname.replace('-', '_'), "_").concat(lname.replace('-', '_'), "@example.com").toLowerCase(),
+      birthday: birthday
+    };
+  };
+}();
+
+function generatePersons(num) {
+  var initId = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+  var records = [];
+
+  for (var i = 0; i < num; i++) {
+    records.push(generatePerson(initId + i - 1));
+  }
+
+  return records;
+}
+
+function generatePersonsDataSource(num) {
+  var array = new Array(num);
+  return new cheetahGrid.data.CachedDataSource({
+    get: function get(index) {
+      return array[index] ? array[index] : array[index] = generatePerson(index);
+    },
+    length: num
+  });
+}
+</script>
+
+<label>Filter:</label><input id="sample1-filter-input">
+<div id="sample1" class="demo-grid large">
+</div>
+<script type="text/javascript">
+/*eslint no-alert:0*/
+
+////wrapscript
+(function() {
+//babel
+"use strict";
+
+//
+
+/*global cheetahGrid,generatePersonsDataSource*/
+var personsDataSource = generatePersonsDataSource(1000000);
+var grid = new cheetahGrid.ListGrid({
+  parentElement: document.querySelector('#sample1'),
+  header: [{
+    field: 'check',
+    caption: '',
+    width: 50,
+    columnType: 'check',
+    action: 'check'
+  }, {
+    field: 'personid',
+    caption: 'ID',
+    width: 100,
+    columnType: 'center'
+  }, {
+    caption: 'name',
+    columns: [{
+      field: 'fname',
+      caption: 'First Name',
+      width: 200
+    }, {
+      field: 'lname',
+      caption: 'Last Name',
+      width: 200
+    }]
+  }, {
+    field: 'email',
+    caption: 'Email',
+    width: 250
+  }, {
+    field: function field(rec) {
+      var d = rec.birthday;
+      return "".concat(d.getFullYear(), "/").concat(d.getMonth() + 1, "/").concat(d.getDate());
+    },
+    caption: 'birthday',
+    width: 100
+  }, {
+    caption: 'button',
+    width: 120,
+
+    /* button column */
+    columnType: new cheetahGrid.columns.type.ButtonColumn({
+      caption: 'SHOW REC'
+    }),
+    action: new cheetahGrid.columns.action.ButtonAction({
+      action: function action(rec) {
+        alert(JSON.stringify(rec));
+      }
+    })
+  }],
+  frozenColCount: 2
+});
+var filterDataSource = new cheetahGrid.data.FilterDataSource(personsDataSource);
+grid.dataSource = filterDataSource;
+var input = document.querySelector('#sample1-filter-input');
+input.addEventListener('input', function () {
+  var filterValue = input.value;
+  filterDataSource.filter = filterValue ? function (record) {
+    // filtering method
+    for (var k in record) {
+      if ("".concat(record[k]).indexOf(filterValue) >= 0) {
+        return true;
+      }
+    }
+
+    return false;
+  } : null; // Please call `invalidate()`
+
+  grid.invalidate();
+}); //
+
+window.grid = grid; //
+})();
+</script>
+
+<pre><code class="js hljs javascript"><span class="hljs-comment">/*global cheetahGrid,generatePersonsDataSource*/</span>
+<span class="hljs-keyword">const</span> personsDataSource = generatePersonsDataSource(<span class="hljs-number">1000000</span>);
+
+<span class="hljs-keyword">const</span> grid = <span class="hljs-keyword">new</span> cheetahGrid.ListGrid({
+	<span class="hljs-attr">parentElement</span>: <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample1'</span>),
+	<span class="hljs-attr">header</span>: [
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'check'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">''</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">50</span>, <span class="hljs-attr">columnType</span>: <span class="hljs-string">'check'</span>, <span class="hljs-attr">action</span>: <span class="hljs-string">'check'</span>},
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'personid'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'ID'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">100</span>, <span class="hljs-attr">columnType</span>: <span class="hljs-string">'center'</span>},
+		{
+			<span class="hljs-attr">caption</span>: <span class="hljs-string">'name'</span>,
+			<span class="hljs-attr">columns</span>: [
+				{<span class="hljs-attr">field</span>: <span class="hljs-string">'fname'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'First Name'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">200</span>},
+				{<span class="hljs-attr">field</span>: <span class="hljs-string">'lname'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'Last Name'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">200</span>},
+			],
+		},
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'email'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'Email'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">250</span>},
+		{
+			field(rec) {
+				<span class="hljs-keyword">const</span> d = rec.birthday;
+				<span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${d.getFullYear()}</span>/<span class="hljs-subst">${d.getMonth() + <span class="hljs-number">1</span>}</span>/<span class="hljs-subst">${d.getDate()}</span>`</span>;
+			},
+			<span class="hljs-attr">caption</span>: <span class="hljs-string">'birthday'</span>,
+			<span class="hljs-attr">width</span>: <span class="hljs-number">100</span>
+		},
+		{
+			<span class="hljs-attr">caption</span>: <span class="hljs-string">'button'</span>,
+			<span class="hljs-attr">width</span>: <span class="hljs-number">120</span>,
+			<span class="hljs-comment">/* button column */</span>
+			columnType: <span class="hljs-keyword">new</span> cheetahGrid.columns.type.ButtonColumn({
+				<span class="hljs-attr">caption</span>: <span class="hljs-string">'SHOW REC'</span>,
+			}),
+			<span class="hljs-attr">action</span>: <span class="hljs-keyword">new</span> cheetahGrid.columns.action.ButtonAction({
+				action(rec) {
+					alert(<span class="hljs-built_in">JSON</span>.stringify(rec));
+				},
+			}),
+		}
+	],
+	<span class="hljs-attr">frozenColCount</span>: <span class="hljs-number">2</span>,
+});
+<span class="hljs-keyword">const</span> filterDataSource = <span class="hljs-keyword">new</span> cheetahGrid.data.FilterDataSource(personsDataSource);
+grid.dataSource = filterDataSource;
+
+<span class="hljs-keyword">const</span> input = <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample1-filter-input'</span>);
+input.addEventListener(<span class="hljs-string">'input'</span>, () =&gt; {
+	<span class="hljs-keyword">const</span> filterValue = input.value;
+	filterDataSource.filter = filterValue ? <span class="hljs-function">(<span class="hljs-params">record</span>) =&gt;</span> {
+		<span class="hljs-comment">// filtering method</span>
+		<span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> k <span class="hljs-keyword">in</span> record) {
+			<span class="hljs-keyword">if</span> ((<span class="hljs-string">`<span class="hljs-subst">${record[k]}</span>`</span>).indexOf(filterValue) &gt;= <span class="hljs-number">0</span>) {
+				<span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+			}
+		}
+		<span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+	} : <span class="hljs-literal">null</span>;
+	<span class="hljs-comment">// Please call `invalidate()`</span>
+	grid.invalidate();
+});
+</code></pre>
+<h2 id="using-promises">Using <code>Promise</code>s</h2>
+<p>この機能はレコードデータが<code>Promise</code>であっても利用可能です。</p>
+
+
+<label>Filter:</label><input id="sample2-filter-input">
+<div id="sample2" class="demo-grid large">
+</div>
+<script type="text/javascript">
+/*eslint no-alert:0*/
+
+////wrapscript
+(function() {
+//babel
+"use strict";
+
+//
+
+/*global cheetahGrid,generatePerson*/
+var personsDataSource = new cheetahGrid.data.CachedDataSource({
+  get: function get(index) {
+    return new Promise(function (resolve) {
+      console.log("get record:".concat(index));
+      setTimeout(function () {
+        resolve(generatePerson(index));
+      }, 300);
+    });
+  },
+  length: 1000000
+});
+var grid = new cheetahGrid.ListGrid({
+  parentElement: document.querySelector('#sample2'),
+  header: [{
+    field: 'check',
+    caption: '',
+    width: 50,
+    columnType: 'check',
+    action: 'check'
+  }, {
+    field: 'personid',
+    caption: 'ID',
+    width: 100,
+    columnType: 'center'
+  }, {
+    caption: 'name',
+    columns: [{
+      field: 'fname',
+      caption: 'First Name',
+      width: 200
+    }, {
+      field: 'lname',
+      caption: 'Last Name',
+      width: 200
+    }]
+  }, {
+    field: 'email',
+    caption: 'Email',
+    width: 250
+  }, {
+    field: function field(rec) {
+      var d = rec.birthday;
+      return "".concat(d.getFullYear(), "/").concat(d.getMonth() + 1, "/").concat(d.getDate());
+    },
+    caption: 'birthday',
+    width: 100
+  }, {
+    caption: 'button',
+    width: 120,
+
+    /* button column */
+    columnType: new cheetahGrid.columns.type.ButtonColumn({
+      caption: 'SHOW REC'
+    }),
+    action: new cheetahGrid.columns.action.ButtonAction({
+      action: function action(rec) {
+        alert(JSON.stringify(rec));
+      }
+    })
+  }],
+  frozenColCount: 2
+});
+var filterDataSource = new cheetahGrid.data.FilterDataSource(personsDataSource);
+grid.dataSource = filterDataSource;
+var input = document.querySelector('#sample2-filter-input');
+input.addEventListener('input', function () {
+  var filterValue = input.value;
+  filterDataSource.filter = filterValue ? function (record) {
+    // filtering method
+    for (var k in record) {
+      if ("".concat(record[k]).indexOf(filterValue) >= 0) {
+        return true;
+      }
+    }
+
+    return false;
+  } : null; // Please call `invalidate()`
+
+  grid.invalidate();
+}); //
+
+window.grid = grid; //
+})();
+</script>
+
+<pre><code class="js hljs javascript"><span class="hljs-comment">/*global cheetahGrid,generatePerson*/</span>
+
+<span class="hljs-keyword">const</span> personsDataSource = <span class="hljs-keyword">new</span> cheetahGrid.data.CachedDataSource({
+	get(index) {
+		<span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve</span>) =&gt;</span> {
+			<span class="hljs-built_in">console</span>.log(<span class="hljs-string">`get record:<span class="hljs-subst">${index}</span>`</span>);
+			setTimeout(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> { resolve(generatePerson(index)); }, <span class="hljs-number">300</span>);
+		});
+	},
+	<span class="hljs-attr">length</span>: <span class="hljs-number">1000000</span>,
+});
+
+<span class="hljs-keyword">const</span> grid = <span class="hljs-keyword">new</span> cheetahGrid.ListGrid({
+	<span class="hljs-attr">parentElement</span>: <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample2'</span>),
+	<span class="hljs-attr">header</span>: [
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'check'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">''</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">50</span>, <span class="hljs-attr">columnType</span>: <span class="hljs-string">'check'</span>, <span class="hljs-attr">action</span>: <span class="hljs-string">'check'</span>},
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'personid'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'ID'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">100</span>, <span class="hljs-attr">columnType</span>: <span class="hljs-string">'center'</span>},
+		{
+			<span class="hljs-attr">caption</span>: <span class="hljs-string">'name'</span>,
+			<span class="hljs-attr">columns</span>: [
+				{<span class="hljs-attr">field</span>: <span class="hljs-string">'fname'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'First Name'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">200</span>},
+				{<span class="hljs-attr">field</span>: <span class="hljs-string">'lname'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'Last Name'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">200</span>},
+			],
+		},
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'email'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'Email'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">250</span>},
+		{
+			field(rec) {
+				<span class="hljs-keyword">const</span> d = rec.birthday;
+				<span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${d.getFullYear()}</span>/<span class="hljs-subst">${d.getMonth() + <span class="hljs-number">1</span>}</span>/<span class="hljs-subst">${d.getDate()}</span>`</span>;
+			},
+			<span class="hljs-attr">caption</span>: <span class="hljs-string">'birthday'</span>,
+			<span class="hljs-attr">width</span>: <span class="hljs-number">100</span>
+		},
+		{
+			<span class="hljs-attr">caption</span>: <span class="hljs-string">'button'</span>,
+			<span class="hljs-attr">width</span>: <span class="hljs-number">120</span>,
+			<span class="hljs-comment">/* button column */</span>
+			columnType: <span class="hljs-keyword">new</span> cheetahGrid.columns.type.ButtonColumn({
+				<span class="hljs-attr">caption</span>: <span class="hljs-string">'SHOW REC'</span>,
+			}),
+			<span class="hljs-attr">action</span>: <span class="hljs-keyword">new</span> cheetahGrid.columns.action.ButtonAction({
+				action(rec) {
+					alert(<span class="hljs-built_in">JSON</span>.stringify(rec));
+				},
+			}),
+		}
+	],
+	<span class="hljs-attr">frozenColCount</span>: <span class="hljs-number">2</span>,
+});
+<span class="hljs-keyword">const</span> filterDataSource = <span class="hljs-keyword">new</span> cheetahGrid.data.FilterDataSource(personsDataSource);
+grid.dataSource = filterDataSource;
+
+<span class="hljs-keyword">const</span> input = <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample2-filter-input'</span>);
+input.addEventListener(<span class="hljs-string">'input'</span>, () =&gt; {
+	<span class="hljs-keyword">const</span> filterValue = input.value;
+	filterDataSource.filter = filterValue ? <span class="hljs-function">(<span class="hljs-params">record</span>) =&gt;</span> {
+		<span class="hljs-comment">// filtering method</span>
+		<span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> k <span class="hljs-keyword">in</span> record) {
+			<span class="hljs-keyword">if</span> ((<span class="hljs-string">`<span class="hljs-subst">${record[k]}</span>`</span>).indexOf(filterValue) &gt;= <span class="hljs-number">0</span>) {
+				<span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+			}
+		}
+		<span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+	} : <span class="hljs-literal">null</span>;
+	<span class="hljs-comment">// Please call `invalidate()`</span>
+	grid.invalidate();
+});
+</code></pre>
+    </div>
+    
+    <script type="text/javascript" src="./../../../../js/doc-common.js"></script>
+
+</body></html>
