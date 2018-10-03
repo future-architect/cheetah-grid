@@ -129,9 +129,9 @@ Partial of the syntax highlight.
 
 Partial of the `<script>`.
 
-### handlebars valiables
+### handlebars variables
 
-The following valiables are available.
+The following variables are available.
 
 #### lang_ja
 
