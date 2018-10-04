@@ -153,7 +153,7 @@ For example, you can set the following strings:
 |`'image'`|draw image in the cell|
 |`'multilinetext'`|draw multiline text in the cell|
 
-If you define a class instance you can define a expanded column types.
+If you define a class instance you can define an advanced column types.
 
 Please refer to the [column types documents](https://future-architect.github.io/cheetah-grid/0.9/demos/usage/column_types/Classes.html) for details  
 
@@ -166,7 +166,7 @@ Define column action by using `action` property.
 |`'check'` | make the check box clickable. |
 |`'input'` | make the cell enterable. |
 
-If you define a class instance you can define a expanded column actions.
+If you define a class instance you can define an advanced column actions.
 
 Please refer to the [column actions documents](https://future-architect.github.io/cheetah-grid/0.9/demos/usage/column_actions/Classes.html) for details  
 
