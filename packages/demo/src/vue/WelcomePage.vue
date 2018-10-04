@@ -2,7 +2,7 @@
   <div class="home">
     <div class="page-title">
       <h1>Welcome to Cheetah Grid</h1>
-      <span>Cheetah Grid is the fastest open-source web component of data table.</span>
+      <span>Cheetah Grid is the fastest open-source data table for web.</span>
     </div>
     <label>Grid initial processing time : </label><strong>{{ time }}ms</strong> / <label>Number of records : </label><strong>{{ count | numberDelimiter }}</strong>
     <br>

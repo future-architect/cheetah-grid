@@ -11,7 +11,7 @@
 
 [![Cheetah Grid](https://future-architect.github.io/cheetah-grid/logo.png)](https://future-architect.github.io/cheetah-grid/)  
 
-The fastest open-source web component of data table.
+The fastest open-source data table for web.
 
 [![capture.png](https://github.com/future-architect/cheetah-grid/raw/master/images/capture.png)](https://future-architect.github.io/cheetah-grid/)
 
