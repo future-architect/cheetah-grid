@@ -1,0 +1,54 @@
+{
+  "name": "cheetah-grid-icon-svg-loader",
+  "version": "0.9.0",
+  "description": "Webpack loader that loads the icon module for Cheetah Grid from SVG.",
+  "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "pretest": "npm run lint",
+    "test:base": "mocha \"tests/**/*.js\" --reporter dot",
+    "test": "npm run test:nyc",
+    "test:nyc": "nyc --reporter=lcov npm run test:base -- --timeout 60000",
+    "test:d": "mocha --inspect --debug-brk \"tests/**/*.js\" --reporter dot",
+    "watch": "npm run test:base -- --watch",
+    "lint": "npm run eslint",
+    "eslint": "eslint . ",
+    "eslint:fix": "eslint . --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/future-architect/cheetah-grid.git"
+  },
+  "keywords": [
+    "svg",
+    "webpack",
+    "icon",
+    "cheetah-grid"
+  ],
+  "author": {
+    "name": "yosuke ota",
+    "email": "otameshiyo23@gmail.com",
+    "url": "https://www.npmjs.com/~ota-meshi"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/future-architect/cheetah-grid/issues"
+  },
+  "homepage": "https://github.com/future-architect/cheetah-grid/tree/master/packages/cheetah-grid-icon-svg-loader",
+  "devDependencies": {
+    "eslint": "^5.6.1",
+    "eslint-plugin-node": "^7.0.1",
+    "font-awesome": "^4.7.0",
+    "mocha": "^5.2.0",
+    "nyc": "^13.0.1"
+  },
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "dependencies": {
+    "loader-utils": "^1.1.0",
+    "xmldom": "^0.1.27"
+  }
+}

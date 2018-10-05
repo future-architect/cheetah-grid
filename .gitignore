@@ -9,3 +9,4 @@ packages/*/coverage
 packages/*/report
 /lerna-debug.log
 *npm-debug.log
+packages/cheetah-grid-icon-svg-loader/.nyc_output/
