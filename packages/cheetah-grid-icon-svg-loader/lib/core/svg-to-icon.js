@@ -35,6 +35,15 @@ function circleToPath(circle) {
 	return paths;
 }
 
+function rectToPath(rect) {
+	const x = rect.getAttribute('x') - 0;
+	const y = rect.getAttribute('y') - 0;
+	const width = rect.getAttribute('width') - 0;
+	const height = rect.getAttribute('height') - 0;
+	return `M${x},${y} h${width} v${height} h${-width}z`;
+}
+
+
 function getD(path) {
 	const fill = path.getAttribute('fill');
 	if (fill === 'none') {
@@ -55,6 +64,8 @@ function elementToPaths(el, resource) {
 		return polygonToPath(el);
 	case 'polyline':
 		return polylineToPath(el);
+	case 'rect':
+		return rectToPath(el);
 	case 'g':
 		let path = '';
 		const {childNodes} = el;

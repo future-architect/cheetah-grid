@@ -1,7 +1,7 @@
 /*eslint-disable no-sync*/
 'use strict';
 
-const svgToIcon = require('./svg-to-cheetahgrid-icon');
+const svgToIcon = require('./svg-to-icon');
 const svgData = require('./svg-data');
 
 function toGlyphs(svgCode) {

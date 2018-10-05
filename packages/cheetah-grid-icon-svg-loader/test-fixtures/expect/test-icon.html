@@ -4,19 +4,19 @@
 	<meta charset="UTF-8">
 	<title>ICON</title>
 	
-	<script src="http://localhost:35729/livereload.js"></script>
-    <script type="text/javascript" src="../../../dist/cheetahGrid.es5.min.js"></script>
+  <script type="text/javascript" src="../../../cheetah-grid/dist/cheetahGrid.es5.min.js"></script>
 </head>
 <body>
 	<h1>ICONS</h1>
 	<div id="test" style="width: 100%;height: 300px;"></div>
-	<script type="text/javascript" src="./mdi_icons.js"></script>
-	<script type="text/javascript" src="./fa_icons.js"></script>
+	<script type="text/javascript" src="./material-design-icons__action_svg_production.js"></script>
+	<script type="text/javascript" src="./material-design-icons__av_svg_design_ic_playlist_play_48px_svg.js"></script>
+	
 	<script>
 'use strict';
 
 function getErrorLogElement() {
-	return document.querySelector('#error_log') || function() {
+	return document.querySelector('#error_log') || (function() {
 		const element = document.createElement('textarea');
 		element.id = 'error_log';
 		element.style.width = '100%';
@@ -27,11 +27,11 @@ function getErrorLogElement() {
 		element.style.color = 'red';
 		document.body.appendChild(element);
 		return element;
-	}();
+	}());
 }
 
 window.onerror = function(msg, file, line, column, err) {
-	getErrorLogElement().value += err && err.stack || msg + '\n    at ' + file + ':' + line + ':' + column;
+	getErrorLogElement().value += err && err.stack || `${msg}\n    at ${file}:${line}:${column}`;
 };
     </script>
 
@@ -42,7 +42,7 @@ function charToHexCodeStr(c) {
 	if (/[!#-&(-[\]-_a-~]/.test(c)) {
 		return c;
 	}
-	return '\\u' + ('0000' + c.charCodeAt(0).toString(16)).slice(-4);
+	return `\\u${(`0000${c.charCodeAt(0).toString(16)}`).slice(-4)}`;
 }
 
 function toCodeString(code) {
@@ -52,7 +52,7 @@ function toCodeString(code) {
 	}
 	return ret;
 }
-(function() {
+function draw() {
 
 	const grid = new cheetahGrid.ListGrid({
 		parentElement: document.querySelector('#test'),
@@ -81,8 +81,8 @@ function toCodeString(code) {
 		headerRowHeight: 24,
 	});
 	const records = [];
-	const icons = cheetahGrid.icons;
-	Object.keys(icons).forEach(function(k, i) {
+	const {icons} = cheetahGrid;
+	Object.keys(icons).forEach((k, i) => {
 		records.push({
 			no: i + 1,
 			label: toCodeString(k),
@@ -92,7 +92,14 @@ function toCodeString(code) {
 	grid.records = records;
 	window.grid = grid;
 
-})();
+}
+
+cheetahGrid.register.icons(window['material-design-icons__action_svg_production']);
+cheetahGrid.register.icons(window['material-design-icons__av_svg_design_ic_playlist_play_48px_svg']);
+
+draw();
 	</script>
+	
+
 </body>
 </html>
