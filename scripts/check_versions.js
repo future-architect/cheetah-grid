@@ -60,7 +60,11 @@ function checkPackageJson(pkg, pkgs) {
 			if (!pkgs[name]) {
 				continue;
 			}
-			const v = dependencies[name].match(/(\d+\.\d+\.\d+)/g)[0];
+			const depVer = dependencies[name].match(/(\d+\.\d+\.\d+)/g);
+			if (!depVer) {
+				continue;
+			}
+			const v = depVer[0];
 			if (minorVersion(v) !== minorVersion(pkgs[name].version)) {
 				const p = checkPublished(pkg, name, pkgs[name].version).
 					then((isPublished) => {
