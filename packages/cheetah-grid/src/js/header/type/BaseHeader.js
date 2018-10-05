@@ -5,8 +5,7 @@ const {isDef} = require('../../internal/utils');
 const {Style} = styleContents;
 
 class BaseHeader {
-	constructor(headerCell) {
-		this._headerCell = headerCell;
+	constructor(options = {}) {
 		this.onDrawCell = this.onDrawCell.bind(this);//スコープを固定させる
 	}
 	get StyleClass() {
@@ -34,7 +33,7 @@ class BaseHeader {
 	drawInternal(value, context, style, helper, grid, info) {
 
 	}
-	bindGridEvent(grid) {
+	bindGridEvent(grid, range) {
 		return [];
 	}
 }

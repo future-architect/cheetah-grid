@@ -46,8 +46,9 @@ class CheckEditor extends Editor {
 		const state = grid[CHECK_COLUMN_STATE_ID];
 
 		const action = (cell) => {
-			const key = `${cell.col}:${cell.row}`;
-			const blockKey = `${key}::block`;
+			const cellKey = `${cell.col}:${cell.row}`;
+			const blockKey = `${cellKey}::block`;
+			const elapsedKey = `${cellKey}::elapsed`;
 			if (this.readOnly || this.disabled || state[blockKey]) {
 				return;
 			}
@@ -58,11 +59,9 @@ class CheckEditor extends Editor {
 					// checkbox animation
 					animate(200, (point) => {
 						if (point === 1) {
-							delete state[key];
+							delete state[elapsedKey];
 						} else {
-							state[key] = {
-								elapsed: point,
-							};
+							state[elapsedKey] = point;
 						}
 						grid.invalidateCell(cell.col, cell.row);
 					});

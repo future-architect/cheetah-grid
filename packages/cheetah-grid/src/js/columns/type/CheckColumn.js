@@ -1,5 +1,6 @@
 'use strict';
 
+const {isDef} = require('../../internal/utils');
 const BaseColumn = require('./BaseColumn');
 const CheckStyle = require('../style/CheckStyle');
 const {CHECK_COLUMN_STATE_ID} = require('../../internal/symbolManager');
@@ -44,8 +45,9 @@ class CheckColumn extends BaseColumn {
 		}
 
 		const {col, row} = context;
-		const key = `${col}:${row}`;
-		const state = grid[CHECK_COLUMN_STATE_ID] && grid[CHECK_COLUMN_STATE_ID][key];
+		const cellKey = `${col}:${row}`;
+		const elapsedKey = `${cellKey}::elapsed`;
+		const elapsed = grid[CHECK_COLUMN_STATE_ID] && grid[CHECK_COLUMN_STATE_ID][elapsedKey];
 
 		const opt = {
 			textAlign,
@@ -54,8 +56,8 @@ class CheckColumn extends BaseColumn {
 			checkBgColor,
 			uncheckBgColor,
 		};
-		if (state) {
-			opt.animElapsedTime = state.elapsed;
+		if (isDef(elapsed)) {
+			opt.animElapsedTime = elapsed;
 		}
 		helper.checkbox(value, context, opt);
 	}

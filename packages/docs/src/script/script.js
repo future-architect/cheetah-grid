@@ -4,7 +4,7 @@ const indexHelper = {
 	// デモメニューの構築
 	buildDemoContents(data) {
 		const nodes = [];
-		data.allDemos.forEach(({title, category, order, path, disabled = false}) => {
+		data.allDemos.forEach(({title, category, order, path, disabled = false, categoryOrders = {}}) => {
 			if (!Array.isArray(category)) {
 				category = [category];
 			}
@@ -18,6 +18,7 @@ const indexHelper = {
 						title: cat,
 						contents: [],
 						level,
+						order: categoryOrders[cat] || Number.MAX_SAFE_INTEGER,
 						disabled: false,
 					};
 					last.push(obj);

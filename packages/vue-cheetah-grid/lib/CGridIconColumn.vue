@@ -84,6 +84,9 @@ export default {
       return {
         caption: this.caption || this.$el.textContent.trim(),
         headerStyle: this.headerStyle,
+        headerField: this.headerField,
+        headerType: this.headerType,
+        headerAction: this.headerAction,
         field,
         columnType,
         width: this.width,

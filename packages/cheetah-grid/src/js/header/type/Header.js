@@ -32,7 +32,7 @@ class Header extends BaseHeader {
 			textOverflow,
 		});
 	}
-	bindGridEvent(grid) {
+	bindGridEvent(grid, range) {
 		return [];
 	}
 }

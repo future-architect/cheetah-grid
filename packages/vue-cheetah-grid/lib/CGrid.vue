@@ -60,7 +60,7 @@ function _setGridData (grid, data, filter) {
 function _bindEvents (v, grid) {
   for (const k in cheetahGrid.ListGrid.EVENT_TYPE) {
     const type = cheetahGrid.ListGrid.EVENT_TYPE[k]
-    const emitType = type.replace('_', '-').toLowerCase()
+    const emitType = type.replace(/_/g, '-').toLowerCase()
     grid.listen(type, (...args) => {
       let result
       v.$emit(emitType, ...args, (r) => {

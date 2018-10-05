@@ -11,7 +11,7 @@ order: 130
 プロパティ`action`を利用して、列のアクションを指定します。  
 用意された各アクションは同じ列に設定する`columnType`に合わせた、Actionクラスを利用してください。
 
-| columnType | specified by string | class | 説明 | LINK |
+| `columnType` | specified `action` by string | class | 説明 | LINK |
 |---|---|---|---|---|
 | `check`  | `'check'` | [`cheetahGrid.columns.action.CheckEditor`](./column_actions/CheckEditor.html) | チェックボックスをクリックした際の動作を指定します | [CheckEditor](./column_actions/CheckEditor.html) |
 | `button` | ---     | [`cheetahGrid.columns.action.ButtonAction`](./column_actions/ButtonAction.html) | ボタンをクリックした際の動作を指定します | [ButtonAction](./column_actions/ButtonAction.html) |
@@ -22,7 +22,7 @@ order: 130
 Define column action by using `action` property.  
 Please select suitable Action class for `columnType` of same column.  
 
-| columnType | specified by string | class | descrition | LINK |
+| `columnType` | specified `action` by string | class | descrition | LINK |
 |---|---|---|---|---|
 | `check`  | `'check'` | [`cheetahGrid.columns.action.CheckEditor`](./column_actions/CheckEditor.html) | Define the behaviour when checkbox is clicked. | [CheckEditor](./column_actions/CheckEditor.html) |
 | `button` | ---     | [`cheetahGrid.columns.action.ButtonAction`](./column_actions/ButtonAction.html) | Define the behaviour when button is clicked. | [ButtonAction](./column_actions/ButtonAction.html) |
@@ -78,7 +78,7 @@ grid.records = [
 {{#marked}}
 ## Advanced Column Action
 {{#if lang_ja}}
-プロパティ`action`はActionインスタンスをしてすることで、
+プロパティ`action`はActionインスタンスを指定することで、
 途中でアクションのプロパティ(disable・readonlyなど) を変更することが可能になります。  
 
 

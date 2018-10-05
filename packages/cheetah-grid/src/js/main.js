@@ -4,6 +4,7 @@
 const core = require('./core');
 const tools = require('./tools');
 const columns = require('./columns');
+const headers = require('./headers');
 const themes = require('./themes');
 const data = require('./data');
 
@@ -27,6 +28,7 @@ module.exports = {
 
 	// objects
 	columns,
+	headers,
 	themes,
 	data,
 
