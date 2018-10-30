@@ -1,5 +1,7 @@
 'use strict';
 
+const {isNode} = require('./utils');
+
 function cubicBezier(x2, y2, x3, y3) {
 	let step;
 	const err = 0.0001;
@@ -47,7 +49,7 @@ const EASINGS = {
 	easeInOut: cubicBezier(0.420, 0.000, 0.580, 1.000),
 };
 
-const raf = window.requestAnimationFrame || setTimeout;
+const raf = isNode ? () => {} : window.requestAnimationFrame || setTimeout;
 
 function now() {
 	return Date.now();

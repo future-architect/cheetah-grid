@@ -1,17 +1,24 @@
 'use strict';
 
+const {isNode} = require('./utils');
 const EventHandler = require('./EventHandler');
 const handler = new EventHandler();
 
 let ratio;
 function setRatio() {
-	ratio = Math.ceil(window.devicePixelRatio || 1);
-	if (ratio > 1 && (ratio % 2) !== 0) {
-		ratio += 1;
+	if (isNode) {
+		ratio = 1;
+	} else {
+		ratio = Math.ceil(window.devicePixelRatio || 1);
+		if (ratio > 1 && (ratio % 2) !== 0) {
+			ratio += 1;
+		}
 	}
 }
 setRatio();
-handler.on(window, 'resize', setRatio);
+if (!isNode) {
+	handler.on(window, 'resize', setRatio);
+}
 
 module.exports = {
 	transform(canvas) {
