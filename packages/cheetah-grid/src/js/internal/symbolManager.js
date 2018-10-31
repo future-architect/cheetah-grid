@@ -1,6 +1,8 @@
 'use strict';
 
-const Symbol = window.Symbol ? window.Symbol : (() => {
+const {isNode} = require('./utils');
+
+const Symbol = isNode ? global.Symbol : window.Symbol ? window.Symbol : (() => {
 	function random() {
 		const c = 'abcdefghijklmnopqrstuvwxyz0123456789';
 		const cl = c.length;

@@ -129,8 +129,8 @@ function newEs5Config(opt) {
 	opt.plugins = [
 		new WrapperPlugin({
 			test: /\.js$/,
-			header: '(function(){\n',
-			footer: '\n}).call(typeof global !== "undefined" ? global : window);'
+			header: '(function(window){\n',
+			footer: '\n}).call(typeof global !== "undefined" ? global : window, typeof global !== "undefined" ? global : window);'
 		}),
 		new BabelPlugin({
 			test: /\.js$/,

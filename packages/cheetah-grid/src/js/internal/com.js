@@ -1,5 +1,5 @@
 'use strict';
 
 module.exports = {
-	'Array_isArray': window.Array.isArray
+	'Array_isArray': (typeof window === 'undefined' ? Array.isArray : window.Array.isArray)
 };

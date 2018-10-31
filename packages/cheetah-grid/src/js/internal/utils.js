@@ -1,5 +1,7 @@
 'use strict';
 
+const isNode = typeof window === 'undefined';
+
 let arrayFind;
 let arrayFindIndex;
 const array = {
@@ -42,10 +44,23 @@ const array = {
 function isDef(data) {
 	return data !== null && typeof data !== 'undefined';
 }
-const ua = window.navigator.userAgent.toLowerCase();
-const IE = (ua.match(/(msie)/) || ua.match(/trident/));
-const Chrome = (ua.indexOf('chrome') > -1) && (ua.indexOf('edge') === -1);
-const Firefox = (ua.indexOf('firefox') > -1);
+function analyzeUserAgent() {
+	if (isNode) {
+		return {
+			IE: false,
+			Chrome: false,
+			Firefox: false
+		};
+	}	else {
+		const ua = window.navigator.userAgent.toLowerCase();
+		return {
+			IE: (ua.match(/(msie)/) || ua.match(/trident/)),
+			Chrome: (ua.indexOf('chrome') > -1) && (ua.indexOf('edge') === -1),
+			Firefox: (ua.indexOf('firefox') > -1)
+		};
+	}
+}
+const {IE, Chrome, Firefox} = analyzeUserAgent();
 
 function setReadonly(obj, name, value) {
 	Object.defineProperty(obj, name, {
@@ -219,6 +234,7 @@ function toBoxArray(obj) {
 // FireFox 17895588
 // IE 10737433
 module.exports = {
+	isNode,
 	isDef,
 	browser: {
 		IE,
