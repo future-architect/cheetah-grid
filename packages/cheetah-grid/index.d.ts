@@ -1,4 +1,4 @@
-declare namespace cheetahGrid {
+declare module cheetahGrid {
     namespace columns {
         namespace action {
             export class BaseAction {
@@ -757,3 +757,5 @@ declare namespace cheetahGrid {
         fireListeners(type: string, ...args: any): any;
     }
 }
+
+export = cheetahGrid;
