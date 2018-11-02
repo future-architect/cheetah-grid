@@ -100,16 +100,17 @@ declare module cheetahGrid {
         namespace style {
             export const EVENT_TYPE: { CHANGE_STYLE: "change_style" };
 
-            export class BaseStyle extends EventTarget {
+            export class BaseStyle<T> extends EventTarget {
                 constructor(option?: {
                     bgColor?: string
                 });
                 bgColor: string;
                 doChangeStyle();
-                clone(): BaseStyle;
+                clone(): BaseStyle<T>;
             }
-            class BranchGraphStyle extends BaseStyle {
-                DEFAULT(): BranchGraphStyle;
+
+            class BranchGraphStyle<T> extends BaseStyle<T> {
+                DEFAULT(): BranchGraphStyle<T>;
                 constructor(style?: {
                     branchColors?: string[];
                     margin?: number;
@@ -124,62 +125,70 @@ declare module cheetahGrid {
                 branchLineWidth?: number;
                 mergeStyle?: string;
             }
-            class StdBaseStyle extends BaseStyle {
+
+            class StdBaseStyle<T> extends BaseStyle<T> {
                 textAlign: string;
                 textBaseline: string;
-                clone(): StdBaseStyle;
+                clone(): StdBaseStyle<T>;
             }
-            export class Style extends StdBaseStyle {
+
+            export class Style<T> extends StdBaseStyle<T> {
                 constructor(style?: {
                     color?: string;
                     font?: string;
                     padding?: number;
                     textOverflow?: string;
                 });
-                static DEFAULT(): Style;
+                static DEFAULT<T>(): Style<T>;
                 color: string;
                 font: string;
                 padding: number;
                 textOverflow: string;
-                clone(): Style;
+                clone(): Style<T>;
             }
-            export class NumberStyle extends Style {
-                static DEFAULT(): NumberStyle;
-                clone(): NumberStyle;
+
+            export class NumberStyle<T> extends Style<T> {
+                static DEFAULT<T>(): NumberStyle<T>;
+                clone(): NumberStyle<T>;
             }
-            export class CheckStyle extends StdBaseStyle {
+
+            export class CheckStyle<T> extends StdBaseStyle<T> {
                 constructor(style?: {
                     uncheckBgColor?: string;
                     checkBgColor?: string;
                     borderColor?: string;
                 });
-                static DEFAULT(): CheckStyle;
-                clone(): CheckStyle;
+                static DEFAULT<T>(): CheckStyle<T>;
+                clone(): CheckStyle<T>;
             }
-            export class ButtonStyle extends Style {
+
+            export class ButtonStyle<T> extends Style<T> {
                 constructor(style?: {
                     buttonBgColor?: string;
                 });
-                static DEFAULT(): ButtonStyle;
+                static DEFAULT<T>(): ButtonStyle<T>;
                 buttonBgColor: string;
-                clone(): ButtonStyle;
+                clone(): ButtonStyle<T>;
             }
-            export class ImageStyle extends StdBaseStyle {
+
+            export class ImageStyle<T> extends StdBaseStyle<T> {
                 constructor(style?: {
                     imageSizing?: string;
                     margin?: number;
                 });
-                static DEFAULT(): ImageStyle;
+                static DEFAULT<T>(): ImageStyle<T>;
                 imageSizing: string;
                 margin: number;
-                clone(): ImageStyle;
+                clone(): ImageStyle<T>;
             }
-            export class IconStyle extends Style {
-                static DEFAULT(): IconStyle;
-                clone(): IconStyle;
+
+            export class IconStyle<T> extends Style<T> {
+                static DEFAULT<T>(): IconStyle<T>;
+                clone(): IconStyle<T>;
             }
-            export class PercentCompleteBarStyle extends Style {
-                static DEFAULT(): PercentCompleteBarStyle;
+
+            export class PercentCompleteBarStyle<T> extends Style<T> {
+                static DEFAULT<T>(): PercentCompleteBarStyle<T>;
                 constructor(style?: {
                     barColor?: string;
                     barBgColor?: string;
@@ -188,10 +197,11 @@ declare module cheetahGrid {
                 barColor: string;
                 barBgColor: string;
                 barheight: number;
-                clone(): PercentCompleteBarStyle;
+                clone(): PercentCompleteBarStyle<T>;
             }
-            export class MultilineTextStyle extends Style {
-                static DEFAULT(): MultilineTextStyle;
+
+            export class MultilineTextStyle<T> extends Style<T> {
+                static DEFAULT<T>(): MultilineTextStyle<T>;
                 constructor(style?: {
                     lineHeight?: string;
                     lineClamp?: string;
@@ -200,93 +210,87 @@ declare module cheetahGrid {
                 lineHeight: string;
                 lineClamp: string;
                 autoWrapText: boolean;
-                clone(): MultilineTextStyle;
+                clone(): MultilineTextStyle<T>;
             }
-            export class MenuStyle extends Style {
-                static DEFAULT(): MenuStyle;
+
+            export class MenuStyle<T> extends Style<T> {
+                static DEFAULT<T>(): MenuStyle<T>;
                 constructor(option?: {
                     appearance?: string;
                 });
                 appearance: string;
-                clone(): MenuStyle;
+                clone(): MenuStyle<T>;
             }
+
             export function of(columnStyle, record, StyleClass): any;
         }
 
         namespace type {
-            export const TYPES: {
-                DEFAULT: Column,
-                NUMBER: Number,
-                CHECK: CheckColumn,
-                BUTTON: ButtonColumn,
-                IMAGE: ImageColumn,
-                MULTILINETEXT: MultilineTextColumn,
-            };
-            class BaseColumn {
+            class BaseColumn<T> {
                 constructor(option?: {
                     fadeinWhenCallbackInPromise?: boolean;
                 });
 
-                StyleClass: style.BaseStyle;
+                StyleClass: style.BaseStyle<T>;
                 onDrawCell(cellValue, info, context, grid);
-                clone(): BaseColumn;
+                clone(): BaseColumn<T>;
                 convertInternal(value);
                 drawInternal(value, context, style, helper, grid, info);
                 drawMessageInternal(message, context, style, helper, grid, info);
                 bindGridEvent(grid, col, util);
             }
-            export class Column extends BaseColumn {
-                StyleClass: style.Style;
-                clone(): Column;
+            export class Column<T> extends BaseColumn<T> {
+                StyleClass: style.Style<T>;
+                clone(): Column<T>;
                 drawInternal(value, context, style, helper, grid, { drawCellBase, getIcon });
             }
-            export class NumberColumn extends Column {
+            export class NumberColumn<T> extends Column<T> {
                 static defaultFotmat: any;
 
                 constructor(option?: {
                     format?: any;
                 });
 
-                StyleClass: style.NumberStyle;
-                clone(): NumberColumn;
+                StyleClass: style.NumberStyle<T>;
+                clone(): NumberColumn<T>;
                 format: any;
-                withFormat(format): NumberColumn;
+                withFormat(format): NumberColumn<T>;
                 convertInternal(value);
             }
-            export class CheckColumn extends BaseColumn {
-                StyleClass: style.Style;
-                clone(): ImageColumn;
+            export class CheckColumn<T> extends BaseColumn<T> {
+                StyleClass: style.Style<T>;
+                clone(): ImageColumn<T>;
                 convertInternal(value);
                 drawInternal(value, context, style, helper, grid, { drawCellBase });
                 bindGridEvent(grid, col, util);
             }
-            export class ButtonColumn extends Column {
+            export class ButtonColumn<T> extends Column<T> {
                 constructor(option?: {
                     caption?: string;
                 });
-                withCaption(caption: string): ButtonColumn;
-                clone(): ButtonColumn;
+                withCaption(caption: string): ButtonColumn<T>;
+                clone(): ButtonColumn<T>;
                 convertInternal(value: string): string;
                 drawInternal(value, context, style, helper, grid, { drawCellBase, getIcon });
             }
-            export class ImageColumn extends BaseColumn {
-                StyleClass: style.Style;
-                clone(): ImageColumn;
+            export class ImageColumn<T> extends BaseColumn<T> {
+                StyleClass: style.Style<T>;
+                clone(): ImageColumn<T>;
                 onDrawCell(cellValue, info, context, grid);
                 drawInternal(value, context, style, helper, grid, { drawCellBase });
             }
-            export class PercentCompleteBarColumn extends Column {
+            export class PercentCompleteBarColumn<T> extends Column<T> {
                 constructor(option: {
                     min?: number;
                     max?: number;
                     formatter?: (value) => any;
                 });
 
-                StyleClass: style.PercentCompleteBarStyle;
-                clone(): PercentCompleteBarColumn;
+                StyleClass: style.PercentCompleteBarStyle<T>;
+                clone(): PercentCompleteBarColumn<T>;
                 drawInternal(value, context, style, helper, grid, info);
             }
-            export class IconColumn extends Column {
+            export class IconColumn<T> extends Column<T> {
                 constructor(option?: {
                     tagName?: string;
                     className?: string;
@@ -295,40 +299,40 @@ declare module cheetahGrid {
                     iconWidth?: number;
                 });
 
-                StyleClass: style.IconStyle;
-                clone(): IconColumn;
+                StyleClass: style.IconStyle<T>;
+                clone(): IconColumn<T>;
                 drawInternal(value, context, style, helper, grid, info);
             }
-            export class BranchGraphColumn extends BaseColumn {
+            export class BranchGraphColumn<T> extends BaseColumn<T> {
                 constructor(option?: {
                     start?: string;
                     cache?: boolean;
                 });
-                StyleClass: style.BranchGraphStyle;
+                StyleClass: style.BranchGraphStyle<T>;
                 clearCache(grid);
                 onDrawCell(cellValue, info, context, grid);
                 clone();
                 drawInternal(value, context, style, helper, grid, { drawCellBase });
             }
-            export class MenuColumn extends BaseColumn {
+            export class MenuColumn<T> extends BaseColumn<T> {
                 constructor(option?: {
                     options?: any;
                 });
-                StyleClass: style.MenuStyle;
-                clone(): MenuColumn;
+                StyleClass: style.MenuStyle<T>;
+                clone(): MenuColumn<T>;
                 options: any;
-                withOptions(options): MenuColumn;
+                withOptions(options): MenuColumn<T>;
                 drawInternal(value, context, style, helper, grid, { drawCellBase, getIcon });
                 convertInternal(value);
             }
-            export class MultilineTextColumn extends BaseColumn {
+            export class MultilineTextColumn<T> extends BaseColumn<T> {
                 constructor(option?: any);
-                StyleClass: style.MultilineTextStyle;
-                clone(): MultilineTextColumn;
+                StyleClass: style.MultilineTextStyle<T>;
+                clone(): MultilineTextColumn<T>;
                 drawInternal(value, context, style, helper, grid, { drawCellBase, getIcon });
             }
 
-            function of(columnType: string | Column): Column;
+            function of<T>(columnType: string | Column<T>): Column<T>;
         }
     }
 
@@ -541,39 +545,65 @@ declare module cheetahGrid {
     }
 
     namespace data {
-        export class DataSource extends EventTarget {
-            constructor();
+        interface IDataSourceParam<T> {
+            get: (index: number) => T;
+            length: number;
         }
-        export class FilterDataSource extends DataSource {
-            constructor();
+        export class DataSource<T> extends EventTarget {
+            constructor(param: IDataSourceParam<T>);
         }
-        export class CachedDataSource extends DataSource {
-            constructor();
+
+        export class FilterDataSource<T> extends DataSource<T> {
+            constructor(dataSource: DataSource<T>, filter?: (record: T) => boolean | null);
+            filter?: (record: T) => boolean | null;
+        }
+
+        interface ICachedDataSourceParam<T> {
+            get: (index: number) => Promise<T>;
+            length: number;
+        }
+        export class CachedDataSource<T> extends DataSource<T> {
+            constructor(param: ICachedDataSourceParam<T>);
         }
     }
 
-    export class Columnoptions {
+    interface FontIcon<T> {
+        font: string;
+        content: keyof T;
+        className: string;
+        width?: number;
+        color?: string;
+    }
+
+    interface ImageIcon<T> {
+        src: keyof T;
+        className: string;
+        width?: number;
+        color?: string;
+    }
+
+    export interface Columnoptions<T> {
         caption?: string;
-        field?: string;
+        field?: keyof T;
         width?: number;
         minWidth?: number;
         maxWidth?: number;
-        icon?: string;
+        icon?: FontIcon<T> | ImageIcon<T>;
         message?: string;
-        columnType?: columns.type.Column;
-        action?: columns.action.Action;
-        style?: columns.style.Style;
+        columnType?: columns.type.Column<T> | "default" | "number" | "check" | "button" | "image" | "multilinetext";
+        action?: columns.action.Action | "check" | "input";
+        style?: columns.style.Style<T>;
         sort?: boolean | ((order, col, grid) => void);
-        columns?: Columnoptions[];
+        columns?: Columnoptions<T>[];
     }
 
-    export class ListGrid extends cheetahGrid.core.DrawGrid {
+    export class ListGrid<T> extends cheetahGrid.core.DrawGrid {
         static EVENT_TYPE: cheetahGrid.core.DrawGridEvents & { CHANGED_VALUE: 'changed_value' };
 
         constructor(options: {
-            header?: Columnoptions[],
-            records?: any[];
-            dataSource?: data.DataSource;
+            header?: Columnoptions<T>[],
+            records?: T[];
+            dataSource?: data.DataSource<T>;
             frozenColCount?: number;
             defaultRowHeight?: number;
             defaultColWidth?: number;
@@ -582,15 +612,15 @@ declare module cheetahGrid {
             theme?: object;
         });
         dispose(): void;
-        header: Columnoptions[];
+        header: Columnoptions<T>[];
         /**
          * Get the records.
          */
-        records: any[];
+        records: T[];
         /**
          * The data source.
          */
-        dataSource: data.DataSource;
+        dataSource: data.DataSource<T>;
         /**
          * The theme.
          */
@@ -609,7 +639,7 @@ declare module cheetahGrid {
          * Get the record of the given row index.
          * @param row The row index.
          */
-        getRowRecord(row: number): object;
+        getRowRecord(row: number): T;
         /**
          * Get the column index of the given field.
          * @param field The field.
