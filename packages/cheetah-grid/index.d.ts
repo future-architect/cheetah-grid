@@ -1,141 +1,136 @@
 declare module cheetahGrid {
     namespace columns {
         namespace action {
+            interface BaseActionOption {
+                disabled?: boolean
+            }
             export class BaseAction {
+                constructor(option?: BaseActionOption)
                 disabled: boolean;
                 clone(): BaseAction;
-                bindGridEvent(grid, col, util);
-                onChangeDisabledInternal();
+                bindGridEvent(grid: core.DrawGrid, col: number, util: any): any[];
+                onChangeDisabledInternal(): void;
+            }
+            interface EditorOption extends BaseActionOption {
+                readOnly?: boolean
             }
             export class Editor extends BaseAction {
-                constructor(option?: {
-                    readOnly?: boolean;
-                });
+                constructor(option?: EditorOption);
                 readOnly: boolean;
                 clone(): Editor;
-                onChangeReadOnlyInternal();
+                onChangeReadOnlyInternal(): void;
             }
-            export class Action extends BaseAction {
-                constructor(option?: {
-                    action?: (record: any) => void;
-                });
-                action: (record: any) => void;
-                clone(): Action;
-                getState(grid);
-                bindGridEvent(grid, col, util): any[];
+            interface ActionOption<T> extends BaseActionOption {
+                action?: (record: T) => void;
+            }
+            export class Action<T> extends BaseAction {
+                constructor(option?: ActionOption<T>);
+                action: (record: T) => void;
+                clone(): Action<T>;
+                getState(grid: core.DrawGrid): any;
             }
             export class CheckEditor extends Editor {
                 clone(): CheckEditor;
-                bindGridEvent(grid, col, util): any[];
             }
-            export class ButtonAction extends Action {
-                getState(grid): any;
+            export class ButtonAction<T> extends Action<T> {
+            }
+            interface BaseInputEditorOption extends EditorOption {
             }
             class BaseInputEditor extends Editor {
-                constructor(option?: any);
+                constructor(option?: BaseInputEditorOption);
                 clone(): BaseInputEditor;
-                onInputCellInternal(grid, cell, inputValue);
-                onOpenCellInternal(grid, cell);
-                onChangeSelectCellInternal(grid, cell, selected);
-                onSetInputAttrsInternal(grid, cell, input);
-                onGridScrollInternal(grid);
-                bindGridEvent(grid, col, util);
+                onInputCellInternal(grid: core.DrawGrid, cell, inputValue: any): void;
+                onOpenCellInternal(grid: core.DrawGrid, cell): void;
+                onChangeSelectCellInternal(grid: core.DrawGrid, cell, selected: boolean): void;
+                onSetInputAttrsInternal(grid: core.DrawGrid, cell, input: HTMLInputElement): void;
+                onGridScrollInternal(grid: core.DrawGrid): void;
+            }
+            interface SmallDialogInputEditorOption extends BaseInputEditorOption {
+                helperText?: (value: string) => string;
+                inputValidator?: (value: string) => string | null;
+                validator?: (value: string) => string | null;
+                classList?: string[];
+                type?: string;
             }
             export class SmallDialogInputEditor extends BaseInputEditor {
-                constructor(option: {
-                    helperText?: (value: string) => string;
-                    inputValidator?: (value: string) => string | null;
-                    validator?: (value: string) => string | null;
-                    classList?: string[];
-                    type?: string;
-                });
+                constructor(option?: SmallDialogInputEditorOption);
 
                 helperText: (value: string) => string;
                 inputValidator: (value: string) => string | null;
                 validator: (value: string) => string | null;
                 classList: string[];
                 type: string;
-
-                clone(): SmallDialogInputEditor;
-                onInputCellInternal(grid, cell, inputValue);
-                onOpenCellInternal(grid, cell);
-                onChangeSelectCellInternal(grid, cell, selected);
-                onGridScrollInternal(grid);
-                onChangeDisabledInternal();
-                onChangeReadOnlyInternal();
-                onSetInputAttrsInternal(grid, cell, input);
+            }
+            interface InlineInputEditorOption extends BaseInputEditorOption {
+                classList?: string[];
+                type?: string;
             }
             export class InlineInputEditor extends BaseInputEditor {
-                constructor(option?: {
-                    classList?: string[];
-                    type?: string;
-                });
+                constructor(option?: InlineInputEditorOption)
 
                 classList: string[];
                 type: string;
-                clone(): InlineInputEditor;
-                onInputCellInternal(grid, cell, inputValue);
-                onOpenCellInternal(grid, cell);
-                onChangeSelectCellInternal(grid, cell, selected);
-                onGridScrollInternal(grid);
-                onChangeDisabledInternal();
-                onChangeReadOnlyInternal();
-                onSetInputAttrsInternal(grid, cell, input);
             }
             export class InlineMenuEditor extends Editor {
                 constructor(option?: {
                     classList?: string[];
                 });
                 classList: string[];
-                options: { classList: string[]; };
-                dispose();
+                options: { value: any, caption: string }[] | object | string;
                 clone(): InlineMenuEditor;
-                onChangeDisabledInternal();
-                onChangeReadOnlyInternal();
-                bindGridEvent(grid, col, util);
             }
-            function of(columnActions?: string | BaseAction): BaseAction;
+            function of(columnAction: string | BaseAction): BaseAction;
         }
 
         namespace style {
             export const EVENT_TYPE: { CHANGE_STYLE: "change_style" };
 
+            interface BaseStyleOption {
+                bgColor?: string
+            }
             export class BaseStyle extends EventTarget {
-                constructor(option?: {
-                    bgColor?: string
-                });
+                constructor(style?: BaseStyleOption);
                 bgColor: string;
-                doChangeStyle();
+                doChangeStyle(): void;
                 clone(): BaseStyle;
             }
-            class BranchGraphStyle extends BaseStyle {
-                DEFAULT(): BranchGraphStyle;
-                constructor(style?: {
-                    branchColors?: string[];
-                    margin?: number;
-                    circleSize?: number;
-                    branchLineWidth?: number;
-                    mergeStyle?: string;
-                });
 
+            interface BranchGraphStyleOption extends BaseStyleOption {
                 branchColors?: string[];
                 margin?: number;
                 circleSize?: number;
                 branchLineWidth?: number;
                 mergeStyle?: string;
             }
+            class BranchGraphStyle extends BaseStyle {
+                DEFAULT(): BranchGraphStyle;
+                constructor(style?: BranchGraphStyleOption);
+                branchColors?: string[];
+                margin?: number;
+                circleSize?: number;
+                branchLineWidth?: number;
+                mergeStyle?: string;
+            }
+
+            interface StdBaseStyleOption extends BaseStyleOption {
+                textAlign?: string;
+                textBaseline?: string;
+            }
             class StdBaseStyle extends BaseStyle {
+                constructor(style?: StdBaseStyleOption)
                 textAlign: string;
                 textBaseline: string;
                 clone(): StdBaseStyle;
             }
+
+            interface StyleOption extends StdBaseStyleOption {
+                color?: string;
+                font?: string;
+                padding?: number;
+                textOverflow?: string;
+            }
             export class Style extends StdBaseStyle {
-                constructor(style?: {
-                    color?: string;
-                    font?: string;
-                    padding?: number;
-                    textOverflow?: string;
-                });
+                constructor(style?: StyleOption);
                 static DEFAULT(): Style;
                 color: string;
                 font: string;
@@ -143,148 +138,150 @@ declare module cheetahGrid {
                 textOverflow: string;
                 clone(): Style;
             }
+
             export class NumberStyle extends Style {
                 static DEFAULT(): NumberStyle;
                 clone(): NumberStyle;
             }
+
+            interface CheckStyleOption extends StdBaseStyleOption {
+                uncheckBgColor?: string;
+                checkBgColor?: string;
+                borderColor?: string;
+            }
             export class CheckStyle extends StdBaseStyle {
-                constructor(style?: {
-                    uncheckBgColor?: string;
-                    checkBgColor?: string;
-                    borderColor?: string;
-                });
+                constructor(style?: CheckStyleOption);
                 static DEFAULT(): CheckStyle;
                 clone(): CheckStyle;
             }
+
+            interface ButtonStyleOption extends StyleOption {
+                buttonBgColor?: string;
+            }
             export class ButtonStyle extends Style {
-                constructor(style?: {
-                    buttonBgColor?: string;
-                });
+                constructor(style?: ButtonStyleOption);
                 static DEFAULT(): ButtonStyle;
                 buttonBgColor: string;
                 clone(): ButtonStyle;
             }
+
+            interface ImageStyleOption extends StdBaseStyleOption {
+                imageSizing?: string;
+                margin?: number;
+            }
             export class ImageStyle extends StdBaseStyle {
-                constructor(style?: {
-                    imageSizing?: string;
-                    margin?: number;
-                });
+                constructor(style?: ImageStyleOption);
                 static DEFAULT(): ImageStyle;
                 imageSizing: string;
                 margin: number;
                 clone(): ImageStyle;
             }
+
             export class IconStyle extends Style {
                 static DEFAULT(): IconStyle;
                 clone(): IconStyle;
             }
+
+            interface PercentCompleteBarStyleOption extends StyleOption {
+                barColor?: string;
+                barBgColor?: string;
+                barheight?: number;
+            }
             export class PercentCompleteBarStyle extends Style {
                 static DEFAULT(): PercentCompleteBarStyle;
-                constructor(style?: {
-                    barColor?: string;
-                    barBgColor?: string;
-                    barheight?: number;
-                });
+                constructor(style?: PercentCompleteBarStyleOption);
                 barColor: string;
                 barBgColor: string;
                 barheight: number;
                 clone(): PercentCompleteBarStyle;
             }
+
+            interface MultilineTextStyleOption extends StyleOption {
+                lineHeight?: string;
+                lineClamp?: string;
+                autoWrapText?: boolean;
+            }
             export class MultilineTextStyle extends Style {
                 static DEFAULT(): MultilineTextStyle;
-                constructor(style?: {
-                    lineHeight?: string;
-                    lineClamp?: string;
-                    autoWrapText?: boolean;
-                });
+                constructor(style?: MultilineTextStyleOption);
                 lineHeight: string;
                 lineClamp: string;
                 autoWrapText: boolean;
                 clone(): MultilineTextStyle;
             }
+
+            interface MenuStyleOption extends StyleOption {
+                appearance?: string;
+            }
             export class MenuStyle extends Style {
                 static DEFAULT(): MenuStyle;
-                constructor(option?: {
-                    appearance?: string;
-                });
+                constructor(option?: MenuStyleOption);
                 appearance: string;
                 clone(): MenuStyle;
             }
-            export function of(columnStyle, record, StyleClass): any;
+
+            export function of<T>(
+                columnStyle: style.BaseStyle | BaseStyleOption | ((record: T) => any) | keyof T,
+                record: T[],
+                StyleClass: typeof style.BaseStyle
+            ): style.BaseStyle;
         }
 
         namespace type {
-            export const TYPES: {
-                DEFAULT: Column,
-                NUMBER: Number,
-                CHECK: CheckColumn,
-                BUTTON: ButtonColumn,
-                IMAGE: ImageColumn,
-                MULTILINETEXT: MultilineTextColumn,
-            };
             class BaseColumn {
                 constructor(option?: {
                     fadeinWhenCallbackInPromise?: boolean;
                 });
 
                 StyleClass: style.BaseStyle;
-                onDrawCell(cellValue, info, context, grid);
+                onDrawCell(cellValue: any, info, context: DrawCellContext, grid: core.DrawGrid): Promise<any> | null;
                 clone(): BaseColumn;
-                convertInternal(value);
-                drawInternal(value, context, style, helper, grid, info);
-                drawMessageInternal(message, context, style, helper, grid, info);
-                bindGridEvent(grid, col, util);
+                convertInternal(value: any): any;
+                drawInternal(value: any, context: DrawCellContext, style: style.BaseStyle, helper, grid: core.DrawGrid, info): void;
+                drawMessageInternal(message: string, context: DrawCellContext, style: style.BaseStyle, helper, grid: core.DrawGrid, info): void;
+                bindGridEvent(grid: core.DrawGrid, col, util): void;
             }
             export class Column extends BaseColumn {
                 StyleClass: style.Style;
                 clone(): Column;
-                drawInternal(value, context, style, helper, grid, { drawCellBase, getIcon });
             }
             export class NumberColumn extends Column {
                 static defaultFotmat: any;
 
                 constructor(option?: {
-                    format?: any;
+                    format?: Intl.NumberFormat;
                 });
 
                 StyleClass: style.NumberStyle;
                 clone(): NumberColumn;
-                format: any;
-                withFormat(format): NumberColumn;
-                convertInternal(value);
+                format: Intl.NumberFormat;
+                withFormat(format: Intl.NumberFormat): NumberColumn;
             }
             export class CheckColumn extends BaseColumn {
                 StyleClass: style.Style;
                 clone(): ImageColumn;
-                convertInternal(value);
-                drawInternal(value, context, style, helper, grid, { drawCellBase });
-                bindGridEvent(grid, col, util);
             }
             export class ButtonColumn extends Column {
+                StyleClass: style.ButtonStyle;
                 constructor(option?: {
                     caption?: string;
                 });
                 withCaption(caption: string): ButtonColumn;
                 clone(): ButtonColumn;
-                convertInternal(value: string): string;
-                drawInternal(value, context, style, helper, grid, { drawCellBase, getIcon });
             }
             export class ImageColumn extends BaseColumn {
-                StyleClass: style.Style;
+                StyleClass: style.ImageStyle;
                 clone(): ImageColumn;
-                onDrawCell(cellValue, info, context, grid);
-                drawInternal(value, context, style, helper, grid, { drawCellBase });
             }
             export class PercentCompleteBarColumn extends Column {
                 constructor(option: {
                     min?: number;
                     max?: number;
-                    formatter?: (value) => any;
+                    formatter?: (value: any) => any;
                 });
 
                 StyleClass: style.PercentCompleteBarStyle;
                 clone(): PercentCompleteBarColumn;
-                drawInternal(value, context, style, helper, grid, info);
             }
             export class IconColumn extends Column {
                 constructor(option?: {
@@ -297,7 +294,6 @@ declare module cheetahGrid {
 
                 StyleClass: style.IconStyle;
                 clone(): IconColumn;
-                drawInternal(value, context, style, helper, grid, info);
             }
             export class BranchGraphColumn extends BaseColumn {
                 constructor(option?: {
@@ -305,30 +301,24 @@ declare module cheetahGrid {
                     cache?: boolean;
                 });
                 StyleClass: style.BranchGraphStyle;
-                clearCache(grid);
-                onDrawCell(cellValue, info, context, grid);
-                clone();
-                drawInternal(value, context, style, helper, grid, { drawCellBase });
+                clearCache(grid: core.DrawGrid): void;
+                clone(): BranchGraphColumn;
             }
             export class MenuColumn extends BaseColumn {
                 constructor(option?: {
-                    options?: any;
+                    options?: { value: any, caption: string }[] | object | string;
                 });
                 StyleClass: style.MenuStyle;
                 clone(): MenuColumn;
-                options: any;
-                withOptions(options): MenuColumn;
-                drawInternal(value, context, style, helper, grid, { drawCellBase, getIcon });
-                convertInternal(value);
+                options: { value: any, caption: string }[] | object | string;
+                withOptions(options: { value: any, caption: string }[] | object | string): MenuColumn;
             }
             export class MultilineTextColumn extends BaseColumn {
-                constructor(option?: any);
                 StyleClass: style.MultilineTextStyle;
                 clone(): MultilineTextColumn;
-                drawInternal(value, context, style, helper, grid, { drawCellBase, getIcon });
             }
 
-            function of(columnType: string | Column): Column;
+            function of(columnType: string | BaseColumn): Column;
         }
     }
 
@@ -541,39 +531,65 @@ declare module cheetahGrid {
     }
 
     namespace data {
-        export class DataSource extends EventTarget {
-            constructor();
+        interface IDataSourceParam<T> {
+            get: (index: number) => T;
+            length: number;
         }
-        export class FilterDataSource extends DataSource {
-            constructor();
+        export class DataSource<T> extends EventTarget {
+            constructor(param: IDataSourceParam<T>);
         }
-        export class CachedDataSource extends DataSource {
-            constructor();
+
+        export class FilterDataSource<T> extends DataSource<T> {
+            constructor(dataSource: DataSource<T>, filter?: (record: T) => boolean | null);
+            filter?: (record: T) => boolean | null;
+        }
+
+        interface ICachedDataSourceParam<T> {
+            get: (index: number) => Promise<T> | T;
+            length: number;
+        }
+        export class CachedDataSource<T> extends DataSource<T> {
+            constructor(param: ICachedDataSourceParam<T>);
         }
     }
 
-    export class Columnoptions {
+    interface FontIcon<T> {
+        font: string;
+        content: keyof T;
+        className: string;
+        width?: number;
+        color?: string;
+    }
+
+    interface ImageIcon<T> {
+        src: keyof T;
+        className: string;
+        width?: number;
+        color?: string;
+    }
+
+    export interface Columnoptions<T> {
         caption?: string;
-        field?: string;
+        field?: keyof T;
         width?: number;
         minWidth?: number;
         maxWidth?: number;
-        icon?: string;
+        icon?: FontIcon<T> | ImageIcon<T>;
         message?: string;
-        columnType?: columns.type.Column;
-        action?: columns.action.Action;
-        style?: columns.style.Style;
-        sort?: boolean | ((order, col, grid) => void);
-        columns?: Columnoptions[];
+        columnType?: columns.type.BaseColumn | "default" | "number" | "check" | "button" | "image" | "multilinetext";
+        action?: columns.action.BaseAction | "check" | "input";
+        style?: columns.style.BaseStyle | columns.style.BaseStyleOption | ((record: T) => any) | keyof T;
+        sort?: boolean | ((order: "asc" | "desc", col: number, grid: ListGrid<T>) => void);
+        columns?: Columnoptions<T>[];
     }
 
-    export class ListGrid extends cheetahGrid.core.DrawGrid {
+    export class ListGrid<T> extends cheetahGrid.core.DrawGrid {
         static EVENT_TYPE: cheetahGrid.core.DrawGridEvents & { CHANGED_VALUE: 'changed_value' };
 
         constructor(options: {
-            header?: Columnoptions[],
-            records?: any[];
-            dataSource?: data.DataSource;
+            header?: Columnoptions<T>[],
+            records?: T[];
+            dataSource?: data.DataSource<T>;
             frozenColCount?: number;
             defaultRowHeight?: number;
             defaultColWidth?: number;
@@ -582,15 +598,15 @@ declare module cheetahGrid {
             theme?: object;
         });
         dispose(): void;
-        header: Columnoptions[];
+        header: Columnoptions<T>[];
         /**
          * Get the records.
          */
-        records: any[];
+        records: T[];
         /**
          * The data source.
          */
-        dataSource: data.DataSource;
+        dataSource: data.DataSource<T>;
         /**
          * The theme.
          */
@@ -609,7 +625,7 @@ declare module cheetahGrid {
          * Get the record of the given row index.
          * @param row The row index.
          */
-        getRowRecord(row: number): object;
+        getRowRecord(row: number): T;
         /**
          * Get the column index of the given field.
          * @param field The field.
@@ -645,7 +661,7 @@ declare module cheetahGrid {
     }
     namespace tools {
         namespace canvashelper {
-            function strokeColorsRect(ctx: CanvasRenderingContext2D, borderColors: any[], left: number, top: number, width: number, height: number);
+            function strokeColorsRect(ctx: CanvasRenderingContext2D, borderColors: any[], left: number, top: number, width: number, height: number): void;
             function roundRect(ctx: CanvasRenderingContext2D, left: number, top: number, width: number, height: number, radius: number): void;
             function fillRoundRect(ctx: CanvasRenderingContext2D, left: number, top: number, width: number, height: number, radius: number): void;
             function strokeRoundRect(ctx: CanvasRenderingContext2D, left: number, top: number, width: number, height: number, radius: number): void;
@@ -730,12 +746,12 @@ declare module cheetahGrid {
         bottom: number;
         right: number;
 
-        offsetLeft(offset: number);
-        offsetTop(offset: number);
+        offsetLeft(offset: number): void;
+        offsetTop(offset: number): void;
         copy(): Rect;
-        intersection(rect: Rect);
-        contains(another: Rect);
-        inPoint(x: number, y: number);
+        intersection(rect: Rect): void;
+        contains(another: Rect): void;
+        inPoint(x: number, y: number): boolean;
     }
     class EventTarget {
         /**
