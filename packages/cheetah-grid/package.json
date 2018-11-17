@@ -39,7 +39,8 @@
     "src/js/",
     "dist/",
     "tools/src/",
-    "webpack-loader/"
+    "webpack-loader/",
+    "index.d.ts"
   ],
   "scripts": {
     "test": "karma start --no-auto-watch --single-run --browsers Chrome_travis_ci",
