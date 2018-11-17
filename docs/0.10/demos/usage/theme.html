@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="author" content="Cheetah Grid">
+    <meta name="keywords" content="spreadsheet,grid,canvas,table,web-components">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Cheetah Grid - Theme</title>
+    <link rel="shortcut icon" type="image/x-icon" href="./../../../icon_512x512.ico">
+
+    <link rel="stylesheet" type="text/css" href="./../../css/style.css">
+    <link rel="stylesheet" type="text/css" href="./../../css/highlightjs.css">
+    
+    <!-- <script src="http://localhost:35729/livereload.js"></script> -->
+    
+    <script type="text/javascript" src="https://unpkg.com/cheetah-grid@0.10||0.9"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script type="text/javascript" src="https://unpkg.com/vue-cheetah-grid@0.10||0.9"></script>
+    <script type="text/javascript">
+        /*global Vue, vueCheetahGrid*/
+        Vue.use(vueCheetahGrid);
+    </script>
+
+    <style type="text/css">
+        html {
+            height: 100%;
+        }
+        body {
+            height: calc(100% - 100px);
+        }
+        .contents {
+            padding: 30px;
+            box-sizing: border-box;
+        }
+        .demo-grid {
+            width: 100%;
+            height: 300px;
+            box-sizing: border-box;
+            border: solid 1px #ddd;
+        }
+        .demo-grid.large {
+            height: 500px;
+        }
+        .demo-grid.middle {
+            height: 300px;   
+        }
+        .demo-grid.small {
+            height: 240px;   
+        }
+        .log {
+            width: 100%;
+            height: 80px;
+            background-color: #F5F5F5;
+        }
+
+        .hljs { 
+             tab-size: 4;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <nav class="header primary" id="header-nav">
+    	<div class="nav-wrapper">
+    		<a href="./../../../index.html">
+    			<img src="./../../../logo.png" style="width: 100px;padding: 5px;vertical-align: middle;" alt="Cheetah Grid">
+    		</a>
+    
+    		<ul class="right hide-on-med-and-down nav-dropdown-container">
+    			<a href="#" class="primary nav-dropdown-button mobile-only" data-target="all-nav" style="width: 30px;">
+    				<span class="icon-arrow"></span>
+    			</a>
+    			<ul id="all-nav" class="mobile-nav-dropdown right-dropdown primary">
+    				<li><a href="./../../index.html" class="primary">Docoments - TOP</a></li>
+    				<li class="nav-dropdown-container">
+    					<a id="nav-versions" href="#" class="primary nav-dropdown-button" data-target="versions">
+    						version<span class="icon-arrow"></span>
+    					</a>
+    					<ul id="versions" class="nav-dropdown right-dropdown">
+    					</ul>
+    				</li>
+    				<li class="nav-dropdown-container">
+    					<a id="nav-lang" href="#" class="primary nav-dropdown-button" data-target="langs">
+    						lang<span class="icon-arrow"></span>
+    					</a>
+    					<ul id="langs" class="nav-dropdown right-dropdown">
+    						<li><a href="./../../ja/demos/usage/theme.html" class="primary">日本語</a></li>
+    						<li><a href="./../../demos/usage/theme.html" class="primary">English</a></li>
+    					</ul>
+    				</li>
+    			</ul>
+    		</ul>
+    	</div>
+    </nav>
+    
+    <script type="text/javascript">
+    	'use strict';
+    	////babel
+    "use strict";
+    
+    function getVersions(callback) {
+      var xhr = new XMLHttpRequest();
+    
+      function onError() {
+        callback(['0.10', '0.0.1']);
+      }
+    
+      xhr.onload = function () {
+        var versions = JSON.parse(xhr.responseText);
+        callback(versions);
+      };
+    
+      xhr.onerror = onError;
+      xhr.onabort = onError;
+    
+      try {
+        xhr.open('GET', "./../../../versions.json"); // eslint-disable-line quotes
+    
+        xhr.send();
+      } catch (e) {
+        onError();
+      }
+    } //
+    
+    
+    getVersions(function (versions) {
+      var myVersion = '0.10';
+    
+      function getVerLocation(v) {
+        return location.href.replace(myVersion, v).replace('.devdoc', v);
+      }
+    
+      var latest = versions[0];
+      var versEl = document.getElementById('versions');
+      versEl.innerHTML = versions.map(function (v, i) {
+        return "<li><a href=\"".concat(getVerLocation(v), "\" class=\"primary\">").concat(v).concat(i === 0 ? ' (latest)' : '', "</a></li>");
+      }).join('');
+    
+      if (latest !== myVersion) {
+        var header = document.getElementById('header-nav');
+        var a = document.createElement('a');
+        header.parentElement.insertBefore(a, header.nextSibling);
+        a.href = getVerLocation(latest);
+        a.textContent = "<goto the latest version(".concat(latest, ") document>");
+      }
+    }); //
+    </script>    <h1><a href="./../.././index.html#usage">Usage</a> &gt; Theme</h1>
+    <div class="contents">
+        
+<h2 id="theme">Theme</h2>
+<p>Can set theme to Cheetah Grid.<br>Can settings for grid instance or global.</p>
+<h3 id="grid-instance">Grid instance</h3>
+<p>Set a theme to the <code>theme</code> property of the grid instance.<br>Built-in themes are <code>MATERIAL_DESIGN</code> and <code>BASIC</code>.</p>
+
+<script type="text/javascript">
+/*eslint no-alert:0*/
+
+/*global cheetahGrid,generatePersons*/
+////babel
+'use strict';
+
+var generatePerson = function () {
+  var fnames = ['Sophia', 'Emma', 'Olivia', 'Isabella', 'Ava', 'Mia', 'Emily', 'Abigail', 'Madison', 'Elizabeth', 'Charlotte', 'Avery', 'Sofia', 'Chloe', 'Ella', 'Harper', 'Amelia', 'Aubrey', 'Addison', 'Evelyn', 'Natalie', 'Grace', 'Hannah', 'Zoey', 'Victoria', 'Lillian', 'Lily', 'Brooklyn', 'Samantha', 'Layla', 'Zoe', 'Audrey', 'Leah', 'Allison', 'Anna', 'Aaliyah', 'Savannah', 'Gabriella', 'Camila', 'Aria', 'Noah', 'Liam', 'Jacob', 'Mason', 'William', 'Ethan', 'Michael', 'Alexander', 'Jayden', 'Daniel', 'Elijah', 'Aiden', 'James', 'Benjamin', 'Matthew', 'Jackson', 'Logan', 'David', 'Anthony', 'Joseph', 'Joshua', 'Andrew', 'Lucas', 'Gabriel', 'Samuel', 'Christopher', 'John', 'Dylan', 'Isaac', 'Ryan', 'Nathan', 'Carter', 'Caleb', 'Luke', 'Christian', 'Hunter', 'Henry', 'Owen', 'Landon', 'Jack'];
+  var lnames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Miller', 'Davis', 'Garcia', 'Rodriguez', 'Wilson', 'Martinez', 'Anderson', 'Taylor', 'Thomas', 'Hernandez', 'Moore', 'Martin', 'Jackson', 'Thompson', 'White', 'Lopez', 'Lee', 'Gonzalez', 'Harris', 'Clark', 'Lewis', 'Robinson', 'Walker', 'Perez', 'Hall', 'Young', 'Allen', 'Sanchez', 'Wright', 'King', 'Scott', 'Green', 'Baker', 'Adams', 'Nelson', 'Hill', 'Ramirez', 'Campbell', 'Mitchell', 'Roberts', 'Carter', 'Phillips', 'Evans', 'Turner', 'Torres', 'Parker', 'Collins', 'Edwards', 'Stewart', 'Flores', 'Morris', 'Nguyen', 'Murphy', 'Rivera', 'Cook', 'Rogers', 'Morgan', 'Peterson', 'Cooper', 'Reed', 'Bailey', 'Bell', 'Gomez', 'Kelly', 'Howard', 'Ward', 'Cox', 'Diaz', 'Richardson', 'Wood', 'Watson', 'Brooks', 'Bennett', 'Gray', 'James', 'Reyes', 'Cruz', 'Hughes', 'Price', 'Myers', 'Long', 'Foster', 'Sanders', 'Ross', 'Morales', 'Powell', 'Sullivan', 'Russell', 'Ortiz', 'Jenkins', 'Gutierrez', 'Perry', 'Butler', 'Barnes', 'Fisher'];
+  var msOfYear = 365 * 24 * 60 * 60 * 1000;
+  return function (index) {
+    var fname = fnames[Math.floor(Math.random() * fnames.length)];
+    var lname = lnames[Math.floor(Math.random() * lnames.length)];
+    var birthday = new Date(Date.now() - 20 * msOfYear - Math.floor(Math.random() * 15 * msOfYear));
+    birthday = new Date(birthday.getFullYear(), birthday.getMonth(), birthday.getDate(), 0, 0, 0, 0);
+    return {
+      personid: index + 1,
+      fname: fname,
+      lname: lname,
+      email: "".concat(fname.replace('-', '_'), "_").concat(lname.replace('-', '_'), "@example.com").toLowerCase(),
+      birthday: birthday
+    };
+  };
+}();
+
+function generatePersons(num) {
+  var initId = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+  var records = [];
+
+  for (var i = 0; i < num; i++) {
+    records.push(generatePerson(initId + i - 1));
+  }
+
+  return records;
+}
+
+function generatePersonsDataSource(num) {
+  var array = new Array(num);
+  return new cheetahGrid.data.CachedDataSource({
+    get: function get(index) {
+      return array[index] ? array[index] : array[index] = generatePerson(index);
+    },
+    length: num
+  });
+}
+////wrapscript
+(function() {
+//babel
+"use strict";
+
+window.girdInstances = [];
+
+function createGrid(parentElement) {
+  var records = generatePersons(100);
+  var grid = new cheetahGrid.ListGrid({
+    parentElement: parentElement,
+    header: [{
+      field: 'check',
+      caption: '',
+      width: 50,
+      columnType: 'check',
+      action: 'check'
+    }, {
+      field: 'personid',
+      caption: 'ID',
+      width: 100,
+      columnType: 'center'
+    }, {
+      /* multiple header */
+      caption: 'name',
+      columns: [{
+        field: 'fname',
+        caption: 'First Name',
+        width: 200,
+        sort: true
+      }, {
+        field: 'lname',
+        caption: 'Last Name',
+        width: 200,
+        sort: true
+      }]
+    }, {
+      field: 'email',
+      caption: 'Email',
+      width: 250,
+      sort: true
+    }, {
+      /* callback field */
+      field: function field(rec) {
+        var d = rec.birthday;
+        return "".concat(d.getFullYear(), "/").concat(d.getMonth() + 1, "/").concat(d.getDate());
+      },
+      caption: 'birthday',
+      width: 100
+    }, {
+      caption: 'button',
+      width: 120,
+
+      /* button column */
+      columnType: new cheetahGrid.columns.type.ButtonColumn({
+        caption: 'SHOW REC'
+      }),
+      action: new cheetahGrid.columns.action.ButtonAction({
+        action: function action(rec) {
+          alert(JSON.stringify(rec));
+        }
+      })
+    }],
+    frozenColCount: 2,
+    records: records
+  });
+  window.girdInstances.push(grid);
+  return grid;
+}
+
+window.createGrid = createGrid; //
+})();
+</script>
+
+<label>theme</label>
+<select id="theme-select1">
+    <option value="" selected="true">unset</option>
+    <option value="MATERIAL_DESIGN">MATERIAL_DESIGN</option>
+    <option value="BASIC">BASIC</option>
+</select>
+<div id="sample1" class="demo-grid small">
+</div>
+<script type="text/javascript">
+
+////wrapscript
+(function() {
+//babel
+"use strict";
+
+/*global cheetahGrid*/
+var grid = window.createGrid(document.querySelector('#sample1')); //
+
+var themeSelect = document.querySelector('#theme-select1');
+
+themeSelect.onchange = function () {
+  grid.theme = cheetahGrid.themes.choices[themeSelect.value];
+  /* The `theme` property of the grid instance can also be set as a string. */
+  // grid.theme = themeSelect.value;
+}; //
+
+
+themeSelect.onchange(); //
+})();
+</script>
+
+
+<pre><code class="js hljs javascript"><span class="hljs-keyword">const</span> themeSelect = <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#theme-select1'</span>);
+themeSelect.onchange = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+	grid.theme = cheetahGrid.themes.choices[themeSelect.value];
+
+	<span class="hljs-comment">/* The `theme` property of the grid instance can also be set as a string. */</span>
+	<span class="hljs-comment">// grid.theme = themeSelect.value;</span>
+};
+</code></pre>
+<pre><code class="language-html hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">select</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"theme-select1"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">""</span> <span class="hljs-attr">selected</span>=<span class="hljs-string">"true"</span>&gt;</span>default<span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">"MATERIAL_DESIGN"</span>&gt;</span>MATERIAL_DESIGN<span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">"BASIC"</span>&gt;</span>BASIC<span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">select</span>&gt;</span></code></pre>
+
+<h3 id="global">Global</h3>
+<p>Set a theme to the <code>cheetahGrid.themes.default</code> property.
+(default MATERIAL_DESIGN.)</p>
+
+
+<label>theme</label>
+<select id="theme-select2">
+    <option value="MATERIAL_DESIGN" selected="true">MATERIAL_DESIGN</option>
+    <option value="BASIC">BASIC</option>
+</select>
+<div id="sample2" class="demo-grid small">
+</div>
+<script type="text/javascript">
+/*eslint no-alert:0*/
+
+////wrapscript
+(function() {
+//babel
+"use strict";
+
+/*global cheetahGrid*/
+window.createGrid(document.querySelector('#sample2')); //
+
+var themeSelect = document.querySelector('#theme-select2');
+
+themeSelect.onchange = function () {
+  cheetahGrid.themes.default = cheetahGrid.themes.choices[themeSelect.value]; // redraw all the grids
+
+  window.girdInstances.forEach(function (grid) {
+    return grid.invalidate();
+  });
+}; //
+
+
+themeSelect.onchange(); //
+})();
+</script>
+
+
+<pre><code class="js hljs javascript"><span class="hljs-keyword">const</span> themeSelect = <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#theme-select2'</span>);
+themeSelect.onchange = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+	cheetahGrid.themes.default = cheetahGrid.themes.choices[themeSelect.value];
+
+	<span class="hljs-comment">// redraw all the grids</span>
+	<span class="hljs-built_in">window</span>.girdInstances.forEach(<span class="hljs-function">(<span class="hljs-params">grid</span>) =&gt;</span> grid.invalidate());
+};
+</code></pre>
+<pre><code class="language-html hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">select</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"theme-select2"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">"MATERIAL_DESIGN"</span> <span class="hljs-attr">selected</span>=<span class="hljs-string">"true"</span>&gt;</span>MATERIAL_DESIGN<span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">"BASIC"</span>&gt;</span>BASIC<span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">select</span>&gt;</span></code></pre>
+
+<h3 id="extend-theme">Extend theme</h3>
+<p>To extend the theme, do as follows.</p>
+
+<div id="sample3" class="demo-grid small">
+</div>
+<script type="text/javascript">
+/*eslint no-alert:0*/
+
+////wrapscript
+(function() {
+//babel
+"use strict";
+
+/*global cheetahGrid*/
+var grid = window.createGrid(document.querySelector('#sample3')); //
+
+var userTheme = {
+  color: 'red',
+  frozenRowsColor: 'red',
+  defaultBgColor: '#FDD',
+  frozenRowsBgColor: '#EAA',
+  selectionBgColor: '#FDA',
+  underlayBackgroundColor: '#FEE',
+  // You can also change the theme apply in the state by using callback.
+  frozenRowsBorderColor: function frozenRowsBorderColor(args) {
+    var row = args.row,
+        frozenRowCount = args.grid.frozenRowCount;
+
+    if (frozenRowCount - 1 === row) {
+      return ['#F88'
+      /*top*/
+      , '#F88'
+      /*right and left*/
+      , 'red'
+      /*bottom*/
+      ];
+    } else {
+      return '#F88';
+    }
+  },
+  borderColor: function borderColor(args) {
+    var col = args.col,
+        colCount = args.grid.colCount;
+
+    if (colCount - 1 === col) {
+      return ['red'
+      /*top*/
+      , '#F88'
+      /*right*/
+      , 'red'
+      /*bottom*/
+      , null
+      /*left*/
+      ];
+    } else {
+        return ['red'
+        /*top and bottom*/
+        , null
+        /*right and left*/
+        ];
+      }
+  },
+  //
+  highlightBorderColor: '#FD5',
+  //
+  checkbox: {
+    uncheckBgColor: '#FDD',
+    checkBgColor: 'rgb(255, 73, 72)',
+    borderColor: 'red'
+  },
+  button: {
+    color: '#FDD',
+    bgColor: '#F55'
+  },
+  font: '16px sans-serif',
+  //
+  header: {
+    sortArrowColor: '#D00' //
+
+  }
+}; //
+
+grid.theme = userTheme; //
+//
+
+window.userTheme = userTheme; //
+})();
+</script>
+
+
+<pre><code class="js hljs javascript"><span class="hljs-keyword">const</span> userTheme = {
+	<span class="hljs-attr">color</span>: <span class="hljs-string">'red'</span>,
+	<span class="hljs-attr">frozenRowsColor</span>: <span class="hljs-string">'red'</span>,
+	<span class="hljs-attr">defaultBgColor</span>: <span class="hljs-string">'#FDD'</span>,
+	<span class="hljs-attr">frozenRowsBgColor</span>: <span class="hljs-string">'#EAA'</span>,
+	<span class="hljs-attr">selectionBgColor</span>: <span class="hljs-string">'#FDA'</span>,
+	<span class="hljs-attr">underlayBackgroundColor</span>: <span class="hljs-string">'#FEE'</span>,
+	<span class="hljs-comment">// You can also change the theme apply in the state by using callback.</span>
+	frozenRowsBorderColor(args) {
+		<span class="hljs-keyword">const</span> {
+			row,
+			<span class="hljs-attr">grid</span>: {frozenRowCount}
+		} = args;
+		<span class="hljs-keyword">if</span> (frozenRowCount - <span class="hljs-number">1</span> === row) {
+			<span class="hljs-keyword">return</span> [<span class="hljs-string">'#F88'</span><span class="hljs-comment">/*top*/</span>, <span class="hljs-string">'#F88'</span><span class="hljs-comment">/*right and left*/</span>, <span class="hljs-string">'red'</span><span class="hljs-comment">/*bottom*/</span>];
+		} <span class="hljs-keyword">else</span> {
+			<span class="hljs-keyword">return</span> <span class="hljs-string">'#F88'</span>;
+		}
+	},
+	borderColor(args) {
+		<span class="hljs-keyword">const</span> {
+			col,
+			<span class="hljs-attr">grid</span>: {colCount}
+		} = args;
+		<span class="hljs-keyword">if</span> (colCount - <span class="hljs-number">1</span> === col) {
+			<span class="hljs-keyword">return</span> [<span class="hljs-string">'red'</span><span class="hljs-comment">/*top*/</span>, <span class="hljs-string">'#F88'</span><span class="hljs-comment">/*right*/</span>, <span class="hljs-string">'red'</span><span class="hljs-comment">/*bottom*/</span>, <span class="hljs-literal">null</span><span class="hljs-comment">/*left*/</span>];
+		} <span class="hljs-keyword">else</span> {
+			<span class="hljs-keyword">return</span> [<span class="hljs-string">'red'</span><span class="hljs-comment">/*top and bottom*/</span>, <span class="hljs-literal">null</span><span class="hljs-comment">/*right and left*/</span>];
+		}
+	},
+	<span class="hljs-attr">highlightBorderColor</span>: <span class="hljs-string">'#FD5'</span>,
+	<span class="hljs-attr">checkbox</span>: {
+		<span class="hljs-attr">uncheckBgColor</span>: <span class="hljs-string">'#FDD'</span>,
+		<span class="hljs-attr">checkBgColor</span>: <span class="hljs-string">'rgb(255, 73, 72)'</span>,
+		<span class="hljs-attr">borderColor</span>: <span class="hljs-string">'red'</span>,
+	},
+	<span class="hljs-attr">button</span>: {
+		<span class="hljs-attr">color</span>: <span class="hljs-string">'#FDD'</span>,
+		<span class="hljs-attr">bgColor</span>: <span class="hljs-string">'#F55'</span>,
+	},
+	<span class="hljs-attr">font</span>: <span class="hljs-string">'16px sans-serif'</span>,
+	<span class="hljs-attr">header</span>: {
+		<span class="hljs-attr">sortArrowColor</span>: <span class="hljs-string">'#D00'</span>
+	}
+};
+grid.theme = userTheme;
+</code></pre>
+
+<h3 id="vue-component">Vue component</h3>
+<p>In the Vue component, set it as follows.</p>
+<script type="text/javascript">
+/*global generatePersons*/
+/*eslint no-unused-vars:0*/
+
+const records = generatePersons(100);
+</script>
+
+
+<div id="vuecde479f31cc3098d41a341a082ab0618"></div>
+<script type="text/javascript">
+(function() {
+	var exports = {};
+	(function(exports) {
+		"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/*eslint no-alert:0*/
+
+/*global records*/
+var _default = {
+  name: 'App',
+  data: function data() {
+    return {
+      records: records,
+      // you can set the theme name or object.
+      // userTheme: 'BASIC',
+      userTheme: {
+        color: '#2c3e50',
+        frozenRowsColor: '#2c3e50',
+        frozenRowsBgColor: '#40b883',
+        borderColor: '#35495e',
+        frozenRowsBorderColor: '#35495e',
+        checkbox: {
+          checkBgColor: '#35495e',
+          borderColor: '#35495e'
+        },
+        button: {
+          color: '#FFF',
+          bgColor: '#2c3e50'
+        }
+      }
+    };
+  },
+  methods: {
+    onClickRecord: function onClickRecord(rec) {
+      alert(JSON.stringify(rec));
+    }
+  }
+};
+exports.default = _default;
+	})(exports)
+	var obj = exports.default || exports
+	obj.template = "\n<div class=\"demo-grid middle\">\n  <c-grid\n    :data=\"records\"\n    :theme=\"userTheme\"> <!-- set theme -->\n    <c-grid-check-column field=\"check\" :width=\"50\"/>\n    <c-grid-column field=\"personid\" width= \"85\">ID</c-grid-column>\n    <c-grid-column-group caption=\"Name\">\n      <c-grid-input-column field=\"fname\" width=\"20%\" min-width=\"150\" :sort=\"true\">First Name</c-grid-input-column>\n      <c-grid-input-column field=\"lname\" width=\"20%\" min-width=\"150\" :sort=\"true\">Last Name</c-grid-input-column>\n    </c-grid-column-group>\n    <c-grid-button-column caption=\"SHOW REC\" width=\"120\" @click=\"onClickRecord\" />\n  </c-grid>\n</div>\n"
+	var vm = new Vue(obj);
+	vm.$mount('#vuecde479f31cc3098d41a341a082ab0618')
+})();
+</script>
+
+<pre><code class="vue hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">template</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"demo-grid middle"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">c-grid</span>
+      <span class="hljs-attr">:data</span>=<span class="hljs-string">"records"</span>
+      <span class="hljs-attr">:theme</span>=<span class="hljs-string">"userTheme"</span>&gt;</span> <span class="hljs-comment">&lt;!-- set theme --&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">c-grid-check-column</span> <span class="hljs-attr">field</span>=<span class="hljs-string">"check"</span> <span class="hljs-attr">:width</span>=<span class="hljs-string">"50"</span>/&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">c-grid-column</span> <span class="hljs-attr">field</span>=<span class="hljs-string">"personid"</span> <span class="hljs-attr">width</span>= <span class="hljs-string">"85"</span>&gt;</span>ID<span class="hljs-tag">&lt;/<span class="hljs-name">c-grid-column</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">c-grid-column-group</span> <span class="hljs-attr">caption</span>=<span class="hljs-string">"Name"</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">c-grid-input-column</span> <span class="hljs-attr">field</span>=<span class="hljs-string">"fname"</span> <span class="hljs-attr">width</span>=<span class="hljs-string">"20%"</span> <span class="hljs-attr">min-width</span>=<span class="hljs-string">"150"</span> <span class="hljs-attr">:sort</span>=<span class="hljs-string">"true"</span>&gt;</span>First Name<span class="hljs-tag">&lt;/<span class="hljs-name">c-grid-input-column</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">c-grid-input-column</span> <span class="hljs-attr">field</span>=<span class="hljs-string">"lname"</span> <span class="hljs-attr">width</span>=<span class="hljs-string">"20%"</span> <span class="hljs-attr">min-width</span>=<span class="hljs-string">"150"</span> <span class="hljs-attr">:sort</span>=<span class="hljs-string">"true"</span>&gt;</span>Last Name<span class="hljs-tag">&lt;/<span class="hljs-name">c-grid-input-column</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">c-grid-column-group</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">c-grid-button-column</span> <span class="hljs-attr">caption</span>=<span class="hljs-string">"SHOW REC"</span> <span class="hljs-attr">width</span>=<span class="hljs-string">"120"</span> @<span class="hljs-attr">click</span>=<span class="hljs-string">"onClickRecord"</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">c-grid</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+<span class="hljs-comment">/*eslint no-alert:0*/</span>
+<span class="hljs-comment">/*global records*/</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+	<span class="hljs-attr">name</span>: <span class="hljs-string">'App'</span>,
+	data() {
+		<span class="hljs-keyword">return</span> {
+			records,
+			<span class="hljs-comment">// you can set the theme name or object.</span>
+			<span class="hljs-comment">// userTheme: 'BASIC',</span>
+			userTheme: {
+				<span class="hljs-attr">color</span>: <span class="hljs-string">'#2c3e50'</span>,
+				<span class="hljs-attr">frozenRowsColor</span>: <span class="hljs-string">'#2c3e50'</span>,
+				<span class="hljs-attr">frozenRowsBgColor</span>: <span class="hljs-string">'#40b883'</span>,
+				<span class="hljs-attr">borderColor</span>: <span class="hljs-string">'#35495e'</span>,
+				<span class="hljs-attr">frozenRowsBorderColor</span>: <span class="hljs-string">'#35495e'</span>,
+				<span class="hljs-attr">checkbox</span>: {
+					<span class="hljs-attr">checkBgColor</span>: <span class="hljs-string">'#35495e'</span>,
+					<span class="hljs-attr">borderColor</span>: <span class="hljs-string">'#35495e'</span>,
+				},
+				<span class="hljs-attr">button</span>: {
+					<span class="hljs-attr">color</span>: <span class="hljs-string">'#FFF'</span>,
+					<span class="hljs-attr">bgColor</span>: <span class="hljs-string">'#2c3e50'</span>,
+				},
+			}
+		};
+	},
+	<span class="hljs-attr">methods</span>: {
+		onClickRecord(rec) { alert(<span class="hljs-built_in">JSON</span>.stringify(rec)); }
+	}
+};
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre>
+    </div>
+    
+    <script type="text/javascript" src="./../../js/doc-common.js"></script>
+
+</body></html>

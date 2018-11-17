@@ -1,7 +1,7 @@
 {
   "name": "cheetah-grid-docs",
   "private": true,
-  "version": "0.9.0",
+  "version": "0.10.0",
   "scripts": {
     "test": "exit 0",
     "lint": "npm run eslint",
