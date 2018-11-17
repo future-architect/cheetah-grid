@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Home</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Home</h1>
+
+    
+
+
+
+    
+
+
+    <h3> </h3>
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    <section>
+        <article><h1>Cheetah Grid</h1><p><a href="https://github.com/future-architect/cheetah-grid"><img src="https://img.shields.io/github/license/future-architect/cheetah-grid.svg" alt="GitHub"></a>
+<a href="https://www.npmjs.com/package/cheetah-grid"><img src="https://img.shields.io/npm/v/cheetah-grid.svg" alt="npm"></a>
+<a href="http://www.npmtrends.com/cheetah-grid"><img src="https://img.shields.io/npm/dw/cheetah-grid.svg" alt="npm"></a>
+<a href="http://www.npmtrends.com/cheetah-grid"><img src="https://img.shields.io/npm/dm/cheetah-grid.svg" alt="npm"></a>
+<a href="http://www.npmtrends.com/cheetah-grid"><img src="https://img.shields.io/npm/dy/cheetah-grid.svg" alt="npm"></a>
+<a href="http://www.npmtrends.com/cheetah-grid"><img src="https://img.shields.io/npm/dt/cheetah-grid.svg" alt="npm"></a>
+<a href="https://travis-ci.org/future-architect/cheetah-grid"><img src="https://travis-ci.org/future-architect/cheetah-grid.svg?branch=master" alt="Build Status"></a><br><a href="https://www.npmjs.com/package/cheetah-grid"><img src="https://nodei.co/npm/cheetah-grid.png?downloads=true" alt="NPM"></a></p>
+<p><a href="https://future-architect.github.io/cheetah-grid/"><img src="https://future-architect.github.io/cheetah-grid/logo.png" alt="Cheetah Grid"></a>  </p>
+<p>The fastest open-source data table for web.</p>
+<p><a href="https://future-architect.github.io/cheetah-grid/"><img src="https://github.com/future-architect/cheetah-grid/raw/master/images/capture.png" alt="capture.png"></a></p>
+<p><a href="https://future-architect.github.io/cheetah-grid/">DEMO &amp; Documents</a></p>
+<h2>Downloading Cheetah Grid</h2><h3>Using Cheetah Grid with a CDN</h3><p><a href="https://www.npmjs.com/package/cheetah-grid"><img src="https://img.shields.io/npm/v/cheetah-grid.svg" alt="npm"></a></p>
+<pre class="prettyprint source lang-html"><code>&lt;script src=&quot;https://unpkg.com/cheetah-grid@0.10.x&quot;>&lt;/script></code></pre><h3>Downloading Cheetah Grid using npm</h3><p><a href="https://www.npmjs.com/package/cheetah-grid"><img src="https://img.shields.io/npm/v/cheetah-grid.svg" alt="npm"></a></p>
+<pre class="prettyprint source lang-sh"><code>npm install -S cheetah-grid</code></pre><pre class="prettyprint source lang-js"><code>const cheetahGrid = require(&quot;cheetah-grid&quot;)</code></pre><h3>Downloading Cheetah Grid source code</h3><p><a href="https://www.npmjs.com/package/cheetah-grid"><img src="https://img.shields.io/npm/v/cheetah-grid.svg" alt="npm"></a></p>
+<p><a href="https://unpkg.com/cheetah-grid@0.10.x/dist/cheetahGrid.es5.min.js">cheetahGrid.es5.min.js</a>  </p>
+<p>SourceMap<br><a href="https://unpkg.com/cheetah-grid@0.10.x/dist/cheetahGrid.es5.min.js.map">cheetahGrid.es5.min.js.map</a>  </p>
+<h3>Downloading Cheetah Grid using GitHub</h3><p><a href="https://github.com/future-architect/cheetah-grid"><img src="https://img.shields.io/github/package-json/v/future-architect/cheetah-grid.svg" alt="GitHub package version"></a></p>
+<h4>git clone</h4><pre class="prettyprint source lang-bash"><code>git clone https://github.com/future-architect/cheetah-grid.git</code></pre><h4>npm install &amp; build</h4><pre class="prettyprint source lang-bash"><code>npm install
+npm run build</code></pre><p>built file is created in the <code>./packages/cheetah-grid/dist</code> directory</p>
+<h2>Usage</h2><h3>Example for basic usage</h3><pre class="prettyprint source lang-html"><code>&lt;div id=&quot;sample&quot; style=&quot;height: 300px; border: solid 1px #ddd;&quot;>
+&lt;/div>
+&lt;script>
+  // initialize
+  const grid = new cheetahGrid.ListGrid({
+    // Parent element on which to place the grid
+    parentElement: document.querySelector('#sample'),
+    // Header definition
+    header: [
+      {field: 'check', caption: '', width: 50, columnType: 'check', action: 'check'},
+      {field: 'personid', caption: 'ID', width: 100, columnType: 'center'},
+      {field: 'fname', caption: 'First Name', width: 200},
+      {field: 'lname', caption: 'Last Name', width: 200},
+      {field: 'email', caption: 'Email', width: 250},
+    ],
+    // Array data to be displayed on the grid
+    records,
+    // Column fixed position
+    frozenColCount: 2,
+  });
+&lt;/script></code></pre><p>Please refer to the <a href="https://future-architect.github.io/cheetah-grid/">documents</a> for details</p>
+<blockquote>
+<p><strong>Using the Vue Component of Cheetah Grid</strong><br>Please refer to the <a href="https://www.npmjs.com/package/vue-cheetah-grid"><code>vue-cheetah-grid</code></a>  </p>
+</blockquote>
+<h3>Definition of columns and headers</h3><p>The <code>header</code> property, the property of <code>cheetahGrid.ListGrid</code>, decides the behave and appearance of columns and header cells.
+We can set this property by constructor arguments or instance property.</p>
+<p>The <code>header</code> property must be set by objects array (<code>Array&lt;object&gt;</code>).
+In the standard definition, each object consists of following properties.</p>
+<table>
+<thead>
+<tr>
+<th>property</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>caption</td>
+<td>define the header caption</td>
+</tr>
+<tr>
+<td>field</td>
+<td>define the field name or function of the record to display in the cell</td>
+</tr>
+<tr>
+<td>width (optional)</td>
+<td>define the width of column</td>
+</tr>
+<tr>
+<td>columnType (optional)</td>
+<td>define the type of column</td>
+</tr>
+<tr>
+<td>style (optional)</td>
+<td>define the style of column</td>
+</tr>
+<tr>
+<td>action (optional)</td>
+<td>define the action of column</td>
+</tr>
+</tbody>
+</table>
+<p>To use multiple header, set the hierarchical structured Object to the <code>header</code> property.  </p>
+<pre class="prettyprint source lang-js"><code>const grid = new cheetahGrid.ListGrid({
+  //...
+  header: [
+    //...
+    { /* multiple header */
+      caption: 'Name',
+      columns: [
+        {field: 'fname', caption: 'First Name', width: 200},
+        {field: 'lname', caption: 'Last Name', width: 200},
+      ],
+    },
+    //...
+  ],
+  //...
+});</code></pre><h3>Definition of column type</h3><p>Set the column type by using <code>columnType</code>.</p>
+<p>For example, you can set the following strings:</p>
+<table>
+<thead>
+<tr>
+<th>property</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>none</td>
+<td>draw text in the cell</td>
+</tr>
+<tr>
+<td><code>'number'</code></td>
+<td>draw number in the cell with comma-separated</td>
+</tr>
+<tr>
+<td><code>'check'</code></td>
+<td>draw checkbox in the cell</td>
+</tr>
+<tr>
+<td><code>'button'</code></td>
+<td>draw button in the cell</td>
+</tr>
+<tr>
+<td><code>'image'</code></td>
+<td>draw image in the cell</td>
+</tr>
+<tr>
+<td><code>'multilinetext'</code></td>
+<td>draw multiline text in the cell</td>
+</tr>
+</tbody>
+</table>
+<p>If you define a class instance you can define an advanced column types.</p>
+<p>Please refer to the <a href="https://future-architect.github.io/cheetah-grid/0.10/demos/usage/column_types/Classes.html">column types documents</a> for details  </p>
+<h3>Definition of column action</h3><p>Define column action by using <code>action</code> property.  </p>
+<table>
+<thead>
+<tr>
+<th><code>action</code></th>
+<th>descrition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>'check'</code></td>
+<td>make the check box clickable.</td>
+</tr>
+<tr>
+<td><code>'input'</code></td>
+<td>make the cell enterable.</td>
+</tr>
+</tbody>
+</table>
+<p>If you define a class instance you can define an advanced column actions.</p>
+<p>Please refer to the <a href="https://future-architect.github.io/cheetah-grid/0.10/demos/usage/column_actions/Classes.html">column actions documents</a> for details  </p>
+<h3>Definition of column style</h3><p>Define column style by using <code>style</code> property.  </p>
+<p>Properties below are prepared in standard.  </p>
+<table>
+<thead>
+<tr>
+<th>property</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>color</td>
+<td>define the color of cell.</td>
+</tr>
+<tr>
+<td>textAlign</td>
+<td>define the horizontal position of text in cell.</td>
+</tr>
+<tr>
+<td>textBaseline</td>
+<td>define the vertical position of text in cell.</td>
+</tr>
+<tr>
+<td>bgColor</td>
+<td>define the background color of cell.</td>
+</tr>
+<tr>
+<td>font</td>
+<td>define the font of cell.</td>
+</tr>
+<tr>
+<td>padding</td>
+<td>define the padding of cell. if you set 4 values separately, please set the <code>Array</code>.</td>
+</tr>
+<tr>
+<td>textOverflow</td>
+<td>define how to display when text overflows the area of a cell. <code>clip</code> or <code>ellipsis</code> is available.</td>
+</tr>
+</tbody>
+</table>
+<p>In addition, there is an extended style property for each column type.</p>
+<hr>
+<p>Please refer to the <a href="https://future-architect.github.io/cheetah-grid/">documents</a> for details</p>
+<h2>License</h2><p>See the <a href="LICENSE">LICENSE</a> file for license rights and limitations (MIT).</p></article>
+    </section>
+
+
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="cheetahGrid.columns.type.BranchGraphColumn.html">BranchGraphColumn</a></li><li><a href="cheetahGrid.core.DrawGrid.html">DrawGrid</a></li><li><a href="cheetahGrid.data.CachedDataSource.html">CachedDataSource</a></li><li><a href="cheetahGrid.data.DataSource.html">DataSource</a></li><li><a href="cheetahGrid.data.FilterDataSource.html">FilterDataSource</a></li><li><a href="cheetahGrid.ListGrid.html">ListGrid</a></li><li><a href="DrawCellContext.html">DrawCellContext</a></li><li><a href="DrawLayers.html">DrawLayers</a></li><li><a href="EventTarget.html">EventTarget</a></li><li><a href="Selection.html">Selection</a></li></ul><h3>Namespaces</h3><ul><li><a href="cheetahGrid.html">cheetahGrid</a></li><li><a href="cheetahGrid.columns.html">columns</a></li><li><a href="cheetahGrid.columns.action.html">action</a></li><li><a href="cheetahGrid.columns.style.html">style</a></li><li><a href="cheetahGrid.columns.type.html">type</a></li><li><a href="cheetahGrid.core.html">core</a></li><li><a href="cheetahGrid.data.html">data</a></li><li><a href="cheetahGrid.headers.html">headers</a></li><li><a href="cheetahGrid.themes.html">themes</a></li><li><a href="cheetahGrid.themes.choices.html">choices</a></li><li><a href="cheetahGrid.themes.theme.html">theme</a></li><li><a href="cheetahGrid.tools.html">tools</a></li><li><a href="cheetahGrid.tools.canvashelper.html">canvashelper</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
