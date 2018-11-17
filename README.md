@@ -161,7 +161,7 @@ Please refer to the [column types documents](https://future-architect.github.io/
 
 Define column action by using `action` property.  
 
-| columnType | descrition |
+| `action` | descrition |
 |---|---|
 |`'check'` | make the check box clickable. |
 |`'input'` | make the cell enterable. |

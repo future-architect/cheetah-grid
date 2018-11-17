@@ -32,6 +32,9 @@ export default {
       return {
         caption: this.caption,
         headerStyle: this.headerStyle,
+        headerField: this.headerField,
+        headerType: this.headerType,
+        headerAction: this.headerAction,
         sort: this.sort,
         columns: slotsToHeaderOptions(this.$slots.default)
       }

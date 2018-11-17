@@ -5,6 +5,7 @@ const GridCanvasHelper = require('./GridCanvasHelper');
 const columns = require('./columns');
 const {BaseStyle} = columns.style;
 const headerType = require('./header/type');
+const headerAction = require('./header/action');
 const {BaseStyle: HeaderBaseStyle} = require('./header/style');
 const DrawGrid = require('./core/DrawGrid');
 const {DataSource, CachedDataSource} = require('./data');
@@ -260,7 +261,7 @@ function _refreshHeader(grid) {
 	grid[_].headerMap = new HeaderMap(grid[_].header);
 	grid[_].headerEvents = [];
 	grid[_].headerMap.headerObjects.forEach((cell) => {
-		const ids = cell.headerType.bindGridEvent(grid);
+		const ids = cell.headerType.bindGridEvent(grid, cell.range);
 		grid[_].headerEvents.push(...ids);
 		if (cell.style) {
 			if (cell.style instanceof HeaderBaseStyle) {
@@ -269,6 +270,10 @@ function _refreshHeader(grid) {
 				});
 				grid[_].headerEvents.push(id);
 			}
+		}
+		if (cell.action) {
+			const ids = cell.action.bindGridEvent(grid, cell.range);
+			grid[_].headerEvents.push(...ids);
 		}
 	});
 	grid[_].headerMap.columns.forEach((col, index) => {
@@ -382,7 +387,7 @@ class HeaderMap {
 		this._headerObjects = [];
 
 		this._addHeaders(0, header, []);
-		this._setupHeaderType();
+		this._setupHeaderControllers();
 	}
 	get columns() {
 		return this._columns;
@@ -451,7 +456,10 @@ class HeaderMap {
 			const cell = {
 				id: headerId++,
 				caption: hd.caption,
+				field: hd.headerField || hd.field,
 				style: hd.headerStyle,
+				headerType: hd.headerType,
+				action: hd.headerAction,
 				sort: hd.sort,
 			};
 			this._headerObjects.push(cell);
@@ -463,10 +471,10 @@ class HeaderMap {
 				this._addHeaders(row + 1, hd.columns, [...roots, cell]);
 			} else {
 				this._columns.push({
+					field: hd.field,
 					width: hd.width,
 					minWidth: hd.minWidth,
 					maxWidth: hd.maxWidth,
-					field: hd.field,
 					icon: hd.icon,
 					message: hd.message,
 					columnType: columns.type.of(hd.columnType),
@@ -480,10 +488,11 @@ class HeaderMap {
 			}
 		});
 	}
-	_setupHeaderType() {
+	_setupHeaderControllers() {
 		this._headerObjects.forEach((cell) => {
 			cell.range = this.getHeaderCellRangeById(cell.id);
-			cell.headerType = headerType.create(cell);
+			cell.headerType = headerType.ofCell(cell);
+			cell.action = headerAction.ofCell(cell);
 		});
 	}
 	_newRow(row) {
@@ -592,9 +601,13 @@ class ListGrid extends DrawGrid {
 	 * maxWidth: column max width
 	 * icon: icon name
 	 * message: message key name
-	 * columnType: ColumnType
-	 * action: ColumnAction
-	 * style: ColumnStyle
+	 * columnType: column type
+	 * action: column action
+	 * style: column style
+	 * headerType: header type
+	 * headerStyle: header style
+	 * headerAction: header action
+	 * headerField: header field name
 	 * sort: define sort setting
 	 * -----
 	 *
@@ -717,12 +730,38 @@ class ListGrid extends DrawGrid {
 		};
 	}
 	/**
+	 * Get the header values.
+	 * @type {object}
+	 */
+	get headerValues() {
+		return this[_].headerValues || (this[_].headerValues = {});
+	}
+	/**
+	 * Sets the header values.
+	 *
+	 * @param {object} headerValues the header values to set
+	 * @type {object}
+	 */
+	set headerValues(headerValues) {
+		this[_].headerValues = headerValues || {};
+	}
+	/**
 	 * Get the field of the given column index.
 	 * @param  {number} col The column index.
 	 * @return {*} The field object.
 	 */
 	getField(col) {
 		return this[_].headerMap.columns[col].field;
+	}
+	/**
+	 * Get the header field of the given header cell.
+	 * @param  {number} col The column index.
+	 * @param  {number} row The header row index.
+	 * @return {*} The field object.
+	 */
+	getHeaderField(col, row) {
+		const hd = this[_].headerMap.getCell(col, row);
+		return hd.field;
 	}
 	/**
 	 * Get the record of the given row index.
@@ -782,6 +821,15 @@ class ListGrid extends DrawGrid {
 	}
 	getGridCanvasHelper() {
 		return this[_].gridCanvasHelper;
+	}
+	/**
+	 * Get header range information for a given cell.
+	 * @param {number} col column index of the cell
+	 * @param {number} row row index of the cell
+	 * @returns {object} cell range info
+	 */
+	getHeaderCellRange(col, row) {
+		return _getHeaderCellRange(this, col, row);
 	}
 	getCopyCellValue(col, row) {
 		if (row < this[_].headerMap.rowCount) {
@@ -849,11 +897,30 @@ class ListGrid extends DrawGrid {
 						},
 						field,
 						value: after,
+						oldValue: before,
 					});
 				}
 				return ret;
 			});
 		}
+	}
+	getHeaderValue(col, row) {
+		const field = this.getHeaderField(col, row);
+		return this.headerValues[field];
+	}
+	setHeaderValue(col, row, newValue) {
+		const field = this.getHeaderField(col, row);
+
+		const oldValue = this.headerValues[field];
+		this.headerValues[field] = newValue;
+
+		this.fireListeners(EVENT_TYPE.CHANGED_HEADER_VALUE, {
+			col,
+			row,
+			field,
+			value: newValue,
+			oldValue,
+		});
 	}
 	bindEventsInternal() {
 		this.listen(EVENT_TYPE.SELECTED_CELL, (e) => {

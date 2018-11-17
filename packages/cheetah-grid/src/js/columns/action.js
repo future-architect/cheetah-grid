@@ -64,7 +64,7 @@ const action = {
 	},
 	of(columnAction) {
 		if (!columnAction) {
-			return action.ACTIONS.DEFAULT;
+			return undefined;
 		} else if (typeof columnAction === 'string') {
 			return action.ACTIONS[columnAction.toUpperCase()] || action.of(null);
 		} else {

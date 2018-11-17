@@ -3,6 +3,7 @@
 const BaseStyle = require('./style/BaseStyle');
 const Style = require('./style/Style');
 const SortHeaderStyle = require('./style/SortHeaderStyle');
+const CheckHeaderStyle = require('./style/CheckHeaderStyle');
 
 const style = {
 	get BaseStyle() {
@@ -14,14 +15,17 @@ const style = {
 	get SortHeaderStyle() {
 		return SortHeaderStyle;
 	},
-	of(columnStyle, StyleClass) {
-		if (columnStyle) {
-			if (columnStyle instanceof Style) {
-				return columnStyle;
-			} else if (typeof columnStyle === 'function') {
-				return style.of(columnStyle(), StyleClass);
+	get CheckHeaderStyle() {
+		return CheckHeaderStyle;
+	},
+	of(headerStyle, StyleClass) {
+		if (headerStyle) {
+			if (headerStyle instanceof Style) {
+				return headerStyle;
+			} else if (typeof headerStyle === 'function') {
+				return style.of(headerStyle(), StyleClass);
 			}
-			return new StyleClass(columnStyle);
+			return new StyleClass(headerStyle);
 		} else {
 			return StyleClass.DEFAULT;
 		}

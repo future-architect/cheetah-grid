@@ -10,6 +10,7 @@ const Rect = require('./internal/Rect');
 const {getChainSafe, getOrApply, style: {toBoxArray}, isDef} = require('./internal/utils');
 const fonts = require('./internal/fonts');
 const calc = require('./internal/calc');
+const InlineDrawer = require('./element/InlineDrawer');
 
 
 const INLINE_ELLIPSIS = inlineUtils.of('\u2026');
@@ -377,12 +378,13 @@ function drawCheckbox(ctx, rect, col, row, check, helper,
 			borderColor = helper.theme.checkbox.borderColor,
 			textAlign = 'center',
 			textBaseline = 'middle',
-		} = {}
+		} = {},
+		positionOpt = {}
 ) {
 	const boxWidth = canvashelper.measureCheckbox(ctx).width;
 	ctx.textAlign = textAlign;
 	ctx.textBaseline = textBaseline;
-	const pos = calcStartPosition(ctx, rect, boxWidth + 1/*罫線分+1*/, boxWidth + 1/*罫線分+1*/);
+	const pos = calcStartPosition(ctx, rect, boxWidth + 1/*罫線分+1*/, boxWidth + 1/*罫線分+1*/, positionOpt);
 	uncheckBgColor = helper.getColor(uncheckBgColor, col, row, ctx);
 	checkBgColor = helper.getColor(checkBgColor, col, row, ctx);
 	borderColor = helper.getColor(borderColor, col, row, ctx);
@@ -872,6 +874,39 @@ class GridCanvasHelper {
 					ctx.stroke();
 				});
 			}
+		}
+	}
+	buildCheckBoxInline(check, context, option = {}) {
+		const self = this;
+		const ctx = context.getContext();
+		const boxWidth = canvashelper.measureCheckbox(ctx).width;
+		return new InlineDrawer({
+			draw,
+			width: boxWidth + 3,
+			height: boxWidth + 1,
+			color: undefined,
+		});
+
+		function draw({
+			ctx,
+			canvashelper,
+			rect,
+			offset,
+			offsetLeft,
+			offsetRight,
+			offsetTop,
+			offsetBottom,
+		}) {
+			const {col, row} = context;
+			drawCheckbox(ctx, rect, col, row, check, self, option, 	{
+				offset: offset + 1,
+				padding: {
+					left: offsetLeft + 1,
+					right: offsetRight,
+					top: offsetTop,
+					bottom: offsetBottom,
+				}
+			});
 		}
 	}
 	checkbox(check, context, option = {}) {

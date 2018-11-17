@@ -26,12 +26,36 @@ export default {
     headerStyle: {
       type: [Object, String, Function],
       default: undefined
+    },
+    /**
+     * Defines a column header data field
+     */
+    headerField: {
+      type: [String],
+      default: undefined
+    },
+    /**
+     * Defines a column header type
+     */
+    headerType: {
+      type: [Object, String, Function],
+      default: undefined
+    },
+    /**
+     * Defines a column header action
+     */
+    headerAction: {
+      type: [Object, String, Function],
+      default: undefined
     }
   },
   watch: {
     caption: girdUpdateWatcher,
     sort: girdUpdateWatcher,
-    headerStyle: girdUpdateWatcher
+    headerStyle: girdUpdateWatcher,
+    headerField: girdUpdateWatcher,
+    headerType: girdUpdateWatcher,
+    headerAction: girdUpdateWatcher
   },
   mounted () {
     this.$_CGrid_nextTickUpdate()

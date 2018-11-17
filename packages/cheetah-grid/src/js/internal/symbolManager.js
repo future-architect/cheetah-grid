@@ -53,6 +53,9 @@ module.exports = {
 	},
 	get INLINE_MENU_EDITOR_STATE_ID() {
 		return this.get('inline_menu_editor.stateID');
-	}
+	},
+	get CHECK_HEADER_STATE_ID() {
+		return this.get('check_header.stateID');
+	},
 };
 
