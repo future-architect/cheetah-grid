@@ -88,7 +88,7 @@ function _getCellIcon0(grid, icon, row) {
 	if (Array.isArray(icon)) {
 		return icon.map((i) => _getCellIcon0(grid, i, row));
 	}
-	if (!isObject(icon)) {
+	if (!isObject(icon) || typeof icon === 'function') {
 		return _getField(grid, icon, row);
 	}
 	const retIcon = {};

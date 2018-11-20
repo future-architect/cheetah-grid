@@ -172,7 +172,7 @@ class DataSource extends EventTarget {
 			return true;
 		}
 		const record = this.getOriginal(index);
-		return field in record;
+		return record && field in record;
 	}
 	setOriginalField(index, field, value) {
 		if (!isDef(field)) {
