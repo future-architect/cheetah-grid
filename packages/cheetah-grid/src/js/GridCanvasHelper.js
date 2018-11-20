@@ -102,7 +102,7 @@ function drawInlines(ctx, inlines, rect, offset, offsetTop, offsetBottom, col, r
 }
 
 function buildInlines(icons, inline) {
-	return inlineUtils.buildInlines(icons, inline);
+	return inlineUtils.buildInlines(icons, inline || '');
 }
 
 function inlineToString(inline) {
