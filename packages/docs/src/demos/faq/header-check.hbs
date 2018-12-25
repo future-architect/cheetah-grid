@@ -1,0 +1,142 @@
+---
+category: FAQ
+title: Checkbox on header
+layout: demo.hbs
+docVersion: 0.11.0
+order: 200
+---
+
+{{#marked}}
+## Checkbox on header
+
+You implement as follows using the `headerAction`, `headerType` properties.
+{{/marked}}
+
+<div id="sample1" class="demo-grid small">
+</div>
+<script type="text/javascript">
+/*eslint no-alert:0*/
+//{{#wrapscript}}
+//{{#copy "sample1"}}
+/*global cheetahGrid*/
+
+const grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#sample1'),
+	header: [
+		{field: 'no', caption: 'no', width: 50},
+		{field: 'check', width: 100, columnType: 'check', action: 'check', headerType: 'check', headerAction: 'check'},
+		{field: 'text', caption: 'text', width: 120},
+	],
+});
+grid.records = [
+	{no: 1, check: true, text: 'abc'},
+	{no: 2, check: false, text: 'def'},
+	{no: 3, check: true, text: 'ghi'},
+];
+
+const {CHANGED_HEADER_VALUE, CHANGED_VALUE} = cheetahGrid.ListGrid.EVENT_TYPE;
+grid.listen(CHANGED_HEADER_VALUE, ({value, field}) => {
+	if (field !== 'check') {
+		return;
+	}
+	// header check value on change
+
+	for (const rec of grid.records) {
+		rec[field] = value;
+	}
+	grid.invalidate();
+});
+grid.listen(CHANGED_VALUE, ({value, field}) => {
+	if (field !== 'check') {
+		return;
+	}
+	// check value on change
+
+	grid.headerValues[field] = false;
+
+	grid.invalidate();
+});
+//{{/copy}}
+//{{/wrapscript}}
+</script>
+{{> code class="js" code=sample1}}
+
+
+{{#marked}}
+## Using Vue.js
+
+You implement as follows using the `header-action`, `header-type` properties.
+{{/marked}}
+
+<script type="text/javascript">
+/*eslint no-unused-vars:0*/
+
+const records = [
+	{no: 1, check: true, text: 'abc'},
+	{no: 2, check: false, text: 'def'},
+	{no: 3, check: true, text: 'ghi'},
+];
+</script>
+
+{{#vue}}
+{{#copy "vue1"}}
+<template>
+	<div class="demo-grid small">
+		<c-grid
+			ref="grid"
+			:data="records">
+			<c-grid-column
+				field="no"
+				width= "50"
+			>
+				no
+			</c-grid-column>
+			<c-grid-check-column
+				field="check"
+				width="100"
+				header-type="check"
+				header-action="check"
+				@changed-header-value="onChangeHeaderValue"
+				@changed-value="onChangeValue" />
+			<c-grid-column
+				field="text"
+				width= "120"
+			>
+				text
+			</c-grid-column>
+		</c-grid>
+	</div>
+</template>
+
+<script>
+/*global records*/
+export default {
+	name: 'App',
+	data: {
+		records
+	},
+	methods: {
+		onChangeHeaderValue({value}) {
+			// header check value on change
+			const {grid} = this.$refs;
+
+			for (const rec of this.records) {
+				rec.check = value;
+			}
+			grid.invalidate();
+		},
+		onChangeValue() {
+			// check value on change
+			const {grid} = this.$refs;
+
+			grid.headerValues.check = false;
+
+			grid.invalidate();
+		}
+	}
+};
+</script>
+{{/copy}}
+{{/vue}}
+
+{{> code class="vue html" code=vue1}}

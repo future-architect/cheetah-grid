@@ -40,11 +40,13 @@ class SortHeaderAction extends BaseAction {
 			if (range.isCellInRange(state.col, cell.row)) {
 				newState = {
 					col: range.startCol,
+					row: range.startRow,
 					order: state.order === 'asc' ? 'desc' : 'asc'
 				};
 			} else {
 				newState = {
 					col: range.startCol,
+					row: range.startRow,
 					order: 'asc'
 				};
 			}

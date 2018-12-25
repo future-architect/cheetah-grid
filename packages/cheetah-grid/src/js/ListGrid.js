@@ -461,6 +461,7 @@ class HeaderMap {
 				headerType: hd.headerType,
 				action: hd.headerAction,
 				sort: hd.sort,
+				define: hd,
 			};
 			this._headerObjects.push(cell);
 			rowCells[col] = cell;
@@ -560,6 +561,7 @@ class ListGrid extends DrawGrid {
 		_refreshHeader(this);
 		this[_].sortState = {
 			col: -1,
+			row: -1,
 			order: undefined,
 		};
 		this[_].gridCanvasHelper = new GridCanvasHelper(this);
@@ -724,10 +726,30 @@ class ListGrid extends DrawGrid {
 	 * @type {object}
 	 */
 	set sortState(sortState) {
-		this[_].sortState = isDef(sortState) ? sortState : {
+		const oldState = this.sortState;
+		let oldField;
+		if (oldState.col >= 0 && oldState.row >= 0) {
+			oldField = this.getHeaderField(oldState.col, oldState.row);
+		}
+
+		const newState = this[_].sortState = isDef(sortState) ? sortState : {
 			col: -1,
+			row: -1,
 			order: undefined,
 		};
+
+		let newField;
+		if (newState.col >= 0 && newState.row >= 0) {
+			newField = this.getHeaderField(newState.col, newState.row);
+		}
+
+		// bind header value
+		if (isDef(oldField) && oldField !== newField) {
+			this.setHeaderValue(oldState.col, oldState.row, undefined);
+		}
+		if (isDef(newField)) {
+			this.setHeaderValue(newState.col, newState.row, newState.order);
+		}
 	}
 	/**
 	 * Get the header values.
@@ -754,6 +776,14 @@ class ListGrid extends DrawGrid {
 		return this[_].headerMap.columns[col].field;
 	}
 	/**
+	 * Get the column define of the given column index.
+	 * @param  {number} col The column index.
+	 * @return {*} The column define object.
+	 */
+	getColumnDefine(col) {
+		return this[_].headerMap.columns[col].define;
+	}
+	/**
 	 * Get the header field of the given header cell.
 	 * @param  {number} col The column index.
 	 * @param  {number} row The header row index.
@@ -762,6 +792,16 @@ class ListGrid extends DrawGrid {
 	getHeaderField(col, row) {
 		const hd = this[_].headerMap.getCell(col, row);
 		return hd.field;
+	}
+	/**
+	 * Get the header define of the given header cell.
+	 * @param  {number} col The column index.
+	 * @param  {number} row The header row index.
+	 * @return {*} The header define object.
+	 */
+	getHeaderDefine(col, row) {
+		const hd = this[_].headerMap.getCell(col, row);
+		return hd.define;
 	}
 	/**
 	 * Get the record of the given row index.

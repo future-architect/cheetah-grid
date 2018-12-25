@@ -50,7 +50,10 @@ module.exports = (env, argv) => {
       }
     },
     resolve: {
-      extensions: ['.js', '.json']
+      extensions: ['.js', '.json'],
+      alias: argv.test ? {
+        'cheetah-grid': path.resolve(__dirname, '../cheetah-grid')
+      } : undefined
     },
     module: {
       rules: [

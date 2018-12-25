@@ -6,8 +6,7 @@ categoryOrders:
   'Advanced Header': 500
 title: Header Actions
 layout: demo.hbs
-# docVersion: 0.10.0
-docVersion: 0.9.0
+docVersion: 0.10.0
 order: 200
 ---
 
@@ -81,18 +80,105 @@ grid.listen(CHANGED_VALUE, ({value, field}) => {
 </script>
 {{> code class="js" code=sample1}}
 
+{{#if_v '0.11.0'}}
+
+{{#marked}}
+## Using Vue.js
+{{#if lang_ja}}
+`vue-cheetah-grid`で利用するには`header-action`、`header-type`プロパティを指定してください。
+{{else}}
+In `vue-cheetah-grid`, define the `header-action`, `header-type` property.
+{{/if}}
+{{/marked}}
+
+<script type="text/javascript">
+/*eslint no-unused-vars:0*/
+
+const records = [
+	{no: 1, check: true, text: 'abc'},
+	{no: 2, check: false, text: 'def'},
+	{no: 3, check: true, text: 'ghi'},
+];
+</script>
+
+{{#vue}}
+{{#copy "vue1"}}
+<template>
+	<div class="demo-grid small">
+		<c-grid
+			ref="grid"
+			:data="records">
+			<c-grid-column
+				field="no"
+				width= "50"
+			>
+				no
+			</c-grid-column>
+			<c-grid-check-column
+				field="check"
+				width="100"
+				header-type="check"
+				header-action="check"
+				@changed-header-value="onChangeHeaderValue"
+				@changed-value="onChangeValue" />
+			<c-grid-column
+				field="text"
+				width= "120"
+				header-type="sort"
+				header-action="sort" 
+			>
+				sort
+			</c-grid-column>
+		</c-grid>
+	</div>
+</template>
+
+<script>
+/*global records*/
+export default {
+	name: 'App',
+	data: {
+		records
+	},
+	methods: {
+		onChangeHeaderValue({value}) {
+			// header check value on change
+			const {grid} = this.$refs;
+
+			for (const rec of this.records) {
+				rec.check = value;
+			}
+			grid.invalidate();
+		},
+		onChangeValue() {
+			// check value on change
+			const {grid} = this.$refs;
+
+			grid.headerValues.check = false;
+
+			grid.invalidate();
+		}
+	}
+};
+</script>
+{{/copy}}
+{{/vue}}
+
+{{> code class="vue html" code=vue1}}
+
+{{/if_v}}
+
 {{#marked}}
 ## Using Header Action Class
 {{#if lang_ja}}
 プロパティ`headerAction`はActionインスタンスを指定することで、
 途中でアクションのプロパティ(disableなど) を変更することが可能になります。  
 
-
-[詳細はこちら](./actions/Classes.html)を参照してください。 　
+{{! [詳細はこちら](./actions/Classes.html)を参照してください。 　}}
 {{else}}
 By setting the property `headerAction` as an Action instance,
 You can change the properties of the action (disable, etc.) in the when you want.  
 
-Please refer to [here](./actions/Classes.html)
+{{! Please refer to [here](./actions/Classes.html) }}
 {{/if}}
 {{/marked}}
