@@ -33,7 +33,7 @@ Can use the `Array` object or `cheetahGrid.data.DataSource` object for grid data
 const grid = new cheetahGrid.ListGrid({
 	parentElement: document.querySelector('#sample1'),
 	header: [
-		{field: 'personid', caption: 'ID', width: 100, columnType: 'center'},
+		{field: 'personid', caption: 'ID', width: 100},
 		{field: 'fname', caption: 'First Name', width: 200},
 		{field: 'lname', caption: 'Last Name', width: 200},
 		{field: 'email', caption: 'Email', width: 250},
@@ -77,7 +77,7 @@ const getPerson = (index) => array[index] || (array[index] = generatePerson(inde
 const grid = new cheetahGrid.ListGrid({
 	parentElement: document.querySelector('#sample2'),
 	header: [
-		{field: 'personid', caption: 'ID', width: 100, columnType: 'center'},
+		{field: 'personid', caption: 'ID', width: 100},
 		{field: 'fname', caption: 'First Name', width: 200},
 		{field: 'lname', caption: 'Last Name', width: 200},
 		{field: 'email', caption: 'Email', width: 250},

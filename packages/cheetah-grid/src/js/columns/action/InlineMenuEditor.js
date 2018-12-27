@@ -1,5 +1,12 @@
 'use strict';
-const {obj: {setReadonly}} = require('../../internal/utils');
+const {
+	obj: {setReadonly},
+	array: {find},
+	event: {
+		cancel: cancelEvent,
+	},
+	then
+} = require('../../internal/utils');
 const {normalize} = require('../../internal/menu-items');
 
 const Editor = require('./Editor');
@@ -11,6 +18,7 @@ const {EVENT_TYPE: {
 	MOUSEOVER_CELL,
 	MOUSEOUT_CELL,
 	MOUSEMOVE_CELL,
+	PASTE_CELL,
 }} = require('../../core/DrawGrid');
 const InlineMenuElement = require('./internal/InlineMenuElement');
 const {INLINE_MENU_EDITOR_STATE_ID: _} = require('../../internal/symbolManager');
@@ -147,6 +155,26 @@ class InlineMenuEditor extends Editor {
 					return;
 				}
 				grid.getElement().style.cursor = '';
+			}),
+
+			// paste value
+			grid.listen(PASTE_CELL, (e) => {
+				if (e.multi) {
+					// ignore multi cell values
+					return;
+				}
+				if (!util.isTarget(e.col, e.row)) {
+					return;
+				}
+				const pasteValue = e.normalizeValue.trim();
+				const pasteOpt = find(this._options, (opt) => `${opt.value}`.trim() === pasteValue);
+				if (pasteOpt) {
+					cancelEvent(e.event);
+					then(
+							grid.doChangeValue(e.col, e.row, () => pasteOpt.value),
+							() => grid.invalidateCell(e.col, e.row)
+					);
+				}
 			}),
 		];
 	}

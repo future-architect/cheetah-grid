@@ -1,5 +1,11 @@
 'use strict';
 
+/**
+ * Normalize the given menu options.
+ * @param {*} options menu options to given
+ * @returns {Array} Normalized options
+ * @private
+ */
 function normalize(options) {
 	if (!options) {
 		return [];

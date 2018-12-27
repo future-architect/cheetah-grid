@@ -54,6 +54,7 @@ const EVENT_TYPE = {
 	MOUSEOVER_CELL: 'mouseover_cell',
 	MOUSEOUT_CELL: 'mouseout_cell',
 	INPUT_CELL: 'input_cell',
+	PASTE_CELL: 'paste_cell',
 	EDITABLEINPUT_CELL: 'editableinput_cell',
 	MODIFY_STATUS_EDITABLEINPUT_CELL: 'modify_status_editableinput_cell',
 	RESIZE_COLUMN: 'resize_column',
@@ -937,6 +938,18 @@ function _bindEvents(grid) {
 		return copyValue;
 	});
 	grid[_].focusControl.onCopy((e) => array.find(grid.fireListeners('copydata', grid[_].selection.range), isDef));
+	grid[_].focusControl.onPaste(({value, event}) => {
+		const normalizeValue = value.replace(/\r?\n$/, '');
+		const {col, row} = grid[_].selection.select;
+		grid.fireListeners(EVENT_TYPE.PASTE_CELL, {
+			col,
+			row,
+			value,
+			normalizeValue,
+			multi: /[\r\n\u2028\u2029\t]/.test(normalizeValue), // is multi cell values
+			event,
+		});
+	});
 	grid[_].focusControl.onInput((value) => {
 		const {col, row} = grid[_].selection.select;
 		grid.fireListeners(EVENT_TYPE.INPUT_CELL, {col, row, value});
@@ -1277,7 +1290,9 @@ class FocusControl extends EventTarget {
 			}
 			if (!this._input.readOnly && e.key && e.key.length === 1) {
 				if (e.key === 'c' && (e.ctrlKey || e.metaKey)) {
-					//copy! for Firefox
+					//copy! for Firefox & Safari
+				} else	if (e.key === 'v' && (e.ctrlKey || e.metaKey)) {
+					//paste! for Firefox & Safari
 				} else {
 					this.fireListeners('input', e.key);
 					cancelEvent(e);
@@ -1335,6 +1350,31 @@ class FocusControl extends EventTarget {
 				}, 100);
 			}
 		});
+		this._handler.on(document, 'paste', (e) => {
+			if (!isDescendantElement(parentElement, e.target)) {
+				return;
+			}
+			let pasteText = undefined;
+			if (browser.IE) {
+				// IE
+				pasteText = window.clipboardData.getData('Text');
+
+			} else {
+				const {clipboardData} = e;
+				if (clipboardData.items) {
+					// Chrome & Firefox & more?
+					pasteText = clipboardData.getData('text/plain');
+				} else {
+					// Safari
+					if (-1 !== Array.prototype.indexOf.call(clipboardData.types, 'text/plain')) {
+						pasteText = clipboardData.getData('Text');
+					}
+				}
+			}
+			if (isDef(pasteText) && pasteText.length) {
+				this.fireListeners('paste', {value: pasteText, event: e});
+			}
+		});
 		this._handler.on(document, 'copy', (e) => {
 			if (this._isComposition) {
 				return;
@@ -1376,6 +1416,9 @@ class FocusControl extends EventTarget {
 	}
 	onCopy(fn) {
 		return this.listen('copy', fn);
+	}
+	onPaste(fn) {
+		return this.listen('paste', fn);
 	}
 	focus() {
 		// this._input.value = '';
