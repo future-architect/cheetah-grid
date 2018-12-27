@@ -1,6 +1,7 @@
 'use strict';
 const {isPromise} = require('../internal/utils');
 const DataSource = require('./DataSource');
+const EventHandler = require('../internal/EventHandler');
 
 class DataSourceIterator {
 	constructor(dataSource) {
@@ -147,6 +148,11 @@ class FilterDataSource extends DataSource {
 		super(dataSource);
 		this._dataSource = dataSource;
 		this.filter = filter;
+		const handler =	this._handler = new EventHandler();
+		for (const k in DataSource.EVENT_TYPE) {
+			const type = DataSource.EVENT_TYPE[k];
+			handler.on(dataSource, type, (...args) => this.fireListeners(type, ...args));
+		}
 	}
 	get filter() {
 		return this._filterData && this._filterData._filter || undefined;
@@ -163,6 +169,17 @@ class FilterDataSource extends DataSource {
 			return super.getOriginal(index);
 		}
 		return this._filterData.get(index);
+	}
+	sort(...args) {
+		const result = this._dataSource.sort(...args);
+		// reset
+		this.filter = this.filter;
+
+		return result;
+	}
+	dispose() {
+		this._handler.dispose();
+		super.dispose();
 	}
 }
 

@@ -49,6 +49,7 @@
     "test:watch": "karma start --min",
     "test:ff": "karma start --browsers Firefox",
     "test:ie": "karma start --min --browsers IE_no_addons",
+    "test:chrome": "karma start --browsers Chrome",
     "build": "npm run webpack",
     "watch": "cross-env NO_UPDATE_NOTIFIER=1 webpack --watch",
     "webpack": "cross-env NO_UPDATE_NOTIFIER=1 webpack",
