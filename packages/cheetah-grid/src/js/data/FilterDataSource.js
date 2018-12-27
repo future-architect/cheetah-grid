@@ -171,11 +171,10 @@ class FilterDataSource extends DataSource {
 		return this._filterData.get(index);
 	}
 	sort(...args) {
-		const result = this._dataSource.sort(...args);
-		// reset
-		this.filter = this.filter;
-
-		return result;
+		return this._dataSource.sort(...args).then((arg) => {
+			this.filter = this.filter;
+			return arg;
+		});
 	}
 	dispose() {
 		this._handler.dispose();
