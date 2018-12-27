@@ -58,15 +58,44 @@ function _setGridData (grid, data, filter) {
   grid.dataSource = dataSource
 }
 function _bindEvents (v, grid) {
-  for (const k in cheetahGrid.ListGrid.EVENT_TYPE) {
-    const type = cheetahGrid.ListGrid.EVENT_TYPE[k]
+  const { EVENT_TYPE } = cheetahGrid.ListGrid
+  grid.listen(EVENT_TYPE.CHANGED_HEADER_VALUE, (...args) => {
+    v.headerValues = grid.headerValues
+  })
+  for (const k in EVENT_TYPE) {
+    const type = EVENT_TYPE[k]
     const emitType = type.replace(/_/g, '-').toLowerCase()
     grid.listen(type, (...args) => {
-      let result
+      const results = []
+
+      // emit grid event
       v.$emit(emitType, ...args, (r) => {
-        result = r
+        results.push(r)
       })
-      return result
+
+      // emit column event
+      const [first] = args
+      const col = first && first.col != null && typeof first.col === 'number' ? first.col : null
+      const row = first && first.row != null && typeof first.row === 'number' ? first.row : null
+
+      if (col != null) {
+        if (row != null && grid.frozenRowCount > row) {
+          const define = grid.getHeaderDefine(col, row)
+          if (define && define.vm) {
+            define.vm.$emit(emitType, ...args, (r) => {
+              results.push(r)
+            })
+          }
+        } else {
+          const define = grid.getColumnDefine(col)
+          if (define && define.vm) {
+            define.vm.$emit(emitType, ...args, (r) => {
+              results.push(r)
+            })
+          }
+        }
+      }
+      return results[0]
     })
   }
 }
@@ -132,6 +161,9 @@ export default {
       default: undefined
     }
   },
+  data () {
+    return { headerValues: {} }
+  },
   computed: {
   },
   watch: {
@@ -150,7 +182,13 @@ export default {
         this.rawGrid.frozenColCount = frozenColCount
       }
     },
-    options: girdUpdateWatcher
+    options: girdUpdateWatcher,
+    headerValues: {
+      handler (headerValues) {
+        this.rawGrid.headerValues = headerValues
+      },
+      deep: true
+    }
   },
   mounted () {
     this.$_CGrid_cancelNextTickUpdate()

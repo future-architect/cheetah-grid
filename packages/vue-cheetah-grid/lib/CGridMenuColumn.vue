@@ -94,6 +94,7 @@ export default {
       const columnType = new cheetahGrid.columns.type.MenuColumn({ options: dispOpt })
       const field = this.filter ? filterToFn(this, this.field, this.filter) : this.field
       return {
+        vm: this,
         caption: this.caption || this.$el.textContent.trim(),
         headerStyle: this.headerStyle,
         headerField: this.headerField,

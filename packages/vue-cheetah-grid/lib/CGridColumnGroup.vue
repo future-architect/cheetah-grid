@@ -30,6 +30,7 @@ export default {
      */
     createColumn () {
       return {
+        vm: this,
         caption: this.caption,
         headerStyle: this.headerStyle,
         headerField: this.headerField,

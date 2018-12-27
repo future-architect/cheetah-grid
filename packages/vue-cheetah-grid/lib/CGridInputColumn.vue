@@ -116,6 +116,7 @@ export default {
       const columnType = normalizeColumnType(this.columnType)
       const field = this.filter ? filterToFn(this, this.field, this.filter) : this.field
       return {
+        vm: this,
         caption: this.caption || this.$el.textContent.trim(),
         headerStyle: this.headerStyle,
         headerField: this.headerField,
