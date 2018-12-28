@@ -9,7 +9,7 @@ const TYPE_NUMBER = 'n';
 
 const NODE_TYPE_UNIT = 'u';
 const NODE_TYPE_BINARY_EXPRESSION = 'b';
-const NODE_TYPE_NUMBER = TYPE_NUMBER;
+const NODE_TYPE_NUMBER = 'n';
 
 function createError(calc) {
 	return new Error(`calc parse error: ${calc}`);
