@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="author" content="Cheetah Grid">
+    <meta name="keywords" content="spreadsheet,grid,canvas,table,web-components">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Cheetah Grid - ButtonAction</title>
+    <link rel="shortcut icon" type="image/x-icon" href="./../../../../icon_512x512.ico">
+
+    <link rel="stylesheet" type="text/css" href="./../../../css/style.css">
+    <link rel="stylesheet" type="text/css" href="./../../../css/highlightjs.css">
+    
+    <!-- <script src="http://localhost:35729/livereload.js"></script> -->
+    
+    <script type="text/javascript" src="https://unpkg.com/cheetah-grid@0.11||0.10"></script>
+
+    <style type="text/css">
+        html {
+            height: 100%;
+        }
+        body {
+            height: calc(100% - 100px);
+        }
+        .contents {
+            padding: 30px;
+            box-sizing: border-box;
+        }
+        .demo-grid {
+            width: 100%;
+            height: 300px;
+            box-sizing: border-box;
+            border: solid 1px #ddd;
+        }
+        .demo-grid.large {
+            height: 500px;
+        }
+        .demo-grid.middle {
+            height: 300px;   
+        }
+        .demo-grid.small {
+            height: 240px;   
+        }
+        .log {
+            width: 100%;
+            height: 80px;
+            background-color: #F5F5F5;
+        }
+
+        .hljs { 
+             tab-size: 4;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <nav class="header primary" id="header-nav">
+    	<div class="nav-wrapper">
+    		<a href="./../../../../index.html">
+    			<img src="./../../../../logo.png" style="width: 100px;padding: 5px;vertical-align: middle;" alt="Cheetah Grid">
+    		</a>
+    
+    		<ul class="right hide-on-med-and-down nav-dropdown-container">
+    			<a href="#" class="primary nav-dropdown-button mobile-only" data-target="all-nav" style="width: 30px;">
+    				<span class="icon-arrow"></span>
+    			</a>
+    			<ul id="all-nav" class="mobile-nav-dropdown right-dropdown primary">
+    				<li><a href="./../../../index.html" class="primary">Docoments - TOP</a></li>
+    				<li class="nav-dropdown-container">
+    					<a id="nav-versions" href="#" class="primary nav-dropdown-button" data-target="versions">
+    						version<span class="icon-arrow"></span>
+    					</a>
+    					<ul id="versions" class="nav-dropdown right-dropdown">
+    					</ul>
+    				</li>
+    				<li class="nav-dropdown-container">
+    					<a id="nav-lang" href="#" class="primary nav-dropdown-button" data-target="langs">
+    						lang<span class="icon-arrow"></span>
+    					</a>
+    					<ul id="langs" class="nav-dropdown right-dropdown">
+    						<li><a href="./../../../ja/demos/usage/column_actions/ButtonAction.html" class="primary">日本語</a></li>
+    						<li><a href="./../../../demos/usage/column_actions/ButtonAction.html" class="primary">English</a></li>
+    					</ul>
+    				</li>
+    			</ul>
+    		</ul>
+    	</div>
+    </nav>
+    
+    <script type="text/javascript">
+    	'use strict';
+    	////babel
+    "use strict";
+    
+    function getVersions(callback) {
+      var xhr = new XMLHttpRequest();
+    
+      function onError() {
+        callback(['0.11', '0.0.1']);
+      }
+    
+      xhr.onload = function () {
+        var versions = JSON.parse(xhr.responseText);
+        callback(versions);
+      };
+    
+      xhr.onerror = onError;
+      xhr.onabort = onError;
+    
+      try {
+        xhr.open('GET', "./../../../../versions.json"); // eslint-disable-line quotes
+    
+        xhr.send();
+      } catch (e) {
+        onError();
+      }
+    } //
+    
+    
+    getVersions(function (versions) {
+      var myVersion = '0.11';
+    
+      function getVerLocation(v) {
+        return location.href.replace(myVersion, v).replace('.devdoc', v);
+      }
+    
+      var latest = versions[0];
+      var versEl = document.getElementById('versions');
+      versEl.innerHTML = versions.map(function (v, i) {
+        return "<li><a href=\"".concat(getVerLocation(v), "\" class=\"primary\">").concat(v).concat(i === 0 ? ' (latest)' : '', "</a></li>");
+      }).join('');
+    
+      if (latest !== myVersion) {
+        var header = document.getElementById('header-nav');
+        var a = document.createElement('a');
+        header.parentElement.insertBefore(a, header.nextSibling);
+        a.href = getVerLocation(latest);
+        a.textContent = "<goto the latest version(".concat(latest, ") document>");
+      }
+    }); //
+    </script>    <h1><a href="./../../.././index.html#usage">Usage</a> &gt; <a href="./../../../demos/usage/column_actions.html">Column Actions</a> &gt; <a href="./../../../demos/usage/column_actions/Classes.html">Classes</a> &gt; ButtonAction</h1>
+    <div class="contents">
+        
+<h2 id="buttonaction">ButtonAction</h2>
+<p>Define the behavior when the button is clicked.  </p>
+<p>The specified method is executed after select the cell by clicking it and then push Enter.  </p>
+<p>You can control the property of <code>disabled</code> and <code>action</code> by manipulating the instance of <code>ButtonAction</code> class.  </p>
+
+
+<div id="sample1" class="demo-grid small">
+</div>
+<label>change disabled properties : </label>
+<select id="sample1disabled">
+    <option value="" selected="true">default</option>
+    <option value="disabled">disabled = true</option>
+</select> <span id="sample1disabledmemo"></span><br>
+<label>change action properties : </label>
+<select id="sample1action">
+    <option value="" selected="true">Show record</option>
+    <option value="hello">Message 'Hello!'</option>
+</select> <span>Once you have changed, please try to click</span>
+
+<script type="text/javascript">
+/*eslint no-alert:0*/
+////wrapscript
+(function() {
+//babel
+"use strict";
+
+//
+
+/*global cheetahGrid*/
+var buttonAction = new cheetahGrid.columns.action.ButtonAction({
+  action: function action(rec) {
+    alert(JSON.stringify(rec, null, '  '));
+  }
+});
+var grid = new cheetahGrid.ListGrid({
+  parentElement: document.querySelector('#sample1'),
+  header: [{
+    caption: 'button',
+    width: 180,
+    columnType: new cheetahGrid.columns.type.ButtonColumn({
+      caption: 'BUTTON'
+    }),
+    action: buttonAction
+  }]
+});
+grid.records = [{
+  no: 1
+  /* ・・・ */
+
+}, {
+  no: 2
+  /* ・・・ */
+
+}, {
+  no: 3
+  /* ・・・ */
+
+}];
+
+document.querySelector('#sample1disabled').onchange = function () {
+  //change disabled properties
+  if (this.value === 'disabled') {
+    buttonAction.disabled = true;
+    document.querySelector('#sample1disabledmemo').textContent = 'It will not toggle and does not respond when hovering the mouse';
+  } else {
+    buttonAction.disabled = false;
+    document.querySelector('#sample1disabledmemo').textContent = 'default';
+  }
+};
+
+document.querySelector('#sample1action').onchange = function () {
+  //change action properties
+  if (this.value === 'hello') {
+    buttonAction.action = function () {
+      alert('Hello!');
+    };
+  } else {
+    buttonAction.action = function (rec) {
+      alert(JSON.stringify(rec, null, '  '));
+    };
+  }
+}; //
+//
+})();
+</script>
+<pre><code class="js hljs javascript"><span class="hljs-comment">/*global cheetahGrid*/</span>
+
+
+<span class="hljs-keyword">const</span> buttonAction = <span class="hljs-keyword">new</span> cheetahGrid.columns.action.ButtonAction({
+	action(rec) {
+		alert(<span class="hljs-built_in">JSON</span>.stringify(rec, <span class="hljs-literal">null</span>, <span class="hljs-string">'  '</span>));
+	},
+});
+
+<span class="hljs-keyword">const</span> grid = <span class="hljs-keyword">new</span> cheetahGrid.ListGrid({
+	<span class="hljs-attr">parentElement</span>: <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample1'</span>),
+	<span class="hljs-attr">header</span>: [
+		{
+			<span class="hljs-attr">caption</span>: <span class="hljs-string">'button'</span>,
+			<span class="hljs-attr">width</span>: <span class="hljs-number">180</span>,
+			<span class="hljs-attr">columnType</span>: <span class="hljs-keyword">new</span> cheetahGrid.columns.type.ButtonColumn({
+				<span class="hljs-attr">caption</span>: <span class="hljs-string">'BUTTON'</span>,
+			}),
+			<span class="hljs-attr">action</span>: buttonAction,
+		},
+	],
+});
+grid.records = [
+	{<span class="hljs-attr">no</span>: <span class="hljs-number">1</span><span class="hljs-comment">/* ・・・ */</span>},
+	{<span class="hljs-attr">no</span>: <span class="hljs-number">2</span><span class="hljs-comment">/* ・・・ */</span>},
+	{<span class="hljs-attr">no</span>: <span class="hljs-number">3</span><span class="hljs-comment">/* ・・・ */</span>},
+];
+
+<span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample1disabled'</span>).onchange = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+	<span class="hljs-comment">//change disabled properties</span>
+	<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.value === <span class="hljs-string">'disabled'</span>) {
+		buttonAction.disabled = <span class="hljs-literal">true</span>;
+		<span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample1disabledmemo'</span>).textContent = <span class="hljs-string">'It will not toggle and does not respond when hovering the mouse'</span>;
+	} <span class="hljs-keyword">else</span> {
+		buttonAction.disabled = <span class="hljs-literal">false</span>;
+		<span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample1disabledmemo'</span>).textContent = <span class="hljs-string">'default'</span>;
+	}
+};
+
+<span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample1action'</span>).onchange = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+	<span class="hljs-comment">//change action properties</span>
+	<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.value === <span class="hljs-string">'hello'</span>) {
+		buttonAction.action = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+			alert(<span class="hljs-string">'Hello!'</span>);
+		};
+	} <span class="hljs-keyword">else</span> {
+		buttonAction.action = <span class="hljs-function">(<span class="hljs-params">rec</span>) =&gt;</span> {
+			alert(<span class="hljs-built_in">JSON</span>.stringify(rec, <span class="hljs-literal">null</span>, <span class="hljs-string">'  '</span>));
+		};
+	}
+};
+</code></pre>
+
+    </div>
+    
+    <script type="text/javascript" src="./../../../js/doc-common.js"></script>
+
+</body></html>
