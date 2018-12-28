@@ -1,5 +1,5 @@
 <script>
-import { girdUpdateWatcher } from './utils'
+import { gridUpdateWatcher } from './utils'
 
 /**
  * The Mixin for `<c-grid-column>` components.
@@ -50,12 +50,12 @@ export default {
     }
   },
   watch: {
-    caption: girdUpdateWatcher,
-    sort: girdUpdateWatcher,
-    headerStyle: girdUpdateWatcher,
-    headerField: girdUpdateWatcher,
-    headerType: girdUpdateWatcher,
-    headerAction: girdUpdateWatcher
+    caption: gridUpdateWatcher,
+    sort: gridUpdateWatcher,
+    headerStyle: gridUpdateWatcher,
+    headerField: gridUpdateWatcher,
+    headerType: gridUpdateWatcher,
+    headerAction: gridUpdateWatcher
   },
   mounted () {
     this.$_CGrid_nextTickUpdate()

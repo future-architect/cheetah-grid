@@ -66,7 +66,7 @@ const records = generatePersons(100);
 const grid = new cheetahGrid.ListGrid({
 	parentElement: document.querySelector('#sample1'),
 	header: [
-		{field: 'personid', caption: 'ID', width: 100, columnType: 'center'},
+		{field: 'personid', caption: 'ID', width: 100},
 		{field: 'fname', caption: 'First Name', width: 200},
 		{field: 'lname', caption: 'Last Name', width: 200},
 		{field: 'email', caption: 'Email', width: 250},
@@ -114,7 +114,7 @@ To use multiple header, set the hierarchical structured Object to the `header` p
 const grid = new cheetahGrid.ListGrid({
 	parentElement: document.querySelector('#sample2'),
 	header: [
-		{field: 'personid', caption: 'ID', width: 100, columnType: 'center'},
+		{field: 'personid', caption: 'ID', width: 100},
 		{ /* multiple header */
 			caption: 'name',
 			columns: [

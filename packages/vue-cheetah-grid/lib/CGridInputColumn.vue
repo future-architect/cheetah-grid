@@ -6,7 +6,7 @@
 <script>
 import ColumnMixin from './c-grid/ColumnMixin.vue'
 import StdColumnMixin from './c-grid/StdColumnMixin.vue'
-import { cheetahGrid, filterToFn, normalizeColumnType, girdUpdateWatcher } from './c-grid/utils'
+import { cheetahGrid, filterToFn, normalizeColumnType, gridUpdateWatcher } from './c-grid/utils'
 
 /**
  * @mixin column-mixin
@@ -72,12 +72,12 @@ export default {
     }
   },
   watch: {
-    columnType: girdUpdateWatcher,
-    helperText: girdUpdateWatcher,
-    inputValidator: girdUpdateWatcher,
-    validator: girdUpdateWatcher,
-    inputClassList: girdUpdateWatcher,
-    inputType: girdUpdateWatcher,
+    columnType: gridUpdateWatcher,
+    helperText: gridUpdateWatcher,
+    inputValidator: gridUpdateWatcher,
+    validator: gridUpdateWatcher,
+    inputClassList: gridUpdateWatcher,
+    inputType: gridUpdateWatcher,
     disabled (disabled) {
       if (this._action) {
         this._action.disabled = disabled

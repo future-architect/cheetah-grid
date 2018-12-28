@@ -25,7 +25,7 @@ function createGrid (el, v) {
     parentElement: el,
     header: [
       { field: 'check', caption: '', width: 50, columnType: 'check', action: 'check' },
-      { field: 'personid', caption: 'ID', width: 85, columnType: 'center' },
+      { field: 'personid', caption: 'ID', width: 85 },
       {
         field: 'stars',
         caption: 'Class',

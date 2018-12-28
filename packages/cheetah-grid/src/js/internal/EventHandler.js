@@ -18,6 +18,13 @@ class EventHandler {
 		this._listeners[id] = obj;
 		return id;
 	}
+	once(target, type, listener, ...options) {
+		const id = this.on(target, type, (...args) => {
+			listener(...args);
+			this.off(id);
+		}, ...options);
+		return id;
+	}
 	tryWithOffEvents(target, type, call) {
 		const list = [];
 		try {

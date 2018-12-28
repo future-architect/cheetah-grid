@@ -69,8 +69,8 @@
 				canvasHelper.fillRect('white');
 
 				//罫線
-				const girdHelper = canvasHelper.createGridHelper(cols, rows);
-				girdHelper.lineAll(1);
+				const gridHelper = canvasHelper.createGridHelper(cols, rows);
+				gridHelper.lineAll(1);
 
 				//TEXT
 				ctx.font = '10px Arial';
@@ -80,7 +80,7 @@
 
 				for (let row = 0; row < rows.length; row++) {
 					for (let col = 0; col < cols.length; col++) {
-						girdHelper.text('[' + col + ':' + row + ']', col, row, {
+						gridHelper.text('[' + col + ':' + row + ']', col, row, {
 							offset: 3
 						});
 					}
@@ -107,13 +107,13 @@
 				//全体塗りつぶし
 				canvasHelper.fillRect('#F6f6f6');
 
-				const girdHelper = canvasHelper.createGridHelper(cols, rows);
+				const gridHelper = canvasHelper.createGridHelper(cols, rows);
 
 				//内部塗りつぶし
-				girdHelper.fillRect('white');
+				gridHelper.fillRect('white');
 
 				//罫線
-				girdHelper.lineAll(1);
+				gridHelper.lineAll(1);
 
 				//TEXT
 				ctx.font = '10px Arial';
@@ -123,7 +123,7 @@
 
 				for (let row = 0; row < rows.length; row++) {
 					for (let col = 0; col < cols.length; col++) {
-						girdHelper.text('[' + col + ':' + row + ']', col, row, {
+						gridHelper.text('[' + col + ':' + row + ']', col, row, {
 							offset: 3
 						});
 					}

@@ -51,21 +51,21 @@
 			const ctx = canvasHelper.context;
 			ctx.font = '16px sans-serif';
 
-			const girdHelper = canvasHelper.createGridHelper(cols, rows);
+			const gridHelper = canvasHelper.createGridHelper(cols, rows);
 
 			//塗りつぶし
 			canvasHelper.fillRect('#f6f6f6');
-			girdHelper.fillRect('white');
-			girdHelper.fillRect('#d3d3d3', 0, 0, null, 0);
-			girdHelper.fillRect('#f6f6f6', 0, 2, null, 2);
+			gridHelper.fillRect('white');
+			gridHelper.fillRect('#d3d3d3', 0, 0, null, 0);
+			gridHelper.fillRect('#f6f6f6', 0, 2, null, 2);
 
 			//罫線
-			girdHelper.lineAll(1);
+			gridHelper.lineAll(1);
 			ctx.strokeStyle = '#5e9ed6';
-			girdHelper.lineH(1, 0, 0, 0);
-			girdHelper.lineH(2, 0, 0, 0, true);
-			girdHelper.lineV(1, 0, 0, 0);
-			girdHelper.lineV(2, 0, 0, 0, true);
+			gridHelper.lineH(1, 0, 0, 0);
+			gridHelper.lineH(2, 0, 0, 0, true);
+			gridHelper.lineV(1, 0, 0, 0);
+			gridHelper.lineV(2, 0, 0, 0, true);
 
 			//TEXT
 			ctx.fillStyle = '#000';
@@ -74,15 +74,15 @@
 				textBaseline: 'middle',
 				textAlign: 'left',
 			};
-			girdHelper.text('bool', 0, 0, textOpt);
-			girdHelper.text('str', 1, 0, textOpt);
-			girdHelper.text('onoff', 2, 0, textOpt);
-			girdHelper.text('num', 3, 0, textOpt);
-			girdHelper.text('nstr', 4, 0, textOpt);
+			gridHelper.text('bool', 0, 0, textOpt);
+			gridHelper.text('str', 1, 0, textOpt);
+			gridHelper.text('onoff', 2, 0, textOpt);
+			gridHelper.text('num', 3, 0, textOpt);
+			gridHelper.text('nstr', 4, 0, textOpt);
 
 			return {
 				canvasHelper: canvasHelper,
-				girdHelper: girdHelper,
+				gridHelper: gridHelper,
 			};
 
 		}
@@ -94,10 +94,10 @@
 				const canvasHelper = base.canvasHelper;
 				const ctx = canvasHelper.context;
 
-				const girdHelper = base.girdHelper;
+				const gridHelper = base.gridHelper;
 
 				for (let col = 0; col < 5; col++) {
-					const rect = girdHelper.getRect(col, 1);
+					const rect = gridHelper.getRect(col, 1);
 					const boxSize = cheetahGrid.tools.canvashelper.measureCheckbox(ctx).width;
 					const offsetX = Math.floor((50 - boxSize) / 2);
 					const offsetY = Math.floor((24 - boxSize) / 2);
@@ -148,10 +148,10 @@
 					const ctx = canvasHelper.context;
 					const canvas = canvasHelper.canvas;
 
-					const girdHelper = base.girdHelper;
+					const gridHelper = base.gridHelper;
 
 					for (let col = 0; col < 5; col++) {
-						const rect = girdHelper.getRect(col, 1);
+						const rect = gridHelper.getRect(col, 1);
 						const boxSize = cheetahGrid.tools.canvashelper.measureCheckbox(ctx).width;
 						const offsetX = Math.floor((50 - boxSize) / 2);
 						const offsetY = Math.floor((24 - boxSize) / 2);

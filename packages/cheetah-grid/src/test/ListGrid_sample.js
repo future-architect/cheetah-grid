@@ -64,7 +64,6 @@ function generate(num) {
 				field: 'personid',
 				caption: 'ID',
 				width: 100,
-				columnType: 'center',
 				// sort
 				sort: function(order, col, grid) {
 					const compare = order === 'desc'

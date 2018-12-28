@@ -102,7 +102,7 @@ const dataSource = new cheetahGrid.data.CachedDataSource({
 const grid = new cheetahGrid.ListGrid({
 	parentElement: document.querySelector('#rec_sample'),
 	header: [
-		{field: 'personid', caption: 'ID', width: 100, columnType: 'center'},
+		{field: 'personid', caption: 'ID', width: 100},
 		{field: 'fname', caption: 'First Name', width: 200},
 		{field: 'lname', caption: 'Last Name', width: 200},
 		{field: 'email', caption: 'Email', width: 250},
@@ -195,7 +195,7 @@ const getPersonDeptWithAjax = (personid) => new Promise((resolve) => {
 const grid = new cheetahGrid.ListGrid({
 	parentElement: document.querySelector('#cell_sample'),
 	header: [
-		{field: 'personid', caption: 'ID', width: 100, columnType: 'center'},
+		{field: 'personid', caption: 'ID', width: 100},
 		{field: 'fname', caption: 'First Name', width: 200},
 		{field: 'lname', caption: 'Last Name', width: 200},
 		{field: 'email', caption: 'Email', width: 250},

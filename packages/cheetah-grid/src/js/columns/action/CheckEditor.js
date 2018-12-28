@@ -1,11 +1,21 @@
 'use strict';
 
-const {obj: {setReadonly}, isPromise} = require('../../internal/utils');
+const {
+	obj: {setReadonly},
+	isPromise,
+	event: {
+		cancel: cancelEvent,
+	},
+} = require('../../internal/utils');
 const {bindCellClickAction, bindCellKeyAction} = require('./actionBind');
 const animate = require('../../internal/animate');
 
 const Editor = require('./Editor');
 const {CHECK_COLUMN_STATE_ID} = require('../../internal/symbolManager');
+
+const {EVENT_TYPE: {
+	PASTE_CELL,
+}} = require('../../core/DrawGrid');
 
 const KEY_ENTER = 13;
 const KEY_SPACE = 32;
@@ -111,7 +121,30 @@ class CheckEditor extends Editor {
 					}
 				},
 				acceptKeys: [KEY_ENTER, KEY_SPACE],
-			})
+			}),
+
+			// paste value
+			grid.listen(PASTE_CELL, (e) => {
+				if (e.multi) {
+					// ignore multi cell values
+					return;
+				}
+				if (!util.isTarget(e.col, e.row)) {
+					return;
+				}
+				const pasteValue = e.normalizeValue.trim();
+				grid.doGetCellValue(e.col, e.row, (value) => {
+					const newValue = toggleValue(value);
+					if (`${newValue}`.trim() === pasteValue) {
+						cancelEvent(e.event);
+
+						action({
+							col: e.col,
+							row: e.row,
+						});
+					}
+				});
+			}),
 		];
 	}
 }

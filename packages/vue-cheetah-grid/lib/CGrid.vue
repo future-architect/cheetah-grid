@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { cheetahGrid, girdUpdateWatcher } from './c-grid/utils'
+import { cheetahGrid, gridUpdateWatcher } from './c-grid/utils'
 import { slotsToHeaderOptions, slotsToHeaderProps } from './c-grid/header-utils'
 
 function deepObjectEquals (a, b) {
@@ -182,7 +182,7 @@ export default {
         this.rawGrid.frozenColCount = frozenColCount
       }
     },
-    options: girdUpdateWatcher,
+    options: gridUpdateWatcher,
     headerValues: {
       handler (headerValues) {
         this.rawGrid.headerValues = headerValues

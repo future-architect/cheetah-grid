@@ -1,8 +1,14 @@
 'use strict';
 
+const {
+	event: {
+		cancel: cancelEvent,
+	}
+} = require('../../internal/utils');
 const Editor = require('./Editor');
 const {EVENT_TYPE: {
 	INPUT_CELL,
+	PASTE_CELL,
 	EDITABLEINPUT_CELL,
 	SELECTED_CELL,
 	DBLCLICK_CELL,
@@ -60,6 +66,20 @@ class BaseInputEditor extends Editor {
 					row: e.row
 				}, e.value);
 			}),
+			grid.listen(PASTE_CELL, (e) => {
+				if (e.multi) {
+					// ignore multi cell values
+					return;
+				}
+				if (!util.isTarget(e.col, e.row)) {
+					return;
+				}
+				cancelEvent(e.event);
+				input({
+					col: e.col,
+					row: e.row
+				}, e.normalizeValue);
+			}),
 			grid.listen(DBLCLICK_CELL, (cell) => {
 				if (!util.isTarget(cell.col, cell.row)) {
 					return;
@@ -78,8 +98,7 @@ class BaseInputEditor extends Editor {
 					row: e.row
 				});
 
-				e.event.preventDefault();
-				e.event.stopPropagation();
+				cancelEvent(e.event);
 			}),
 			grid.listen(KEYDOWN, (keyCode, e) => {
 				if (keyCode !== KEY_F2 && keyCode !== KEY_ENTER) {

@@ -39,6 +39,7 @@ const KEY_UP = 38;
 const KEY_RIGHT = 39;
 const KEY_DOWN = 40;
 const KEY_ALPHA_C = 67;
+const KEY_ALPHA_V = 86;
 
 const EVENT_TYPE = {
 	CLICK_CELL: 'click_cell',
@@ -54,6 +55,7 @@ const EVENT_TYPE = {
 	MOUSEOVER_CELL: 'mouseover_cell',
 	MOUSEOUT_CELL: 'mouseout_cell',
 	INPUT_CELL: 'input_cell',
+	PASTE_CELL: 'paste_cell',
 	EDITABLEINPUT_CELL: 'editableinput_cell',
 	MODIFY_STATUS_EDITABLEINPUT_CELL: 'modify_status_editableinput_cell',
 	RESIZE_COLUMN: 'resize_column',
@@ -937,6 +939,18 @@ function _bindEvents(grid) {
 		return copyValue;
 	});
 	grid[_].focusControl.onCopy((e) => array.find(grid.fireListeners('copydata', grid[_].selection.range), isDef));
+	grid[_].focusControl.onPaste(({value, event}) => {
+		const normalizeValue = value.replace(/\r?\n$/, '');
+		const {col, row} = grid[_].selection.select;
+		grid.fireListeners(EVENT_TYPE.PASTE_CELL, {
+			col,
+			row,
+			value,
+			normalizeValue,
+			multi: /[\r\n\u2028\u2029\t]/.test(normalizeValue), // is multi cell values
+			event,
+		});
+	});
 	grid[_].focusControl.onInput((value) => {
 		const {col, row} = grid[_].selection.select;
 		grid.fireListeners(EVENT_TYPE.INPUT_CELL, {col, row, value});
@@ -1250,6 +1264,14 @@ class FocusControl extends EventTarget {
 			}
 			grid.focus();
 		});
+		let lastInputValue;
+		const inputClear = () => {
+			lastInputValue = this._input.value;
+			if (this._isComposition) {
+				return;
+			}
+			setSafeInputValue(this._input, '');
+		};
 
 		const handleCompositionEnd = () => {
 			this._isComposition = false;
@@ -1257,7 +1279,7 @@ class FocusControl extends EventTarget {
 			this._input.style.font = '';
 			const {value} = this._input;
 
-			setSafeInputValue(this._input, '');
+			inputClear();
 
 			if (!this._input.readOnly) {
 				this.fireListeners('input', value);
@@ -1277,13 +1299,15 @@ class FocusControl extends EventTarget {
 			}
 			if (!this._input.readOnly && e.key && e.key.length === 1) {
 				if (e.key === 'c' && (e.ctrlKey || e.metaKey)) {
-					//copy! for Firefox
+					//copy! for Firefox & Safari
+				} else	if (e.key === 'v' && (e.ctrlKey || e.metaKey)) {
+					//paste! for Firefox & Safari
 				} else {
 					this.fireListeners('input', e.key);
 					cancelEvent(e);
 				}
 			}
-			setSafeInputValue(this._input, '');
+			inputClear();
 		});
 		this._handler.on(this._input, 'keydown', (e) => {
 			if (this._isComposition) {
@@ -1296,43 +1320,85 @@ class FocusControl extends EventTarget {
 			const keyCode = getKeyCode(e);
 			this.fireListeners('keydown', keyCode, e);
 
-			if (!this._input.readOnly && this._input.value) {
+			if (!this._input.readOnly && lastInputValue) {
 				// for Safari
-				this.fireListeners('input', this._input.value);
+				this.fireListeners('input', lastInputValue);
 			}
 
-			setSafeInputValue(this._input, '');
+			inputClear();
 		});
-		const inputClear = (e) => {
-			if (this._isComposition) {
-				return;
-			}
-			setSafeInputValue(this._input, '');
-		};
 		this._handler.on(this._input, 'keyup', (e) => {
 			if (this._isComposition) {
 				if (this._compositionEnd) {
 					handleCompositionEnd();
 				}
 			}
-			inputClear(e);
+			inputClear();
 		});
 
-		this._handler.on(this._input, 'input', inputClear);
-		this._handler.on(document, 'keydown', (e) => {
-			if (!browser.IE) {
+		this._handler.on(this._input, 'input', (e) => {
+			inputClear();
+		});
+		if (browser.IE) {
+			this._handler.on(document, 'keydown', (e) => {
+				if (e.target !== this._input) {
+					return;
+				}
+				const keyCode = getKeyCode(e);
+				if (keyCode === KEY_ALPHA_C && e.ctrlKey) {
+					// When text is not selected copy-event is not emit, on IE.
+					setSafeInputValue(this._input, 'dummy');
+					this._input.select();
+					setTimeout(() => {
+						setSafeInputValue(this._input, '');
+					}, 100);
+				} else if (keyCode === KEY_ALPHA_V && e.ctrlKey) {
+					// When input is read-only paste-event is not emit, on IE.
+					if (this._input.readOnly) {
+						this._input.readOnly = false;
+						setTimeout(() => {
+							this._input.readOnly = true;
+							setSafeInputValue(this._input, '');
+						}, 10);
+					}
+				}
+			});
+		}
+		if (browser.Edge) {
+			this._handler.once(document, 'keydown', (e) => {
+				if (!isDescendantElement(parentElement, e.target)) {
+					return;
+				}
+				// When the input has focus on the first page opening, the paste-event and copy-event is not emit, on Edge.
+				const dummyInput = document.createElement('input');
+				grid.getElement().appendChild(dummyInput);
+				dummyInput.focus();
+				this._input.focus();
+				dummyInput.parentElement.removeChild(dummyInput);
+			});
+		}
+		this._handler.on(document, 'paste', (e) => {
+			if (!isDescendantElement(parentElement, e.target)) {
 				return;
 			}
-			if (e.target !== this._input) {
-				return;
+			let pasteText = undefined;
+			if (browser.IE) {
+				// IE
+				pasteText = window.clipboardData.getData('Text');
+			} else {
+				const {clipboardData} = e;
+				if (clipboardData.items) {
+					// Chrome & Firefox & Edge
+					pasteText = clipboardData.getData('text/plain');
+				} else {
+					// Safari
+					if (-1 !== Array.prototype.indexOf.call(clipboardData.types, 'text/plain')) {
+						pasteText = clipboardData.getData('Text');
+					}
+				}
 			}
-			const keyCode = getKeyCode(e);
-			if (keyCode === KEY_ALPHA_C && e.ctrlKey) {
-				setSafeInputValue(this._input, 'dummy');
-				this._input.select();
-				setTimeout(() => {
-					setSafeInputValue(this._input, '');
-				}, 100);
+			if (isDef(pasteText) && pasteText.length) {
+				this.fireListeners('paste', {value: pasteText, event: e});
 			}
 		});
 		this._handler.on(document, 'copy', (e) => {
@@ -1376,6 +1442,9 @@ class FocusControl extends EventTarget {
 	}
 	onCopy(fn) {
 		return this.listen('copy', fn);
+	}
+	onPaste(fn) {
+		return this.listen('paste', fn);
 	}
 	focus() {
 		// this._input.value = '';
