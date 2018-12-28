@@ -1,8 +1,12 @@
 'use strict';
 
+const {browser} = require('./utils');
+
 function getPath2D() {
-	//return require('./legacy/canvas/Path2D');
-	return window.Path2D || require('./legacy/canvas/Path2D');
+	if (window.Path2D && !browser.Edge) {
+		return window.Path2D;
+	}
+	return require('./legacy/canvas/Path2D');
 }
 
 module.exports = {
