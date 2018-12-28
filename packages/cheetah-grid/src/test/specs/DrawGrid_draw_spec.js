@@ -66,21 +66,21 @@
 				const ctx = canvasHelper.context;
 				const canvas = canvasHelper.canvas;
 
-				const girdHelper = canvasHelper.createGridHelper(cols, rows);
+				const gridHelper = canvasHelper.createGridHelper(cols, rows);
 
 				//塗りつぶし
 				canvasHelper.fillRect('#f6f6f6');
-				girdHelper.fillRect('white');
-				girdHelper.fillRect('#d3d3d3', 0, 0, null, 0);
-				girdHelper.fillRect('#F6F6F6', 0, 2, null, 2);
+				gridHelper.fillRect('white');
+				gridHelper.fillRect('#d3d3d3', 0, 0, null, 0);
+				gridHelper.fillRect('#F6F6F6', 0, 2, null, 2);
 
 				//罫線
-				girdHelper.lineAll(1);
+				gridHelper.lineAll(1);
 				ctx.strokeStyle = '#5e9ed6';
-				girdHelper.lineH(1, 0, 0, 0);
-				girdHelper.lineH(2, 0, 0, 0, true);
-				girdHelper.lineV(1, 0, 0, 0);
-				girdHelper.lineV(2, 0, 0, 0, true);
+				gridHelper.lineH(1, 0, 0, 0);
+				gridHelper.lineH(2, 0, 0, 0, true);
+				gridHelper.lineV(1, 0, 0, 0);
+				gridHelper.lineV(2, 0, 0, 0, true);
 
 				//TEXT
 				ctx.font = '16px sans-serif';
@@ -88,7 +88,7 @@
 
 				for (let row = 0; row < rows.length; row++) {
 					for (let col = 0; col < cols.length; col++) {
-						girdHelper.text('[' + col + ':' + row + ']', col, row, {
+						gridHelper.text('[' + col + ':' + row + ']', col, row, {
 							offset: 3,
 							textBaseline: 'middle'
 						});
@@ -115,23 +115,23 @@
 				const ctx = canvasHelper.context;
 				const canvas = canvasHelper.canvas;
 
-				const girdHelper = canvasHelper.createGridHelper(cols, rows);
+				const gridHelper = canvasHelper.createGridHelper(cols, rows);
 
 				//塗りつぶし
 				canvasHelper.fillRect('#f6f6f6');
-				girdHelper.fillRect('white');
-				girdHelper.fillRect('#d3d3d3', 0, 0, null, 0);
-				girdHelper.fillRect('#F6F6F6', 0, 2, null, 2);
+				gridHelper.fillRect('white');
+				gridHelper.fillRect('#d3d3d3', 0, 0, null, 0);
+				gridHelper.fillRect('#F6F6F6', 0, 2, null, 2);
 
 				//罫線
-				girdHelper.lineAll(1);
+				gridHelper.lineAll(1);
 				ctx.strokeStyle = '#5e9ed6';
-				girdHelper.lineH(1, 0, 6, 6, true);
-				girdHelper.lineH(1, 1, 6, 6);
-				girdHelper.lineH(2, 1, 6, 6, true);
-				girdHelper.lineV(1, 5, 1, 1, true);
-				girdHelper.lineV(1, 6, 1, 1);
-				girdHelper.lineV(2, 6, 1, 1, true);
+				gridHelper.lineH(1, 0, 6, 6, true);
+				gridHelper.lineH(1, 1, 6, 6);
+				gridHelper.lineH(2, 1, 6, 6, true);
+				gridHelper.lineV(1, 5, 1, 1, true);
+				gridHelper.lineV(1, 6, 1, 1);
+				gridHelper.lineV(2, 6, 1, 1, true);
 
 				//TEXT
 				ctx.font = '16px sans-serif';
@@ -141,7 +141,7 @@
 					for (let col = 0; col < cols.length; col++) {
 						const text = col < 2 ? '[' + col + ':' + row + ']'
 							: (col === 2 ? '' : '[' + (col + 2) + ':' + row + ']');
-						girdHelper.text(text, col, row, {
+						gridHelper.text(text, col, row, {
 							offset: 3,
 							textBaseline: 'middle'
 						});

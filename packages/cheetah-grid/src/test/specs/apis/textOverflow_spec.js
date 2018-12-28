@@ -64,26 +64,26 @@
 			const ctx = canvasHelper.context;
 			ctx.font = '16px sans-serif';
 
-			const girdHelper = canvasHelper.createGridHelper(cols, rows);
+			const gridHelper = canvasHelper.createGridHelper(cols, rows);
 
 			//塗りつぶし
 			canvasHelper.fillRect('#f6f6f6');
-			girdHelper.fillRect('white');
-			girdHelper.fillRect('#d3d3d3', 0, 0, null, 0);
-			girdHelper.fillRect('#f6f6f6', 0, 2, null, 1);
+			gridHelper.fillRect('white');
+			gridHelper.fillRect('#d3d3d3', 0, 0, null, 0);
+			gridHelper.fillRect('#f6f6f6', 0, 2, null, 1);
 
 			//罫線
-			girdHelper.lineAll(1);
+			gridHelper.lineAll(1);
 			ctx.strokeStyle = '#5e9ed6';
-			girdHelper.lineH(1, 0, 0, 0);
-			girdHelper.lineH(2, 0, 0, 0, true);
-			girdHelper.lineV(1, 0, 0, 0);
-			girdHelper.lineV(2, 0, 0, 0, true);
+			gridHelper.lineH(1, 0, 0, 0);
+			gridHelper.lineH(2, 0, 0, 0, true);
+			gridHelper.lineV(1, 0, 0, 0);
+			gridHelper.lineV(2, 0, 0, 0, true);
 
 
 			return {
 				canvasHelper: canvasHelper,
-				girdHelper: girdHelper,
+				gridHelper: gridHelper,
 			};
 
 		}
@@ -106,7 +106,7 @@
 				const canvasHelper = base.canvasHelper;
 				const ctx = canvasHelper.context;
 
-				const girdHelper = base.girdHelper;
+				const gridHelper = base.gridHelper;
 
 				//TEXT
 				ctx.fillStyle = '#000';
@@ -115,13 +115,13 @@
 					textBaseline: 'middle',
 					textAlign: 'left',
 				};
-				girdHelper.text('TES\u2026', 0, 0, textOpt);
-				girdHelper.text('VAL\u2026', 0, 1, {
+				gridHelper.text('TES\u2026', 0, 0, textOpt);
+				gridHelper.text('VAL\u2026', 0, 1, {
 					offset: 3,
 					textBaseline: 'middle',
 					textAlign: 'left',
 				});
-				girdHelper.text('VAL\u2026', 0, 2, {
+				gridHelper.text('VAL\u2026', 0, 2, {
 					offset: 3,
 					textBaseline: 'middle',
 					textAlign: 'left',
@@ -159,7 +159,7 @@
 				const canvasHelper = base.canvasHelper;
 				const ctx = canvasHelper.context;
 
-				const girdHelper = base.girdHelper;
+				const gridHelper = base.gridHelper;
 
 				const em = ctx.measureText('あ').width;
 
@@ -170,26 +170,26 @@
 					textBaseline: 'middle',
 					textAlign: 'left',
 				};
-				girdHelper.text('TES\u2026', 0, 0, textOpt);
-				girdHelper.text('VAL\u2026', 0, 1, {
+				gridHelper.text('TES\u2026', 0, 0, textOpt);
+				gridHelper.text('VAL\u2026', 0, 1, {
 					y: 61,
 					offset: 4,
 					textBaseline: 'middle',
 					textAlign: 'left',
 				});
-				girdHelper.text('VAL\u2026', 0, 1, {
+				gridHelper.text('VAL\u2026', 0, 1, {
 					y: 61 + em,
 					offset: 4,
 					textBaseline: 'middle',
 					textAlign: 'left',
 				});
-				girdHelper.text('VAL\u2026', 0, 2, {
+				gridHelper.text('VAL\u2026', 0, 2, {
 					y: 111,
 					offset: 4,
 					textBaseline: 'middle',
 					textAlign: 'left',
 				});
-				girdHelper.text('VAL\u2026', 0, 2, {
+				gridHelper.text('VAL\u2026', 0, 2, {
 					y: 111 + Number(em),
 					offset: 4,
 					textBaseline: 'middle',
@@ -229,7 +229,7 @@
 				const canvasHelper = base.canvasHelper;
 				const ctx = canvasHelper.context;
 
-				const girdHelper = base.girdHelper;
+				const gridHelper = base.gridHelper;
 
 				const em = ctx.measureText('あ').width;
 
@@ -242,50 +242,50 @@
 					textBaseline: 'middle',
 					textAlign: 'left',
 				};
-				girdHelper.text('TES\u2026', 0, 0, textOpt);
+				gridHelper.text('TES\u2026', 0, 0, textOpt);
 
 				const valTop = 62;
-				girdHelper.text('VALU', 0, 1, {
+				gridHelper.text('VALU', 0, 1, {
 					y: valTop,
 					offset: 3,
 					textBaseline: 'middle',
 					textAlign: 'left',
 				});
-				girdHelper.text('E', 0, 1, {
+				gridHelper.text('E', 0, 1, {
 					y: valTop + em,
 					offset: 3,
 					textBaseline: 'middle',
 					textAlign: 'left',
 				});
 				if (lineClamp === 3) {
-					girdHelper.text('VAL\u2026', 0, 1, {
+					gridHelper.text('VAL\u2026', 0, 1, {
 						y: valTop + em * 2,
 						offset: 3,
 						textBaseline: 'middle',
 						textAlign: 'left',
 					});
 				} else {
-					girdHelper.text('VALU', 0, 1, {
+					gridHelper.text('VALU', 0, 1, {
 						y: valTop + em * 2,
 						offset: 3,
 						textBaseline: 'middle',
 						textAlign: 'left',
 					});
 					if (lineClamp === 4) {
-						girdHelper.text('E\u2026', 0, 1, {
+						gridHelper.text('E\u2026', 0, 1, {
 							y: valTop + em * 3,
 							offset: 3,
 							textBaseline: 'middle',
 							textAlign: 'left',
 						});
 					} else {
-						girdHelper.text('E', 0, 1, {
+						gridHelper.text('E', 0, 1, {
 							y: valTop + em * 3,
 							offset: 3,
 							textBaseline: 'middle',
 							textAlign: 'left',
 						});
-						girdHelper.text('VAL\u2026', 0, 1, {
+						gridHelper.text('VAL\u2026', 0, 1, {
 							y: valTop + em * 4,
 							offset: 3,
 							textBaseline: 'middle',
