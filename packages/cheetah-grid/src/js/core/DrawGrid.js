@@ -1264,6 +1264,14 @@ class FocusControl extends EventTarget {
 			}
 			grid.focus();
 		});
+		let lastInputValue;
+		const inputClear = () => {
+			lastInputValue = this._input.value;
+			if (this._isComposition) {
+				return;
+			}
+			setSafeInputValue(this._input, '');
+		};
 
 		const handleCompositionEnd = () => {
 			this._isComposition = false;
@@ -1271,7 +1279,7 @@ class FocusControl extends EventTarget {
 			this._input.style.font = '';
 			const {value} = this._input;
 
-			setSafeInputValue(this._input, '');
+			inputClear();
 
 			if (!this._input.readOnly) {
 				this.fireListeners('input', value);
@@ -1299,7 +1307,7 @@ class FocusControl extends EventTarget {
 					cancelEvent(e);
 				}
 			}
-			setSafeInputValue(this._input, '');
+			inputClear();
 		});
 		this._handler.on(this._input, 'keydown', (e) => {
 			if (this._isComposition) {
@@ -1312,29 +1320,25 @@ class FocusControl extends EventTarget {
 			const keyCode = getKeyCode(e);
 			this.fireListeners('keydown', keyCode, e);
 
-			if (!this._input.readOnly && this._input.value) {
+			if (!this._input.readOnly && lastInputValue) {
 				// for Safari
-				this.fireListeners('input', this._input.value);
+				this.fireListeners('input', lastInputValue);
 			}
 
-			setSafeInputValue(this._input, '');
+			inputClear();
 		});
-		const inputClear = (e) => {
-			if (this._isComposition) {
-				return;
-			}
-			setSafeInputValue(this._input, '');
-		};
 		this._handler.on(this._input, 'keyup', (e) => {
 			if (this._isComposition) {
 				if (this._compositionEnd) {
 					handleCompositionEnd();
 				}
 			}
-			inputClear(e);
+			inputClear();
 		});
 
-		this._handler.on(this._input, 'input', inputClear);
+		this._handler.on(this._input, 'input', (e) => {
+			inputClear();
+		});
 		if (browser.IE) {
 			this._handler.on(document, 'keydown', (e) => {
 				if (e.target !== this._input) {
