@@ -54,6 +54,30 @@
 			});
 			expect(ret).toEqual(900);
 		});
+		it('toPx calc priority (1', function() {
+			const ret = calc.toPx('calc(30% - 60px * 3)', {
+				full: 1200,
+			});
+			expect(ret).toEqual((1200 * 0.30 - 60 * 3));
+		});
+		it('toPx calc priority (2', function() {
+			const ret = calc.toPx('calc(30% - (60px * 3))', {
+				full: 1200,
+			});
+			expect(ret).toEqual((1200 * 0.30 - 60 * 3));
+		});
+		it('toPx calc priority (3', function() {
+			const ret = calc.toPx('calc(30% - (60px * 3 + 2px * 4))', {
+				full: 1200,
+			});
+			expect(ret).toEqual((1200 * 0.30 - (60 * 3 + 2 * 4)));
+		});
+		it('toPx calc priority (4', function() {
+			const ret = calc.toPx('calc(30% - (60px * 3 * 2 / 2 * 2))', {
+				full: 1200,
+			});
+			expect(ret).toEqual((1200 * 0.30 - (60 * 3 * 2 / 2 * 2)));
+		});
 
 	});
 })();

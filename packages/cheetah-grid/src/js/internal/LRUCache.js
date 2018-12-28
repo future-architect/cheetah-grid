@@ -9,22 +9,25 @@ class LRUCache {
 	get(key) {
 		const val = this._map[key];
 		if (val) {
-			const idx = this._list.indexOf(key);
-			this._list.splice(idx, 1);
-			this._list.push(key);
+			const list = this._list;
+			const idx = list.indexOf(key);
+			list.splice(idx, 1);
+			list.push(key);
 		}
 		return val;
 	}
 	put(key, value) {
-		if (this._map[key]) {
-			const idx = this._list.indexOf(key);
-			this._list.splice(idx, 1);
+		const list = this._list;
+		const map = this._map;
+		if (map[key]) {
+			const idx = list.indexOf(key);
+			list.splice(idx, 1);
 		}
-		this._map[key] = value;
-		this._list.push(key);
-		if (this._list.length > this._cacheSize) {
-			const remKey = this._list.shift();
-			delete this._map[remKey];
+		map[key] = value;
+		list.push(key);
+		if (list.length > this._cacheSize) {
+			const remKey = list.shift();
+			delete map[remKey];
 		}
 	}
 }

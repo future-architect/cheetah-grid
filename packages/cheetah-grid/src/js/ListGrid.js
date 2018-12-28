@@ -551,25 +551,26 @@ class ListGrid extends DrawGrid {
 	 */
 	constructor(options = {}) {
 		super(adjustListGridOption(options));
-		this[_].header = options.header || [];
-		this[_].headerRowHeight = options.headerRowHeight || [];
+		const protectedSpace = this[_];
+		protectedSpace.header = options.header || [];
+		protectedSpace.headerRowHeight = options.headerRowHeight || [];
 		if (options.dataSource) {
 			_setDataSource(this, options.dataSource);
 		} else {
 			_setRecords(this, options.records);
 		}
 		_refreshHeader(this);
-		this[_].sortState = {
+		protectedSpace.sortState = {
 			col: -1,
 			row: -1,
 			order: undefined,
 		};
-		this[_].gridCanvasHelper = new GridCanvasHelper(this);
-		this[_].theme = themes.of(options.theme);
-		this[_].messageHandler = new MessageHandler(this, (col, row) => _getCellMessage(this, col, row));
-		this[_].tooltipHandler = new TooltipHandler(this);
+		protectedSpace.gridCanvasHelper = new GridCanvasHelper(this);
+		protectedSpace.theme = themes.of(options.theme);
+		protectedSpace.messageHandler = new MessageHandler(this, (col, row) => _getCellMessage(this, col, row));
+		protectedSpace.tooltipHandler = new TooltipHandler(this);
 		this.invalidate();
-		this[_].handler.on(window, 'resize', () => {
+		protectedSpace.handler.on(window, 'resize', () => {
 			this.updateSize();
 			this.updateScroll();
 			this.invalidate();
@@ -580,8 +581,9 @@ class ListGrid extends DrawGrid {
 	 * @returns {void}
 	 */
 	dispose() {
-		this[_].messageHandler.dispose();
-		this[_].tooltipHandler.dispose();
+		const protectedSpace = this[_];
+		protectedSpace.messageHandler.dispose();
+		protectedSpace.tooltipHandler.dispose();
 		super.dispose();
 	}
 	/**
@@ -881,12 +883,13 @@ class ListGrid extends DrawGrid {
 		return _getCellValue(this, col, row);
 	}
 	onDrawCell(col, row, context) {
-		const column = this[_].headerMap.columns[col];
+		const {headerMap} = this[_];
+		const column = headerMap.columns[col];
 
 		let draw;
 		let style;
-		if (row < this[_].headerMap.rowCount) {
-			const hd = this[_].headerMap.getCell(col, row);
+		if (row < headerMap.rowCount) {
+			const hd = headerMap.getCell(col, row);
 			draw = hd.headerType.onDrawCell;
 			({style} = hd);
 			_updateRect(this, col, row, context);
