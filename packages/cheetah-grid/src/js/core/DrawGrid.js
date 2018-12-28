@@ -39,6 +39,7 @@ const KEY_UP = 38;
 const KEY_RIGHT = 39;
 const KEY_DOWN = 40;
 const KEY_ALPHA_C = 67;
+const KEY_ALPHA_V = 86;
 
 const EVENT_TYPE = {
 	CLICK_CELL: 'click_cell',
@@ -1334,22 +1335,44 @@ class FocusControl extends EventTarget {
 		});
 
 		this._handler.on(this._input, 'input', inputClear);
-		this._handler.on(document, 'keydown', (e) => {
-			if (!browser.IE) {
-				return;
-			}
-			if (e.target !== this._input) {
-				return;
-			}
-			const keyCode = getKeyCode(e);
-			if (keyCode === KEY_ALPHA_C && e.ctrlKey) {
-				setSafeInputValue(this._input, 'dummy');
-				this._input.select();
-				setTimeout(() => {
-					setSafeInputValue(this._input, '');
-				}, 100);
-			}
-		});
+		if (browser.IE) {
+			this._handler.on(document, 'keydown', (e) => {
+				if (e.target !== this._input) {
+					return;
+				}
+				const keyCode = getKeyCode(e);
+				if (keyCode === KEY_ALPHA_C && e.ctrlKey) {
+					// When text is not selected copy-event is not emit, on IE.
+					setSafeInputValue(this._input, 'dummy');
+					this._input.select();
+					setTimeout(() => {
+						setSafeInputValue(this._input, '');
+					}, 100);
+				} else if (keyCode === KEY_ALPHA_V && e.ctrlKey) {
+					// When input is read-only paste-event is not emit, on IE.
+					if (this._input.readOnly) {
+						this._input.readOnly = false;
+						setTimeout(() => {
+							this._input.readOnly = true;
+							setSafeInputValue(this._input, '');
+						}, 10);
+					}
+				}
+			});
+		}
+		if (browser.Edge) {
+			this._handler.once(document, 'keydown', (e) => {
+				if (!isDescendantElement(parentElement, e.target)) {
+					return;
+				}
+				// When the input has focus on the first page opening, the paste-event and copy-event is not emit, on Edge.
+				const dummyInput = document.createElement('input');
+				grid.getElement().appendChild(dummyInput);
+				dummyInput.focus();
+				this._input.focus();
+				dummyInput.parentElement.removeChild(dummyInput);
+			});
+		}
 		this._handler.on(document, 'paste', (e) => {
 			if (!isDescendantElement(parentElement, e.target)) {
 				return;
@@ -1358,11 +1381,10 @@ class FocusControl extends EventTarget {
 			if (browser.IE) {
 				// IE
 				pasteText = window.clipboardData.getData('Text');
-
 			} else {
 				const {clipboardData} = e;
 				if (clipboardData.items) {
-					// Chrome & Firefox & more?
+					// Chrome & Firefox & Edge
 					pasteText = clipboardData.getData('text/plain');
 				} else {
 					// Safari

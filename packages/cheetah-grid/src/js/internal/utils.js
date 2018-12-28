@@ -48,19 +48,23 @@ function analyzeUserAgent() {
 	if (isNode) {
 		return {
 			IE: false,
+			Edge: false,
 			Chrome: false,
-			Firefox: false
+			Firefox: false,
+			Safari: false,
 		};
 	}	else {
 		const ua = window.navigator.userAgent.toLowerCase();
 		return {
 			IE: (ua.match(/(msie)/) || ua.match(/trident/)),
+			Edge: (ua.indexOf('edge') > -1),
 			Chrome: (ua.indexOf('chrome') > -1) && (ua.indexOf('edge') === -1),
-			Firefox: (ua.indexOf('firefox') > -1)
+			Firefox: (ua.indexOf('firefox') > -1),
+			Safari: (ua.indexOf('safari') > -1) && (ua.indexOf('edge') === -1),
 		};
 	}
 }
-const {IE, Chrome, Firefox} = analyzeUserAgent();
+const {IE, Chrome, Firefox, Edge, Safari} = analyzeUserAgent();
 
 function setReadonly(obj, name, value) {
 	Object.defineProperty(obj, name, {
@@ -230,16 +234,18 @@ function toBoxArray(obj) {
 	return obj;
 }
 
-// Chrome 33554431
-// FireFox 17895588
-// IE 10737433
 module.exports = {
 	isNode,
 	isDef,
 	browser: {
 		IE,
+		Edge,
 		Chrome,
 		Firefox,
+		Safari,
+		// Chrome 33554431
+		// FireFox 17895588
+		// IE 10737433
 		heightLimit: Chrome ? 33554431
 		: Firefox ? 17895588
 		: 10737433 // default IE limit
