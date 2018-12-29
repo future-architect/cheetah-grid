@@ -49,8 +49,19 @@ function tokenize(calc) {
 	return tokens;
 }
 
+const PRECEDENCE = {
+	'*': 3,
+	'/': 3,
+	'+': 2,
+	'-': 2
+};
+
 function lex(tokens, calc) {
-	function buildBinary(left, op, right) {
+	function buildBinaryExpNode(stack) {
+		const right = stack.pop();
+		const op = stack.pop();
+		const left = stack.pop();
+
 		if (!left || !left.nodeType ||
 			!op || op.type !== TYPE_OPERATOR ||
 			!right || !right.nodeType
@@ -66,18 +77,6 @@ function lex(tokens, calc) {
 	}
 
 	const stack = [];
-
-	const procMuitipleExpression = () => {
-		if (stack.length >= 3) {
-			const beforeOp = stack[stack.length - 2].value;
-			if ((beforeOp === '*' || beforeOp === '/')) {
-				const right = stack.pop();
-				const op = stack.pop();
-				const left = stack.pop();
-				stack.push(buildBinary(left, op, right));
-			}
-		}
-	};
 
 	while (tokens.length) {
 		const token = tokens.shift();
@@ -100,6 +99,12 @@ function lex(tokens, calc) {
 			stack.push(lex(tokens.slice(0, closeIndex), calc));
 			tokens.splice(0, closeIndex + 1);
 		} else if (token.type === TYPE_OPERATOR) {
+			if (stack.length >= 3) {
+				const beforeOp = stack[stack.length - 2].value;
+				if (PRECEDENCE[token.value] <= PRECEDENCE[beforeOp]) {
+					stack.push(buildBinaryExpNode(stack));
+				}
+			}
 			stack.push(token);
 		} else if (token.type === TYPE_UNIT) {
 			const {value} = token;
@@ -110,20 +115,15 @@ function lex(tokens, calc) {
 				value: num,
 				unit,
 			});
-			procMuitipleExpression();
 		} else if (token.type === TYPE_NUMBER) {
 			stack.push({
 				nodeType: NODE_TYPE_NUMBER,
 				value: parseFloat(token.value)
 			});
-			procMuitipleExpression();
 		}
 	}
 	while (stack.length > 1) {
-		const left = stack.shift();
-		const op = stack.shift();
-		const right = stack.shift();
-		stack.push(buildBinary(left, op, right));
+		stack.push(buildBinaryExpNode(stack));
 	}
 	return stack[0];
 }
@@ -133,10 +133,10 @@ function parse(calcStr) {
 	return lex(tokens, calcStr);
 }
 
-function calc(node, context) {
+function calcNode(node, context) {
 	if (node.nodeType === NODE_TYPE_BINARY_EXPRESSION) {
-		const left = calc(node.left, context);
-		const right = calc(node.right, context);
+		const left = calcNode(node.left, context);
+		const right = calcNode(node.right, context);
 
 		switch (node.op.value) {
 		case '+':
@@ -169,11 +169,10 @@ function calc(node, context) {
 
 function toPx(value, context) {
 	const ast = parse(value);
-	return calc(ast, context);
+	return calcNode(ast, context);
 }
 
 module.exports = {
-	parse,
 	toPx(value, context) {
 		if (typeof value === 'string') {
 			return toPx(value.trim(), context);
