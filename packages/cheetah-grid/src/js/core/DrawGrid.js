@@ -736,7 +736,7 @@ function _bindEvents(grid) {
 		}
 	});
 	handler.on(element, 'mouseup', (e) => {
-		if (!this.hasListeners(EV_MOUSEUP_CELL)) {
+		if (!grid.hasListeners(EV_MOUSEUP_CELL)) {
 			return;
 		}
 		const {eventArgs} = getCellEventArgsSet(e);

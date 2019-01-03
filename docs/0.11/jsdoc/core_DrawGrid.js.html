@@ -69,25 +69,43 @@ const KEY_DOWN = 40;
 const KEY_ALPHA_C = 67;
 const KEY_ALPHA_V = 86;
 
+const EV_CLICK_CELL = 'click_cell';
+const EV_DBLCLICK_CELL = 'dblclick_cell';
+const EV_DBLTAP_CELL = 'dbltap_cell';
+const EV_MOUSEDOWN_CELL = 'mousedown_cell';
+const EV_MOUSEUP_CELL = 'mouseup_cell';
+const EV_SELECTED_CELL = 'selected_cell';
+const EV_KEYDOWN = 'keydown';
+const EV_MOUSEMOVE_CELL = 'mousemove_cell';
+const EV_MOUSEENTER_CELL = 'mouseenter_cell';
+const EV_MOUSELEAVE_CELL = 'mouseleave_cell';
+const EV_MOUSEOVER_CELL = 'mouseover_cell';
+const EV_MOUSEOUT_CELL = 'mouseout_cell';
+const EV_INPUT_CELL = 'input_cell';
+const EV_PASTE_CELL = 'paste_cell';
+const EV_EDITABLEINPUT_CELL = 'editableinput_cell';
+const EV_MODIFY_STATUS_EDITABLEINPUT_CELL = 'modify_status_editableinput_cell';
+const EV_RESIZE_COLUMN = 'resize_column';
+const EV_SCROLL = 'scroll';
 const EVENT_TYPE = {
-	CLICK_CELL: 'click_cell',
-	DBLCLICK_CELL: 'dblclick_cell',
-	DBLTAP_CELL: 'dbltap_cell',
-	MOUSEDOWN_CELL: 'mousedown_cell',
-	MOUSEUP_CELL: 'mouseup_cell',
-	SELECTED_CELL: 'selected_cell',
-	KEYDOWN: 'keydown',
-	MOUSEMOVE_CELL: 'mousemove_cell',
-	MOUSEENTER_CELL: 'mouseenter_cell',
-	MOUSELEAVE_CELL: 'mouseleave_cell',
-	MOUSEOVER_CELL: 'mouseover_cell',
-	MOUSEOUT_CELL: 'mouseout_cell',
-	INPUT_CELL: 'input_cell',
-	PASTE_CELL: 'paste_cell',
-	EDITABLEINPUT_CELL: 'editableinput_cell',
-	MODIFY_STATUS_EDITABLEINPUT_CELL: 'modify_status_editableinput_cell',
-	RESIZE_COLUMN: 'resize_column',
-	SCROLL: 'scroll',
+	CLICK_CELL: EV_CLICK_CELL,
+	DBLCLICK_CELL: EV_DBLCLICK_CELL,
+	DBLTAP_CELL: EV_DBLTAP_CELL,
+	MOUSEDOWN_CELL: EV_MOUSEDOWN_CELL,
+	MOUSEUP_CELL: EV_MOUSEUP_CELL,
+	SELECTED_CELL: EV_SELECTED_CELL,
+	KEYDOWN: EV_KEYDOWN,
+	MOUSEMOVE_CELL: EV_MOUSEMOVE_CELL,
+	MOUSEENTER_CELL: EV_MOUSEENTER_CELL,
+	MOUSELEAVE_CELL: EV_MOUSELEAVE_CELL,
+	MOUSEOVER_CELL: EV_MOUSEOVER_CELL,
+	MOUSEOUT_CELL: EV_MOUSEOUT_CELL,
+	INPUT_CELL: EV_INPUT_CELL,
+	PASTE_CELL: EV_PASTE_CELL,
+	EDITABLEINPUT_CELL: EV_EDITABLEINPUT_CELL,
+	MODIFY_STATUS_EDITABLEINPUT_CELL: EV_MODIFY_STATUS_EDITABLEINPUT_CELL,
+	RESIZE_COLUMN: EV_RESIZE_COLUMN,
+	SCROLL: EV_SCROLL,
 };
 
 //private methods
@@ -690,6 +708,7 @@ function _getMouseAbstractPoint(grid, e) {
 }
 
 function _bindEvents(grid) {
+	const {handler, element, scrollable} = grid[_];
 	const getCellEventArgsSet = (e) => {
 		const abstractPos = _getMouseAbstractPoint(grid, e);
 		if (!abstractPos) {
@@ -720,14 +739,14 @@ function _bindEvents(grid) {
 		}
 		return limit.max !== limit.min;
 	};
-	grid[_].handler.on(grid[_].element, 'mousedown', (e) => {
+	handler.on(element, 'mousedown', (e) => {
 		const eventArgsSet = getCellEventArgsSet(e);
 		const {abstractPos, eventArgs} = eventArgsSet;
 		if (!abstractPos) {
 			return;
 		}
 		if (eventArgs) {
-			const results = grid.fireListeners(EVENT_TYPE.MOUSEDOWN_CELL, eventArgs);
+			const results = grid.fireListeners(EV_MOUSEDOWN_CELL, eventArgs);
 			if (array.findIndex(results, (v) => !v) >= 0) {
 				return;
 			}
@@ -744,9 +763,18 @@ function _bindEvents(grid) {
 			grid[_].cellSelector.start(e);
 		}
 	});
+	handler.on(element, 'mouseup', (e) => {
+		if (!grid.hasListeners(EV_MOUSEUP_CELL)) {
+			return;
+		}
+		const {eventArgs} = getCellEventArgsSet(e);
+		if (eventArgs) {
+			grid.fireListeners(EV_MOUSEUP_CELL, eventArgs);
+		}
+	});
 	let doubleTapBefore = null;
 	let longTouchId = null;
-	grid[_].handler.on(grid[_].element, 'touchstart', (e) => {
+	handler.on(element, 'touchstart', (e) => {
 
 		if (!doubleTapBefore) {
 			doubleTapBefore = getCellEventArgsSet(e).eventArgs;
@@ -758,7 +786,7 @@ function _bindEvents(grid) {
 			if (eventArgs &amp;&amp;
 					eventArgs.col === doubleTapBefore.col &amp;&amp;
 					eventArgs.row === doubleTapBefore.row) {
-				grid.fireListeners(EVENT_TYPE.DBLTAP_CELL, eventArgs);
+				grid.fireListeners(EV_DBLTAP_CELL, eventArgs);
 			}
 
 			doubleTapBefore = null;
@@ -793,9 +821,9 @@ function _bindEvents(grid) {
 			longTouchId = null;
 		}
 	}
-	grid[_].handler.on(grid[_].element, 'touchcancel', cancel);
-	grid[_].handler.on(grid[_].element, 'touchmove', cancel);
-	grid[_].handler.on(grid[_].element, 'touchend', (e) => {
+	handler.on(element, 'touchcancel', cancel);
+	handler.on(element, 'touchmove', cancel);
+	handler.on(element, 'touchend', (e) => {
 		if (longTouchId) {
 			clearTimeout(longTouchId);
 			grid[_].cellSelector.select(e);
@@ -807,53 +835,53 @@ function _bindEvents(grid) {
 	let mouseEnterCell = null;
 	let mouseOverCell = null;
 	function onMouseenterCell(cell) {
-		grid.fireListeners(EVENT_TYPE.MOUSEENTER_CELL, cell);
+		grid.fireListeners(EV_MOUSEENTER_CELL, cell);
 		mouseEnterCell = cell;
 	}
 	function onMouseleaveCell() {
 		const beforeMouseCell = mouseEnterCell;
 		mouseEnterCell = null;
 		if (beforeMouseCell) {
-			grid.fireListeners(EVENT_TYPE.MOUSELEAVE_CELL, {
+			grid.fireListeners(EV_MOUSELEAVE_CELL, {
 				col: beforeMouseCell.col,
 				row: beforeMouseCell.row,
 			});
 		}
 	}
 	function onMouseoverCell(cell) {
-		grid.fireListeners(EVENT_TYPE.MOUSEOVER_CELL, cell);
+		grid.fireListeners(EV_MOUSEOVER_CELL, cell);
 		mouseOverCell = cell;
 	}
 	function onMouseoutCell() {
 		const beforeMouseCell = mouseOverCell;
 		mouseOverCell = null;
 		if (beforeMouseCell) {
-			grid.fireListeners(EVENT_TYPE.MOUSEOUT_CELL, {
+			grid.fireListeners(EV_MOUSEOUT_CELL, {
 				col: beforeMouseCell.col,
 				row: beforeMouseCell.row,
 			});
 		}
 	}
-	const scrollElement = grid[_].scrollable.getElement();
-	grid[_].handler.on(scrollElement, 'mouseover', (e) => {
+	const scrollElement = scrollable.getElement();
+	handler.on(scrollElement, 'mouseover', (e) => {
 		isMouseover = true;
 	});
-	grid[_].handler.on(scrollElement, 'mouseout', (e) => {
+	handler.on(scrollElement, 'mouseout', (e) => {
 		isMouseover = false;
 		onMouseoutCell();
 	});
 
-	grid[_].handler.on(grid[_].element, 'mouseleave', (e) => {
+	handler.on(element, 'mouseleave', (e) => {
 		onMouseleaveCell();
 	});
 
-	grid[_].handler.on(grid[_].element, 'mousemove', (e) => {
+	handler.on(element, 'mousemove', (e) => {
 		const eventArgsSet = getCellEventArgsSet(e);
 		const {abstractPos, eventArgs} = eventArgsSet;
 		if (eventArgs) {
 			const beforeMouseCell = mouseEnterCell;
 			if (beforeMouseCell) {
-				grid.fireListeners(EVENT_TYPE.MOUSEMOVE_CELL, eventArgs);
+				grid.fireListeners(EV_MOUSEMOVE_CELL, eventArgs);
 				if (beforeMouseCell.col !== eventArgs.col || beforeMouseCell.row !== eventArgs.row) {
 					onMouseoutCell();
 					onMouseleaveCell();
@@ -880,7 +908,7 @@ function _bindEvents(grid) {
 				if (isMouseover) {
 					onMouseoverCell(cell);
 				}
-				grid.fireListeners(EVENT_TYPE.MOUSEMOVE_CELL, eventArgs);
+				grid.fireListeners(EV_MOUSEMOVE_CELL, eventArgs);
 			}
 		} else {
 			onMouseoutCell();
@@ -889,7 +917,7 @@ function _bindEvents(grid) {
 		if (grid[_].columnResizer.moving(e) || grid[_].cellSelector.moving(e)) {
 			return;
 		}
-		const {style} = grid[_].element;
+		const {style} = element;
 		if (!abstractPos) {
 			if (style.cursor === 'col-resize') {
 				style.cursor = '';
@@ -905,39 +933,39 @@ function _bindEvents(grid) {
 			}
 		}
 	});
-	grid[_].handler.on(grid[_].element, 'click', (e) => {
+	handler.on(element, 'click', (e) => {
 		if (grid[_].columnResizer.lastMoving(e) || grid[_].cellSelector.lastMoving(e)) {
 			return;
 		}
-		if (!grid.hasListeners(EVENT_TYPE.CLICK_CELL)) {
+		if (!grid.hasListeners(EV_CLICK_CELL)) {
 			return;
 		}
 		const {eventArgs} = getCellEventArgsSet(e);
 		if (!eventArgs) {
 			return;
 		}
-		grid.fireListeners(EVENT_TYPE.CLICK_CELL, eventArgs);
+		grid.fireListeners(EV_CLICK_CELL, eventArgs);
 	});
-	grid[_].handler.on(grid[_].element, 'dblclick', (e) => {
-		if (!grid.hasListeners(EVENT_TYPE.DBLCLICK_CELL)) {
+	handler.on(element, 'dblclick', (e) => {
+		if (!grid.hasListeners(EV_DBLCLICK_CELL)) {
 			return;
 		}
 		const {eventArgs} = getCellEventArgsSet(e);
 		if (!eventArgs) {
 			return;
 		}
-		grid.fireListeners(EVENT_TYPE.DBLCLICK_CELL, eventArgs);
+		grid.fireListeners(EV_DBLCLICK_CELL, eventArgs);
 	});
 	grid[_].focusControl.listen('keydown', (keyCode, e) => {
-		grid.fireListeners(EVENT_TYPE.KEYDOWN, keyCode, e);
+		grid.fireListeners(EV_KEYDOWN, keyCode, e);
 	});
-	grid[_].selection.listen(EVENT_TYPE.SELECTED_CELL, (data) => {
-		grid.fireListeners(EVENT_TYPE.SELECTED_CELL, data, data.selected);
+	grid[_].selection.listen(EV_SELECTED_CELL, (data) => {
+		grid.fireListeners(EV_SELECTED_CELL, data, data.selected);
 	});
 
-	grid[_].scrollable.onScroll((e) => {
+	scrollable.onScroll((e) => {
 		_onScroll(grid, e);
-		grid.fireListeners(EVENT_TYPE.SCROLL, {event: e});
+		grid.fireListeners(EV_SCROLL, {event: e});
 	});
 	grid[_].focusControl.onKeyDownMove((e) => {
 		_onKeyDownMove(grid, e);
@@ -970,7 +998,7 @@ function _bindEvents(grid) {
 	grid[_].focusControl.onPaste(({value, event}) => {
 		const normalizeValue = value.replace(/\r?\n$/, '');
 		const {col, row} = grid[_].selection.select;
-		grid.fireListeners(EVENT_TYPE.PASTE_CELL, {
+		grid.fireListeners(EV_PASTE_CELL, {
 			col,
 			row,
 			value,
@@ -981,7 +1009,7 @@ function _bindEvents(grid) {
 	});
 	grid[_].focusControl.onInput((value) => {
 		const {col, row} = grid[_].selection.select;
-		grid.fireListeners(EVENT_TYPE.INPUT_CELL, {col, row, value});
+		grid.fireListeners(EV_INPUT_CELL, {col, row, value});
 	});
 	grid.bindEventsInternal();
 }
@@ -1005,11 +1033,15 @@ function _getResizeColAt(grid, abstractX, abstractY, offset = 5) {
 	return -1;
 }
 function _getVisibleRect(grid) {
+	const {
+		scroll: {left, top},
+		canvas: {width, height}
+	} = grid[_];
 	return new Rect(
-			grid[_].scroll.left,
-			grid[_].scroll.top,
-			grid[_].canvas.width,
-			grid[_].canvas.height
+			left,
+			top,
+			width,
+			height
 	);
 }
 function _getScrollableVisibleRect(grid) {
@@ -1075,13 +1107,15 @@ class BaseMouseDownMover {
 		return pt.x === last.x &amp;&amp; pt.y === last.y;
 	}
 	_bindMoveAndUp(e) {
+		const events = this._events;
+		const handler = this._handler;
 		if (!isTouchEvent(e)) {
-			this._events.mousemove = this._handler.on(document.body, 'mousemove', (e) => this._mouseMove(e));
-			this._events.mouseup = this._handler.on(document.body, 'mouseup', (e) => this._mouseUp(e));
+			events.mousemove = handler.on(document.body, 'mousemove', (e) => this._mouseMove(e));
+			events.mouseup = handler.on(document.body, 'mouseup', (e) => this._mouseUp(e));
 		} else {
-			this._events.touchmove = this._handler.on(document.body, 'touchmove', (e) => this._mouseMove(e), {passive: false});
-			this._events.touchend = this._handler.on(document.body, 'touchend', (e) => this._mouseUp(e));
-			this._events.touchcancel = this._handler.on(document.body, 'touchcancel', (e) => this._mouseUp(e));
+			events.touchmove = handler.on(document.body, 'touchmove', (e) => this._mouseMove(e), {passive: false});
+			events.touchend = handler.on(document.body, 'touchend', (e) => this._mouseUp(e));
+			events.touchcancel = handler.on(document.body, 'touchcancel', (e) => this._mouseUp(e));
 		}
 		this._started = true;
 		this._moved = false;
@@ -1101,12 +1135,14 @@ class BaseMouseDownMover {
 		//protected
 	}
 	_mouseUp(e) {
-		this._handler.off(this._events.mousemove);
-		this._handler.off(this._events.touchmove);
-		this._handler.off(this._events.mouseup);
-		this._handler.off(this._events.touchend);
-		// this._handler.off(this._events.mouseleave);
-		this._handler.off(this._events.touchcancel);
+		const events = this._events;
+		const handler = this._handler;
+		handler.off(events.mousemove);
+		handler.off(events.touchmove);
+		handler.off(events.mouseup);
+		handler.off(events.touchend);
+		// handler.off(this._events.mouseleave);
+		handler.off(events.touchcancel);
 
 		this._started = false;
 
@@ -1157,44 +1193,51 @@ class CellSelector extends BaseMouseDownMover {
 	}
 	_moveInternal(e) {
 		const cell = this._getTargetCell(e);
-		if (!cell || (this._cell.col === cell.col &amp;&amp; this._cell.row === cell.row)) {
+		if (!cell) {
 			return false;
 		}
-		_moveFocusCell(this._grid, cell.col, cell.row, true);
+		const {col: oldCol, row: oldRow} = this._cell;
+		const {col: newCol, row: newRow} = cell;
+		if (oldCol === newCol &amp;&amp; oldRow === newRow) {
+			return false;
+		}
+		const grid = this._grid;
+		_moveFocusCell(grid, newCol, newRow, true);
 
 		//make visible
 		const makeVisibleCol = (() => {
-			if (cell.col &lt; this._cell.col &amp;&amp; 0 &lt; cell.col) {
+			if (newCol &lt; oldCol &amp;&amp; 0 &lt; newCol) {
 				// move left
-				return cell.col - 1;
-			} else if (this._cell.col &lt; cell.col &amp;&amp; cell.col + 1 &lt; this._grid.colCount) {
+				return newCol - 1;
+			} else if (oldCol &lt; newCol &amp;&amp; newCol + 1 &lt; grid.colCount) {
 				// move right
-				return cell.col + 1;
+				return newCol + 1;
 			}
-			return cell.col;
+			return newCol;
 		})();
 		const makeVisibleRow = (() => {
-			if (cell.row &lt; this._cell.row &amp;&amp; 0 &lt; cell.row) {
+			if (newRow &lt; oldRow &amp;&amp; 0 &lt; newRow) {
 				// move up
-				return cell.row - 1;
-			} else if (this._cell.row &lt; cell.row &amp;&amp; cell.row + 1 &lt; this._grid.rowCount) {
+				return newRow - 1;
+			} else if (oldRow &lt; newRow &amp;&amp; newRow + 1 &lt; grid.rowCount) {
 				// move down
-				return cell.row + 1;
+				return newRow + 1;
 			}
-			return cell.row;
+			return newRow;
 		})();
-		if (makeVisibleCol !== cell.col || makeVisibleRow !== cell.row) {
-			this._grid.makeVisibleCell(makeVisibleCol, makeVisibleRow);
+		if (makeVisibleCol !== newCol || makeVisibleRow !== newRow) {
+			grid.makeVisibleCell(makeVisibleCol, makeVisibleRow);
 		}
 		this._cell = cell;
 		return true;
 	}
 	_getTargetCell(e) {
-		const abstractPos = _getMouseAbstractPoint(this._grid, e);
+		const grid = this._grid;
+		const abstractPos = _getMouseAbstractPoint(grid, e);
 		if (!abstractPos) {
 			return null;
 		}
-		const cell = this._grid.getCellAt(abstractPos.x, abstractPos.y);
+		const cell = grid.getCellAt(abstractPos.x, abstractPos.y);
 		if (cell.col &lt; 0 || cell.row &lt; 0) {
 			return null;
 		}
@@ -1246,7 +1289,7 @@ class ColumnResizer extends BaseMouseDownMover {
 		rect.left = this._invalidateAbsoluteLeft;
 		_invalidateRect(this._grid, rect);
 
-		this._grid.fireListeners(EVENT_TYPE.RESIZE_COLUMN, {col: this._targetCol});
+		this._grid.fireListeners(EV_RESIZE_COLUMN, {col: this._targetCol});
 
 		return true;
 	}
@@ -1276,15 +1319,15 @@ class FocusControl extends EventTarget {
 		super();
 		this._grid = grid;
 		this._scrollable = scrollable;
-		this._handler = new EventHandler();
-		this._input = document.createElement('input');
-		this._input.classList.add('grid-focus-control');
-		this._input.readOnly = true;
-		parentElement.appendChild(this._input);
+		const handler = this._handler = new EventHandler();
+		const input = this._input = document.createElement('input');
+		input.classList.add('grid-focus-control');
+		input.readOnly = true;
+		parentElement.appendChild(input);
 
-		this._handler.on(this._input, 'compositionstart', (e) => {
-			this._input.classList.add('composition');
-			this._input.style.font = this._grid.font || '16px sans-serif';
+		handler.on(input, 'compositionstart', (e) => {
+			input.classList.add('composition');
+			input.style.font = grid.font || '16px sans-serif';
 			this._isComposition = true;
 			if (this._compositionEnd) {
 				clearTimeout(this._compositionEnd);
@@ -1294,22 +1337,22 @@ class FocusControl extends EventTarget {
 		});
 		let lastInputValue;
 		const inputClear = () => {
-			lastInputValue = this._input.value;
+			lastInputValue = input.value;
 			if (this._isComposition) {
 				return;
 			}
-			setSafeInputValue(this._input, '');
+			setSafeInputValue(input, '');
 		};
 
 		const handleCompositionEnd = () => {
 			this._isComposition = false;
-			this._input.classList.remove('composition');
-			this._input.style.font = '';
-			const {value} = this._input;
+			input.classList.remove('composition');
+			input.style.font = '';
+			const {value} = input;
 
 			inputClear();
 
-			if (!this._input.readOnly) {
+			if (!input.readOnly) {
 				this.fireListeners('input', value);
 			}
 
@@ -1318,14 +1361,14 @@ class FocusControl extends EventTarget {
 				delete this._compositionEnd;
 			}
 		};
-		this._handler.on(this._input, 'compositionend', (e) => {
+		handler.on(input, 'compositionend', (e) => {
 			this._compositionEnd = setTimeout(handleCompositionEnd);
 		});
-		this._handler.on(this._input, 'keypress', (e) => {
+		handler.on(input, 'keypress', (e) => {
 			if (this._isComposition) {
 				return;
 			}
-			if (!this._input.readOnly &amp;&amp; e.key &amp;&amp; e.key.length === 1) {
+			if (!input.readOnly &amp;&amp; e.key &amp;&amp; e.key.length === 1) {
 				if (e.key === 'c' &amp;&amp; (e.ctrlKey || e.metaKey)) {
 					//copy! for Firefox &amp; Safari
 				} else	if (e.key === 'v' &amp;&amp; (e.ctrlKey || e.metaKey)) {
@@ -1337,7 +1380,7 @@ class FocusControl extends EventTarget {
 			}
 			inputClear();
 		});
-		this._handler.on(this._input, 'keydown', (e) => {
+		handler.on(input, 'keydown', (e) => {
 			if (this._isComposition) {
 				if (this._compositionEnd) {
 					handleCompositionEnd();
@@ -1348,14 +1391,14 @@ class FocusControl extends EventTarget {
 			const keyCode = getKeyCode(e);
 			this.fireListeners('keydown', keyCode, e);
 
-			if (!this._input.readOnly &amp;&amp; lastInputValue) {
+			if (!input.readOnly &amp;&amp; lastInputValue) {
 				// for Safari
 				this.fireListeners('input', lastInputValue);
 			}
 
 			inputClear();
 		});
-		this._handler.on(this._input, 'keyup', (e) => {
+		handler.on(input, 'keyup', (e) => {
 			if (this._isComposition) {
 				if (this._compositionEnd) {
 					handleCompositionEnd();
@@ -1364,36 +1407,36 @@ class FocusControl extends EventTarget {
 			inputClear();
 		});
 
-		this._handler.on(this._input, 'input', (e) => {
+		handler.on(input, 'input', (e) => {
 			inputClear();
 		});
 		if (browser.IE) {
-			this._handler.on(document, 'keydown', (e) => {
-				if (e.target !== this._input) {
+			handler.on(document, 'keydown', (e) => {
+				if (e.target !== input) {
 					return;
 				}
 				const keyCode = getKeyCode(e);
 				if (keyCode === KEY_ALPHA_C &amp;&amp; e.ctrlKey) {
 					// When text is not selected copy-event is not emit, on IE.
-					setSafeInputValue(this._input, 'dummy');
-					this._input.select();
+					setSafeInputValue(input, 'dummy');
+					input.select();
 					setTimeout(() => {
-						setSafeInputValue(this._input, '');
+						setSafeInputValue(input, '');
 					}, 100);
 				} else if (keyCode === KEY_ALPHA_V &amp;&amp; e.ctrlKey) {
 					// When input is read-only paste-event is not emit, on IE.
-					if (this._input.readOnly) {
-						this._input.readOnly = false;
+					if (input.readOnly) {
+						input.readOnly = false;
 						setTimeout(() => {
-							this._input.readOnly = true;
-							setSafeInputValue(this._input, '');
+							input.readOnly = true;
+							setSafeInputValue(input, '');
 						}, 10);
 					}
 				}
 			});
 		}
 		if (browser.Edge) {
-			this._handler.once(document, 'keydown', (e) => {
+			handler.once(document, 'keydown', (e) => {
 				if (!isDescendantElement(parentElement, e.target)) {
 					return;
 				}
@@ -1401,11 +1444,11 @@ class FocusControl extends EventTarget {
 				const dummyInput = document.createElement('input');
 				grid.getElement().appendChild(dummyInput);
 				dummyInput.focus();
-				this._input.focus();
+				input.focus();
 				dummyInput.parentElement.removeChild(dummyInput);
 			});
 		}
-		this._handler.on(document, 'paste', (e) => {
+		handler.on(document, 'paste', (e) => {
 			if (!isDescendantElement(parentElement, e.target)) {
 				return;
 			}
@@ -1429,14 +1472,14 @@ class FocusControl extends EventTarget {
 				this.fireListeners('paste', {value: pasteText, event: e});
 			}
 		});
-		this._handler.on(document, 'copy', (e) => {
+		handler.on(document, 'copy', (e) => {
 			if (this._isComposition) {
 				return;
 			}
 			if (!isDescendantElement(parentElement, e.target)) {
 				return;
 			}
-			setSafeInputValue(this._input, '');
+			setSafeInputValue(input, '');
 			const data = array.find(this.fireListeners('copy'), isDef);
 			if (isDef(data)) {
 				cancelEvent(e);
@@ -1479,11 +1522,12 @@ class FocusControl extends EventTarget {
 		this._input.focus();
 	}
 	setFocusRect(rect) {
+		const input = this._input;
 		const top = this._scrollable.calcTop(rect.top);
-		this._input.style.top = `${(top - style.getScrollBarSize()).toFixed()}px`;//position:relative だとずれるが、IEは position:relativeじゃないと最大値まで利用できない
-		this._input.style.left = `${rect.left.toFixed()}px`;
-		this._input.style.width = `${rect.width.toFixed()}px`;
-		this._input.style.height = `${rect.height.toFixed()}px`;
+		input.style.top = `${(top - style.getScrollBarSize()).toFixed()}px`;//position:relative だとずれるが、IEは position:relativeじゃないと最大値まで利用できない
+		input.style.left = `${rect.left.toFixed()}px`;
+		input.style.width = `${rect.width.toFixed()}px`;
+		input.style.height = `${rect.height.toFixed()}px`;
 	}
 	set editMode(editMode) {
 		this._input.readOnly = !editMode;
@@ -1515,11 +1559,11 @@ class FocusControl extends EventTarget {
 	}
 	storeInputStatus() {
 		const el = this._input;
-		this._inputStatus = {};
+		const inputStatus = this._inputStatus = {};
 		const atts = el.attributes;
 		for (let i = 0, n = atts.length; i &lt; n; i++) {
 			const att = atts[i];
-			this._inputStatus[att.name] = att.value;
+			inputStatus[att.name] = att.value;
 		}
 	}
 	setDefaultInputStatus() {
@@ -1553,10 +1597,12 @@ class Selection extends EventTarget {
 		this._end = {col: 0, row: 0};
 	}
 	get range() {
-		const startCol = Math.min(this._start.col, this._end.col);
-		const startRow = Math.min(this._start.row, this._end.row);
-		const endCol = Math.max(this._start.col, this._end.col);
-		const endRow = Math.max(this._start.row, this._end.row);
+		const start = this._start;
+		const end = this._end;
+		const startCol = Math.min(start.col, end.col);
+		const startRow = Math.min(start.row, end.row);
+		const endCol = Math.max(start.col, end.col);
+		const endRow = Math.max(start.row, end.row);
 		return {
 			start: {
 				col: startCol,
@@ -1630,8 +1676,8 @@ class Selection extends EventTarget {
 					col: after.col,
 					row: after.row,
 				};
-				this.fireListeners(EVENT_TYPE.SELECTED_CELL, before);
-				this.fireListeners(EVENT_TYPE.SELECTED_CELL, after);
+				this.fireListeners(EV_SELECTED_CELL, before);
+				this.fireListeners(EV_SELECTED_CELL, after);
 			} finally {
 				this._isWraped = false;
 			}
@@ -1934,34 +1980,37 @@ class DrawGrid extends EventTarget {
 				parentElement,
 			} = {}) {
 		super();
-		this[_] = {};
+		const protectedSpace = this[_] = {};
 		style.initDocument();
-		this[_].element = createRootElement();
-		this[_].scrollable = new Scrollable();
-		this[_].handler = new EventHandler();
-		this[_].selection = new Selection(this);
-		this[_].focusControl = new FocusControl(this, this[_].scrollable.getElement(), this[_].scrollable);
+		protectedSpace.element = createRootElement();
+		protectedSpace.scrollable = new Scrollable();
+		protectedSpace.handler = new EventHandler();
+		protectedSpace.selection = new Selection(this);
+		protectedSpace.focusControl = new FocusControl(
+				this, protectedSpace.scrollable.getElement(),
+				protectedSpace.scrollable
+		);
 
-		this[_].canvas = hiDPI.transform(document.createElement('canvas'));
-		this[_].context = this[_].canvas.getContext('2d', {alpha: false});
+		protectedSpace.canvas = hiDPI.transform(document.createElement('canvas'));
+		protectedSpace.context = protectedSpace.canvas.getContext('2d', {alpha: false});
 
-		this[_].rowCount = rowCount;
-		this[_].colCount = colCount;
-		this[_].frozenColCount = frozenColCount;
-		this[_].frozenRowCount = frozenRowCount;
+		protectedSpace.rowCount = rowCount;
+		protectedSpace.colCount = colCount;
+		protectedSpace.frozenColCount = frozenColCount;
+		protectedSpace.frozenRowCount = frozenRowCount;
 
-		this[_].defaultRowHeight = defaultRowHeight;
-		this[_].defaultColWidth = defaultColWidth;
+		protectedSpace.defaultRowHeight = defaultRowHeight;
+		protectedSpace.defaultColWidth = defaultColWidth;
 
-		this[_].font = font;
-		this[_].underlayBackgroundColor = underlayBackgroundColor;
+		protectedSpace.font = font;
+		protectedSpace.underlayBackgroundColor = underlayBackgroundColor;
 
 		/////
-		this[_].rowHeightsMap = new NumberMap();
-		this[_].colWidthsMap = new NumberMap();
-		this[_].colWidthsLimit = {};
-		this[_].calcWidthContext = {
-			_: this[_],
+		protectedSpace.rowHeightsMap = new NumberMap();
+		protectedSpace.colWidthsMap = new NumberMap();
+		protectedSpace.colWidthsLimit = {};
+		protectedSpace.calcWidthContext = {
+			_: protectedSpace,
 			get full() {
 				return this._.canvas.width;
 			},
@@ -1970,17 +2019,17 @@ class DrawGrid extends EventTarget {
 			}
 		};
 
-		this[_].columnResizer = new ColumnResizer(this);
-		this[_].cellSelector = new CellSelector(this);
+		protectedSpace.columnResizer = new ColumnResizer(this);
+		protectedSpace.cellSelector = new CellSelector(this);
 
-		this[_].drawCells = {};
-		this[_].cellTextOverflows = {};
+		protectedSpace.drawCells = {};
+		protectedSpace.cellTextOverflows = {};
 
-		this[_].element.appendChild(this[_].canvas);
-		this[_].element.appendChild(this[_].scrollable.getElement());
+		protectedSpace.element.appendChild(protectedSpace.canvas);
+		protectedSpace.element.appendChild(protectedSpace.scrollable.getElement());
 		this.updateScroll();
 		if (parentElement) {
-			parentElement.appendChild(this[_].element);
+			parentElement.appendChild(protectedSpace.element);
 			this.updateSize();
 		} else {
 			this.updateSize();
@@ -2164,21 +2213,22 @@ class DrawGrid extends EventTarget {
 	 */
 	updateSize() {
 		//スタイルをクリアしてサイズ値を取得
-		this[_].canvas.style.width = '';
-		this[_].canvas.style.height = '';
-		const width = Math.floor(this[_].canvas.offsetWidth ||
-					this[_].canvas.parentElement.offsetWidth - style.getScrollBarSize()/*for legacy*/
+		const {canvas} = this[_];
+		canvas.style.width = '';
+		canvas.style.height = '';
+		const width = Math.floor(canvas.offsetWidth ||
+					canvas.parentElement.offsetWidth - style.getScrollBarSize()/*for legacy*/
 		);
-		const height = Math.floor(this[_].canvas.offsetHeight ||
-					this[_].canvas.parentElement.offsetHeight - style.getScrollBarSize()/*for legacy*/
+		const height = Math.floor(canvas.offsetHeight ||
+					canvas.parentElement.offsetHeight - style.getScrollBarSize()/*for legacy*/
 		);
 
-		this[_].canvas.width = width;
-		this[_].canvas.height = height;
+		canvas.width = width;
+		canvas.height = height;
 
 		//整数で一致させるためstyleをセットして返す
-		this[_].canvas.style.width = `${width}px`;
-		this[_].canvas.style.height = `${height}px`;
+		canvas.style.width = `${width}px`;
+		canvas.style.height = `${height}px`;
 
 		const sel = this[_].selection.select;
 		this[_].focusControl.setFocusRect(this.getCellRect(sel.col, sel.row));
@@ -2194,10 +2244,10 @@ class DrawGrid extends EventTarget {
 		if (newHeight === scrollable.scrollHeight &amp;&amp; newWidth === scrollable.scrollWidth) {
 			return false;
 		}
-		this[_].scrollable.setScrollSize(_getScrollWidth(this), _getScrollHeight(this));
+		scrollable.setScrollSize(_getScrollWidth(this), _getScrollHeight(this));
 		this[_].scroll = {
-			left: this[_].scrollable.scrollLeft,
-			top: this[_].scrollable.scrollTop,
+			left: scrollable.scrollLeft,
+			top: scrollable.scrollTop,
 		};
 		return true;
 	}
@@ -2351,8 +2401,9 @@ class DrawGrid extends EventTarget {
 		);
 	}
 	isFrozenCell(col, row) {
-		const isFrozenRow = this[_].frozenRowCount > 0 &amp;&amp; row &lt; this[_].frozenRowCount;
-		const isFrozenCol = this[_].frozenColCount > 0 &amp;&amp; col &lt; this[_].frozenColCount;
+		const {frozenRowCount, frozenColCount} = this[_];
+		const isFrozenRow = frozenRowCount > 0 &amp;&amp; row &lt; frozenRowCount;
+		const isFrozenCol = frozenColCount > 0 &amp;&amp; col &lt; frozenColCount;
 		if (isFrozenRow || isFrozenCol) {
 			return {
 				row: isFrozenRow,
@@ -2401,18 +2452,19 @@ class DrawGrid extends EventTarget {
 		if (visibleRect.contains(rect)) {
 			return;
 		}
+		const {scrollable} = this[_];
 		if (!isFrozenCell || !isFrozenCell.col) {
 			if (rect.left &lt; visibleRect.left) {
-				this[_].scrollable.scrollLeft -= visibleRect.left - rect.left;
+				scrollable.scrollLeft -= visibleRect.left - rect.left;
 			} else if (visibleRect.right &lt; rect.right) {
-				this[_].scrollable.scrollLeft -= visibleRect.right - rect.right;
+				scrollable.scrollLeft -= visibleRect.right - rect.right;
 			}
 		}
 		if (!isFrozenCell || !isFrozenCell.row) {
 			if (rect.top &lt; visibleRect.top) {
-				this[_].scrollable.scrollTop -= visibleRect.top - rect.top;
+				scrollable.scrollTop -= visibleRect.top - rect.top;
 			} else if (visibleRect.bottom &lt; rect.bottom) {
-				this[_].scrollable.scrollTop -= visibleRect.bottom - rect.bottom;
+				scrollable.scrollTop -= visibleRect.bottom - rect.bottom;
 			}
 		}
 	}
@@ -2423,33 +2475,34 @@ class DrawGrid extends EventTarget {
 	 * @return {void}
 	 */
 	focusCell(col, row) {
-		const oldEditMode = this[_].focusControl.editMode;
+		const {focusControl} = this[_];
+		const oldEditMode = focusControl.editMode;
 		if (oldEditMode) {
-			this[_].focusControl.resetInputStatus();
+			focusControl.resetInputStatus();
 		}
 
-		this[_].focusControl.setFocusRect(this.getCellRect(col, row));
+		focusControl.setFocusRect(this.getCellRect(col, row));
 
 		const {col: selCol, row: selRow} = this[_].selection.select;
 		const results = this.fireListeners(
-				EVENT_TYPE.EDITABLEINPUT_CELL,
+				EV_EDITABLEINPUT_CELL,
 				{col: selCol, row: selRow}
 		);
 
 		const editMode = (array.findIndex(results, (v) => !!v) >= 0);
-		this[_].focusControl.editMode = editMode;
+		focusControl.editMode = editMode;
 
 		if (editMode) {
-			this[_].focusControl.storeInputStatus();
-			this[_].focusControl.setDefaultInputStatus();
+			focusControl.storeInputStatus();
+			focusControl.setDefaultInputStatus();
 			this.fireListeners(
-					EVENT_TYPE.MODIFY_STATUS_EDITABLEINPUT_CELL,
-					{col: selCol, row: selRow, input: this[_].focusControl.input}
+					EV_MODIFY_STATUS_EDITABLEINPUT_CELL,
+					{col: selCol, row: selRow, input: focusControl.input}
 			);
 		}
 
 		// Failure occurs in IE if focus is not last
-		this[_].focusControl.focus();
+		focusControl.focus();
 	}
 	/**
 	 * Redraws the range of the given cell.
@@ -2482,14 +2535,15 @@ class DrawGrid extends EventTarget {
 		const invalidateTarget = visibleRect.intersection(cellsRect);
 		if (invalidateTarget) {
 
-			if (this[_].frozenColCount > 0 &amp;&amp; endCol >= this[_].frozenColCount) {
+			const {frozenColCount, frozenRowCount} = this[_];
+			if (frozenColCount > 0 &amp;&amp; endCol >= frozenColCount) {
 				const frozenRect = _getFrozenColsRect(this);
 				if (frozenRect.intersection(invalidateTarget)) {
 					invalidateTarget.left = Math.min(frozenRect.right - 1, frozenRect.right);
 				}
 			}
 
-			if (this[_].frozenRowCount > 0 &amp;&amp; endRow >= this[_].frozenRowCount) {
+			if (frozenRowCount > 0 &amp;&amp; endRow >= frozenRowCount) {
 				const frozenRect = _getFrozenRowsRect(this);
 				if (frozenRect.intersection(invalidateTarget)) {
 					invalidateTarget.top = Math.min(frozenRect.bottom - 1, invalidateTarget.top);
@@ -2574,19 +2628,20 @@ class DrawGrid extends EventTarget {
 	 */
 	dispose() {
 		super.dispose();
-		this[_].handler.dispose();
-		this[_].scrollable.dispose();
-		this[_].focusControl.dispose();
-		this[_].columnResizer.dispose();
-		this[_].cellSelector.dispose();
-		if (this[_].disposables) {
-			this[_].disposables.forEach((disposable) => disposable.dispose());
-			this[_].disposables = null;
+		const protectedSpace = this[_];
+		protectedSpace.handler.dispose();
+		protectedSpace.scrollable.dispose();
+		protectedSpace.focusControl.dispose();
+		protectedSpace.columnResizer.dispose();
+		protectedSpace.cellSelector.dispose();
+		if (protectedSpace.disposables) {
+			protectedSpace.disposables.forEach((disposable) => disposable.dispose());
+			protectedSpace.disposables = null;
 		}
 
-		const {parentElement} = this[_].element;
+		const {parentElement} = protectedSpace.element;
 		if (parentElement) {
-			parentElement.removeChild(this[_].element);
+			parentElement.removeChild(protectedSpace.element);
 		}
 	}
 	getAttachCellArea(col, row) {
