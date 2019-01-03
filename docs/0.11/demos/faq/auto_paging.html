@@ -290,8 +290,7 @@ var grid = new cheetahGrid.ListGrid({
   header: [{
     field: 'personid',
     caption: 'ID',
-    width: 100,
-    columnType: 'center'
+    width: 100
   }, {
     field: 'fname',
     caption: 'First Name',
@@ -353,7 +352,7 @@ grid.dataSource = dataSource; //
 <span class="hljs-keyword">const</span> grid = <span class="hljs-keyword">new</span> cheetahGrid.ListGrid({
 	<span class="hljs-attr">parentElement</span>: <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample'</span>),
 	<span class="hljs-attr">header</span>: [
-		{<span class="hljs-attr">field</span>: <span class="hljs-string">'personid'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'ID'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">100</span>, <span class="hljs-attr">columnType</span>: <span class="hljs-string">'center'</span>},
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'personid'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'ID'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">100</span>},
 		{<span class="hljs-attr">field</span>: <span class="hljs-string">'fname'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'First Name'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">200</span>},
 		{<span class="hljs-attr">field</span>: <span class="hljs-string">'lname'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'Last Name'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">200</span>},
 		{<span class="hljs-attr">field</span>: <span class="hljs-string">'email'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'Email'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">250</span>},
