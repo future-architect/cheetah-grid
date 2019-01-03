@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="author" content="Cheetah Grid">
+    <meta name="keywords" content="spreadsheet,grid,canvas,table,web-components">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Cheetah Grid - Cell Message</title>
+    <link rel="shortcut icon" type="image/x-icon" href="./../../../icon_512x512.ico">
+
+    <link rel="stylesheet" type="text/css" href="./../../css/style.css">
+    <link rel="stylesheet" type="text/css" href="./../../css/highlightjs.css">
+    
+    <!-- <script src="http://localhost:35729/livereload.js"></script> -->
+    
+    <script type="text/javascript" src="https://unpkg.com/cheetah-grid@0.11||0.10"></script>
+
+    <style type="text/css">
+        html {
+            height: 100%;
+        }
+        body {
+            height: calc(100% - 100px);
+        }
+        .contents {
+            padding: 30px;
+            box-sizing: border-box;
+        }
+        .demo-grid {
+            width: 100%;
+            height: 300px;
+            box-sizing: border-box;
+            border: solid 1px #ddd;
+        }
+        .demo-grid.large {
+            height: 500px;
+        }
+        .demo-grid.middle {
+            height: 300px;   
+        }
+        .demo-grid.small {
+            height: 240px;   
+        }
+        .log {
+            width: 100%;
+            height: 80px;
+            background-color: #F5F5F5;
+        }
+
+        .hljs { 
+             tab-size: 4;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <nav class="header primary" id="header-nav">
+    	<div class="nav-wrapper">
+    		<a href="./../../../index.html">
+    			<img src="./../../../logo.png" style="width: 100px;padding: 5px;vertical-align: middle;" alt="Cheetah Grid">
+    		</a>
+    
+    		<ul class="right hide-on-med-and-down nav-dropdown-container">
+    			<a href="#" class="primary nav-dropdown-button mobile-only" data-target="all-nav" style="width: 30px;">
+    				<span class="icon-arrow"></span>
+    			</a>
+    			<ul id="all-nav" class="mobile-nav-dropdown right-dropdown primary">
+    				<li><a href="./../../index.html" class="primary">Docoments - TOP</a></li>
+    				<li class="nav-dropdown-container">
+    					<a id="nav-versions" href="#" class="primary nav-dropdown-button" data-target="versions">
+    						version<span class="icon-arrow"></span>
+    					</a>
+    					<ul id="versions" class="nav-dropdown right-dropdown">
+    					</ul>
+    				</li>
+    				<li class="nav-dropdown-container">
+    					<a id="nav-lang" href="#" class="primary nav-dropdown-button" data-target="langs">
+    						lang<span class="icon-arrow"></span>
+    					</a>
+    					<ul id="langs" class="nav-dropdown right-dropdown">
+    						<li><a href="./../../ja/demos/usage/cell_message.html" class="primary">日本語</a></li>
+    						<li><a href="./../../demos/usage/cell_message.html" class="primary">English</a></li>
+    					</ul>
+    				</li>
+    			</ul>
+    		</ul>
+    	</div>
+    </nav>
+    
+    <script type="text/javascript">
+    	'use strict';
+    	////babel
+    "use strict";
+    
+    function getVersions(callback) {
+      var xhr = new XMLHttpRequest();
+    
+      function onError() {
+        callback(['0.11', '0.0.1']);
+      }
+    
+      xhr.onload = function () {
+        var versions = JSON.parse(xhr.responseText);
+        callback(versions);
+      };
+    
+      xhr.onerror = onError;
+      xhr.onabort = onError;
+    
+      try {
+        xhr.open('GET', "./../../../versions.json"); // eslint-disable-line quotes
+    
+        xhr.send();
+      } catch (e) {
+        onError();
+      }
+    } //
+    
+    
+    getVersions(function (versions) {
+      var myVersion = '0.11';
+    
+      function getVerLocation(v) {
+        return location.href.replace(myVersion, v).replace('.devdoc', v);
+      }
+    
+      var latest = versions[0];
+      var versEl = document.getElementById('versions');
+      versEl.innerHTML = versions.map(function (v, i) {
+        return "<li><a href=\"".concat(getVerLocation(v), "\" class=\"primary\">").concat(v).concat(i === 0 ? ' (latest)' : '', "</a></li>");
+      }).join('');
+    
+      if (latest !== myVersion) {
+        var header = document.getElementById('header-nav');
+        var a = document.createElement('a');
+        header.parentElement.insertBefore(a, header.nextSibling);
+        a.href = getVerLocation(latest);
+        a.textContent = "<goto the latest version(".concat(latest, ") document>");
+      }
+    }); //
+    </script>    <h1><a href="./../.././index.html#usage">Usage</a> &gt; Cell Message</h1>
+    <div class="contents">
+        
+<h2 id="cell-message">Cell Message</h2>
+<p>Define the message to display in each cell of the column by using <code>message</code> property.  </p>
+
+<div id="sample1" class="demo-grid small">
+</div>
+<script type="text/javascript">
+
+////wrapscript
+(function() {
+//babel
+"use strict";
+
+var menuOptions = [{
+  value: '',
+  caption: 'Empty'
+}, {
+  value: '1',
+  caption: 'Option 1'
+}, {
+  value: '2',
+  caption: 'Option 2'
+}, {
+  value: '3',
+  caption: 'Option 3'
+}, {
+  value: '4',
+  caption: 'Option 4'
+}, {
+  value: '5',
+  caption: 'Option 5'
+}, {
+  value: '6',
+  caption: 'Option 6'
+}, {
+  value: '7',
+  caption: 'Option 7'
+}];
+var displayOptions = [{
+  value: '',
+  caption: 'Choose your option'
+}, {
+  value: '1',
+  caption: 'Option 1'
+}, {
+  value: '2',
+  caption: 'Option 2'
+}, {
+  value: '3',
+  caption: 'Option 3'
+}, {
+  value: '4',
+  caption: 'Option 4'
+}, {
+  value: '5',
+  caption: 'Option 5'
+}, {
+  value: '6',
+  caption: 'Option 6'
+}, {
+  value: '7',
+  caption: 'Option 7'
+}]; //
+
+/*global cheetahGrid*/
+
+var grid = new cheetahGrid.ListGrid({
+  parentElement: document.querySelector('#sample1'),
+  header: [{
+    field: 'text1',
+    caption: 'message field',
+    width: 150,
+    //message field
+    message: 'msg'
+  }, {
+    field: 'text2',
+    caption: 'input',
+    width: 150,
+    //message function
+    message: function message(rec) {
+      return rec.text2.match(/^[a-zA-Z]*$/) ? null : 'Please only alphabet.';
+    },
+    action: 'input'
+  }, {
+    field: 'text3',
+    caption: 'inline input',
+    width: 150,
+    message: function message(rec) {
+      return rec.text3.match(/^[a-zA-Z]*$/) ? null : 'Please only alphabet.';
+    },
+    action: new cheetahGrid.columns.action.InlineInputEditor()
+  }, {
+    field: 'val4',
+    caption: 'menu',
+    width: 200,
+    message: function message(rec) {
+      return rec.val4 ? null : 'Please select.';
+    },
+    columnType: new cheetahGrid.columns.type.MenuColumn({
+      options: displayOptions
+    }),
+    action: new cheetahGrid.columns.action.InlineMenuEditor({
+      options: menuOptions
+    })
+  }, {
+    field: 'check5',
+    caption: 'check',
+    width: 100,
+    message: function message(rec) {
+      return rec.check5 ? null : 'Please check.';
+    },
+    columnType: 'check',
+    action: 'check'
+  }, {
+    field: 'text1',
+    caption: 'info',
+    width: 150,
+    message: function message(rec) {
+      return {
+        //info message
+        type: 'info',
+        message: 'Info Message.'
+      };
+    }
+  }, {
+    field: 'text1',
+    caption: 'warning',
+    width: 150,
+    message: function message(rec) {
+      return {
+        //warning message
+        type: 'warning',
+        message: 'Warning Message.'
+      };
+    }
+  }]
+});
+grid.records = [{
+  text1: 'text',
+  text2: '123',
+  text3: '123',
+  val4: '',
+  check5: false,
+  msg: 'message.'
+}, {
+  text1: 'text',
+  text2: '123',
+  text3: '123',
+  val4: '',
+  check5: false,
+  msg: 'message.'
+}, {
+  text1: 'text',
+  text2: '123',
+  text3: '123',
+  val4: '',
+  check5: false,
+  msg: 'message.'
+}, {
+  text1: 'text',
+  text2: '123',
+  text3: '123',
+  val4: '',
+  check5: false,
+  msg: 'message.'
+}, {
+  text1: 'text',
+  text2: '123',
+  text3: '123',
+  val4: '',
+  check5: false,
+  msg: 'message.'
+}, {
+  text1: 'text',
+  text2: '123',
+  text3: '123',
+  val4: '',
+  check5: false,
+  msg: 'message.'
+}, {
+  text1: 'text',
+  text2: '123',
+  text3: '123',
+  val4: '',
+  check5: false,
+  msg: 'message.'
+}, {
+  text1: 'text',
+  text2: '123',
+  text3: '123',
+  val4: '',
+  check5: false,
+  msg: 'message.'
+}, {
+  text1: 'text',
+  text2: '123',
+  text3: '123',
+  val4: '',
+  check5: false,
+  msg: 'message.'
+}, {
+  text1: 'text',
+  text2: '123',
+  text3: '123',
+  val4: '',
+  check5: false,
+  msg: 'message.'
+}, {
+  text1: 'text',
+  text2: '123',
+  text3: '123',
+  val4: '',
+  check5: false,
+  msg: 'message.'
+}, {
+  text1: 'text',
+  text2: '123',
+  text3: '123',
+  val4: '',
+  check5: false,
+  msg: 'message.'
+}, {
+  text1: 'text',
+  text2: '123',
+  text3: '123',
+  val4: '',
+  check5: false,
+  msg: 'message.'
+}, {
+  text1: 'text',
+  text2: '123',
+  text3: '123',
+  val4: '',
+  check5: false,
+  msg: 'message.'
+}, {
+  text1: 'text',
+  text2: '123',
+  text3: '123',
+  val4: '',
+  check5: false,
+  msg: 'message.'
+}]; //
+//
+})();
+</script>
+<pre><code class="js hljs javascript"><span class="hljs-comment">/*global cheetahGrid*/</span>
+<span class="hljs-keyword">const</span> grid = <span class="hljs-keyword">new</span> cheetahGrid.ListGrid({
+	<span class="hljs-attr">parentElement</span>: <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample1'</span>),
+	<span class="hljs-attr">header</span>: [
+		{
+			<span class="hljs-attr">field</span>: <span class="hljs-string">'text1'</span>,
+			<span class="hljs-attr">caption</span>: <span class="hljs-string">'message field'</span>,
+			<span class="hljs-attr">width</span>: <span class="hljs-number">150</span>,
+			<span class="hljs-comment">//message field</span>
+			message: <span class="hljs-string">'msg'</span>
+		},
+		{
+			<span class="hljs-attr">field</span>: <span class="hljs-string">'text2'</span>,
+			<span class="hljs-attr">caption</span>: <span class="hljs-string">'input'</span>,
+			<span class="hljs-attr">width</span>: <span class="hljs-number">150</span>,
+			<span class="hljs-comment">//message function</span>
+			message(rec) {
+				<span class="hljs-keyword">return</span> rec.text2.match(<span class="hljs-regexp">/^[a-zA-Z]*$/</span>) ? <span class="hljs-literal">null</span> : <span class="hljs-string">'Please only alphabet.'</span>;
+			},
+			<span class="hljs-attr">action</span>: <span class="hljs-string">'input'</span>
+		},
+		{
+			<span class="hljs-attr">field</span>: <span class="hljs-string">'text3'</span>,
+			<span class="hljs-attr">caption</span>: <span class="hljs-string">'inline input'</span>,
+			<span class="hljs-attr">width</span>: <span class="hljs-number">150</span>,
+			message(rec) {
+				<span class="hljs-keyword">return</span> rec.text3.match(<span class="hljs-regexp">/^[a-zA-Z]*$/</span>) ? <span class="hljs-literal">null</span> : <span class="hljs-string">'Please only alphabet.'</span>;
+			},
+			<span class="hljs-attr">action</span>: <span class="hljs-keyword">new</span> cheetahGrid.columns.action.InlineInputEditor(),
+		},
+		{
+			<span class="hljs-attr">field</span>: <span class="hljs-string">'val4'</span>,
+			<span class="hljs-attr">caption</span>: <span class="hljs-string">'menu'</span>,
+			<span class="hljs-attr">width</span>: <span class="hljs-number">200</span>,
+			message(rec) {
+				<span class="hljs-keyword">return</span> rec.val4 ? <span class="hljs-literal">null</span> : <span class="hljs-string">'Please select.'</span>;
+			},
+			<span class="hljs-attr">columnType</span>: <span class="hljs-keyword">new</span> cheetahGrid.columns.type.MenuColumn({<span class="hljs-attr">options</span>: displayOptions}),
+			<span class="hljs-attr">action</span>: <span class="hljs-keyword">new</span> cheetahGrid.columns.action.InlineMenuEditor({<span class="hljs-attr">options</span>: menuOptions}),
+		},
+		{
+			<span class="hljs-attr">field</span>: <span class="hljs-string">'check5'</span>,
+			<span class="hljs-attr">caption</span>: <span class="hljs-string">'check'</span>,
+			<span class="hljs-attr">width</span>: <span class="hljs-number">100</span>,
+			message(rec) {
+				<span class="hljs-keyword">return</span> rec.check5 ? <span class="hljs-literal">null</span> : <span class="hljs-string">'Please check.'</span>;
+			},
+			<span class="hljs-attr">columnType</span>: <span class="hljs-string">'check'</span>,
+			<span class="hljs-attr">action</span>: <span class="hljs-string">'check'</span>,
+		},
+		{
+			<span class="hljs-attr">field</span>: <span class="hljs-string">'text1'</span>,
+			<span class="hljs-attr">caption</span>: <span class="hljs-string">'info'</span>,
+			<span class="hljs-attr">width</span>: <span class="hljs-number">150</span>,
+			message(rec) {
+				<span class="hljs-keyword">return</span> {
+					<span class="hljs-comment">//info message</span>
+					type: <span class="hljs-string">'info'</span>,
+					<span class="hljs-attr">message</span>: <span class="hljs-string">'Info Message.'</span>
+				};
+			},
+		},
+		{
+			<span class="hljs-attr">field</span>: <span class="hljs-string">'text1'</span>,
+			<span class="hljs-attr">caption</span>: <span class="hljs-string">'warning'</span>,
+			<span class="hljs-attr">width</span>: <span class="hljs-number">150</span>,
+			message(rec) {
+				<span class="hljs-keyword">return</span> {
+					<span class="hljs-comment">//warning message</span>
+					type: <span class="hljs-string">'warning'</span>,
+					<span class="hljs-attr">message</span>: <span class="hljs-string">'Warning Message.'</span>
+				};
+			},
+		},
+	],
+});
+grid.records = [
+	{<span class="hljs-attr">text1</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">text2</span>: <span class="hljs-string">'123'</span>, <span class="hljs-attr">text3</span>: <span class="hljs-string">'123'</span>, <span class="hljs-attr">val4</span>: <span class="hljs-string">''</span>, <span class="hljs-attr">check5</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">msg</span>: <span class="hljs-string">'message.'</span>},
+	{<span class="hljs-attr">text1</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">text2</span>: <span class="hljs-string">'123'</span>, <span class="hljs-attr">text3</span>: <span class="hljs-string">'123'</span>, <span class="hljs-attr">val4</span>: <span class="hljs-string">''</span>, <span class="hljs-attr">check5</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">msg</span>: <span class="hljs-string">'message.'</span>},
+	{<span class="hljs-attr">text1</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">text2</span>: <span class="hljs-string">'123'</span>, <span class="hljs-attr">text3</span>: <span class="hljs-string">'123'</span>, <span class="hljs-attr">val4</span>: <span class="hljs-string">''</span>, <span class="hljs-attr">check5</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">msg</span>: <span class="hljs-string">'message.'</span>},
+	{<span class="hljs-attr">text1</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">text2</span>: <span class="hljs-string">'123'</span>, <span class="hljs-attr">text3</span>: <span class="hljs-string">'123'</span>, <span class="hljs-attr">val4</span>: <span class="hljs-string">''</span>, <span class="hljs-attr">check5</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">msg</span>: <span class="hljs-string">'message.'</span>},
+	{<span class="hljs-attr">text1</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">text2</span>: <span class="hljs-string">'123'</span>, <span class="hljs-attr">text3</span>: <span class="hljs-string">'123'</span>, <span class="hljs-attr">val4</span>: <span class="hljs-string">''</span>, <span class="hljs-attr">check5</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">msg</span>: <span class="hljs-string">'message.'</span>},
+
+	{<span class="hljs-attr">text1</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">text2</span>: <span class="hljs-string">'123'</span>, <span class="hljs-attr">text3</span>: <span class="hljs-string">'123'</span>, <span class="hljs-attr">val4</span>: <span class="hljs-string">''</span>, <span class="hljs-attr">check5</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">msg</span>: <span class="hljs-string">'message.'</span>},
+	{<span class="hljs-attr">text1</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">text2</span>: <span class="hljs-string">'123'</span>, <span class="hljs-attr">text3</span>: <span class="hljs-string">'123'</span>, <span class="hljs-attr">val4</span>: <span class="hljs-string">''</span>, <span class="hljs-attr">check5</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">msg</span>: <span class="hljs-string">'message.'</span>},
+	{<span class="hljs-attr">text1</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">text2</span>: <span class="hljs-string">'123'</span>, <span class="hljs-attr">text3</span>: <span class="hljs-string">'123'</span>, <span class="hljs-attr">val4</span>: <span class="hljs-string">''</span>, <span class="hljs-attr">check5</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">msg</span>: <span class="hljs-string">'message.'</span>},
+	{<span class="hljs-attr">text1</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">text2</span>: <span class="hljs-string">'123'</span>, <span class="hljs-attr">text3</span>: <span class="hljs-string">'123'</span>, <span class="hljs-attr">val4</span>: <span class="hljs-string">''</span>, <span class="hljs-attr">check5</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">msg</span>: <span class="hljs-string">'message.'</span>},
+	{<span class="hljs-attr">text1</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">text2</span>: <span class="hljs-string">'123'</span>, <span class="hljs-attr">text3</span>: <span class="hljs-string">'123'</span>, <span class="hljs-attr">val4</span>: <span class="hljs-string">''</span>, <span class="hljs-attr">check5</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">msg</span>: <span class="hljs-string">'message.'</span>},
+
+	{<span class="hljs-attr">text1</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">text2</span>: <span class="hljs-string">'123'</span>, <span class="hljs-attr">text3</span>: <span class="hljs-string">'123'</span>, <span class="hljs-attr">val4</span>: <span class="hljs-string">''</span>, <span class="hljs-attr">check5</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">msg</span>: <span class="hljs-string">'message.'</span>},
+	{<span class="hljs-attr">text1</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">text2</span>: <span class="hljs-string">'123'</span>, <span class="hljs-attr">text3</span>: <span class="hljs-string">'123'</span>, <span class="hljs-attr">val4</span>: <span class="hljs-string">''</span>, <span class="hljs-attr">check5</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">msg</span>: <span class="hljs-string">'message.'</span>},
+	{<span class="hljs-attr">text1</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">text2</span>: <span class="hljs-string">'123'</span>, <span class="hljs-attr">text3</span>: <span class="hljs-string">'123'</span>, <span class="hljs-attr">val4</span>: <span class="hljs-string">''</span>, <span class="hljs-attr">check5</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">msg</span>: <span class="hljs-string">'message.'</span>},
+	{<span class="hljs-attr">text1</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">text2</span>: <span class="hljs-string">'123'</span>, <span class="hljs-attr">text3</span>: <span class="hljs-string">'123'</span>, <span class="hljs-attr">val4</span>: <span class="hljs-string">''</span>, <span class="hljs-attr">check5</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">msg</span>: <span class="hljs-string">'message.'</span>},
+	{<span class="hljs-attr">text1</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">text2</span>: <span class="hljs-string">'123'</span>, <span class="hljs-attr">text3</span>: <span class="hljs-string">'123'</span>, <span class="hljs-attr">val4</span>: <span class="hljs-string">''</span>, <span class="hljs-attr">check5</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">msg</span>: <span class="hljs-string">'message.'</span>},
+];
+</code></pre>
+    </div>
+    
+    <script type="text/javascript" src="./../../js/doc-common.js"></script>
+
+</body></html>
