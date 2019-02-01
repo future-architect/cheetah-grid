@@ -202,6 +202,7 @@ function generatePersonsDataSource(num) {
 
 /*eslint-disable no-unused-vars*/
 var lang = navigator.language || navigator.userLanguage || navigator.browserLanguage;
+var inputEditor = new cheetahGrid.columns.action.InlineInputEditor();
 var records = generatePersons(100);
 var grid = new cheetahGrid.ListGrid({
   parentElement: document.querySelector('#sample1'),
@@ -212,15 +213,18 @@ var grid = new cheetahGrid.ListGrid({
   }, {
     field: 'fname',
     caption: 'First Name',
-    width: 200
+    width: 200,
+    action: inputEditor
   }, {
     field: 'lname',
     caption: 'Last Name',
-    width: 200
+    width: 200,
+    action: inputEditor
   }, {
     field: 'email',
     caption: 'Email',
-    width: 250
+    width: 250,
+    action: inputEditor
   }, {
     field: function field(rec) {
       return rec.birthday.toLocaleString(lang, {
@@ -245,14 +249,21 @@ var log = function log(typeName, args) {
 
 var _cheetahGrid$ListGrid = cheetahGrid.ListGrid.EVENT_TYPE,
     CLICK_CELL = _cheetahGrid$ListGrid.CLICK_CELL,
-    SELECTED_CELL = _cheetahGrid$ListGrid.SELECTED_CELL,
+    DBLCLICK_CELL = _cheetahGrid$ListGrid.DBLCLICK_CELL,
+    DBLTAP_CELL = _cheetahGrid$ListGrid.DBLTAP_CELL,
     MOUSEDOWN_CELL = _cheetahGrid$ListGrid.MOUSEDOWN_CELL,
     MOUSEUP_CELL = _cheetahGrid$ListGrid.MOUSEUP_CELL,
+    SELECTED_CELL = _cheetahGrid$ListGrid.SELECTED_CELL,
+    KEYDOWN = _cheetahGrid$ListGrid.KEYDOWN,
     MOUSEMOVE_CELL = _cheetahGrid$ListGrid.MOUSEMOVE_CELL,
     MOUSEENTER_CELL = _cheetahGrid$ListGrid.MOUSEENTER_CELL,
     MOUSELEAVE_CELL = _cheetahGrid$ListGrid.MOUSELEAVE_CELL,
-    KEYDOWN = _cheetahGrid$ListGrid.KEYDOWN,
-    RESIZE_COLUMN = _cheetahGrid$ListGrid.RESIZE_COLUMN;
+    MOUSEOVER_CELL = _cheetahGrid$ListGrid.MOUSEOVER_CELL,
+    MOUSEOUT_CELL = _cheetahGrid$ListGrid.MOUSEOUT_CELL,
+    INPUT_CELL = _cheetahGrid$ListGrid.INPUT_CELL,
+    PASTE_CELL = _cheetahGrid$ListGrid.PASTE_CELL,
+    RESIZE_COLUMN = _cheetahGrid$ListGrid.RESIZE_COLUMN,
+    SCROLL = _cheetahGrid$ListGrid.SCROLL;
 grid.listen(CLICK_CELL, function () {
   for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
     args[_key] = arguments[_key];
@@ -260,48 +271,83 @@ grid.listen(CLICK_CELL, function () {
 
   return log('click cell', args);
 });
-grid.listen(SELECTED_CELL, function () {
+grid.listen(DBLCLICK_CELL, function () {
   for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
     args[_key2] = arguments[_key2];
   }
 
-  return log('selected cell', args);
+  return log('dbl click cell', args);
 });
-grid.listen(MOUSEDOWN_CELL, function () {
+grid.listen(DBLTAP_CELL, function () {
   for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
     args[_key3] = arguments[_key3];
+  }
+
+  return log('dbl tap cell', args);
+});
+grid.listen(MOUSEDOWN_CELL, function () {
+  for (var _len4 = arguments.length, args = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+    args[_key4] = arguments[_key4];
   }
 
   return log('mousedown cell', args);
 });
 grid.listen(MOUSEUP_CELL, function () {
-  for (var _len4 = arguments.length, args = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
-    args[_key4] = arguments[_key4];
-  }
-
-  return log('mouseup cell', args);
-});
-grid.listen(KEYDOWN, function () {
   for (var _len5 = arguments.length, args = new Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
     args[_key5] = arguments[_key5];
   }
 
-  return log('keydown', args);
+  return log('mouseup cell', args);
 });
-grid.listen(RESIZE_COLUMN, function () {
+grid.listen(SELECTED_CELL, function () {
   for (var _len6 = arguments.length, args = new Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
     args[_key6] = arguments[_key6];
   }
 
+  return log('selected cell', args);
+});
+grid.listen(KEYDOWN, function () {
+  for (var _len7 = arguments.length, args = new Array(_len7), _key7 = 0; _key7 < _len7; _key7++) {
+    args[_key7] = arguments[_key7];
+  }
+
+  return log('keydown', args);
+});
+grid.listen(INPUT_CELL, function () {
+  for (var _len8 = arguments.length, args = new Array(_len8), _key8 = 0; _key8 < _len8; _key8++) {
+    args[_key8] = arguments[_key8];
+  }
+
+  return log('input cell', args);
+});
+grid.listen(PASTE_CELL, function () {
+  for (var _len9 = arguments.length, args = new Array(_len9), _key9 = 0; _key9 < _len9; _key9++) {
+    args[_key9] = arguments[_key9];
+  }
+
+  return log('paste cell', args);
+});
+grid.listen(RESIZE_COLUMN, function () {
+  for (var _len10 = arguments.length, args = new Array(_len10), _key10 = 0; _key10 < _len10; _key10++) {
+    args[_key10] = arguments[_key10];
+  }
+
   return log('resize column', args);
+});
+grid.listen(SCROLL, function () {
+  for (var _len11 = arguments.length, args = new Array(_len11), _key11 = 0; _key11 < _len11; _key11++) {
+    args[_key11] = arguments[_key11];
+  }
+
+  return log('scroll', args);
 });
 grid.listen(MOUSEMOVE_CELL, function () {
   if (!document.querySelector('#include-mouse').checked) {
     return;
   }
 
-  for (var _len7 = arguments.length, args = new Array(_len7), _key7 = 0; _key7 < _len7; _key7++) {
-    args[_key7] = arguments[_key7];
+  for (var _len12 = arguments.length, args = new Array(_len12), _key12 = 0; _key12 < _len12; _key12++) {
+    args[_key12] = arguments[_key12];
   }
 
   log('mousemove cell', args);
@@ -311,8 +357,8 @@ grid.listen(MOUSEENTER_CELL, function () {
     return;
   }
 
-  for (var _len8 = arguments.length, args = new Array(_len8), _key8 = 0; _key8 < _len8; _key8++) {
-    args[_key8] = arguments[_key8];
+  for (var _len13 = arguments.length, args = new Array(_len13), _key13 = 0; _key13 < _len13; _key13++) {
+    args[_key13] = arguments[_key13];
   }
 
   log('mouseenter cell', args);
@@ -322,8 +368,8 @@ grid.listen(MOUSELEAVE_CELL, function () {
     return;
   }
 
-  for (var _len9 = arguments.length, args = new Array(_len9), _key9 = 0; _key9 < _len9; _key9++) {
-    args[_key9] = arguments[_key9];
+  for (var _len14 = arguments.length, args = new Array(_len14), _key14 = 0; _key14 < _len14; _key14++) {
+    args[_key14] = arguments[_key14];
   }
 
   log('mouseleave cell', args);
@@ -342,22 +388,34 @@ grid.listen(MOUSELEAVE_CELL, function () {
 
 <span class="hljs-keyword">const</span> {
 	CLICK_CELL,
-	SELECTED_CELL,
+	DBLCLICK_CELL,
+	DBLTAP_CELL,
 	MOUSEDOWN_CELL,
 	MOUSEUP_CELL,
+	SELECTED_CELL,
+	KEYDOWN,
 	MOUSEMOVE_CELL,
 	MOUSEENTER_CELL,
 	MOUSELEAVE_CELL,
-	KEYDOWN,
+	MOUSEOVER_CELL,
+	MOUSEOUT_CELL,
+	INPUT_CELL,
+	PASTE_CELL,
 	RESIZE_COLUMN,
+	SCROLL,
 } = cheetahGrid.ListGrid.EVENT_TYPE;
 
 grid.listen(CLICK_CELL, (...args) =&gt; log(<span class="hljs-string">'click cell'</span>, args));
-grid.listen(SELECTED_CELL, (...args) =&gt; log(<span class="hljs-string">'selected cell'</span>, args));
+grid.listen(DBLCLICK_CELL, (...args) =&gt; log(<span class="hljs-string">'dbl click cell'</span>, args));
+grid.listen(DBLTAP_CELL, (...args) =&gt; log(<span class="hljs-string">'dbl tap cell'</span>, args));
 grid.listen(MOUSEDOWN_CELL, (...args) =&gt; log(<span class="hljs-string">'mousedown cell'</span>, args));
 grid.listen(MOUSEUP_CELL, (...args) =&gt; log(<span class="hljs-string">'mouseup cell'</span>, args));
+grid.listen(SELECTED_CELL, (...args) =&gt; log(<span class="hljs-string">'selected cell'</span>, args));
 grid.listen(KEYDOWN, (...args) =&gt; log(<span class="hljs-string">'keydown'</span>, args));
+grid.listen(INPUT_CELL, (...args) =&gt; log(<span class="hljs-string">'input cell'</span>, args));
+grid.listen(PASTE_CELL, (...args) =&gt; log(<span class="hljs-string">'paste cell'</span>, args));
 grid.listen(RESIZE_COLUMN, (...args) =&gt; log(<span class="hljs-string">'resize column'</span>, args));
+grid.listen(SCROLL, (...args) =&gt; log(<span class="hljs-string">'scroll'</span>, args));
 
 grid.listen(MOUSEMOVE_CELL, (...args) =&gt; {
 	<span class="hljs-keyword">if</span> (!<span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#include-mouse'</span>).checked) {
