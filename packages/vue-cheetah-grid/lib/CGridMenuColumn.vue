@@ -1,12 +1,21 @@
 <template>
   <!-- Use this slot to set the header caption -->
-  <div class="c-grid-menu-column"><slot /></div>
+  <div class="c-grid-menu-column">
+    <slot />
+  </div>
 </template>
 
 <script>
 import ColumnMixin from './c-grid/ColumnMixin.vue'
 import StdColumnMixin from './c-grid/StdColumnMixin.vue'
 import { cheetahGrid, filterToFn, gridUpdateWatcher } from './c-grid/utils'
+
+function isDisabledRecord (option, record) {
+  if (typeof option === 'function') {
+    return !!option(record)
+  }
+  return !!option
+}
 
 /**
  * @mixin column-mixin
@@ -41,13 +50,15 @@ export default {
      * Defines disabled
      */
     disabled: {
-      type: Boolean
+      type: [Boolean, Function],
+      default: false
     },
     /**
      * Defines readonly
      */
     readonly: {
-      type: Boolean
+      type: [Boolean, Function],
+      default: false
     }
   },
   watch: {
@@ -111,7 +122,10 @@ export default {
           if (typeof style === 'function') {
             style = style(...args)
           }
-          if (this.disabled || this.readonly) {
+          if (
+            isDisabledRecord(this.disabled, ...args) ||
+            isDisabledRecord(this.readonly, ...args)
+          ) {
             if (style) {
               if (style.clone) {
                 style = style.clone()

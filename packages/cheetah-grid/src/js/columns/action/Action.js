@@ -1,6 +1,7 @@
 'use strict';
 
 const {bindCellClickAction, bindCellKeyAction} = require('./actionBind');
+const {isDisabledRecord} = require('./action-utils');
 
 const BaseAction = require('./BaseAction');
 
@@ -24,7 +25,7 @@ class Action extends BaseAction {
 	bindGridEvent(grid, col, util) {
 		const state = this.getState(grid);
 		const action = (cell) => {
-			if (this.disabled) {
+			if (isDisabledRecord(this.disabled, grid, cell.row)) {
 				return;
 			}
 			const record = grid.getRowRecord(cell.row);
@@ -35,7 +36,7 @@ class Action extends BaseAction {
 			...bindCellClickAction(grid, col, util, {
 				action,
 				mouseOver: (e) => {
-					if (this.disabled) {
+					if (isDisabledRecord(this.disabled, grid, e.row)) {
 						return false;
 					}
 					state.mouseActiveCell = {

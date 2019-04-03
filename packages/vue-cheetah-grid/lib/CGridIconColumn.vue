@@ -1,6 +1,8 @@
 <template>
   <!-- Use this slot to set the header caption -->
-  <div class="c-grid-icon-column"><slot /></div>
+  <div class="c-grid-icon-column">
+    <slot />
+  </div>
 </template>
 
 <script>

@@ -7,6 +7,7 @@ const {
 		cancel: cancelEvent,
 	},
 } = require('../../internal/utils');
+const {isDisabledRecord, isReadOnlyRecord} = require('./action-utils');
 const {bindCellClickAction, bindCellKeyAction} = require('./actionBind');
 const animate = require('../../internal/animate');
 
@@ -59,7 +60,12 @@ class CheckEditor extends Editor {
 			const cellKey = `${cell.col}:${cell.row}`;
 			const blockKey = `${cellKey}::block`;
 			const elapsedKey = `${cellKey}::elapsed`;
-			if (this.readOnly || this.disabled || state[blockKey]) {
+
+			if (
+				isReadOnlyRecord(this.readOnly, grid, cell.row) ||
+				isDisabledRecord(this.disabled, grid, cell.row) ||
+				state[blockKey]
+			) {
 				return;
 			}
 			const ret = grid.doChangeValue(cell.col, cell.row, toggleValue);
@@ -91,7 +97,7 @@ class CheckEditor extends Editor {
 			...bindCellClickAction(grid, col, util, {
 				action,
 				mouseOver: (e) => {
-					if (this.disabled) {
+					if (isDisabledRecord(this.disabled, grid, e.row)) {
 						return false;
 					}
 					state.mouseActiveCell = {

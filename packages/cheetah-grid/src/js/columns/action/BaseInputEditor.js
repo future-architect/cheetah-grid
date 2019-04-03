@@ -5,6 +5,7 @@ const {
 		cancel: cancelEvent,
 	}
 } = require('../../internal/utils');
+const {isDisabledRecord, isReadOnlyRecord} = require('./action-utils');
 const Editor = require('./Editor');
 const {EVENT_TYPE: {
 	INPUT_CELL,
@@ -44,14 +45,20 @@ class BaseInputEditor extends Editor {
 	}
 	bindGridEvent(grid, col, util) {
 		const open = (cell) => {
-			if (this.readOnly || this.disabled) {
+			if (
+				isReadOnlyRecord(this.readOnly, grid, cell.row) ||
+				isDisabledRecord(this.disabled, grid, cell.row)
+			) {
 				return;
 			}
 			this.onOpenCellInternal(grid, cell);
 		};
 
 		const input = (cell, value) => {
-			if (this.readOnly || this.disabled) {
+			if (
+				isReadOnlyRecord(this.readOnly, grid, cell.row) ||
+				isDisabledRecord(this.disabled, grid, cell.row)
+			) {
 				return;
 			}
 			this.onInputCellInternal(grid, cell, value);
@@ -123,7 +130,10 @@ class BaseInputEditor extends Editor {
 				if (!util.isTarget(cell.col, cell.row)) {
 					return false;
 				}
-				if (this.readOnly || this.disabled) {
+				if (
+					isReadOnlyRecord(this.readOnly, grid, cell.row) ||
+					isDisabledRecord(this.disabled, grid, cell.row)
+				) {
 					return false;
 				}
 				return true;
@@ -132,7 +142,10 @@ class BaseInputEditor extends Editor {
 				if (!util.isTarget(cell.col, cell.row)) {
 					return;
 				}
-				if (this.readOnly || this.disabled) {
+				if (
+					isReadOnlyRecord(this.readOnly, grid, cell.row) ||
+					isDisabledRecord(this.disabled, grid, cell.row)
+				) {
 					return;
 				}
 				this.onSetInputAttrsInternal(grid, {

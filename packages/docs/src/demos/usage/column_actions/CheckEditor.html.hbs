@@ -187,3 +187,48 @@ grid.records = [
 //{{/wrapscript}}
 </script>
 {{> code class="js" code=sample2}}
+
+{{#marked}}
+{{#if lang_ja}}
+### disabled
+
+`disabled`に`function`を指定することで、レコードの状態によって、`disabled`を制御することができます。
+{{else}}
+### disabled
+
+You can control `disabled` depending on the state of the record by giving `disabled` a `function`.
+{{/if}}
+{{/marked}}
+
+<div id="sample3" class="demo-grid small">
+</div>
+
+<script type="text/javascript">
+/*eslint no-alert:0*/
+//{{#wrapscript}}
+//{{#copy "sample3"}}
+/*global cheetahGrid*/
+
+const checkEditorAction = new cheetahGrid.columns.action.CheckEditor();
+checkEditorAction.disabled = (record) => record.disabled;
+
+const grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#sample3'),
+	header: [
+
+		{field: 'test', caption: 'disabled?', width: 220, columnType: 'check', action: checkEditorAction},
+
+		//
+		{field: 'disabled', caption: 'control', width: 220, columnType: 'check', action: 'check'},
+	],
+});
+grid.records = [
+	{disabled: true, test: false},
+	{disabled: false, test: true},
+	{disabled: true, test: false},
+];
+
+//{{/copy}}
+//{{/wrapscript}}
+</script>
+{{> code class="js" code=sample3}}

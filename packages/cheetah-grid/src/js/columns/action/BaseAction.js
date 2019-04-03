@@ -9,7 +9,7 @@ class BaseAction {
 		return this._disabled;
 	}
 	set disabled(disabled) {
-		this._disabled = !!disabled;
+		this._disabled = disabled;
 		this.onChangeDisabledInternal();
 	}
 	clone() {

@@ -104,7 +104,7 @@ Please refer to the [documents](https://future-architect.github.io/cheetah-grid/
 | `<c-grid-icon-column>` | Icon column definition | component for icon column definition |
 | `<c-grid-percent-complete-bar-column>` | Percent complete bar column definition | component for Percent complete bar column definition |
 
-Please refer also to the [vuedoc](https://github.com/future-architect/cheetah-grid/tree/master/docs/0.11/vuedoc)
+Please refer also to the [vuedoc](https://github.com/future-architect/cheetah-grid/tree/master/docs/0.12/vuedoc)
 
 ---
 

@@ -1,6 +1,8 @@
 <template>
   <!-- Use this slot to set the header caption -->
-  <div class="c-grid-button-column"><slot /></div>
+  <div class="c-grid-button-column">
+    <slot />
+  </div>
 </template>
 
 <script>
@@ -27,7 +29,8 @@ export default {
      * Defines disabled
      */
     disabled: {
-      type: Boolean
+      type: [Boolean, Function],
+      default: false
     }
   },
   watch: {

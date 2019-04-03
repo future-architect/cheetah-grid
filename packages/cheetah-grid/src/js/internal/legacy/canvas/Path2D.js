@@ -23,11 +23,11 @@ class Path2D {
 			return;
 		}
 		if (typeof arg === 'string') {
-			try {
-				this._ops = parser.parse(arg);
-			} catch (e) {
-				throw e;
-			}
+			// try {
+			this._ops = parser.parse(arg);
+			// } catch (e) {
+			// 	throw e;
+			// }
 		} else if (arg.hasOwnProperty('_ops')) {
 			this._ops = [...this._ops];
 		} else {
