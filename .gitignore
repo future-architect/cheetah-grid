@@ -10,3 +10,4 @@ packages/*/report
 /lerna-debug.log
 *npm-debug.log
 packages/cheetah-grid-icon-svg-loader/.nyc_output/
+packages/docs2/.vuepress/public/dev

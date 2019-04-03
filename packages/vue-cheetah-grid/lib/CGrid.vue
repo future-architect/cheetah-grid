@@ -1,7 +1,7 @@
 <template>
   <div class="c-grid">
-    <!-- Use this slot to set the columns definition -->
     <div class="define">
+      <!-- Use this slot to set the columns definition -->
       <slot />
     </div>
   </div>
@@ -70,8 +70,7 @@ function _bindEvents (v, grid) {
     grid.listen(type, (...args) => {
       const results = []
 
-      // emit grid event
-      v.$emit(emitType, ...args, (r) => {
+      v.$_CGrid_emit(emitType, ...args, (r) => {
         results.push(r)
       })
 
@@ -124,6 +123,9 @@ function _initGrid (v) {
 
 let seq = 0
 
+/**
+ * Defines the Grid.
+ */
 export default {
   name: 'CGrid',
   props: {
@@ -300,6 +302,54 @@ export default {
         }
         this.rawGrid.dispose()
         _initGrid(this)
+      }
+    },
+    /**
+     * @private
+     */
+    $_CGrid_emit (type, ...args) {
+      // emit grid event
+      switch (type) {
+        case 'click-cell':
+          /**
+           * Click on cell.
+           */
+          this.$emit('click-cell', ...args)
+          break
+        case 'dblclick-cell':
+          /**
+           * Doubleclick on cell.
+           */
+          this.$emit('dblclick-cell', ...args)
+          break
+        case 'selected-cell':
+          /**
+           * Selected cell.
+           */
+          this.$emit('selected-cell', ...args)
+          break
+        case 'paste-cell':
+          /**
+           * Paste on cell.
+           */
+          this.$emit('paste-cell', ...args)
+          break
+        case 'changed-value':
+          /**
+           * Changed value.
+           */
+          this.$emit('changed-value', ...args)
+          break
+        case 'changed-header-value':
+          /**
+           * Changed header value.
+           */
+          this.$emit('changed-header-value', ...args)
+          break
+          // TODO others
+        default:
+          this.$emit(type, ...args)
+          break
       }
     }
   }

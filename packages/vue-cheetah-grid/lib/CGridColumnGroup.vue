@@ -1,6 +1,6 @@
 <template>
-  <!-- Use this slot to set the children columns definition -->
   <div class="c-grid-column-group">
+    <!-- Use this slot to set the children columns definition -->
     <slot />
   </div>
 </template>
@@ -10,6 +10,7 @@ import ColumnMixin from './c-grid/ColumnMixin.vue'
 import { slotsToHeaderOptions, slotsToHeaderProps } from './c-grid/header-utils'
 
 /**
+ * Defines multiple header.
  * @mixin column-mixin
  */
 export default {
