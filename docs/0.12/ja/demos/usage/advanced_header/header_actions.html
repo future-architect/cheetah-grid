@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="author" content="Cheetah Grid">
+    <meta name="keywords" content="spreadsheet,grid,canvas,table,web-components">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Cheetah Grid - Header Actions</title>
+    <link rel="shortcut icon" type="image/x-icon" href="./../../../../../icon_512x512.ico">
+
+    <link rel="stylesheet" type="text/css" href="./../../../../css/style.css">
+    <link rel="stylesheet" type="text/css" href="./../../../../css/highlightjs.css">
+    
+    <!-- <script src="http://localhost:35729/livereload.js"></script> -->
+    
+    <script type="text/javascript" src="https://unpkg.com/cheetah-grid@0.12||0.11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script type="text/javascript" src="https://unpkg.com/vue-cheetah-grid@0.12||0.11"></script>
+    <script type="text/javascript">
+        /*global Vue, vueCheetahGrid*/
+        Vue.use(vueCheetahGrid);
+    </script>
+
+    <style type="text/css">
+        html {
+            height: 100%;
+        }
+        body {
+            height: calc(100% - 100px);
+        }
+        .contents {
+            padding: 30px;
+            box-sizing: border-box;
+        }
+        .demo-grid {
+            width: 100%;
+            height: 300px;
+            box-sizing: border-box;
+            border: solid 1px #ddd;
+        }
+        .demo-grid.large {
+            height: 500px;
+        }
+        .demo-grid.middle {
+            height: 300px;   
+        }
+        .demo-grid.small {
+            height: 240px;   
+        }
+        .log {
+            width: 100%;
+            height: 80px;
+            background-color: #F5F5F5;
+        }
+
+        .hljs { 
+             tab-size: 4;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <nav class="header primary" id="header-nav">
+    	<div class="nav-wrapper">
+    		<a href="./../../../../../index.html">
+    			<img src="./../../../../../logo.png" style="width: 100px;padding: 5px;vertical-align: middle;" alt="Cheetah Grid">
+    		</a>
+    
+    		<ul class="right hide-on-med-and-down nav-dropdown-container">
+    			<a href="#" class="primary nav-dropdown-button mobile-only" data-target="all-nav" style="width: 30px;">
+    				<span class="icon-arrow"></span>
+    			</a>
+    			<ul id="all-nav" class="mobile-nav-dropdown right-dropdown primary">
+    				<li><a href="./../../../../ja/index.html" class="primary">Docoments - TOP</a></li>
+    				<li class="nav-dropdown-container">
+    					<a id="nav-versions" href="#" class="primary nav-dropdown-button" data-target="versions">
+    						version<span class="icon-arrow"></span>
+    					</a>
+    					<ul id="versions" class="nav-dropdown right-dropdown">
+    					</ul>
+    				</li>
+    				<li class="nav-dropdown-container">
+    					<a id="nav-lang" href="#" class="primary nav-dropdown-button" data-target="langs">
+    						lang<span class="icon-arrow"></span>
+    					</a>
+    					<ul id="langs" class="nav-dropdown right-dropdown">
+    						<li><a href="./../../../../ja/demos/usage/advanced_header/header_actions.html" class="primary">日本語</a></li>
+    						<li><a href="./../../../../demos/usage/advanced_header/header_actions.html" class="primary">English</a></li>
+    					</ul>
+    				</li>
+    			</ul>
+    		</ul>
+    	</div>
+    </nav>
+    
+    <script type="text/javascript">
+    	'use strict';
+    	////babel
+    "use strict";
+    
+    function getVersions(callback) {
+      var xhr = new XMLHttpRequest();
+    
+      function onError() {
+        callback(['0.12', '0.0.1']);
+      }
+    
+      xhr.onload = function () {
+        var versions = JSON.parse(xhr.responseText);
+        callback(versions);
+      };
+    
+      xhr.onerror = onError;
+      xhr.onabort = onError;
+    
+      try {
+        xhr.open('GET', "./../../../../../versions.json"); // eslint-disable-line quotes
+    
+        xhr.send();
+      } catch (e) {
+        onError();
+      }
+    } //
+    
+    
+    getVersions(function (versions) {
+      var myVersion = '0.12';
+    
+      function getVerLocation(v) {
+        return location.href.replace(myVersion, v).replace('.devdoc', v);
+      }
+    
+      var latest = versions[0];
+      var versEl = document.getElementById('versions');
+      versEl.innerHTML = versions.map(function (v, i) {
+        return "<li><a href=\"".concat(getVerLocation(v), "\" class=\"primary\">").concat(v).concat(i === 0 ? ' (latest)' : '', "</a></li>");
+      }).join('');
+    
+      if (latest !== myVersion) {
+        var header = document.getElementById('header-nav');
+        var a = document.createElement('a');
+        header.parentElement.insertBefore(a, header.nextSibling);
+        a.href = getVerLocation(latest);
+        a.textContent = "<goto the latest version(".concat(latest, ") document>");
+      }
+    }); //
+    </script>    <h1><a href="./../../../.././index.html#usage">Usage</a> &gt; Advanced Header &gt; Header Actions</h1>
+    <div class="contents">
+        
+<h2 id="advanced-header-action">Advanced Header Action</h2>
+<p>プロパティ<code>headerAction</code>を利用して、ヘッダのアクションを指定します。<br>用意された各アクションは同じヘッダに設定する<code>headerType</code>に合わせた、Actionクラスを利用してください。</p>
+<table>
+<thead>
+<tr>
+<th><code>headerType</code></th>
+<th>specified <code>headerAction</code> by string</th>
+<th>class</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>check</code></td>
+<td><code>'check'</code></td>
+<td><a href="./actions/CheckHeaderAction.html"><code>cheetahGrid.headers.action.CheckHeaderAction</code></a></td>
+<td>チェックボックスをクリックした際の動作を指定します。</td>
+</tr>
+<tr>
+<td><code>sort</code></td>
+<td><code>'sort'</code></td>
+<td><a href="./actions/SortHeaderAction.html"><code>cheetahGrid.headers.action.SortHeaderAction</code></a></td>
+<td>クリックした際の動作を指定します。デフォルトではデータをソートします。</td>
+</tr>
+</tbody></table>
+
+<div id="sample1" class="demo-grid small">
+</div>
+<script type="text/javascript">
+/*eslint no-alert:0*/
+////wrapscript
+(function() {
+//babel
+"use strict";
+
+//
+
+/*global cheetahGrid*/
+var grid = new cheetahGrid.ListGrid({
+  parentElement: document.querySelector('#sample1'),
+  header: [{
+    field: 'no',
+    caption: 'no',
+    width: 50
+  }, {
+    field: 'check',
+    width: 100,
+    columnType: 'check',
+    action: 'check',
+    headerType: 'check',
+    headerAction: 'check'
+  }, {
+    field: 'text',
+    caption: 'sort',
+    width: 120,
+    action: 'input',
+    headerType: 'sort',
+    headerAction: 'sort'
+  }]
+});
+grid.records = [{
+  no: 1,
+  check: true,
+  text: 'abc'
+}, {
+  no: 2,
+  check: false,
+  text: 'def'
+}, {
+  no: 3,
+  check: true,
+  text: 'ghi'
+}];
+var _cheetahGrid$ListGrid = cheetahGrid.ListGrid.EVENT_TYPE,
+    CHANGED_HEADER_VALUE = _cheetahGrid$ListGrid.CHANGED_HEADER_VALUE,
+    CHANGED_VALUE = _cheetahGrid$ListGrid.CHANGED_VALUE;
+grid.listen(CHANGED_HEADER_VALUE, function (_ref) {
+  var value = _ref.value,
+      field = _ref.field;
+
+  if (field !== 'check') {
+    return;
+  } // header check value on change
+
+
+  var _iteratorNormalCompletion = true;
+  var _didIteratorError = false;
+  var _iteratorError = undefined;
+
+  try {
+    for (var _iterator = grid.records[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      var rec = _step.value;
+      rec[field] = value;
+    }
+  } catch (err) {
+    _didIteratorError = true;
+    _iteratorError = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion && _iterator["return"] != null) {
+        _iterator["return"]();
+      }
+    } finally {
+      if (_didIteratorError) {
+        throw _iteratorError;
+      }
+    }
+  }
+
+  grid.invalidate();
+});
+grid.listen(CHANGED_VALUE, function (_ref2) {
+  var value = _ref2.value,
+      field = _ref2.field;
+
+  if (field !== 'check') {
+    return;
+  } // check value on change
+
+
+  grid.headerValues[field] = false;
+  grid.invalidate();
+}); //
+//
+})();
+</script>
+<pre><code class="js hljs javascript"><span class="hljs-comment">/*global cheetahGrid*/</span>
+
+<span class="hljs-keyword">const</span> grid = <span class="hljs-keyword">new</span> cheetahGrid.ListGrid({
+	<span class="hljs-attr">parentElement</span>: <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample1'</span>),
+	<span class="hljs-attr">header</span>: [
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'no'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'no'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">50</span>},
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'check'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">100</span>, <span class="hljs-attr">columnType</span>: <span class="hljs-string">'check'</span>, <span class="hljs-attr">action</span>: <span class="hljs-string">'check'</span>, <span class="hljs-attr">headerType</span>: <span class="hljs-string">'check'</span>, <span class="hljs-attr">headerAction</span>: <span class="hljs-string">'check'</span>},
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'text'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'sort'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">120</span>, <span class="hljs-attr">action</span>: <span class="hljs-string">'input'</span>, <span class="hljs-attr">headerType</span>: <span class="hljs-string">'sort'</span>, <span class="hljs-attr">headerAction</span>: <span class="hljs-string">'sort'</span>},
+	],
+});
+grid.records = [
+	{<span class="hljs-attr">no</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">check</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">text</span>: <span class="hljs-string">'abc'</span>},
+	{<span class="hljs-attr">no</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">check</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">text</span>: <span class="hljs-string">'def'</span>},
+	{<span class="hljs-attr">no</span>: <span class="hljs-number">3</span>, <span class="hljs-attr">check</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">text</span>: <span class="hljs-string">'ghi'</span>},
+];
+
+<span class="hljs-keyword">const</span> {CHANGED_HEADER_VALUE, CHANGED_VALUE} = cheetahGrid.ListGrid.EVENT_TYPE;
+grid.listen(CHANGED_HEADER_VALUE, ({value, field}) =&gt; {
+	<span class="hljs-keyword">if</span> (field !== <span class="hljs-string">'check'</span>) {
+		<span class="hljs-keyword">return</span>;
+	}
+	<span class="hljs-comment">// header check value on change</span>
+
+	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> rec <span class="hljs-keyword">of</span> grid.records) {
+		rec[field] = value;
+	}
+	grid.invalidate();
+});
+grid.listen(CHANGED_VALUE, ({value, field}) =&gt; {
+	<span class="hljs-keyword">if</span> (field !== <span class="hljs-string">'check'</span>) {
+		<span class="hljs-keyword">return</span>;
+	}
+	<span class="hljs-comment">// check value on change</span>
+
+	grid.headerValues[field] = <span class="hljs-literal">false</span>;
+
+	grid.invalidate();
+});
+</code></pre>
+
+<h2 id="using-vue-js">Using Vue.js</h2>
+<p><code>vue-cheetah-grid</code>で利用するには<code>header-action</code>、<code>header-type</code>プロパティを指定してください。</p>
+
+<script type="text/javascript">
+/*eslint no-unused-vars:0*/
+
+const records = [
+	{no: 1, check: true, text: 'abc'},
+	{no: 2, check: false, text: 'def'},
+	{no: 3, check: true, text: 'ghi'},
+];
+</script>
+
+
+<div id="vue69875a8e1b6e80b4f1535955939f6710"></div>
+<script type="text/javascript">
+(function() {
+	var exports = {};
+	(function(exports) {
+		"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/*global records*/
+var _default = {
+  name: 'App',
+  data: {
+    records: records
+  },
+  methods: {
+    onChangeHeaderValue: function onChangeHeaderValue(_ref) {
+      var value = _ref.value;
+      // header check value on change
+      var grid = this.$refs.grid;
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = this.records[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var rec = _step.value;
+          rec.check = value;
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator["return"] != null) {
+            _iterator["return"]();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+
+      grid.invalidate();
+    },
+    onChangeValue: function onChangeValue() {
+      // check value on change
+      var grid = this.$refs.grid;
+      grid.headerValues.check = false;
+      grid.invalidate();
+    }
+  }
+};
+exports["default"] = _default;
+	})(exports)
+	var obj = exports.default || exports
+	obj.template = "\n<div class=\"demo-grid small\">\n\t<c-grid\n\t\tref=\"grid\"\n\t\t:data=\"records\">\n\t\t<c-grid-column\n\t\t\tfield=\"no\"\n\t\t\twidth= \"50\"\n\t\t>\n\t\t\tno\n\t\t</c-grid-column>\n\t\t<c-grid-check-column\n\t\t\tfield=\"check\"\n\t\t\twidth=\"100\"\n\t\t\theader-type=\"check\"\n\t\t\theader-action=\"check\"\n\t\t\t@changed-header-value=\"onChangeHeaderValue\"\n\t\t\t@changed-value=\"onChangeValue\" />\n\t\t<c-grid-column\n\t\t\tfield=\"text\"\n\t\t\twidth= \"120\"\n\t\t\theader-type=\"sort\"\n\t\t\theader-action=\"sort\" \n\t\t>\n\t\t\tsort\n\t\t</c-grid-column>\n\t</c-grid>\n</div>\n"
+	var vm = new Vue(obj);
+	vm.$mount('#vue69875a8e1b6e80b4f1535955939f6710')
+})();
+</script>
+
+<pre><code class="vue html hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">template</span>&gt;</span>
+	<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"demo-grid small"</span>&gt;</span>
+		<span class="hljs-tag">&lt;<span class="hljs-name">c-grid</span>
+			<span class="hljs-attr">ref</span>=<span class="hljs-string">"grid"</span>
+			<span class="hljs-attr">:data</span>=<span class="hljs-string">"records"</span>&gt;</span>
+			<span class="hljs-tag">&lt;<span class="hljs-name">c-grid-column</span>
+				<span class="hljs-attr">field</span>=<span class="hljs-string">"no"</span>
+				<span class="hljs-attr">width</span>= <span class="hljs-string">"50"</span>
+			&gt;</span>
+				no
+			<span class="hljs-tag">&lt;/<span class="hljs-name">c-grid-column</span>&gt;</span>
+			<span class="hljs-tag">&lt;<span class="hljs-name">c-grid-check-column</span>
+				<span class="hljs-attr">field</span>=<span class="hljs-string">"check"</span>
+				<span class="hljs-attr">width</span>=<span class="hljs-string">"100"</span>
+				<span class="hljs-attr">header-type</span>=<span class="hljs-string">"check"</span>
+				<span class="hljs-attr">header-action</span>=<span class="hljs-string">"check"</span>
+				@<span class="hljs-attr">changed-header-value</span>=<span class="hljs-string">"onChangeHeaderValue"</span>
+				@<span class="hljs-attr">changed-value</span>=<span class="hljs-string">"onChangeValue"</span> /&gt;</span>
+			<span class="hljs-tag">&lt;<span class="hljs-name">c-grid-column</span>
+				<span class="hljs-attr">field</span>=<span class="hljs-string">"text"</span>
+				<span class="hljs-attr">width</span>= <span class="hljs-string">"120"</span>
+				<span class="hljs-attr">header-type</span>=<span class="hljs-string">"sort"</span>
+				<span class="hljs-attr">header-action</span>=<span class="hljs-string">"sort"</span> 
+			&gt;</span>
+				sort
+			<span class="hljs-tag">&lt;/<span class="hljs-name">c-grid-column</span>&gt;</span>
+		<span class="hljs-tag">&lt;/<span class="hljs-name">c-grid</span>&gt;</span>
+	<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+<span class="hljs-comment">/*global records*/</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+	<span class="hljs-attr">name</span>: <span class="hljs-string">'App'</span>,
+	<span class="hljs-attr">data</span>: {
+		records
+	},
+	<span class="hljs-attr">methods</span>: {
+		onChangeHeaderValue({value}) {
+			<span class="hljs-comment">// header check value on change</span>
+			<span class="hljs-keyword">const</span> {grid} = <span class="hljs-keyword">this</span>.$refs;
+
+			<span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> rec <span class="hljs-keyword">of</span> <span class="hljs-keyword">this</span>.records) {
+				rec.check = value;
+			}
+			grid.invalidate();
+		},
+		onChangeValue() {
+			<span class="hljs-comment">// check value on change</span>
+			<span class="hljs-keyword">const</span> {grid} = <span class="hljs-keyword">this</span>.$refs;
+
+			grid.headerValues.check = <span class="hljs-literal">false</span>;
+
+			grid.invalidate();
+		}
+	}
+};
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre>
+
+<h2 id="using-header-action-class">Using Header Action Class</h2>
+<p>プロパティ<code>headerAction</code>はActionインスタンスを指定することで、
+途中でアクションのプロパティ(disableなど) を変更することが可能になります。  </p>
+
+    </div>
+    
+    <script type="text/javascript" src="./../../../../js/doc-common.js"></script>
+
+</body></html>

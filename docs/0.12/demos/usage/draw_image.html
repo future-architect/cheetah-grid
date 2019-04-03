@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="author" content="Cheetah Grid">
+    <meta name="keywords" content="spreadsheet,grid,canvas,table,web-components">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Cheetah Grid - Draw Image</title>
+    <link rel="shortcut icon" type="image/x-icon" href="./../../../icon_512x512.ico">
+
+    <link rel="stylesheet" type="text/css" href="./../../css/style.css">
+    <link rel="stylesheet" type="text/css" href="./../../css/highlightjs.css">
+    
+    <!-- <script src="http://localhost:35729/livereload.js"></script> -->
+    <script src="https://www.promisejs.org/polyfills/promise-7.0.4.min.js"></script>
+    
+    <script type="text/javascript" src="https://unpkg.com/cheetah-grid@0.12||0.11"></script>
+
+    <style type="text/css">
+        html {
+            height: 100%;
+        }
+        body {
+            height: calc(100% - 100px);
+        }
+        .contents {
+            padding: 30px;
+            box-sizing: border-box;
+        }
+        .demo-grid {
+            width: 100%;
+            height: 300px;
+            box-sizing: border-box;
+            border: solid 1px #ddd;
+        }
+        .demo-grid.large {
+            height: 500px;
+        }
+        .demo-grid.middle {
+            height: 300px;   
+        }
+        .demo-grid.small {
+            height: 240px;   
+        }
+        .log {
+            width: 100%;
+            height: 80px;
+            background-color: #F5F5F5;
+        }
+
+        .hljs { 
+             tab-size: 4;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <nav class="header primary" id="header-nav">
+    	<div class="nav-wrapper">
+    		<a href="./../../../index.html">
+    			<img src="./../../../logo.png" style="width: 100px;padding: 5px;vertical-align: middle;" alt="Cheetah Grid">
+    		</a>
+    
+    		<ul class="right hide-on-med-and-down nav-dropdown-container">
+    			<a href="#" class="primary nav-dropdown-button mobile-only" data-target="all-nav" style="width: 30px;">
+    				<span class="icon-arrow"></span>
+    			</a>
+    			<ul id="all-nav" class="mobile-nav-dropdown right-dropdown primary">
+    				<li><a href="./../../index.html" class="primary">Docoments - TOP</a></li>
+    				<li class="nav-dropdown-container">
+    					<a id="nav-versions" href="#" class="primary nav-dropdown-button" data-target="versions">
+    						version<span class="icon-arrow"></span>
+    					</a>
+    					<ul id="versions" class="nav-dropdown right-dropdown">
+    					</ul>
+    				</li>
+    				<li class="nav-dropdown-container">
+    					<a id="nav-lang" href="#" class="primary nav-dropdown-button" data-target="langs">
+    						lang<span class="icon-arrow"></span>
+    					</a>
+    					<ul id="langs" class="nav-dropdown right-dropdown">
+    						<li><a href="./../../ja/demos/usage/draw_image.html" class="primary">日本語</a></li>
+    						<li><a href="./../../demos/usage/draw_image.html" class="primary">English</a></li>
+    					</ul>
+    				</li>
+    			</ul>
+    		</ul>
+    	</div>
+    </nav>
+    
+    <script type="text/javascript">
+    	'use strict';
+    	////babel
+    "use strict";
+    
+    function getVersions(callback) {
+      var xhr = new XMLHttpRequest();
+    
+      function onError() {
+        callback(['0.12', '0.0.1']);
+      }
+    
+      xhr.onload = function () {
+        var versions = JSON.parse(xhr.responseText);
+        callback(versions);
+      };
+    
+      xhr.onerror = onError;
+      xhr.onabort = onError;
+    
+      try {
+        xhr.open('GET', "./../../../versions.json"); // eslint-disable-line quotes
+    
+        xhr.send();
+      } catch (e) {
+        onError();
+      }
+    } //
+    
+    
+    getVersions(function (versions) {
+      var myVersion = '0.12';
+    
+      function getVerLocation(v) {
+        return location.href.replace(myVersion, v).replace('.devdoc', v);
+      }
+    
+      var latest = versions[0];
+      var versEl = document.getElementById('versions');
+      versEl.innerHTML = versions.map(function (v, i) {
+        return "<li><a href=\"".concat(getVerLocation(v), "\" class=\"primary\">").concat(v).concat(i === 0 ? ' (latest)' : '', "</a></li>");
+      }).join('');
+    
+      if (latest !== myVersion) {
+        var header = document.getElementById('header-nav');
+        var a = document.createElement('a');
+        header.parentElement.insertBefore(a, header.nextSibling);
+        a.href = getVerLocation(latest);
+        a.textContent = "<goto the latest version(".concat(latest, ") document>");
+      }
+    }); //
+    </script>    <h1><a href="./../.././index.html#usage">Usage</a> &gt; Draw Image</h1>
+    <div class="contents">
+        
+<h2 id="draw-image">Draw image</h2>
+<p>Use <code>columnType: 'image'</code> to draw image in the cell.</p>
+<p>note: You should load polyfill like <a href="https://www.npmjs.com/package/es6-promise">es6-promise</a>, when using the browser which doesn't support Promise, such as IE.</p>
+
+<div id="sample" class="demo-grid middle">
+</div>
+<p>note: Images used in samples are on <a href="https://en.wikipedia.org/wiki/Cheetah">wikipedia</a>.
+Please click the images to check details of those.</p>
+<script type="text/javascript">
+////wrapscript
+(function() {
+//babel
+"use strict";
+
+//
+
+/*global cheetahGrid*/
+// create cheetahGrid
+var grid = new cheetahGrid.ListGrid({
+  parentElement: document.querySelector('#sample'),
+  header: [{
+    field: 'imageUrl',
+    caption: 'image',
+    width: 100,
+    columnType: 'image',
+    style: {
+      imageSizing: 'keep-aspect-ratio'
+    },
+    // open image detail
+    action: new cheetahGrid.columns.action.Action({
+      action: function action(rec) {
+        window.open(rec.link, '_blank');
+      }
+    })
+  }, {
+    field: 'label',
+    caption: 'label',
+    width: 200
+  }],
+  frozenColCount: 1,
+  defaultRowHeight: 100,
+  headerRowHeight: 24
+}); //https://en.wikipedia.org/wiki/Cheetah
+
+grid.records = [{
+  imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Asian_cheetah.jpg/180px-Asian_cheetah.jpg',
+  label: 'Asian cheetah',
+  link: 'https://en.wikipedia.org/wiki/File:Asian_cheetah.jpg'
+}, {
+  imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Cheetah_%28Kruger_National_Park%2C_South_Africa%2C_2001%29.jpg/180px-Cheetah_%28Kruger_National_Park%2C_South_Africa%2C_2001%29.jpg',
+  label: 'South African cheetah',
+  link: 'https://en.wikipedia.org/wiki/File:Cheetah_(Kruger_National_Park,_South_Africa,_2001).jpg'
+}, {
+  imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Cheetah_at_Whipsnade_Zoo%2C_Dunstable.jpg/180px-Cheetah_at_Whipsnade_Zoo%2C_Dunstable.jpg',
+  label: 'Sudan cheetah',
+  link: 'https://en.wikipedia.org/wiki/File:Cheetah_at_Whipsnade_Zoo,_Dunstable.jpg'
+}, {
+  imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/TanzanianCheetah.jpg/180px-TanzanianCheetah.jpg',
+  label: 'Tanzanian cheetah',
+  link: 'https://en.wikipedia.org/wiki/File:TanzanianCheetah.jpg'
+}, {
+  imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Cheetah_portrait_Whipsnade_Zoo.jpg/220px-Cheetah_portrait_Whipsnade_Zoo.jpg',
+  label: 'Cheetah',
+  link: 'https://en.wikipedia.org/wiki/File:Cheetah_portrait_Whipsnade_Zoo.jpg'
+}, {
+  imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/King_cheetah.jpg/170px-King_cheetah.jpg',
+  label: 'King cheetah',
+  link: 'https://en.wikipedia.org/wiki/File:King_cheetah.jpg'
+}];
+grid.configure('fadeinWhenCallbackInPromise', true); //
+//
+})();
+</script>
+<pre><code class="js hljs javascript"><span class="hljs-comment">/*global cheetahGrid*/</span>
+
+
+<span class="hljs-comment">// create cheetahGrid</span>
+<span class="hljs-keyword">const</span> grid = <span class="hljs-keyword">new</span> cheetahGrid.ListGrid({
+	<span class="hljs-attr">parentElement</span>: <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample'</span>),
+	<span class="hljs-attr">header</span>: [
+		{
+			<span class="hljs-attr">field</span>: <span class="hljs-string">'imageUrl'</span>,
+			<span class="hljs-attr">caption</span>: <span class="hljs-string">'image'</span>,
+			<span class="hljs-attr">width</span>: <span class="hljs-number">100</span>,
+			<span class="hljs-attr">columnType</span>: <span class="hljs-string">'image'</span>,
+			<span class="hljs-attr">style</span>: {<span class="hljs-attr">imageSizing</span>: <span class="hljs-string">'keep-aspect-ratio'</span>},
+
+			<span class="hljs-comment">// open image detail</span>
+			action: <span class="hljs-keyword">new</span> cheetahGrid.columns.action.Action({
+				action(rec) {
+					<span class="hljs-built_in">window</span>.open(rec.link, <span class="hljs-string">'_blank'</span>);
+				},
+			}),
+		},
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'label'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'label'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">200</span>},
+	],
+	<span class="hljs-attr">frozenColCount</span>: <span class="hljs-number">1</span>,
+	<span class="hljs-attr">defaultRowHeight</span>: <span class="hljs-number">100</span>,
+	<span class="hljs-attr">headerRowHeight</span>: <span class="hljs-number">24</span>,
+});
+<span class="hljs-comment">//https://en.wikipedia.org/wiki/Cheetah</span>
+grid.records = [
+	{
+		<span class="hljs-attr">imageUrl</span>: <span class="hljs-string">'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Asian_cheetah.jpg/180px-Asian_cheetah.jpg'</span>,
+		<span class="hljs-attr">label</span>: <span class="hljs-string">'Asian cheetah'</span>,
+		<span class="hljs-attr">link</span>: <span class="hljs-string">'https://en.wikipedia.org/wiki/File:Asian_cheetah.jpg'</span>
+	},
+	{
+		<span class="hljs-attr">imageUrl</span>: <span class="hljs-string">'https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Cheetah_%28Kruger_National_Park%2C_South_Africa%2C_2001%29.jpg/180px-Cheetah_%28Kruger_National_Park%2C_South_Africa%2C_2001%29.jpg'</span>,
+		<span class="hljs-attr">label</span>: <span class="hljs-string">'South African cheetah'</span>,
+		<span class="hljs-attr">link</span>: <span class="hljs-string">'https://en.wikipedia.org/wiki/File:Cheetah_(Kruger_National_Park,_South_Africa,_2001).jpg'</span>
+	},
+	{
+		<span class="hljs-attr">imageUrl</span>: <span class="hljs-string">'https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Cheetah_at_Whipsnade_Zoo%2C_Dunstable.jpg/180px-Cheetah_at_Whipsnade_Zoo%2C_Dunstable.jpg'</span>,
+		<span class="hljs-attr">label</span>: <span class="hljs-string">'Sudan cheetah'</span>,
+		<span class="hljs-attr">link</span>: <span class="hljs-string">'https://en.wikipedia.org/wiki/File:Cheetah_at_Whipsnade_Zoo,_Dunstable.jpg'</span>
+	},
+	{
+		<span class="hljs-attr">imageUrl</span>: <span class="hljs-string">'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/TanzanianCheetah.jpg/180px-TanzanianCheetah.jpg'</span>,
+		<span class="hljs-attr">label</span>: <span class="hljs-string">'Tanzanian cheetah'</span>,
+		<span class="hljs-attr">link</span>: <span class="hljs-string">'https://en.wikipedia.org/wiki/File:TanzanianCheetah.jpg'</span>
+	},
+	{
+		<span class="hljs-attr">imageUrl</span>: <span class="hljs-string">'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Cheetah_portrait_Whipsnade_Zoo.jpg/220px-Cheetah_portrait_Whipsnade_Zoo.jpg'</span>,
+		<span class="hljs-attr">label</span>: <span class="hljs-string">'Cheetah'</span>,
+		<span class="hljs-attr">link</span>: <span class="hljs-string">'https://en.wikipedia.org/wiki/File:Cheetah_portrait_Whipsnade_Zoo.jpg'</span>
+	},
+	{
+		<span class="hljs-attr">imageUrl</span>: <span class="hljs-string">'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/King_cheetah.jpg/170px-King_cheetah.jpg'</span>,
+		<span class="hljs-attr">label</span>: <span class="hljs-string">'King cheetah'</span>,
+		<span class="hljs-attr">link</span>: <span class="hljs-string">'https://en.wikipedia.org/wiki/File:King_cheetah.jpg'</span>
+	},
+];
+grid.configure(<span class="hljs-string">'fadeinWhenCallbackInPromise'</span>, <span class="hljs-literal">true</span>);
+</code></pre>
+
+    </div>
+    
+    <script type="text/javascript" src="./../../js/doc-common.js"></script>
+
+</body></html>
