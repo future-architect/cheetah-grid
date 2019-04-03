@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="author" content="Cheetah Grid">
+    <meta name="keywords" content="spreadsheet,grid,canvas,table,web-components">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Cheetah Grid - What it is</title>
+    <link rel="shortcut icon" type="image/x-icon" href="./../../../icon_512x512.ico">
+
+    <link rel="stylesheet" type="text/css" href="./../../css/style.css">
+    <link rel="stylesheet" type="text/css" href="./../../css/highlightjs.css">
+    
+    <!-- <script src="http://localhost:35729/livereload.js"></script> -->
+    <script src="https://www.promisejs.org/polyfills/promise-7.0.4.min.js"></script>
+    
+    <script type="text/javascript" src="https://unpkg.com/cheetah-grid@0.12||0.11"></script>
+
+    <style type="text/css">
+        html {
+            height: 100%;
+        }
+        body {
+            height: calc(100% - 100px);
+        }
+        .contents {
+            padding: 30px;
+            box-sizing: border-box;
+        }
+        .demo-grid {
+            width: 100%;
+            height: 300px;
+            box-sizing: border-box;
+            border: solid 1px #ddd;
+        }
+        .demo-grid.large {
+            height: 500px;
+        }
+        .demo-grid.middle {
+            height: 300px;   
+        }
+        .demo-grid.small {
+            height: 240px;   
+        }
+        .log {
+            width: 100%;
+            height: 80px;
+            background-color: #F5F5F5;
+        }
+
+        .hljs { 
+             tab-size: 4;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <nav class="header primary" id="header-nav">
+    	<div class="nav-wrapper">
+    		<a href="./../../../index.html">
+    			<img src="./../../../logo.png" style="width: 100px;padding: 5px;vertical-align: middle;" alt="Cheetah Grid">
+    		</a>
+    
+    		<ul class="right hide-on-med-and-down nav-dropdown-container">
+    			<a href="#" class="primary nav-dropdown-button mobile-only" data-target="all-nav" style="width: 30px;">
+    				<span class="icon-arrow"></span>
+    			</a>
+    			<ul id="all-nav" class="mobile-nav-dropdown right-dropdown primary">
+    				<li><a href="./../../index.html" class="primary">Docoments - TOP</a></li>
+    				<li class="nav-dropdown-container">
+    					<a id="nav-versions" href="#" class="primary nav-dropdown-button" data-target="versions">
+    						version<span class="icon-arrow"></span>
+    					</a>
+    					<ul id="versions" class="nav-dropdown right-dropdown">
+    					</ul>
+    				</li>
+    				<li class="nav-dropdown-container">
+    					<a id="nav-lang" href="#" class="primary nav-dropdown-button" data-target="langs">
+    						lang<span class="icon-arrow"></span>
+    					</a>
+    					<ul id="langs" class="nav-dropdown right-dropdown">
+    						<li><a href="./../../ja/demos/sample/sample.html" class="primary">日本語</a></li>
+    						<li><a href="./../../demos/sample/sample.html" class="primary">English</a></li>
+    					</ul>
+    				</li>
+    			</ul>
+    		</ul>
+    	</div>
+    </nav>
+    
+    <script type="text/javascript">
+    	'use strict';
+    	////babel
+    "use strict";
+    
+    function getVersions(callback) {
+      var xhr = new XMLHttpRequest();
+    
+      function onError() {
+        callback(['0.12', '0.0.1']);
+      }
+    
+      xhr.onload = function () {
+        var versions = JSON.parse(xhr.responseText);
+        callback(versions);
+      };
+    
+      xhr.onerror = onError;
+      xhr.onabort = onError;
+    
+      try {
+        xhr.open('GET', "./../../../versions.json"); // eslint-disable-line quotes
+    
+        xhr.send();
+      } catch (e) {
+        onError();
+      }
+    } //
+    
+    
+    getVersions(function (versions) {
+      var myVersion = '0.12';
+    
+      function getVerLocation(v) {
+        return location.href.replace(myVersion, v).replace('.devdoc', v);
+      }
+    
+      var latest = versions[0];
+      var versEl = document.getElementById('versions');
+      versEl.innerHTML = versions.map(function (v, i) {
+        return "<li><a href=\"".concat(getVerLocation(v), "\" class=\"primary\">").concat(v).concat(i === 0 ? ' (latest)' : '', "</a></li>");
+      }).join('');
+    
+      if (latest !== myVersion) {
+        var header = document.getElementById('header-nav');
+        var a = document.createElement('a');
+        header.parentElement.insertBefore(a, header.nextSibling);
+        a.href = getVerLocation(latest);
+        a.textContent = "<goto the latest version(".concat(latest, ") document>");
+      }
+    }); //
+    </script>    <h1><a href="./../.././index.html#introduction">Introduction</a> &gt; What it is</h1>
+    <div class="contents">
+        
+<h1 id="what-it-is">What it is</h1>
+<p>Cheetah Grid is a high performance JavaScript data table component that works on canvas</p>
+<h1 id="show-1-000-000-records-without-stress">Show <strong>1,000,000</strong> records without stress</h1>
+<p>You can display data of 1 million records in a <strong>moment</strong>.</p>
+<hr>
+
+<script type="text/javascript">
+
+////babel
+'use strict';
+
+var generatePerson = function () {
+  var fnames = ['Sophia', 'Emma', 'Olivia', 'Isabella', 'Ava', 'Mia', 'Emily', 'Abigail', 'Madison', 'Elizabeth', 'Charlotte', 'Avery', 'Sofia', 'Chloe', 'Ella', 'Harper', 'Amelia', 'Aubrey', 'Addison', 'Evelyn', 'Natalie', 'Grace', 'Hannah', 'Zoey', 'Victoria', 'Lillian', 'Lily', 'Brooklyn', 'Samantha', 'Layla', 'Zoe', 'Audrey', 'Leah', 'Allison', 'Anna', 'Aaliyah', 'Savannah', 'Gabriella', 'Camila', 'Aria', 'Noah', 'Liam', 'Jacob', 'Mason', 'William', 'Ethan', 'Michael', 'Alexander', 'Jayden', 'Daniel', 'Elijah', 'Aiden', 'James', 'Benjamin', 'Matthew', 'Jackson', 'Logan', 'David', 'Anthony', 'Joseph', 'Joshua', 'Andrew', 'Lucas', 'Gabriel', 'Samuel', 'Christopher', 'John', 'Dylan', 'Isaac', 'Ryan', 'Nathan', 'Carter', 'Caleb', 'Luke', 'Christian', 'Hunter', 'Henry', 'Owen', 'Landon', 'Jack'];
+  var lnames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Miller', 'Davis', 'Garcia', 'Rodriguez', 'Wilson', 'Martinez', 'Anderson', 'Taylor', 'Thomas', 'Hernandez', 'Moore', 'Martin', 'Jackson', 'Thompson', 'White', 'Lopez', 'Lee', 'Gonzalez', 'Harris', 'Clark', 'Lewis', 'Robinson', 'Walker', 'Perez', 'Hall', 'Young', 'Allen', 'Sanchez', 'Wright', 'King', 'Scott', 'Green', 'Baker', 'Adams', 'Nelson', 'Hill', 'Ramirez', 'Campbell', 'Mitchell', 'Roberts', 'Carter', 'Phillips', 'Evans', 'Turner', 'Torres', 'Parker', 'Collins', 'Edwards', 'Stewart', 'Flores', 'Morris', 'Nguyen', 'Murphy', 'Rivera', 'Cook', 'Rogers', 'Morgan', 'Peterson', 'Cooper', 'Reed', 'Bailey', 'Bell', 'Gomez', 'Kelly', 'Howard', 'Ward', 'Cox', 'Diaz', 'Richardson', 'Wood', 'Watson', 'Brooks', 'Bennett', 'Gray', 'James', 'Reyes', 'Cruz', 'Hughes', 'Price', 'Myers', 'Long', 'Foster', 'Sanders', 'Ross', 'Morales', 'Powell', 'Sullivan', 'Russell', 'Ortiz', 'Jenkins', 'Gutierrez', 'Perry', 'Butler', 'Barnes', 'Fisher'];
+  var msOfYear = 365 * 24 * 60 * 60 * 1000;
+  return function (index) {
+    var fname = fnames[Math.floor(Math.random() * fnames.length)];
+    var lname = lnames[Math.floor(Math.random() * lnames.length)];
+    var birthday = new Date(Date.now() - 20 * msOfYear - Math.floor(Math.random() * 15 * msOfYear));
+    birthday = new Date(birthday.getFullYear(), birthday.getMonth(), birthday.getDate(), 0, 0, 0, 0);
+    return {
+      personid: index + 1,
+      fname: fname,
+      lname: lname,
+      email: "".concat(fname.replace('-', '_'), "_").concat(lname.replace('-', '_'), "@example.com").toLowerCase(),
+      birthday: birthday
+    };
+  };
+}();
+
+function generatePersons(num) {
+  var initId = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+  var records = [];
+
+  for (var i = 0; i < num; i++) {
+    records.push(generatePerson(initId + i - 1));
+  }
+
+  return records;
+}
+
+function generatePersonsDataSource(num) {
+  var array = new Array(num);
+  return new cheetahGrid.data.CachedDataSource({
+    get: function get(index) {
+      return array[index] ? array[index] : array[index] = generatePerson(index);
+    },
+    length: num
+  });
+}
+</script>
+
+<label>Grid initial processing time : </label><strong id="time"></strong>
+<br>
+<br>
+<label>theme</label>
+<select id="theme">
+    <option value="default" selected="true">default</option>
+</select>
+<div id="sample" class="demo-grid large">
+</div>
+<script type="text/javascript">
+/*eslint no-alert:0*/
+
+////wrapscript
+(function() {
+//babel
+"use strict";
+
+//
+
+/*global cheetahGrid,generatePersonsDataSource*/
+var personsDataSource = generatePersonsDataSource(1000000);
+var startTime = new Date();
+var grid = new cheetahGrid.ListGrid({
+  parentElement: document.querySelector('#sample'),
+  header: [{
+    field: 'check',
+    caption: '',
+    width: 50,
+    columnType: 'check',
+    action: 'check'
+  }, {
+    field: 'personid',
+    caption: 'ID',
+    width: 100
+  }, {
+    /* multiple header */
+    caption: 'name',
+    columns: [{
+      field: 'fname',
+      caption: 'First Name',
+      width: 200
+    }, {
+      field: 'lname',
+      caption: 'Last Name',
+      width: 200
+    }]
+  }, {
+    field: 'email',
+    caption: 'Email',
+    width: 250
+  }, {
+    /* callback field */
+    field: function field(rec) {
+      var d = rec.birthday;
+      return "".concat(d.getFullYear(), "/").concat(d.getMonth() + 1, "/").concat(d.getDate());
+    },
+    caption: 'birthday',
+    width: 100
+  }, {
+    caption: 'button',
+    width: 120,
+
+    /* button column */
+    columnType: new cheetahGrid.columns.type.ButtonColumn({
+      caption: 'SHOW REC'
+    }),
+    action: new cheetahGrid.columns.action.ButtonAction({
+      action: function action(rec) {
+        alert(JSON.stringify(rec));
+      }
+    })
+  }],
+  frozenColCount: 2
+});
+grid.dataSource = personsDataSource;
+var endTime = new Date();
+document.getElementById('time').textContent = "".concat(endTime - startTime, "ms"); //
+
+window.grid = grid;
+var themeSelect = document.querySelector('#theme');
+
+themeSelect.onchange = function () {
+  if (themeSelect.value === 'default') {
+    grid.theme = null;
+  } else {
+    grid.theme = themeSelect.value;
+  }
+
+  console.log(themeSelect.value);
+};
+
+for (var name in cheetahGrid.themes.choices) {
+  var opt = document.createElement('option');
+  opt.value = name;
+  opt.textContent = name;
+  themeSelect.appendChild(opt);
+} //
+})();
+</script>
+<pre><code class="js hljs javascript"><span class="hljs-comment">/*global cheetahGrid,generatePersonsDataSource*/</span>
+<span class="hljs-keyword">const</span> personsDataSource = generatePersonsDataSource(<span class="hljs-number">1000000</span>);
+
+<span class="hljs-keyword">const</span> startTime = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>();
+
+<span class="hljs-keyword">const</span> grid = <span class="hljs-keyword">new</span> cheetahGrid.ListGrid({
+	<span class="hljs-attr">parentElement</span>: <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample'</span>),
+	<span class="hljs-attr">header</span>: [
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'check'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">''</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">50</span>, <span class="hljs-attr">columnType</span>: <span class="hljs-string">'check'</span>, <span class="hljs-attr">action</span>: <span class="hljs-string">'check'</span>},
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'personid'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'ID'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">100</span>},
+		{ <span class="hljs-comment">/* multiple header */</span>
+			caption: <span class="hljs-string">'name'</span>,
+			<span class="hljs-attr">columns</span>: [
+				{<span class="hljs-attr">field</span>: <span class="hljs-string">'fname'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'First Name'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">200</span>},
+				{<span class="hljs-attr">field</span>: <span class="hljs-string">'lname'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'Last Name'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">200</span>},
+			],
+		},
+		{<span class="hljs-attr">field</span>: <span class="hljs-string">'email'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'Email'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">250</span>},
+		{
+			<span class="hljs-comment">/* callback field */</span>
+			field(rec) {
+				<span class="hljs-keyword">const</span> d = rec.birthday;
+				<span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${d.getFullYear()}</span>/<span class="hljs-subst">${d.getMonth() + <span class="hljs-number">1</span>}</span>/<span class="hljs-subst">${d.getDate()}</span>`</span>;
+			},
+			<span class="hljs-attr">caption</span>: <span class="hljs-string">'birthday'</span>,
+			<span class="hljs-attr">width</span>: <span class="hljs-number">100</span>
+		},
+		{
+			<span class="hljs-attr">caption</span>: <span class="hljs-string">'button'</span>,
+			<span class="hljs-attr">width</span>: <span class="hljs-number">120</span>,
+			<span class="hljs-comment">/* button column */</span>
+			columnType: <span class="hljs-keyword">new</span> cheetahGrid.columns.type.ButtonColumn({
+				<span class="hljs-attr">caption</span>: <span class="hljs-string">'SHOW REC'</span>,
+			}),
+			<span class="hljs-attr">action</span>: <span class="hljs-keyword">new</span> cheetahGrid.columns.action.ButtonAction({
+				action(rec) {
+					alert(<span class="hljs-built_in">JSON</span>.stringify(rec));
+				},
+			}),
+		}
+	],
+	<span class="hljs-attr">frozenColCount</span>: <span class="hljs-number">2</span>,
+});
+grid.dataSource = personsDataSource;
+
+<span class="hljs-keyword">const</span> endTime = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>();
+
+<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'time'</span>).textContent = <span class="hljs-string">`<span class="hljs-subst">${endTime - startTime}</span>ms`</span>;
+</code></pre>
+<hr>
+<h1 id="a-simple-example">A simple example</h1>
+<hr>
+
+<label>record count : </label><input id="input2" type="number" value="100" style="text-align: right;"><button id="reload">RELOAD</button><br>
+<span id="log2"></span>
+<label>Grid initial processing time : </label><strong id="time2"></strong>
+<div id="sample2" class="demo-grid middle">
+</div>
+<script type="text/javascript">
+/*eslint no-alert:0*/
+
+//Use Promise
+////wrapscript
+(function() {
+//babel
+"use strict";
+
+/*global cheetahGrid,generatePersons*/
+var logEl = document.querySelector('#log2');
+var baseRecords = [];
+
+function generatePersonRecords(count) {
+  var addCount = count - baseRecords.length;
+
+  if (addCount > 1000000) {
+    if (!window.confirm("Construction of the array may take time. Is it OK?\nrecord count: ".concat(count))) {
+      return Promise.resolve();
+    }
+  }
+
+  if (addCount < 0) {
+    return Promise.resolve(baseRecords.slice(0, count));
+  }
+
+  function gen() {
+    return new Promise(function (resolve) {
+      setTimeout(function () {
+        generatePersons(10000, baseRecords.length + 1).forEach(function (r) {
+          return baseRecords.push(r);
+        });
+        resolve();
+      }, 0);
+    });
+  }
+
+  function recursive() {
+    return gen().then(function () {
+      if (baseRecords.length > count) {
+        logEl.innerHTML = '';
+        return baseRecords.slice(0, count);
+      } else {
+        if (count >= 100000) {
+          logEl.innerHTML = "generated : ".concat(baseRecords.length, "<br>");
+        }
+
+        return gen().then(recursive);
+      }
+    });
+  }
+
+  return recursive();
+}
+
+var grid;
+
+function reload() {
+  generatePersonRecords(document.querySelector('#input2').value - 0).then(function (records) {
+    if (!records) {
+      return;
+    }
+
+    var startTime = new Date();
+
+    if (grid) {
+      grid.dispose();
+    } //
+    // initialize
+
+
+    grid = new cheetahGrid.ListGrid({
+      // Parent element on which to place the grid
+      parentElement: document.querySelector('#sample2'),
+      // Header definition
+      header: [{
+        field: 'check',
+        caption: '',
+        width: 50,
+        columnType: 'check',
+        action: 'check'
+      }, {
+        field: 'personid',
+        caption: 'ID',
+        width: 100
+      }, {
+        field: 'fname',
+        caption: 'First Name',
+        width: 200
+      }, {
+        field: 'lname',
+        caption: 'Last Name',
+        width: 200
+      }, {
+        field: 'email',
+        caption: 'Email',
+        width: 250
+      }],
+      // Array data to be displayed on the grid
+      records: records,
+      // Column fixed position
+      frozenColCount: 2
+    }); //
+
+    var endTime = new Date();
+    document.getElementById('time2').textContent = "".concat(endTime - startTime, "ms");
+  });
+}
+
+document.querySelector('#reload').onclick = reload;
+reload(); //
+})();
+</script>
+<pre><code class="js hljs javascript">		<span class="hljs-comment">// initialize</span>
+		grid = <span class="hljs-keyword">new</span> cheetahGrid.ListGrid({
+			<span class="hljs-comment">// Parent element on which to place the grid</span>
+			parentElement: <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample2'</span>),
+			<span class="hljs-comment">// Header definition</span>
+			header: [
+				{<span class="hljs-attr">field</span>: <span class="hljs-string">'check'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">''</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">50</span>, <span class="hljs-attr">columnType</span>: <span class="hljs-string">'check'</span>, <span class="hljs-attr">action</span>: <span class="hljs-string">'check'</span>},
+				{<span class="hljs-attr">field</span>: <span class="hljs-string">'personid'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'ID'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">100</span>},
+				{<span class="hljs-attr">field</span>: <span class="hljs-string">'fname'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'First Name'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">200</span>},
+				{<span class="hljs-attr">field</span>: <span class="hljs-string">'lname'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'Last Name'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">200</span>},
+				{<span class="hljs-attr">field</span>: <span class="hljs-string">'email'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'Email'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">250</span>},
+			],
+			<span class="hljs-comment">// Array data to be displayed on the grid</span>
+			records,
+			<span class="hljs-comment">// Column fixed position</span>
+			frozenColCount: <span class="hljs-number">2</span>,
+		});
+</code></pre>
+    </div>
+    
+    <script type="text/javascript" src="./../../js/doc-common.js"></script>
+
+</body></html>

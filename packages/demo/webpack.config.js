@@ -33,7 +33,7 @@ module.exports = (env, argv) => {
   // context: path.join(__dirname, 'src'),
   // context: '/',
     entry: {
-      app: ['babel-polyfill', './src/main.js']
+      app: ['@babel/polyfill', './src/main.js']
     },
     output: {
       path: path.resolve(__dirname, '../../docs/assets'),
