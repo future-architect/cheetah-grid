@@ -494,9 +494,10 @@ function _getRowsHeight(grid, startRow, endRow) {
 }
 
 function _getScrollWidth(grid) {
-	let w = _getDefaultColPxWidth(grid) * grid[_].colCount;
-	grid[_].colWidthsMap.eachAll((width, col) => {
-		w += _adjustColWidth(grid, col, _toPxWidth(grid, width)) - _getDefaultColPxWidth(grid);
+	const defaultColPxWidth = _getDefaultColPxWidth(grid);
+	let w = defaultColPxWidth * grid[_].colCount;
+	grid[_].colWidthsMap.each(0, grid[_].colCount - 1, (width, col) => {
+		w += _adjustColWidth(grid, col, _toPxWidth(grid, width)) - defaultColPxWidth;
 	});
 	return w;
 }
@@ -506,7 +507,7 @@ function _getScrollHeight(grid, row) {
 		return internal;
 	}
 	let h = grid[_].defaultRowHeight * grid[_].rowCount;
-	grid[_].rowHeightsMap.eachAll((height) => {
+	grid[_].rowHeightsMap.each(0, grid[_].rowCount - 1, (height) => {
 		h += height - grid[_].defaultRowHeight;
 	});
 	return h;
@@ -2216,7 +2217,7 @@ class DrawGrid extends EventTarget {
 		if (newHeight === scrollable.scrollHeight && newWidth === scrollable.scrollWidth) {
 			return false;
 		}
-		scrollable.setScrollSize(_getScrollWidth(this), _getScrollHeight(this));
+		scrollable.setScrollSize(newWidth, newHeight);
 		this[_].scroll = {
 			left: scrollable.scrollLeft,
 			top: scrollable.scrollTop,

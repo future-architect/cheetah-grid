@@ -7,6 +7,7 @@ const {
 	},
 	then
 } = require('../../internal/utils');
+const {isDisabledRecord, isReadOnlyRecord} = require('./action-utils');
 const {normalize} = require('../../internal/menu-items');
 
 const Editor = require('./Editor');
@@ -91,7 +92,10 @@ class InlineMenuEditor extends Editor {
 	}
 	bindGridEvent(grid, col, util) {
 		const open = (cell) => {
-			if (this.readOnly || this.disabled) {
+			if (
+				isReadOnlyRecord(this.readOnly, grid, cell.row) ||
+				isDisabledRecord(this.disabled, grid, cell.row)
+			) {
 				return;
 			}
 			grid.doGetCellValue(cell.col, cell.row, (value) => {
@@ -131,7 +135,10 @@ class InlineMenuEditor extends Editor {
 
 			// mouse move
 			grid.listen(MOUSEOVER_CELL, (e) => {
-				if (this.readOnly || this.disabled) {
+				if (
+					isReadOnlyRecord(this.readOnly, grid, e.row) ||
+					isDisabledRecord(this.disabled, grid, e.row)
+				) {
 					return;
 				}
 				if (!util.isTarget(e.col, e.row)) {
@@ -140,7 +147,10 @@ class InlineMenuEditor extends Editor {
 				grid.getElement().style.cursor = 'pointer';
 			}),
 			grid.listen(MOUSEMOVE_CELL, (e) => {
-				if (this.readOnly || this.disabled) {
+				if (
+					isReadOnlyRecord(this.readOnly, grid, e.row) ||
+					isDisabledRecord(this.disabled, grid, e.row)
+				) {
 					return;
 				}
 				if (!util.isTarget(e.col, e.row)) {

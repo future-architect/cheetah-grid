@@ -18,7 +18,7 @@
           action="check"
         />
         <c-grid-column
-          :column-style="{textAlign: 'center'}"
+          :column-style="{ textAlign: 'center' }"
           :sort="true"
           :width="70"
           field="no"

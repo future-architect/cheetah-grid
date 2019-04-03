@@ -15,8 +15,8 @@
         <c-grid-column
           :width="200"
           :column-type="{
-            typeName:'BranchGraphColumn',
-            option:{
+            typeName: 'BranchGraphColumn',
+            option: {
               cache: true
             }
           }"

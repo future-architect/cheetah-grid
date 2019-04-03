@@ -23,7 +23,7 @@ The fastest open-source data table for web.
 [![npm](https://img.shields.io/npm/v/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
 
 ```html
-<script src="https://unpkg.com/cheetah-grid@0.11.x"></script>
+<script src="https://unpkg.com/cheetah-grid@0.12.x"></script>
 ```
 
 ### Downloading Cheetah Grid using npm
@@ -42,10 +42,10 @@ const cheetahGrid = require("cheetah-grid")
 
 [![npm](https://img.shields.io/npm/v/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
 
-[cheetahGrid.es5.min.js](https://unpkg.com/cheetah-grid@0.11.x/dist/cheetahGrid.es5.min.js)  
+[cheetahGrid.es5.min.js](https://unpkg.com/cheetah-grid@0.12.x/dist/cheetahGrid.es5.min.js)  
 
 SourceMap  
-[cheetahGrid.es5.min.js.map](https://unpkg.com/cheetah-grid@0.11.x/dist/cheetahGrid.es5.min.js.map)  
+[cheetahGrid.es5.min.js.map](https://unpkg.com/cheetah-grid@0.12.x/dist/cheetahGrid.es5.min.js.map)  
 
 
 ### Downloading Cheetah Grid using GitHub
@@ -154,7 +154,7 @@ For example, you can set the following strings:
 
 If you define a class instance you can define an advanced column types.
 
-Please refer to the [column types documents](https://future-architect.github.io/cheetah-grid/0.11/demos/usage/column_types/Classes.html) for details  
+Please refer to the [column types documents](https://future-architect.github.io/cheetah-grid/0.12/demos/usage/column_types/Classes.html) for details  
 
 ### Definition of column action
 
@@ -167,7 +167,7 @@ Define column action by using `action` property.
 
 If you define a class instance you can define an advanced column actions.
 
-Please refer to the [column actions documents](https://future-architect.github.io/cheetah-grid/0.11/demos/usage/column_actions/Classes.html) for details  
+Please refer to the [column actions documents](https://future-architect.github.io/cheetah-grid/0.12/demos/usage/column_actions/Classes.html) for details  
 
 ### Definition of column style
 

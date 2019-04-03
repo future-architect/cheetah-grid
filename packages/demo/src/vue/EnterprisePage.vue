@@ -46,14 +46,14 @@
           }"
           :action="{
             actionName: 'InlineMenuEditor',
-            option:{options: [
-              {value: '', caption: 'Empty'},
-              {value: 1, classList: 'stars', html: `<i class='material-icons'>star</i>`},
-              {value: 2, classList: 'stars', html: `<i class='material-icons'>star</i>`.repeat(2)},
-              {value: 3, classList: 'stars', html: `<i class='material-icons'>star</i>`.repeat(3)},
-              {value: 4, classList: 'stars', html: `<i class='material-icons'>star</i>`.repeat(4)},
-              {value: 5, classList: 'stars', html: `<i class='material-icons'>star</i>`.repeat(5)}
-            ]}
+            option: { options: [
+              { value: '', caption: 'Empty' },
+              { value: 1, classList: 'stars', html: `<i class='material-icons'>star</i>` },
+              { value: 2, classList: 'stars', html: `<i class='material-icons'>star</i>`.repeat(2) },
+              { value: 3, classList: 'stars', html: `<i class='material-icons'>star</i>`.repeat(3) },
+              { value: 4, classList: 'stars', html: `<i class='material-icons'>star</i>`.repeat(4) },
+              { value: 5, classList: 'stars', html: `<i class='material-icons'>star</i>`.repeat(5) }
+            ] }
           }"
           :message="starsValidateMessage"
           icon-name="star"

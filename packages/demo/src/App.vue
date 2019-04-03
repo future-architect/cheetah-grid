@@ -4,7 +4,7 @@
       <div>
         <section class="header-main">
           <router-link
-            :to="{name: 'welcome'}"
+            :to="{ name: 'welcome' }"
             class="logo"
           >
             <img
@@ -56,7 +56,7 @@
             class="menu-item"
           >
             <router-link
-              :to="{name: route.name}"
+              :to="{ name: route.name }"
             >
               <span class="link">{{ route.meta.title }}</span>
             </router-link>

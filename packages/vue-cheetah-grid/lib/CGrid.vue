@@ -1,7 +1,9 @@
 <template>
   <div class="c-grid">
     <!-- Use this slot to set the columns definition -->
-    <div class="define"><slot /></div>
+    <div class="define">
+      <slot />
+    </div>
   </div>
 </template>
 

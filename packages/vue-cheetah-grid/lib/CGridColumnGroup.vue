@@ -1,6 +1,8 @@
 <template>
   <!-- Use this slot to set the children columns definition -->
-  <div class="c-grid-column-group"><slot /></div>
+  <div class="c-grid-column-group">
+    <slot />
+  </div>
 </template>
 
 <script>

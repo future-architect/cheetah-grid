@@ -182,6 +182,7 @@ module.exports = {
 		// 'prefer-template': 'off',
 		'require-unicode-regexp': 'off',
 		'prefer-object-spread': 'off',
+		'prefer-named-capture-group': 'off',
 
 	}
 

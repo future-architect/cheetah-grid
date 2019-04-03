@@ -17,7 +17,10 @@ module.exports = {
 		// https://github.com/feross/standard/blob/master/RULES.md#javascript-standard-style
 		'standard',
 		// https://github.com/vuejs/eslint-plugin-vue#gear-configs
-		'plugin:vue/recommended'
+		'plugin:vue/recommended',
+		// https://www.npmjs.com/package/eslint-config-vue-preset
+		'vue-preset/vue/recommended-e',
+		'vue-preset/standard'
 	],
 	'plugins': [
 		'vue'
