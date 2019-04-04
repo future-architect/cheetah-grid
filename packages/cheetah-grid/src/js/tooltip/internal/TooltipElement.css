@@ -39,6 +39,7 @@
 	display: block;
 	white-space: pre-wrap;
 	margin: 0;
+	box-sizing: border-box;
 }
 .cheetah-grid__tooltip-element {
 	color: #FFFFFF;

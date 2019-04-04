@@ -1,0 +1,29 @@
+{
+  "name": "cheetah-grid-docs",
+  "private": true,
+  "version": "0.12.0",
+  "scripts": {
+    "watch": "vuepress dev . --debug",
+    "build": "npm-run-all build:*",
+    "build:vuedoc": "node ./scripts/vuedoc/build.js",
+    "build:vuepress": "vuepress build .",
+    "build:jsdoc": "jsdoc ./../cheetah-grid/src/js -c jsdoc-conf.js"
+  },
+  "devDependencies": {
+    "@vuedoc/md": "^1.6.0",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.16.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-config-vue-preset": "^0.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^7.0.1",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "eslint-plugin-vue": "^5.2.2",
+    "fs-readdir-recursive": "^1.1.0",
+    "jsdoc": "^3.5.5",
+    "npm-run-all": "^4.1.5",
+    "vuepress": "^0.14.10",
+    "webpack-dev-middleware": "3.6.0"
+  }
+}

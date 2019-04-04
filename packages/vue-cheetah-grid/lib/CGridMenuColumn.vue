@@ -1,6 +1,6 @@
 <template>
-  <!-- Use this slot to set the header caption -->
   <div class="c-grid-menu-column">
+    <!-- Use this slot to set the header caption -->
     <slot />
   </div>
 </template>
@@ -18,6 +18,7 @@ function isDisabledRecord (option, record) {
 }
 
 /**
+ * Defines select menu column.
  * @mixin column-mixin
  * @mixin std-column-mixin
  */
