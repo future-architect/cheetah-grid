@@ -11,8 +11,8 @@ const version = buildVersion(require('../package.json').version);
 
 const readmePath = require.resolve('../README.md');
 const vueReadmePath = require.resolve('../packages/vue-cheetah-grid/README.md');
-const gettingStarted = require.resolve('../packages/docs2/introduction/01.GettingStarted.md');
-const gettingStartedVue = require.resolve('../packages/docs2/introduction/02.GettingStartedWithVue.md');
+const gettingStarted = require.resolve('../packages/docs/introduction/getting-started.md');
+const gettingStartedVue = require.resolve('../packages/docs/introduction/getting-started-with-vue.md');
 
 
 [readmePath, vueReadmePath, gettingStarted, gettingStartedVue].forEach((readmePath) => {
