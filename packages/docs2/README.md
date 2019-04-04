@@ -18,4 +18,4 @@ footer: © 2017 - 2019 Future Corporation. Author Yosuke Ota. Code licensed unde
 
 ## JSDOC
 
-- [JSDOC](./jsdoc/index.html)
+- [JSDOC](https://future-architect.github.io/cheetah-grid/documents/jsdoc/index.html)
