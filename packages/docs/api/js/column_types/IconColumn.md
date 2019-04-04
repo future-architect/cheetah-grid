@@ -8,9 +8,8 @@ Show ICON using Web Font.
 Number of ICONs can be set at field.  
 
 :::tip
-When showing ICON to ordinal column, please refer to [here](../draw_icon.md)
+When showing ICON to ordinal column, please refer to [here](../column_icon.md)
 :::
-
 
 <code-preview>
 
