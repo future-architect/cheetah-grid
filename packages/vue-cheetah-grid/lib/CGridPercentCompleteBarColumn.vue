@@ -1,6 +1,6 @@
 <template>
-  <!-- Use this slot to set the header caption -->
   <div class="c-grid-percent-complete-bar-column">
+    <!-- Use this slot to set the header caption -->
     <slot />
   </div>
 </template>
@@ -11,6 +11,7 @@ import StdColumnMixin from './c-grid/StdColumnMixin.vue'
 import { cheetahGrid, normalizeAction, filterToFn, gridUpdateWatcher } from './c-grid/utils'
 
 /**
+ * Defines percent complete bar column.
  * @mixin column-mixin
  * @mixin std-column-mixin
  */

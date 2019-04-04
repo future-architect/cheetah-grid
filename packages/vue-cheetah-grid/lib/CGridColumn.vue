@@ -1,6 +1,6 @@
 <template>
-  <!-- Use this slot to set the header caption -->
   <div class="c-grid-column">
+    <!-- Use this slot to set the header caption -->
     <slot />
   </div>
 </template>
@@ -11,6 +11,7 @@ import StdColumnMixin from './c-grid/StdColumnMixin.vue'
 import { filterToFn, normalizeColumnType, normalizeAction, gridUpdateWatcher } from './c-grid/utils'
 
 /**
+ * Defines column.
  * @mixin column-mixin
  * @mixin std-column-mixin
  */
