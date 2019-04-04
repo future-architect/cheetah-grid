@@ -65,8 +65,7 @@
           <label class="menu-title">LINKS:</label>
           <div class="menu-item">
             <a
-              ref="docLink"
-              href="https://future-architect.github.io/cheetah-grid/0.6/index.html"
+              href="https://future-architect.github.io/cheetah-grid/documents/index.html"
             >
               <span class="link">Documents</span>
             </a>
@@ -145,18 +144,6 @@ export default {
         fjs.parentNode.insertBefore(js, fjs)
       }
     }(document, 'script', 'twitter-wjs'))
-
-    const xhr = new XMLHttpRequest()
-    xhr.onload = () => {
-      const [version] = JSON.parse(xhr.responseText)
-      this.$refs.docLink.href = `https://future-architect.github.io/cheetah-grid/${version}/index.html`
-    }
-    try {
-      xhr.open('GET', 'https://future-architect.github.io/cheetah-grid/versions.json')
-      xhr.send()
-    } catch (e) {
-      //
-    }
   },
   methods: {
   }
