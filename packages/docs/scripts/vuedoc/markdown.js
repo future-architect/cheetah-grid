@@ -34,8 +34,15 @@ function createProps (comp) {
       : prop.value.hasOwnProperty('default')
         ? parseValue(prop.value.default)
         : undefined
+    const typeMd = parseType(type)
+      .replace(/\|/g, '&#124;')
+      .replace('`Number`', '`number`')
+      .replace('`String`', '`string`')
+      .replace('`Boolean`', '`boolean`')
+      .replace('`Function`', '`function`')
+      .replace('`Object`', '`object`')
 
-    list.push(`| ${prop.name} | ${parseType(type).replace(/\|/g, '&#124;')}  | ${prop.description} | \`${defaultValue}\` |`)
+    list.push(`| ${prop.name} | ${typeMd}  | ${prop.description} | \`${defaultValue}\` |`)
   }
 
   let md = ''
@@ -57,6 +64,24 @@ ${reqProps.join('\n')}
 ${optProps.join('\n')}
 `
   }
+  return md
+}
+
+function createData (comp) {
+  const dataTable = []
+  for (const data of comp.data) {
+    if (data.description) {
+      const typeKeyword = data.keywords.find(k => k.name === 'type')
+      const type = (typeKeyword && typeKeyword.description.replace(/\{(.+?)\}/, '$1')) || '---'
+
+      dataTable.push(`| ${data.name} | ${type} | \`${JSON.stringify(data.value)}\` | ${data.description} |`)
+    }
+  }
+  const md = `
+| Name        | Type | Initial Value | Description         |
+|:------------|:-----|:--------------|:--------------------|
+${dataTable.join('\n')}
+`
   return md
 }
 
@@ -109,6 +134,12 @@ module.exports = {
     if (comp.props.length) {
       contents = replaceOrAppend(contents, /\n##\s*Prop(ertie)?s\s*/i, '\n## Properties\n\n')
       contents = replaceBlock(contents, '<!-- PROPS_TABLE_START -->', '<!-- PROPS_TABLE_END -->', createProps(comp))
+    }
+
+    // data
+    if (comp.data.length) {
+      contents = replaceOrAppend(contents, /\n##\s*Data\s*/i, '\n## Data\n\n')
+      contents = replaceBlock(contents, '<!-- DATA_TABLE_START -->', '<!-- DATA_TABLE_END -->', createData(comp))
     }
 
     // events

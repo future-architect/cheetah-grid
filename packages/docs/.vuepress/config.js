@@ -5,7 +5,7 @@ const path = require('path')
 const pkg = require('../../cheetah-grid/package.json')
 const semver = require('semver')
 const rm = require('rimraf')
-const { compare } = require('./frontmatter')
+const { compare, inferTitle } = require('./frontmatter')
 const gridVersion = `${semver.major(pkg.version)}.${semver.minor(pkg.version)}`
 const failbackVersion = `${semver.major(pkg.version)}.${semver.minor(pkg.version) - 1}`
 
@@ -69,20 +69,50 @@ function listupLinks (parent = '/') {
   return result
 }
 
-function adjustLinks (links) {
-  for (const key in links) {
-    if (key !== '/') {
-      const parent = key.replace(/\/([^/]*)\/$/, '')
-      links[key] = [
-        '/',
-        ...(parent ? [`${parent}/`] : []),
-        ...links[key]
-      ]
+function groupSubmenu (links, rootLink) {
+  const menus = links[rootLink]
+  for (let i = 0; i < menus.length; i++) {
+    const menu = menus[i]
+    if (menu === rootLink) {
+      continue
+    }
+    const subMenus = links[menu]
+    if (subMenus) {
+      const newMenus = [...menus]
+      newMenus[i] = {
+        title: inferTitle(menu),
+        collapsable: false,
+        children: subMenus
+      }
+      links[menu] = newMenus
     }
   }
 }
+
+function adjustLinks (links) {
+  for (const key in links) {
+    if (key !== '/') {
+      const menus = links[key]
+      let parent = parentPath(key)
+      while (parent && parent !== '/') {
+        if (!menus.includes(parent)) {
+          menus.unshift(parent)
+        }
+        parent = parentPath(parent)
+      }
+    }
+  }
+
+  function parentPath (p) {
+    return `${p.split(/[/\\]/g).slice(0, -2).join('/')}/`
+  }
+}
+
 const links = listupLinks()
-// links['/'] = ['/', '/introduction/', '/api/']
+
+groupSubmenu(links, '/api/js/')
+groupSubmenu(links, '/api/vue/')
+
 adjustLinks(links)
 console.log(links)
 
@@ -98,6 +128,9 @@ module.exports = {
         // DEMOを動的に起動させるために`vue`に`vue.esm.js`を利用させます。
         'vue': resolve('../node_modules/vue/dist/vue.esm.js')
       }
+    },
+    externals: {
+      'vue': 'Vue'
     }
   },
   base: process.env.VUEPRESS_BASE || '/cheetah-grid/documents/',
@@ -112,12 +145,13 @@ module.exports = {
     ['link', { rel: 'icon', href: '/icon_512x512.ico' }],
     ['link', { rel: 'stylesheet', href: 'https://fonts.googleapis.com/icon?family=Material+Icons' }],
     ['link', { rel: 'stylesheet', href: 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css' }],
+    ['script', { src: 'https://cdn.jsdelivr.net/npm/vue@2.6/dist/vue.min.js' }],
 
     ...scriptPaths.map(p => ['script', { src: p }])
   ],
   locales: {
     '/': {
-      lang: 'ja'
+      lang: 'en-US'
     }
   },
   themeConfig: {

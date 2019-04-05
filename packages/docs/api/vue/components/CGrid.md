@@ -86,19 +86,23 @@ Use this slot to set the columns definition
 
 | Name        | Type    | Description         | Default  |
 |:------------|:-------:|:--------------------|:---------|
-| data | `Array`&#124;`Object`  | Defines a records or data source. | `undefined` |
-| frozen-col-count | `Number`&#124;`String`  | Defines a frozen col Count | `0` |
-| filter | `Function`  | Defines a records filter | `undefined` |
-| theme | `Object`&#124;`String`  | Defines the grid theme | `undefined` |
-| options | `Object`  | Defines a raw options for Cheetah Grid | `undefined` |
+| data | `Array`&#124;`object`  | Defines a records or data source. | `undefined` |
+| frozen-col-count | `number`&#124;`string`  | Defines a frozen col Count | `0` |
+| filter | `function`  | Defines a records filter | `undefined` |
+| theme | `object`&#124;`string`  | Defines the grid theme | `undefined` |
+| options | `object`  | Defines a raw options for Cheetah Grid | `undefined` |
 
 <!-- PROPS_TABLE_END -->
 
 ## Data
 
-- `headerValues` 
+<!-- DATA_TABLE_START -->
 
-**initial value:** `{}` 
+| Name        | Type | Initial Value | Description         |
+|:------------|:-----|:--------------|:--------------------|
+| headerValues | object | `{}` | Header values. |
+
+<!-- DATA_TABLE_END -->
 
 ## Events
 

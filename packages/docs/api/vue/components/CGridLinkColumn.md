@@ -24,24 +24,24 @@ Use this slot to set the header caption
 
 | Name        | Type    | Description         | Default  |
 |:------------|:-------:|:--------------------|:---------|
-| field | `Object`&#124;`String`&#124;`Function`  | Defines a column data field | `undefined` |
-| width | `Number`&#124;`String`  | Defines a default column width | `undefined` |
-| min-width | `Number`&#124;`String`  | Defines a column min width | `undefined` |
-| max-width | `Number`&#124;`String`  | Defines a column max width | `undefined` |
-| column-type | `Object`&#124;`String`&#124;`Function`  | Defines a column type | `undefined` |
-| column-style | `Object`&#124;`String`&#124;`Function`  | Defines a column style | `undefined` |
-| caption | `String`  | Defines a header caption | `''` |
-| disabled | `Boolean`&#124;`Function`  | Defines disabled | `false` |
-| filter | `String`&#124;`Function`  | Defines a vue filter name | `undefined` |
-| header-action | `Object`&#124;`String`&#124;`Function`  | Defines a column header action | `undefined` |
-| header-field | `String`  | Defines a column header data field | `undefined` |
-| header-style | `Object`&#124;`String`&#124;`Function`  | Defines a column header style | `undefined` |
-| header-type | `Object`&#124;`String`&#124;`Function`  | Defines a column header type | `undefined` |
-| href | `String`&#124;`Function`  | Defines a href | `undefined` |
-| icon | `Object`&#124;`String`&#124;`Function`  | Defines an icon | `undefined` |
-| message | `Object`&#124;`String`&#124;`Function`  | Defines a Message generation method | `undefined` |
-| sort | `String`&#124;`Function`&#124;`Boolean`  | Defines a sort | `undefined` |
-| target | `String`  | Defines an anchor target | `undefined` |
+| field | `object`&#124;`string`&#124;`function`  | Defines a column data field | `undefined` |
+| width | `number`&#124;`string`  | Defines a default column width | `undefined` |
+| min-width | `number`&#124;`string`  | Defines a column min width | `undefined` |
+| max-width | `number`&#124;`string`  | Defines a column max width | `undefined` |
+| column-type | `object`&#124;`string`&#124;`function`  | Defines a column type | `undefined` |
+| column-style | `object`&#124;`string`&#124;`function`  | Defines a column style | `undefined` |
+| caption | `string`  | Defines a header caption | `''` |
+| disabled | `boolean`&#124;`function`  | Defines disabled | `false` |
+| filter | `string`&#124;`function`  | Defines a vue filter name | `undefined` |
+| header-action | `object`&#124;`string`&#124;`function`  | Defines a column header action | `undefined` |
+| header-field | `string`  | Defines a column header data field | `undefined` |
+| header-style | `object`&#124;`string`&#124;`function`  | Defines a column header style | `undefined` |
+| header-type | `object`&#124;`string`&#124;`function`  | Defines a column header type | `undefined` |
+| href | `string`&#124;`function`  | Defines a href | `undefined` |
+| icon | `object`&#124;`string`&#124;`function`  | Defines an icon | `undefined` |
+| message | `object`&#124;`string`&#124;`function`  | Defines a Message generation method | `undefined` |
+| sort | `string`&#124;`function`&#124;`boolean`  | Defines a sort | `undefined` |
+| target | `string`  | Defines an anchor target | `undefined` |
 
 <!-- PROPS_TABLE_END -->
 
