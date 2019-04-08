@@ -44,7 +44,7 @@ const gettingStartedVue = require.resolve('../packages/docs/introduction/getting
 
 	while ((result = reDocumentLink.exec(readme)) !== null) {
 		const rmVersion = result[1];
-		if (version !== rmVersion) {
+		if (version !== rmVersion && rmVersion !== 'documents') {
 			const msg = `Invalid docs link version. act:${rmVersion} @ "${readmePath}"`;
 			console.error(chalk.red(msg));
 			process.exit(1);//eslint-disable-line no-process-exit

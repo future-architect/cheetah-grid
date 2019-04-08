@@ -154,7 +154,7 @@ For example, you can set the following strings:
 
 If you define a class instance you can define an advanced column types.
 
-Please refer to the [column types documents](https://future-architect.github.io/cheetah-grid/0.12/demos/usage/column_types/Classes.html) for details  
+Please refer to the [column types documents](https://future-architect.github.io/cheetah-grid/documents/api/js/column_types/Classes.html) for details  
 
 ### Definition of column action
 
@@ -167,7 +167,7 @@ Define column action by using `action` property.
 
 If you define a class instance you can define an advanced column actions.
 
-Please refer to the [column actions documents](https://future-architect.github.io/cheetah-grid/0.12/demos/usage/column_actions/Classes.html) for details  
+Please refer to the [column actions documents](https://future-architect.github.io/cheetah-grid/documents/api/js/column_types/Classes.html) for details  
 
 ### Definition of column style
 

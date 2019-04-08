@@ -68,12 +68,12 @@ Use this slot to set the children columns definition
 
 | Name        | Type    | Description         | Default  |
 |:------------|:-------:|:--------------------|:---------|
-| caption | `String`  | Defines a header caption | `''` |
-| header-action | `Object`&#124;`String`&#124;`Function`  | Defines a column header action | `undefined` |
-| header-field | `String`  | Defines a column header data field | `undefined` |
-| header-style | `Object`&#124;`String`&#124;`Function`  | Defines a column header style | `undefined` |
-| header-type | `Object`&#124;`String`&#124;`Function`  | Defines a column header type | `undefined` |
-| sort | `String`&#124;`Function`&#124;`Boolean`  | Defines a sort | `undefined` |
+| caption | `string`  | Defines a header caption | `''` |
+| header-action | `object`&#124;`string`&#124;`function`  | Defines a column header action | `undefined` |
+| header-field | `string`  | Defines a column header data field | `undefined` |
+| header-style | `object`&#124;`string`&#124;`function`  | Defines a column header style | `undefined` |
+| header-type | `object`&#124;`string`&#124;`function`  | Defines a column header type | `undefined` |
+| sort | `string`&#124;`function`&#124;`boolean`  | Defines a sort | `undefined` |
 
 <!-- PROPS_TABLE_END -->
 

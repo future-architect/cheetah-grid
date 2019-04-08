@@ -166,7 +166,13 @@ export default {
     }
   },
   data () {
-    return { headerValues: {} }
+    return {
+      /**
+       * Header values.
+       * @type {object}
+       */
+      headerValues: {}
+    }
   },
   computed: {
   },

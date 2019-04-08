@@ -12,14 +12,19 @@ function isDirectory (f) {
   }
 }
 
-function getOrder (f) {
+function readFile (menu) {
+  let f = path.resolve(DOC_ROOT, `.${menu}`)
   if (isDirectory(f)) {
     f += '/README.md'
   } else {
     f += '.md'
   }
-  const context = fs.readFileSync(f, 'utf8')
-  let r = /---([\s\S]+?)---/g.exec(context)
+  return fs.readFileSync(f, 'utf8')
+}
+
+function getOrder (menu) {
+  const contents = readFile(menu)
+  let r = /^---([\s\S]+?)---/g.exec(contents)
   if (r) {
     r = /order\s*:\s*(\d+)\s*\n/g.exec(r[1])
     if (r) {
@@ -29,7 +34,28 @@ function getOrder (f) {
   return null
 }
 
+function inferTitle (menu) {
+  const contents = readFile(menu)
+  let r = /^---([\s\S]+?)---/g.exec(contents)
+  if (r) {
+    r = /title\s*:\s*(.+)\s*\n/g.exec(r[1])
+    if (r) {
+      return r[1]
+    }
+  }
+  r = /^#\s+(.+?)\n/g.exec(contents)
+  if (r) {
+    return r[1]
+  }
+  r = /\n#\s+(.+?)\n/g.exec(contents)
+  if (r) {
+    return r[1]
+  }
+  return null
+}
+
 module.exports = {
+  inferTitle,
   compare (a, b) {
     if (a.endsWith('/') && b.startsWith(a)) {
       return -1
@@ -37,8 +63,8 @@ module.exports = {
     if (b.endsWith('/') && a.startsWith(b)) {
       return 1
     }
-    const oa = getOrder(path.resolve(DOC_ROOT, `.${a}`))
-    const ob = getOrder(path.resolve(DOC_ROOT, `.${b}`))
+    const oa = getOrder(a)
+    const ob = getOrder(b)
     if (oa == null && ob == null) {
       return a > b ? 1 : a < b ? -1 : 0
     }
