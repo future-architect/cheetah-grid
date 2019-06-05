@@ -2056,7 +2056,7 @@ class DrawGrid extends EventTarget {
 		if (this[_].selection._updateGridRange()) {
 			const {col, row} = this[_].selection.focus;
 			this.makeVisibleCell(col, row);
-			this.focusCell(col, row);
+			this.setFocusCursor(col, row);
 		}
 	}
 	/**
@@ -2077,7 +2077,7 @@ class DrawGrid extends EventTarget {
 		if (this[_].selection._updateGridRange()) {
 			const {col, row} = this[_].selection.focus;
 			this.makeVisibleCell(col, row);
-			this.focusCell(col, row);
+			this.setFocusCursor(col, row);
 		}
 	}
 	/**
@@ -2442,12 +2442,12 @@ class DrawGrid extends EventTarget {
 		}
 	}
 	/**
-	 * Focus the cell.
+	 * Moves the focus cursor to the given cell.
 	 * @param  {number} col The column index.
 	 * @param  {number} row The row index
 	 * @return {void}
 	 */
-	focusCell(col, row) {
+	setFocusCursor(col, row) {
 		const {focusControl} = this[_];
 		const oldEditMode = focusControl.editMode;
 		if (oldEditMode) {
@@ -2473,9 +2473,18 @@ class DrawGrid extends EventTarget {
 					{col: selCol, row: selRow, input: focusControl.input}
 			);
 		}
+	}
+	/**
+	 * Focus the cell.
+	 * @param  {number} col The column index.
+	 * @param  {number} row The row index
+	 * @return {void}
+	 */
+	focusCell(col, row) {
+		this.setFocusCursor(col, row);
 
 		// Failure occurs in IE if focus is not last
-		focusControl.focus();
+		this[_].focusControl.focus();
 	}
 	/**
 	 * Redraws the range of the given cell.
