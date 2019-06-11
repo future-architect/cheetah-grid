@@ -7,7 +7,7 @@ order: 110
 You can set the width of each column by using `width` property.
 If nothing is set to `width` property, the value of `defaultColWidth` (property in `grid`) is used.
 
-You can use `%` mode by setting value as `string`.
+You can use `%`, `calc()` or `auto` by setting a string to the `width` property.
 
 <code-preview>
 
@@ -22,9 +22,9 @@ const grid = new cheetahGrid.ListGrid({
   parentElement: document.querySelector('.sample1'),
   header: [
     {field: 'check', caption: '', /*unset width. use defaultColWidth*/ columnType: 'check', action: 'check', minWidth: 50, maxWidth: 50},
-    {field: 'personid', caption: 'ID', width: '60px', minWidth: '50px', maxWidth: '50%'},
-    {field: 'fname', caption: 'First Name', width: '20%', minWidth: '120px'},
-    {field: 'lname', caption: 'Last Name', width: '20%', minWidth: '120px'},
+    {field: 'personid', caption: 'ID', width: '10%', minWidth: '50px', maxWidth: '50%'},
+    {field: 'fname', caption: 'First Name', width: 'auto', minWidth: '120px'},
+    {field: 'lname', caption: 'Last Name', width: 'auto', minWidth: '120px'},
     {field: 'email', caption: 'Email', width: 'calc(60% - 110px)', minWidth: '120px'},
   ],
   defaultColWidth: 50,

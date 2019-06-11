@@ -79,14 +79,14 @@ function generate(num) {
 			{
 				caption: 'name',
 				columns: [
-					{field: 'fname', caption: 'First Name', width: 200},
-					{field: 'lname', caption: 'Last Name', width: 200},
+					{field: 'fname', caption: 'First Name', width: 'auto'},
+					{field: 'lname', caption: 'Last Name', width: 'auto'},
 				],
 			},
 			{
 				field: 'email',
 				caption: 'Email',
-				width: 100,
+				width: '15%',
 				sort: true
 			},
 			{
@@ -133,8 +133,8 @@ function generate(num) {
 						caption: 'buttons',
 						columns: [
 							{
-								caption: 'button',
-								width: 80,
+								caption: 'button1',
+								width: 'calc(10px + 70px)',
 								columnType: new columnType.ButtonColumn({
 									caption: 'BUTTON',
 								}),
@@ -143,7 +143,7 @@ function generate(num) {
 										alert('ID:' + rec.personid + ' ' + JSON.stringify(rec));//eslint-disable-line
 									},
 								}),
-							}
+							},
 						],
 					},
 				]

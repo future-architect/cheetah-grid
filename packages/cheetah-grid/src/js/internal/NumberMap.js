@@ -33,6 +33,9 @@ class NumberMap {
 	get(key) {
 		return this._vals[key];
 	}
+	has(key) {
+		return this._vals[key] != null;
+	}
 	each(keyFrom, keyTo, fn) {
 		const {_keys: keys} = this;
 		const {length} = keys;
