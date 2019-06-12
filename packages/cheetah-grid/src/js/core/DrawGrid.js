@@ -2202,7 +2202,6 @@ class DrawGrid extends EventTarget {
 	 */
 	set defaultRowHeight(defaultRowHeight) {
 		this[_].defaultRowHeight = defaultRowHeight;
-		this.updateScroll();
 	}
 	/**
 	 * Get the default column width.
@@ -2218,7 +2217,6 @@ class DrawGrid extends EventTarget {
 	 */
 	set defaultColWidth(defaultColWidth) {
 		this[_].defaultColWidth = defaultColWidth;
-		this.updateScroll();
 	}
 	/**
 	 * Get the font definition as a string.
@@ -2317,7 +2315,6 @@ class DrawGrid extends EventTarget {
 	 */
 	setRowHeight(row, height) {
 		_setRowHeight(this, row, height);
-		this.updateScroll();
 	}
 	/**
 	 * Get the column width of the given the column index.
@@ -2335,7 +2332,6 @@ class DrawGrid extends EventTarget {
 	 */
 	setColWidth(col, width) {
 		_setColWidth(this, col, width);
-		this.updateScroll();
 	}
 	/**
 	 * Get the column max width of the given the column index.
