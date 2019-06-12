@@ -449,11 +449,6 @@ function _invalidateRect(grid, drawRect) {
 function _toPxWidth(grid, width) {
 	return Math.round(calc.toPx(width, grid[_].calcWidthContext));
 }
-
-function _getDefaultColPxWidth(grid) {
-	return _toPxWidth(grid, grid.defaultColWidth);
-}
-
 function _adjustColWidth(grid, col, orgWidth) {
 	const limit = grid[_].colWidthsLimit[col];
 	if (!limit) {
@@ -475,22 +470,108 @@ function _adjustColWidth(grid, col, orgWidth) {
 	return orgWidth;
 }
 
-function _getColWidth(grid, col) {
+/**
+ * Gets the definition of the column width.
+ * @param {DrawGrid} grid grid instance
+ * @param {number} col number of column
+ * @returns {string|number} width definition
+ * @private
+ */
+function _getColWidthDefine(grid, col) {
 	const width = grid[_].colWidthsMap.get(col);
 	if (width) {
-		return _adjustColWidth(grid, col, _toPxWidth(grid, width));
+		return width;
 	}
-	return _getDefaultColPxWidth(grid);
+	return grid.defaultColWidth;
+}
+
+/**
+ * Checks if the given width definition is `auto`.
+ * @param {string|number} width width definition to check
+ * @returns {boolean} `true ` if the given width definition is `auto`
+ * @private
+ */
+function isAutoDefine(width) {
+	return width &amp;&amp; typeof width === 'string' &amp;&amp; width.toLowerCase() === 'auto';
+}
+
+/**
+ * Creates a formula to calculate the auto width.
+ * @param {DrawGrid} grid grid instance
+ * @returns {string} formula
+ * @private
+ */
+function _calcAutoColWidthExpr(grid) {
+	const others = [];
+	let autoCount = 0;
+	for (let col = 0; col &lt; grid[_].colCount; col++) {
+		const def = _getColWidthDefine(grid, col);
+		if (isAutoDefine(def)) {
+			autoCount++;
+		} else {
+			others.push(typeof def === 'number' ? `${def}px` : def);
+		}
+	}
+	if (others.length) {
+		return `calc((100% - (${others.join(' + ')})) / ${autoCount})`;
+	} else {
+		return `${100 / autoCount}%`;
+	}
+}
+
+/**
+ * Calculate the pixels of width from the definition of width.
+ * @param {DrawGrid} grid grid instance
+ * @param {string|number} width width definition
+ * @returns {number} the pixels of width
+ * @private
+ */
+function _colWidthDefineToPxWidth(grid, width) {
+	if (isAutoDefine(width)) {
+		return _toPxWidth(grid, _calcAutoColWidthExpr(grid));
+	}
+	return _toPxWidth(grid, width);
+}
+
+function _getColWidth(grid, col) {
+	const width = _getColWidthDefine(grid, col);
+	return _adjustColWidth(grid, col, _colWidthDefineToPxWidth(grid, width));
 }
 function _setColWidth(grid, col, width) {
 	grid[_].colWidthsMap.put(col, width);
 }
+
+/**
+ * Overwrites the definition of a column whose width is set to `auto` with the current auto width formula.
+ * @param {DrawGrid} grid grid instance
+ * @returns {void}
+ * @private
+ */
+function _storeAutoColWidthExprs(grid) {
+	let expr = null;
+	for (let col = 0; col &lt; grid[_].colCount; col++) {
+		const def = _getColWidthDefine(grid, col);
+		if (isAutoDefine(def)) {
+			_setColWidth(grid, col, expr || (expr = _calcAutoColWidthExpr(grid)));
+		}
+	}
+}
 function _getColsWidth(grid, startCol, endCol) {
+	const defaultColPxWidth = _colWidthDefineToPxWidth(grid, grid.defaultColWidth);
 	const colCount = endCol - startCol + 1;
-	let w = _getDefaultColPxWidth(grid) * colCount;
+	let w = defaultColPxWidth * colCount;
 	grid[_].colWidthsMap.each(startCol, endCol, (width, col) => {
-		w += _adjustColWidth(grid, col, _toPxWidth(grid, width)) - _getDefaultColPxWidth(grid);
+		w += _adjustColWidth(grid, col, _colWidthDefineToPxWidth(grid, width)) - defaultColPxWidth;
 	});
+	for (let col = startCol; col &lt;= endCol; col++) {
+		if (grid[_].colWidthsMap.has(col)) {
+			continue;
+		}
+		const adj = _adjustColWidth(grid, col, defaultColPxWidth);
+		if (adj !== defaultColPxWidth) {
+			w += adj - defaultColPxWidth;
+		}
+	}
 	return w;
 }
 
@@ -522,12 +603,7 @@ function _getRowsHeight(grid, startRow, endRow) {
 }
 
 function _getScrollWidth(grid) {
-	const defaultColPxWidth = _getDefaultColPxWidth(grid);
-	let w = defaultColPxWidth * grid[_].colCount;
-	grid[_].colWidthsMap.each(0, grid[_].colCount - 1, (width, col) => {
-		w += _adjustColWidth(grid, col, _toPxWidth(grid, width)) - defaultColPxWidth;
-	});
-	return w;
+	return _getColsWidth(grid, 0, grid[_].colCount - 1);
 }
 function _getScrollHeight(grid, row) {
 	const internal = grid.getScrollHeightInternal(row);
@@ -1284,6 +1360,7 @@ class ColumnResizer extends BaseMouseDownMover {
 		if (afterSize &lt; 10 &amp;&amp; moveX &lt; 0) {
 			afterSize = 10;
 		}
+		_storeAutoColWidthExprs(this._grid);
 		_setColWidth(this._grid, this._targetCol, afterSize);
 
 		const rect = _getVisibleRect(this._grid);
@@ -2084,7 +2161,7 @@ class DrawGrid extends EventTarget {
 		if (this[_].selection._updateGridRange()) {
 			const {col, row} = this[_].selection.focus;
 			this.makeVisibleCell(col, row);
-			this.focusCell(col, row);
+			this.setFocusCursor(col, row);
 		}
 	}
 	/**
@@ -2105,7 +2182,7 @@ class DrawGrid extends EventTarget {
 		if (this[_].selection._updateGridRange()) {
 			const {col, row} = this[_].selection.focus;
 			this.makeVisibleCell(col, row);
-			this.focusCell(col, row);
+			this.setFocusCursor(col, row);
 		}
 	}
 	/**
@@ -2153,7 +2230,6 @@ class DrawGrid extends EventTarget {
 	 */
 	set defaultRowHeight(defaultRowHeight) {
 		this[_].defaultRowHeight = defaultRowHeight;
-		this.updateScroll();
 	}
 	/**
 	 * Get the default column width.
@@ -2169,7 +2245,6 @@ class DrawGrid extends EventTarget {
 	 */
 	set defaultColWidth(defaultColWidth) {
 		this[_].defaultColWidth = defaultColWidth;
-		this.updateScroll();
 	}
 	/**
 	 * Get the font definition as a string.
@@ -2268,7 +2343,6 @@ class DrawGrid extends EventTarget {
 	 */
 	setRowHeight(row, height) {
 		_setRowHeight(this, row, height);
-		this.updateScroll();
 	}
 	/**
 	 * Get the column width of the given the column index.
@@ -2286,7 +2360,6 @@ class DrawGrid extends EventTarget {
 	 */
 	setColWidth(col, width) {
 		_setColWidth(this, col, width);
-		this.updateScroll();
 	}
 	/**
 	 * Get the column max width of the given the column index.
@@ -2470,12 +2543,12 @@ class DrawGrid extends EventTarget {
 		}
 	}
 	/**
-	 * Focus the cell.
+	 * Moves the focus cursor to the given cell.
 	 * @param  {number} col The column index.
 	 * @param  {number} row The row index
 	 * @return {void}
 	 */
-	focusCell(col, row) {
+	setFocusCursor(col, row) {
 		const {focusControl} = this[_];
 		const oldEditMode = focusControl.editMode;
 		if (oldEditMode) {
@@ -2501,9 +2574,18 @@ class DrawGrid extends EventTarget {
 					{col: selCol, row: selRow, input: focusControl.input}
 			);
 		}
+	}
+	/**
+	 * Focus the cell.
+	 * @param  {number} col The column index.
+	 * @param  {number} row The row index
+	 * @return {void}
+	 */
+	focusCell(col, row) {
+		this.setFocusCursor(col, row);
 
 		// Failure occurs in IE if focus is not last
-		focusControl.focus();
+		this[_].focusControl.focus();
 	}
 	/**
 	 * Redraws the range of the given cell.
@@ -2705,13 +2787,13 @@ module.exports = DrawGrid;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="cheetahGrid.columns.type.BranchGraphColumn.html">BranchGraphColumn</a></li><li><a href="cheetahGrid.core.DrawGrid.html">DrawGrid</a></li><li><a href="cheetahGrid.data.CachedDataSource.html">CachedDataSource</a></li><li><a href="cheetahGrid.data.DataSource.html">DataSource</a></li><li><a href="cheetahGrid.data.FilterDataSource.html">FilterDataSource</a></li><li><a href="cheetahGrid.ListGrid.html">ListGrid</a></li><li><a href="DrawCellContext.html">DrawCellContext</a></li><li><a href="DrawLayers.html">DrawLayers</a></li><li><a href="EventTarget.html">EventTarget</a></li><li><a href="Selection.html">Selection</a></li></ul><h3>Namespaces</h3><ul><li><a href="cheetahGrid.html">cheetahGrid</a></li><li><a href="cheetahGrid.columns.html">columns</a></li><li><a href="cheetahGrid.columns.action.html">action</a></li><li><a href="cheetahGrid.columns.style.html">style</a></li><li><a href="cheetahGrid.columns.type.html">type</a></li><li><a href="cheetahGrid.core.html">core</a></li><li><a href="cheetahGrid.data.html">data</a></li><li><a href="cheetahGrid.headers.html">headers</a></li><li><a href="cheetahGrid.themes.html">themes</a></li><li><a href="cheetahGrid.themes.choices.html">choices</a></li><li><a href="cheetahGrid.themes.theme.html">theme</a></li><li><a href="cheetahGrid.tools.html">tools</a></li><li><a href="cheetahGrid.tools.canvashelper.html">canvashelper</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="cheetahGrid.html">cheetahGrid</a></li><li><a href="cheetahGrid.columns.html">columns</a></li><li><a href="cheetahGrid.columns.action.html">action</a></li><li><a href="cheetahGrid.columns.style.html">style</a></li><li><a href="cheetahGrid.columns.type.html">type</a></li><li><a href="cheetahGrid.core.html">core</a></li><li><a href="cheetahGrid.data.html">data</a></li><li><a href="cheetahGrid.headers.html">headers</a></li><li><a href="cheetahGrid.themes.html">themes</a></li><li><a href="cheetahGrid.themes.choices.html">choices</a></li><li><a href="cheetahGrid.themes.theme.html">theme</a></li><li><a href="cheetahGrid.tools.html">tools</a></li><li><a href="cheetahGrid.tools.canvashelper.html">canvashelper</a></li></ul><h3>Classes</h3><ul><li><a href="cheetahGrid.columns.type.BranchGraphColumn.html">BranchGraphColumn</a></li><li><a href="cheetahGrid.core.DrawGrid.html">DrawGrid</a></li><li><a href="cheetahGrid.data.CachedDataSource.html">CachedDataSource</a></li><li><a href="cheetahGrid.data.DataSource.html">DataSource</a></li><li><a href="cheetahGrid.data.FilterDataSource.html">FilterDataSource</a></li><li><a href="cheetahGrid.ListGrid.html">ListGrid</a></li><li><a href="DrawLayers.html">DrawLayers</a></li><li><a href="EventTarget.html">EventTarget</a></li><li><a href="Selection.html">Selection</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a>
 </footer>
 
 <script> prettyPrint(); </script>
