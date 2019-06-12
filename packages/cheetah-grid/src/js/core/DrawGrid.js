@@ -422,21 +422,22 @@ function _toPxWidth(grid, width) {
 	return Math.round(calc.toPx(width, grid[_].calcWidthContext));
 }
 function _adjustColWidth(grid, col, orgWidth) {
-	const limit = grid[_].colWidthsLimit[col];
-	if (!limit) {
+	const limits = _getColWidthLimits(grid, col);
+	return Math.max(_applyColWidthLimits(limits, orgWidth), 0);
+}
+function _applyColWidthLimits(limits, orgWidth) {
+	if (!limits) {
 		return orgWidth;
 	}
 
-	if (limit.min) {
-		const min = _toPxWidth(grid, limit.min);
-		if (min > orgWidth) {
-			return min;
+	if (limits.min) {
+		if (limits.min > orgWidth) {
+			return limits.min;
 		}
 	}
-	if (limit.max) {
-		const max = _toPxWidth(grid, limit.max);
-		if (max < orgWidth) {
-			return max;
+	if (limits.max) {
+		if (limits.max < orgWidth) {
+			return limits.max;
 		}
 	}
 	return orgWidth;
@@ -455,6 +456,33 @@ function _getColWidthDefine(grid, col) {
 		return width;
 	}
 	return grid.defaultColWidth;
+}
+
+
+/**
+ * Gets the column width limits.
+ * @param {DrawGrid} grid grid instance
+ * @param {number} col number of column
+ * @returns {object|null} the column width limits
+ * @private
+ */
+function _getColWidthLimits(grid, col) {
+	const limit = grid[_].colWidthsLimit[col];
+	if (!limit) {
+		return null;
+	}
+
+	const result = {};
+
+	if (limit.min) {
+		result.min = _toPxWidth(grid, limit.min);
+		result.minDef = limit.min;
+	}
+	if (limit.max) {
+		result.max = _toPxWidth(grid, limit.max);
+		result.maxDef = limit.max;
+	}
+	return result;
 }
 
 /**
@@ -476,12 +504,41 @@ function isAutoDefine(width) {
 function _calcAutoColWidthExpr(grid) {
 	const others = [];
 	let autoCount = 0;
+	const hasLimitsOnAuto = [];
 	for (let col = 0; col < grid[_].colCount; col++) {
 		const def = _getColWidthDefine(grid, col);
+		const limits = _getColWidthLimits(grid, col);
 		if (isAutoDefine(def)) {
+			if (limits) {
+				hasLimitsOnAuto.push(limits);
+			}
 			autoCount++;
 		} else {
-			others.push(typeof def === 'number' ? `${def}px` : def);
+			let expr = typeof def === 'number' ? `${def}px` : def;
+			if (limits) {
+				const orgWidth = _toPxWidth(grid, expr);
+				const newWidth = _applyColWidthLimits(limits, orgWidth);
+				if (orgWidth !== newWidth) {
+					expr = `${newWidth}px`;
+				}
+			}
+			others.push(expr);
+		}
+	}
+	if (hasLimitsOnAuto.length && others.length) {
+		const autoPx = _toPxWidth(grid, `calc(100% - (${others.join(' + ')}))`) / autoCount;
+		for (let index = 0; index < hasLimitsOnAuto.length; index++) {
+			const limits = hasLimitsOnAuto[index];
+			if (limits.min && autoPx < limits.min) {
+				others.push(typeof limits.minDef === 'number' ? `${limits.minDef}px` : limits.minDef);
+				autoCount--;
+			} else if (limits.max && limits.max < autoPx) {
+				others.push(typeof limits.maxDef === 'number' ? `${limits.maxDef}px` : limits.maxDef);
+				autoCount--;
+			}
+		}
+		if (autoCount <= 0) {
+			return `${autoPx}px`;
 		}
 	}
 	if (others.length) {
