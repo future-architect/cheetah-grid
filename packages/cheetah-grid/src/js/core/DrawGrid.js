@@ -484,7 +484,11 @@ function _calcAutoColWidthExpr(grid) {
 			others.push(typeof def === 'number' ? `${def}px` : def);
 		}
 	}
-	return `calc((100% - (${others.join(' + ')})) / ${autoCount})`;
+	if (others.length) {
+		return `calc((100% - (${others.join(' + ')})) / ${autoCount})`;
+	} else {
+		return `${100 / autoCount}%`;
+	}
 }
 
 /**
