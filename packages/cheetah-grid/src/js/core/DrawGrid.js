@@ -421,11 +421,6 @@ function _invalidateRect(grid, drawRect) {
 function _toPxWidth(grid, width) {
 	return Math.round(calc.toPx(width, grid[_].calcWidthContext));
 }
-
-function _getDefaultColPxWidth(grid) {
-	return _toPxWidth(grid, grid.defaultColWidth);
-}
-
 function _adjustColWidth(grid, col, orgWidth) {
 	const limit = grid[_].colWidthsLimit[col];
 	if (!limit) {
@@ -447,22 +442,108 @@ function _adjustColWidth(grid, col, orgWidth) {
 	return orgWidth;
 }
 
-function _getColWidth(grid, col) {
+/**
+ * Gets the definition of the column width.
+ * @param {DrawGrid} grid grid instance
+ * @param {number} col number of column
+ * @returns {string|number} width definition
+ * @private
+ */
+function _getColWidthDefine(grid, col) {
 	const width = grid[_].colWidthsMap.get(col);
 	if (width) {
-		return _adjustColWidth(grid, col, _toPxWidth(grid, width));
+		return width;
 	}
-	return _getDefaultColPxWidth(grid);
+	return grid.defaultColWidth;
+}
+
+/**
+ * Checks if the given width definition is `auto`.
+ * @param {string|number} width width definition to check
+ * @returns {boolean} `true ` if the given width definition is `auto`
+ * @private
+ */
+function isAutoDefine(width) {
+	return width && typeof width === 'string' && width.toLowerCase() === 'auto';
+}
+
+/**
+ * Creates a formula to calculate the auto width.
+ * @param {DrawGrid} grid grid instance
+ * @returns {string} formula
+ * @private
+ */
+function _calcAutoColWidthExpr(grid) {
+	const others = [];
+	let autoCount = 0;
+	for (let col = 0; col < grid[_].colCount; col++) {
+		const def = _getColWidthDefine(grid, col);
+		if (isAutoDefine(def)) {
+			autoCount++;
+		} else {
+			others.push(typeof def === 'number' ? `${def}px` : def);
+		}
+	}
+	if (others.length) {
+		return `calc((100% - (${others.join(' + ')})) / ${autoCount})`;
+	} else {
+		return `${100 / autoCount}%`;
+	}
+}
+
+/**
+ * Calculate the pixels of width from the definition of width.
+ * @param {DrawGrid} grid grid instance
+ * @param {string|number} width width definition
+ * @returns {number} the pixels of width
+ * @private
+ */
+function _colWidthDefineToPxWidth(grid, width) {
+	if (isAutoDefine(width)) {
+		return _toPxWidth(grid, _calcAutoColWidthExpr(grid));
+	}
+	return _toPxWidth(grid, width);
+}
+
+function _getColWidth(grid, col) {
+	const width = _getColWidthDefine(grid, col);
+	return _adjustColWidth(grid, col, _colWidthDefineToPxWidth(grid, width));
 }
 function _setColWidth(grid, col, width) {
 	grid[_].colWidthsMap.put(col, width);
 }
+
+/**
+ * Overwrites the definition of a column whose width is set to `auto` with the current auto width formula.
+ * @param {DrawGrid} grid grid instance
+ * @returns {void}
+ * @private
+ */
+function _storeAutoColWidthExprs(grid) {
+	let expr = null;
+	for (let col = 0; col < grid[_].colCount; col++) {
+		const def = _getColWidthDefine(grid, col);
+		if (isAutoDefine(def)) {
+			_setColWidth(grid, col, expr || (expr = _calcAutoColWidthExpr(grid)));
+		}
+	}
+}
 function _getColsWidth(grid, startCol, endCol) {
+	const defaultColPxWidth = _colWidthDefineToPxWidth(grid, grid.defaultColWidth);
 	const colCount = endCol - startCol + 1;
-	let w = _getDefaultColPxWidth(grid) * colCount;
+	let w = defaultColPxWidth * colCount;
 	grid[_].colWidthsMap.each(startCol, endCol, (width, col) => {
-		w += _adjustColWidth(grid, col, _toPxWidth(grid, width)) - _getDefaultColPxWidth(grid);
+		w += _adjustColWidth(grid, col, _colWidthDefineToPxWidth(grid, width)) - defaultColPxWidth;
 	});
+	for (let col = startCol; col <= endCol; col++) {
+		if (grid[_].colWidthsMap.has(col)) {
+			continue;
+		}
+		const adj = _adjustColWidth(grid, col, defaultColPxWidth);
+		if (adj !== defaultColPxWidth) {
+			w += adj - defaultColPxWidth;
+		}
+	}
 	return w;
 }
 
@@ -494,12 +575,7 @@ function _getRowsHeight(grid, startRow, endRow) {
 }
 
 function _getScrollWidth(grid) {
-	const defaultColPxWidth = _getDefaultColPxWidth(grid);
-	let w = defaultColPxWidth * grid[_].colCount;
-	grid[_].colWidthsMap.each(0, grid[_].colCount - 1, (width, col) => {
-		w += _adjustColWidth(grid, col, _toPxWidth(grid, width)) - defaultColPxWidth;
-	});
-	return w;
+	return _getColsWidth(grid, 0, grid[_].colCount - 1);
 }
 function _getScrollHeight(grid, row) {
 	const internal = grid.getScrollHeightInternal(row);
@@ -1256,6 +1332,7 @@ class ColumnResizer extends BaseMouseDownMover {
 		if (afterSize < 10 && moveX < 0) {
 			afterSize = 10;
 		}
+		_storeAutoColWidthExprs(this._grid);
 		_setColWidth(this._grid, this._targetCol, afterSize);
 
 		const rect = _getVisibleRect(this._grid);
@@ -2125,7 +2202,6 @@ class DrawGrid extends EventTarget {
 	 */
 	set defaultRowHeight(defaultRowHeight) {
 		this[_].defaultRowHeight = defaultRowHeight;
-		this.updateScroll();
 	}
 	/**
 	 * Get the default column width.
@@ -2141,7 +2217,6 @@ class DrawGrid extends EventTarget {
 	 */
 	set defaultColWidth(defaultColWidth) {
 		this[_].defaultColWidth = defaultColWidth;
-		this.updateScroll();
 	}
 	/**
 	 * Get the font definition as a string.
@@ -2240,7 +2315,6 @@ class DrawGrid extends EventTarget {
 	 */
 	setRowHeight(row, height) {
 		_setRowHeight(this, row, height);
-		this.updateScroll();
 	}
 	/**
 	 * Get the column width of the given the column index.
@@ -2258,7 +2332,6 @@ class DrawGrid extends EventTarget {
 	 */
 	setColWidth(col, width) {
 		_setColWidth(this, col, width);
-		this.updateScroll();
 	}
 	/**
 	 * Get the column max width of the given the column index.

@@ -302,9 +302,6 @@ function _refreshHeader(grid) {
 			}
 		}
 	});
-	grid.colCount = grid[_].headerMap.columns.length;
-	_refreshRowCount(grid);
-	grid.frozenRowCount = grid[_].headerMap.rowCount;
 	for (let col = 0; col < grid[_].headerMap.columns.length; col++) {
 		const column = grid[_].headerMap.columns[col];
 		const {width, minWidth, maxWidth} = column;
@@ -325,6 +322,9 @@ function _refreshHeader(grid) {
 			grid.setRowHeight(row, height);
 		}
 	}
+	grid.colCount = grid[_].headerMap.columns.length;
+	_refreshRowCount(grid);
+	grid.frozenRowCount = grid[_].headerMap.rowCount;
 }
 
 function _refreshRowCount(grid) {

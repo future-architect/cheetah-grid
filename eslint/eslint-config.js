@@ -173,6 +173,8 @@ module.exports = {
 		'array-element-newline': 'off',
 		'function-paren-newline': 'off',
 		'array-bracket-newline': 'off',
+		'no-eq-null': 'off',
+		'eqeqeq': ['error', 'always', {'null': 'ignore'}],
 		// v5
 		'max-lines-per-function': 'off',
 		'max-classes-per-file': 'off',
