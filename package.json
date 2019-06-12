@@ -1,7 +1,7 @@
 {
   "name": "cheetah-grid-manager",
   "private": true,
-  "version": "0.12.0",
+  "version": "0.13.0",
   "description": "Cheetah Grid is a high performance grid engine that works on canvas",
   "keywords": [
     "spreadsheet",
@@ -47,7 +47,7 @@
     "prune:all": "mrpm prune",
     "lint": "mrpm run lint",
     "echo:v": "echo $npm_package_version",
-    "check": "node ./scripts/check_doclink_versions.js && node ./scripts/check_readme.js && node ./scripts/check_versions.js",
+    "check": "node ./scripts/check_readme.js && node ./scripts/check_versions.js",
     "publish:all": "mrpm publish",
     "update:all": "mrpm update",
     "postinstall": "cross-env NO_UPDATE_NOTIFIER=1 mrpm install",
