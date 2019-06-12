@@ -79,14 +79,15 @@ function generate(num) {
 			{
 				caption: 'name',
 				columns: [
-					{field: 'fname', caption: 'First Name', width: 'auto'},
-					{field: 'lname', caption: 'Last Name', width: 'auto'},
+					{field: 'fname', caption: 'First Name', width: 'auto', maxWidth: '200px'},
+					{field: 'lname', caption: 'Last Name', width: 'auto', minWidth: '150px'},
 				],
 			},
 			{
 				field: 'email',
 				caption: 'Email',
 				width: '15%',
+				minWidth: '200px',
 				sort: true
 			},
 			{
