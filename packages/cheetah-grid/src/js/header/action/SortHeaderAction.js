@@ -32,7 +32,7 @@ class SortHeaderAction extends BaseAction {
 			if (isObject(field) && field.get && field.set) {
 				field = field.get;
 			}
-			grid.dataSource.sort(grid.getField(newState.col), newState.order);
+			grid.dataSource.sort(field, newState.order);
 		}
 	}
 	bindGridEvent(grid, range) {
