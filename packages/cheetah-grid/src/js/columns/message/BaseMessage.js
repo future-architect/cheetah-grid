@@ -17,7 +17,7 @@ class BaseMessage {
 	createMessageElementInternal() {
 
 	}
-	drawCellMessageInternal(message, context, style, helper, info) {
+	drawCellMessageInternal(message, context, style, helper, grid, info) {
 
 	}
 	attachMessageElement(col, row, message) {
@@ -32,8 +32,8 @@ class BaseMessage {
 		const messageElement = this._getMessageElement();
 		messageElement._detach();
 	}
-	drawCellMessage(message, context, style, helper, info) {
-		this.drawCellMessageInternal(message, context, style, helper, info);
+	drawCellMessage(message, context, style, helper, grid, info) {
+		this.drawCellMessageInternal(message, context, style, helper, grid, info);
 	}
 }
 

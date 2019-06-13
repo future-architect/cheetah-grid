@@ -5,7 +5,9 @@ const {isPromise} = require('../../internal/utils');
 const {
 	SELECTED_CELL,
 	SCROLL,
-	CHANGED_VALUE
+	CHANGED_VALUE,
+	FOCUS_GRID,
+	BLUR_GRID
 } = require('../../list-grid/EVENT_TYPE');
 const ErrorMessage = require('./ErrorMessage');
 const WarningMessage = require('./WarningMessage');
@@ -71,13 +73,13 @@ class MessageHandler {
 		}
 		this._messageInstances = null;
 	}
-	drawCellMessage(message, context, style, helper, info) {
+	drawCellMessage(message, context, style, helper, grid, info) {
 
 		if (!hasMessage(message)) {
 			return;
 		}
 		const instance = this._getMessageInstanceOfMessage(message);
-		instance.drawCellMessage(message, context, style, helper, info);
+		instance.drawCellMessage(message, context, style, helper, grid, info);
 	}
 	_attach(col, row, message) {
 		const info = this._attachInfo;
@@ -134,6 +136,13 @@ class MessageHandler {
 				return;
 			}
 			onSelectMessage(e);
+		});
+		grid.listen(FOCUS_GRID, (e) => {
+			const sel = grid.selection.select;
+			onSelectMessage(sel);
+		});
+		grid.listen(BLUR_GRID, (e) => {
+			this._detach();
 		});
 	}
 	_getMessageInstanceOfMessage(message) {

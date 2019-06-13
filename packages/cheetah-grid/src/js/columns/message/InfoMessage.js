@@ -10,18 +10,18 @@ class InfoMessage extends BaseMessage {
 	createMessageElementInternal() {
 		return new MessageElement();
 	}
-	drawCellMessageInternal(message, context, style, helper, info) {
+	drawCellMessageInternal(message, context, style, helper, grid, info) {
 		const {bgColor} = style;
 		const {selected} = context.getSelectState();
 
-		helper.drawBorderWithClip(context, (ctx) => {
-			if (!selected) {
+		if (!selected || !grid.hasFocusGrid()) {
+			helper.drawBorderWithClip(context, (ctx) => {
 				messageUtils.drawInfomationMarkBox(context, {
 					bgColor: GREY_L2,
 					color: bgColor,
 				}, helper);
-			}
-		});
+			});
+		}
 	}
 }
 

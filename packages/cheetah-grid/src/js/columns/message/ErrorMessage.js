@@ -10,18 +10,18 @@ class ErrorMessage extends BaseMessage {
 	createMessageElementInternal() {
 		return new ErrorMessageElement();
 	}
-	drawCellMessageInternal(message, context, style, helper, info) {
+	drawCellMessageInternal(message, context, style, helper, grid, info) {
 		const {bgColor} = style;
 		const {selected} = context.getSelectState();
 
-		helper.drawBorderWithClip(context, (ctx) => {
-			if (!selected) {
+		if (!selected || !grid.hasFocusGrid()) {
+			helper.drawBorderWithClip(context, (ctx) => {
 				messageUtils.drawExclamationMarkBox(context, {
 					bgColor: RED_A100,
 					color: bgColor,
 				}, helper);
-			}
-		});
+			});
+		}
 	}
 }
 

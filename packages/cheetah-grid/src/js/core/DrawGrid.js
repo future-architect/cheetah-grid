@@ -59,6 +59,8 @@ const EV_EDITABLEINPUT_CELL = 'editableinput_cell';
 const EV_MODIFY_STATUS_EDITABLEINPUT_CELL = 'modify_status_editableinput_cell';
 const EV_RESIZE_COLUMN = 'resize_column';
 const EV_SCROLL = 'scroll';
+const EV_FOCUS_GRID = 'focus_grid';
+const EV_BLUR_GRID = 'blur_grid';
 const EVENT_TYPE = {
 	CLICK_CELL: EV_CLICK_CELL,
 	DBLCLICK_CELL: EV_DBLCLICK_CELL,
@@ -78,6 +80,8 @@ const EVENT_TYPE = {
 	MODIFY_STATUS_EDITABLEINPUT_CELL: EV_MODIFY_STATUS_EDITABLEINPUT_CELL,
 	RESIZE_COLUMN: EV_RESIZE_COLUMN,
 	SCROLL: EV_SCROLL,
+	FOCUS_GRID: EV_FOCUS_GRID,
+	BLUR_GRID: EV_BLUR_GRID
 };
 
 //private methods
@@ -1062,7 +1066,7 @@ function _bindEvents(grid) {
 		}
 		grid.fireListeners(EV_DBLCLICK_CELL, eventArgs);
 	});
-	grid[_].focusControl.listen('keydown', (keyCode, e) => {
+	grid[_].focusControl.onKeyDown((keyCode, e) => {
 		grid.fireListeners(EV_KEYDOWN, keyCode, e);
 	});
 	grid[_].selection.listen(EV_SELECTED_CELL, (data) => {
@@ -1116,6 +1120,20 @@ function _bindEvents(grid) {
 	grid[_].focusControl.onInput((value) => {
 		const {col, row} = grid[_].selection.select;
 		grid.fireListeners(EV_INPUT_CELL, {col, row, value});
+	});
+	grid[_].focusControl.onFocus((e) => {
+		grid.fireListeners(EV_FOCUS_GRID, e);
+		grid[_].focusedGrid = true;
+
+		const {col, row} = grid[_].selection.select;
+		grid.invalidateCell(col, row);
+	});
+	grid[_].focusControl.onBlur((e) => {
+		grid.fireListeners(EV_BLUR_GRID, e);
+		grid[_].focusedGrid = false;
+
+		const {col, row} = grid[_].selection.select;
+		grid.invalidateCell(col, row);
 	});
 	grid.bindEventsInternal();
 }
@@ -1597,6 +1615,12 @@ class FocusControl extends EventTarget {
 				}
 			}
 		});
+		handler.on(input, 'focus', (e) => {
+			this.fireListeners('focus', e);
+		});
+		handler.on(input, 'blur', (e) => {
+			this.fireListeners('blur', e);
+		});
 	}
 	onKeyDownMove(fn) {
 		this._handler.on(this._input, 'keydown', (e) => {
@@ -1615,6 +1639,9 @@ class FocusControl extends EventTarget {
 			}
 		});
 	}
+	onKeyDown(fn) {
+		return this.listen('keydown', fn);
+	}
 	onInput(fn) {
 		return this.listen('input', fn);
 	}
@@ -1623,6 +1650,12 @@ class FocusControl extends EventTarget {
 	}
 	onPaste(fn) {
 		return this.listen('paste', fn);
+	}
+	onFocus(fn) {
+		return this.listen('focus', fn);
+	}
+	onBlur(fn) {
+		return this.listen('blur', fn);
 	}
 	focus() {
 		// this._input.value = '';
@@ -2131,6 +2164,7 @@ class DrawGrid extends EventTarget {
 
 		protectedSpace.drawCells = {};
 		protectedSpace.cellTextOverflows = {};
+		protectedSpace.focusedGrid = false;
 
 		protectedSpace.element.appendChild(protectedSpace.canvas);
 		protectedSpace.element.appendChild(protectedSpace.scrollable.getElement());
@@ -2164,6 +2198,9 @@ class DrawGrid extends EventTarget {
 	focus() {
 		const {col, row} = this[_].selection.select;
 		this.focusCell(col, row);
+	}
+	hasFocusGrid() {
+		return this[_].focusedGrid;
 	}
 	/**
 	 * Get the selection instance.
