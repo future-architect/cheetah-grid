@@ -199,7 +199,7 @@ class BaseColumn {
 
 	}
 	drawMessageInternal(message, context, style, helper, grid, info) {
-		info.messageHandler.drawCellMessage(message, context, style, helper, info);
+		info.messageHandler.drawCellMessage(message, context, style, helper, grid, info);
 	}
 	bindGridEvent(grid, col, util) {
 		return [];
