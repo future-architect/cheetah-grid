@@ -3,6 +3,7 @@
 const {bindCellClickAction} = require('./actionBind');
 
 const BaseAction = require('./BaseAction');
+const {obj: {isObject}} = require('../../internal/utils');
 
 class SortHeaderAction extends BaseAction {
 	constructor(option = {}) {
@@ -27,6 +28,10 @@ class SortHeaderAction extends BaseAction {
 				grid
 			});
 		} else {
+			let field = grid.getField(newState.col);
+			if (isObject(field) && field.get && field.set) {
+				field = field.get;
+			}
 			grid.dataSource.sort(grid.getField(newState.col), newState.order);
 		}
 	}
