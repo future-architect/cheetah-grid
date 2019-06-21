@@ -1,11 +1,10 @@
 'use strict';
 
-const {getChainSafe} = require('../internal/utils');
 const DataSource = require('./DataSource');
 
 function _setFieldCache({_fCache}, index, field, value) {
-	const recCache = _fCache[index] || (_fCache[index] = {});
-	recCache[field] = value;
+	const recCache = _fCache[index] || (_fCache[index] = new Map());
+	recCache.set(field, value);
 }
 /**
 	 * grid data source for caching Promise data
@@ -36,9 +35,12 @@ class CachedDataSource extends DataSource {
 		return super.getOriginal(index);
 	}
 	getOriginalField(index, field) {
-		const cache = getChainSafe(this._fCache, index, field);
-		if (cache) {
-			return cache;
+		const rowCache = this._fCache && this._fCache[index];
+		if (rowCache) {
+			const cache = rowCache.get(field);
+			if (cache) {
+				return cache;
+			}
 		}
 		return super.getOriginalField(index, field);
 	}
