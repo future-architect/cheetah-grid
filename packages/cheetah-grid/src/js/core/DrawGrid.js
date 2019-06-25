@@ -1182,8 +1182,8 @@ function _getScrollableVisibleRect(grid) {
 		frozenRowsHeight = frozenRect.height;
 	}
 	return new Rect(
-			grid[_].scroll.left + frozenColsWidth,
-			grid[_].scroll.top + frozenRowsHeight,
+			grid[_].scrollable.scrollLeft + frozenColsWidth,
+			grid[_].scrollable.scrollTop + frozenRowsHeight,
 			grid[_].canvas.width - frozenColsWidth,
 			grid[_].canvas.height - frozenRowsHeight
 	);
