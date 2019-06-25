@@ -58,7 +58,6 @@
     "cross-env": "^5.2.0",
     "eslint": "^5.9.0",
     "eslint-plugin-html": "^4.0.6",
-    "mrpm": "^2.0.2",
-    "shelljs": "^0.8.3"
+    "mrpm": "^2.0.2"
   }
 }
