@@ -2287,7 +2287,7 @@ class DrawGrid extends EventTarget {
 	 *
 	 */
 	get defaultRowHeight() {
-		return this[_].rowCount;
+		return this[_].defaultRowHeight;
 	}
 	/**
 	 * Set the default row height.
