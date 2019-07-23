@@ -79,7 +79,7 @@ function _bindEvents (v, grid) {
       const col = first && first.col != null && typeof first.col === 'number' ? first.col : null
       const row = first && first.row != null && typeof first.row === 'number' ? first.row : null
 
-      if (col != null) {
+      if (col != null && grid.colCount > col) {
         if (row != null && grid.frozenRowCount > row) {
           const define = grid.getHeaderDefine(col, row)
           if (define && define.vm) {
