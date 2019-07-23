@@ -967,7 +967,7 @@ class ListGrid extends DrawGrid {
 	}
 	bindEventsInternal() {
 		this.listen(EVENT_TYPE.SELECTED_CELL, (e) => {
-			if (e.row < this[_].headerMap.rowCount) {
+			if (e.row < this[_].headerMap.rowCount && e.col < this[_].headerMap.columns.length) {
 				const {startCol, endCol, startRow, endRow} = _getHeaderCellRange(this, e.col, e.row);
 				if (startCol !== endCol || startRow !== endRow) {
 					this.invalidateGridRect(startCol, startRow, endCol, endRow);
