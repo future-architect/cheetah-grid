@@ -1,6 +1,6 @@
 {
   "name": "cheetah-grid",
-  "version": "0.13.8",
+  "version": "0.13.9",
   "description": "Cheetah Grid is a high performance grid engine that works on canvas",
   "keywords": [
     "spreadsheet",
