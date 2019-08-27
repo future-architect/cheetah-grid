@@ -50,6 +50,7 @@ const grid = new cheetahGrid.ListGrid({
           ? (v1, v2) => v1 === v2 ? 0 : v1 > v2 ? 1 : -1
           : (v1, v2) => v1 === v2 ? 0 : v1 < v2 ? 1 : -1;
         records.sort((r1, r2) => compare(r1.no, r2.no));
+        console.log('sorted:',records)
         grid.records = records;
       }
     },

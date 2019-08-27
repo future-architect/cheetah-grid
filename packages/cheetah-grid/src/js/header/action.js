@@ -46,7 +46,7 @@ const action = {
 	},
 	ofCell(headerCell) {
 		if (headerCell.sort) {
-			if (headerCell.sort === 'function') {
+			if (typeof headerCell.sort === 'function') {
 				// 0.9.0 Backward compatibility
 				const sort = ({order, col, grid}) => headerCell.sort(order, col, grid);
 				return new ImmutableSortHeaderAction({sort});
