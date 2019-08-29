@@ -4,6 +4,11 @@ const OriginalSource = require("webpack-sources").OriginalSource;
 const ModuleFilenameHelpers = require("webpack/lib/ModuleFilenameHelpers");
 const RequestShortener = require("webpack/lib/RequestShortener");
 const babel = require("@babel/core");
+const webpack = require('webpack');
+
+/**
+ * @typedef {import("webpack").Compiler} Compiler
+ */
 
 class BabelPlugin {
 	constructor(options) {
@@ -11,6 +16,9 @@ class BabelPlugin {
 		this.options = options;
 	}
 
+	/**
+	 * @param {Compiler} compiler webpack.Compiler
+	 */ 
 	apply(compiler) {
 		const options = this.options;
 		options.test = options.test || /\.js($|\?)/i;
@@ -18,14 +26,14 @@ class BabelPlugin {
 		options.compact = options.compact || false;
 
 		const requestShortener = new RequestShortener(compiler.context);
-		compiler.plugin("compilation", (compilation) => {
+		compiler.hooks.compilation.tap("BabelPlugin", (compilation) => {
 			if(options.sourceMaps) {
-				compilation.plugin("build-module", (module) => {
+				compilation.hooks.buildModule.tap("BabelPlugin", (module) => {
 					// to get detailed location info about errors
 					module.useSourceMap = true;
 				});
 			}
-			compilation.plugin("optimize-chunk-assets", (chunks, callback) => {
+			compilation.hooks.optimizeChunkAssets.tapAsync("BabelPlugin", (chunks, callback) => {
 				let files = [];
 				chunks.forEach((chunk) => files.push(...chunk.files));
 				files.push(...compilation.additionalChunkAssets);
