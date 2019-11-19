@@ -25,7 +25,7 @@ module.exports = (env, argv) => {
   return {
     mode: argv.mode,
     entry: {
-      'vueCheetahGrid': './lib/index.js'
+      vueCheetahGrid: './lib/index.js'
     },
     output: {
       path: path.resolve(__dirname, './dist'),
@@ -36,7 +36,7 @@ module.exports = (env, argv) => {
       devtoolFallbackModuleFilenameTemplate: devtoolModuleFilenameTemplate
     },
     externals: argv.test ? undefined : {
-      'vue': {
+      vue: {
         commonjs: 'vue',
         commonjs2: 'vue',
         amd: 'vue',
