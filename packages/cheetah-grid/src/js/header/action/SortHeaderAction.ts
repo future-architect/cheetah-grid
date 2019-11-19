@@ -1,0 +1,81 @@
+import {
+  CellAddress,
+  CellRange,
+  EventListenerId,
+  ListGridAPI,
+  SortHeaderActionOption,
+  SortOption,
+  SortState
+} from "../../ts-types";
+import { BaseAction } from "./BaseAction";
+import { bindCellClickAction } from "./actionBind";
+
+export class SortHeaderAction<T> extends BaseAction<T> {
+  private _sort: SortOption<T>;
+  constructor(option: SortHeaderActionOption<T> = {}) {
+    super(option);
+    this._sort = option.sort ?? true;
+  }
+  get sort(): SortOption<T> {
+    return this._sort;
+  }
+  set sort(sort) {
+    this._sort = sort;
+    this.onChangeDisabledInternal();
+  }
+  clone(): SortHeaderAction<T> {
+    return new SortHeaderAction(this);
+  }
+  _executeSort(newState: SortState, grid: ListGridAPI<T>): void {
+    if (typeof this._sort === "function") {
+      this._sort({
+        order: newState.order || "asc",
+        col: newState.col,
+        grid
+      });
+    } else {
+      const field = grid.getField(newState.col);
+      if (field == null) {
+        return;
+      }
+      grid.dataSource.sort(field, newState.order || "asc");
+    }
+  }
+  bindGridEvent(grid: ListGridAPI<T>, range: CellRange): EventListenerId[] {
+    const action = (cell: CellAddress): void => {
+      if (this.disabled) {
+        return;
+      }
+      const state = grid.sortState as SortState;
+      let newState: SortState;
+      if (range.inCell(state.col, cell.row)) {
+        newState = {
+          col: range.start.col,
+          row: range.start.row,
+          order: state.order === "asc" ? "desc" : "asc"
+        };
+      } else {
+        newState = {
+          col: range.start.col,
+          row: range.start.row,
+          order: "asc"
+        };
+      }
+      grid.sortState = newState;
+      this._executeSort(newState, grid);
+      grid.invalidateGridRect(0, 0, grid.colCount - 1, grid.rowCount - 1);
+    };
+
+    return [
+      ...bindCellClickAction(grid, range, {
+        action,
+        mouseOver: _e => {
+          if (this.disabled) {
+            return false;
+          }
+          return true;
+        }
+      })
+    ];
+  }
+}

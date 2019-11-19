@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import { mount, createLocalVue } from '@vue/test-utils'
 import CGrid from '../lib/index'
 import Sample from './Sample.vue'
-import cheetahGrid from 'cheetah-grid'
+import * as cheetahGrid from 'cheetah-grid'
 
 const localVue = createLocalVue()
 localVue.use(CGrid)

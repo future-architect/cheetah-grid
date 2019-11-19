@@ -35,6 +35,10 @@ npm install -S cheetah-grid
 ```
 
 ```js
+import * as cheetahGrid from 'cheetah-grid'
+
+// or
+
 const cheetahGrid = require("cheetah-grid")
 ```
 

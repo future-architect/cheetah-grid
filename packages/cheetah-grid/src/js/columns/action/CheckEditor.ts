@@ -1,0 +1,160 @@
+import {
+  ActionBindUtil,
+  bindCellClickAction,
+  bindCellKeyAction
+} from "./actionBind";
+import { CellAddress, EventListenerId } from "../../ts-types";
+import { event, isPromise, obj } from "../../internal/utils";
+import { isDisabledRecord, isReadOnlyRecord } from "./action-utils";
+import { EVENT_TYPE } from "../../core/EVENT_TYPE";
+import { Editor } from "./Editor";
+import { GridInternal } from "../../ts-types-internal";
+import { animate } from "../../internal/animate";
+import { getCheckColumnStateId } from "../../internal/symbolManager";
+
+const CHECK_COLUMN_STATE_ID = getCheckColumnStateId();
+
+const KEY_ENTER = 13;
+const KEY_SPACE = 32;
+
+function toggleValue(val: number): number;
+function toggleValue(val: string): string;
+function toggleValue(val: unknown): boolean;
+function toggleValue(
+  val: number | string | unknown
+): number | string | boolean {
+  if (typeof val === "number") {
+    if (val === 0) {
+      return 1;
+    } else {
+      return 0;
+    }
+  } else if (typeof val === "string") {
+    if (val === "false") {
+      return "true";
+    } else if (val === "off") {
+      return "on";
+    } else if (val.match(/^0+$/)) {
+      return val.replace(/^(0*)0$/, "$11");
+    } else if (val === "true") {
+      return "false";
+    } else if (val === "on") {
+      return "off";
+    } else if (val.match(/^0*1$/)) {
+      return val.replace(/^(0*)1$/, "$10");
+    }
+  }
+  return !val;
+}
+
+export class CheckEditor<T> extends Editor<T> {
+  clone(): CheckEditor<T> {
+    return new CheckEditor(this);
+  }
+  bindGridEvent(
+    grid: GridInternal<T>,
+    col: number,
+    util: ActionBindUtil
+  ): EventListenerId[] {
+    let _state = grid[CHECK_COLUMN_STATE_ID];
+    if (!_state) {
+      _state = { block: {}, elapsed: {} };
+      obj.setReadonly(grid, CHECK_COLUMN_STATE_ID, _state);
+    }
+    const state = _state;
+
+    const action = (cell: CellAddress): void => {
+      const cellKey = `${cell.col}:${cell.row}`;
+
+      if (
+        isReadOnlyRecord(this.readOnly, grid, cell.row) ||
+        isDisabledRecord(this.disabled, grid, cell.row) ||
+        state.block[cellKey]
+      ) {
+        return;
+      }
+      const ret = grid.doChangeValue(cell.col, cell.row, toggleValue);
+      if (ret) {
+        const onChange = (): void => {
+          // checkbox animation
+          animate(200, point => {
+            if (point === 1) {
+              delete state.elapsed[cellKey];
+            } else {
+              state.elapsed[cellKey] = point;
+            }
+            grid.invalidateCell(cell.col, cell.row);
+          });
+        };
+        if (isPromise(ret)) {
+          state.block[cellKey] = true;
+          ret.then(() => {
+            delete state.block[cellKey];
+            onChange();
+          });
+        } else {
+          onChange();
+        }
+      }
+    };
+    return [
+      ...bindCellClickAction(grid, col, util, {
+        action,
+        mouseOver: e => {
+          if (isDisabledRecord(this.disabled, grid, e.row)) {
+            return false;
+          }
+          state.mouseActiveCell = {
+            col: e.col,
+            row: e.row
+          };
+          grid.invalidateCell(e.col, e.row);
+          return true;
+        },
+        mouseOut: e => {
+          delete state.mouseActiveCell;
+          grid.invalidateCell(e.col, e.row);
+        }
+      }),
+      ...bindCellKeyAction(grid, col, util, {
+        action: _e => {
+          const selrange = grid.selection.range;
+          const { col } = grid.selection.select;
+          for (let { row } = selrange.start; row <= selrange.end.row; row++) {
+            if (!util.isTarget(col, row)) {
+              continue;
+            }
+            action({
+              col,
+              row
+            });
+          }
+        },
+        acceptKeys: [KEY_ENTER, KEY_SPACE]
+      }),
+
+      // paste value
+      grid.listen(EVENT_TYPE.PASTE_CELL, e => {
+        if (e.multi) {
+          // ignore multi cell values
+          return;
+        }
+        if (!util.isTarget(e.col, e.row)) {
+          return;
+        }
+        const pasteValue = e.normalizeValue.trim();
+        grid.doGetCellValue(e.col, e.row, value => {
+          const newValue = toggleValue(value);
+          if (`${newValue}`.trim() === pasteValue) {
+            event.cancel(e.event);
+
+            action({
+              col: e.col,
+              row: e.row
+            });
+          }
+        });
+      })
+    ];
+  }
+}
