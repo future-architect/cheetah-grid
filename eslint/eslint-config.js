@@ -178,6 +178,8 @@ module.exports = {
 		// v5
 		'max-lines-per-function': 'off',
 		'max-classes-per-file': 'off',
+		// v6
+		'function-call-argument-newline': 'off',
 
 		// ECMAScript 6+
 		'no-confusing-arrow': 'off',

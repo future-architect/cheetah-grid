@@ -28,11 +28,11 @@ module.exports = function (config) {
 
     browsers: ['Chrome', 'IE_no_addons'],
     customLaunchers: {
-      'IE_no_addons': {
+      IE_no_addons: {
         base: 'IE',
         flags: ['-extoff']
       },
-      'Chrome_travis_ci': {
+      Chrome_travis_ci: {
         base: 'ChromeHeadless',
         flags: ['--no-sandbox']
       }
