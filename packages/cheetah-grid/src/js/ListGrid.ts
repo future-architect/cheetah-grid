@@ -1,6 +1,4 @@
 import * as columns from "./columns";
-import * as headerAction from "./header/action";
-import * as headerType from "./header/type";
 import * as icons from "./internal/icons";
 import * as themes from "./themes";
 import { CachedDataSource, DataSource } from "./data";
@@ -10,16 +8,11 @@ import {
   CellRange,
   ColorPropertyDefine,
   ColorsPropertyDefine,
-  ColumnActionOption,
   ColumnIconOption,
   ColumnStyleOption,
-  ColumnTypeOption,
   EventListenerId,
   FieldData,
   FieldDef,
-  HeaderActionOption,
-  HeaderStyleOption,
-  HeaderTypeOption,
   HeaderValues,
   ListGridAPI,
   ListGridEventHandlersEventMap,
@@ -31,12 +24,19 @@ import {
   ThemeDefine
 } from "./ts-types";
 import {
+  ColumnDefine,
+  GroupHeaderDefine,
+  HeaderDefine,
+  HeadersDefine,
+  LayoutMapAPI,
+  SimpleHeaderMap
+} from "./internal/layout-map";
+import {
   DrawGrid,
   DrawGridConstructorOptions,
   DrawGridProtected
 } from "./core/DrawGrid";
 import { isDef, isPromise, obj, then } from "./internal/utils";
-import { BaseAction } from "./columns/action";
 import { BaseColumn } from "./columns/type/BaseColumn";
 import { BaseStyle } from "./columns/style";
 import { DrawCellInfo } from "./ts-types-internal";
@@ -51,14 +51,13 @@ import { getProtectedSymbol } from "./internal/symbolManager";
 
 const _ = getProtectedSymbol();
 
-let headerId = 0;
 //private methods
-function _getHeaderCellRange<T>(
+function _getCellRange<T>(
   grid: ListGrid<T>,
   col: number,
   row: number
 ): CellRange {
-  return grid[_].headerMap.getHeaderCellRange(col, row);
+  return grid[_].headerMap.getCellRange(col, row);
 }
 function _updateRect<T>(
   grid: ListGrid<T>,
@@ -70,7 +69,7 @@ function _updateRect<T>(
   const {
     start: { col: startCol, row: startRow },
     end: { col: endCol, row: endRow }
-  } = _getHeaderCellRange(grid, col, row);
+  } = _getCellRange(grid, col, row);
   for (let c = col - 1; c >= startCol; c--) {
     rect.left -= grid.getColWidth(c);
   }
@@ -372,7 +371,7 @@ function _refreshHeader<T>(grid: ListGrid<T>): void {
   const headerEvents: EventListenerId[] = (grid[_].headerEvents = []);
 
   headerEvents.forEach(id => grid.unlisten(id));
-  grid[_].headerMap = new HeaderMap(grid[_].header);
+  grid[_].headerMap = new SimpleHeaderMap(grid[_].header);
   grid[_].headerMap.headerObjects.forEach(cell => {
     const ids = cell.headerType.bindGridEvent(grid, cell.range);
     headerEvents.push(...ids);
@@ -514,228 +513,6 @@ function _getRowRecordIndex<T>(grid: ListGrid<T>, row: number): number {
 //
 //
 
-type OldSortOption<T> =
-  | boolean
-  | ((order: "asc" | "desc", col: number, grid: ListGridAPI<T>) => void);
-export interface BaseHeaderDefine<T> {
-  caption?: string;
-  headerField?: string;
-  headerStyle?: HeaderStyleOption | HeaderBaseStyle | null;
-  headerType?: HeaderTypeOption | headerType.BaseHeader<T> | null;
-  headerAction?: HeaderActionOption | headerAction.BaseAction<T> | null;
-  sort?: OldSortOption<T>;
-}
-export interface ColumnDefine<T> extends BaseHeaderDefine<T> {
-  field?: FieldDef<T>;
-  width?: number | string;
-  minWidth?: number | string;
-  maxWidth?: number | string;
-  icon?: ColumnIconOption<T> | ColumnIconOption<T>[];
-  message?: Message | ((record: T) => Message) | keyof T;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  columnType?: ColumnTypeOption | BaseColumn<T, any> | null;
-  action?: ColumnActionOption | BaseAction<T> | null;
-  style?: ColumnStyleOption | null;
-}
-export interface GroupHeaderDefine<T> extends BaseHeaderDefine<T> {
-  columns: HeaderDefine<T>[];
-}
-export type HeaderDefine<T> = GroupHeaderDefine<T> | ColumnDefine<T>;
-export type HeadersDefine<T> = HeaderDefine<T>[];
-
-type HeaderWorkData<T> = {
-  id: number;
-  caption?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  field?: any;
-  style?: HeaderStyleOption | HeaderBaseStyle | null;
-  headerType?: HeaderTypeOption | headerType.BaseHeader<T> | null;
-  action?: HeaderActionOption | headerAction.BaseAction<T> | null;
-  sort?: OldSortOption<T>;
-  define: HeaderDefine<T>;
-};
-
-type HeaderData<T> = {
-  id: number;
-  caption?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  field?: any;
-  style?: HeaderStyleOption | HeaderBaseStyle | null;
-  headerType: headerType.BaseHeader<T>;
-  action?: headerAction.BaseAction<T>;
-  range: CellRange;
-  define: HeaderDefine<T>;
-};
-
-type ColumnData<T> = {
-  field?: FieldDef<T>;
-  width?: number | string;
-  minWidth?: number | string;
-  maxWidth?: number | string;
-  icon?: ColumnIconOption<T> | ColumnIconOption<T>[];
-  message?: Message | ((record: T) => Message) | keyof T;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  columnType: BaseColumn<T, any>;
-  action?: BaseAction<T>;
-  style: ColumnStyleOption | null | undefined;
-  define: ColumnDefine<T>;
-};
-
-class HeaderMap<T> {
-  private _headerObjects: HeaderData<T>[];
-  private _headerCellIds: number[][];
-  private _columns: ColumnData<T>[];
-  constructor(header: HeadersDefine<T>) {
-    this._columns = [];
-    this._headerCellIds = [];
-
-    const allHeaders = this._addHeaders(0, header, []);
-    this._headerObjects = this._setupHeaderControllers(allHeaders);
-  }
-  get columns(): ColumnData<T>[] {
-    return this._columns;
-  }
-  get rowCount(): number {
-    return this._headerCellIds.length;
-  }
-  get headerObjects(): HeaderData<T>[] {
-    return this._headerObjects;
-  }
-  getCellId(col: number, row: number): number {
-    return this._headerCellIds[row][col];
-  }
-  getCell(col: number, row: number): HeaderData<T> {
-    const id = this.getCellId(col, row);
-    return this._headerObjects[id];
-  }
-  getHeaderCellRangeById(id: number): CellRange {
-    for (let r = 0; r < this.rowCount; r++) {
-      for (let c = 0; c < this.columns.length; c++) {
-        if (id === this.getCellId(c, r)) {
-          return this.getHeaderCellRange(c, r);
-        }
-      }
-    }
-    throw new Error(`can not found header @id=${id}`);
-  }
-  getHeaderCellRange(col: number, row: number): CellRange {
-    const result: CellRange = {
-      start: { col, row },
-      end: { col, row },
-      inCell(col, row) {
-        return (
-          this.start.col <= col &&
-          col <= this.end.col &&
-          this.start.row <= row &&
-          row <= this.end.row
-        );
-      }
-    };
-    const id = this.getCellId(col, row);
-    for (let c = col - 1; c >= 0; c--) {
-      if (id !== this.getCellId(c, row)) {
-        break;
-      }
-      result.start.col = c;
-    }
-    for (let c = col + 1; c < this.columns.length; c++) {
-      if (id !== this.getCellId(c, row)) {
-        break;
-      }
-      result.end.col = c;
-    }
-    for (let r = row - 1; r >= 0; r--) {
-      if (id !== this.getCellId(col, r)) {
-        break;
-      }
-      result.start.row = r;
-    }
-    for (let r = row + 1; r < this.rowCount; r++) {
-      if (id !== this.getCellId(col, r)) {
-        break;
-      }
-      result.end.row = r;
-    }
-    return result;
-  }
-  _addHeaders(
-    row: number,
-    header: HeaderDefine<T>[],
-    roots: number[]
-  ): HeaderWorkData<T>[] {
-    const results: HeaderWorkData<T>[] = [];
-    const rowCells = this._headerCellIds[row] || this._newRow(row);
-    header.forEach(hd => {
-      const col = this._columns.length;
-      const id = headerId++;
-      const cell: HeaderWorkData<T> = {
-        id,
-        caption: hd.caption,
-        field: hd.headerField || (hd as ColumnDefine<T>).field,
-        style: hd.headerStyle,
-        headerType: hd.headerType,
-        action: hd.headerAction,
-        sort: hd.sort,
-        define: hd
-      };
-      results[id] = cell;
-      rowCells[col] = id;
-      for (let r = row - 1; r >= 0; r--) {
-        this._headerCellIds[r][col] = roots[r];
-      }
-      if ((hd as GroupHeaderDefine<T>).columns) {
-        this._addHeaders(row + 1, (hd as GroupHeaderDefine<T>).columns, [
-          ...roots,
-          id
-        ]).forEach(c => (results[c.id] = c));
-      } else {
-        const colDef = hd as ColumnDefine<T>;
-        this._columns.push({
-          field: colDef.field,
-          width: colDef.width,
-          minWidth: colDef.minWidth,
-          maxWidth: colDef.maxWidth,
-          icon: colDef.icon,
-          message: colDef.message,
-          columnType: columns.type.of(colDef.columnType),
-          action: columns.action.of(colDef.action),
-          style: colDef.style,
-          define: colDef
-        });
-        for (let r = row + 1; r < this._headerCellIds.length; r++) {
-          this._headerCellIds[r][col] = id;
-        }
-      }
-    });
-    return results;
-  }
-  _setupHeaderControllers(allHeaders: HeaderWorkData<T>[]): HeaderData<T>[] {
-    return allHeaders.map(cell => {
-      return {
-        id: cell.id,
-        caption: cell.caption,
-        field: cell.field,
-        style: cell.style,
-        headerType: headerType.ofCell(cell),
-        action: headerAction.ofCell(cell),
-        range: this.getHeaderCellRangeById(cell.id),
-        define: cell.define
-      };
-    });
-  }
-  _newRow(row: number): number[] {
-    const newRow: number[] = (this._headerCellIds[row] = []);
-    if (!this._columns.length) {
-      return newRow;
-    }
-    const prev = this._headerCellIds[row - 1];
-    for (let col = 0; col < prev.length; col++) {
-      newRow[col] = prev[col];
-    }
-    return newRow;
-  }
-}
-
 function adjustListGridOption<T>(
   options: ListGridConstructorOptions<T>
 ): ListGridConstructorOptions<T> {
@@ -747,7 +524,7 @@ function adjustListGridOption<T>(
 export interface ListGridProtected<T> extends DrawGridProtected {
   dataSourceEventIds?: EventListenerId[];
   headerEvents?: EventListenerId[];
-  headerMap: HeaderMap<T>;
+  headerMap: LayoutMapAPI<T>;
   headerValues?: HeaderValues;
   tooltipHandler: TooltipHandler<T>;
   messageHandler: MessageHandler<T>;
@@ -767,6 +544,7 @@ export interface ListGridConstructorOptions<T>
   records?: T[];
   theme?: ThemeDefine | string;
 }
+export { HeadersDefine, ColumnDefine, HeaderDefine, GroupHeaderDefine };
 /**
  * ListGrid
  * @classdesc cheetahGrid.ListGrid
@@ -1134,22 +912,30 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
     return this[_].gridCanvasHelper;
   }
   /**
-   * Get header range information for a given cell.
+   * Get cell range information for a given cell.
    * @param {number} col column index of the cell
    * @param {number} row row index of the cell
    * @returns {object} cell range info
    */
+  getCellRange(col: number, row: number): CellRange {
+    return _getCellRange(this, col, row);
+  }
+  /**
+   * Get header range information for a given cell.
+   * @param {number} col column index of the cell
+   * @param {number} row row index of the cell
+   * @returns {object} cell range info
+   * @deprecated use `getCellRange` instead
+   */
   getHeaderCellRange(col: number, row: number): CellRange {
-    return _getHeaderCellRange(this, col, row);
+    return this.getCellRange(col, row);
   }
   getCopyCellValue(col: number, row: number): string {
-    if (row < this[_].headerMap.rowCount) {
-      const {
-        start: { col: startCol, row: startRow }
-      } = _getHeaderCellRange(this, col, row);
-      if (startCol !== col || startRow !== row) {
-        return "";
-      }
+    const {
+      start: { col: startCol, row: startRow }
+    } = _getCellRange(this, col, row);
+    if (startCol !== col || startRow !== row) {
+      return "";
     }
     return _getCellValue(this, col, row);
   }
@@ -1171,6 +957,7 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
     } else {
       draw = column.columnType.onDrawCell;
       ({ style } = column);
+      _updateRect(this, col, row, context);
     }
     const cellValue = _getCellValue(this, col, row);
     return _onDrawValue(this, cellValue, context, { col, row }, style, draw);
@@ -1256,54 +1043,41 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
   }
   bindEventsInternal(): void {
     this.listen(EVENT_TYPE.SELECTED_CELL, e => {
-      if (
-        e.row < this[_].headerMap.rowCount &&
-        e.col < this[_].headerMap.columns.length
-      ) {
-        const {
-          start: { col: startCol, row: startRow },
-          end: { col: endCol, row: endRow }
-        } = _getHeaderCellRange(this, e.col, e.row);
-        if (startCol !== endCol || startRow !== endRow) {
-          this.invalidateGridRect(startCol, startRow, endCol, endRow);
-        }
+      const {
+        start: { col: startCol, row: startRow },
+        end: { col: endCol, row: endRow }
+      } = _getCellRange(this, e.col, e.row);
+      if (startCol !== endCol || startRow !== endRow) {
+        this.invalidateGridRect(startCol, startRow, endCol, endRow);
       }
     });
   }
   getMoveLeftColByKeyDownInternal({ col, row }: CellAddress): number {
-    if (row < this[_].headerMap.rowCount) {
-      const {
-        start: { col: startCol }
-      } = _getHeaderCellRange(this, col, row);
-      col = startCol;
-    }
+    const {
+      start: { col: startCol }
+    } = _getCellRange(this, col, row);
+    col = startCol;
     return super.getMoveLeftColByKeyDownInternal({ col, row });
   }
   getMoveRightColByKeyDownInternal({ col, row }: CellAddress): number {
-    if (row < this[_].headerMap.rowCount) {
-      const {
-        end: { col: endCol }
-      } = _getHeaderCellRange(this, col, row);
-      col = endCol;
-    }
+    const {
+      end: { col: endCol }
+    } = _getCellRange(this, col, row);
+    col = endCol;
     return super.getMoveRightColByKeyDownInternal({ col, row });
   }
   getMoveUpRowByKeyDownInternal({ col, row }: CellAddress): number {
-    if (row < this[_].headerMap.rowCount) {
-      const {
-        start: { row: startRow }
-      } = _getHeaderCellRange(this, col, row);
-      row = startRow;
-    }
+    const {
+      start: { row: startRow }
+    } = _getCellRange(this, col, row);
+    row = startRow;
     return super.getMoveUpRowByKeyDownInternal({ col, row });
   }
   getMoveDownRowByKeyDownInternal({ col, row }: CellAddress): number {
-    if (row < this[_].headerMap.rowCount) {
-      const {
-        end: { row: endRow }
-      } = _getHeaderCellRange(this, col, row);
-      row = endRow;
-    }
+    const {
+      end: { row: endRow }
+    } = _getCellRange(this, col, row);
+    row = endRow;
     return super.getMoveDownRowByKeyDownInternal({ col, row });
   }
   getOffsetInvalidateCells(): number {

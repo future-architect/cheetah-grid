@@ -8,6 +8,9 @@ import * as register from "./register";
 import * as themes from "./themes";
 import * as tools from "./tools";
 import {
+  ColumnDefine,
+  GroupHeaderDefine,
+  HeaderDefine,
   HeadersDefine,
   ListGrid,
   ListGridConstructorOptions
@@ -29,6 +32,9 @@ export {
   // ListGrid types
   ListGridConstructorOptions,
   HeadersDefine,
+  ColumnDefine,
+  HeaderDefine,
+  GroupHeaderDefine,
   // objects
   columns,
   headers,

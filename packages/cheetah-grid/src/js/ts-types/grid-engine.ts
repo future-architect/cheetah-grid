@@ -150,7 +150,7 @@ export interface ListGridAPI<T> extends DrawGridAPI {
   getHeaderValue(col: number, row: number): any | undefined;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setHeaderValue(col: number, row: number, newValue: any): void;
-  getHeaderCellRange(col: number, row: number): CellRange;
+  getCellRange(col: number, row: number): CellRange;
   getColumnIndexByField(field: FieldDef<T>): number | null;
   focusGridCell(field: FieldDef<T>, index: number): void;
   makeVisibleGridCell(field: FieldDef<T>, index: number): void;

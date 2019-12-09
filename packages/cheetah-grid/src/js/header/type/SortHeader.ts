@@ -41,7 +41,7 @@ export class SortHeader<T> extends BaseHeader<T> {
     const state = grid.sortState as SortState;
     let order = undefined;
     const { col, row } = context;
-    const range = grid.getHeaderCellRange(col, row);
+    const range = grid.getCellRange(col, row);
     if (range.inCell(state.col, range.start.row)) {
       ({ order } = state);
     }
