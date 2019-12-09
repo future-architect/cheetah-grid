@@ -67,7 +67,7 @@ const newDefaultProps = (opt = {}) => {
 	};
 	return {
 		mode: opt.mode || 'production',
-		context: resolve('src/js/'),
+		context: resolve('dist-ts/'),
 		entry: entries,
 		output: {
 			path: resolve('dist/'),
@@ -98,9 +98,6 @@ const newDefaultProps = (opt = {}) => {
 			]
 		},
 		plugins: [
-			new webpack.ProvidePlugin({
-				'Array.isArray': ['@/internal/com.js', 'Array_isArray'],
-			}),
 			// new webpack.SourceMapDevToolPlugin({
 			// 	exclude: /^webpack/,
 			// 	filename: '[name]' + suffix + '.js.map',
@@ -119,6 +116,14 @@ const newDefaultProps = (opt = {}) => {
 function newEs6Config(opt) {
 	opt = Object.assign({}, opt);
 	opt.mode = opt.mode || 'development';
+	opt.plugins = [
+		new WrapperPlugin({
+			test: /\.js$/,
+			header: '(function(window){\n',
+			footer: '\n}).call(typeof global !== "undefined" ? global : window, typeof global !== "undefined" ? global : window);'
+		}),
+		...(opt.plugins || []),
+	];
 	return newDefaultProps(opt);
 }
 

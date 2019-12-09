@@ -9,9 +9,9 @@
 		mainEl.id = 'main';
 		document.body.appendChild(mainEl);
 	}
-	const path2DManager = cheetahGrid._internal.path2DManager;
+	const path2DManager = cheetahGrid._getInternal().path2DManager;
 
-	const icons = cheetahGrid.icons;
+	const icons = cheetahGrid.getIcons();
 
 	const canvas = document.createElement('canvas');
 	mainEl.appendChild(canvas);

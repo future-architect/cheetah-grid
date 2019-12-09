@@ -1,4 +1,4 @@
-import cheetahGrid from 'cheetah-grid'
+import * as cheetahGrid from 'cheetah-grid'
 
 export { cheetahGrid }
 

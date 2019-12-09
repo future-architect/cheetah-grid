@@ -3,7 +3,7 @@
 /*eslint prefer-arrow-callback:"off", object-shorthand:"off", prefer-destructuring: "off"*/
 'use strict';
 (function() {
-	const color = cheetahGrid._internal.color;
+	const color = cheetahGrid._getInternal().color;
 
 
 	describe('color', function() {

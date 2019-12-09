@@ -1,0 +1,41 @@
+import { CellContext, GridCanvasHelper, ListGridAPI } from "../../ts-types";
+import { BaseHeader } from "./BaseHeader";
+import { DrawCellInfo } from "../../ts-types-internal";
+import { Style } from "../style/Style";
+
+export class Header<T> extends BaseHeader<T> {
+  get StyleClass(): typeof Style {
+    return Style;
+  }
+  drawInternal(
+    value: string,
+    context: CellContext,
+    style: Style,
+    helper: GridCanvasHelper,
+    _grid: ListGridAPI<T>,
+    { drawCellBase }: DrawCellInfo<T>
+  ): void {
+    const {
+      textAlign,
+      textBaseline,
+      color,
+      font,
+      bgColor,
+      textOverflow
+    } = style;
+
+    if (bgColor) {
+      drawCellBase({
+        bgColor
+      });
+    }
+
+    helper.text(value, context, {
+      textAlign,
+      textBaseline,
+      color,
+      font,
+      textOverflow
+    });
+  }
+}

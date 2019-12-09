@@ -1,0 +1,78 @@
+import {
+  ActionOption,
+  BaseActionOption,
+  ButtonActionOption,
+  ColumnActionOption,
+  EditorOption,
+  InlineInputEditorOption,
+  InlineMenuEditorOption,
+  SmallDialogInputEditorOption
+} from "../ts-types";
+import { Action } from "./action/Action";
+import { BaseAction } from "./action/BaseAction";
+import { ButtonAction } from "./action/ButtonAction";
+import { CheckEditor } from "./action/CheckEditor";
+import { Editor } from "./action/Editor";
+import { InlineInputEditor } from "./action/InlineInputEditor";
+import { InlineMenuEditor } from "./action/InlineMenuEditor";
+import { SmallDialogInputEditor } from "./action/SmallDialogInputEditor";
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+class ImmutableCheckEditor extends CheckEditor<any> {
+  get disabled(): boolean {
+    return this._disabled;
+  }
+  get readOnly(): boolean {
+    return this._readOnly;
+  }
+}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+class ImmutableInputEditor extends SmallDialogInputEditor<any> {
+  get disabled(): boolean {
+    return this._disabled;
+  }
+  get readOnly(): boolean {
+    return this._readOnly;
+  }
+}
+
+export const ACTIONS = {
+  CHECK: new ImmutableCheckEditor(),
+  INPUT: new ImmutableInputEditor()
+};
+/**
+ * column actions
+ * @type {Object}
+ * @namespace cheetahGrid.columns.action
+ * @memberof cheetahGrid.columns
+ */
+export {
+  BaseAction,
+  Editor,
+  Action,
+  CheckEditor,
+  ButtonAction,
+  SmallDialogInputEditor,
+  InlineInputEditor,
+  InlineMenuEditor,
+  // types
+  ActionOption,
+  BaseActionOption,
+  ButtonActionOption,
+  EditorOption,
+  InlineInputEditorOption,
+  InlineMenuEditorOption,
+  SmallDialogInputEditorOption
+};
+export function of<T>(
+  columnAction: ColumnActionOption | BaseAction<T> | null | undefined
+): BaseAction<T> | undefined {
+  if (!columnAction) {
+    return undefined;
+  } else if (typeof columnAction === "string") {
+    const key = columnAction.toUpperCase() as keyof typeof ACTIONS;
+    return ACTIONS[key] || of(null);
+  } else {
+    return columnAction;
+  }
+}

@@ -1,0 +1,144 @@
+import { BaseTooltip } from "./BaseTooltip";
+import { EVENT_TYPE } from "../list-grid/EVENT_TYPE";
+import { ListGridAPI } from "../ts-types";
+import { Tooltip } from "./Tooltip";
+
+const TOOLTIP_INSTANCE_FACTORY = {
+  "overflow-text"<T>(grid: ListGridAPI<T>): BaseTooltip<T> {
+    return new Tooltip(grid);
+  }
+};
+
+function getTooltipInstanceInfo<T>(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  grid: ListGridAPI<T>,
+  col: number,
+  row: number
+): {
+  type: "overflow-text";
+  content: string;
+} | null {
+  //
+  // overflow text tooltip
+  const overflowText = grid.getCellOverflowText(col, row);
+  if (overflowText) {
+    return {
+      type: "overflow-text",
+      content: overflowText
+    };
+  }
+  return null;
+}
+
+type AttachInfo<T> = {
+  instance: BaseTooltip<T>;
+  col: number;
+  row: number;
+};
+
+export class TooltipHandler<T> {
+  private _grid: ListGridAPI<T>;
+  private _tooltipInstances: { [type: string]: BaseTooltip<T> };
+  private _attachInfo?: AttachInfo<T> | null;
+  constructor(grid: ListGridAPI<T>) {
+    this._grid = grid;
+    this._tooltipInstances = {};
+    this._bindGridEvent(grid);
+  }
+  dispose(): void {
+    const tooltipInstances = this._tooltipInstances;
+    for (const k in tooltipInstances) {
+      tooltipInstances[k].dispose();
+    }
+    delete this._tooltipInstances;
+    this._attachInfo = null;
+  }
+  _attach(col: number, row: number): void {
+    const info = this._attachInfo;
+    const instanceInfo = this._getTooltipInstanceInfo(col, row);
+    if (info && (!instanceInfo || info.instance !== instanceInfo.instance)) {
+      info.instance.detachTooltipElement();
+      this._attachInfo = null;
+    }
+    if (!instanceInfo) {
+      return;
+    }
+    const { instance } = instanceInfo;
+    instance.attachTooltipElement(col, row, instanceInfo.content);
+    this._attachInfo = { col, row, instance };
+  }
+  _move(col: number, row: number): void {
+    const info = this._attachInfo;
+    if (!info || info.col !== col || info.row !== row) {
+      return;
+    }
+    const { instance } = info;
+    instance.moveTooltipElement(col, row);
+  }
+  _detach(): void {
+    const info = this._attachInfo;
+    if (!info) {
+      return;
+    }
+    const { instance } = info;
+    instance.detachTooltipElement();
+    this._attachInfo = null;
+  }
+  _isAttachCell(col: number, row: number): boolean {
+    const info = this._attachInfo;
+    if (!info) {
+      return false;
+    }
+    return info.col === col && info.row === row;
+  }
+  _bindGridEvent(grid: ListGridAPI<T>): void {
+    grid.listen(EVENT_TYPE.MOUSEOVER_CELL, e => {
+      this._attach(e.col, e.row);
+    });
+    grid.listen(EVENT_TYPE.MOUSEOUT_CELL, _e => {
+      this._detach();
+    });
+    grid.listen(EVENT_TYPE.SELECTED_CELL, e => {
+      if (this._isAttachCell(e.col, e.row)) {
+        this._detach();
+      }
+    });
+    grid.listen(EVENT_TYPE.SCROLL, () => {
+      const info = this._attachInfo;
+      if (!info) {
+        return;
+      }
+      this._move(info.col, info.row);
+    });
+    grid.listen(EVENT_TYPE.CHANGED_VALUE, e => {
+      if (this._isAttachCell(e.col, e.row)) {
+        this._detach();
+        this._attach(e.col, e.row);
+      }
+    });
+  }
+  _getTooltipInstanceInfo(
+    col: number,
+    row: number
+  ): {
+    instance: Tooltip<T>;
+    type: string;
+    content: string;
+  } | null {
+    const grid = this._grid;
+    const tooltipInstances = this._tooltipInstances;
+    const info = getTooltipInstanceInfo(grid, col, row);
+    if (!info) {
+      return null;
+    }
+    const { type } = info;
+    const instance =
+      tooltipInstances[type] ||
+      (tooltipInstances[type] = TOOLTIP_INSTANCE_FACTORY[type](grid));
+    return {
+      instance,
+      type,
+      content: info.content
+    };
+  }
+}

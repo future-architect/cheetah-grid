@@ -1,0 +1,306 @@
+import * as sort from "../internal/sort";
+import {
+  DataSourceAPI,
+  FieldAssessor,
+  FieldData,
+  FieldDef,
+  MaybePromise,
+  MaybePromiseOrCall,
+  MaybePromiseOrCallOrUndef,
+  MaybePromiseOrUndef
+} from "../ts-types";
+import {
+  applyChainSafe,
+  array,
+  emptyFn,
+  getOrApply,
+  isDef,
+  isPromise,
+  obj
+} from "../internal/utils";
+import { EventTarget } from "../core/EventTarget";
+
+function isFieldAssessor<T>(field: FieldDef<T>): field is FieldAssessor<T> {
+  if (obj.isObject(field)) {
+    const a = field as FieldAssessor<T>;
+    if (a.get && a.set) {
+      return true;
+    }
+  }
+  return false;
+}
+
+const EVENT_TYPE: {
+  UPDATE_LENGTH: "update_length";
+  UPDATED_LENGTH: "updated_length";
+  UPDATED_ORDER: "updated_order";
+} = {
+  UPDATE_LENGTH: "update_length",
+  UPDATED_LENGTH: "updated_length",
+  UPDATED_ORDER: "updated_order"
+};
+
+export type PromiseCacheValue<V> = MaybePromiseOrUndef<V>;
+type PromiseBack<V> = (value: PromiseCacheValue<V>) => void;
+
+function getValue<V>(
+  value: MaybePromiseOrCallOrUndef<V, []>,
+  setPromiseBack: PromiseBack<V>
+): MaybePromiseOrUndef<V> {
+  const maybePromiseValue = getOrApply(value);
+  if (isPromise(maybePromiseValue)) {
+    const promiseValue = maybePromiseValue.then((r: V | undefined) => {
+      setPromiseBack(r);
+      return r;
+    });
+    //一時的にキャッシュ
+    setPromiseBack(promiseValue);
+    return promiseValue;
+  } else {
+    return maybePromiseValue;
+  }
+}
+
+function getField<T, F extends FieldDef<T>>(
+  record: MaybePromiseOrUndef<T>,
+  field: F,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  setPromiseBack: PromiseBack<any>
+): FieldData {
+  if (!isDef(record)) {
+    return undefined;
+  }
+  if (isPromise(record)) {
+    return record.then((r: T | undefined) =>
+      getField(r, field, setPromiseBack)
+    );
+  }
+  const fieldGet = isFieldAssessor<T>(field) ? field.get : field;
+  if (fieldGet in record) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const fieldResult = (record as any)[fieldGet];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return getValue(fieldResult, setPromiseBack);
+  }
+  if (typeof fieldGet === "function") {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const fieldResult = (fieldGet as any)(record);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return getValue(fieldResult, setPromiseBack);
+  }
+
+  const ss = `${fieldGet}`.split(".");
+  if (ss.length <= 1) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const fieldResult = (record as any)[fieldGet];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return getValue(fieldResult, setPromiseBack);
+  }
+  const fieldResult = applyChainSafe(
+    record,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (val, name) => getField(val, name, emptyFn as any),
+    ...ss
+  );
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return getValue(fieldResult, setPromiseBack);
+}
+function setField<T, F extends FieldDef<T>>(
+  record: T | undefined,
+  field: F,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  value: any
+): boolean {
+  if (record == null) {
+    return false;
+  }
+
+  const fieldSet = isFieldAssessor<T>(field) ? field.set : field;
+  if (fieldSet in record) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (record as any)[fieldSet] = value;
+  } else if (typeof fieldSet === "function") {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (fieldSet as any)(record, value);
+  } else if (typeof fieldSet === "string") {
+    const ss = `${fieldSet}`.split(".");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let obj: any = record;
+    const { length } = ss;
+    for (let i = 0; i < length; i++) {
+      const f = ss[i];
+      if (i === length - 1) {
+        obj[f] = value;
+      } else {
+        obj = obj[f] || (obj[f] = {});
+      }
+    }
+  } else {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (record as any)[fieldSet] = value;
+  }
+  return true;
+}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function _getIndex(dataSource: DataSource<any>, index: number): number {
+  if (!dataSource._sortedIndexMap) {
+    return index;
+  }
+  const mapIndex = dataSource._sortedIndexMap[index];
+  return isDef(mapIndex) ? mapIndex : index;
+}
+
+export interface DataSourceParam<T> {
+  get: (index: number) => T;
+  length: number;
+}
+
+/**
+ * grid data source
+ *
+ * @classdesc cheetahGrid.data.DataSource
+ * @extends EventTarget
+ * @memberof cheetahGrid.data
+ */
+export class DataSource<T> extends EventTarget implements DataSourceAPI<T> {
+  private _get: (index: number) => MaybePromiseOrCall<T, []>;
+  private _length: number;
+  _sortedIndexMap: null | number[] = null;
+  static get EVENT_TYPE(): typeof EVENT_TYPE {
+    return EVENT_TYPE;
+  }
+  static ofArray<T>(array: T[]): DataSource<T> {
+    return new DataSource<T>({
+      get: (index: number): T => array[index],
+      length: array.length
+    });
+  }
+  constructor(obj?: DataSourceParam<T> | DataSource<T>) {
+    super();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    this._get = obj?.get.bind(obj) || (undefined as any);
+    this._length = obj?.length || 0;
+  }
+  get(index: number): MaybePromiseOrUndef<T> {
+    return this.getOriginal(_getIndex(this, index));
+  }
+  getField<F extends FieldDef<T>>(index: number, field: F): FieldData {
+    return this.getOriginalField(_getIndex(this, index), field);
+  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  hasField(index: number, field: FieldDef<T>): boolean {
+    return this.hasOriginalField(_getIndex(this, index), field);
+  }
+  setField<F extends FieldDef<T>>(
+    index: number,
+    field: F,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    value: any
+  ): MaybePromise<boolean> {
+    return this.setOriginalField(_getIndex(this, index), field, value);
+  }
+  sort(field: FieldDef<T>, order: "desc" | "asc"): MaybePromise<void> {
+    const sortedIndexMap = new Array<number>(this._length);
+
+    const orderFn: (v1: T, v2: T) => -1 | 0 | 1 =
+      order !== "desc"
+        ? (v1: T, v2: T): -1 | 0 | 1 => (v1 === v2 ? 0 : v1 > v2 ? 1 : -1)
+        : (v1: T, v2: T): -1 | 0 | 1 => (v1 === v2 ? 0 : v1 < v2 ? 1 : -1);
+
+    return sort
+      .sortPromise(
+        index =>
+          isDef(sortedIndexMap[index])
+            ? sortedIndexMap[index]
+            : (sortedIndexMap[index] = index),
+        (index, rel) => {
+          sortedIndexMap[index] = rel;
+        },
+        this._length,
+        orderFn,
+        index => this.getOriginalField(index, field)
+      )
+      .then(() => {
+        this._sortedIndexMap = sortedIndexMap;
+        this.fireListeners(EVENT_TYPE.UPDATED_ORDER);
+      });
+  }
+  get length(): number {
+    return this._length;
+  }
+  set length(length) {
+    if (this._length === length) {
+      return;
+    }
+
+    const results = this.fireListeners(EVENT_TYPE.UPDATE_LENGTH, length);
+    if (array.findIndex(results, v => !v) >= 0) {
+      return;
+    }
+    this._length = length;
+    this.fireListeners(EVENT_TYPE.UPDATED_LENGTH, this._length);
+  }
+  dispose(): void {
+    super.dispose();
+  }
+  getOriginal(index: number): MaybePromiseOrUndef<T> {
+    return getValue(this._get(index), (val: PromiseCacheValue<T>) => {
+      this.recordPromiseCallBackInternal(index, val);
+    });
+  }
+  getOriginalField<F extends FieldDef<T>>(index: number, field: F): FieldData {
+    if (!isDef(field)) {
+      return undefined;
+    }
+    const record = this.getOriginal(index);
+    return getField(record, field, val => {
+      this.fieldPromiseCallBackInternal(index, field, val);
+    });
+  }
+  hasOriginalField(index: number, field: FieldDef<T>): boolean {
+    if (!isDef(field)) {
+      return false;
+    }
+    if (typeof field === "function") {
+      return true;
+    }
+    const record = this.getOriginal(index);
+    return Boolean(record && field in record);
+  }
+  setOriginalField<F extends FieldDef<T>>(
+    index: number,
+    field: F,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    value: any
+  ): MaybePromise<boolean> {
+    if (!isDef(field)) {
+      return false;
+    }
+    const record = this.getOriginal(index);
+    if (isPromise(record)) {
+      return record.then(r => setField(r, field, value));
+    }
+    return setField(record, field, value);
+  }
+  fieldPromiseCallBackInternal<F extends FieldDef<T>>(
+    _index: number,
+    _field: F,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    _value: PromiseCacheValue<any>
+  ): void {
+    //
+  }
+  recordPromiseCallBackInternal(
+    _index: number,
+    _record: PromiseCacheValue<T>
+  ): void {
+    //
+  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static EMPTY = new DataSource<any>({
+    get(): void {
+      /*noop */
+    },
+    length: 0
+  });
+}

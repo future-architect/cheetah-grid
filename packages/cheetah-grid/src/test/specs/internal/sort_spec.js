@@ -6,7 +6,7 @@
 	function isDef(data) {
 		return data !== null && typeof data !== 'undefined';
 	}
-	const sort = cheetahGrid._internal.sort;
+	const sort = cheetahGrid._getInternal().sort;
 
 	describe('sort', function() {
 

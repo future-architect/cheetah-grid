@@ -3,7 +3,7 @@
 /*eslint prefer-arrow-callback:"off", object-shorthand:"off", prefer-destructuring: "off"*/
 'use strict';
 (function() {
-	const calc = cheetahGrid._internal.calc;
+	const calc = cheetahGrid._getInternal().calc;
 
 	describe('calc', function() {
 		it('toPx num', function() {
