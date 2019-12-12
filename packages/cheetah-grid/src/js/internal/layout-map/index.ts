@@ -1,6 +1,6 @@
 export { LayoutMapAPI, HeaderDefine, ColumnDefine } from "./api";
 export {
   HeadersDefine,
-  SimpleHeaderMap,
+  SimpleHeaderLayoutMap,
   GroupHeaderDefine
-} from "./simple-header";
+} from "./simple-header-layout";

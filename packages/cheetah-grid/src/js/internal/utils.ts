@@ -1,4 +1,4 @@
-import { MaybeCall, MaybePromise } from "../ts-types";
+import { CellRange, MaybeCall, MaybePromise } from "../ts-types";
 
 const isNode =
   typeof window === "undefined" || typeof window.window === "undefined";
@@ -352,6 +352,19 @@ export {
   then,
   array
 };
+
+export function cellInRange(
+  range: CellRange,
+  col: number,
+  row: number
+): boolean {
+  return (
+    range.start.col <= col &&
+    col <= range.end.col &&
+    range.start.row <= row &&
+    row <= range.end.row
+  );
+}
 
 export const browser = {
   IE,

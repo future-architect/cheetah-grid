@@ -2,10 +2,10 @@ import {
   CellAddress,
   EditorOption,
   EventListenerId,
+  LayoutObjectId,
   ListGridAPI
 } from "../../ts-types";
 import { isDisabledRecord, isReadOnlyRecord } from "./action-utils";
-import { ActionBindUtil } from "./actionBind";
 import { EVENT_TYPE } from "../../core/EVENT_TYPE";
 import { Editor } from "./Editor";
 import { event } from "../../internal/utils";
@@ -36,8 +36,7 @@ export abstract class BaseInputEditor<T> extends Editor<T> {
   abstract onGridScrollInternal(grid: ListGridAPI<T>): void;
   bindGridEvent(
     grid: ListGridAPI<T>,
-    _col: number,
-    util: ActionBindUtil
+    cellId: LayoutObjectId
   ): EventListenerId[] {
     const open = (cell: CellAddress): void => {
       if (
@@ -58,9 +57,13 @@ export abstract class BaseInputEditor<T> extends Editor<T> {
       }
       this.onInputCellInternal(grid, cell, value);
     };
+
+    function isTarget(col: number, row: number): boolean {
+      return grid.getLayoutCellId(col, row) === cellId;
+    }
     return [
       grid.listen(EVENT_TYPE.INPUT_CELL, e => {
-        if (!util.isTarget(e.col, e.row)) {
+        if (!isTarget(e.col, e.row)) {
           return;
         }
         input(
@@ -76,7 +79,7 @@ export abstract class BaseInputEditor<T> extends Editor<T> {
           // ignore multi cell values
           return;
         }
-        if (!util.isTarget(e.col, e.row)) {
+        if (!isTarget(e.col, e.row)) {
           return;
         }
         event.cancel(e.event);
@@ -89,7 +92,7 @@ export abstract class BaseInputEditor<T> extends Editor<T> {
         );
       }),
       grid.listen(EVENT_TYPE.DBLCLICK_CELL, cell => {
-        if (!util.isTarget(cell.col, cell.row)) {
+        if (!isTarget(cell.col, cell.row)) {
           return;
         }
         open({
@@ -98,7 +101,7 @@ export abstract class BaseInputEditor<T> extends Editor<T> {
         });
       }),
       grid.listen(EVENT_TYPE.DBLTAP_CELL, e => {
-        if (!util.isTarget(e.col, e.row)) {
+        if (!isTarget(e.col, e.row)) {
           return;
         }
         open({
@@ -113,7 +116,7 @@ export abstract class BaseInputEditor<T> extends Editor<T> {
           return;
         }
         const sel = grid.selection.select;
-        if (!util.isTarget(sel.col, sel.row)) {
+        if (!isTarget(sel.col, sel.row)) {
           return;
         }
         open({
@@ -132,7 +135,7 @@ export abstract class BaseInputEditor<T> extends Editor<T> {
         this.onGridScrollInternal(grid);
       }),
       grid.listen(EVENT_TYPE.EDITABLEINPUT_CELL, cell => {
-        if (!util.isTarget(cell.col, cell.row)) {
+        if (!isTarget(cell.col, cell.row)) {
           return false;
         }
         if (
@@ -144,7 +147,7 @@ export abstract class BaseInputEditor<T> extends Editor<T> {
         return true;
       }),
       grid.listen(EVENT_TYPE.MODIFY_STATUS_EDITABLEINPUT_CELL, cell => {
-        if (!util.isTarget(cell.col, cell.row)) {
+        if (!isTarget(cell.col, cell.row)) {
           return;
         }
         if (

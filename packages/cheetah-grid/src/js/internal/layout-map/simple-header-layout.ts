@@ -5,16 +5,17 @@ import {
   CellRange,
   HeaderActionOption,
   HeaderStyleOption,
-  HeaderTypeOption
+  HeaderTypeOption,
+  LayoutObjectId
 } from "../../ts-types";
 import {
   ColumnData,
   ColumnDefine,
   HeaderData,
   HeaderDefine,
-  LayoutMapAPI,
   OldSortOption
 } from "./api";
+import { BaseLayoutMap } from "./base-layout";
 import { BaseStyle as HeaderBaseStyle } from "../../header/style";
 
 export interface GroupHeaderDefine<T> extends HeaderDefine<T> {
@@ -23,7 +24,7 @@ export interface GroupHeaderDefine<T> extends HeaderDefine<T> {
 export type HeadersDefine<T> = (GroupHeaderDefine<T> | ColumnDefine<T>)[];
 
 type HeaderWorkData<T> = {
-  id: number;
+  id: LayoutObjectId;
   caption?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   field?: any;
@@ -34,72 +35,71 @@ type HeaderWorkData<T> = {
   define: HeaderDefine<T>;
 };
 
-let headerId = 0;
-export class SimpleHeaderMap<T> implements LayoutMapAPI<T> {
+let seqId = 0;
+export class SimpleHeaderLayoutMap<T> extends BaseLayoutMap<T> {
   private _headerObjects: HeaderData<T>[];
+  private _headerObjectMap: { [key in LayoutObjectId]: HeaderData<T> };
   private _headerCellIds: number[][];
   private _columns: ColumnData<T>[];
+  readonly bodyRowCount: number = 1;
   constructor(header: HeadersDefine<T>) {
+    super();
     this._columns = [];
     this._headerCellIds = [];
 
     const allHeaders = this._addHeaders(0, header, []);
     this._headerObjects = this._setupHeaderControllers(allHeaders);
+    this._headerObjectMap = this._headerObjects.reduce((o, e) => {
+      o[e.id as number] = e;
+      return o;
+    }, {} as { [key in LayoutObjectId]: HeaderData<T> });
   }
-  get columns(): ColumnData<T>[] {
+  get columnWidths(): ColumnData<T>[] {
     return this._columns;
   }
-  get rowCount(): number {
+  get headerRowCount(): number {
     return this._headerCellIds.length;
+  }
+  get colCount(): number {
+    return this._columns.length;
   }
   get headerObjects(): HeaderData<T>[] {
     return this._headerObjects;
   }
-  getCellId(col: number, row: number): number {
+  get columnObjects(): ColumnData<T>[] {
+    return this._columns;
+  }
+  getCellId(col: number, row: number): LayoutObjectId {
+    if (this.headerRowCount <= row) {
+      return this._columns[col].id;
+    }
+    //in header
     return this._headerCellIds[row][col];
   }
-  getCell(col: number, row: number): HeaderData<T> {
+  getHeader(col: number, row: number): HeaderData<T> {
     const id = this.getCellId(col, row);
-    return this._headerObjects[id];
+    return this._headerObjectMap[id as number];
   }
-  getHeaderCellRangeById(id: number): CellRange {
-    for (let r = 0; r < this.rowCount; r++) {
-      for (let c = 0; c < this.columns.length; c++) {
-        if (id === this.getCellId(c, r)) {
-          return this.getCellRange(c, r);
-        }
+  getBody(col: number, _row: number): ColumnData<T> {
+    return this._columns[col];
+  }
+  getBodyLayoutRangeById(id: number): CellRange {
+    for (let col = 0; col < this.colCount; col++) {
+      if (id === this._columns[col].id) {
+        return {
+          start: { col, row: 0 },
+          end: { col, row: 0 }
+        };
       }
     }
     throw new Error(`can not found header @id=${id}`);
   }
   getCellRange(col: number, row: number): CellRange {
-    if (this.rowCount <= row) {
-      return {
-        start: { col, row },
-        end: { col, row },
-        inCell(col, row): boolean {
-          return (
-            this.start.col <= col &&
-            col <= this.end.col &&
-            this.start.row <= row &&
-            row <= this.end.row
-          );
-        }
-      };
+    const result: CellRange = { start: { col, row }, end: { col, row } };
+    if (this.headerRowCount <= row) {
+      return result;
     }
     //in header
-    const result: CellRange = {
-      start: { col, row },
-      end: { col, row },
-      inCell(col, row) {
-        return (
-          this.start.col <= col &&
-          col <= this.end.col &&
-          this.start.row <= row &&
-          row <= this.end.row
-        );
-      }
-    };
     const id = this.getCellId(col, row);
     for (let c = col - 1; c >= 0; c--) {
       if (id !== this.getCellId(c, row)) {
@@ -107,7 +107,7 @@ export class SimpleHeaderMap<T> implements LayoutMapAPI<T> {
       }
       result.start.col = c;
     }
-    for (let c = col + 1; c < this.columns.length; c++) {
+    for (let c = col + 1; c < this.colCount; c++) {
       if (id !== this.getCellId(c, row)) {
         break;
       }
@@ -119,13 +119,33 @@ export class SimpleHeaderMap<T> implements LayoutMapAPI<T> {
       }
       result.start.row = r;
     }
-    for (let r = row + 1; r < this.rowCount; r++) {
+    for (let r = row + 1; r < this.headerRowCount; r++) {
       if (id !== this.getCellId(col, r)) {
         break;
       }
       result.end.row = r;
     }
     return result;
+  }
+  getRecordIndexByRow(row: number): number {
+    if (row < this.headerRowCount) {
+      return -1;
+    } else {
+      return row - this.headerRowCount;
+    }
+  }
+  getRecordStartRowByRecordIndex(index: number): number {
+    return this.headerRowCount + index;
+  }
+  _getHeaderCellRangeById(id: LayoutObjectId): CellRange {
+    for (let r = 0; r < this.headerRowCount; r++) {
+      for (let c = 0; c < this.colCount; c++) {
+        if (id === this.getCellId(c, r)) {
+          return this.getCellRange(c, r);
+        }
+      }
+    }
+    throw new Error(`can not found header @id=${id as number}`);
   }
   _addHeaders(
     row: number,
@@ -136,7 +156,7 @@ export class SimpleHeaderMap<T> implements LayoutMapAPI<T> {
     const rowCells = this._headerCellIds[row] || this._newRow(row);
     header.forEach(hd => {
       const col = this._columns.length;
-      const id = headerId++;
+      const id = seqId++;
       const cell: HeaderWorkData<T> = {
         id,
         caption: hd.caption,
@@ -156,10 +176,11 @@ export class SimpleHeaderMap<T> implements LayoutMapAPI<T> {
         this._addHeaders(row + 1, (hd as GroupHeaderDefine<T>).columns, [
           ...roots,
           id
-        ]).forEach(c => (results[c.id] = c));
+        ]).forEach(c => results.push(c));
       } else {
         const colDef = hd as ColumnDefine<T>;
         this._columns.push({
+          id: seqId++,
           field: colDef.field,
           width: colDef.width,
           minWidth: colDef.minWidth,
@@ -187,7 +208,7 @@ export class SimpleHeaderMap<T> implements LayoutMapAPI<T> {
         style: cell.style,
         headerType: headerType.ofCell(cell),
         action: headerAction.ofCell(cell),
-        range: this.getHeaderCellRangeById(cell.id),
+        range: this._getHeaderCellRangeById(cell.id),
         define: cell.define
       };
     });

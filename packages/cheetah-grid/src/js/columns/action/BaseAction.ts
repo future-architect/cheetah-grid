@@ -1,5 +1,9 @@
-import { BaseActionOption, EventListenerId, ListGridAPI } from "../../ts-types";
-import { ActionBindUtil } from "./actionBind";
+import {
+  BaseActionOption,
+  EventListenerId,
+  LayoutObjectId,
+  ListGridAPI
+} from "../../ts-types";
 
 export abstract class BaseAction<T> {
   protected _disabled: boolean;
@@ -16,8 +20,7 @@ export abstract class BaseAction<T> {
   abstract clone(): BaseAction<T>;
   bindGridEvent(
     _grid: ListGridAPI<T>,
-    _col: number,
-    _util: ActionBindUtil
+    _cellId: LayoutObjectId
   ): EventListenerId[] {
     return [];
   }

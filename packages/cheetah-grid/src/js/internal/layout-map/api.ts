@@ -10,6 +10,7 @@ import {
   HeaderActionOption,
   HeaderStyleOption,
   HeaderTypeOption,
+  LayoutObjectId,
   ListGridAPI,
   Message
 } from "../../ts-types";
@@ -44,8 +45,8 @@ export interface ColumnDefine<T> extends BaseHeaderDefine<T> {
   style?: ColumnStyleOption | null;
 }
 
-export type HeaderData<T> = {
-  id: number;
+export interface HeaderData<T> {
+  id: LayoutObjectId;
   caption?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   field?: any;
@@ -54,13 +55,16 @@ export type HeaderData<T> = {
   action?: headerAction.BaseAction<T>;
   range: CellRange;
   define: HeaderDefine<T>;
-};
+}
 
-export type ColumnData<T> = {
-  field?: FieldDef<T>;
+export interface WidthData {
   width?: number | string;
   minWidth?: number | string;
   maxWidth?: number | string;
+}
+export interface ColumnData<T> extends WidthData {
+  id: LayoutObjectId;
+  field?: FieldDef<T>;
   icon?: ColumnIconOption<T> | ColumnIconOption<T>[];
   message?: Message | ((record: T) => Message) | keyof T;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -68,13 +72,22 @@ export type ColumnData<T> = {
   action?: BaseAction<T>;
   style: ColumnStyleOption | null | undefined;
   define: ColumnDefine<T>;
-};
+}
 
 export interface LayoutMapAPI<T> {
-  readonly columns: ColumnData<T>[];
-  readonly rowCount: number;
+  readonly headerRowCount: number;
+  readonly bodyRowCount: number;
+  readonly colCount: number;
+
+  readonly columnWidths: WidthData[];
   readonly headerObjects: HeaderData<T>[];
-  getCell(col: number, row: number): HeaderData<T>;
-  getCellId(col: number, row: number): number;
+  readonly columnObjects: ColumnData<T>[];
+
+  getHeader(col: number, row: number): HeaderData<T>;
+  getBody(col: number, row: number): ColumnData<T>;
+  getCellId(col: number, row: number): LayoutObjectId;
   getCellRange(col: number, row: number): CellRange;
+  getBodyLayoutRangeById(id: LayoutObjectId): CellRange;
+  getRecordIndexByRow(row: number): number;
+  getRecordStartRowByRecordIndex(index: number): number;
 }

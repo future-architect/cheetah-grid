@@ -3,12 +3,12 @@ import {
   ColumnMenuItemOption,
   EventListenerId,
   InlineMenuEditorOption,
+  LayoutObjectId,
   ListGridAPI
 } from "../../ts-types";
 import { GridInternal, InputEditorState } from "../../ts-types-internal";
 import { array, event, obj, then } from "../../internal/utils";
 import { isDisabledRecord, isReadOnlyRecord } from "./action-utils";
-import { ActionBindUtil } from "./actionBind";
 import { EVENT_TYPE } from "../../core/EVENT_TYPE";
 import { Editor } from "./Editor";
 import { InlineMenuElement } from "./internal/InlineMenuElement";
@@ -102,8 +102,7 @@ export class InlineMenuEditor<T> extends Editor<T> {
   }
   bindGridEvent(
     grid: ListGridAPI<T>,
-    _col: number,
-    util: ActionBindUtil
+    cellId: LayoutObjectId
   ): EventListenerId[] {
     const open = (cell: CellAddress): void => {
       if (
@@ -117,9 +116,12 @@ export class InlineMenuEditor<T> extends Editor<T> {
       });
     };
 
+    function isTarget(col: number, row: number): boolean {
+      return grid.getLayoutCellId(col, row) === cellId;
+    }
     return [
       grid.listen(EVENT_TYPE.CLICK_CELL, cell => {
-        if (!util.isTarget(cell.col, cell.row)) {
+        if (!isTarget(cell.col, cell.row)) {
           return;
         }
         open({
@@ -132,7 +134,7 @@ export class InlineMenuEditor<T> extends Editor<T> {
           return;
         }
         const sel = grid.selection.select;
-        if (!util.isTarget(sel.col, sel.row)) {
+        if (!isTarget(sel.col, sel.row)) {
           return;
         }
         open({
@@ -155,7 +157,7 @@ export class InlineMenuEditor<T> extends Editor<T> {
         ) {
           return;
         }
-        if (!util.isTarget(e.col, e.row)) {
+        if (!isTarget(e.col, e.row)) {
           return;
         }
         grid.getElement().style.cursor = "pointer";
@@ -167,7 +169,7 @@ export class InlineMenuEditor<T> extends Editor<T> {
         ) {
           return;
         }
-        if (!util.isTarget(e.col, e.row)) {
+        if (!isTarget(e.col, e.row)) {
           return;
         }
         if (!grid.getElement().style.cursor) {
@@ -175,7 +177,7 @@ export class InlineMenuEditor<T> extends Editor<T> {
         }
       }),
       grid.listen(EVENT_TYPE.MOUSEOUT_CELL, e => {
-        if (!util.isTarget(e.col, e.row)) {
+        if (!isTarget(e.col, e.row)) {
           return;
         }
         grid.getElement().style.cursor = "";
@@ -187,7 +189,7 @@ export class InlineMenuEditor<T> extends Editor<T> {
           // ignore multi cell values
           return;
         }
-        if (!util.isTarget(e.col, e.row)) {
+        if (!isTarget(e.col, e.row)) {
           return;
         }
         const pasteValue = e.normalizeValue.trim();

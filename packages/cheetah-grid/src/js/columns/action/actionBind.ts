@@ -1,16 +1,16 @@
-import { CellAddress, EventListenerId, ListGridAPI } from "../../ts-types";
+import {
+  CellAddress,
+  EventListenerId,
+  LayoutObjectId,
+  ListGridAPI
+} from "../../ts-types";
 import { event, isPromise } from "../../internal/utils";
 import { EVENT_TYPE } from "../../core/EVENT_TYPE";
-
-export type ActionBindUtil = {
-  isTarget(col: number, row: number): boolean;
-};
 
 const KEY_ENTER = 13;
 export function bindCellClickAction<T>(
   grid: ListGridAPI<T>,
-  _col: number,
-  util: ActionBindUtil,
+  cellId: LayoutObjectId,
   {
     action,
     mouseOver,
@@ -21,10 +21,13 @@ export function bindCellClickAction<T>(
     mouseOut: (cell: CellAddress) => void;
   }
 ): EventListenerId[] {
+  function isTarget(col: number, row: number): boolean {
+    return grid.getLayoutCellId(col, row) === cellId;
+  }
   return [
     // click
     grid.listen(EVENT_TYPE.CLICK_CELL, e => {
-      if (!util.isTarget(e.col, e.row)) {
+      if (!isTarget(e.col, e.row)) {
         return;
       }
       if (isPromise(grid.getRowRecord(e.row))) {
@@ -37,7 +40,7 @@ export function bindCellClickAction<T>(
     }),
     // mouse move
     grid.listen(EVENT_TYPE.MOUSEOVER_CELL, e => {
-      if (!util.isTarget(e.col, e.row)) {
+      if (!isTarget(e.col, e.row)) {
         return;
       }
       if (isPromise(grid.getRowRecord(e.row))) {
@@ -56,7 +59,7 @@ export function bindCellClickAction<T>(
       grid.getElement().style.cursor = "pointer";
     }),
     grid.listen(EVENT_TYPE.MOUSEOUT_CELL, e => {
-      if (!util.isTarget(e.col, e.row)) {
+      if (!isTarget(e.col, e.row)) {
         return;
       }
       if (mouseOut) {
@@ -71,8 +74,7 @@ export function bindCellClickAction<T>(
 }
 export function bindCellKeyAction<T>(
   grid: ListGridAPI<T>,
-  _col: number,
-  util: ActionBindUtil,
+  cellId: LayoutObjectId,
   {
     action,
     acceptKeys = []
@@ -81,6 +83,9 @@ export function bindCellKeyAction<T>(
     acceptKeys?: number[];
   }
 ): EventListenerId[] {
+  function isTarget(col: number, row: number): boolean {
+    return grid.getLayoutCellId(col, row) === cellId;
+  }
   acceptKeys = [...acceptKeys, KEY_ENTER];
   return [
     // enter key down
@@ -89,7 +94,7 @@ export function bindCellKeyAction<T>(
         return;
       }
       const sel = grid.selection.select;
-      if (!util.isTarget(sel.col, sel.row)) {
+      if (!isTarget(sel.col, sel.row)) {
         return;
       }
       if (isPromise(grid.getRowRecord(sel.row))) {

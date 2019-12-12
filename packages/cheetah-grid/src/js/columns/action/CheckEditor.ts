@@ -1,9 +1,5 @@
-import {
-  ActionBindUtil,
-  bindCellClickAction,
-  bindCellKeyAction
-} from "./actionBind";
-import { CellAddress, EventListenerId } from "../../ts-types";
+import { CellAddress, EventListenerId, LayoutObjectId } from "../../ts-types";
+import { bindCellClickAction, bindCellKeyAction } from "./actionBind";
 import { event, isPromise, obj } from "../../internal/utils";
 import { isDisabledRecord, isReadOnlyRecord } from "./action-utils";
 import { EVENT_TYPE } from "../../core/EVENT_TYPE";
@@ -53,8 +49,7 @@ export class CheckEditor<T> extends Editor<T> {
   }
   bindGridEvent(
     grid: GridInternal<T>,
-    col: number,
-    util: ActionBindUtil
+    cellId: LayoutObjectId
   ): EventListenerId[] {
     let _state = grid[CHECK_COLUMN_STATE_ID];
     if (!_state) {
@@ -97,8 +92,12 @@ export class CheckEditor<T> extends Editor<T> {
         }
       }
     };
+
+    function isTarget(col: number, row: number): boolean {
+      return grid.getLayoutCellId(col, row) === cellId;
+    }
     return [
-      ...bindCellClickAction(grid, col, util, {
+      ...bindCellClickAction(grid, cellId, {
         action,
         mouseOver: e => {
           if (isDisabledRecord(this.disabled, grid, e.row)) {
@@ -116,12 +115,12 @@ export class CheckEditor<T> extends Editor<T> {
           grid.invalidateCell(e.col, e.row);
         }
       }),
-      ...bindCellKeyAction(grid, col, util, {
+      ...bindCellKeyAction(grid, cellId, {
         action: _e => {
           const selrange = grid.selection.range;
           const { col } = grid.selection.select;
           for (let { row } = selrange.start; row <= selrange.end.row; row++) {
-            if (!util.isTarget(col, row)) {
+            if (!isTarget(col, row)) {
               continue;
             }
             action({
@@ -139,7 +138,7 @@ export class CheckEditor<T> extends Editor<T> {
           // ignore multi cell values
           return;
         }
-        if (!util.isTarget(e.col, e.row)) {
+        if (!isTarget(e.col, e.row)) {
           return;
         }
         const pasteValue = e.normalizeValue.trim();

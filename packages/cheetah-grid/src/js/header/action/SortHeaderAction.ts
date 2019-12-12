@@ -9,6 +9,7 @@ import {
 } from "../../ts-types";
 import { BaseAction } from "./BaseAction";
 import { bindCellClickAction } from "./actionBind";
+import { cellInRange } from "../../internal/utils";
 
 export class SortHeaderAction<T> extends BaseAction<T> {
   private _sort: SortOption<T>;
@@ -31,10 +32,13 @@ export class SortHeaderAction<T> extends BaseAction<T> {
       this._sort({
         order: newState.order || "asc",
         col: newState.col,
+        row: newState.row,
         grid
       });
     } else {
-      const field = grid.getField(newState.col);
+      const fieldRow =
+        Math.min(grid.recordRowCount - 1, newState.row) + grid.frozenRowCount;
+      const field = grid.getField(newState.col, fieldRow);
       if (field == null) {
         return;
       }
@@ -48,7 +52,7 @@ export class SortHeaderAction<T> extends BaseAction<T> {
       }
       const state = grid.sortState as SortState;
       let newState: SortState;
-      if (range.inCell(state.col, cell.row)) {
+      if (cellInRange(range, state.col, cell.row)) {
         newState = {
           col: range.start.col,
           row: range.start.row,

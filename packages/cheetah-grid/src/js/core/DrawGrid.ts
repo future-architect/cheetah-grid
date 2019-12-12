@@ -18,6 +18,7 @@ import {
 import {
   array,
   browser,
+  cellInRange,
   event,
   isDef,
   isDescendantElement,
@@ -2006,11 +2007,6 @@ class Selection extends EventTarget {
       end: {
         col: endCol,
         row: endRow
-      },
-      inCell(col: number, row: number): boolean {
-        return (
-          startCol <= col && col <= endCol && startRow <= row && row <= endRow
-        );
       }
     };
   }
@@ -2225,7 +2221,7 @@ class DrawCellContext implements CellContext {
     const sel = this._selection.select;
     return {
       selected: sel.col === this._col && sel.row === this._row,
-      selection: this._selection.range.inCell(this._col, this._row)
+      selection: cellInRange(this._selection.range, this._col, this._row)
     };
   }
   /**
@@ -3180,16 +3176,23 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
       parentElement.removeChild(protectedSpace.element);
     }
   }
-  getAttachCellArea(
-    col: number,
-    row: number
+  getAttachCellsArea(
+    range: CellRange
   ): {
     element: HTMLElement;
     rect: Rect;
   } {
     return {
       element: this.getElement(),
-      rect: _toRelativeRect(this, this.getCellRect(col, row))
+      rect: _toRelativeRect(
+        this,
+        this.getCellsRect(
+          range.start.col,
+          range.start.row,
+          range.end.col,
+          range.end.row
+        )
+      )
     };
   }
   bindEventsInternal(): void {

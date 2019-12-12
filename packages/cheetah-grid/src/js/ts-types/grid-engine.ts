@@ -24,6 +24,8 @@ import {
 import { RequiredThemeDefine } from "./plugin";
 import { SimpleColumnIconOption } from "../ts-types-internal/data";
 
+export type LayoutObjectId = number | string | symbol;
+
 export interface DrawGridAPI {
   font?: string;
   rowCount: number;
@@ -98,9 +100,9 @@ export interface DrawGridAPI {
     row: number,
     overflowText: false | string
   ): void;
-  getAttachCellArea(
-    col: number,
-    row: number
+
+  getAttachCellsArea(
+    range: CellRange
   ): {
     element: HTMLElement;
     rect: RectProps;
@@ -136,14 +138,17 @@ export interface ListGridAPI<T> extends DrawGridAPI {
   theme: RequiredThemeDefine | null;
   sortState: SortState | null;
   headerValues: HeaderValues;
+  recordRowCount: number;
   listen<TYPE extends keyof ListGridEventHandlersEventMap<T>>(
     type: TYPE,
     listener: (
       ...event: ListGridEventHandlersEventMap<T>[TYPE]
     ) => ListGridEventHandlersReturnMap[TYPE]
   ): EventListenerId;
-  getField(col: number): FieldDef<T> | undefined;
+  getField(col: number, row: number): FieldDef<T> | undefined;
   getRowRecord(row: number): MaybePromiseOrUndef<T>;
+  getRecordIndexByRow(row: number): number;
+  getRecordStartRowByRecordIndex(index: number): number;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getHeaderField(col: number, row: number): any | undefined;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -151,7 +156,7 @@ export interface ListGridAPI<T> extends DrawGridAPI {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setHeaderValue(col: number, row: number, newValue: any): void;
   getCellRange(col: number, row: number): CellRange;
-  getColumnIndexByField(field: FieldDef<T>): number | null;
+  getCellRangeByField(field: FieldDef<T>, index: number): CellRange | null;
   focusGridCell(field: FieldDef<T>, index: number): void;
   makeVisibleGridCell(field: FieldDef<T>, index: number): void;
   getCopyCellValue(col: number, row: number): string;
@@ -168,6 +173,7 @@ export interface ListGridAPI<T> extends DrawGridAPI {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     valueCallback: (value: any) => void
   ): boolean;
+  getLayoutCellId(col: number, row: number): LayoutObjectId;
 }
 
 export interface Inline {

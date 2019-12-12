@@ -4,8 +4,8 @@ import {
   DrawGridAPI,
   EventListenerId
 } from "../../ts-types";
+import { cellInRange, event } from "../../internal/utils";
 import { EVENT_TYPE } from "../../core/EVENT_TYPE";
-import { event } from "../../internal/utils";
 const KEY_ENTER = 13;
 export function bindCellClickAction(
   grid: DrawGridAPI,
@@ -24,7 +24,7 @@ export function bindCellClickAction(
   return [
     // click
     grid.listen(EVENT_TYPE.CLICK_CELL, e => {
-      if (!range.inCell(e.col, e.row)) {
+      if (!cellInRange(range, e.col, e.row)) {
         return;
       }
       action({
@@ -34,7 +34,7 @@ export function bindCellClickAction(
     }),
     // mouse move
     grid.listen(EVENT_TYPE.MOUSEOVER_CELL, e => {
-      if (!range.inCell(e.col, e.row)) {
+      if (!cellInRange(range, e.col, e.row)) {
         return;
       }
       if (mouseOver) {
@@ -52,7 +52,7 @@ export function bindCellClickAction(
     }),
     //横からMOUSEENTERした場合、'col-resize'の処理と競合するのでmoveを監視して処理する
     grid.listen(EVENT_TYPE.MOUSEMOVE_CELL, e => {
-      if (!range.inCell(e.col, e.row)) {
+      if (!cellInRange(range, e.col, e.row)) {
         return;
       }
       if (inMouse && !grid.getElement().style.cursor) {
@@ -60,7 +60,7 @@ export function bindCellClickAction(
       }
     }),
     grid.listen(EVENT_TYPE.MOUSEOUT_CELL, e => {
-      if (!range.inCell(e.col, e.row)) {
+      if (!cellInRange(range, e.col, e.row)) {
         return;
       }
       if (mouseOut) {
@@ -93,7 +93,7 @@ export function bindCellKeyAction(
         return;
       }
       const sel = grid.selection.select;
-      if (!range.inCell(sel.col, sel.row)) {
+      if (!cellInRange(range, sel.col, sel.row)) {
         return;
       }
       action({

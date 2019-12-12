@@ -1186,6 +1186,7 @@ export class GridCanvasHelper<T> implements Base {
       }
     });
   }
+  // Unused in main
   borderWithState(
     context: CellContext,
     option: { borderColor?: ColorsPropertyDefine; lineWidth?: number } = {}
@@ -1202,7 +1203,7 @@ export class GridCanvasHelper<T> implements Base {
     } else {
       // header color
       const isFrozenCell = this._grid.isFrozenCell(col, row);
-      if (isFrozenCell && isFrozenCell.row) {
+      if (isFrozenCell?.row) {
         option.borderColor = this.theme.frozenRowsBorderColor;
       }
 

@@ -22,10 +22,11 @@ type Timelines = { timeline: BranchPoint[][]; branches: string[] };
 function getAllColumnData<T>(
   grid: ListGridAPI<T>,
   col: number,
+  row: number,
   callback: (allData: BranchGraphCommand[]) => void
 ): void {
   const { dataSource } = grid;
-  const field = grid.getField(col) as FieldDef<T>;
+  const field = grid.getField(col, row) as FieldDef<T>;
   const allData: BranchGraphCommand[] = [];
   let promise;
   for (let index = 0; index < dataSource.length; index++) {
@@ -377,13 +378,14 @@ function calcCommand(info: Timelines, command: BranchGraphCommand): void {
 function calcBranchesInfo<T>(
   start: "top" | "bottom",
   grid: ListGridAPI<T>,
-  col: number
+  col: number,
+  row: number
 ): Timelines {
   const result = {
     branches: [],
     timeline: []
   };
-  getAllColumnData(grid, col, data => {
+  getAllColumnData(grid, col, row, data => {
     if (start !== "top") {
       data = [...data].reverse();
     }
@@ -577,9 +579,9 @@ export class BranchGraphColumn<T> extends BaseColumn<T, unknown> {
   ): void | Promise<void> {
     if (this._cache) {
       const state = grid[_] || (grid[_] = {});
-      const { col } = context;
+      const { col, row } = context;
       if (!state[col]) {
-        state[col] = calcBranchesInfo(this._start, grid, col);
+        state[col] = calcBranchesInfo(this._start, grid, col, row);
       }
     }
     return super.onDrawCell(cellValue, info, context, grid);
@@ -598,7 +600,7 @@ export class BranchGraphColumn<T> extends BaseColumn<T, unknown> {
     const { col, row } = context;
     const { timeline, branches } =
       (this._cache ? grid[_]?.[col] : null) ??
-      calcBranchesInfo(this._start, grid, col);
+      calcBranchesInfo(this._start, grid, col, row);
 
     const {
       upLineIndexKey,

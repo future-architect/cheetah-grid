@@ -7,7 +7,6 @@ export interface CellAddress {
 export interface CellRange {
   start: CellAddress;
   end: CellAddress;
-  inCell(col: number, row: number): boolean;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

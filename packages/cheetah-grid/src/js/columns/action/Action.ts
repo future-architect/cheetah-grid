@@ -1,15 +1,12 @@
 import {
-  ActionBindUtil,
-  bindCellClickAction,
-  bindCellKeyAction
-} from "./actionBind";
-import {
   ActionListener,
   ActionOption,
   CellAddress,
   EventListenerId,
+  LayoutObjectId,
   ListGridAPI
 } from "../../ts-types";
+import { bindCellClickAction, bindCellKeyAction } from "./actionBind";
 import { BaseAction } from "./BaseAction";
 import { GridInternal } from "../../ts-types-internal";
 import { isDisabledRecord } from "./action-utils";
@@ -34,8 +31,7 @@ export class Action<T> extends BaseAction<T> {
   }
   bindGridEvent(
     grid: ListGridAPI<T>,
-    col: number,
-    util: ActionBindUtil
+    cellId: LayoutObjectId
   ): EventListenerId[] {
     const state = this.getState(grid);
     const action = (cell: CellAddress): void => {
@@ -47,7 +43,7 @@ export class Action<T> extends BaseAction<T> {
     };
 
     return [
-      ...bindCellClickAction(grid, col, util, {
+      ...bindCellClickAction(grid, cellId, {
         action,
         mouseOver: e => {
           if (isDisabledRecord(this.disabled, grid, e.row)) {
@@ -65,7 +61,7 @@ export class Action<T> extends BaseAction<T> {
           grid.invalidateCell(e.col, e.row);
         }
       }),
-      ...bindCellKeyAction(grid, col, util, {
+      ...bindCellKeyAction(grid, cellId, {
         action
       })
     ];

@@ -43,6 +43,7 @@ export type SortOption<T> =
   | ((arg: {
       order: "asc" | "desc";
       col: number;
+      row: number;
       grid: ListGridAPI<T>;
     }) => void);
 
