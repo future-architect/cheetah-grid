@@ -53,12 +53,14 @@ export class Action<T> extends BaseAction<T> {
             col: e.col,
             row: e.row
           };
-          grid.invalidateCell(e.col, e.row);
+          const range = grid.getCellRange(e.col, e.row);
+          grid.invalidateCellRange(range);
           return true;
         },
         mouseOut: e => {
           delete state.mouseActiveCell;
-          grid.invalidateCell(e.col, e.row);
+          const range = grid.getCellRange(e.col, e.row);
+          grid.invalidateCellRange(range);
         }
       }),
       ...bindCellKeyAction(grid, cellId, {

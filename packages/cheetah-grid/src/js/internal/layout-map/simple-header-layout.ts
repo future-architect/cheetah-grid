@@ -1,54 +1,34 @@
 import * as columns from "../../columns";
 import * as headerAction from "../../header/action";
 import * as headerType from "../../header/type";
-import {
-  CellRange,
-  HeaderActionOption,
-  HeaderStyleOption,
-  HeaderTypeOption,
-  LayoutObjectId
-} from "../../ts-types";
+import { CellRange, LayoutObjectId } from "../../ts-types";
 import {
   ColumnData,
   ColumnDefine,
   HeaderData,
   HeaderDefine,
-  OldSortOption
+  LayoutMapAPI
 } from "./api";
-import { BaseLayoutMap } from "./base-layout";
-import { BaseStyle as HeaderBaseStyle } from "../../header/style";
+import { EmptyDataCache } from "./utils";
 
 export interface GroupHeaderDefine<T> extends HeaderDefine<T> {
   columns: HeadersDefine<T>;
 }
 export type HeadersDefine<T> = (GroupHeaderDefine<T> | ColumnDefine<T>)[];
 
-type HeaderWorkData<T> = {
-  id: LayoutObjectId;
-  caption?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  field?: any;
-  style?: HeaderStyleOption | HeaderBaseStyle | null;
-  headerType?: HeaderTypeOption | headerType.BaseHeader<T> | null;
-  action?: HeaderActionOption | headerAction.BaseAction<T> | null;
-  sort?: OldSortOption<T>;
-  define: HeaderDefine<T>;
-};
-
 let seqId = 0;
-export class SimpleHeaderLayoutMap<T> extends BaseLayoutMap<T> {
+export class SimpleHeaderLayoutMap<T> implements LayoutMapAPI<T> {
   private _headerObjects: HeaderData<T>[];
   private _headerObjectMap: { [key in LayoutObjectId]: HeaderData<T> };
   private _headerCellIds: number[][];
   private _columns: ColumnData<T>[];
   readonly bodyRowCount: number = 1;
+  private _emptyDataCache = new EmptyDataCache();
   constructor(header: HeadersDefine<T>) {
-    super();
     this._columns = [];
     this._headerCellIds = [];
 
-    const allHeaders = this._addHeaders(0, header, []);
-    this._headerObjects = this._setupHeaderControllers(allHeaders);
+    this._headerObjects = this._addHeaders(0, header, []);
     this._headerObjectMap = this._headerObjects.reduce((o, e) => {
       o[e.id as number] = e;
       return o;
@@ -78,12 +58,15 @@ export class SimpleHeaderLayoutMap<T> extends BaseLayoutMap<T> {
   }
   getHeader(col: number, row: number): HeaderData<T> {
     const id = this.getCellId(col, row);
-    return this._headerObjectMap[id as number];
+    return (
+      this._headerObjectMap[id as number] ||
+      this._emptyDataCache.getHeader(col, row)
+    );
   }
   getBody(col: number, _row: number): ColumnData<T> {
-    return this._columns[col];
+    return this._columns[col] || this._emptyDataCache.getBody(col, 0);
   }
-  getBodyLayoutRangeById(id: number): CellRange {
+  getBodyLayoutRangeById(id: LayoutObjectId): CellRange {
     for (let col = 0; col < this.colCount; col++) {
       if (id === this._columns[col].id) {
         return {
@@ -92,7 +75,7 @@ export class SimpleHeaderLayoutMap<T> extends BaseLayoutMap<T> {
         };
       }
     }
-    throw new Error(`can not found header @id=${id}`);
+    throw new Error(`can not found body layout @id=${id as number}`);
   }
   getCellRange(col: number, row: number): CellRange {
     const result: CellRange = { start: { col, row }, end: { col, row } };
@@ -137,34 +120,23 @@ export class SimpleHeaderLayoutMap<T> extends BaseLayoutMap<T> {
   getRecordStartRowByRecordIndex(index: number): number {
     return this.headerRowCount + index;
   }
-  _getHeaderCellRangeById(id: LayoutObjectId): CellRange {
-    for (let r = 0; r < this.headerRowCount; r++) {
-      for (let c = 0; c < this.colCount; c++) {
-        if (id === this.getCellId(c, r)) {
-          return this.getCellRange(c, r);
-        }
-      }
-    }
-    throw new Error(`can not found header @id=${id as number}`);
-  }
-  _addHeaders(
+  private _addHeaders(
     row: number,
     header: HeadersDefine<T>,
     roots: number[]
-  ): HeaderWorkData<T>[] {
-    const results: HeaderWorkData<T>[] = [];
+  ): HeaderData<T>[] {
+    const results: HeaderData<T>[] = [];
     const rowCells = this._headerCellIds[row] || this._newRow(row);
     header.forEach(hd => {
       const col = this._columns.length;
       const id = seqId++;
-      const cell: HeaderWorkData<T> = {
+      const cell: HeaderData<T> = {
         id,
         caption: hd.caption,
         field: hd.headerField || (hd as ColumnDefine<T>).field,
         style: hd.headerStyle,
-        headerType: hd.headerType,
-        action: hd.headerAction,
-        sort: hd.sort,
+        headerType: headerType.ofCell(hd),
+        action: headerAction.ofCell(hd),
         define: hd
       };
       results[id] = cell;
@@ -199,21 +171,7 @@ export class SimpleHeaderLayoutMap<T> extends BaseLayoutMap<T> {
     });
     return results;
   }
-  _setupHeaderControllers(allHeaders: HeaderWorkData<T>[]): HeaderData<T>[] {
-    return allHeaders.map(cell => {
-      return {
-        id: cell.id,
-        caption: cell.caption,
-        field: cell.field,
-        style: cell.style,
-        headerType: headerType.ofCell(cell),
-        action: headerAction.ofCell(cell),
-        range: this._getHeaderCellRangeById(cell.id),
-        define: cell.define
-      };
-    });
-  }
-  _newRow(row: number): number[] {
+  private _newRow(row: number): number[] {
     const newRow: number[] = (this._headerCellIds[row] = []);
     if (!this._columns.length) {
       return newRow;

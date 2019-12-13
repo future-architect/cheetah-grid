@@ -61,6 +61,7 @@ export interface DrawGridAPI {
     endCol?: number,
     endRow?: number
   ): void;
+  invalidateCellRange(cellRange: CellRange): void;
 
   getRowHeight(row: number): number;
   setRowHeight(row: number, height: number): void;
@@ -78,6 +79,7 @@ export interface DrawGridAPI {
     endCol: number,
     endRow: number
   ): RectProps;
+  getCellRangeRect(cellRange: CellRange): RectProps;
 
   isFrozenCell(
     col: number,
@@ -313,8 +315,8 @@ export interface CellContext {
   toCurrentContext(): CellContext;
   getDrawRect(): RectProps | null;
   getRect(): RectProps;
-  setRect(rect: RectProps): void;
-  getSelectState(): { selected: boolean; selection: boolean };
+  getSelection(): { select: CellAddress; range: CellRange };
+  setRectFilter(rectFilter: (base: RectProps) => RectProps): void;
 }
 
 export interface Selection {

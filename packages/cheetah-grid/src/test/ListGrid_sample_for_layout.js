@@ -56,115 +56,160 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 }
 (function() {
 	window.cheetah = cheetahGrid;
+	const menuOptions = [
+		{value: '', caption: 'Empty'},
+		{value: '1', caption: 'Option 1'},
+		{value: '2', caption: 'Option 2'},
+		{value: '3', caption: 'Option 3'},
+		{value: '4', caption: 'Option 4'},
+		{value: '5', caption: 'Option 5'},
+		{value: '6', caption: 'Option 6'},
+		{value: '7', caption: 'Option 7'},
+	];
+	const displayOptions = [
+		{value: '', caption: 'Choose your option'},
+		{value: '1', caption: 'Option 1'},
+		{value: '2', caption: 'Option 2'},
+		{value: '3', caption: 'Option 3'},
+		{value: '4', caption: 'Option 4'},
+		{value: '5', caption: 'Option 5'},
+		{value: '6', caption: 'Option 6'},
+		{value: '7', caption: 'Option 7'},
+	];
 	const columnType = cheetahGrid.columns.type;
 	const columnAction = cheetahGrid.columns.action;
 	const records = generate(1000);
 	const startTime = new Date();
 	const grid = new cheetahGrid.ListGrid({
 		parentElement: document.querySelector('#parent'),
-		header: [
-			{field: 'check', caption: 'check', width: 50, columnType: 'check', action: 'check'},
-			{
-				field: 'personid',
-				caption: 'ID',
-				width: 100,
-				// sort
-				sort: function(order, col, grid) {
-					const compare = order === 'desc'
-						? function(v1, v2) { return v1 === v2 ? 0 : v1 > v2 ? 1 : -1; }
-						: function(v1, v2) { return v1 === v2 ? 0 : v1 < v2 ? 1 : -1; };
-					records.sort(function(r1, r2) { return compare(r1.personid, r2.personid); });
-					grid.records = records;
+		layout: [
+			[
+				{
+					field: 'check',
+					caption: 'check',
+					width: 50,
+					columnType: 'check',
+					action: 'check',
+					rowSpan: 3
 				},
-				// sort
-				style: {padding: [0, 0, 0, '1.2em']}
-			},
-			{field: 'checkReadOnly', caption: 'read', width: 50, columnType: 'check'},
-			{
-				caption: 'name',
-				columns: [
-					{field: 'fname', caption: 'First Name', width: 'auto', maxWidth: '200px'},
-					{field: 'lname', caption: 'Last Name', width: 'auto', minWidth: '150px'},
-				],
-			},
-			{
-				field: 'email',
-				caption: 'Email',
-				width: '15%',
-				minWidth: '200px',
-				sort: true
-			},
-			{
-				caption: 'nums',
-				columns: [
-					{
-						field: 'num',
-						caption: 'num',
-						width: 80,
-						columnType: 'number',
-						style: function(r) {
-							if (r.num > 100) {
-								return {
-									color: 'red'
-								};
-							}
-							return null;
+				{
+					field: 'personid',
+					caption: 'ID',
+					width: 100,
+					// sort
+					sort: function(order, col, grid) {
+						const compare = order === 'desc'
+							? function(v1, v2) { return v1 === v2 ? 0 : v1 > v2 ? 1 : -1; }
+							: function(v1, v2) { return v1 === v2 ? 0 : v1 < v2 ? 1 : -1; };
+						records.sort(function(r1, r2) { return compare(r1.personid, r2.personid); });
+						grid.records = records;
+					},
+					// sort
+					style: {padding: [0, 0, 0, '1.2em']},
+					rowSpan: 3
+				},
+				{
+					field: 'checkReadOnly',
+					caption: 'read',
+					width: 50,
+					columnType: 'check',
+					rowSpan: 3
+				},
+				{
+					caption: 'name',
+					field: function(r) { return r.fname + ' ' + r.lname; },
+					colSpan: 2,
+				},
+				{
+					field: 'email',
+					caption: 'Email',
+					width: '15%',
+					minWidth: '200px',
+					sort: true,
+					colSpan: 3,
+				},
+			],
+			[
+				{field: 'fname', caption: 'First Name', width: 'auto', maxWidth: '200px'},
+				{field: 'lname', caption: 'Last Name', width: 'auto', minWidth: '150px'},
+				{
+					field: 'num',
+					caption: 'num',
+					width: 80,
+					columnType: 'number',
+					style: function(r) {
+						if (r.num > 100) {
+							return {
+								color: 'red'
+							};
 						}
-					},
-				]
-			},
-			{
-				caption: 'ex',
-				columns: [
-					{field: function(r) { return r.personid + '行目'; }, caption: 'personid', width: 100, columnType: 'number'},
-					{
-						caption: 'sub',
-						columns: [
-							{field: 'fn', caption: 'fn', width: 80},
-							{field: 'promise', caption: 'promise', width: 80, columnType: 'number'},
-						],
-					},
-					{
-						caption: 'checks',
-						columns: [
-							{field: 'check2', caption: 'str', width: 50, columnType: 'check', action: 'check'},
-							{field: 'check3', caption: 'on/off', width: 50, columnType: 'check', action: 'check'},
-							{field: 'check4', caption: 'num', width: 50, columnType: 'check', action: 'check'},
-							{field: 'check5', caption: 'numstr', width: 50, columnType: 'check', action: 'check'},
-							{field: 'check6.chain.check', caption: 'chain', width: 50, columnType: 'check', action: 'check'},
-						],
-					},
-					{
-						caption: 'buttons',
-						columns: [
-							{
-								caption: 'button1',
-								width: 'calc(10px + 70px)',
-								columnType: new columnType.ButtonColumn({
-									caption: 'BUTTON',
-								}),
-								action: new columnAction.ButtonAction({
-									action: function(rec) {
-										alert('ID:' + rec.personid + ' ' + JSON.stringify(rec));//eslint-disable-line
-									},
-								}),
-							},
-						],
-					},
-				]
-			},
-			{
-				field: 'description',
-				caption: 'Multiline',
-				width: 600,
-				columnType: 'multilinetext',
-				style: {
-					autoWrapText: true,
-					lineClamp: 'auto'
+						return null;
+					}
 				},
-				rowSpan: 2,
-				colSpan: 2
-			},
+				{field: function(r) { return r.personid + '行目'; }, caption: 'personid', width: 100, columnType: 'number'},
+				{
+					caption: 'button1',
+					width: 'calc(10px + 70px)',
+					columnType: new columnType.ButtonColumn({
+						caption: 'BUTTON',
+					}),
+					action: new columnAction.ButtonAction({
+						action: function(rec) {
+						alert('ID:' + rec.personid + ' ' + JSON.stringify(rec));//eslint-disable-line
+						},
+					}),
+					rowSpan: 2
+				},
+			],
+			[
+				{field: 'fn', caption: 'fn', width: 80},
+				{field: 'promise', caption: 'promise', width: 80, columnType: 'number'},
+			],
+			[
+				{field: 'check6.chain.check', caption: 'chain', width: 50, columnType: 'check', action: 'check', colSpan: 2},
+				{field: 'text', caption: 'input', width: 50, columnType: '', action: 'input', rowSpan: 2, colSpan: 2},
+				{
+					field: 'sel',
+					caption: 'InlineMenuEditor',
+					width: 260,
+					columnType: new cheetahGrid.columns.type.MenuColumn({options: displayOptions}),
+					action: new cheetahGrid.columns.action.InlineMenuEditor({options: menuOptions}),
+					rowSpan: 2,
+					colSpan: 2
+				},
+				{
+					field: 'text2',
+					caption: 'message',
+					width: 150,
+					//message function
+					message(rec) {
+						return !rec.text2 || rec.text2.match(/^[a-zA-Z]*$/) ? null : 'Please only alphabet.';
+					},
+					action: 'input',
+					rowSpan: 2,
+					colSpan: 2
+				},
+				{
+					field: 'description',
+					caption: 'Multiline',
+					width: 600,
+					columnType: 'multilinetext',
+					style: {
+						autoWrapText: true,
+						lineClamp: 4
+					},
+					rowSpan: 2,
+					colSpan: 2
+				},
+				{
+					field: 'text',
+					caption: 'InlineInputEditor',
+					width: 260,
+					action: new cheetahGrid.columns.action.InlineInputEditor(),
+					rowSpan: 2,
+					colSpan: 2
+				},
+			]
 		],
 		frozenColCount: 2,
 	});

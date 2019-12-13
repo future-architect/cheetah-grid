@@ -59,7 +59,8 @@ export class CheckEditor<T> extends Editor<T> {
     const state = _state;
 
     const action = (cell: CellAddress): void => {
-      const cellKey = `${cell.col}:${cell.row}`;
+      const range = grid.getCellRange(cell.col, cell.row);
+      const cellKey = `${range.start.col}:${range.start.row}`;
 
       if (
         isReadOnlyRecord(this.readOnly, grid, cell.row) ||
@@ -78,7 +79,7 @@ export class CheckEditor<T> extends Editor<T> {
             } else {
               state.elapsed[cellKey] = point;
             }
-            grid.invalidateCell(cell.col, cell.row);
+            grid.invalidateCellRange(range);
           });
         };
         if (isPromise(ret)) {
@@ -107,12 +108,14 @@ export class CheckEditor<T> extends Editor<T> {
             col: e.col,
             row: e.row
           };
-          grid.invalidateCell(e.col, e.row);
+          const range = grid.getCellRange(e.col, e.row);
+          grid.invalidateCellRange(range);
           return true;
         },
         mouseOut: e => {
           delete state.mouseActiveCell;
-          grid.invalidateCell(e.col, e.row);
+          const range = grid.getCellRange(e.col, e.row);
+          grid.invalidateCellRange(range);
         }
       }),
       ...bindCellKeyAction(grid, cellId, {

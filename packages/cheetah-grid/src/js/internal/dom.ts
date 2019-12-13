@@ -45,10 +45,10 @@ export function toNodeList(
   arg: HTMLElement | HTMLElement[] | string
 ): HTMLElement[] {
   if (Array.isArray(arg)) {
-    const result = [];
-    for (const e of arg) {
+    const result: HTMLElement[] = [];
+    arg.forEach(e => {
       result.push(...toNodeList(e));
-    }
+    });
     return result;
   }
   const node = toNode(arg);

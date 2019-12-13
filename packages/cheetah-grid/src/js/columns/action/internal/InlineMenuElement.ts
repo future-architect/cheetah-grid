@@ -233,7 +233,8 @@ export class InlineMenuElement<T> {
       const menu = this._menu;
       closeMenu(grid, col, row, menu);
 
-      grid.invalidateCell(col, row);
+      const range = grid.getCellRange(col, row);
+      grid.invalidateCellRange(range);
       if (gridFocus) {
         grid.focus();
       }

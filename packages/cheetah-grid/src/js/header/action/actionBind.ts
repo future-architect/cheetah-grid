@@ -1,15 +1,15 @@
 import {
   CellAddress,
-  CellRange,
-  DrawGridAPI,
-  EventListenerId
+  EventListenerId,
+  LayoutObjectId,
+  ListGridAPI
 } from "../../ts-types";
-import { cellInRange, event } from "../../internal/utils";
 import { EVENT_TYPE } from "../../core/EVENT_TYPE";
+import { event } from "../../internal/utils";
 const KEY_ENTER = 13;
-export function bindCellClickAction(
-  grid: DrawGridAPI,
-  range: CellRange,
+export function bindCellClickAction<T>(
+  grid: ListGridAPI<T>,
+  cellId: LayoutObjectId,
   {
     action,
     mouseOver,
@@ -20,11 +20,14 @@ export function bindCellClickAction(
     mouseOut?: (cell: CellAddress) => void;
   }
 ): EventListenerId[] {
+  function isTarget(col: number, row: number): boolean {
+    return grid.getLayoutCellId(col, row) === cellId;
+  }
   let inMouse: boolean;
   return [
     // click
     grid.listen(EVENT_TYPE.CLICK_CELL, e => {
-      if (!cellInRange(range, e.col, e.row)) {
+      if (!isTarget(e.col, e.row)) {
         return;
       }
       action({
@@ -34,7 +37,7 @@ export function bindCellClickAction(
     }),
     // mouse move
     grid.listen(EVENT_TYPE.MOUSEOVER_CELL, e => {
-      if (!cellInRange(range, e.col, e.row)) {
+      if (!isTarget(e.col, e.row)) {
         return;
       }
       if (mouseOver) {
@@ -52,7 +55,7 @@ export function bindCellClickAction(
     }),
     //横からMOUSEENTERした場合、'col-resize'の処理と競合するのでmoveを監視して処理する
     grid.listen(EVENT_TYPE.MOUSEMOVE_CELL, e => {
-      if (!cellInRange(range, e.col, e.row)) {
+      if (!isTarget(e.col, e.row)) {
         return;
       }
       if (inMouse && !grid.getElement().style.cursor) {
@@ -60,7 +63,7 @@ export function bindCellClickAction(
       }
     }),
     grid.listen(EVENT_TYPE.MOUSEOUT_CELL, e => {
-      if (!cellInRange(range, e.col, e.row)) {
+      if (!isTarget(e.col, e.row)) {
         return;
       }
       if (mouseOut) {
@@ -74,9 +77,9 @@ export function bindCellClickAction(
     })
   ];
 }
-export function bindCellKeyAction(
-  grid: DrawGridAPI,
-  range: CellRange,
+export function bindCellKeyAction<T>(
+  grid: ListGridAPI<T>,
+  cellId: LayoutObjectId,
   {
     action,
     acceptKeys = []
@@ -86,6 +89,10 @@ export function bindCellKeyAction(
   }
 ): EventListenerId[] {
   acceptKeys = [...acceptKeys, KEY_ENTER];
+
+  function isTarget(col: number, row: number): boolean {
+    return grid.getLayoutCellId(col, row) === cellId;
+  }
   return [
     // enter key down
     grid.listen(EVENT_TYPE.KEYDOWN, (keyCode, e) => {
@@ -93,7 +100,7 @@ export function bindCellKeyAction(
         return;
       }
       const sel = grid.selection.select;
-      if (!cellInRange(range, sel.col, sel.row)) {
+      if (!isTarget(sel.col, sel.row)) {
         return;
       }
       action({

@@ -4,3 +4,4 @@ export {
   SimpleHeaderLayoutMap,
   GroupHeaderDefine
 } from "./simple-header-layout";
+export { LayoutDefine, MultiLayoutMap } from "./multi-layout";

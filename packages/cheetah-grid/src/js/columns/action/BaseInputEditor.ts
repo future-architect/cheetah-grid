@@ -156,6 +156,25 @@ export abstract class BaseInputEditor<T> extends Editor<T> {
         ) {
           return;
         }
+        const range = grid.getCellRange(cell.col, cell.row);
+        if (
+          range.start.col !== range.end.col ||
+          range.start.row !== range.end.row
+        ) {
+          const { input } = cell;
+          const baseRect = grid.getCellRect(cell.col, cell.row);
+          const rangeRect = grid.getCellRangeRect(range);
+          input.style.top = `${(
+            parseFloat(input.style.top) +
+            (rangeRect.top - baseRect.top)
+          ).toFixed()}px`;
+          input.style.left = `${(
+            parseFloat(input.style.left) +
+            (rangeRect.left - baseRect.left)
+          ).toFixed()}px`;
+          input.style.width = `${rangeRect.width.toFixed()}px`;
+          input.style.height = `${rangeRect.height.toFixed()}px`;
+        }
         this.onSetInputAttrsInternal(
           grid,
           {

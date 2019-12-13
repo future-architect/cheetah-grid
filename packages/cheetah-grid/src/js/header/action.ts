@@ -1,11 +1,11 @@
 import {
   BaseActionOption,
   HeaderActionOption,
-  ListGridAPI,
   SortHeaderActionOption,
   SortOption
 } from "../ts-types";
 import { BaseAction } from "./action/BaseAction";
+import { BaseHeaderDefine } from "../internal/layout-map/api";
 import { CheckHeaderAction } from "./action/CheckHeaderAction";
 import { SortHeaderAction } from "./action/SortHeaderAction";
 
@@ -53,12 +53,9 @@ export function of<T>(
     return headerAction;
   }
 }
-export function ofCell<T>(headerCell: {
-  sort?:
-    | boolean
-    | ((order: "asc" | "desc", col: number, grid: ListGridAPI<T>) => void);
-  action?: HeaderActionOption | BaseAction<T> | null;
-}): BaseAction<T> | undefined {
+export function ofCell<T>(
+  headerCell: BaseHeaderDefine<T>
+): BaseAction<T> | undefined {
   if (headerCell.sort) {
     if (typeof headerCell.sort === "function") {
       const sortMethod = headerCell.sort;
@@ -69,5 +66,5 @@ export function ofCell<T>(headerCell: {
     }
     return ACTIONS.SORT;
   }
-  return of(headerCell.action);
+  return of(headerCell.headerAction);
 }

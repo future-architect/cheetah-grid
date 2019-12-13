@@ -53,7 +53,6 @@ export interface HeaderData<T> {
   style?: HeaderStyleOption | HeaderBaseStyle | null;
   headerType: headerType.BaseHeader<T>;
   action?: headerAction.BaseAction<T>;
-  range: CellRange;
   define: HeaderDefine<T>;
 }
 

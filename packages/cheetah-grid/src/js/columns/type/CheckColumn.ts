@@ -53,7 +53,8 @@ export class CheckColumn<T> extends BaseColumn<T, boolean> {
     }
 
     const { col, row } = context;
-    const cellKey = `${col}:${row}`;
+    const range = grid.getCellRange(col, row);
+    const cellKey = `${range.start.col}:${range.start.row}`;
     const elapsed = grid[CHECK_COLUMN_STATE_ID]?.elapsed[cellKey];
 
     const opt: Parameters<GridCanvasHelper["checkbox"]>[2] = {

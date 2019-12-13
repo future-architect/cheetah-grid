@@ -3,12 +3,13 @@ import {
   CellContext,
   ColumnStyle,
   GridCanvasHelper,
+  ListGridAPI,
   MessageObject
 } from "../../ts-types";
 import { BaseMessage } from "./BaseMessage";
 import { DrawCellInfo } from "../../ts-types-internal";
 import { ErrorMessageElement } from "./internal/ErrorMessageElement";
-import { ListGrid } from "../../main";
+import { cellInRange } from "../../internal/utils";
 
 const RED_A100 = "#ff8a80";
 
@@ -21,13 +22,19 @@ export class ErrorMessage<T> extends BaseMessage<T> {
     context: CellContext,
     style: ColumnStyle,
     helper: GridCanvasHelper,
-    grid: ListGrid<T>,
+    grid: ListGridAPI<T>,
     _info: DrawCellInfo<T>
   ): void {
     const { bgColor } = style;
-    const { selected } = context.getSelectState();
-
-    if (!selected || !grid.hasFocusGrid()) {
+    const { select } = context.getSelection();
+    if (
+      !cellInRange(
+        grid.getCellRange(context.col, context.row),
+        select.col,
+        select.row
+      ) ||
+      !grid.hasFocusGrid()
+    ) {
       helper.drawBorderWithClip(
         context,
         (_ctx: CanvasRenderingContext2D): void => {

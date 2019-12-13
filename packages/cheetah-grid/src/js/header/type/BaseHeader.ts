@@ -1,10 +1,10 @@
 import * as styleContents from "../style";
 import {
   CellContext,
-  CellRange,
   EventListenerId,
   GridCanvasHelper,
   HeaderStyleOption,
+  LayoutObjectId,
   ListGridAPI
 } from "../../ts-types";
 import { BaseStyle } from "../style/BaseStyle";
@@ -48,7 +48,10 @@ export abstract class BaseHeader<T> {
     grid: ListGridAPI<T>,
     info: DrawCellInfo<T>
   ): void;
-  bindGridEvent(_grid: ListGridAPI<T>, _range: CellRange): EventListenerId[] {
+  bindGridEvent(
+    _grid: ListGridAPI<T>,
+    _cellId: LayoutObjectId
+  ): EventListenerId[] {
     return [];
   }
 }

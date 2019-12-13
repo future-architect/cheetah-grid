@@ -201,7 +201,10 @@ export class InlineMenuEditor<T> extends Editor<T> {
           event.cancel(e.event);
           then(
             grid.doChangeValue(e.col, e.row, () => pasteOpt.value),
-            () => grid.invalidateCell(e.col, e.row)
+            () => {
+              const range = grid.getCellRange(e.col, e.row);
+              grid.invalidateCellRange(range);
+            }
           );
         }
       })

@@ -1,7 +1,7 @@
 import {
   BaseActionOption,
-  CellRange,
   EventListenerId,
+  LayoutObjectId,
   ListGridAPI
 } from "../../ts-types";
 
@@ -20,7 +20,10 @@ export class BaseAction<T> {
   clone(): BaseAction<T> {
     return new BaseAction(this);
   }
-  bindGridEvent(_grid: ListGridAPI<T>, _range: CellRange): EventListenerId[] {
+  bindGridEvent(
+    _grid: ListGridAPI<T>,
+    _cellId: LayoutObjectId
+  ): EventListenerId[] {
     return [];
   }
   onChangeDisabledInternal(): void {

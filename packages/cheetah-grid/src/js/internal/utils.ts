@@ -1,4 +1,4 @@
-import { CellRange, MaybeCall, MaybePromise } from "../ts-types";
+import { CellAddress, CellRange, MaybeCall, MaybePromise } from "../ts-types";
 
 const isNode =
   typeof window === "undefined" || typeof window.window === "undefined";
@@ -353,6 +353,9 @@ export {
   array
 };
 
+export function cellEquals(a: CellAddress, b: CellAddress): boolean {
+  return a.col === b.col && a.row === b.row;
+}
 export function cellInRange(
   range: CellRange,
   col: number,

@@ -18,7 +18,6 @@ import {
 import {
   array,
   browser,
-  cellInRange,
   event,
   isDef,
   isDescendantElement,
@@ -940,24 +939,14 @@ function _moveFocusCell(
   }
 
   const beforeRange = extendRange(grid.selection.range);
-  const beforeRect = grid.getCellsRect(
-    beforeRange.start.col,
-    beforeRange.start.row,
-    beforeRange.end.col,
-    beforeRange.end.row
-  );
+  const beforeRect = grid.getCellRangeRect(beforeRange);
 
   grid.selection._setFocusCell(col, row, shiftKey);
   grid.makeVisibleCell(col, row);
   grid.focusCell(col, row);
 
   const afterRange = extendRange(grid.selection.range);
-  const afterRect = grid.getCellsRect(
-    afterRange.start.col,
-    afterRange.start.row,
-    afterRange.end.col,
-    afterRange.end.row
-  );
+  const afterRect = grid.getCellRangeRect(afterRange);
 
   if (afterRect.intersection(beforeRect)) {
     const invalidateRect = Rect.max(afterRect, beforeRect);
@@ -1128,33 +1117,45 @@ function _bindEvents(grid: DrawGrid): void {
   let isMouseover = false;
   let mouseEnterCell: CellAddress | null = null;
   let mouseOverCell: CellAddress | null = null;
-  function onMouseenterCell(cell: CellAddress): void {
-    grid.fireListeners(EVENT_TYPE.MOUSEENTER_CELL, cell);
+  function onMouseenterCell(cell: CellAddress, related?: CellAddress): void {
+    grid.fireListeners(EVENT_TYPE.MOUSEENTER_CELL, {
+      col: cell.col,
+      row: cell.row,
+      related
+    });
     mouseEnterCell = cell;
   }
-  function onMouseleaveCell(): void {
+  function onMouseleaveCell(related?: CellAddress): CellAddress | undefined {
     const beforeMouseCell = mouseEnterCell;
     mouseEnterCell = null;
     if (beforeMouseCell) {
       grid.fireListeners(EVENT_TYPE.MOUSELEAVE_CELL, {
         col: beforeMouseCell.col,
-        row: beforeMouseCell.row
+        row: beforeMouseCell.row,
+        related
       });
     }
+    return beforeMouseCell || undefined;
   }
-  function onMouseoverCell(cell: CellAddress): void {
-    grid.fireListeners(EVENT_TYPE.MOUSEOVER_CELL, cell);
+  function onMouseoverCell(cell: CellAddress, related?: CellAddress): void {
+    grid.fireListeners(EVENT_TYPE.MOUSEOVER_CELL, {
+      col: cell.col,
+      row: cell.row,
+      related
+    });
     mouseOverCell = cell;
   }
-  function onMouseoutCell(): void {
+  function onMouseoutCell(related?: CellAddress): CellAddress | undefined {
     const beforeMouseCell = mouseOverCell;
     mouseOverCell = null;
     if (beforeMouseCell) {
       grid.fireListeners(EVENT_TYPE.MOUSEOUT_CELL, {
         col: beforeMouseCell.col,
-        row: beforeMouseCell.row
+        row: beforeMouseCell.row,
+        related
       });
     }
+    return beforeMouseCell || undefined;
   }
   const scrollElement = scrollable.getElement();
   handler.on(scrollElement, "mouseover", (_e: MouseEvent): void => {
@@ -1180,15 +1181,15 @@ function _bindEvents(grid: DrawGrid): void {
           beforeMouseCell.col !== eventArgs.col ||
           beforeMouseCell.row !== eventArgs.row
         ) {
-          onMouseoutCell();
-          onMouseleaveCell();
-          const cell = {
+          const enterCell = {
             col: eventArgs.col,
             row: eventArgs.row
           };
-          onMouseenterCell(cell);
+          const outCell = onMouseoutCell(enterCell);
+          const leaveCell = onMouseleaveCell(enterCell);
+          onMouseenterCell(enterCell, leaveCell);
           if (isMouseover) {
-            onMouseoverCell(cell);
+            onMouseoverCell(enterCell, outCell);
           }
         } else if (isMouseover && !mouseOverCell) {
           onMouseoverCell({
@@ -1197,13 +1198,13 @@ function _bindEvents(grid: DrawGrid): void {
           });
         }
       } else {
-        const cell = {
+        const enterCell = {
           col: eventArgs.col,
           row: eventArgs.row
         };
-        onMouseenterCell(cell);
+        onMouseenterCell(enterCell);
         if (isMouseover) {
-          onMouseoverCell(cell);
+          onMouseoverCell(enterCell);
         }
         grid.fireListeners(EVENT_TYPE.MOUSEMOVE_CELL, eventArgs);
       }
@@ -2159,6 +2160,7 @@ class DrawCellContext implements CellContext {
   private _cancel?: boolean;
   private _grid?: DrawGrid;
   private _onTerminate?: () => void;
+  private _rectFilter: ((base: Rect) => Rect) | null = null;
   //  private _grid: any;
   //  private _onTerminate: any;
   /**
@@ -2217,11 +2219,10 @@ class DrawCellContext implements CellContext {
    * select status.
    * @return {object} select status
    */
-  getSelectState(): { selected: boolean; selection: boolean } {
-    const sel = this._selection.select;
+  getSelection(): { select: CellAddress; range: CellRange } {
     return {
-      selected: sel.col === this._col && sel.row === this._row,
-      selection: cellInRange(this._selection.range, this._col, this._row)
+      select: this._selection.select,
+      range: this._selection.range
     };
   }
   /**
@@ -2240,17 +2241,13 @@ class DrawCellContext implements CellContext {
    * @return {Rect} rect Rectangle of cell.
    */
   getRect(): Rect {
-    if (this._mode === 0) {
-      return this._rect as Rect;
-    } else {
-      if (this._rect) {
-        return this._rect;
-      }
-      return (this._grid as DrawGrid).getCellRelativeRect(this._col, this._row);
-    }
+    const rectFilter = this._rectFilter;
+    return rectFilter
+      ? rectFilter(this._getRectInternal())
+      : this._getRectInternal();
   }
-  setRect(rect: Rect): void {
-    this._rect = rect;
+  setRectFilter(rectFilter: (base: Rect) => Rect): void {
+    this._rectFilter = rectFilter;
   }
   /**
    * Rectangle of Drawing range.
@@ -2310,6 +2307,7 @@ class DrawCellContext implements CellContext {
       if (this._cancel) {
         context.cancel();
       }
+      context._rectFilter = this._rectFilter;
       return context;
     }
   }
@@ -2368,6 +2366,16 @@ class DrawCellContext implements CellContext {
   terminate(): void {
     if (this._mode !== 0) {
       this._onTerminate?.();
+    }
+  }
+  private _getRectInternal(): Rect {
+    if (this._mode === 0) {
+      return this._rect as Rect;
+    } else {
+      if (this._rect) {
+        return this._rect;
+      }
+      return (this._grid as DrawGrid).getCellRelativeRect(this._col, this._row);
     }
   }
 }
@@ -2893,6 +2901,14 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
     }
     return new Rect(absoluteLeft, absoluteTop, width, height);
   }
+  getCellRangeRect(range: CellRange): Rect {
+    return this.getCellsRect(
+      range.start.col,
+      range.start.row,
+      range.end.col,
+      range.end.row
+    );
+  }
   isFrozenCell(
     col: number,
     row: number
@@ -3053,7 +3069,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
         if (frozenRect.intersection(invalidateTarget)) {
           invalidateTarget.left = Math.min(
             frozenRect.right - 1,
-            frozenRect.right
+            invalidateTarget.left
           );
         }
       }
@@ -3070,6 +3086,14 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
 
       _invalidateRect(this, invalidateTarget);
     }
+  }
+  invalidateCellRange(range: CellRange): void {
+    this.invalidateGridRect(
+      range.start.col,
+      range.start.row,
+      range.end.col,
+      range.end.row
+    );
   }
   /**
    * Redraws the whole grid.
@@ -3184,15 +3208,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
   } {
     return {
       element: this.getElement(),
-      rect: _toRelativeRect(
-        this,
-        this.getCellsRect(
-          range.start.col,
-          range.start.row,
-          range.end.col,
-          range.end.row
-        )
-      )
+      rect: _toRelativeRect(this, this.getCellRangeRect(range))
     };
   }
   bindEventsInternal(): void {

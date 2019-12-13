@@ -21,12 +21,10 @@ type Timelines = { timeline: BranchPoint[][]; branches: string[] };
 
 function getAllColumnData<T>(
   grid: ListGridAPI<T>,
-  col: number,
-  row: number,
+  field: FieldDef<T>,
   callback: (allData: BranchGraphCommand[]) => void
 ): void {
   const { dataSource } = grid;
-  const field = grid.getField(col, row) as FieldDef<T>;
   const allData: BranchGraphCommand[] = [];
   let promise;
   for (let index = 0; index < dataSource.length; index++) {
@@ -378,14 +376,13 @@ function calcCommand(info: Timelines, command: BranchGraphCommand): void {
 function calcBranchesInfo<T>(
   start: "top" | "bottom",
   grid: ListGridAPI<T>,
-  col: number,
-  row: number
+  field: FieldDef<T>
 ): Timelines {
   const result = {
     branches: [],
     timeline: []
   };
-  getAllColumnData(grid, col, row, data => {
+  getAllColumnData(grid, field, data => {
     if (start !== "top") {
       data = [...data].reverse();
     }
@@ -578,10 +575,11 @@ export class BranchGraphColumn<T> extends BaseColumn<T, unknown> {
     grid: GridInternal<T>
   ): void | Promise<void> {
     if (this._cache) {
-      const state = grid[_] || (grid[_] = {});
+      const state = grid[_] || (grid[_] = new Map());
       const { col, row } = context;
-      if (!state[col]) {
-        state[col] = calcBranchesInfo(this._start, grid, col, row);
+      const field = grid.getField(col, row) as FieldDef<T>;
+      if (!state.has(field)) {
+        state.set(field, calcBranchesInfo(this._start, grid, field));
       }
     }
     return super.onDrawCell(cellValue, info, context, grid);
@@ -598,9 +596,10 @@ export class BranchGraphColumn<T> extends BaseColumn<T, unknown> {
     { drawCellBase }: DrawCellInfo<T>
   ): void {
     const { col, row } = context;
+    const field = grid.getField(col, row) as FieldDef<T>;
     const { timeline, branches } =
-      (this._cache ? grid[_]?.[col] : null) ??
-      calcBranchesInfo(this._start, grid, col, row);
+      (this._cache ? grid[_]?.get(field) : null) ??
+      calcBranchesInfo(this._start, grid, field);
 
     const {
       upLineIndexKey,

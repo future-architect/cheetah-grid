@@ -29,7 +29,9 @@ import {
   GroupHeaderDefine,
   HeaderDefine,
   HeadersDefine,
+  LayoutDefine,
   LayoutMapAPI,
+  MultiLayoutMap,
   SimpleHeaderLayoutMap
 } from "./internal/layout-map";
 import {
@@ -45,6 +47,7 @@ import { EVENT_TYPE } from "./list-grid/EVENT_TYPE";
 import { GridCanvasHelper } from "./GridCanvasHelper";
 import { BaseStyle as HeaderBaseStyle } from "./header/style";
 import { MessageHandler } from "./columns/message/MessageHandler";
+import { Rect } from "./internal/Rect";
 import { Theme } from "./themes/theme";
 import { TooltipHandler } from "./tooltip/TooltipHandler";
 //protected symbol
@@ -66,24 +69,26 @@ function _updateRect<T>(
   row: number,
   context: CellContext
 ): void {
-  const rect = context.getRect();
-  const {
-    start: { col: startCol, row: startRow },
-    end: { col: endCol, row: endRow }
-  } = _getCellRange(grid, col, row);
-  for (let c = col - 1; c >= startCol; c--) {
-    rect.left -= grid.getColWidth(c);
-  }
-  for (let c = col + 1; c <= endCol; c++) {
-    rect.right += grid.getColWidth(c);
-  }
-  for (let r = row - 1; r >= startRow; r--) {
-    rect.top -= grid.getRowHeight(r);
-  }
-  for (let r = row + 1; r <= endRow; r++) {
-    rect.bottom += grid.getRowHeight(r);
-  }
-  context.setRect(rect);
+  context.setRectFilter(rect => {
+    let { left, right, top, bottom } = rect;
+    const {
+      start: { col: startCol, row: startRow },
+      end: { col: endCol, row: endRow }
+    } = _getCellRange(grid, col, row);
+    for (let c = col - 1; c >= startCol; c--) {
+      left -= grid.getColWidth(c);
+    }
+    for (let c = col + 1; c <= endCol; c++) {
+      right += grid.getColWidth(c);
+    }
+    for (let r = row - 1; r >= startRow; r--) {
+      top -= grid.getRowHeight(r);
+    }
+    for (let r = row + 1; r <= endRow; r++) {
+      bottom += grid.getRowHeight(r);
+    }
+    return Rect.bounds(left, top, right, bottom);
+  });
 }
 function _getCellValue<T>(
   grid: ListGrid<T>,
@@ -297,7 +302,11 @@ function _borderWithState<T>(
   const selRecordIndex = layoutMap.getRecordIndexByRow(sel.row);
   const selId = layoutMap.getCellId(sel.col, sel.row);
   function isSelectCell(col: number, row: number): boolean {
+    if (col === sel.col && row === sel.row) {
+      return true;
+    }
     return (
+      selId != null &&
       layoutMap.getCellId(col, row) === selId &&
       layoutMap.getRecordIndexByRow(row) === selRecordIndex
     );
@@ -370,11 +379,21 @@ function _refreshHeader<T>(grid: ListGrid<T>): void {
   const headerEvents: EventListenerId[] = (grid[_].headerEvents = []);
 
   headerEvents.forEach(id => grid.unlisten(id));
-  const layoutMap = (grid[_].layoutMap = new SimpleHeaderLayoutMap(
-    grid[_].header
-  ));
+  let layoutMap: LayoutMapAPI<T>;
+  if (
+    protectedSpace.layout &&
+    (!Array.isArray(protectedSpace.layout) || protectedSpace.layout.length > 0)
+  ) {
+    layoutMap = protectedSpace.layoutMap = new MultiLayoutMap(
+      protectedSpace.layout
+    );
+  } else {
+    layoutMap = protectedSpace.layoutMap = new SimpleHeaderLayoutMap(
+      protectedSpace.header ?? []
+    );
+  }
   layoutMap.headerObjects.forEach(cell => {
-    const ids = cell.headerType.bindGridEvent(grid, cell.range);
+    const ids = cell.headerType.bindGridEvent(grid, cell.id);
     headerEvents.push(...ids);
     if (cell.style) {
       if (cell.style instanceof HeaderBaseStyle) {
@@ -388,7 +407,7 @@ function _refreshHeader<T>(grid: ListGrid<T>): void {
       }
     }
     if (cell.action) {
-      const ids = cell.action.bindGridEvent(grid, cell.range);
+      const ids = cell.action.bindGridEvent(grid, cell.id);
       headerEvents.push(...ids);
     }
   });
@@ -525,6 +544,7 @@ export interface ListGridProtected<T> extends DrawGridProtected {
   theme: Theme | null;
   headerRowHeight: number[] | number;
   header: HeadersDefine<T>;
+  layout: LayoutDefine<T>;
   gridCanvasHelper: GridCanvasHelper<T>;
   sortState: SortState;
   dataSource: DataSource<T>;
@@ -533,6 +553,7 @@ export interface ListGridProtected<T> extends DrawGridProtected {
 export interface ListGridConstructorOptions<T>
   extends DrawGridConstructorOptions {
   header?: HeadersDefine<T>;
+  layout?: LayoutDefine<T>;
   headerRowHeight?: number[] | number;
   dataSource?: DataSource<T>;
   records?: T[];
@@ -575,6 +596,7 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
     super(adjustListGridOption(options));
     const protectedSpace = this[_];
     protectedSpace.header = options.header || [];
+    protectedSpace.layout = options.layout || [];
     protectedSpace.headerRowHeight = options.headerRowHeight || [];
     if (options.dataSource) {
       _setDataSource(this, options.dataSource);
@@ -652,6 +674,19 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
    */
   set header(header) {
     this[_].header = header;
+    _refreshHeader(this);
+  }
+  /**
+   * Gets the define of the layout.
+   */
+  get layout(): LayoutDefine<T> {
+    return this[_].layout;
+  }
+  /**
+   * Sets the define of the layout with the given data.
+   */
+  set layout(layout) {
+    this[_].layout = layout;
     _refreshHeader(this);
   }
   /**
@@ -1087,12 +1122,13 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
   }
   bindEventsInternal(): void {
     this.listen(EVENT_TYPE.SELECTED_CELL, e => {
+      const range = _getCellRange(this, e.col, e.row);
       const {
         start: { col: startCol, row: startRow },
         end: { col: endCol, row: endRow }
-      } = _getCellRange(this, e.col, e.row);
+      } = range;
       if (startCol !== endCol || startRow !== endRow) {
-        this.invalidateGridRect(startCol, startRow, endCol, endRow);
+        this.invalidateCellRange(range);
       }
     });
   }

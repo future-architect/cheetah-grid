@@ -9,6 +9,7 @@ import {
 import { BaseMessage } from "./BaseMessage";
 import { DrawCellInfo } from "../../ts-types-internal";
 import { MessageElement } from "./internal/MessageElement";
+import { cellInRange } from "../../internal/utils";
 const GREY_L2 = "#e0e0e0";
 
 export class InfoMessage<T> extends BaseMessage<T> {
@@ -24,9 +25,15 @@ export class InfoMessage<T> extends BaseMessage<T> {
     _info: DrawCellInfo<T>
   ): void {
     const { bgColor } = style;
-    const { selected } = context.getSelectState();
-
-    if (!selected || !grid.hasFocusGrid()) {
+    const { select } = context.getSelection();
+    if (
+      !cellInRange(
+        grid.getCellRange(context.col, context.row),
+        select.col,
+        select.row
+      ) ||
+      !grid.hasFocusGrid()
+    ) {
       helper.drawBorderWithClip(
         context,
         (_ctx: CanvasRenderingContext2D): void => {

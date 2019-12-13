@@ -7,7 +7,7 @@ import {
 import { DrawCellInfo, GridInternal } from "../../ts-types-internal";
 import { ButtonStyle } from "../style/ButtonStyle";
 import { Column } from "./Column";
-
+import { cellInRange } from "../../internal/utils";
 import { getButtonColumnStateId } from "../../internal/symbolManager";
 
 const BUTTON_COLUMN_STATE_ID = getButtonColumnStateId();
@@ -60,17 +60,21 @@ export class ButtonColumn<T> extends Column<T> {
     }
     helper.testFontLoad(font, value, context);
     const { col, row } = context;
+    const range = grid.getCellRange(col, row);
     let active = false;
     const state = grid[BUTTON_COLUMN_STATE_ID];
+
     if (state) {
       if (
         state.mouseActiveCell &&
-        state.mouseActiveCell.col === col &&
-        state.mouseActiveCell.row === row
+        cellInRange(range, state.mouseActiveCell.col, state.mouseActiveCell.row)
       ) {
         active = true;
-      } else if (context.getSelectState().selected) {
-        active = true;
+      } else {
+        const { select } = context.getSelection();
+        if (cellInRange(range, select.col, select.row)) {
+          active = true;
+        }
       }
     }
 

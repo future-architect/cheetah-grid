@@ -58,12 +58,13 @@ export class CheckHeader<T> extends BaseHeader<T> {
     }
 
     const { col, row } = context;
-    const cellKey = `${col}:${row}`;
+    const range = grid.getCellRange(col, row);
+    const cellKey = `${range.start.col}:${range.start.row}`;
     const {
       elapsed: { [cellKey]: elapsed }
     } = getState(grid);
 
-    const checked = grid.getHeaderValue(col, row);
+    const checked = grid.getHeaderValue(range.start.col, range.start.row);
 
     const opt: {
       animElapsedTime?: number;

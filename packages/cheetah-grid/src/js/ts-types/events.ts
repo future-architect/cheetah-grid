@@ -44,14 +44,16 @@ export type ModifyStatusEditableinputCellEvent = CellAddress & {
   input: HTMLInputElement;
 };
 
+export type MousePointerCellEvent = CellAddress & { related?: CellAddress };
+
 export interface DrawGridEventHandlersEventMap {
   selected_cell: [SelectedCellEvent, boolean];
   click_cell: [MouseCellEvent];
   dblclick_cell: [MouseCellEvent];
-  mouseenter_cell: [CellAddress];
-  mouseleave_cell: [CellAddress];
-  mouseover_cell: [CellAddress];
-  mouseout_cell: [CellAddress];
+  mouseenter_cell: [MousePointerCellEvent];
+  mouseleave_cell: [MousePointerCellEvent];
+  mouseover_cell: [MousePointerCellEvent];
+  mouseout_cell: [MousePointerCellEvent];
   mousemove_cell: [MouseCellEvent];
   mousedown_cell: [MouseCellEvent];
   mouseup_cell: [MouseCellEvent];

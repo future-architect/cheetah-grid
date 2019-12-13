@@ -1,7 +1,7 @@
 import {
   CellAddress,
-  CellRange,
   EventListenerId,
+  LayoutObjectId,
   ListGridAPI,
   SortHeaderActionOption,
   SortOption,
@@ -9,7 +9,6 @@ import {
 } from "../../ts-types";
 import { BaseAction } from "./BaseAction";
 import { bindCellClickAction } from "./actionBind";
-import { cellInRange } from "../../internal/utils";
 
 export class SortHeaderAction<T> extends BaseAction<T> {
   private _sort: SortOption<T>;
@@ -45,14 +44,21 @@ export class SortHeaderAction<T> extends BaseAction<T> {
       grid.dataSource.sort(field, newState.order || "asc");
     }
   }
-  bindGridEvent(grid: ListGridAPI<T>, range: CellRange): EventListenerId[] {
+  bindGridEvent(
+    grid: ListGridAPI<T>,
+    cellId: LayoutObjectId
+  ): EventListenerId[] {
+    function isTarget(col: number, row: number): boolean {
+      return grid.getLayoutCellId(col, row) === cellId;
+    }
     const action = (cell: CellAddress): void => {
       if (this.disabled) {
         return;
       }
       const state = grid.sortState as SortState;
       let newState: SortState;
-      if (cellInRange(range, state.col, cell.row)) {
+      const range = grid.getCellRange(cell.col, cell.row);
+      if (isTarget(state.col, cell.row)) {
         newState = {
           col: range.start.col,
           row: range.start.row,
@@ -71,7 +77,7 @@ export class SortHeaderAction<T> extends BaseAction<T> {
     };
 
     return [
-      ...bindCellClickAction(grid, range, {
+      ...bindCellClickAction(grid, cellId, {
         action,
         mouseOver: _e => {
           if (this.disabled) {
