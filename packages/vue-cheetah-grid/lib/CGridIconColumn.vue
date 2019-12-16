@@ -8,7 +8,7 @@
 <script>
 import ColumnMixin from './c-grid/ColumnMixin.vue'
 import StdColumnMixin from './c-grid/StdColumnMixin.vue'
-import { cheetahGrid, filterToFn, normalizeAction, gridUpdateWatcher } from './c-grid/utils'
+import { cheetahGrid, extend, normalizeAction, gridUpdateWatcher } from './c-grid/utils'
 
 /**
  * Defines icon column.
@@ -83,25 +83,18 @@ export default {
         iconWidth: this.iconWidth
       })
       const action = normalizeAction(this.action)
-      const field = this.filter ? filterToFn(this, this.field, this.filter) : this.field
-      return {
-        vm: this,
-        caption: this.caption || this.$el.textContent.trim(),
-        headerStyle: this.headerStyle,
-        headerField: this.headerField,
-        headerType: this.headerType,
-        headerAction: this.headerAction,
-        field,
-        columnType,
-        width: this.width,
-        minWidth: this.minWidth,
-        maxWidth: this.maxWidth,
-        action,
-        style: this.columnStyle,
-        sort: this.sort,
-        icon: this.icon,
-        message: this.message
-      }
+
+      const baseCol = ColumnMixin.methods.createColumn.apply(this)
+      const stdCol = StdColumnMixin.methods.createColumn.apply(this)
+      return extend(
+        baseCol,
+        stdCol,
+        {
+          caption: this.caption || this.$el.textContent.trim(),
+          columnType,
+          action
+        }
+      )
     }
   }
 }

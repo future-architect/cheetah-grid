@@ -8,6 +8,7 @@
 <script>
 import ColumnMixin from './c-grid/ColumnMixin.vue'
 import { slotsToHeaderOptions, slotsToHeaderProps } from './c-grid/header-utils'
+import { extend } from './c-grid/utils'
 
 /**
  * Defines multiple header.
@@ -25,23 +26,20 @@ export default {
      */
     getPropsObjectInternal () {
       const props = ColumnMixin.methods.getPropsObjectInternal.apply(this)
-      props.columns = slotsToHeaderProps(this.$slots.default)
+      props.columns = slotsToHeaderProps(this.$_CGridInstance, this.$slots.default)
       return props
     },
     /**
      * @private
      */
     createColumn () {
-      return {
-        vm: this,
-        caption: this.caption,
-        headerStyle: this.headerStyle,
-        headerField: this.headerField,
-        headerType: this.headerType,
-        headerAction: this.headerAction,
-        sort: this.sort,
-        columns: slotsToHeaderOptions(this.$slots.default)
-      }
+      const baseCol = ColumnMixin.methods.createColumn.apply(this)
+      return extend(
+        baseCol,
+        {
+          columns: slotsToHeaderOptions(this.$_CGridInstance, this.$slots.default)
+        }
+      )
     }
   }
 }

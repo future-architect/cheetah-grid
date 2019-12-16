@@ -1,14 +1,18 @@
 <template>
   <div class="c-grid">
     <div class="define">
-      <!-- Use this slot to set the columns definition -->
+      <!-- Use this slot to set the simple header definition -->
       <slot />
+      <!-- Use this slot to set the layout header definition -->
+      <slot name="layout-header" />
+      <!-- Use this slot to set the layout body definition -->
+      <slot name="layout-body" />
     </div>
   </div>
 </template>
 
 <script>
-import { cheetahGrid, gridUpdateWatcher } from './c-grid/utils'
+import { cheetahGrid, gridUpdateWatcher, extend } from './c-grid/utils'
 import { slotsToHeaderOptions, slotsToHeaderProps } from './c-grid/header-utils'
 
 function deepObjectEquals (a, b) {
@@ -59,10 +63,10 @@ function _setGridData (grid, data, filter) {
   }
   grid.dataSource = dataSource
 }
-function _bindEvents (v, grid) {
+function _bindEvents (vm, grid) {
   const { EVENT_TYPE } = cheetahGrid.ListGrid
   grid.listen(EVENT_TYPE.CHANGED_HEADER_VALUE, (...args) => {
-    v.headerValues = grid.headerValues
+    vm.headerValues = grid.headerValues
   })
   for (const k in EVENT_TYPE) {
     const type = EVENT_TYPE[k]
@@ -70,7 +74,7 @@ function _bindEvents (v, grid) {
     grid.listen(type, (...args) => {
       const results = []
 
-      v.$_CGrid_emit(emitType, ...args, (r) => {
+      vm.$_CGrid_emit(emitType, ...args, (r) => {
         results.push(r)
       })
 
@@ -100,25 +104,65 @@ function _bindEvents (v, grid) {
     })
   }
 }
-function _buildGridProps (v) {
-  return Object.assign({
-    frozenColCount: v.frozenColCount - 0,
-    theme: v.theme || null
-  }, { header: slotsToHeaderProps(v.$slots.default) }, v.options)
+function _buildGridProps (vm) {
+  const headerLayoutOptions = {}
+  if (vm.$slots['layout-body']) {
+    if (vm.$slots['layout-header']) {
+      headerLayoutOptions.layout = {
+        header: slotsToHeaderProps(vm, vm.$slots['layout-header']),
+        body: slotsToHeaderProps(vm, vm.$slots['layout-body'])
+      }
+    } else {
+      headerLayoutOptions.layout = {
+        header: slotsToHeaderProps(vm, vm.$slots['layout-body']),
+        body: slotsToHeaderProps(vm, vm.$slots['layout-body'])
+      }
+    }
+  } else {
+    headerLayoutOptions.header = slotsToHeaderProps(vm, vm.$slots.default)
+  }
+  return extend(
+    {
+      frozenColCount: vm.frozenColCount - 0,
+      theme: vm.theme || null
+    },
+    headerLayoutOptions,
+    vm.options
+  )
 }
-function _buildGridOption (v) {
-  return Object.assign({
-    frozenColCount: v.frozenColCount - 0,
-    theme: v.theme || null
-  }, { header: slotsToHeaderOptions(v.$slots.default) }, v.options)
+function _buildGridOption (vm) {
+  const headerLayoutOptions = {}
+  if (vm.$slots['layout-body']) {
+    if (vm.$slots['layout-header']) {
+      headerLayoutOptions.layout = {
+        header: slotsToHeaderOptions(vm, vm.$slots['layout-header']),
+        body: slotsToHeaderOptions(vm, vm.$slots['layout-body'])
+      }
+    } else {
+      headerLayoutOptions.layout = {
+        header: slotsToHeaderOptions(vm, vm.$slots['layout-body']),
+        body: slotsToHeaderOptions(vm, vm.$slots['layout-body'])
+      }
+    }
+  } else {
+    headerLayoutOptions.header = slotsToHeaderOptions(vm, vm.$slots.default)
+  }
+  return extend(
+    {
+      frozenColCount: vm.frozenColCount - 0,
+      theme: vm.theme || null
+    },
+    headerLayoutOptions,
+    vm.options
+  )
 }
-function _initGrid (v) {
-  v._beforeGridProps = _buildGridProps(v)
-  const options = _buildGridOption(v)
-  options.parentElement = v.$el
-  const grid = v.rawGrid = new cheetahGrid.ListGrid(options)
-  _setGridData(grid, v.data, v.filter)
-  _bindEvents(v, grid)
+function _initGrid (vm) {
+  vm._beforeGridProps = _buildGridProps(vm)
+  const options = _buildGridOption(vm)
+  options.parentElement = vm.$el
+  const grid = vm.rawGrid = new cheetahGrid.ListGrid(options)
+  _setGridData(grid, vm.data, vm.filter)
+  _bindEvents(vm, grid)
 }
 
 let seq = 0
@@ -128,6 +172,11 @@ let seq = 0
  */
 export default {
   name: 'CGrid',
+  provide () {
+    return {
+      $_CGridInstance: this
+    }
+  },
   props: {
     /**
      * Defines a records or data source.
@@ -200,6 +249,9 @@ export default {
       deep: true
     }
   },
+  created () {
+    this.$_CGrid_defineColumns = []
+  },
   mounted () {
     this.$_CGrid_cancelNextTickUpdate()
     if (this.rawGrid) {
@@ -214,6 +266,7 @@ export default {
       this.rawGrid.dispose()
       this.rawGrid = null
     }
+    this.$_CGrid_defineColumns = []
   },
   updated () {
     this.$_CGrid_nextTickUpdate()
@@ -282,15 +335,17 @@ export default {
       this.$_CGrid_cancelNextTickUpdate()
       if (this.rawGrid) {
         const gridProps = _buildGridProps(this)
-        const beforeGridProps = Object.assign({}, this._beforeGridProps)
+        const beforeGridProps = extend({}, this._beforeGridProps)
         if (deepObjectEquals(beforeGridProps, gridProps)) {
-        // optionの変更が無ければ、ここからの操作はしない
+          // optionの変更が無ければ、ここからの操作はしない
           return
         }
 
-        const newProps = Object.assign({}, gridProps)
+        const newProps = extend({}, gridProps)
         delete beforeGridProps.header
         delete newProps.header
+        delete beforeGridProps.layout
+        delete newProps.layout
         delete beforeGridProps.frozenColCount
         delete newProps.frozenColCount
         delete beforeGridProps.theme
@@ -298,12 +353,13 @@ export default {
         if (deepObjectEquals(beforeGridProps, newProps)) {
           // 操作可能なoptionのみの変更。インスタンス再作成はしない
           const options = _buildGridOption(this)
-          const { header, frozenColCount, theme } = options
+          const { header, layout, frozenColCount, theme } = options
           this.rawGrid.header = header
+          this.rawGrid.layout = layout
           this.rawGrid.frozenColCount = frozenColCount
           this.rawGrid.theme = theme
           this.rawGrid.invalidate()
-          this._beforeGridProps = Object.assign({}, gridProps)
+          this._beforeGridProps = extend({}, gridProps)
           return
         }
         this.rawGrid.dispose()
@@ -357,6 +413,26 @@ export default {
           this.$emit(type, ...args)
           break
       }
+    },
+    /**
+     * @private
+     */
+    $_CGrid_setColumnDefine (colDef) {
+      const index = this.$_CGrid_defineColumns.indexOf(colDef)
+      if (index >= 0) {
+        return
+      }
+      this.$_CGrid_defineColumns.push(colDef)
+    },
+    /**
+     * @private
+     */
+    $_CGrid_removeColumnDefine (colDef) {
+      const index = this.$_CGrid_defineColumns.indexOf(colDef)
+      if (index < 0) {
+        return
+      }
+      this.$_CGrid_defineColumns.splice(index, 1)
     }
   }
 }

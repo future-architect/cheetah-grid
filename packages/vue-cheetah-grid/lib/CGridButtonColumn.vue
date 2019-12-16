@@ -8,7 +8,7 @@
 <script>
 import ColumnMixin from './c-grid/ColumnMixin.vue'
 import StdColumnMixin from './c-grid/StdColumnMixin.vue'
-import { cheetahGrid, filterToFn } from './c-grid/utils'
+import { cheetahGrid, extend } from './c-grid/utils'
 
 /**
  * Defines button column.
@@ -64,28 +64,19 @@ export default {
         },
         disabled: this.disabled
       })
-      const field = this.filter ? filterToFn(this, this.field, this.filter) : this.field
-      return {
-        vm: this,
-        caption: this.$el.textContent.trim(),
-        headerStyle: this.headerStyle,
-        headerField: this.headerField,
-        headerType: this.headerType,
-        headerAction: this.headerAction,
-        field,
-        width: this.width,
-        minWidth: this.minWidth,
-        maxWidth: this.maxWidth,
-        style: this.columnStyle,
-        sort: this.sort,
-        icon: this.icon,
-        message: this.message,
-
-        columnType: new cheetahGrid.columns.type.ButtonColumn({
-          caption: this.caption
-        }),
-        action
-      }
+      const baseCol = ColumnMixin.methods.createColumn.apply(this)
+      const stdCol = StdColumnMixin.methods.createColumn.apply(this)
+      return extend(
+        baseCol,
+        stdCol,
+        {
+          caption: this.$el.textContent.trim(),
+          columnType: new cheetahGrid.columns.type.ButtonColumn({
+            caption: this.caption
+          }),
+          action
+        }
+      )
     }
   }
 }
