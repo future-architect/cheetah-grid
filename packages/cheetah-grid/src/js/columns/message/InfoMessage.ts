@@ -2,7 +2,7 @@ import * as messageUtils from "./messageUtils";
 import {
   CellContext,
   ColumnStyle,
-  GridCanvasHelper,
+  GridCanvasHelperAPI,
   ListGridAPI,
   MessageObject
 } from "../../ts-types";
@@ -20,7 +20,7 @@ export class InfoMessage<T> extends BaseMessage<T> {
     _message: MessageObject,
     context: CellContext,
     style: ColumnStyle,
-    helper: GridCanvasHelper,
+    helper: GridCanvasHelperAPI,
     grid: ListGridAPI<T>,
     _info: DrawCellInfo<T>
   ): void {

@@ -1,11 +1,11 @@
 import { BaseHeader } from "./type/BaseHeader";
-import { BaseHeaderDefine } from "../internal/layout-map/api";
+import { BaseHeaderDefine } from "../list-grid/layout-map/api";
 import { CheckHeader } from "./type/CheckHeader";
 import { Header } from "./type/Header";
 import { HeaderTypeOption } from "../ts-types";
 import { SortHeader } from "./type/SortHeader";
 
-export const TYPES = {
+const TYPES = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   DEFAULT: new Header<any>(),
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

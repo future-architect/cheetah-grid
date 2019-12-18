@@ -48,20 +48,6 @@ export default {
     headerAction: {
       type: [Object, String, Function],
       default: undefined
-    },
-    /**
-     * Defines the layout colspan
-     */
-    colspan: {
-      type: [Number, String],
-      default: undefined
-    },
-    /**
-     * Defines the layout rowspan
-     */
-    rowspan: {
-      type: [Number, String],
-      default: undefined
     }
   },
   watch: {
@@ -70,9 +56,7 @@ export default {
     headerStyle: gridUpdateWatcher,
     headerField: gridUpdateWatcher,
     headerType: gridUpdateWatcher,
-    headerAction: gridUpdateWatcher,
-    colspan: gridUpdateWatcher,
-    rowspan: gridUpdateWatcher
+    headerAction: gridUpdateWatcher
   },
   mounted () {
     this.$_CGridInstance.$_CGrid_setColumnDefine(this)
@@ -115,9 +99,7 @@ export default {
         headerField: this.headerField,
         headerType: this.headerType,
         headerAction: this.headerAction,
-        sort: this.sort,
-        colSpan: this.colspan,
-        rowSpan: this.rowspan
+        sort: this.sort
       }
     },
     /**

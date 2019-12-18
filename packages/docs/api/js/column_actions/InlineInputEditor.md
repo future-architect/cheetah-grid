@@ -133,4 +133,4 @@ grid.records = [
 
 </code-preview>
 
-<style scoped>.content >>> .al-right { text-align: right; }</style>
+<style scoped>.code-preview >>> .al-right { text-align: right; }</style>

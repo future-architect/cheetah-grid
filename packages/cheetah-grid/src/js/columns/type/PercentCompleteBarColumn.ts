@@ -1,6 +1,6 @@
 import {
   CellContext,
-  GridCanvasHelper,
+  GridCanvasHelperAPI,
   ListGridAPI,
   PercentCompleteBarColumnOption
 } from "../../ts-types";
@@ -31,7 +31,7 @@ export class PercentCompleteBarColumn<T> extends Column<T> {
     value: string,
     context: CellContext,
     style: PercentCompleteBarStyle,
-    helper: GridCanvasHelper,
+    helper: GridCanvasHelperAPI,
     grid: ListGridAPI<T>,
     info: DrawCellInfo<T>
   ): void {

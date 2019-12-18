@@ -1,6 +1,6 @@
 import { CellRange, ListGridAPI } from "../ts-types";
 import { BaseTooltip } from "./BaseTooltip";
-import { EVENT_TYPE } from "../list-grid/EVENT_TYPE";
+import { LG_EVENT_TYPE } from "../list-grid/LG_EVENT_TYPE";
 import { Tooltip } from "./Tooltip";
 import { cellInRange } from "../internal/utils";
 
@@ -93,7 +93,7 @@ export class TooltipHandler<T> {
     return cellInRange(info.range, col, row);
   }
   _bindGridEvent(grid: ListGridAPI<T>): void {
-    grid.listen(EVENT_TYPE.MOUSEOVER_CELL, e => {
+    grid.listen(LG_EVENT_TYPE.MOUSEOVER_CELL, e => {
       if (e.related) {
         if (this._isAttachCell(e.col, e.row)) {
           return;
@@ -101,7 +101,7 @@ export class TooltipHandler<T> {
       }
       this._attach(e.col, e.row);
     });
-    grid.listen(EVENT_TYPE.MOUSEOUT_CELL, e => {
+    grid.listen(LG_EVENT_TYPE.MOUSEOUT_CELL, e => {
       if (e.related) {
         if (this._isAttachCell(e.related.col, e.related.row)) {
           return;
@@ -109,19 +109,19 @@ export class TooltipHandler<T> {
       }
       this._detach();
     });
-    grid.listen(EVENT_TYPE.SELECTED_CELL, e => {
+    grid.listen(LG_EVENT_TYPE.SELECTED_CELL, e => {
       if (this._isAttachCell(e.col, e.row)) {
         this._detach();
       }
     });
-    grid.listen(EVENT_TYPE.SCROLL, () => {
+    grid.listen(LG_EVENT_TYPE.SCROLL, () => {
       const info = this._attachInfo;
       if (!info) {
         return;
       }
       this._move(info.range.start.col, info.range.start.row);
     });
-    grid.listen(EVENT_TYPE.CHANGED_VALUE, e => {
+    grid.listen(LG_EVENT_TYPE.CHANGED_VALUE, e => {
       if (this._isAttachCell(e.col, e.row)) {
         this._detach();
         this._attach(e.col, e.row);

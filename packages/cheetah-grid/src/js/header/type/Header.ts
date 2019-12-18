@@ -1,4 +1,4 @@
-import { CellContext, GridCanvasHelper, ListGridAPI } from "../../ts-types";
+import { CellContext, GridCanvasHelperAPI, ListGridAPI } from "../../ts-types";
 import { BaseHeader } from "./BaseHeader";
 import { DrawCellInfo } from "../../ts-types-internal";
 import { Style } from "../style/Style";
@@ -11,7 +11,7 @@ export class Header<T> extends BaseHeader<T> {
     value: string,
     context: CellContext,
     style: Style,
-    helper: GridCanvasHelper,
+    helper: GridCanvasHelperAPI,
     _grid: ListGridAPI<T>,
     { drawCellBase }: DrawCellInfo<T>
   ): void {

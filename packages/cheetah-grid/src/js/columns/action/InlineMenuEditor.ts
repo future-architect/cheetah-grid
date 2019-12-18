@@ -9,7 +9,7 @@ import {
 import { GridInternal, InputEditorState } from "../../ts-types-internal";
 import { array, event, obj, then } from "../../internal/utils";
 import { isDisabledRecord, isReadOnlyRecord } from "./action-utils";
-import { EVENT_TYPE } from "../../core/EVENT_TYPE";
+import { DG_EVENT_TYPE } from "../../core/DG_EVENT_TYPE";
 import { Editor } from "./Editor";
 import { InlineMenuElement } from "./internal/InlineMenuElement";
 import { getInlineMenuEditorStateId } from "../../internal/symbolManager";
@@ -120,7 +120,7 @@ export class InlineMenuEditor<T> extends Editor<T> {
       return grid.getLayoutCellId(col, row) === cellId;
     }
     return [
-      grid.listen(EVENT_TYPE.CLICK_CELL, cell => {
+      grid.listen(DG_EVENT_TYPE.CLICK_CELL, cell => {
         if (!isTarget(cell.col, cell.row)) {
           return;
         }
@@ -129,7 +129,7 @@ export class InlineMenuEditor<T> extends Editor<T> {
           row: cell.row
         });
       }),
-      grid.listen(EVENT_TYPE.KEYDOWN, (keyCode, _e) => {
+      grid.listen(DG_EVENT_TYPE.KEYDOWN, (keyCode, _e) => {
         if (keyCode !== KEY_F2 && keyCode !== KEY_ENTER) {
           return;
         }
@@ -142,15 +142,15 @@ export class InlineMenuEditor<T> extends Editor<T> {
           row: sel.row
         });
       }),
-      grid.listen(EVENT_TYPE.SELECTED_CELL, _e => {
+      grid.listen(DG_EVENT_TYPE.SELECTED_CELL, _e => {
         detachMenu();
       }),
-      grid.listen(EVENT_TYPE.SCROLL, () => {
+      grid.listen(DG_EVENT_TYPE.SCROLL, () => {
         detachMenu(true);
       }),
 
       // mouse move
-      grid.listen(EVENT_TYPE.MOUSEOVER_CELL, e => {
+      grid.listen(DG_EVENT_TYPE.MOUSEOVER_CELL, e => {
         if (
           isReadOnlyRecord(this.readOnly, grid, e.row) ||
           isDisabledRecord(this.disabled, grid, e.row)
@@ -162,7 +162,7 @@ export class InlineMenuEditor<T> extends Editor<T> {
         }
         grid.getElement().style.cursor = "pointer";
       }),
-      grid.listen(EVENT_TYPE.MOUSEMOVE_CELL, e => {
+      grid.listen(DG_EVENT_TYPE.MOUSEMOVE_CELL, e => {
         if (
           isReadOnlyRecord(this.readOnly, grid, e.row) ||
           isDisabledRecord(this.disabled, grid, e.row)
@@ -176,7 +176,7 @@ export class InlineMenuEditor<T> extends Editor<T> {
           grid.getElement().style.cursor = "pointer";
         }
       }),
-      grid.listen(EVENT_TYPE.MOUSEOUT_CELL, e => {
+      grid.listen(DG_EVENT_TYPE.MOUSEOUT_CELL, e => {
         if (!isTarget(e.col, e.row)) {
           return;
         }
@@ -184,7 +184,7 @@ export class InlineMenuEditor<T> extends Editor<T> {
       }),
 
       // paste value
-      grid.listen(EVENT_TYPE.PASTE_CELL, e => {
+      grid.listen(DG_EVENT_TYPE.PASTE_CELL, e => {
         if (e.multi) {
           // ignore multi cell values
           return;

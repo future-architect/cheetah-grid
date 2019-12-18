@@ -24,7 +24,7 @@ export abstract class BaseAction<T> {
   ): EventListenerId[] {
     return [];
   }
-  onChangeDisabledInternal(): void {
+  protected onChangeDisabledInternal(): void {
     // abstruct
   }
 }

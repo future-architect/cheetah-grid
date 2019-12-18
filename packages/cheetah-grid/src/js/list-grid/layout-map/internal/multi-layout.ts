@@ -1,34 +1,18 @@
-import * as columns from "../../columns";
-import * as headerAction from "../../header/action";
-import * as headerType from "../../header/type";
-import { CellRange, LayoutObjectId } from "../../ts-types";
+import * as columns from "../../../columns";
+import * as headerAction from "../../../header/action";
+import * as headerType from "../../../header/type";
 import {
+  CellDefine,
   ColumnData,
-  ColumnDefine,
+  HeaderBodyLayoutDefine,
+  HeaderCellDefine,
   HeaderData,
-  HeaderDefine,
+  LayoutDefine,
   LayoutMapAPI,
   WidthData
-} from "./api";
+} from "../api";
+import { CellRange, LayoutObjectId } from "../../../ts-types";
 import { EmptyDataCache } from "./utils";
-
-export interface HeaderCellDefine<T> extends HeaderDefine<T> {
-  colSpan?: number;
-  rowSpan?: number;
-}
-
-export interface CellDefine<T> extends ColumnDefine<T> {
-  colSpan?: number;
-  rowSpan?: number;
-}
-
-export type HeaderBodyLayoutDefine<T> = {
-  header: HeaderCellDefine<T>[][];
-  body: CellDefine<T>[][];
-};
-
-export type ArrayLayoutDefine<T> = CellDefine<T>[][];
-export type LayoutDefine<T> = HeaderBodyLayoutDefine<T> | ArrayLayoutDefine<T>;
 
 interface HasSpans {
   colSpan?: number;

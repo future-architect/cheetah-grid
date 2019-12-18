@@ -4,7 +4,6 @@ import { FilterDataSource } from "./data/FilterDataSource";
 
 /**
  * data modules
- * @type {Object}
  * @namespace cheetahGrid.data
  * @memberof cheetahGrid
  */

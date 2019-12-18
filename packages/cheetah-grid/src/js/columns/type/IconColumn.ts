@@ -2,7 +2,7 @@ import * as icons from "../../internal/icons";
 import {
   CellContext,
   ColumnIconOption,
-  GridCanvasHelper,
+  GridCanvasHelperAPI,
   IconColumnOption,
   ListGridAPI
 } from "../../ts-types";
@@ -48,7 +48,7 @@ export class IconColumn<T> extends Column<T> {
     value: string,
     context: CellContext,
     style: IconStyle,
-    helper: GridCanvasHelper,
+    helper: GridCanvasHelperAPI,
     grid: ListGridAPI<T>,
     info: DrawCellInfo<T>
   ): void {

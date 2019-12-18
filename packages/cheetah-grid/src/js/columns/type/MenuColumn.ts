@@ -2,7 +2,7 @@ import * as utils from "./columnUtils";
 import {
   CellContext,
   ColumnMenuItemOptions,
-  GridCanvasHelper,
+  GridCanvasHelperAPI,
   ListGridAPI,
   MenuColumnOption,
   SimpleColumnMenuItemOption
@@ -37,7 +37,7 @@ export class MenuColumn<T> extends BaseColumn<T, unknown> {
     value: string,
     context: CellContext,
     style: MenuStyle,
-    helper: GridCanvasHelper,
+    helper: GridCanvasHelperAPI,
     _grid: ListGridAPI<T>,
     { drawCellBase, getIcon }: DrawCellInfo<T>
   ): void {

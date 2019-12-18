@@ -1,4 +1,4 @@
-import { CellContext, ColorDef, GridCanvasHelper } from "../../ts-types";
+import { CellContext, ColorDef, GridCanvasHelperAPI } from "../../ts-types";
 import { Rect } from "../../internal/Rect";
 export function drawExclamationMarkBox(
   context: CellContext,
@@ -6,7 +6,7 @@ export function drawExclamationMarkBox(
     bgColor: ColorDef;
     color?: ColorDef;
   },
-  helper: GridCanvasHelper
+  helper: GridCanvasHelperAPI
 ): void {
   const { bgColor, color } = style;
   const ctx = context.getContext();
@@ -40,7 +40,7 @@ export function drawInfomationMarkBox(
     bgColor: ColorDef;
     color: ColorDef;
   },
-  helper: GridCanvasHelper
+  helper: GridCanvasHelperAPI
 ): void {
   const { bgColor, color } = style;
   const ctx = context.getContext();

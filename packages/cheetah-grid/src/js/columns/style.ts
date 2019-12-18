@@ -22,14 +22,9 @@ import { NumberStyle } from "./style/NumberStyle";
 import { PercentCompleteBarStyle } from "./style/PercentCompleteBarStyle";
 import { Style } from "./style/Style";
 
-/**
- * column styles
- * @type {Object}
- * @namespace cheetahGrid.columns.style
- * @memberof cheetahGrid.columns
- */
-export const { EVENT_TYPE } = BaseStyle;
+const { EVENT_TYPE } = BaseStyle;
 export {
+  EVENT_TYPE,
   BaseStyle,
   Style,
   NumberStyle,

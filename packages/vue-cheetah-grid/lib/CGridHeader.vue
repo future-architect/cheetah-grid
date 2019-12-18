@@ -6,39 +6,80 @@
 </template>
 
 <script>
-import ColumnMixin from './c-grid/ColumnMixin.vue'
+import LayoutColumnMixin from './c-grid/LayoutColumnMixin.vue'
 import { extend, gridUpdateWatcher } from './c-grid/utils'
 
 /**
  * Defines layout header.
+ * Can be used in the `layout-header` slot of `CGrid`.
  * @mixin column-mixin
+ * @mixin layout-column-mixin
  */
 export default {
   name: 'CGridHeader',
-  mixins: [ColumnMixin],
+  mixins: [LayoutColumnMixin],
   props: {
     /**
-     * Defines a button caption
+     * Defines a header caption
      */
     caption: {
       type: [String],
       default: ''
+    },
+    /**
+     * Defines a default column width
+     */
+    width: {
+      type: [Number, String],
+      default: undefined
+    },
+    /**
+     * Defines a column min width
+     */
+    minWidth: {
+      type: [Number, String],
+      default: undefined
+    },
+    /**
+     * Defines a column max width
+     */
+    maxWidth: {
+      type: [Number, String],
+      default: undefined
+    },
+    /**
+     * Defines the layout colspan.
+     */
+    colspan: {
+      type: [Number, String],
+      default: undefined
+    },
+    /**
+     * Defines the layout rowspan.
+     */
+    rowspan: {
+      type: [Number, String],
+      default: undefined
     }
   },
   watch: {
-    columnType: gridUpdateWatcher,
-    action: gridUpdateWatcher
+    width: gridUpdateWatcher,
+    minWidth: gridUpdateWatcher,
+    maxWidth: gridUpdateWatcher
   },
   methods: {
     /**
      * @private
      */
     createColumn () {
-      const baseCol = ColumnMixin.methods.createColumn.apply(this)
+      const baseCol = LayoutColumnMixin.methods.createColumn.apply(this)
       return extend(
         baseCol,
         {
-          caption: this.caption || this.$el.textContent.trim()
+          caption: this.caption || this.$el.textContent.trim(),
+          width: this.width,
+          minWidth: this.minWidth,
+          maxWidth: this.maxWidth
         }
       )
     }

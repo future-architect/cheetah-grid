@@ -12,6 +12,7 @@ import { extend } from './c-grid/utils'
 
 /**
  * Defines multiple header.
+ * Can be used in the `default` slot of `CGrid`.
  * @mixin column-mixin
  */
 export default {

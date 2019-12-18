@@ -134,61 +134,6 @@ grid.theme = userTheme;
 
 </code-preview>
 
-## Vue component
-
-In the Vue component, set it as follows.
-
-<code-preview :data="{createGrid}">
-
-```vue
-<div class="demo-grid middle">
-  <c-grid
-    :data="records"
-    :theme="userTheme"> <!-- set theme -->
-    <c-grid-check-column field="check" :width="50"/>
-    <c-grid-column field="personid" width= "85">ID</c-grid-column>
-    <c-grid-column-group caption="Name">
-      <c-grid-input-column field="fname" width="20%" min-width="150" :sort="true">First Name</c-grid-input-column>
-      <c-grid-input-column field="lname" width="20%" min-width="150" :sort="true">Last Name</c-grid-input-column>
-    </c-grid-column-group>
-    <c-grid-button-column caption="SHOW REC" width="120" @click="onClickRecord" />
-  </c-grid>
-</div>
-```
-
-```js
-export default {
-  name: 'App',
-  data() {
-    return {
-      records,
-      // you can set the theme name or object.
-      // userTheme: 'BASIC',
-      userTheme: {
-        color: '#2c3e50',
-        frozenRowsColor: '#2c3e50',
-        frozenRowsBgColor: '#40b883',
-        borderColor: '#35495e',
-        frozenRowsBorderColor: '#35495e',
-        checkbox: {
-          checkBgColor: '#35495e',
-          borderColor: '#35495e',
-        },
-        button: {
-          color: '#FFF',
-          bgColor: '#2c3e50',
-        },
-      }
-    };
-  },
-  methods: {
-    onClickRecord(rec) { alert(JSON.stringify(rec)); }
-  }
-};
-```
-
-</code-preview>
-
 <script>
 const girdInstances = [];
 function createGrid(parentElement) {

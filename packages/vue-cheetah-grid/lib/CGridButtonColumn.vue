@@ -6,18 +6,19 @@
 </template>
 
 <script>
-import ColumnMixin from './c-grid/ColumnMixin.vue'
+import LayoutColumnMixin from './c-grid/LayoutColumnMixin.vue'
 import StdColumnMixin from './c-grid/StdColumnMixin.vue'
 import { cheetahGrid, extend } from './c-grid/utils'
 
 /**
  * Defines button column.
  * @mixin column-mixin
+ * @mixin layout-column-mixin
  * @mixin std-column-mixin
  */
 export default {
   name: 'CGridButtonColumn',
-  mixins: [ColumnMixin, StdColumnMixin],
+  mixins: [LayoutColumnMixin, StdColumnMixin],
   props: {
     /**
      * Defines a button caption
@@ -47,7 +48,7 @@ export default {
      * @override
      */
     getPropsObjectInternal () {
-      const props = ColumnMixin.methods.getPropsObjectInternal.apply(this)
+      const props = LayoutColumnMixin.methods.getPropsObjectInternal.apply(this)
       delete props.disabled
       return props
     },
@@ -64,7 +65,7 @@ export default {
         },
         disabled: this.disabled
       })
-      const baseCol = ColumnMixin.methods.createColumn.apply(this)
+      const baseCol = LayoutColumnMixin.methods.createColumn.apply(this)
       const stdCol = StdColumnMixin.methods.createColumn.apply(this)
       return extend(
         baseCol,

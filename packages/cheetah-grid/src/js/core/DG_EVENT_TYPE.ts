@@ -20,7 +20,12 @@ export interface DrawGridEvents {
   FOCUS_GRID: "focus_grid";
   BLUR_GRID: "blur_grid";
 }
-export const EVENT_TYPE: DrawGridEvents = {
+/**
+ * DrawGrid event types
+ * @classdesc cheetahGrid.core.EVENT_TYPE
+ * @memberof cheetahGrid.core
+ */
+export const DG_EVENT_TYPE: DrawGridEvents = {
   CLICK_CELL: "click_cell",
   DBLCLICK_CELL: "dblclick_cell",
   DBLTAP_CELL: "dbltap_cell",
@@ -41,4 +46,4 @@ export const EVENT_TYPE: DrawGridEvents = {
   SCROLL: "scroll",
   FOCUS_GRID: "focus_grid",
   BLUR_GRID: "blur_grid"
-};
+} as DrawGridEvents;

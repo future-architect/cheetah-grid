@@ -1,20 +1,16 @@
-import * as columns from "../../columns";
-import * as headerAction from "../../header/action";
-import * as headerType from "../../header/type";
-import { CellRange, LayoutObjectId } from "../../ts-types";
+import * as columns from "../../../columns";
+import * as headerAction from "../../../header/action";
+import * as headerType from "../../../header/type";
+import { CellRange, LayoutObjectId } from "../../../ts-types";
 import {
   ColumnData,
   ColumnDefine,
+  GroupHeaderDefine,
   HeaderData,
-  HeaderDefine,
+  HeadersDefine,
   LayoutMapAPI
-} from "./api";
+} from "../api";
 import { EmptyDataCache } from "./utils";
-
-export interface GroupHeaderDefine<T> extends HeaderDefine<T> {
-  columns: HeadersDefine<T>;
-}
-export type HeadersDefine<T> = (GroupHeaderDefine<T> | ColumnDefine<T>)[];
 
 let seqId = 0;
 export class SimpleHeaderLayoutMap<T> implements LayoutMapAPI<T> {

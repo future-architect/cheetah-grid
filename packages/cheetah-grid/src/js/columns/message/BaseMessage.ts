@@ -1,7 +1,7 @@
 import {
   CellContext,
   ColumnStyle,
-  GridCanvasHelper,
+  GridCanvasHelperAPI,
   ListGridAPI,
   MessageObject
 } from "../../ts-types";
@@ -32,7 +32,7 @@ export abstract class BaseMessage<T> {
     message: MessageObject,
     context: CellContext,
     style: ColumnStyle,
-    helper: GridCanvasHelper,
+    helper: GridCanvasHelperAPI,
     grid: ListGridAPI<T>,
     info: DrawCellInfo<T>
   ): void;
@@ -52,7 +52,7 @@ export abstract class BaseMessage<T> {
     message: MessageObject,
     context: CellContext,
     style: ColumnStyle,
-    helper: GridCanvasHelper,
+    helper: GridCanvasHelperAPI,
     grid: ListGridAPI<T>,
     info: DrawCellInfo<T>
   ): void {

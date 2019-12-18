@@ -1,7 +1,7 @@
 import { CellAddress, FieldDef } from "../ts-types/grid";
 import {
   CellContext,
-  GridCanvasHelper,
+  GridCanvasHelperAPI,
   ListGridAPI
 } from "../ts-types/grid-engine";
 import { ColorPropertyDefine, ColumnIconOption } from "../ts-types/define";
@@ -17,7 +17,7 @@ export interface MessageHandler<T> {
     message: Message,
     context: CellContext,
     style: ColumnStyle,
-    helper: GridCanvasHelper,
+    helper: GridCanvasHelperAPI,
     grid: ListGridAPI<T>,
     info: DrawCellInfo<T>
   ): void;

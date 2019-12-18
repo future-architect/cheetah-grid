@@ -1,11 +1,22 @@
 <template>
   <div class="c-grid">
     <div class="define">
-      <!-- Use this slot to set the simple header definition -->
+      <!--
+        Use this slot to set the simple header definition.
+        The definition is set to `header` property described in [Define Headers and Columns]
+      -->
       <slot />
-      <!-- Use this slot to set the layout header definition -->
+      <!--
+        Use this slot to set the layout header definition.
+        Use this slot in combination with the `layout-body` slot.
+        The definition is set to `layout.header` property described in [Advanced Layout].
+      -->
       <slot name="layout-header" />
-      <!-- Use this slot to set the layout body definition -->
+      <!--
+        Use this slot to set the layout body definition.
+        Use this slot in combination with the `layout-header` slot.
+        The definition is set to `layout.body` property described in [Advanced Layout].
+      -->
       <slot name="layout-body" />
     </div>
   </div>
@@ -92,7 +103,7 @@ function _bindEvents (vm, grid) {
             })
           }
         } else {
-          const define = grid.getColumnDefine(col)
+          const define = grid.getColumnDefine(col, row)
           if (define && define.vm) {
             define.vm.$emit(emitType, ...args, (r) => {
               results.push(r)

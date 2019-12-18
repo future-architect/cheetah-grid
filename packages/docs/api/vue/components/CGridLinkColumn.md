@@ -32,6 +32,7 @@ Use this slot to set the header caption
 | column-style | `object`&#124;`string`&#124;`function`  | Defines a column style | `undefined` |
 | caption | `string`  | Defines a header caption | `''` |
 | disabled | `boolean`&#124;`function`  | Defines disabled | `false` |
+| colspan | `number`&#124;`string`  | Defines the layout colspan.<br>This property can be used when defining in the `layout-header` and `layout-body` slots. | `undefined` |
 | filter | `string`&#124;`function`  | Defines a vue filter name | `undefined` |
 | header-action | `object`&#124;`string`&#124;`function`  | Defines a column header action | `undefined` |
 | header-field | `string`  | Defines a column header data field | `undefined` |
@@ -40,6 +41,7 @@ Use this slot to set the header caption
 | href | `string`&#124;`function`  | Defines a href | `undefined` |
 | icon | `object`&#124;`string`&#124;`function`  | Defines an icon | `undefined` |
 | message | `object`&#124;`string`&#124;`function`  | Defines a Message generation method | `undefined` |
+| rowspan | `number`&#124;`string`  | Defines the layout rowspan.<br>This property can be used when defining in the `layout-header` and `layout-body` slots. | `undefined` |
 | sort | `string`&#124;`function`&#124;`boolean`  | Defines a sort | `undefined` |
 | target | `string`  | Defines an anchor target | `undefined` |
 

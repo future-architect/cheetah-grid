@@ -6,18 +6,19 @@
 </template>
 
 <script>
-import ColumnMixin from './c-grid/ColumnMixin.vue'
+import LayoutColumnMixin from './c-grid/LayoutColumnMixin.vue'
 import StdColumnMixin from './c-grid/StdColumnMixin.vue'
 import { cheetahGrid, extend, normalizeColumnType, gridUpdateWatcher } from './c-grid/utils'
 
 /**
  * Defines link column.
  * @mixin column-mixin
+ * @mixin layout-column-mixin
  * @mixin std-column-mixin
  */
 export default {
   name: 'CGridLinkColumn',
-  mixins: [ColumnMixin, StdColumnMixin],
+  mixins: [LayoutColumnMixin, StdColumnMixin],
   props: {
     /**
      * Defines a column type
@@ -64,7 +65,7 @@ export default {
      * @override
      */
     getPropsObjectInternal () {
-      const props = ColumnMixin.methods.getPropsObjectInternal.apply(this)
+      const props = LayoutColumnMixin.methods.getPropsObjectInternal.apply(this)
       delete props.disabled
       return props
     },
@@ -86,7 +87,7 @@ export default {
         })
       const columnType = normalizeColumnType(this.columnType)
 
-      const baseCol = ColumnMixin.methods.createColumn.apply(this)
+      const baseCol = LayoutColumnMixin.methods.createColumn.apply(this)
       const stdCol = StdColumnMixin.methods.createColumn.apply(this)
       return extend(
         baseCol,

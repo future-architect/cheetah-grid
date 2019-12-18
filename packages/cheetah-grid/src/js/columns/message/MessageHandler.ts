@@ -2,15 +2,15 @@ import { MessageHandler as Base, DrawCellInfo } from "../../ts-types-internal";
 import {
   CellContext,
   ColumnStyle,
-  GridCanvasHelper,
+  GridCanvasHelperAPI,
   ListGridAPI,
   Message,
   MessageObject
 } from "../../ts-types";
 import { BaseMessage } from "./BaseMessage";
-import { EVENT_TYPE } from "../../list-grid/EVENT_TYPE";
 import { ErrorMessage } from "./ErrorMessage";
 import { InfoMessage } from "./InfoMessage";
+import { LG_EVENT_TYPE } from "../../list-grid/LG_EVENT_TYPE";
 import { WarningMessage } from "./WarningMessage";
 import { isPromise } from "../../internal/utils";
 
@@ -89,7 +89,7 @@ export class MessageHandler<T> implements Base<T> {
     message: Message,
     context: CellContext,
     style: ColumnStyle,
-    helper: GridCanvasHelper,
+    helper: GridCanvasHelperAPI,
     grid: ListGridAPI<T>,
     info: DrawCellInfo<T>
   ): void {
@@ -144,7 +144,7 @@ export class MessageHandler<T> implements Base<T> {
         this._attach(sel.col, sel.row, message);
       }
     };
-    grid.listen(EVENT_TYPE.SELECTED_CELL, e => {
+    grid.listen(LG_EVENT_TYPE.SELECTED_CELL, e => {
       if (!e.selected) {
         return;
       }
@@ -153,22 +153,22 @@ export class MessageHandler<T> implements Base<T> {
       }
       onSelectMessage(e);
     });
-    grid.listen(EVENT_TYPE.SCROLL, () => {
+    grid.listen(LG_EVENT_TYPE.SCROLL, () => {
       const sel = grid.selection.select;
       this._move(sel.col, sel.row);
     });
-    grid.listen(EVENT_TYPE.CHANGED_VALUE, e => {
+    grid.listen(LG_EVENT_TYPE.CHANGED_VALUE, e => {
       const sel = grid.selection.select;
       if (sel.col !== e.col || sel.row !== e.row) {
         return;
       }
       onSelectMessage(e);
     });
-    grid.listen(EVENT_TYPE.FOCUS_GRID, _e => {
+    grid.listen(LG_EVENT_TYPE.FOCUS_GRID, _e => {
       const sel = grid.selection.select;
       onSelectMessage(sel);
     });
-    grid.listen(EVENT_TYPE.BLUR_GRID, _e => {
+    grid.listen(LG_EVENT_TYPE.BLUR_GRID, _e => {
       this._detach();
     });
   }

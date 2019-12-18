@@ -73,7 +73,34 @@ export interface ColumnData<T> extends WidthData {
   define: ColumnDefine<T>;
 }
 
-export interface LayoutMapAPI<T> {
+// Simple header
+
+export interface GroupHeaderDefine<T> extends HeaderDefine<T> {
+  columns: HeadersDefine<T>;
+}
+export type HeadersDefine<T> = (GroupHeaderDefine<T> | ColumnDefine<T>)[];
+
+// Advanced layout
+
+export interface HeaderCellDefine<T> extends HeaderDefine<T> {
+  colSpan?: number;
+  rowSpan?: number;
+}
+
+export interface CellDefine<T> extends ColumnDefine<T> {
+  colSpan?: number;
+  rowSpan?: number;
+}
+
+export type HeaderBodyLayoutDefine<T> = {
+  header: HeaderCellDefine<T>[][];
+  body: CellDefine<T>[][];
+};
+
+export type ArrayLayoutDefine<T> = CellDefine<T>[][];
+export type LayoutDefine<T> = HeaderBodyLayoutDefine<T> | ArrayLayoutDefine<T>;
+
+interface LayoutMapAPI<T> {
   readonly headerRowCount: number;
   readonly bodyRowCount: number;
   readonly colCount: number;
@@ -90,3 +117,5 @@ export interface LayoutMapAPI<T> {
   getRecordIndexByRow(row: number): number;
   getRecordStartRowByRecordIndex(index: number): number;
 }
+
+export { LayoutMapAPI };

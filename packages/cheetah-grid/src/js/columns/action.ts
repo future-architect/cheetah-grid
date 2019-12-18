@@ -42,7 +42,6 @@ export const ACTIONS = {
 };
 /**
  * column actions
- * @type {Object}
  * @namespace cheetahGrid.columns.action
  * @memberof cheetahGrid.columns
  */

@@ -4,12 +4,12 @@ import * as fonts from "./internal/fonts";
 import * as inlineUtils from "./element/inlines";
 import * as themes from "./themes";
 import {
-  GridCanvasHelper as Base,
   CellContext,
   ColorDef,
   ColorPropertyDefine,
   ColorsPropertyDefine,
   FontPropertyDefine,
+  GridCanvasHelperAPI,
   LineClamp,
   ListGridAPI,
   RectProps,
@@ -770,7 +770,7 @@ function strokeRect(
   }
 }
 
-export class GridCanvasHelper<T> implements Base {
+export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
   private _grid: ListGridAPI<T>;
   private _theme: RequiredThemeDefine;
   constructor(grid: ListGridAPI<T>) {

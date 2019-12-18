@@ -2,7 +2,7 @@ import * as styleContents from "../style";
 import {
   CellContext,
   EventListenerId,
-  GridCanvasHelper,
+  GridCanvasHelperAPI,
   HeaderStyleOption,
   LayoutObjectId,
   ListGridAPI
@@ -44,7 +44,7 @@ export abstract class BaseHeader<T> {
     value: string,
     context: CellContext,
     style: BaseStyle,
-    helper: GridCanvasHelper,
+    helper: GridCanvasHelperAPI,
     grid: ListGridAPI<T>,
     info: DrawCellInfo<T>
   ): void;

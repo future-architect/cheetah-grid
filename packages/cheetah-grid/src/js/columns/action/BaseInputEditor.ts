@@ -6,7 +6,7 @@ import {
   ListGridAPI
 } from "../../ts-types";
 import { isDisabledRecord, isReadOnlyRecord } from "./action-utils";
-import { EVENT_TYPE } from "../../core/EVENT_TYPE";
+import { DG_EVENT_TYPE } from "../../core/DG_EVENT_TYPE";
 import { Editor } from "./Editor";
 import { event } from "../../internal/utils";
 const KEY_ENTER = 13;
@@ -62,7 +62,7 @@ export abstract class BaseInputEditor<T> extends Editor<T> {
       return grid.getLayoutCellId(col, row) === cellId;
     }
     return [
-      grid.listen(EVENT_TYPE.INPUT_CELL, e => {
+      grid.listen(DG_EVENT_TYPE.INPUT_CELL, e => {
         if (!isTarget(e.col, e.row)) {
           return;
         }
@@ -74,7 +74,7 @@ export abstract class BaseInputEditor<T> extends Editor<T> {
           e.value
         );
       }),
-      grid.listen(EVENT_TYPE.PASTE_CELL, e => {
+      grid.listen(DG_EVENT_TYPE.PASTE_CELL, e => {
         if (e.multi) {
           // ignore multi cell values
           return;
@@ -91,7 +91,7 @@ export abstract class BaseInputEditor<T> extends Editor<T> {
           e.normalizeValue
         );
       }),
-      grid.listen(EVENT_TYPE.DBLCLICK_CELL, cell => {
+      grid.listen(DG_EVENT_TYPE.DBLCLICK_CELL, cell => {
         if (!isTarget(cell.col, cell.row)) {
           return;
         }
@@ -100,7 +100,7 @@ export abstract class BaseInputEditor<T> extends Editor<T> {
           row: cell.row
         });
       }),
-      grid.listen(EVENT_TYPE.DBLTAP_CELL, e => {
+      grid.listen(DG_EVENT_TYPE.DBLTAP_CELL, e => {
         if (!isTarget(e.col, e.row)) {
           return;
         }
@@ -111,7 +111,7 @@ export abstract class BaseInputEditor<T> extends Editor<T> {
 
         event.cancel(e.event);
       }),
-      grid.listen(EVENT_TYPE.KEYDOWN, (keyCode, _e) => {
+      grid.listen(DG_EVENT_TYPE.KEYDOWN, (keyCode, _e) => {
         if (keyCode !== KEY_F2 && keyCode !== KEY_ENTER) {
           return;
         }
@@ -124,17 +124,17 @@ export abstract class BaseInputEditor<T> extends Editor<T> {
           row: sel.row
         });
       }),
-      grid.listen(EVENT_TYPE.SELECTED_CELL, e => {
+      grid.listen(DG_EVENT_TYPE.SELECTED_CELL, e => {
         this.onChangeSelectCellInternal(
           grid,
           { col: e.col, row: e.row },
           e.selected
         );
       }),
-      grid.listen(EVENT_TYPE.SCROLL, () => {
+      grid.listen(DG_EVENT_TYPE.SCROLL, () => {
         this.onGridScrollInternal(grid);
       }),
-      grid.listen(EVENT_TYPE.EDITABLEINPUT_CELL, cell => {
+      grid.listen(DG_EVENT_TYPE.EDITABLEINPUT_CELL, cell => {
         if (!isTarget(cell.col, cell.row)) {
           return false;
         }
@@ -146,7 +146,7 @@ export abstract class BaseInputEditor<T> extends Editor<T> {
         }
         return true;
       }),
-      grid.listen(EVENT_TYPE.MODIFY_STATUS_EDITABLEINPUT_CELL, cell => {
+      grid.listen(DG_EVENT_TYPE.MODIFY_STATUS_EDITABLEINPUT_CELL, cell => {
         if (!isTarget(cell.col, cell.row)) {
           return;
         }

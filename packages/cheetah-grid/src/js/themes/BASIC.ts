@@ -58,7 +58,6 @@ function FROZEN_ROWS_BG_COLOR(args: StylePropertyFunctionArg): CanvasGradient {
 /**
  * basic theme
  * @name BASIC
- * @type {Object}
  * @memberof cheetahGrid.themes.choices
  */
 export default {

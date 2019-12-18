@@ -5,7 +5,7 @@ sidebarDepth: 3
 
 # ${componentName}
 
-${comp.description}
+${unindent(comp.description)}
 `
 }
 
@@ -13,7 +13,7 @@ function createSlot (slot) {
   return `
 ### \`${slot.name}\` slot
 
-${slot.description}
+${unindent(slot.description)}
 `
 }
 
@@ -31,6 +31,7 @@ function createProps (comp) {
     const defaultKeyword = prop.keywords.find(({ name, description }) => name === 'default' && description)
     const defaultValue = defaultKeyword
       ? defaultKeyword.description
+      // eslint-disable-next-line no-prototype-builtins
       : prop.value.hasOwnProperty('default')
         ? parseValue(prop.value.default)
         : undefined
@@ -42,7 +43,7 @@ function createProps (comp) {
       .replace('`Function`', '`function`')
       .replace('`Object`', '`object`')
 
-    list.push(`| ${prop.name} | ${typeMd}  | ${prop.description} | \`${defaultValue}\` |`)
+    list.push(`| ${prop.name} | ${typeMd}  | ${prop.description.replace(/\r?\n/g, '<br>')} | \`${defaultValue}\` |`)
   }
 
   let md = ''
@@ -74,7 +75,7 @@ function createData (comp) {
       const typeKeyword = data.keywords.find(k => k.name === 'type')
       const type = (typeKeyword && typeKeyword.description.replace(/\{(.+?)\}/, '$1')) || '---'
 
-      dataTable.push(`| ${data.name} | ${type} | \`${JSON.stringify(data.value)}\` | ${data.description} |`)
+      dataTable.push(`| ${data.name} | ${type} | \`${JSON.stringify(data.value)}\` | ${data.description.replace(/\r?\n/g, '<br>')} |`)
     }
   }
   const md = `
@@ -89,7 +90,7 @@ function createEvents (comp) {
   const events = []
   for (const event of comp.events) {
     if (event.description) {
-      events.push(`| ${event.name} | ${event.description} |`)
+      events.push(`| ${event.name} | ${event.description.replace(/\r?\n/g, '<br>')} |`)
     }
   }
   const md = `
@@ -106,7 +107,7 @@ function createMethods (comp) {
     const r = /\{(.+)\}/.exec(method.return.desc)
     const type = (r ? r[1] : '---').replace(/^void$/i, '---')
 
-    methods.push(`| ${method.name} | ${type} | ${method.description} |`)
+    methods.push(`| ${method.name} | ${type} | ${method.description.replace(/\r?\n/g, '<br>')} |`)
   }
   const md = `
 | Name        | Return Type | Description         |
@@ -202,4 +203,15 @@ function parseType (type) {
       .join('|')
   }
   return `\`${type}\``
+}
+
+/**
+ * @param {string} str string
+ */
+function unindent (str) {
+  const lines = str.split(/\r?\n/g)
+
+  return lines
+    .map((line, i) => line.replace(/^\s+/, '') + (i === lines.length - 1 ? '' : '  '))
+    .join('\n')
 }

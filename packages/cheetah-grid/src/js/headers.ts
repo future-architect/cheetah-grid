@@ -4,7 +4,6 @@ import * as type from "./header/type";
 
 /**
  * header classes
- * @type {Object}
  * @namespace cheetahGrid.headers
  * @memberof cheetahGrid
  */

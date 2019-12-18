@@ -5,7 +5,7 @@ import {
   SortOption
 } from "../ts-types";
 import { BaseAction } from "./action/BaseAction";
-import { BaseHeaderDefine } from "../internal/layout-map/api";
+import { BaseHeaderDefine } from "../list-grid/layout-map/api";
 import { CheckHeaderAction } from "./action/CheckHeaderAction";
 import { SortHeaderAction } from "./action/SortHeaderAction";
 
@@ -28,7 +28,6 @@ export const ACTIONS = {
 };
 /**
  * column actions
- * @type {Object}
  * @namespace cheetahGrid.columns.action
  * @memberof cheetahGrid.columns
  */

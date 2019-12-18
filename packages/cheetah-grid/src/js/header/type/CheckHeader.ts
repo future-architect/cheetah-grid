@@ -1,7 +1,7 @@
 import {
   CellContext,
   ColorPropertyDefine,
-  GridCanvasHelper
+  GridCanvasHelperAPI
 } from "../../ts-types";
 import {
   CheckHeaderState,
@@ -35,7 +35,7 @@ export class CheckHeader<T> extends BaseHeader<T> {
     value: string,
     context: CellContext,
     style: CheckHeaderStyle,
-    helper: GridCanvasHelper,
+    helper: GridCanvasHelperAPI,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     grid: GridInternal<T>,
     { drawCellBase }: DrawCellInfo<T>

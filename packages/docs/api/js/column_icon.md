@@ -306,4 +306,4 @@ grid.records = [
 
 </code-preview>
 
-<style scoped>.content >>> .fa { width: 16px; }</style>
+<style scoped>.code-preview >>> .fa { width: 16px; }</style>

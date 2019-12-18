@@ -1,4 +1,4 @@
-import { AnyFunction, Inline as Base, ColorDef, RectProps } from "../ts-types";
+import { AnyFunction, ColorDef, InlineAPI, RectProps } from "../ts-types";
 import { GenWordsResult, isDef, str } from "../internal/utils";
 import { Canvashelper } from "../tools/canvashelper";
 
@@ -59,7 +59,7 @@ export type InlineDrawOption = {
   offsetTop: number;
   offsetBottom: number;
 };
-export class Inline implements Base {
+export class Inline implements InlineAPI {
   private _content: string;
   constructor(content?: string) {
     this._content = isDef(content) ? content : "";

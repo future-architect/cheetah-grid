@@ -24,7 +24,7 @@ import {
   isPromise
 } from "../internal/utils";
 
-import { EVENT_TYPE } from "./EVENT_TYPE";
+import { DG_EVENT_TYPE } from "./DG_EVENT_TYPE";
 import { EventHandler } from "../internal/EventHandler";
 import { EventTarget } from "./EventTarget";
 import { NumberMap } from "../internal/NumberMap";
@@ -64,10 +64,10 @@ function _vibrate(e: TouchEvent | MouseEvent): void {
   }
 }
 function _getTargetRowAt(
-  grid: DrawGrid,
+  this: DrawGrid,
   absoluteY: number
 ): { row: number; top: number } | null {
-  const internal = grid.getTargetRowAtInternal(absoluteY);
+  const internal = this.getTargetRowAtInternal(absoluteY);
   if (isDef(internal)) {
     return internal;
   }
@@ -80,7 +80,7 @@ function _getTargetRowAt(
   } | null => {
     let bottom = startBottom;
     for (let row = startRow; row >= 0; row--) {
-      const height = _getRowHeight(grid, row);
+      const height = _getRowHeight.call(this, row);
       const top = bottom - height;
       if (top <= absoluteY && absoluteY < bottom) {
         return {
@@ -99,10 +99,10 @@ function _getTargetRowAt(
     top: number;
     row: number;
   } | null => {
-    let top = startBottom - _getRowHeight(grid, startRow);
-    const { rowCount } = grid[_];
+    let top = startBottom - _getRowHeight.call(this, startRow);
+    const { rowCount } = this[_];
     for (let row = startRow; row < rowCount; row++) {
-      const height = _getRowHeight(grid, row);
+      const height = _getRowHeight.call(this, row);
       const bottom = top + height;
       if (top <= absoluteY && absoluteY < bottom) {
         return {
@@ -115,10 +115,10 @@ function _getTargetRowAt(
     return null;
   };
   const candRow = Math.min(
-    Math.ceil(absoluteY / grid[_].defaultRowHeight),
-    grid.rowCount - 1
+    Math.ceil(absoluteY / this[_].defaultRowHeight),
+    this.rowCount - 1
   );
-  const bottom = _getRowsHeight(grid, 0, candRow);
+  const bottom = _getRowsHeight.call(this, 0, candRow);
   if (absoluteY >= bottom) {
     return findAfter(candRow, bottom);
   } else {
@@ -160,7 +160,7 @@ function _getTargetFrozenRowAt(
   let { top } = grid[_].scroll;
   const rowCount = grid[_].frozenRowCount;
   for (let row = 0; row < rowCount; row++) {
-    const height = _getRowHeight(grid, row);
+    const height = _getRowHeight.call(grid, row);
     const bottom = top + height;
     if (bottom > absoluteY) {
       return {
@@ -205,7 +205,7 @@ function _getFrozenRowsRect(grid: DrawGrid): Rect | null {
   let height = 0;
   const rowCount = grid[_].frozenRowCount;
   for (let row = 0; row < rowCount; row++) {
-    height += _getRowHeight(grid, row);
+    height += _getRowHeight.call(grid, row);
   }
   return new Rect(grid[_].scroll.left, top, grid[_].canvas.width, height);
 }
@@ -252,7 +252,7 @@ function _removeCellDrawing(grid: DrawGrid, col: number, row: number): void {
   }
 }
 function _drawCell(
-  grid: DrawGrid,
+  this: DrawGrid,
   ctx: CanvasRenderingContext2D,
   col: number,
   absoluteLeft: number,
@@ -282,7 +282,7 @@ function _drawCell(
   if (drawRect.height > 0 && drawRect.width > 0) {
     ctx.save();
     try {
-      const cellDrawing = _getCellDrawing(grid, col, row);
+      const cellDrawing = _getCellDrawing(this, col, row);
       if (cellDrawing) {
         cellDrawing.cancel();
       }
@@ -293,17 +293,17 @@ function _drawCell(
         rect,
         drawRect,
         !!cellDrawing,
-        grid[_].selection,
+        this[_].selection,
         drawLayers
       );
-      const p = grid.onDrawCell(col, row, dcContext);
+      const p = this.onDrawCell(col, row, dcContext);
       if (isPromise(p)) {
         //遅延描画
-        _putCellDrawing(grid, col, row, dcContext);
+        _putCellDrawing(this, col, row, dcContext);
 
         const pCol = col;
-        dcContext._delayMode(grid, () => {
-          _removeCellDrawing(grid, pCol, row);
+        dcContext._delayMode(this, () => {
+          _removeCellDrawing(this, pCol, row);
         });
         p.then(() => {
           dcContext.terminate();
@@ -357,7 +357,7 @@ function _drawRow(
     for (let { col } = initFrozenCol; col < count; col++) {
       const width = _getColWidth(grid, col);
 
-      _drawCell(
+      _drawCell.call(
         grid,
         ctx,
         col,
@@ -385,7 +385,7 @@ function _drawRow(
   let absoluteLeft = initCol.left;
   for (let { col } = initCol; col < colCount; col++) {
     const width = _getColWidth(grid, col);
-    _drawCell(
+    _drawCell.call(
       grid,
       ctx,
       col,
@@ -409,16 +409,19 @@ function _drawRow(
   }
   drawOuter(colCount - 1, absoluteLeft);
 }
+function _getInitContext(this: DrawGrid): CanvasRenderingContext2D {
+  return this._getInitContext();
+}
 function _invalidateRect(grid: DrawGrid, drawRect: Rect): void {
   const visibleRect = _getVisibleRect(grid);
   const { rowCount } = grid[_];
-  const ctx = grid._getInitContext();
+  const ctx = _getInitContext.call(grid);
 
-  const initRow = _getTargetRowAt(
+  const initRow = _getTargetRowAt.call(
     grid,
     Math.max(visibleRect.top, drawRect.top)
   ) || {
-    top: _getRowsHeight(grid, 0, rowCount - 1),
+    top: _getRowsHeight.call(grid, 0, rowCount - 1),
     row: rowCount
   };
   const initCol = _getTargetColAt(
@@ -468,7 +471,7 @@ function _invalidateRect(grid: DrawGrid, drawRect: Rect): void {
     let absoluteTop = initFrozenRow.top;
     const count = grid[_].frozenRowCount;
     for (let { row } = initFrozenRow; row < count; row++) {
-      const height = _getRowHeight(grid, row);
+      const height = _getRowHeight.call(grid, row);
       _drawRow(
         grid,
         ctx,
@@ -495,7 +498,7 @@ function _invalidateRect(grid: DrawGrid, drawRect: Rect): void {
 
   let absoluteTop = initRow.top;
   for (let { row } = initRow; row < rowCount; row++) {
-    const height = _getRowHeight(grid, row);
+    const height = _getRowHeight.call(grid, row);
 
     //行の描画
     _drawRow(
@@ -760,33 +763,33 @@ function _getColsWidth(
   return w;
 }
 
-function _getRowHeight(grid: DrawGrid, row: number): number {
-  const internal = grid.getRowHeightInternal(row);
+function _getRowHeight(this: DrawGrid, row: number): number {
+  const internal = this.getRowHeightInternal(row);
   if (isDef(internal)) {
     return internal;
   }
-  const height = grid[_].rowHeightsMap.get(row);
+  const height = this[_].rowHeightsMap.get(row);
   if (height) {
     return height;
   }
-  return grid[_].defaultRowHeight;
+  return this[_].defaultRowHeight;
 }
 function _setRowHeight(grid: DrawGrid, row: number, height: number): void {
   grid[_].rowHeightsMap.put(row, height);
 }
 function _getRowsHeight(
-  grid: DrawGrid,
+  this: DrawGrid,
   startRow: number,
   endRow: number
 ): number {
-  const internal = grid.getRowsHeightInternal(startRow, endRow);
+  const internal = this.getRowsHeightInternal(startRow, endRow);
   if (isDef(internal)) {
     return internal;
   }
   const rowCount = endRow - startRow + 1;
-  let h = grid[_].defaultRowHeight * rowCount;
-  grid[_].rowHeightsMap.each(startRow, endRow, (height: number): void => {
-    h += height - grid[_].defaultRowHeight;
+  let h = this[_].defaultRowHeight * rowCount;
+  this[_].rowHeightsMap.each(startRow, endRow, (height: number): void => {
+    h += height - this[_].defaultRowHeight;
   });
   return h;
 }
@@ -794,14 +797,14 @@ function _getRowsHeight(
 function _getScrollWidth(grid: DrawGrid): number {
   return _getColsWidth(grid, 0, grid[_].colCount - 1);
 }
-function _getScrollHeight(grid: DrawGrid, row?: number): number {
-  const internal = grid.getScrollHeightInternal(row);
+function _getScrollHeight(this: DrawGrid, row?: number): number {
+  const internal = this.getScrollHeightInternal(row);
   if (isDef(internal)) {
     return internal;
   }
-  let h = grid[_].defaultRowHeight * grid[_].rowCount;
-  grid[_].rowHeightsMap.each(0, grid[_].rowCount - 1, height => {
-    h += height - grid[_].defaultRowHeight;
+  let h = this[_].defaultRowHeight * this[_].rowCount;
+  this[_].rowHeightsMap.each(0, this[_].rowCount - 1, height => {
+    h += height - this[_].defaultRowHeight;
   });
   return h;
 }
@@ -878,55 +881,55 @@ function _onScroll(grid: DrawGrid, _e: Event): void {
   }
 }
 
-function _onKeyDownMove(grid: DrawGrid, e: KeyboardEvent): void {
+function _onKeyDownMove(this: DrawGrid, e: KeyboardEvent): void {
   const { shiftKey } = e;
   const keyCode = getKeyCode(e);
-  const focusCell = shiftKey ? grid.selection.focus : grid.selection.select;
+  const focusCell = shiftKey ? this.selection.focus : this.selection.select;
   if (keyCode === KEY_LEFT) {
-    const col = grid.getMoveLeftColByKeyDownInternal(focusCell);
+    const col = this.getMoveLeftColByKeyDownInternal(focusCell);
     if (col < 0) {
       return;
     }
-    _moveFocusCell(grid, col, focusCell.row, shiftKey);
+    _moveFocusCell.call(this, col, focusCell.row, shiftKey);
     cancelEvent(e);
   } else if (keyCode === KEY_UP) {
-    const row = grid.getMoveUpRowByKeyDownInternal(focusCell);
+    const row = this.getMoveUpRowByKeyDownInternal(focusCell);
     if (row < 0) {
       return;
     }
-    _moveFocusCell(grid, focusCell.col, row, shiftKey);
+    _moveFocusCell.call(this, focusCell.col, row, shiftKey);
     cancelEvent(e);
   } else if (keyCode === KEY_RIGHT) {
-    const col = grid.getMoveRightColByKeyDownInternal(focusCell);
-    if (grid.colCount <= col) {
+    const col = this.getMoveRightColByKeyDownInternal(focusCell);
+    if (this.colCount <= col) {
       return;
     }
-    _moveFocusCell(grid, col, focusCell.row, shiftKey);
+    _moveFocusCell.call(this, col, focusCell.row, shiftKey);
     cancelEvent(e);
   } else if (keyCode === KEY_DOWN) {
-    const row = grid.getMoveDownRowByKeyDownInternal(focusCell);
-    if (grid.rowCount <= row) {
+    const row = this.getMoveDownRowByKeyDownInternal(focusCell);
+    if (this.rowCount <= row) {
       return;
     }
-    _moveFocusCell(grid, focusCell.col, row, shiftKey);
+    _moveFocusCell.call(this, focusCell.col, row, shiftKey);
     cancelEvent(e);
   } else if (keyCode === KEY_HOME) {
     const row = e.ctrlKey ? 0 : focusCell.row;
-    _moveFocusCell(grid, 0, row, e.shiftKey);
+    _moveFocusCell.call(this, 0, row, e.shiftKey);
     cancelEvent(e);
   } else if (keyCode === KEY_END) {
-    const row = e.ctrlKey ? grid.rowCount - 1 : focusCell.row;
-    _moveFocusCell(grid, grid.colCount - 1, row, shiftKey);
+    const row = e.ctrlKey ? this.rowCount - 1 : focusCell.row;
+    _moveFocusCell.call(this, this.colCount - 1, row, shiftKey);
     cancelEvent(e);
   }
 }
 function _moveFocusCell(
-  grid: DrawGrid,
+  this: DrawGrid,
   col: number,
   row: number,
   shiftKey: boolean
 ): void {
-  const offset = grid.getOffsetInvalidateCells();
+  const offset = this.getOffsetInvalidateCells();
 
   function extendRange(range: CellRange): CellRange {
     if (offset > 0) {
@@ -938,22 +941,22 @@ function _moveFocusCell(
     return range;
   }
 
-  const beforeRange = extendRange(grid.selection.range);
-  const beforeRect = grid.getCellRangeRect(beforeRange);
+  const beforeRange = extendRange(this.selection.range);
+  const beforeRect = this.getCellRangeRect(beforeRange);
 
-  grid.selection._setFocusCell(col, row, shiftKey);
-  grid.makeVisibleCell(col, row);
-  grid.focusCell(col, row);
+  this.selection._setFocusCell(col, row, shiftKey);
+  this.makeVisibleCell(col, row);
+  this.focusCell(col, row);
 
-  const afterRange = extendRange(grid.selection.range);
-  const afterRect = grid.getCellRangeRect(afterRange);
+  const afterRange = extendRange(this.selection.range);
+  const afterRect = this.getCellRangeRect(afterRange);
 
   if (afterRect.intersection(beforeRect)) {
     const invalidateRect = Rect.max(afterRect, beforeRect);
-    _invalidateRect(grid, invalidateRect);
+    _invalidateRect(this, invalidateRect);
   } else {
-    _invalidateRect(grid, beforeRect);
-    _invalidateRect(grid, afterRect);
+    _invalidateRect(this, beforeRect);
+    _invalidateRect(this, afterRect);
   }
 }
 function _getMouseAbstractPoint(
@@ -1025,7 +1028,10 @@ function _bindEvents(grid: DrawGrid): void {
       return;
     }
     if (eventArgs) {
-      const results = grid.fireListeners(EVENT_TYPE.MOUSEDOWN_CELL, eventArgs);
+      const results = grid.fireListeners(
+        DG_EVENT_TYPE.MOUSEDOWN_CELL,
+        eventArgs
+      );
       if (array.findIndex(results, v => !v) >= 0) {
         return;
       }
@@ -1043,12 +1049,12 @@ function _bindEvents(grid: DrawGrid): void {
     }
   });
   handler.on(element, "mouseup", e => {
-    if (!grid.hasListeners(EVENT_TYPE.MOUSEUP_CELL)) {
+    if (!grid.hasListeners(DG_EVENT_TYPE.MOUSEUP_CELL)) {
       return;
     }
     const { eventArgs } = getCellEventArgsSet(e);
     if (eventArgs) {
-      grid.fireListeners(EVENT_TYPE.MOUSEUP_CELL, eventArgs);
+      grid.fireListeners(DG_EVENT_TYPE.MOUSEUP_CELL, eventArgs);
     }
   });
   let doubleTapBefore:
@@ -1069,7 +1075,7 @@ function _bindEvents(grid: DrawGrid): void {
         eventArgs.col === doubleTapBefore.col &&
         eventArgs.row === doubleTapBefore.row
       ) {
-        grid.fireListeners(EVENT_TYPE.DBLTAP_CELL, eventArgs);
+        grid.fireListeners(DG_EVENT_TYPE.DBLTAP_CELL, eventArgs);
       }
 
       doubleTapBefore = null;
@@ -1118,7 +1124,7 @@ function _bindEvents(grid: DrawGrid): void {
   let mouseEnterCell: CellAddress | null = null;
   let mouseOverCell: CellAddress | null = null;
   function onMouseenterCell(cell: CellAddress, related?: CellAddress): void {
-    grid.fireListeners(EVENT_TYPE.MOUSEENTER_CELL, {
+    grid.fireListeners(DG_EVENT_TYPE.MOUSEENTER_CELL, {
       col: cell.col,
       row: cell.row,
       related
@@ -1129,7 +1135,7 @@ function _bindEvents(grid: DrawGrid): void {
     const beforeMouseCell = mouseEnterCell;
     mouseEnterCell = null;
     if (beforeMouseCell) {
-      grid.fireListeners(EVENT_TYPE.MOUSELEAVE_CELL, {
+      grid.fireListeners(DG_EVENT_TYPE.MOUSELEAVE_CELL, {
         col: beforeMouseCell.col,
         row: beforeMouseCell.row,
         related
@@ -1138,7 +1144,7 @@ function _bindEvents(grid: DrawGrid): void {
     return beforeMouseCell || undefined;
   }
   function onMouseoverCell(cell: CellAddress, related?: CellAddress): void {
-    grid.fireListeners(EVENT_TYPE.MOUSEOVER_CELL, {
+    grid.fireListeners(DG_EVENT_TYPE.MOUSEOVER_CELL, {
       col: cell.col,
       row: cell.row,
       related
@@ -1149,7 +1155,7 @@ function _bindEvents(grid: DrawGrid): void {
     const beforeMouseCell = mouseOverCell;
     mouseOverCell = null;
     if (beforeMouseCell) {
-      grid.fireListeners(EVENT_TYPE.MOUSEOUT_CELL, {
+      grid.fireListeners(DG_EVENT_TYPE.MOUSEOUT_CELL, {
         col: beforeMouseCell.col,
         row: beforeMouseCell.row,
         related
@@ -1176,7 +1182,7 @@ function _bindEvents(grid: DrawGrid): void {
     if (eventArgs) {
       const beforeMouseCell = mouseEnterCell;
       if (beforeMouseCell) {
-        grid.fireListeners(EVENT_TYPE.MOUSEMOVE_CELL, eventArgs);
+        grid.fireListeners(DG_EVENT_TYPE.MOUSEMOVE_CELL, eventArgs);
         if (
           beforeMouseCell.col !== eventArgs.col ||
           beforeMouseCell.row !== eventArgs.row
@@ -1206,7 +1212,7 @@ function _bindEvents(grid: DrawGrid): void {
         if (isMouseover) {
           onMouseoverCell(enterCell);
         }
-        grid.fireListeners(EVENT_TYPE.MOUSEMOVE_CELL, eventArgs);
+        grid.fireListeners(DG_EVENT_TYPE.MOUSEMOVE_CELL, eventArgs);
       }
     } else {
       onMouseoutCell();
@@ -1238,38 +1244,38 @@ function _bindEvents(grid: DrawGrid): void {
     ) {
       return;
     }
-    if (!grid.hasListeners(EVENT_TYPE.CLICK_CELL)) {
+    if (!grid.hasListeners(DG_EVENT_TYPE.CLICK_CELL)) {
       return;
     }
     const { eventArgs } = getCellEventArgsSet(e);
     if (!eventArgs) {
       return;
     }
-    grid.fireListeners(EVENT_TYPE.CLICK_CELL, eventArgs);
+    grid.fireListeners(DG_EVENT_TYPE.CLICK_CELL, eventArgs);
   });
   handler.on(element, "dblclick", e => {
-    if (!grid.hasListeners(EVENT_TYPE.DBLCLICK_CELL)) {
+    if (!grid.hasListeners(DG_EVENT_TYPE.DBLCLICK_CELL)) {
       return;
     }
     const { eventArgs } = getCellEventArgsSet(e);
     if (!eventArgs) {
       return;
     }
-    grid.fireListeners(EVENT_TYPE.DBLCLICK_CELL, eventArgs);
+    grid.fireListeners(DG_EVENT_TYPE.DBLCLICK_CELL, eventArgs);
   });
   grid[_].focusControl.onKeyDown((keyCode: number, e: KeyboardEvent) => {
-    grid.fireListeners(EVENT_TYPE.KEYDOWN, keyCode, e);
+    grid.fireListeners(DG_EVENT_TYPE.KEYDOWN, keyCode, e);
   });
-  grid[_].selection.listen(EVENT_TYPE.SELECTED_CELL, data => {
-    grid.fireListeners(EVENT_TYPE.SELECTED_CELL, data, data.selected);
+  grid[_].selection.listen(DG_EVENT_TYPE.SELECTED_CELL, data => {
+    grid.fireListeners(DG_EVENT_TYPE.SELECTED_CELL, data, data.selected);
   });
 
   scrollable.onScroll(e => {
     _onScroll(grid, e);
-    grid.fireListeners(EVENT_TYPE.SCROLL, { event: e });
+    grid.fireListeners(DG_EVENT_TYPE.SCROLL, { event: e });
   });
   grid[_].focusControl.onKeyDownMove(e => {
-    _onKeyDownMove(grid, e);
+    _onKeyDownMove.call(grid, e);
   });
   grid.listen("copydata", range => {
     let copyValue = "";
@@ -1305,7 +1311,7 @@ function _bindEvents(grid: DrawGrid): void {
     ({ value, event }: { value: string; event: ClipboardEvent }) => {
       const normalizeValue = value.replace(/\r?\n$/, "");
       const { col, row } = grid[_].selection.select;
-      grid.fireListeners(EVENT_TYPE.PASTE_CELL, {
+      grid.fireListeners(DG_EVENT_TYPE.PASTE_CELL, {
         col,
         row,
         value,
@@ -1317,23 +1323,22 @@ function _bindEvents(grid: DrawGrid): void {
   );
   grid[_].focusControl.onInput(value => {
     const { col, row } = grid[_].selection.select;
-    grid.fireListeners(EVENT_TYPE.INPUT_CELL, { col, row, value });
+    grid.fireListeners(DG_EVENT_TYPE.INPUT_CELL, { col, row, value });
   });
   grid[_].focusControl.onFocus((e: FocusEvent) => {
-    grid.fireListeners(EVENT_TYPE.FOCUS_GRID, e);
+    grid.fireListeners(DG_EVENT_TYPE.FOCUS_GRID, e);
     grid[_].focusedGrid = true;
 
     const { col, row } = grid[_].selection.select;
     grid.invalidateCell(col, row);
   });
   grid[_].focusControl.onBlur(e => {
-    grid.fireListeners(EVENT_TYPE.BLUR_GRID, e);
+    grid.fireListeners(DG_EVENT_TYPE.BLUR_GRID, e);
     grid[_].focusedGrid = false;
 
     const { col, row } = grid[_].selection.select;
     grid.invalidateCell(col, row);
   });
-  grid.bindEventsInternal();
 }
 
 function _getResizeColAt(
@@ -1524,7 +1529,7 @@ class CellSelector extends BaseMouseDownMover {
     if (!cell) {
       return;
     }
-    _moveFocusCell(this._grid, cell.col, cell.row, e.shiftKey);
+    _moveFocusCell.call(this._grid, cell.col, cell.row, e.shiftKey);
 
     this._bindMoveAndUp(e);
 
@@ -1538,7 +1543,7 @@ class CellSelector extends BaseMouseDownMover {
     if (!cell) {
       return;
     }
-    _moveFocusCell(this._grid, cell.col, cell.row, e.shiftKey);
+    _moveFocusCell.call(this._grid, cell.col, cell.row, e.shiftKey);
     this._cell = cell;
   }
   protected _moveInternal(e: MouseEvent | TouchEvent): boolean {
@@ -1552,7 +1557,7 @@ class CellSelector extends BaseMouseDownMover {
       return false;
     }
     const grid = this._grid;
-    _moveFocusCell(grid, newCol, newRow, true);
+    _moveFocusCell.call(grid, newCol, newRow, true);
 
     //make visible
     const makeVisibleCol = ((): number => {
@@ -1644,7 +1649,7 @@ class ColumnResizer extends BaseMouseDownMover {
     rect.left = this._invalidateAbsoluteLeft;
     _invalidateRect(this._grid, rect);
 
-    this._grid.fireListeners(EVENT_TYPE.RESIZE_COLUMN, {
+    this._grid.fireListeners(DG_EVENT_TYPE.RESIZE_COLUMN, {
       col: this._targetCol
     });
 
@@ -2066,8 +2071,8 @@ class Selection extends EventTarget {
           col: after.col,
           row: after.row
         };
-        this.fireListeners(EVENT_TYPE.SELECTED_CELL, before);
-        this.fireListeners(EVENT_TYPE.SELECTED_CELL, after);
+        this.fireListeners(DG_EVENT_TYPE.SELECTED_CELL, before);
+        this.fireListeners(DG_EVENT_TYPE.SELECTED_CELL, after);
       } finally {
         this._isWraped = false;
       }
@@ -2233,7 +2238,7 @@ class DrawCellContext implements CellContext {
     if (this._mode === 0) {
       return this._ctx as CanvasRenderingContext2D;
     } else {
-      return (this._grid as DrawGrid)._getInitContext();
+      return _getInitContext.call(this._grid as DrawGrid);
     }
   }
   /**
@@ -2379,7 +2384,7 @@ class DrawCellContext implements CellContext {
     }
   }
 }
-export interface DrawGridProtected {
+interface DrawGridProtected {
   element: HTMLElement;
   scrollable: Scrollable;
   handler: EventHandler;
@@ -2430,38 +2435,52 @@ export interface DrawGridProtected {
   disposables?: { dispose(): void }[] | null;
 }
 
+export { DrawGridProtected };
+
 export interface DrawGridConstructorOptions {
   rowCount?: number;
   colCount?: number;
   frozenColCount?: number;
   frozenRowCount?: number;
+  /**
+   * Default grid row height. default 40
+   */
   defaultRowHeight?: number;
+  /**
+   * Default grid col width. default 80
+   */
   defaultColWidth?: string | number;
   font?: string;
   underlayBackgroundColor?: string;
+  /**
+   * Canvas parent element
+   */
   parentElement?: HTMLElement | null;
 }
 const protectedKey = _;
 /**
  * DrawGrid
  * @classdesc cheetahGrid.core.DrawGrid
- * @extends EventTarget
  * @memberof cheetahGrid.core
  */
 export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
-  [protectedKey]: DrawGridProtected;
-  constructor({
-    rowCount = 10,
-    colCount = 10,
-    frozenColCount = 0,
-    frozenRowCount = 0,
-    defaultRowHeight = 40,
-    defaultColWidth = 80,
-    font,
-    underlayBackgroundColor,
-    parentElement
-  }: DrawGridConstructorOptions = {}) {
+  protected [protectedKey]: DrawGridProtected;
+  static get EVENT_TYPE(): typeof DG_EVENT_TYPE {
+    return DG_EVENT_TYPE;
+  }
+  constructor(options: DrawGridConstructorOptions = {}) {
     super();
+    const {
+      rowCount = 10,
+      colCount = 10,
+      frozenColCount = 0,
+      frozenRowCount = 0,
+      defaultRowHeight = 40,
+      defaultColWidth = 80,
+      font,
+      underlayBackgroundColor,
+      parentElement
+    } = options;
     const protectedSpace = (this[_] = {} as DrawGridProtected);
     style.initDocument();
     protectedSpace.element = createRootElement();
@@ -2525,6 +2544,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
       this.updateSize();
     }
     _bindEvents(this);
+    this.bindEventsInternal();
   }
   /**
    * Get root element.
@@ -2535,7 +2555,6 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
   }
   /**
    * Get canvas element.
-   * @type {HTMLCanvasElement}
    */
   get canvas(): HTMLCanvasElement {
     return this[_].canvas;
@@ -2553,22 +2572,18 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
   }
   /**
    * Get the selection instance.
-   * @type {Selection}
    */
   get selection(): Selection {
     return this[_].selection;
   }
   /**
    * Get the number of rows.
-   * @type {number}
    */
   get rowCount(): number {
     return this[_].rowCount;
   }
   /**
    * Set the number of rows.
-   * @param {number} rowCount the number of rows to set
-   * @type {number}
    */
   set rowCount(rowCount: number) {
     this[_].rowCount = rowCount;
@@ -2581,15 +2596,12 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
   }
   /**
    * Get the number of columns.
-   * @type {number}
    */
   get colCount(): number {
     return this[_].colCount;
   }
   /**
    * Set the number of columns.
-   * @param {number} colCount the number of columns to set
-   * @type {number}
    */
   set colCount(colCount: number) {
     this[_].colCount = colCount;
@@ -2602,37 +2614,30 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
   }
   /**
    * Get the number of frozen columns.
-   * @type {number}
    */
   get frozenColCount(): number {
     return this[_].frozenColCount;
   }
   /**
    * Set the number of frozen columns.
-   * @param {number} frozenColCount the number of frozen columns to set
-   * @type {number}
    */
   set frozenColCount(frozenColCount: number) {
     this[_].frozenColCount = frozenColCount;
   }
   /**
    * Get the number of frozen rows.
-   * @type {number}
    */
   get frozenRowCount(): number {
     return this[_].frozenRowCount;
   }
   /**
    * Set the number of frozen rows.
-   * @param {number} frozenRowCount the number of frozen rows to set
-   * @type {number}
    */
   set frozenRowCount(frozenRowCount: number) {
     this[_].frozenRowCount = frozenRowCount;
   }
   /**
    * Get the default row height.
-   * @type {number}
    *
    */
   get defaultRowHeight(): number {
@@ -2640,53 +2645,42 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
   }
   /**
    * Set the default row height.
-   * @param {number} defaultRowHeight the default row height to set
-   * @type {number}
    */
   set defaultRowHeight(defaultRowHeight: number) {
     this[_].defaultRowHeight = defaultRowHeight;
   }
   /**
    * Get the default column width.
-   * @type {number}
    */
   get defaultColWidth(): string | number {
     return this[_].defaultColWidth;
   }
   /**
    * Set the default column width.
-   * @param {number} defaultColWidth the default column width to set
-   * @type {number}
    */
   set defaultColWidth(defaultColWidth: string | number) {
     this[_].defaultColWidth = defaultColWidth;
   }
   /**
    * Get the font definition as a string.
-   * @type {string}
    */
   get font(): string | undefined {
     return this[_].font;
   }
   /**
    * Set the font definition with the given string.
-   * @param {string} font the font definition to set
-   * @type {string}
    */
   set font(font: string | undefined) {
     this[_].font = font;
   }
   /**
    * Get the background color of the underlay.
-   * @type {*}
    */
   get underlayBackgroundColor(): string | undefined {
     return this[_].underlayBackgroundColor;
   }
   /**
    * Set the background color of the underlay.
-   * @param {*} underlayBackgroundColor the background color of the underlay to set
-   * @type {*}
    */
   set underlayBackgroundColor(underlayBackgroundColor: string | undefined) {
     this[_].underlayBackgroundColor = underlayBackgroundColor;
@@ -2736,7 +2730,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
    */
   updateScroll(): boolean {
     const { scrollable } = this[_];
-    const newHeight = _getScrollHeight(this);
+    const newHeight = _getScrollHeight.call(this);
     const newWidth = _getScrollWidth(this);
     if (
       newHeight === scrollable.scrollHeight &&
@@ -2757,7 +2751,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
    * @return {number} The row height
    */
   getRowHeight(row: number): number {
-    return _getRowHeight(this, row);
+    return _getRowHeight.call(this, row);
   }
   /**
    * Set the row height of the given the row index.
@@ -2840,8 +2834,8 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
       absoluteLeft += this[_].scroll.left;
     }
 
-    let absoluteTop = _getRowsHeight(this, 0, row - 1);
-    const height = _getRowHeight(this, row);
+    let absoluteTop = _getRowsHeight.call(this, 0, row - 1);
+    const height = _getRowHeight.call(this, row);
     if (isFrozenCell && isFrozenCell.row) {
       absoluteTop += this[_].scroll.top;
     }
@@ -2886,8 +2880,8 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
         );
       }
     }
-    let absoluteTop = _getRowsHeight(this, 0, startRow - 1);
-    let height = _getRowsHeight(this, startRow, endRow);
+    let absoluteTop = _getRowsHeight.call(this, 0, startRow - 1);
+    let height = _getRowsHeight.call(this, startRow, endRow);
     if (isFrozenStartCell && isFrozenStartCell.row) {
       const scrollTop = this[_].scroll.top;
       absoluteTop += scrollTop;
@@ -2933,7 +2927,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
     if (frozen) {
       return frozen.row;
     }
-    const row = _getTargetRowAt(this, absoluteY);
+    const row = _getTargetRowAt.call(this, absoluteY);
     return row ? row.row : -1;
   }
   getColAt(absoluteX: number): number {
@@ -2998,7 +2992,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
     focusControl.setFocusRect(this.getCellRect(col, row));
 
     const { col: selCol, row: selRow } = this[_].selection.select;
-    const results = this.fireListeners(EVENT_TYPE.EDITABLEINPUT_CELL, {
+    const results = this.fireListeners(DG_EVENT_TYPE.EDITABLEINPUT_CELL, {
       col: selCol,
       row: selRow
     });
@@ -3009,7 +3003,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
     if (editMode) {
       focusControl.storeInputStatus();
       focusControl.setDefaultInputStatus();
-      this.fireListeners(EVENT_TYPE.MODIFY_STATUS_EDITABLEINPUT_CELL, {
+      this.fireListeners(DG_EVENT_TYPE.MODIFY_STATUS_EDITABLEINPUT_CELL, {
         col: selCol,
         row: selRow,
         input: focusControl.input
@@ -3132,7 +3126,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
    * @param  {DrawCellContext} context context of cell drawing.
    * @return {void}
    */
-  abstract onDrawCell(
+  protected abstract onDrawCell(
     col: number,
     row: number,
     context: CellContext
@@ -3211,39 +3205,42 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
       rect: _toRelativeRect(this, this.getCellRangeRect(range))
     };
   }
-  bindEventsInternal(): void {
+  protected bindEventsInternal(): void {
     //nop
   }
-  getTargetRowAtInternal(
+  protected getTargetRowAtInternal(
     _absoluteY: number
   ): { row: number; top: number } | void {
     //継承用 設定を無視して計算する場合継承して実装
   }
-  getRowsHeightInternal(_startRow: number, _endRow: number): number | void {
+  protected getRowsHeightInternal(
+    _startRow: number,
+    _endRow: number
+  ): number | void {
     //継承用 設定を無視して計算する場合継承して実装
   }
-  getRowHeightInternal(_row: number): number | void {
+  protected getRowHeightInternal(_row: number): number | void {
     //継承用 設定を無視して計算する場合継承して実装
   }
-  getScrollHeightInternal(_row?: number): number | void {
+  protected getScrollHeightInternal(_row?: number): number | void {
     //継承用 設定を無視して計算する場合継承して実装
   }
-  getMoveLeftColByKeyDownInternal({ col }: CellAddress): number {
+  protected getMoveLeftColByKeyDownInternal({ col }: CellAddress): number {
     return col - 1;
   }
-  getMoveRightColByKeyDownInternal({ col }: CellAddress): number {
+  protected getMoveRightColByKeyDownInternal({ col }: CellAddress): number {
     return col + 1;
   }
-  getMoveUpRowByKeyDownInternal({ row }: CellAddress): number {
+  protected getMoveUpRowByKeyDownInternal({ row }: CellAddress): number {
     return row - 1;
   }
-  getMoveDownRowByKeyDownInternal({ row }: CellAddress): number {
+  protected getMoveDownRowByKeyDownInternal({ row }: CellAddress): number {
     return row + 1;
   }
-  getOffsetInvalidateCells(): number {
+  protected getOffsetInvalidateCells(): number {
     return 0;
   }
-  _getInitContext(): CanvasRenderingContext2D {
+  protected _getInitContext(): CanvasRenderingContext2D {
     const ctx = this[_].context;
     //初期化
     ctx.fillStyle = "white";

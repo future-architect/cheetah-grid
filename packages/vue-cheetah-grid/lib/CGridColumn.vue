@@ -6,18 +6,19 @@
 </template>
 
 <script>
-import ColumnMixin from './c-grid/ColumnMixin.vue'
+import LayoutColumnMixin from './c-grid/LayoutColumnMixin.vue'
 import StdColumnMixin from './c-grid/StdColumnMixin.vue'
 import { extend, normalizeColumnType, normalizeAction, gridUpdateWatcher } from './c-grid/utils'
 
 /**
  * Defines column.
  * @mixin column-mixin
+ * @mixin layout-column-mixin
  * @mixin std-column-mixin
  */
 export default {
   name: 'CGridColumn',
-  mixins: [ColumnMixin, StdColumnMixin],
+  mixins: [LayoutColumnMixin, StdColumnMixin],
   props: {
     /**
      * Defines a column type
@@ -45,7 +46,7 @@ export default {
     createColumn () {
       const columnType = normalizeColumnType(this.columnType)
       const action = normalizeAction(this.action)
-      const baseCol = ColumnMixin.methods.createColumn.apply(this)
+      const baseCol = LayoutColumnMixin.methods.createColumn.apply(this)
       const stdCol = StdColumnMixin.methods.createColumn.apply(this)
       return extend(
         baseCol,

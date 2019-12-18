@@ -5,7 +5,7 @@ import {
   ListGridAPI
 } from "../../ts-types";
 import { event, isPromise } from "../../internal/utils";
-import { EVENT_TYPE } from "../../core/EVENT_TYPE";
+import { DG_EVENT_TYPE } from "../../core/DG_EVENT_TYPE";
 
 const KEY_ENTER = 13;
 export function bindCellClickAction<T>(
@@ -26,7 +26,7 @@ export function bindCellClickAction<T>(
   }
   return [
     // click
-    grid.listen(EVENT_TYPE.CLICK_CELL, e => {
+    grid.listen(DG_EVENT_TYPE.CLICK_CELL, e => {
       if (!isTarget(e.col, e.row)) {
         return;
       }
@@ -39,7 +39,7 @@ export function bindCellClickAction<T>(
       });
     }),
     // mouse move
-    grid.listen(EVENT_TYPE.MOUSEOVER_CELL, e => {
+    grid.listen(DG_EVENT_TYPE.MOUSEOVER_CELL, e => {
       if (!isTarget(e.col, e.row)) {
         return;
       }
@@ -58,7 +58,7 @@ export function bindCellClickAction<T>(
       }
       grid.getElement().style.cursor = "pointer";
     }),
-    grid.listen(EVENT_TYPE.MOUSEOUT_CELL, e => {
+    grid.listen(DG_EVENT_TYPE.MOUSEOUT_CELL, e => {
       if (!isTarget(e.col, e.row)) {
         return;
       }
@@ -89,7 +89,7 @@ export function bindCellKeyAction<T>(
   acceptKeys = [...acceptKeys, KEY_ENTER];
   return [
     // enter key down
-    grid.listen(EVENT_TYPE.KEYDOWN, (keyCode, e) => {
+    grid.listen(DG_EVENT_TYPE.KEYDOWN, (keyCode, e) => {
       if (acceptKeys.indexOf(keyCode) === -1) {
         return;
       }

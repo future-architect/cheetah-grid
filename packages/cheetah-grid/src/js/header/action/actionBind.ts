@@ -4,7 +4,7 @@ import {
   LayoutObjectId,
   ListGridAPI
 } from "../../ts-types";
-import { EVENT_TYPE } from "../../core/EVENT_TYPE";
+import { DG_EVENT_TYPE } from "../../core/DG_EVENT_TYPE";
 import { event } from "../../internal/utils";
 const KEY_ENTER = 13;
 export function bindCellClickAction<T>(
@@ -26,7 +26,7 @@ export function bindCellClickAction<T>(
   let inMouse: boolean;
   return [
     // click
-    grid.listen(EVENT_TYPE.CLICK_CELL, e => {
+    grid.listen(DG_EVENT_TYPE.CLICK_CELL, e => {
       if (!isTarget(e.col, e.row)) {
         return;
       }
@@ -36,7 +36,7 @@ export function bindCellClickAction<T>(
       });
     }),
     // mouse move
-    grid.listen(EVENT_TYPE.MOUSEOVER_CELL, e => {
+    grid.listen(DG_EVENT_TYPE.MOUSEOVER_CELL, e => {
       if (!isTarget(e.col, e.row)) {
         return;
       }
@@ -54,7 +54,7 @@ export function bindCellClickAction<T>(
       inMouse = true;
     }),
     //横からMOUSEENTERした場合、'col-resize'の処理と競合するのでmoveを監視して処理する
-    grid.listen(EVENT_TYPE.MOUSEMOVE_CELL, e => {
+    grid.listen(DG_EVENT_TYPE.MOUSEMOVE_CELL, e => {
       if (!isTarget(e.col, e.row)) {
         return;
       }
@@ -62,7 +62,7 @@ export function bindCellClickAction<T>(
         grid.getElement().style.cursor = "pointer";
       }
     }),
-    grid.listen(EVENT_TYPE.MOUSEOUT_CELL, e => {
+    grid.listen(DG_EVENT_TYPE.MOUSEOUT_CELL, e => {
       if (!isTarget(e.col, e.row)) {
         return;
       }
@@ -95,7 +95,7 @@ export function bindCellKeyAction<T>(
   }
   return [
     // enter key down
-    grid.listen(EVENT_TYPE.KEYDOWN, (keyCode, e) => {
+    grid.listen(DG_EVENT_TYPE.KEYDOWN, (keyCode, e) => {
       if (acceptKeys.indexOf(keyCode) === -1) {
         return;
       }

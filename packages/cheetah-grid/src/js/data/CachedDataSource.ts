@@ -1,34 +1,34 @@
-import { DataSource, DataSourceParam, PromiseCacheValue } from "./DataSource";
+import { DataSource, DataSourceParam } from "./DataSource";
 import {
   FieldData,
   FieldDef,
   MaybePromise,
   MaybePromiseOrUndef
 } from "../ts-types";
+import { PromiseCacheValue } from "./internal/types";
 
 function _setFieldCache<T, F extends FieldDef<T>>(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  { _fCache }: CachedDataSource<T>,
+  fCache: { [index: number]: Map<FieldDef<T>, any> },
   index: number,
   field: F,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   value: PromiseCacheValue<any>
 ): void {
-  const recCache = _fCache[index] || (_fCache[index] = new Map());
+  const recCache = fCache[index] || (fCache[index] = new Map());
   recCache.set(field, value);
 }
 /**
  * grid data source for caching Promise data
  *
  * @classdesc cheetahGrid.data.CachedDataSource
- * @extends cheetahGrid.data.DataSource
  * @memberof cheetahGrid.data
  */
 export class CachedDataSource<T> extends DataSource<T> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private _rCache: { [index: number]: any };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  _fCache: { [index: number]: Map<FieldDef<T>, any> };
+  private _fCache: { [index: number]: Map<FieldDef<T>, any> };
   static get EVENT_TYPE(): typeof DataSource.EVENT_TYPE {
     return DataSource.EVENT_TYPE;
   }
@@ -43,13 +43,16 @@ export class CachedDataSource<T> extends DataSource<T> {
     this._rCache = {};
     this._fCache = {};
   }
-  getOriginal(index: number): MaybePromiseOrUndef<T> {
+  protected getOriginal(index: number): MaybePromiseOrUndef<T> {
     if (this._rCache && this._rCache[index]) {
       return this._rCache[index];
     }
     return super.getOriginal(index);
   }
-  getOriginalField<F extends FieldDef<T>>(index: number, field: F): FieldData {
+  protected getOriginalField<F extends FieldDef<T>>(
+    index: number,
+    field: F
+  ): FieldData {
     const rowCache = this._fCache && this._fCache[index];
     if (rowCache) {
       const cache = rowCache.get(field);
@@ -59,7 +62,7 @@ export class CachedDataSource<T> extends DataSource<T> {
     }
     return super.getOriginalField(index, field);
   }
-  setOriginalField<F extends FieldDef<T>>(
+  protected setOriginalField<F extends FieldDef<T>>(
     index: number,
     field: F,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -79,15 +82,15 @@ export class CachedDataSource<T> extends DataSource<T> {
       this._fCache = {};
     }
   }
-  fieldPromiseCallBackInternal<F extends FieldDef<T>>(
+  protected fieldPromiseCallBackInternal<F extends FieldDef<T>>(
     index: number,
     field: F,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     value: PromiseCacheValue<any>
   ): void {
-    _setFieldCache(this, index, field, value);
+    _setFieldCache(this._fCache, index, field, value);
   }
-  recordPromiseCallBackInternal(
+  protected recordPromiseCallBackInternal(
     index: number,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     record: PromiseCacheValue<T>

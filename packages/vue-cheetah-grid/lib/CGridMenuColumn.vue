@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import ColumnMixin from './c-grid/ColumnMixin.vue'
+import LayoutColumnMixin from './c-grid/LayoutColumnMixin.vue'
 import StdColumnMixin from './c-grid/StdColumnMixin.vue'
 import { cheetahGrid, extend, gridUpdateWatcher } from './c-grid/utils'
 
@@ -20,11 +20,12 @@ function isDisabledRecord (option, record) {
 /**
  * Defines select menu column.
  * @mixin column-mixin
+ * @mixin layout-column-mixin
  * @mixin std-column-mixin
  */
 export default {
   name: 'CGridMenuColumn',
-  mixins: [ColumnMixin, StdColumnMixin],
+  mixins: [LayoutColumnMixin, StdColumnMixin],
   props: {
     /**
      * Defines a menu options
@@ -87,7 +88,7 @@ export default {
      * @override
      */
     getPropsObjectInternal () {
-      const props = ColumnMixin.methods.getPropsObjectInternal.apply(this)
+      const props = LayoutColumnMixin.methods.getPropsObjectInternal.apply(this)
       delete props.disabled
       delete props.readonly
       return props
@@ -105,7 +106,7 @@ export default {
       }) : undefined
       const columnType = new cheetahGrid.columns.type.MenuColumn({ options: dispOpt })
 
-      const baseCol = ColumnMixin.methods.createColumn.apply(this)
+      const baseCol = LayoutColumnMixin.methods.createColumn.apply(this)
       const stdCol = StdColumnMixin.methods.createColumn.apply(this)
       return extend(
         baseCol,

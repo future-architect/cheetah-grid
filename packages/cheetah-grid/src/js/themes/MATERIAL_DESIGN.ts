@@ -42,7 +42,6 @@ function BORDER_COLOR(args: StylePropertyFunctionArg): (string | null)[] {
 /**
  * material design theme
  * @name MATERIAL_DESIGN
- * @type {Object}
  * @memberof cheetahGrid.themes.choices
  */
 export default {

@@ -162,7 +162,7 @@ export interface ListGridAPI<T> extends DrawGridAPI {
   focusGridCell(field: FieldDef<T>, index: number): void;
   makeVisibleGridCell(field: FieldDef<T>, index: number): void;
   getCopyCellValue(col: number, row: number): string;
-  getGridCanvasHelper(): GridCanvasHelper;
+  getGridCanvasHelper(): GridCanvasHelperAPI;
   doChangeValue(
     col: number,
     row: number,
@@ -178,7 +178,7 @@ export interface ListGridAPI<T> extends DrawGridAPI {
   getLayoutCellId(col: number, row: number): LayoutObjectId;
 }
 
-export interface Inline {
+export interface InlineAPI {
   width(arg: { ctx: CanvasRenderingContext2D }): number;
   font(): string | null;
   color(): ColorDef | null;
@@ -190,11 +190,11 @@ export interface Inline {
 }
 
 type ColorsDef = ColorDef | (ColorDef | null)[];
-export interface GridCanvasHelper {
+export interface GridCanvasHelperAPI {
   theme: RequiredThemeDefine;
 
   text(
-    text: string | (Inline | string)[],
+    text: string | (InlineAPI | string)[],
     context: CellContext,
     option: {
       padding?: number | string | (number | string)[];
@@ -306,7 +306,7 @@ export interface GridCanvasHelper {
       textAlign?: CanvasTextAlign;
       textBaseline?: CanvasTextBaseline;
     }
-  ): Inline;
+  ): InlineAPI;
 }
 export interface CellContext {
   readonly col: number;

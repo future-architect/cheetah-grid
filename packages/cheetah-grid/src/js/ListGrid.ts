@@ -1,4 +1,3 @@
-import * as columns from "./columns";
 import * as icons from "./internal/icons";
 import * as themes from "./themes";
 import { CachedDataSource, DataSource } from "./data";
@@ -33,7 +32,7 @@ import {
   LayoutMapAPI,
   MultiLayoutMap,
   SimpleHeaderLayoutMap
-} from "./internal/layout-map";
+} from "./list-grid/layout-map";
 import {
   DrawGrid,
   DrawGridConstructorOptions,
@@ -43,9 +42,9 @@ import { isDef, isPromise, obj, then } from "./internal/utils";
 import { BaseColumn } from "./columns/type/BaseColumn";
 import { BaseStyle } from "./columns/style";
 import { DrawCellInfo } from "./ts-types-internal";
-import { EVENT_TYPE } from "./list-grid/EVENT_TYPE";
 import { GridCanvasHelper } from "./GridCanvasHelper";
 import { BaseStyle as HeaderBaseStyle } from "./header/style";
+import { LG_EVENT_TYPE } from "./list-grid/LG_EVENT_TYPE";
 import { MessageHandler } from "./columns/message/MessageHandler";
 import { Rect } from "./internal/Rect";
 import { Theme } from "./themes/theme";
@@ -422,12 +421,9 @@ function _refreshHeader<T>(grid: ListGrid<T>): void {
     }
     if (col.style) {
       if (col.style instanceof BaseStyle) {
-        const id = col.style.listen(
-          columns.style.EVENT_TYPE.CHANGE_STYLE,
-          () => {
-            grid.invalidate();
-          }
-        );
+        const id = col.style.listen(BaseStyle.EVENT_TYPE.CHANGE_STYLE, () => {
+          grid.invalidate();
+        });
         headerEvents.push(id);
       }
     }
@@ -534,7 +530,7 @@ function adjustListGridOption<T>(
   delete options.rowCount;
   return options;
 }
-export interface ListGridProtected<T> extends DrawGridProtected {
+interface ListGridProtected<T> extends DrawGridProtected {
   dataSourceEventIds?: EventListenerId[];
   headerEvents?: EventListenerId[];
   layoutMap: LayoutMapAPI<T>;
@@ -550,47 +546,61 @@ export interface ListGridProtected<T> extends DrawGridProtected {
   dataSource: DataSource<T>;
   records?: T[] | null;
 }
+export { ListGridProtected };
+
 export interface ListGridConstructorOptions<T>
   extends DrawGridConstructorOptions {
+  /**
+   * Simple header property
+   */
   header?: HeadersDefine<T>;
+  /**
+   * Layout property
+   */
   layout?: LayoutDefine<T>;
+  /**
+   * Header row height(s)
+   */
   headerRowHeight?: number[] | number;
+  /**
+   * Records data source
+   */
   dataSource?: DataSource<T>;
+  /**
+   * Simple records data
+   */
   records?: T[];
+  /**
+   * Theme
+   */
   theme?: ThemeDefine | string;
+  /**
+   * @deprecated Cannot be used with ListGrid.
+   * @override
+   */
+  rowCount?: undefined;
+  /**
+   * @deprecated Cannot be used with ListGrid.
+   * @override
+   */
+  colCount?: undefined;
 }
 export { HeadersDefine, ColumnDefine, HeaderDefine, GroupHeaderDefine };
 /**
  * ListGrid
  * @classdesc cheetahGrid.ListGrid
- * @extends cheetahGrid.core.DrawGrid
  * @memberof cheetahGrid
  */
 export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
-  [_]: ListGridProtected<T>;
-  static get EVENT_TYPE(): typeof EVENT_TYPE {
-    return EVENT_TYPE;
+  protected [_]: ListGridProtected<T>;
+  static get EVENT_TYPE(): typeof LG_EVENT_TYPE {
+    return LG_EVENT_TYPE;
   }
   /**
    * constructor
    *
-   * <pre>
-   * Constructor options
-   * -----
-   * header: see header property
-   * records {array}: records data
-   * dataSource {DataSource}: records data source
-   * frozenColCount {number}: default 0
-   * defaultRowHeight {number}: default grid row height. default 40
-   * defaultColWidth {number}: default grid col width. default 80
-   * borderColor: border color
-   * parentElement {Element}: canvas parentElement
-   * theme {object}: theme
-   * -----
-   * </pre>
-   *
    * @constructor
-   * @param  {Object} options Constructor options
+   * @param options Constructor options
    */
   constructor(options: ListGridConstructorOptions<T> = {}) {
     super(adjustListGridOption(options));
@@ -635,7 +645,6 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
   }
   /**
    * Gets the define of the header.
-   * @type {Array}
    */
   get header(): HeadersDefine<T> {
     return this[_].header;
@@ -668,9 +677,6 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
    * columns: columns define
    * -----
    * </pre>
-   *
-   * @param {Array} header the define of the header to set
-   * @type {Array}
    */
   set header(header) {
     this[_].header = header;
@@ -697,15 +703,12 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
   }
   /**
    * Get the records.
-   * @type {Array}
    */
   get records(): T[] | null {
     return this[_].records || null;
   }
   /**
    * Set the records from given
-   * @param {Array} records records to set
-   * @type {Array}
    */
   set records(records) {
     if (records == null) {
@@ -717,15 +720,12 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
   }
   /**
    * Get the data source.
-   * @type {DataSource}
    */
   get dataSource(): DataSource<T> {
     return this[_].dataSource;
   }
   /**
    * Set the data source from given
-   * @param {DataSource} dataSource data source to set
-   * @type {DataSource}
    */
   set dataSource(dataSource) {
     _setDataSource(this, dataSource);
@@ -734,15 +734,12 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
   }
   /**
    * Get the theme.
-   * @type {object}
    */
   get theme(): Theme | null {
     return this[_].theme;
   }
   /**
    * Set the theme from given
-   * @param {object} theme theme to set
-   * @type {object}
    */
   set theme(theme) {
     this[_].theme = themes.of(theme);
@@ -751,7 +748,6 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
   /**
    * Get the font definition as a string.
    * @override
-   * @type {string}
    */
   get font(): string {
     return super.font || this[_].gridCanvasHelper.theme.font;
@@ -759,8 +755,6 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
   /**
    * Set the font definition with the given string.
    * @override
-   * @param {string} font the font definition to set
-   * @type {string}
    */
   set font(font) {
     super.font = font;
@@ -768,7 +762,6 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
   /**
    * Get the background color of the underlay.
    * @override
-   * @type {*}
    */
   get underlayBackgroundColor(): string {
     return (
@@ -779,15 +772,12 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
   /**
    * Set the background color of the underlay.
    * @override
-   * @param {*} underlayBackgroundColor the background color of the underlay to set
-   * @type {*}
    */
   set underlayBackgroundColor(underlayBackgroundColor) {
     super.underlayBackgroundColor = underlayBackgroundColor;
   }
   /**
    * Get the sort state.
-   * @type {object}
    */
   get sortState(): SortState {
     return this[_].sortState;
@@ -795,9 +785,6 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
   /**
    * Sets the sort state.
    * If `null` to set, the sort state is initialized.
-   *
-   * @param {object} sortState the sort state to set
-   * @type {object}
    */
   set sortState(sortState) {
     const oldState = this.sortState;
@@ -829,16 +816,12 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
   }
   /**
    * Get the header values.
-   * @type {object}
    */
   get headerValues(): HeaderValues {
     return this[_].headerValues || (this[_].headerValues = new Map());
   }
   /**
    * Sets the header values.
-   *
-   * @param {object} headerValues the header values to set
-   * @type {object}
    */
   set headerValues(headerValues) {
     this[_].headerValues = headerValues || new Map();
@@ -1015,7 +998,7 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
     }
     return _getCellValue(this, col, row);
   }
-  onDrawCell(
+  protected onDrawCell(
     col: number,
     row: number,
     context: CellContext
@@ -1084,7 +1067,7 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
       return then(_setCellValue(this, col, row, after), ret => {
         if (ret) {
           const { field } = this[_].layoutMap.getBody(col, row);
-          this.fireListeners(EVENT_TYPE.CHANGED_VALUE, {
+          this.fireListeners(LG_EVENT_TYPE.CHANGED_VALUE, {
             col,
             row,
             record: record as T,
@@ -1109,7 +1092,7 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
     const oldValue = this.headerValues.get(field);
     this.headerValues.set(field, newValue);
 
-    this.fireListeners(EVENT_TYPE.CHANGED_HEADER_VALUE, {
+    this.fireListeners(LG_EVENT_TYPE.CHANGED_HEADER_VALUE, {
       col,
       row,
       field,
@@ -1120,8 +1103,8 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
   getLayoutCellId(col: number, row: number): LayoutObjectId {
     return this[_].layoutMap.getCellId(col, row);
   }
-  bindEventsInternal(): void {
-    this.listen(EVENT_TYPE.SELECTED_CELL, e => {
+  protected bindEventsInternal(): void {
+    this.listen(LG_EVENT_TYPE.SELECTED_CELL, e => {
       const range = _getCellRange(this, e.col, e.row);
       const {
         start: { col: startCol, row: startRow },
@@ -1132,35 +1115,38 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
       }
     });
   }
-  getMoveLeftColByKeyDownInternal({ col, row }: CellAddress): number {
+  protected getMoveLeftColByKeyDownInternal({ col, row }: CellAddress): number {
     const {
       start: { col: startCol }
     } = _getCellRange(this, col, row);
     col = startCol;
     return super.getMoveLeftColByKeyDownInternal({ col, row });
   }
-  getMoveRightColByKeyDownInternal({ col, row }: CellAddress): number {
+  protected getMoveRightColByKeyDownInternal({
+    col,
+    row
+  }: CellAddress): number {
     const {
       end: { col: endCol }
     } = _getCellRange(this, col, row);
     col = endCol;
     return super.getMoveRightColByKeyDownInternal({ col, row });
   }
-  getMoveUpRowByKeyDownInternal({ col, row }: CellAddress): number {
+  protected getMoveUpRowByKeyDownInternal({ col, row }: CellAddress): number {
     const {
       start: { row: startRow }
     } = _getCellRange(this, col, row);
     row = startRow;
     return super.getMoveUpRowByKeyDownInternal({ col, row });
   }
-  getMoveDownRowByKeyDownInternal({ col, row }: CellAddress): number {
+  protected getMoveDownRowByKeyDownInternal({ col, row }: CellAddress): number {
     const {
       end: { row: endRow }
     } = _getCellRange(this, col, row);
     row = endRow;
     return super.getMoveDownRowByKeyDownInternal({ col, row });
   }
-  getOffsetInvalidateCells(): number {
+  protected getOffsetInvalidateCells(): number {
     return 1;
   }
   fireListeners<TYPE extends keyof ListGridEventHandlersEventMap<T>>(

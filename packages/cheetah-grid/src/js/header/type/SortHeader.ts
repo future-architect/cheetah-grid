@@ -1,6 +1,6 @@
 import {
   CellContext,
-  GridCanvasHelper,
+  GridCanvasHelperAPI,
   ListGridAPI,
   SortState
 } from "../../ts-types";
@@ -18,7 +18,7 @@ export class SortHeader<T> extends BaseHeader<T> {
     value: string,
     context: CellContext,
     style: SortHeaderStyle,
-    helper: GridCanvasHelper,
+    helper: GridCanvasHelperAPI,
     grid: ListGridAPI<T>,
     { drawCellBase }: DrawCellInfo<T>
   ): void {

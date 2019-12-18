@@ -2,7 +2,7 @@ import { CellAddress, EventListenerId, LayoutObjectId } from "../../ts-types";
 import { bindCellClickAction, bindCellKeyAction } from "./actionBind";
 import { event, isPromise, obj } from "../../internal/utils";
 import { isDisabledRecord, isReadOnlyRecord } from "./action-utils";
-import { EVENT_TYPE } from "../../core/EVENT_TYPE";
+import { DG_EVENT_TYPE } from "../../core/DG_EVENT_TYPE";
 import { Editor } from "./Editor";
 import { GridInternal } from "../../ts-types-internal";
 import { animate } from "../../internal/animate";
@@ -136,7 +136,7 @@ export class CheckEditor<T> extends Editor<T> {
       }),
 
       // paste value
-      grid.listen(EVENT_TYPE.PASTE_CELL, e => {
+      grid.listen(DG_EVENT_TYPE.PASTE_CELL, e => {
         if (e.multi) {
           // ignore multi cell values
           return;

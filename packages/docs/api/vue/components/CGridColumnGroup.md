@@ -4,7 +4,8 @@ sidebarDepth: 3
 
 # CGridColumnGroup
 
-Defines multiple header.
+Defines multiple header.  
+Can be used in the `default` slot of `CGrid`.
 
 ## Vue Template Structure
 

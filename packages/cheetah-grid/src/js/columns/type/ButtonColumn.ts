@@ -2,7 +2,7 @@ import * as utils from "./columnUtils";
 import {
   ButtonColumnOption,
   CellContext,
-  GridCanvasHelper
+  GridCanvasHelperAPI
 } from "../../ts-types";
 import { DrawCellInfo, GridInternal } from "../../ts-types-internal";
 import { ButtonStyle } from "../style/ButtonStyle";
@@ -39,7 +39,7 @@ export class ButtonColumn<T> extends Column<T> {
     value: string,
     context: CellContext,
     style: ButtonStyle,
-    helper: GridCanvasHelper,
+    helper: GridCanvasHelperAPI,
     grid: GridInternal<T>,
     { drawCellBase, getIcon }: DrawCellInfo<T>
   ): void {

@@ -1,6 +1,6 @@
 <template>
   <div class="c-grid-layout-row">
-    <!-- Use this slot to set the children layout definition -->
+    <!-- Use this slot to set the row layout definition -->
     <slot />
   </div>
 </template>
@@ -10,6 +10,7 @@ import { slotsToHeaderOptions, slotsToHeaderProps } from './c-grid/header-utils'
 
 /**
  * Defines layout row.
+ * Can be used in the `layout-header` slot and the `layout-body` slot of `CGrid`.
  */
 export default {
   inject: ['$_CGridInstance'],

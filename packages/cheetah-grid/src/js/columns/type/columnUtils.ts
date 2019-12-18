@@ -2,7 +2,7 @@ import * as icons from "../../internal/icons";
 import {
   CellContext,
   ColumnIconOption,
-  GridCanvasHelper,
+  GridCanvasHelperAPI,
   MaybePromise
 } from "../../ts-types";
 import { SimpleColumnIconOption } from "../../ts-types-internal";
@@ -12,7 +12,7 @@ export function loadIcons(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   icon: MaybePromise<ColumnIconOption<any> | ColumnIconOption<any>[]> | null,
   context: CellContext,
-  helper: GridCanvasHelper,
+  helper: GridCanvasHelperAPI,
   callback: (
     icons: SimpleColumnIconOption[] | undefined,
     context: CellContext
