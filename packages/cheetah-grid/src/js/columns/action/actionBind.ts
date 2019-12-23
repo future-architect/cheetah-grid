@@ -1,16 +1,16 @@
-import { CellAddress, EventListenerId, ListGridAPI } from "../../ts-types";
+import {
+  CellAddress,
+  EventListenerId,
+  LayoutObjectId,
+  ListGridAPI
+} from "../../ts-types";
 import { event, isPromise } from "../../internal/utils";
-import { EVENT_TYPE } from "../../core/EVENT_TYPE";
-
-export type ActionBindUtil = {
-  isTarget(col: number, row: number): boolean;
-};
+import { DG_EVENT_TYPE } from "../../core/DG_EVENT_TYPE";
 
 const KEY_ENTER = 13;
 export function bindCellClickAction<T>(
   grid: ListGridAPI<T>,
-  _col: number,
-  util: ActionBindUtil,
+  cellId: LayoutObjectId,
   {
     action,
     mouseOver,
@@ -21,10 +21,13 @@ export function bindCellClickAction<T>(
     mouseOut: (cell: CellAddress) => void;
   }
 ): EventListenerId[] {
+  function isTarget(col: number, row: number): boolean {
+    return grid.getLayoutCellId(col, row) === cellId;
+  }
   return [
     // click
-    grid.listen(EVENT_TYPE.CLICK_CELL, e => {
-      if (!util.isTarget(e.col, e.row)) {
+    grid.listen(DG_EVENT_TYPE.CLICK_CELL, e => {
+      if (!isTarget(e.col, e.row)) {
         return;
       }
       if (isPromise(grid.getRowRecord(e.row))) {
@@ -36,8 +39,8 @@ export function bindCellClickAction<T>(
       });
     }),
     // mouse move
-    grid.listen(EVENT_TYPE.MOUSEOVER_CELL, e => {
-      if (!util.isTarget(e.col, e.row)) {
+    grid.listen(DG_EVENT_TYPE.MOUSEOVER_CELL, e => {
+      if (!isTarget(e.col, e.row)) {
         return;
       }
       if (isPromise(grid.getRowRecord(e.row))) {
@@ -55,8 +58,8 @@ export function bindCellClickAction<T>(
       }
       grid.getElement().style.cursor = "pointer";
     }),
-    grid.listen(EVENT_TYPE.MOUSEOUT_CELL, e => {
-      if (!util.isTarget(e.col, e.row)) {
+    grid.listen(DG_EVENT_TYPE.MOUSEOUT_CELL, e => {
+      if (!isTarget(e.col, e.row)) {
         return;
       }
       if (mouseOut) {
@@ -71,8 +74,7 @@ export function bindCellClickAction<T>(
 }
 export function bindCellKeyAction<T>(
   grid: ListGridAPI<T>,
-  _col: number,
-  util: ActionBindUtil,
+  cellId: LayoutObjectId,
   {
     action,
     acceptKeys = []
@@ -81,15 +83,18 @@ export function bindCellKeyAction<T>(
     acceptKeys?: number[];
   }
 ): EventListenerId[] {
+  function isTarget(col: number, row: number): boolean {
+    return grid.getLayoutCellId(col, row) === cellId;
+  }
   acceptKeys = [...acceptKeys, KEY_ENTER];
   return [
     // enter key down
-    grid.listen(EVENT_TYPE.KEYDOWN, (keyCode, e) => {
+    grid.listen(DG_EVENT_TYPE.KEYDOWN, (keyCode, e) => {
       if (acceptKeys.indexOf(keyCode) === -1) {
         return;
       }
       const sel = grid.selection.select;
-      if (!util.isTarget(sel.col, sel.row)) {
+      if (!isTarget(sel.col, sel.row)) {
         return;
       }
       if (isPromise(grid.getRowRecord(sel.row))) {

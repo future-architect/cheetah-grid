@@ -1,4 +1,4 @@
-import { DrawGridAPI, MessageObject } from "../../../ts-types";
+import { ListGridAPI, MessageObject } from "../../../ts-types";
 import { EventHandler } from "../../../internal/EventHandler";
 import { createElement } from "../../../internal/dom";
 
@@ -36,8 +36,8 @@ export class MessageElement {
     delete this._rootElement;
     delete this._messageElement;
   }
-  attach(
-    grid: DrawGridAPI,
+  attach<T>(
+    grid: ListGridAPI<T>,
     col: number,
     row: number,
     message: MessageObject
@@ -57,7 +57,7 @@ export class MessageElement {
       this._detach();
     }
   }
-  move(grid: DrawGridAPI, col: number, row: number): void {
+  move<T>(grid: ListGridAPI<T>, col: number, row: number): void {
     const rootElement = this._rootElement;
     if (this._attachCell(grid, col, row)) {
       rootElement.classList.add(SHOWN_CLASSNAME);
@@ -77,16 +77,17 @@ export class MessageElement {
       rootElement.classList.add(HIDDEN_CLASSNAME);
     }
   }
-  _attachCell(grid: DrawGridAPI, col: number, row: number): boolean {
+  _attachCell<T>(grid: ListGridAPI<T>, col: number, row: number): boolean {
     const rootElement = this._rootElement;
-    const { element, rect } = grid.getAttachCellArea(col, row);
+    const { element, rect } = grid.getAttachCellsArea(
+      grid.getCellRange(col, row)
+    );
 
     const { bottom: top, left, width } = rect;
     const { frozenRowCount, frozenColCount } = grid;
     if (row >= frozenRowCount && frozenRowCount > 0) {
-      const { rect: frozenRect } = grid.getAttachCellArea(
-        col,
-        frozenRowCount - 1
+      const { rect: frozenRect } = grid.getAttachCellsArea(
+        grid.getCellRange(col, frozenRowCount - 1)
       );
       if (top < frozenRect.bottom) {
         return false; //範囲外
@@ -97,9 +98,8 @@ export class MessageElement {
       }
     }
     if (col >= frozenColCount && frozenColCount > 0) {
-      const { rect: frozenRect } = grid.getAttachCellArea(
-        frozenColCount - 1,
-        row
+      const { rect: frozenRect } = grid.getAttachCellsArea(
+        grid.getCellRange(frozenColCount - 1, row)
       );
       if (left < frozenRect.right) {
         return false; //範囲外

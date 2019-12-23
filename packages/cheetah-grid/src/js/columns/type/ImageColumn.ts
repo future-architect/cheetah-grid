@@ -1,6 +1,6 @@
 import {
   CellContext,
-  GridCanvasHelper,
+  GridCanvasHelperAPI,
   ListGridAPI,
   MaybePromise
 } from "../../ts-types";
@@ -59,7 +59,7 @@ export class ImageColumn<T> extends BaseColumn<T, HTMLImageElement> {
     value: HTMLImageElement,
     context: CellContext,
     style: ImageStyle,
-    helper: GridCanvasHelper,
+    helper: GridCanvasHelperAPI,
     _grid: ListGridAPI<T>,
     { drawCellBase }: DrawCellInfo<T>
   ): void {

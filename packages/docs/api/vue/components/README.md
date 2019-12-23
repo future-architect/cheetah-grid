@@ -4,15 +4,30 @@ order: 50
 
 # Available Vue Components
 
-| Component Name | Descrition | LINK |
-|----------|-----|---|
-| `<c-grid>` | Grid | [CGrid](./CGrid.md) |
-| `<c-grid-column>` | Column definition to display in the grid | [CGridColumn](./CGridColumn.md) |
-| `<c-grid-column-group>` | Definition of column group when multiple header is displayed | [CGridColumnGroup](./CGridColumnGroup.md) |
-| `<c-grid-button-column>` | Button column definition | [CGridButtonColumn](./CGridButtonColumn.md) |
-| `<c-grid-check-column>` | Checkbox column definition | [CGridCheckColumn](./CGridCheckColumn.md) |
-| `<c-grid-input-column>` | Input column definition | [CGridInputColumn](./CGridInputColumn.md) |
-| `<c-grid-menu-column>` | Menu column definition | [CGridMenuColumn](./CGridMenuColumn.md) |
-| `<c-grid-link-column>` | Link column definition | [CGridLinkColumn](./CGridLinkColumn.md) |
-| `<c-grid-icon-column>` | Icon column definition | [CGridIconColumn](./CGridIconColumn.md) |
-| `<c-grid-percent-complete-bar-column>` | Percent complete bar column definition | [CGridPercentCompleteBarColumn](./CGridPercentCompleteBarColumn.md) |
+| Component Name                         | Descrition                                                   | LINK                            |
+| -------------------------------------- | ------------------------------------------------------------ | ------------------------------- |
+| `<c-grid>`                             | Grid                                                         | [CGrid]                         |
+| `<c-grid-column>`                      | Column definition to display in the grid                     | [CGridColumn]                   |
+| `<c-grid-column-group>`                | Definition of column group when multiple header is displayed | [CGridColumnGroup]              |
+| `<c-grid-button-column>`               | Button column definition                                     | [CGridButtonColumn]             |
+| `<c-grid-check-column>`                | Checkbox column definition                                   | [CGridCheckColumn]              |
+| `<c-grid-input-column>`                | Input column definition                                      | [CGridInputColumn]              |
+| `<c-grid-menu-column>`                 | Menu column definition                                       | [CGridMenuColumn]               |
+| `<c-grid-link-column>`                 | Link column definition                                       | [CGridLinkColumn]               |
+| `<c-grid-icon-column>`                 | Icon column definition                                       | [CGridIconColumn]               |
+| `<c-grid-percent-complete-bar-column>` | Percent complete bar column definition                       | [CGridPercentCompleteBarColumn] |
+| `<c-grid-layout-row>`                  | Define advanced layout row.                                  | [CGridLayoutRow]                |
+| `<c-grid-header>`                      | Define advanced layout header.                               | [CGridHeader]                   |
+
+[CGrid]: ./CGrid.md
+[CGridColumn]: ./CGridColumn.md
+[CGridColumnGroup]: ./CGridColumnGroup.md
+[CGridButtonColumn]: ./CGridButtonColumn.md
+[CGridCheckColumn]: ./CGridCheckColumn.md
+[CGridInputColumn]: ./CGridInputColumn.md
+[CGridMenuColumn]: ./CGridMenuColumn.md
+[CGridLinkColumn]: ./CGridLinkColumn.md
+[CGridIconColumn]: ./CGridIconColumn.md
+[CGridPercentCompleteBarColumn]: ./CGridPercentCompleteBarColumn.md
+[CGridLayoutRow]: ./CGridLayoutRow.md
+[CGridHeader]: ./CGridHeader.md

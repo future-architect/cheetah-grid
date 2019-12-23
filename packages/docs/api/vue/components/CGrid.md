@@ -74,9 +74,30 @@ export default {
 
 ### `default` slot
 
-Use this slot to set the columns definition
+Use this slot to set the simple header definition.  
+The definition is set to `header` property described in [Define Headers and Columns]
 
 <!-- SLOT_DEFAULT_END -->
+
+<!-- SLOT_LAYOUT-HEADER_START -->
+
+### `layout-header` slot
+
+Use this slot to set the layout header definition.  
+Use this slot in combination with the `layout-body` slot.  
+The definition is set to `layout.header` property described in [Advanced Layout].
+
+<!-- SLOT_LAYOUT-HEADER_END -->
+
+<!-- SLOT_LAYOUT-BODY_START -->
+
+### `layout-body` slot
+
+Use this slot to set the layout body definition.  
+Use this slot in combination with the `layout-header` slot.  
+The definition is set to `layout.body` property described in [Advanced Layout].
+
+<!-- SLOT_LAYOUT-BODY_END -->
 
 ## Properties
 
@@ -93,6 +114,61 @@ Use this slot to set the columns definition
 | options | `object`  | Defines a raw options for Cheetah Grid | `undefined` |
 
 <!-- PROPS_TABLE_END -->
+
+## Examples of using Properties
+
+### theme
+
+<code-preview>
+
+```vue
+<div class="demo-grid middle">
+  <c-grid
+    :data="records"
+    :theme="userTheme"> <!-- set theme -->
+    <c-grid-check-column field="check" :width="50"/>
+    <c-grid-column field="personid" width= "85">ID</c-grid-column>
+    <c-grid-column-group caption="Name">
+      <c-grid-input-column field="fname" width="20%" min-width="150" :sort="true">First Name</c-grid-input-column>
+      <c-grid-input-column field="lname" width="20%" min-width="150" :sort="true">Last Name</c-grid-input-column>
+    </c-grid-column-group>
+    <c-grid-button-column caption="SHOW REC" width="120" @click="onClickRecord" />
+  </c-grid>
+</div>
+```
+
+```js
+export default {
+  name: 'App',
+  data() {
+    return {
+      records,
+      // you can set the theme name or object.
+      // userTheme: 'BASIC',
+      userTheme: {
+        color: '#2c3e50',
+        frozenRowsColor: '#2c3e50',
+        frozenRowsBgColor: '#40b883',
+        borderColor: '#35495e',
+        frozenRowsBorderColor: '#35495e',
+        checkbox: {
+          checkBgColor: '#35495e',
+          borderColor: '#35495e',
+        },
+        button: {
+          color: '#FFF',
+          bgColor: '#2c3e50',
+        },
+      }
+    };
+  },
+  methods: {
+    onClickRecord(rec) { alert(JSON.stringify(rec)); }
+  }
+};
+```
+
+</code-preview>
 
 ## Data
 
@@ -126,6 +202,50 @@ The events for which the column can be identified emit the same event to each co
 e.g. `<c-grid-column>`
 :::
 
+
+<code-preview>
+
+```vue
+<div class="demo-grid middle">
+  <c-grid
+    :data="records"
+    :frozen-col-count="1">
+    <c-grid-column field="personid" width= "85"
+      @click-cell="onClickCell($event, 'ID')"
+    >
+      ID
+  </c-grid-column>
+    <c-grid-input-column field="fname" width="20%"
+      @click-cell="onClickCell($event, 'First Name')"
+    >
+      First Name
+    </c-grid-input-column>
+    <c-grid-input-column field="lname" width= "20%"
+      @click-cell="onClickCell($event, 'Last Name')"
+    >
+      Last Name
+    </c-grid-input-column>
+  </c-grid>
+</div>
+```
+
+```js
+export default {
+  data() {
+    return {
+      records
+    }
+  },
+  methods: {
+    onClickCell(event, colName) {
+      alert('Click at '+colName+': $event='+JSON.stringify(event))
+    }
+  }
+};
+```
+
+</code-preview>
+
 ## Methods
 
 <!-- METHODS_TABLE_START -->
@@ -137,3 +257,6 @@ e.g. `<c-grid-column>`
 | updateScroll | --- | Apply the changed scroll size. |
 
 <!-- METHODS_TABLE_END -->
+
+[Advanced Layout]: ../../js/advanced_layout/README.md
+[Define Headers and Columns]: ../../js/headers_columns.md

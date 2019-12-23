@@ -126,11 +126,11 @@ module.exports = {
     resolve: {
       alias: {
         // DEMOを動的に起動させるために`vue`に`vue.esm.js`を利用させます。
-        'vue': resolve('../node_modules/vue/dist/vue.esm.js')
+        vue: resolve('../node_modules/vue/dist/vue.esm.js')
       }
     },
     externals: {
-      'vue': 'Vue'
+      vue: 'Vue'
     }
   },
   base: process.env.VUEPRESS_BASE || '/cheetah-grid/documents/',

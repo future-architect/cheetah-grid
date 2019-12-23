@@ -1,5 +1,5 @@
 import * as utils from "./columnUtils";
-import { CellContext, GridCanvasHelper, ListGridAPI } from "../../ts-types";
+import { CellContext, GridCanvasHelperAPI, ListGridAPI } from "../../ts-types";
 import { BaseColumn } from "./BaseColumn";
 import { DrawCellInfo } from "../../ts-types-internal";
 import { Style } from "../style/Style";
@@ -15,7 +15,7 @@ export class Column<T> extends BaseColumn<T, string> {
     value: string,
     context: CellContext,
     style: Style,
-    helper: GridCanvasHelper,
+    helper: GridCanvasHelperAPI,
     _grid: ListGridAPI<T>,
     { drawCellBase, getIcon }: DrawCellInfo<T>
   ): void {

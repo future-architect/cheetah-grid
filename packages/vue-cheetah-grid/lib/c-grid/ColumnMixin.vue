@@ -1,10 +1,11 @@
 <script>
-import { gridUpdateWatcher } from './utils'
+import { gridUpdateWatcher, extend } from './utils'
 
 /**
  * The Mixin for `<c-grid-column>` components.
  */
 export default {
+  inject: ['$_CGridInstance'],
   props: {
     /**
      * Defines a header caption
@@ -58,10 +59,14 @@ export default {
     headerAction: gridUpdateWatcher
   },
   mounted () {
+    this.$_CGridInstance.$_CGrid_setColumnDefine(this)
     this.$_CGrid_nextTickUpdate()
   },
   updated () {
     this.$_CGrid_nextTickUpdate()
+  },
+  beforeDestroy () {
+    this.$_CGridInstance.$_CGrid_removeColumnDefine(this)
   },
   methods: {
     /**
@@ -69,8 +74,8 @@ export default {
      * @return {void}
      */
     invalidate () {
-      if (this.$parent && this.$parent.invalidate) {
-        this.$parent.invalidate()
+      if (this.$_CGridInstance && this.$_CGridInstance.invalidate) {
+        this.$_CGridInstance.invalidate()
       }
     },
     /**
@@ -79,24 +84,38 @@ export default {
      * @returns {object}
      */
     getPropsObjectInternal () {
-      const props = Object.assign({}, this.$props)
+      const props = extend({}, this.$props)
       props.textContent = this.$el.textContent.trim()
       return props
     },
     /**
      * @private
      */
+    createColumn () {
+      return {
+        vm: this,
+        caption: this.caption,
+        headerStyle: this.headerStyle,
+        headerField: this.headerField,
+        headerType: this.headerType,
+        headerAction: this.headerAction,
+        sort: this.sort
+      }
+    },
+    /**
+     * @private
+     */
     $_CGrid_update () {
-      if (this.$parent && this.$parent.$_CGrid_update) {
-        this.$parent.$_CGrid_update()
+      if (this.$_CGridInstance && this.$_CGridInstance.$_CGrid_update) {
+        this.$_CGridInstance.$_CGrid_update()
       }
     },
     /**
      * @private
      */
     $_CGrid_nextTickUpdate () {
-      if (this.$parent && this.$parent.$_CGrid_nextTickUpdate) {
-        this.$parent.$_CGrid_nextTickUpdate()
+      if (this.$_CGridInstance && this.$_CGridInstance.$_CGrid_nextTickUpdate) {
+        this.$_CGridInstance.$_CGrid_nextTickUpdate()
       }
     }
   }

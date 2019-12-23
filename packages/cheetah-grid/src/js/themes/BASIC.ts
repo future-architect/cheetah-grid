@@ -3,11 +3,12 @@
 import { StylePropertyFunctionArg, ThemeDefine } from "../ts-types";
 
 function DEFAULT_BG_COLOR(args: StylePropertyFunctionArg): string {
-  const {
-    row,
-    grid: { frozenRowCount }
-  } = args;
-  if (!((row - frozenRowCount) & 1)) {
+  const { row, grid } = args;
+  if (row < grid.frozenRowCount) {
+    return "#FFF";
+  }
+  const index = grid.getRecordIndexByRow(row);
+  if (!(index & 1)) {
     return "#FFF";
   } else {
     return "#F6F6F6";
@@ -57,7 +58,6 @@ function FROZEN_ROWS_BG_COLOR(args: StylePropertyFunctionArg): CanvasGradient {
 /**
  * basic theme
  * @name BASIC
- * @type {Object}
  * @memberof cheetahGrid.themes.choices
  */
 export default {

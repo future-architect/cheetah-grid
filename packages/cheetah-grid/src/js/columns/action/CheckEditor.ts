@@ -1,12 +1,8 @@
-import {
-  ActionBindUtil,
-  bindCellClickAction,
-  bindCellKeyAction
-} from "./actionBind";
-import { CellAddress, EventListenerId } from "../../ts-types";
+import { CellAddress, EventListenerId, LayoutObjectId } from "../../ts-types";
+import { bindCellClickAction, bindCellKeyAction } from "./actionBind";
 import { event, isPromise, obj } from "../../internal/utils";
 import { isDisabledRecord, isReadOnlyRecord } from "./action-utils";
-import { EVENT_TYPE } from "../../core/EVENT_TYPE";
+import { DG_EVENT_TYPE } from "../../core/DG_EVENT_TYPE";
 import { Editor } from "./Editor";
 import { GridInternal } from "../../ts-types-internal";
 import { animate } from "../../internal/animate";
@@ -53,8 +49,7 @@ export class CheckEditor<T> extends Editor<T> {
   }
   bindGridEvent(
     grid: GridInternal<T>,
-    col: number,
-    util: ActionBindUtil
+    cellId: LayoutObjectId
   ): EventListenerId[] {
     let _state = grid[CHECK_COLUMN_STATE_ID];
     if (!_state) {
@@ -64,7 +59,8 @@ export class CheckEditor<T> extends Editor<T> {
     const state = _state;
 
     const action = (cell: CellAddress): void => {
-      const cellKey = `${cell.col}:${cell.row}`;
+      const range = grid.getCellRange(cell.col, cell.row);
+      const cellKey = `${range.start.col}:${range.start.row}`;
 
       if (
         isReadOnlyRecord(this.readOnly, grid, cell.row) ||
@@ -83,7 +79,7 @@ export class CheckEditor<T> extends Editor<T> {
             } else {
               state.elapsed[cellKey] = point;
             }
-            grid.invalidateCell(cell.col, cell.row);
+            grid.invalidateCellRange(range);
           });
         };
         if (isPromise(ret)) {
@@ -97,8 +93,12 @@ export class CheckEditor<T> extends Editor<T> {
         }
       }
     };
+
+    function isTarget(col: number, row: number): boolean {
+      return grid.getLayoutCellId(col, row) === cellId;
+    }
     return [
-      ...bindCellClickAction(grid, col, util, {
+      ...bindCellClickAction(grid, cellId, {
         action,
         mouseOver: e => {
           if (isDisabledRecord(this.disabled, grid, e.row)) {
@@ -108,20 +108,22 @@ export class CheckEditor<T> extends Editor<T> {
             col: e.col,
             row: e.row
           };
-          grid.invalidateCell(e.col, e.row);
+          const range = grid.getCellRange(e.col, e.row);
+          grid.invalidateCellRange(range);
           return true;
         },
         mouseOut: e => {
           delete state.mouseActiveCell;
-          grid.invalidateCell(e.col, e.row);
+          const range = grid.getCellRange(e.col, e.row);
+          grid.invalidateCellRange(range);
         }
       }),
-      ...bindCellKeyAction(grid, col, util, {
+      ...bindCellKeyAction(grid, cellId, {
         action: _e => {
           const selrange = grid.selection.range;
           const { col } = grid.selection.select;
           for (let { row } = selrange.start; row <= selrange.end.row; row++) {
-            if (!util.isTarget(col, row)) {
+            if (!isTarget(col, row)) {
               continue;
             }
             action({
@@ -134,12 +136,12 @@ export class CheckEditor<T> extends Editor<T> {
       }),
 
       // paste value
-      grid.listen(EVENT_TYPE.PASTE_CELL, e => {
+      grid.listen(DG_EVENT_TYPE.PASTE_CELL, e => {
         if (e.multi) {
           // ignore multi cell values
           return;
         }
-        if (!util.isTarget(e.col, e.row)) {
+        if (!isTarget(e.col, e.row)) {
           return;
         }
         const pasteValue = e.normalizeValue.trim();

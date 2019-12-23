@@ -157,7 +157,6 @@ class FilterData<T> {
  * grid data source for filter
  *
  * @classdesc cheetahGrid.data.FilterDataSource
- * @extends cheetahGrid.data.DataSource
  * @memberof cheetahGrid.data
  */
 export class FilterDataSource<T> extends DataSource<T> {
@@ -195,7 +194,7 @@ export class FilterDataSource<T> extends DataSource<T> {
       : null;
     this.length = this._dataSource.length;
   }
-  getOriginal(index: number): MaybePromiseOrUndef<T> {
+  protected getOriginal(index: number): MaybePromiseOrUndef<T> {
     if (!this._filterData) {
       return super.getOriginal(index);
     }

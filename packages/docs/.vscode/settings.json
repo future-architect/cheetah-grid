@@ -1,4 +1,9 @@
 {
-  "eslint.autoFixOnSave": true,
-  "eslint.workingDirectories": ["./", "./.vuepress"]
+  "eslint.workingDirectories": [
+    "./",
+    "./.vuepress"
+  ],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  }
 }

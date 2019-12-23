@@ -77,7 +77,9 @@ export class InlineInputElement<T> {
 
     input.style.font = grid.font || "16px sans-serif";
 
-    const { element, rect } = grid.getAttachCellArea(col, row);
+    const { element, rect } = grid.getAttachCellsArea(
+      grid.getCellRange(col, row)
+    );
     input.style.top = `${rect.top.toFixed()}px`;
     input.style.left = `${rect.left.toFixed()}px`;
     input.style.width = `${rect.width.toFixed()}px`;
@@ -85,7 +87,7 @@ export class InlineInputElement<T> {
     element.appendChild(input);
 
     setInputAttrs(editor, grid, input);
-    input.value = value;
+    input.value = value ?? "";
 
     this._activeData = { grid, col, row, editor };
     this._beforePropEditor = editor;
@@ -129,7 +131,8 @@ export class InlineInputElement<T> {
       this._handler.tryWithOffEvents(input, "blur", () => {
         input.parentElement?.removeChild(input);
       });
-      grid.invalidateCell(col, row);
+      const range = grid.getCellRange(col, row);
+      grid.invalidateCellRange(range);
       if (gridFocus) {
         grid.focus();
       }

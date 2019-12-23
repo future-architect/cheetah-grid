@@ -14,22 +14,34 @@ function FROZEN_ROWS_BORDER_COLOR(args: StylePropertyFunctionArg): string[] {
   }
 }
 function BORDER_COLOR(args: StylePropertyFunctionArg): (string | null)[] {
-  const {
-    col,
-    grid: { colCount, frozenColCount }
-  } = args;
+  const { col, row, grid } = args;
+  const { colCount, frozenColCount, recordRowCount } = grid;
+  let top: string | null = "#ccc7c7";
+  let bottom: string | null = "#ccc7c7";
+  if (recordRowCount > 1) {
+    const startRow = grid.getRecordStartRowByRecordIndex(
+      grid.getRecordIndexByRow(row)
+    );
+    const endRow = startRow + recordRowCount - 1;
+    if (startRow !== row) {
+      top = null;
+    }
+    if (endRow !== row) {
+      bottom = null;
+    }
+  }
   if (frozenColCount - 1 === col) {
-    return ["#ccc7c7", "#f2f2f2", "#ccc7c7", null];
+    return [top, "#f2f2f2", bottom, null];
   }
   if (colCount - 1 === col) {
-    return ["#ccc7c7", "#f2f2f2", "#ccc7c7", null];
+    return [top, "#f2f2f2", bottom, null];
   }
-  return ["#ccc7c7", null];
+
+  return [top, null, bottom, null];
 }
 /**
  * material design theme
  * @name MATERIAL_DESIGN
- * @type {Object}
  * @memberof cheetahGrid.themes.choices
  */
 export default {

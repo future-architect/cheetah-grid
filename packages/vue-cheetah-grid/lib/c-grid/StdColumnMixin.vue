@@ -1,5 +1,5 @@
 <script>
-import { gridUpdateWatcher } from './utils'
+import { gridUpdateWatcher, filterToFn } from './utils'
 
 /**
  * The Mixin for `<c-grid-column>` components.
@@ -73,6 +73,23 @@ export default {
     columnStyle: gridUpdateWatcher,
     icon: gridUpdateWatcher,
     message: gridUpdateWatcher
+  },
+  methods: {
+    /**
+     * @private
+     */
+    createColumn () {
+      const field = this.filter ? filterToFn(this, this.field, this.filter) : this.field
+      return {
+        field,
+        width: this.width,
+        minWidth: this.minWidth,
+        maxWidth: this.maxWidth,
+        style: this.columnStyle,
+        icon: this.icon,
+        message: this.message
+      }
+    }
   }
 }
 </script>

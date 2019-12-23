@@ -18,7 +18,7 @@ Please define function if you want to sort by your own logic.
 const records = [
   {
     no: 1,
-    name: 'Asian',
+    name: 'Asiatic',
   },
   {
     no: 2,
@@ -82,7 +82,7 @@ In order to change the color of the sort arrow you implement as follows.
 const records = [
   {
     no: 1,
-    name: 'Asian',
+    name: 'Asiatic',
   },
   {
     no: 2,
@@ -151,7 +151,7 @@ If you set `sortState` property to `null`, the sort state is initialized.
 const records = [
   {
     no: 1,
-    name: 'Asian',
+    name: 'Asiatic',
   },
   {
     no: 2,

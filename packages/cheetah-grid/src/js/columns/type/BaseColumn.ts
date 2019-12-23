@@ -3,7 +3,8 @@ import {
   BaseColumnOption,
   CellContext,
   EventListenerId,
-  GridCanvasHelper,
+  GridCanvasHelperAPI,
+  LayoutObjectId,
   ListGridAPI,
   MaybePromise,
   Message
@@ -274,7 +275,7 @@ export abstract class BaseColumn<T, V> {
     value: V,
     context: CellContext,
     style: BaseStyle,
-    helper: GridCanvasHelper,
+    helper: GridCanvasHelperAPI,
     grid: ListGridAPI<T>,
     info: DrawCellInfo<T>
   ): void;
@@ -282,7 +283,7 @@ export abstract class BaseColumn<T, V> {
     message: Message,
     context: CellContext,
     style: BaseStyle,
-    helper: GridCanvasHelper,
+    helper: GridCanvasHelperAPI,
     grid: ListGridAPI<T>,
     info: DrawCellInfo<T>
   ): void {
@@ -297,10 +298,7 @@ export abstract class BaseColumn<T, V> {
   }
   bindGridEvent(
     _grid: ListGridAPI<T>,
-    _col: number,
-    _util: {
-      isTarget(col: number, row: number): boolean;
-    }
+    _cellId: LayoutObjectId
   ): EventListenerId[] {
     return [];
   }

@@ -1,14 +1,14 @@
 import {
   CellContext,
-  GridCanvasHelper,
+  GridCanvasHelperAPI,
   ListGridAPI,
   SortState
 } from "../../ts-types";
+import { cellInRange, isDef } from "../../internal/utils";
 import { BaseHeader } from "./BaseHeader";
 import { DrawCellInfo } from "../../ts-types-internal";
 import { SortHeaderStyle } from "../style/SortHeaderStyle";
 import { getFontSize } from "../../internal/canvases";
-import { isDef } from "../../internal/utils";
 
 export class SortHeader<T> extends BaseHeader<T> {
   get StyleClass(): typeof SortHeaderStyle {
@@ -18,7 +18,7 @@ export class SortHeader<T> extends BaseHeader<T> {
     value: string,
     context: CellContext,
     style: SortHeaderStyle,
-    helper: GridCanvasHelper,
+    helper: GridCanvasHelperAPI,
     grid: ListGridAPI<T>,
     { drawCellBase }: DrawCellInfo<T>
   ): void {
@@ -41,8 +41,8 @@ export class SortHeader<T> extends BaseHeader<T> {
     const state = grid.sortState as SortState;
     let order = undefined;
     const { col, row } = context;
-    const range = grid.getHeaderCellRange(col, row);
-    if (range.inCell(state.col, range.start.row)) {
+    const range = grid.getCellRange(col, row);
+    if (cellInRange(range, state.col, state.row)) {
       ({ order } = state);
     }
 

@@ -8,6 +8,9 @@ import * as register from "./register";
 import * as themes from "./themes";
 import * as tools from "./tools";
 import {
+  ColumnDefine,
+  GroupHeaderDefine,
+  HeaderDefine,
   HeadersDefine,
   ListGrid,
   ListGridConstructorOptions
@@ -15,12 +18,17 @@ import {
 import { GridCanvasHelper } from "./GridCanvasHelper";
 import { Theme } from "./themes/theme";
 
+export { getInternal as _getInternal } from "./get-internal";
+
 /**
  * Cheetah Grid
- * @type {Object}
  * @namespace cheetahGrid
  */
 export {
+  /**
+   * Types
+   * @namespace cheetahGrid.TYPES
+   */
   TYPES,
   core,
   tools,
@@ -29,6 +37,9 @@ export {
   // ListGrid types
   ListGridConstructorOptions,
   HeadersDefine,
+  ColumnDefine,
+  HeaderDefine,
+  GroupHeaderDefine,
   // objects
   columns,
   headers,
@@ -36,23 +47,13 @@ export {
   data,
   // helper
   GridCanvasHelper,
+  getIcons,
   //plugin registers
   register
 };
 
-export function getIcons(): { [key: string]: TYPES.IconDefine } {
+function getIcons(): { [key: string]: TYPES.IconDefine } {
   return icons.get();
-}
-
-export function _getInternal(): unknown {
-  console.warn("use internal!!");
-  return {
-    color: require("./internal/color"),
-    sort: require("./internal/sort"),
-    calc: require("./internal/calc"),
-    symbolManager: require("./internal/symbolManager"),
-    path2DManager: require("./internal/path2DManager")
-  };
 }
 
 // backward compatibility
@@ -94,7 +95,3 @@ Object.defineProperty(themes as any, "choices", {
     return themes.getChoices();
   }
 });
-
-// backward compatibility
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-(core.DrawGrid as any).EVENT_TYPE = core.EVENT_TYPE;

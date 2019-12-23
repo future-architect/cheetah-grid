@@ -1,10 +1,11 @@
 import { BaseHeader } from "./type/BaseHeader";
+import { BaseHeaderDefine } from "../list-grid/layout-map/api";
 import { CheckHeader } from "./type/CheckHeader";
 import { Header } from "./type/Header";
 import { HeaderTypeOption } from "../ts-types";
 import { SortHeader } from "./type/SortHeader";
 
-export const TYPES = {
+const TYPES = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   DEFAULT: new Header<any>(),
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -26,11 +27,7 @@ export function of<T>(
     return headerType;
   }
 }
-export function ofCell<T>(headerCell: {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  sort?: any;
-  headerType?: HeaderTypeOption | BaseHeader<T> | null | undefined;
-}): BaseHeader<T> {
+export function ofCell<T>(headerCell: BaseHeaderDefine<T>): BaseHeader<T> {
   if (headerCell.sort) {
     return TYPES.SORT;
   }

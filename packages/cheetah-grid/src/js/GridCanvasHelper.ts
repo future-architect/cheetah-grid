@@ -4,12 +4,12 @@ import * as fonts from "./internal/fonts";
 import * as inlineUtils from "./element/inlines";
 import * as themes from "./themes";
 import {
-  GridCanvasHelper as Base,
   CellContext,
   ColorDef,
   ColorPropertyDefine,
   ColorsPropertyDefine,
   FontPropertyDefine,
+  GridCanvasHelperAPI,
   LineClamp,
   ListGridAPI,
   RectProps,
@@ -20,7 +20,14 @@ import {
 import { Inline, InlineDrawOption } from "./element/Inline";
 import { RGBA, colorToRGB } from "./internal/color";
 import { calcStartPosition, getFontSize } from "./internal/canvases";
-import { getChainSafe, getOrApply, isDef, style } from "./internal/utils";
+import {
+  cellEquals,
+  cellInRange,
+  getChainSafe,
+  getOrApply,
+  isDef,
+  style
+} from "./internal/utils";
 import { InlineDrawer } from "./element/InlineDrawer";
 import { Rect } from "./internal/Rect";
 import { SimpleColumnIconOption } from "./ts-types-internal";
@@ -763,7 +770,7 @@ function strokeRect(
   }
 }
 
-export class GridCanvasHelper<T> implements Base {
+export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
   private _grid: ListGridAPI<T>;
   private _theme: RequiredThemeDefine;
   constructor(grid: ListGridAPI<T>) {
@@ -1125,9 +1132,9 @@ export class GridCanvasHelper<T> implements Base {
     context: CellContext,
     option: { fillColor?: ColorPropertyDefine } = {}
   ): ColorPropertyDefine {
-    const state = context.getSelectState();
+    const sel = context.getSelection();
     const { col, row } = context;
-    if (!state.selected && state.selection) {
+    if (!cellEquals(sel.select, context) && cellInRange(sel.range, col, row)) {
       return this.theme.selectionBgColor;
     }
     if (option.fillColor) {
@@ -1186,23 +1193,24 @@ export class GridCanvasHelper<T> implements Base {
       }
     });
   }
+  // Unused in main
   borderWithState(
     context: CellContext,
     option: { borderColor?: ColorsPropertyDefine; lineWidth?: number } = {}
   ): void {
     const rect = context.getRect();
-    const state = context.getSelectState();
+    const sel = context.getSelection();
     const { col, row } = context;
 
     //罫線
-    if (state.selected) {
+    if (cellEquals(sel.select, context)) {
       option.borderColor = this.theme.highlightBorderColor;
       option.lineWidth = 2;
       this.border(context, option);
     } else {
       // header color
       const isFrozenCell = this._grid.isFrozenCell(col, row);
-      if (isFrozenCell && isFrozenCell.row) {
+      if (isFrozenCell?.row) {
         option.borderColor = this.theme.frozenRowsBorderColor;
       }
 

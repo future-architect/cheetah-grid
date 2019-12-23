@@ -1,4 +1,4 @@
-import { CellAddress, CellRange, EventListenerId } from "../../ts-types";
+import { CellAddress, EventListenerId, LayoutObjectId } from "../../ts-types";
 import { CheckHeaderState, GridInternal } from "../../ts-types-internal";
 import { bindCellClickAction, bindCellKeyAction } from "./actionBind";
 import { BaseAction } from "./BaseAction";
@@ -23,16 +23,20 @@ export class CheckHeaderAction<T> extends BaseAction<T> {
   clone(): CheckHeaderAction<T> {
     return new CheckHeaderAction(this);
   }
-  bindGridEvent(grid: GridInternal<T>, range: CellRange): EventListenerId[] {
+  bindGridEvent(
+    grid: GridInternal<T>,
+    cellId: LayoutObjectId
+  ): EventListenerId[] {
     const state = getState(grid);
 
     const action = ({ col, row }: CellAddress): void => {
-      const cellKey = `${col}:${row}`;
+      const range = grid.getCellRange(col, row);
+      const cellKey = `${range.start.col}:${range.start.row}`;
       if (this.disabled || state.block[cellKey]) {
         return;
       }
-      const checked = grid.getHeaderValue(col, row);
-      grid.setHeaderValue(col, row, !checked);
+      const checked = grid.getHeaderValue(range.start.col, range.start.row);
+      grid.setHeaderValue(range.start.col, range.start.row, !checked);
 
       const onChange = (): void => {
         // checkbox animation
@@ -42,18 +46,13 @@ export class CheckHeaderAction<T> extends BaseAction<T> {
           } else {
             state.elapsed[cellKey] = point;
           }
-          grid.invalidateGridRect(
-            range.start.col,
-            range.start.row,
-            range.end.col,
-            range.end.row
-          );
+          grid.invalidateCellRange(range);
         });
       };
       onChange();
     };
     return [
-      ...bindCellClickAction(grid, range, {
+      ...bindCellClickAction(grid, cellId, {
         action,
         mouseOver: e => {
           if (this.disabled) {
@@ -63,15 +62,18 @@ export class CheckHeaderAction<T> extends BaseAction<T> {
             col: e.col,
             row: e.row
           };
-          grid.invalidateCell(e.col, e.row);
+
+          const range = grid.getCellRange(e.col, e.row);
+          grid.invalidateCellRange(range);
           return true;
         },
         mouseOut: e => {
           delete state.mouseActiveCell;
-          grid.invalidateCell(e.col, e.row);
+          const range = grid.getCellRange(e.col, e.row);
+          grid.invalidateCellRange(range);
         }
       }),
-      ...bindCellKeyAction(grid, range, {
+      ...bindCellKeyAction(grid, cellId, {
         action,
         acceptKeys: [KEY_ENTER, KEY_SPACE]
       })

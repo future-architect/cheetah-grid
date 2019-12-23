@@ -9,6 +9,8 @@ If nothing is set to `width` property, the value of `defaultColWidth` (property 
 
 You can use `%`, `calc()` or `auto` by setting a string to the `width` property.
 
+You can also set the minimum and maximum widths by setting the `minWidth` and `maxWidth` properties.
+
 <code-preview>
 
 ```html
@@ -21,7 +23,7 @@ const records = generatePersons(100);
 const grid = new cheetahGrid.ListGrid({
   parentElement: document.querySelector('.sample1'),
   header: [
-    {field: 'check', caption: '', /*unset width. use defaultColWidth*/ columnType: 'check', action: 'check', minWidth: 50, maxWidth: 50},
+    {field: 'check', caption: '', columnType: 'check', action: 'check', minWidth: 50, maxWidth: 50},
     {field: 'personid', caption: 'ID', width: '10%', minWidth: '50px', maxWidth: '50%'},
     {field: 'fname', caption: 'First Name', width: 'auto', minWidth: '120px'},
     {field: 'lname', caption: 'Last Name', width: 'auto', minWidth: '120px'},

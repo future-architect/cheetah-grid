@@ -380,22 +380,3 @@ export type Canvashelper = {
   drawInlineImageRect: typeof drawInlineImageRect;
   strokeColorsRect: typeof strokeColorsRect;
 };
-// /**
-//  * canvashelper
-//  * @type {Object}
-//  * @namespace cheetahGrid.tools.canvashelper
-//  * @memberof cheetahGrid.tools
-//  */
-// const canvashelper = {
-//   roundRect,
-//   fillRoundRect,
-//   strokeRoundRect,
-//   drawCheckbox,
-//   measureCheckbox,
-//   fillTextRect,
-//   drawButton,
-//   drawInlineImageRect,
-//   strokeColorsRect
-// };
-
-// export = canvashelper;

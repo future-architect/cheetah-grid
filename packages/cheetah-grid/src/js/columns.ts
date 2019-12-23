@@ -4,7 +4,6 @@ import * as type from "./columns/type";
 
 /**
  * columns
- * @type {Object}
  * @namespace cheetahGrid.columns
  * @memberof cheetahGrid
  */

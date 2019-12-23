@@ -1,6 +1,7 @@
+import { CellAddress, FieldDef } from "../ts-types/grid";
 import {
   CellContext,
-  GridCanvasHelper,
+  GridCanvasHelperAPI,
   ListGridAPI
 } from "../ts-types/grid-engine";
 import { ColorPropertyDefine, ColumnIconOption } from "../ts-types/define";
@@ -9,7 +10,6 @@ import {
   ColumnStyleOption,
   HeaderStyleOption
 } from "../ts-types/column";
-import { CellAddress } from "../ts-types/grid";
 import { Message } from "../ts-types/data";
 
 export interface MessageHandler<T> {
@@ -17,7 +17,7 @@ export interface MessageHandler<T> {
     message: Message,
     context: CellContext,
     style: ColumnStyle,
-    helper: GridCanvasHelper,
+    helper: GridCanvasHelperAPI,
     grid: ListGridAPI<T>,
     info: DrawCellInfo<T>
   ): void;
@@ -68,9 +68,10 @@ interface BranchPoint {
   lines: BranchLine[];
   readonly tag?: string;
 }
-export type BranchGraphColumnState = {
-  [col: number]: { timeline: BranchPoint[][]; branches: string[] };
-};
+export type BranchGraphColumnState<T> = Map<
+  FieldDef<T>,
+  { timeline: BranchPoint[][]; branches: string[] }
+>;
 
 export type InputEditorState = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -91,7 +92,7 @@ export interface GridInternal<T> extends ListGridAPI<T> {
   "$$$$col.fadein_stateID symbol$$$$"?: ColumnFadeinState;
   "$$$$btncol.stateID symbol$$$$"?: ButtonColumnState;
   "$$$$chkcol.stateID symbol$$$$"?: CheckColumnState;
-  "$$$$branch_graph_col.stateID symbol$$$$"?: BranchGraphColumnState;
+  "$$$$branch_graph_col.stateID symbol$$$$"?: BranchGraphColumnState<T>;
   "$$$$inline_menu_editor.stateID symbol$$$$"?: InputEditorState;
   "$$$$inline_input_editor.stateID symbol$$$$"?: InputEditorState;
   "$$$$small_dialog_input_editor.stateID symbol$$$$"?: InputEditorState;

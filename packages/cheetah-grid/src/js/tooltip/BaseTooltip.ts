@@ -14,7 +14,7 @@ export abstract class BaseTooltip<T> {
     }
     this._tooltipElement = undefined;
   }
-  _getTooltipElement(): TooltipElement<T> {
+  private _getTooltipElement(): TooltipElement<T> {
     if (this._tooltipElement) {
       return this._tooltipElement;
     }

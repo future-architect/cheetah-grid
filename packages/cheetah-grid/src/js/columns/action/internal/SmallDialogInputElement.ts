@@ -163,16 +163,18 @@ export class SmallDialogInputElement<T> {
     delete dialog.dataset.errorMessage;
     dialog.classList.remove(SHOWN_CLASSNAME);
     dialog.classList.add(HIDDEN_CLASSNAME);
-    input.readOnly = false;
+    input.readOnly = true;
     input.tabIndex = 0;
-    const { element, rect } = grid.getAttachCellArea(col, row);
+    const { element, rect } = grid.getAttachCellsArea(
+      grid.getCellRange(col, row)
+    );
     dialog.style.top = `${rect.top.toFixed()}px`;
     dialog.style.left = `${rect.left.toFixed()}px`;
     dialog.style.width = `${rect.width.toFixed()}px`;
     input.style.height = `${rect.height.toFixed()}px`;
     element.appendChild(dialog);
 
-    input.value = value;
+    input.value = value ?? "";
     input.style.font = grid.font || "16px sans-serif";
     const activeData = { grid, col, row, editor };
     this._onInputValue(input, activeData);
@@ -184,7 +186,7 @@ export class SmallDialogInputElement<T> {
     }
     dialog.classList.add(SHOWN_CLASSNAME);
     dialog.classList.remove(HIDDEN_CLASSNAME);
-    input.readOnly = true;
+    input.readOnly = false;
 
     bindProps(grid, dialog, input, editor);
 
@@ -203,12 +205,13 @@ export class SmallDialogInputElement<T> {
 
       dialog.classList.remove(SHOWN_CLASSNAME);
       dialog.classList.add(HIDDEN_CLASSNAME);
-      input.readOnly = false;
+      input.readOnly = true;
       input.tabIndex = -1;
 
       const { grid, col, row } = this._activeData as ActiveData<T>;
 
-      grid.invalidateCell(col, row);
+      const range = grid.getCellRange(col, row);
+      grid.invalidateCellRange(range);
       if (gridFocus) {
         grid.focus();
       }

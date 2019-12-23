@@ -1,7 +1,7 @@
 import {
   CellContext,
   ColorPropertyDefine,
-  GridCanvasHelper
+  GridCanvasHelperAPI
 } from "../../ts-types";
 import {
   CheckHeaderState,
@@ -35,7 +35,7 @@ export class CheckHeader<T> extends BaseHeader<T> {
     value: string,
     context: CellContext,
     style: CheckHeaderStyle,
-    helper: GridCanvasHelper,
+    helper: GridCanvasHelperAPI,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     grid: GridInternal<T>,
     { drawCellBase }: DrawCellInfo<T>
@@ -58,12 +58,13 @@ export class CheckHeader<T> extends BaseHeader<T> {
     }
 
     const { col, row } = context;
-    const cellKey = `${col}:${row}`;
+    const range = grid.getCellRange(col, row);
+    const cellKey = `${range.start.col}:${range.start.row}`;
     const {
       elapsed: { [cellKey]: elapsed }
     } = getState(grid);
 
-    const checked = grid.getHeaderValue(col, row);
+    const checked = grid.getHeaderValue(range.start.col, range.start.row);
 
     const opt: {
       animElapsedTime?: number;

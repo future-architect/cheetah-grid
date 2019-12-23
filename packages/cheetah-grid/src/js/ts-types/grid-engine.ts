@@ -24,6 +24,8 @@ import {
 import { RequiredThemeDefine } from "./plugin";
 import { SimpleColumnIconOption } from "../ts-types-internal/data";
 
+export type LayoutObjectId = number | string | symbol;
+
 export interface DrawGridAPI {
   font?: string;
   rowCount: number;
@@ -59,6 +61,7 @@ export interface DrawGridAPI {
     endCol?: number,
     endRow?: number
   ): void;
+  invalidateCellRange(cellRange: CellRange): void;
 
   getRowHeight(row: number): number;
   setRowHeight(row: number, height: number): void;
@@ -76,6 +79,7 @@ export interface DrawGridAPI {
     endCol: number,
     endRow: number
   ): RectProps;
+  getCellRangeRect(cellRange: CellRange): RectProps;
 
   isFrozenCell(
     col: number,
@@ -98,9 +102,9 @@ export interface DrawGridAPI {
     row: number,
     overflowText: false | string
   ): void;
-  getAttachCellArea(
-    col: number,
-    row: number
+
+  getAttachCellsArea(
+    range: CellRange
   ): {
     element: HTMLElement;
     rect: RectProps;
@@ -136,26 +140,29 @@ export interface ListGridAPI<T> extends DrawGridAPI {
   theme: RequiredThemeDefine | null;
   sortState: SortState | null;
   headerValues: HeaderValues;
+  recordRowCount: number;
   listen<TYPE extends keyof ListGridEventHandlersEventMap<T>>(
     type: TYPE,
     listener: (
       ...event: ListGridEventHandlersEventMap<T>[TYPE]
     ) => ListGridEventHandlersReturnMap[TYPE]
   ): EventListenerId;
-  getField(col: number): FieldDef<T> | undefined;
+  getField(col: number, row: number): FieldDef<T> | undefined;
   getRowRecord(row: number): MaybePromiseOrUndef<T>;
+  getRecordIndexByRow(row: number): number;
+  getRecordStartRowByRecordIndex(index: number): number;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getHeaderField(col: number, row: number): any | undefined;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getHeaderValue(col: number, row: number): any | undefined;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setHeaderValue(col: number, row: number, newValue: any): void;
-  getHeaderCellRange(col: number, row: number): CellRange;
-  getColumnIndexByField(field: FieldDef<T>): number | null;
+  getCellRange(col: number, row: number): CellRange;
+  getCellRangeByField(field: FieldDef<T>, index: number): CellRange | null;
   focusGridCell(field: FieldDef<T>, index: number): void;
   makeVisibleGridCell(field: FieldDef<T>, index: number): void;
   getCopyCellValue(col: number, row: number): string;
-  getGridCanvasHelper(): GridCanvasHelper;
+  getGridCanvasHelper(): GridCanvasHelperAPI;
   doChangeValue(
     col: number,
     row: number,
@@ -168,9 +175,10 @@ export interface ListGridAPI<T> extends DrawGridAPI {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     valueCallback: (value: any) => void
   ): boolean;
+  getLayoutCellId(col: number, row: number): LayoutObjectId;
 }
 
-export interface Inline {
+export interface InlineAPI {
   width(arg: { ctx: CanvasRenderingContext2D }): number;
   font(): string | null;
   color(): ColorDef | null;
@@ -182,11 +190,11 @@ export interface Inline {
 }
 
 type ColorsDef = ColorDef | (ColorDef | null)[];
-export interface GridCanvasHelper {
+export interface GridCanvasHelperAPI {
   theme: RequiredThemeDefine;
 
   text(
-    text: string | (Inline | string)[],
+    text: string | (InlineAPI | string)[],
     context: CellContext,
     option: {
       padding?: number | string | (number | string)[];
@@ -298,7 +306,7 @@ export interface GridCanvasHelper {
       textAlign?: CanvasTextAlign;
       textBaseline?: CanvasTextBaseline;
     }
-  ): Inline;
+  ): InlineAPI;
 }
 export interface CellContext {
   readonly col: number;
@@ -307,8 +315,8 @@ export interface CellContext {
   toCurrentContext(): CellContext;
   getDrawRect(): RectProps | null;
   getRect(): RectProps;
-  setRect(rect: RectProps): void;
-  getSelectState(): { selected: boolean; selection: boolean };
+  getSelection(): { select: CellAddress; range: CellRange };
+  setRectFilter(rectFilter: (base: RectProps) => RectProps): void;
 }
 
 export interface Selection {

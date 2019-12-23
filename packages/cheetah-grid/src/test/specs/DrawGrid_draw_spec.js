@@ -35,6 +35,9 @@
 	const theme = {};
 	grid.theme = cheetahGrid.themes.choices.BASIC.extends(theme);
 	theme.frozenRowsBgColor = '#d3d3d3';
+	grid.getRecordIndexByRow = function(row) {
+		return row - grid.frozenRowCount;
+	};
 	grid.onDrawCell = function(col, row, context) {
 		//cell全体を描画
 		helper.fillCellWithState(context);

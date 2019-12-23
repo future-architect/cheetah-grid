@@ -3,13 +3,13 @@ import {
   ColumnMenuItemOption,
   EventListenerId,
   InlineMenuEditorOption,
+  LayoutObjectId,
   ListGridAPI
 } from "../../ts-types";
 import { GridInternal, InputEditorState } from "../../ts-types-internal";
 import { array, event, obj, then } from "../../internal/utils";
 import { isDisabledRecord, isReadOnlyRecord } from "./action-utils";
-import { ActionBindUtil } from "./actionBind";
-import { EVENT_TYPE } from "../../core/EVENT_TYPE";
+import { DG_EVENT_TYPE } from "../../core/DG_EVENT_TYPE";
 import { Editor } from "./Editor";
 import { InlineMenuElement } from "./internal/InlineMenuElement";
 import { getInlineMenuEditorStateId } from "../../internal/symbolManager";
@@ -102,8 +102,7 @@ export class InlineMenuEditor<T> extends Editor<T> {
   }
   bindGridEvent(
     grid: ListGridAPI<T>,
-    _col: number,
-    util: ActionBindUtil
+    cellId: LayoutObjectId
   ): EventListenerId[] {
     const open = (cell: CellAddress): void => {
       if (
@@ -117,9 +116,12 @@ export class InlineMenuEditor<T> extends Editor<T> {
       });
     };
 
+    function isTarget(col: number, row: number): boolean {
+      return grid.getLayoutCellId(col, row) === cellId;
+    }
     return [
-      grid.listen(EVENT_TYPE.CLICK_CELL, cell => {
-        if (!util.isTarget(cell.col, cell.row)) {
+      grid.listen(DG_EVENT_TYPE.CLICK_CELL, cell => {
+        if (!isTarget(cell.col, cell.row)) {
           return;
         }
         open({
@@ -127,12 +129,12 @@ export class InlineMenuEditor<T> extends Editor<T> {
           row: cell.row
         });
       }),
-      grid.listen(EVENT_TYPE.KEYDOWN, (keyCode, _e) => {
+      grid.listen(DG_EVENT_TYPE.KEYDOWN, (keyCode, _e) => {
         if (keyCode !== KEY_F2 && keyCode !== KEY_ENTER) {
           return;
         }
         const sel = grid.selection.select;
-        if (!util.isTarget(sel.col, sel.row)) {
+        if (!isTarget(sel.col, sel.row)) {
           return;
         }
         open({
@@ -140,54 +142,54 @@ export class InlineMenuEditor<T> extends Editor<T> {
           row: sel.row
         });
       }),
-      grid.listen(EVENT_TYPE.SELECTED_CELL, _e => {
+      grid.listen(DG_EVENT_TYPE.SELECTED_CELL, _e => {
         detachMenu();
       }),
-      grid.listen(EVENT_TYPE.SCROLL, () => {
+      grid.listen(DG_EVENT_TYPE.SCROLL, () => {
         detachMenu(true);
       }),
 
       // mouse move
-      grid.listen(EVENT_TYPE.MOUSEOVER_CELL, e => {
+      grid.listen(DG_EVENT_TYPE.MOUSEOVER_CELL, e => {
         if (
           isReadOnlyRecord(this.readOnly, grid, e.row) ||
           isDisabledRecord(this.disabled, grid, e.row)
         ) {
           return;
         }
-        if (!util.isTarget(e.col, e.row)) {
+        if (!isTarget(e.col, e.row)) {
           return;
         }
         grid.getElement().style.cursor = "pointer";
       }),
-      grid.listen(EVENT_TYPE.MOUSEMOVE_CELL, e => {
+      grid.listen(DG_EVENT_TYPE.MOUSEMOVE_CELL, e => {
         if (
           isReadOnlyRecord(this.readOnly, grid, e.row) ||
           isDisabledRecord(this.disabled, grid, e.row)
         ) {
           return;
         }
-        if (!util.isTarget(e.col, e.row)) {
+        if (!isTarget(e.col, e.row)) {
           return;
         }
         if (!grid.getElement().style.cursor) {
           grid.getElement().style.cursor = "pointer";
         }
       }),
-      grid.listen(EVENT_TYPE.MOUSEOUT_CELL, e => {
-        if (!util.isTarget(e.col, e.row)) {
+      grid.listen(DG_EVENT_TYPE.MOUSEOUT_CELL, e => {
+        if (!isTarget(e.col, e.row)) {
           return;
         }
         grid.getElement().style.cursor = "";
       }),
 
       // paste value
-      grid.listen(EVENT_TYPE.PASTE_CELL, e => {
+      grid.listen(DG_EVENT_TYPE.PASTE_CELL, e => {
         if (e.multi) {
           // ignore multi cell values
           return;
         }
-        if (!util.isTarget(e.col, e.row)) {
+        if (!isTarget(e.col, e.row)) {
           return;
         }
         const pasteValue = e.normalizeValue.trim();
@@ -199,7 +201,10 @@ export class InlineMenuEditor<T> extends Editor<T> {
           event.cancel(e.event);
           then(
             grid.doChangeValue(e.col, e.row, () => pasteOpt.value),
-            () => grid.invalidateCell(e.col, e.row)
+            () => {
+              const range = grid.getCellRange(e.col, e.row);
+              grid.invalidateCellRange(range);
+            }
           );
         }
       })

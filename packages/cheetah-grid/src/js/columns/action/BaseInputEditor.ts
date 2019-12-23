@@ -2,11 +2,11 @@ import {
   CellAddress,
   EditorOption,
   EventListenerId,
+  LayoutObjectId,
   ListGridAPI
 } from "../../ts-types";
 import { isDisabledRecord, isReadOnlyRecord } from "./action-utils";
-import { ActionBindUtil } from "./actionBind";
-import { EVENT_TYPE } from "../../core/EVENT_TYPE";
+import { DG_EVENT_TYPE } from "../../core/DG_EVENT_TYPE";
 import { Editor } from "./Editor";
 import { event } from "../../internal/utils";
 const KEY_ENTER = 13;
@@ -36,8 +36,7 @@ export abstract class BaseInputEditor<T> extends Editor<T> {
   abstract onGridScrollInternal(grid: ListGridAPI<T>): void;
   bindGridEvent(
     grid: ListGridAPI<T>,
-    _col: number,
-    util: ActionBindUtil
+    cellId: LayoutObjectId
   ): EventListenerId[] {
     const open = (cell: CellAddress): void => {
       if (
@@ -58,9 +57,13 @@ export abstract class BaseInputEditor<T> extends Editor<T> {
       }
       this.onInputCellInternal(grid, cell, value);
     };
+
+    function isTarget(col: number, row: number): boolean {
+      return grid.getLayoutCellId(col, row) === cellId;
+    }
     return [
-      grid.listen(EVENT_TYPE.INPUT_CELL, e => {
-        if (!util.isTarget(e.col, e.row)) {
+      grid.listen(DG_EVENT_TYPE.INPUT_CELL, e => {
+        if (!isTarget(e.col, e.row)) {
           return;
         }
         input(
@@ -71,12 +74,12 @@ export abstract class BaseInputEditor<T> extends Editor<T> {
           e.value
         );
       }),
-      grid.listen(EVENT_TYPE.PASTE_CELL, e => {
+      grid.listen(DG_EVENT_TYPE.PASTE_CELL, e => {
         if (e.multi) {
           // ignore multi cell values
           return;
         }
-        if (!util.isTarget(e.col, e.row)) {
+        if (!isTarget(e.col, e.row)) {
           return;
         }
         event.cancel(e.event);
@@ -88,8 +91,8 @@ export abstract class BaseInputEditor<T> extends Editor<T> {
           e.normalizeValue
         );
       }),
-      grid.listen(EVENT_TYPE.DBLCLICK_CELL, cell => {
-        if (!util.isTarget(cell.col, cell.row)) {
+      grid.listen(DG_EVENT_TYPE.DBLCLICK_CELL, cell => {
+        if (!isTarget(cell.col, cell.row)) {
           return;
         }
         open({
@@ -97,8 +100,8 @@ export abstract class BaseInputEditor<T> extends Editor<T> {
           row: cell.row
         });
       }),
-      grid.listen(EVENT_TYPE.DBLTAP_CELL, e => {
-        if (!util.isTarget(e.col, e.row)) {
+      grid.listen(DG_EVENT_TYPE.DBLTAP_CELL, e => {
+        if (!isTarget(e.col, e.row)) {
           return;
         }
         open({
@@ -108,12 +111,12 @@ export abstract class BaseInputEditor<T> extends Editor<T> {
 
         event.cancel(e.event);
       }),
-      grid.listen(EVENT_TYPE.KEYDOWN, (keyCode, _e) => {
+      grid.listen(DG_EVENT_TYPE.KEYDOWN, (keyCode, _e) => {
         if (keyCode !== KEY_F2 && keyCode !== KEY_ENTER) {
           return;
         }
         const sel = grid.selection.select;
-        if (!util.isTarget(sel.col, sel.row)) {
+        if (!isTarget(sel.col, sel.row)) {
           return;
         }
         open({
@@ -121,18 +124,18 @@ export abstract class BaseInputEditor<T> extends Editor<T> {
           row: sel.row
         });
       }),
-      grid.listen(EVENT_TYPE.SELECTED_CELL, e => {
+      grid.listen(DG_EVENT_TYPE.SELECTED_CELL, e => {
         this.onChangeSelectCellInternal(
           grid,
           { col: e.col, row: e.row },
           e.selected
         );
       }),
-      grid.listen(EVENT_TYPE.SCROLL, () => {
+      grid.listen(DG_EVENT_TYPE.SCROLL, () => {
         this.onGridScrollInternal(grid);
       }),
-      grid.listen(EVENT_TYPE.EDITABLEINPUT_CELL, cell => {
-        if (!util.isTarget(cell.col, cell.row)) {
+      grid.listen(DG_EVENT_TYPE.EDITABLEINPUT_CELL, cell => {
+        if (!isTarget(cell.col, cell.row)) {
           return false;
         }
         if (
@@ -143,8 +146,8 @@ export abstract class BaseInputEditor<T> extends Editor<T> {
         }
         return true;
       }),
-      grid.listen(EVENT_TYPE.MODIFY_STATUS_EDITABLEINPUT_CELL, cell => {
-        if (!util.isTarget(cell.col, cell.row)) {
+      grid.listen(DG_EVENT_TYPE.MODIFY_STATUS_EDITABLEINPUT_CELL, cell => {
+        if (!isTarget(cell.col, cell.row)) {
           return;
         }
         if (
@@ -152,6 +155,25 @@ export abstract class BaseInputEditor<T> extends Editor<T> {
           isDisabledRecord(this.disabled, grid, cell.row)
         ) {
           return;
+        }
+        const range = grid.getCellRange(cell.col, cell.row);
+        if (
+          range.start.col !== range.end.col ||
+          range.start.row !== range.end.row
+        ) {
+          const { input } = cell;
+          const baseRect = grid.getCellRect(cell.col, cell.row);
+          const rangeRect = grid.getCellRangeRect(range);
+          input.style.top = `${(
+            parseFloat(input.style.top) +
+            (rangeRect.top - baseRect.top)
+          ).toFixed()}px`;
+          input.style.left = `${(
+            parseFloat(input.style.left) +
+            (rangeRect.left - baseRect.left)
+          ).toFixed()}px`;
+          input.style.width = `${rangeRect.width.toFixed()}px`;
+          input.style.height = `${rangeRect.height.toFixed()}px`;
         }
         this.onSetInputAttrsInternal(
           grid,

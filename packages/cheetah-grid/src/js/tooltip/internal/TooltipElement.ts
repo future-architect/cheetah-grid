@@ -85,14 +85,15 @@ export class TooltipElement<T> {
   }
   _attachCell(grid: ListGridAPI<T>, col: number, row: number): boolean {
     const rootElement = this._rootElement;
-    const { element, rect } = grid.getAttachCellArea(col, row);
+    const { element, rect } = grid.getAttachCellsArea(
+      grid.getCellRange(col, row)
+    );
 
     const { bottom: top, left, width } = rect;
     const { frozenRowCount, frozenColCount } = grid;
     if (row >= frozenRowCount && frozenRowCount > 0) {
-      const { rect: frozenRect } = grid.getAttachCellArea(
-        col,
-        frozenRowCount - 1
+      const { rect: frozenRect } = grid.getAttachCellsArea(
+        grid.getCellRange(col, frozenRowCount - 1)
       );
       if (top < frozenRect.bottom) {
         return false; //範囲外
@@ -103,9 +104,8 @@ export class TooltipElement<T> {
       }
     }
     if (col >= frozenColCount && frozenColCount > 0) {
-      const { rect: frozenRect } = grid.getAttachCellArea(
-        frozenColCount - 1,
-        row
+      const { rect: frozenRect } = grid.getAttachCellsArea(
+        grid.getCellRange(frozenColCount - 1, row)
       );
       if (left < frozenRect.right) {
         return false; //範囲外

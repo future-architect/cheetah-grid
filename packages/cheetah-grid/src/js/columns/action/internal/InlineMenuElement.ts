@@ -114,7 +114,9 @@ function openMenu<T>(
   }
   const children = Array.prototype.slice.call(menu.children, 0);
   const focusIndex = children.indexOf(focusEl);
-  const { element, rect } = grid.getAttachCellArea(col, row);
+  const { element, rect } = grid.getAttachCellsArea(
+    grid.getCellRange(col, row)
+  );
 
   // Cover the right line
   rect.width++;
@@ -231,7 +233,8 @@ export class InlineMenuElement<T> {
       const menu = this._menu;
       closeMenu(grid, col, row, menu);
 
-      grid.invalidateCell(col, row);
+      const range = grid.getCellRange(col, row);
+      grid.invalidateCellRange(range);
       if (gridFocus) {
         grid.focus();
       }

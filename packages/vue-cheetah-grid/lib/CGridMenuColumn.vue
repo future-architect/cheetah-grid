@@ -6,9 +6,9 @@
 </template>
 
 <script>
-import ColumnMixin from './c-grid/ColumnMixin.vue'
+import LayoutColumnMixin from './c-grid/LayoutColumnMixin.vue'
 import StdColumnMixin from './c-grid/StdColumnMixin.vue'
-import { cheetahGrid, filterToFn, gridUpdateWatcher } from './c-grid/utils'
+import { cheetahGrid, extend, gridUpdateWatcher } from './c-grid/utils'
 
 function isDisabledRecord (option, record) {
   if (typeof option === 'function') {
@@ -20,11 +20,12 @@ function isDisabledRecord (option, record) {
 /**
  * Defines select menu column.
  * @mixin column-mixin
+ * @mixin layout-column-mixin
  * @mixin std-column-mixin
  */
 export default {
   name: 'CGridMenuColumn',
-  mixins: [ColumnMixin, StdColumnMixin],
+  mixins: [LayoutColumnMixin, StdColumnMixin],
   props: {
     /**
      * Defines a menu options
@@ -87,7 +88,7 @@ export default {
      * @override
      */
     getPropsObjectInternal () {
-      const props = ColumnMixin.methods.getPropsObjectInternal.apply(this)
+      const props = LayoutColumnMixin.methods.getPropsObjectInternal.apply(this)
       delete props.disabled
       delete props.readonly
       return props
@@ -104,46 +105,40 @@ export default {
         readOnly: this.readonly
       }) : undefined
       const columnType = new cheetahGrid.columns.type.MenuColumn({ options: dispOpt })
-      const field = this.filter ? filterToFn(this, this.field, this.filter) : this.field
-      return {
-        vm: this,
-        caption: this.caption || this.$el.textContent.trim(),
-        headerStyle: this.headerStyle,
-        headerField: this.headerField,
-        headerType: this.headerType,
-        headerAction: this.headerAction,
-        field,
-        columnType,
-        width: this.width,
-        minWidth: this.minWidth,
-        maxWidth: this.maxWidth,
-        action,
-        style: (...args) => {
-          let style = this.columnStyle
-          if (typeof style === 'function') {
-            style = style(...args)
-          }
-          if (
-            isDisabledRecord(this.disabled, ...args) ||
-            isDisabledRecord(this.readonly, ...args)
-          ) {
-            if (style) {
-              if (style.clone) {
-                style = style.clone()
-              } else {
-                style = Object.assign({}, style)
-              }
-              style.appearance = 'none'
-            } else {
-              style = { appearance: 'none' }
+
+      const baseCol = LayoutColumnMixin.methods.createColumn.apply(this)
+      const stdCol = StdColumnMixin.methods.createColumn.apply(this)
+      return extend(
+        baseCol,
+        stdCol,
+        {
+          caption: this.caption || this.$el.textContent.trim(),
+          columnType,
+          action,
+          style: (...args) => {
+            let style = this.columnStyle
+            if (typeof style === 'function') {
+              style = style(...args)
             }
+            if (
+              isDisabledRecord(this.disabled, ...args) ||
+            isDisabledRecord(this.readonly, ...args)
+            ) {
+              if (style) {
+                if (style.clone) {
+                  style = style.clone()
+                } else {
+                  style = extend({}, style)
+                }
+                style.appearance = 'none'
+              } else {
+                style = { appearance: 'none' }
+              }
+            }
+            return style
           }
-          return style
-        },
-        sort: this.sort,
-        icon: this.icon,
-        message: this.message
-      }
+        }
+      )
     }
   }
 }

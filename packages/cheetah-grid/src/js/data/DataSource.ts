@@ -19,6 +19,7 @@ import {
   obj
 } from "../internal/utils";
 import { EventTarget } from "../core/EventTarget";
+import { PromiseCacheValue } from "./internal/types";
 
 function isFieldAssessor<T>(field: FieldDef<T>): field is FieldAssessor<T> {
   if (obj.isObject(field)) {
@@ -40,7 +41,6 @@ const EVENT_TYPE: {
   UPDATED_ORDER: "updated_order"
 };
 
-export type PromiseCacheValue<V> = MaybePromiseOrUndef<V>;
 type PromiseBack<V> = (value: PromiseCacheValue<V>) => void;
 
 function getValue<V>(
@@ -141,12 +141,11 @@ function setField<T, F extends FieldDef<T>>(
   }
   return true;
 }
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function _getIndex(dataSource: DataSource<any>, index: number): number {
-  if (!dataSource._sortedIndexMap) {
+function _getIndex(sortedIndexMap: null | number[], index: number): number {
+  if (!sortedIndexMap) {
     return index;
   }
-  const mapIndex = dataSource._sortedIndexMap[index];
+  const mapIndex = sortedIndexMap[index];
   return isDef(mapIndex) ? mapIndex : index;
 }
 
@@ -159,13 +158,12 @@ export interface DataSourceParam<T> {
  * grid data source
  *
  * @classdesc cheetahGrid.data.DataSource
- * @extends EventTarget
  * @memberof cheetahGrid.data
  */
 export class DataSource<T> extends EventTarget implements DataSourceAPI<T> {
   private _get: (index: number) => MaybePromiseOrCall<T, []>;
   private _length: number;
-  _sortedIndexMap: null | number[] = null;
+  protected _sortedIndexMap: null | number[] = null;
   static get EVENT_TYPE(): typeof EVENT_TYPE {
     return EVENT_TYPE;
   }
@@ -182,14 +180,14 @@ export class DataSource<T> extends EventTarget implements DataSourceAPI<T> {
     this._length = obj?.length || 0;
   }
   get(index: number): MaybePromiseOrUndef<T> {
-    return this.getOriginal(_getIndex(this, index));
+    return this.getOriginal(_getIndex(this._sortedIndexMap, index));
   }
   getField<F extends FieldDef<T>>(index: number, field: F): FieldData {
-    return this.getOriginalField(_getIndex(this, index), field);
+    return this.getOriginalField(_getIndex(this._sortedIndexMap, index), field);
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   hasField(index: number, field: FieldDef<T>): boolean {
-    return this.hasOriginalField(_getIndex(this, index), field);
+    return this.hasOriginalField(_getIndex(this._sortedIndexMap, index), field);
   }
   setField<F extends FieldDef<T>>(
     index: number,
@@ -197,7 +195,11 @@ export class DataSource<T> extends EventTarget implements DataSourceAPI<T> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     value: any
   ): MaybePromise<boolean> {
-    return this.setOriginalField(_getIndex(this, index), field, value);
+    return this.setOriginalField(
+      _getIndex(this._sortedIndexMap, index),
+      field,
+      value
+    );
   }
   sort(field: FieldDef<T>, order: "desc" | "asc"): MaybePromise<void> {
     const sortedIndexMap = new Array<number>(this._length);
@@ -243,12 +245,15 @@ export class DataSource<T> extends EventTarget implements DataSourceAPI<T> {
   dispose(): void {
     super.dispose();
   }
-  getOriginal(index: number): MaybePromiseOrUndef<T> {
+  protected getOriginal(index: number): MaybePromiseOrUndef<T> {
     return getValue(this._get(index), (val: PromiseCacheValue<T>) => {
       this.recordPromiseCallBackInternal(index, val);
     });
   }
-  getOriginalField<F extends FieldDef<T>>(index: number, field: F): FieldData {
+  protected getOriginalField<F extends FieldDef<T>>(
+    index: number,
+    field: F
+  ): FieldData {
     if (!isDef(field)) {
       return undefined;
     }
@@ -257,7 +262,7 @@ export class DataSource<T> extends EventTarget implements DataSourceAPI<T> {
       this.fieldPromiseCallBackInternal(index, field, val);
     });
   }
-  hasOriginalField(index: number, field: FieldDef<T>): boolean {
+  protected hasOriginalField(index: number, field: FieldDef<T>): boolean {
     if (!isDef(field)) {
       return false;
     }
@@ -267,7 +272,7 @@ export class DataSource<T> extends EventTarget implements DataSourceAPI<T> {
     const record = this.getOriginal(index);
     return Boolean(record && field in record);
   }
-  setOriginalField<F extends FieldDef<T>>(
+  protected setOriginalField<F extends FieldDef<T>>(
     index: number,
     field: F,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -282,7 +287,7 @@ export class DataSource<T> extends EventTarget implements DataSourceAPI<T> {
     }
     return setField(record, field, value);
   }
-  fieldPromiseCallBackInternal<F extends FieldDef<T>>(
+  protected fieldPromiseCallBackInternal<F extends FieldDef<T>>(
     _index: number,
     _field: F,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -290,7 +295,7 @@ export class DataSource<T> extends EventTarget implements DataSourceAPI<T> {
   ): void {
     //
   }
-  recordPromiseCallBackInternal(
+  protected recordPromiseCallBackInternal(
     _index: number,
     _record: PromiseCacheValue<T>
   ): void {

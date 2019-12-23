@@ -4,7 +4,7 @@ import {
   CellContext,
   ColorDef,
   FieldDef,
-  GridCanvasHelper,
+  GridCanvasHelperAPI,
   ListGridAPI,
   MaybePromise,
   MaybePromiseOrUndef
@@ -21,11 +21,10 @@ type Timelines = { timeline: BranchPoint[][]; branches: string[] };
 
 function getAllColumnData<T>(
   grid: ListGridAPI<T>,
-  col: number,
+  field: FieldDef<T>,
   callback: (allData: BranchGraphCommand[]) => void
 ): void {
   const { dataSource } = grid;
-  const field = grid.getField(col) as FieldDef<T>;
   const allData: BranchGraphCommand[] = [];
   let promise;
   for (let index = 0; index < dataSource.length; index++) {
@@ -377,13 +376,13 @@ function calcCommand(info: Timelines, command: BranchGraphCommand): void {
 function calcBranchesInfo<T>(
   start: "top" | "bottom",
   grid: ListGridAPI<T>,
-  col: number
+  field: FieldDef<T>
 ): Timelines {
   const result = {
     branches: [],
     timeline: []
   };
-  getAllColumnData(grid, col, data => {
+  getAllColumnData(grid, field, data => {
     if (start !== "top") {
       data = [...data].reverse();
     }
@@ -506,25 +505,30 @@ function renderMerge<T>(
 }
 
 /**
- * BranchGraphColumn<br>
- * <br>
- * # Data command<br>
- * ## mastar branch or orphan branch<br>
- * <pre><code class="js">
+ * BranchGraphColumn
+ *
+ * Data commands
+ * - mastar branch or orphan branch
+ *
+ * ```js
  * {
  * 	command: 'branch',
  * 	branch: 'branch name A',
  * }
- * </code></pre>
- * ## commit<br>
- * <pre><code class="js">
+ * ```
+ *
+ * - commit
+ *
+ * ```js
  * {
  * 	command: 'commit',
  * 	branch: 'branch name A'
  * }
- * </code></pre>
- * ## branch<br>
- * <pre><code class="js">
+ * ```
+ *
+ * - branch
+ *
+ * ```js
  * {
  * 	command: 'branch',
  * 	branch: {
@@ -532,9 +536,11 @@ function renderMerge<T>(
  * 		to: 'branch name B'
  * 	}
  * }
- * </code></pre>
- * ## merge<br>
- * <pre><code class="js">
+ * ```
+ *
+ * - merge
+ *
+ * ```js
  * {
  * 	command: 'merge',
  * 	branch: {
@@ -542,16 +548,17 @@ function renderMerge<T>(
  * 		to: 'branch name A'
  * 	}
  * }
- * </code></pre>
- * ## tag<br>
- * <pre><code class="js">
+ * ```
+ *
+ * - tag
+ *
+ * ```js
  * {
  * 	command: 'tag',
  * 	branch: 'branch name A',
  * 	tag: 'tag name'
  * }
- * </code></pre>
- *
+ * ```
  *
  * @memberof cheetahGrid.columns.type
  */
@@ -576,10 +583,11 @@ export class BranchGraphColumn<T> extends BaseColumn<T, unknown> {
     grid: GridInternal<T>
   ): void | Promise<void> {
     if (this._cache) {
-      const state = grid[_] || (grid[_] = {});
-      const { col } = context;
-      if (!state[col]) {
-        state[col] = calcBranchesInfo(this._start, grid, col);
+      const state = grid[_] || (grid[_] = new Map());
+      const { col, row } = context;
+      const field = grid.getField(col, row) as FieldDef<T>;
+      if (!state.has(field)) {
+        state.set(field, calcBranchesInfo(this._start, grid, field));
       }
     }
     return super.onDrawCell(cellValue, info, context, grid);
@@ -591,14 +599,15 @@ export class BranchGraphColumn<T> extends BaseColumn<T, unknown> {
     _value: unknown,
     context: CellContext,
     style: BranchGraphStyle,
-    helper: GridCanvasHelper,
+    helper: GridCanvasHelperAPI,
     grid: GridInternal<T>,
     { drawCellBase }: DrawCellInfo<T>
   ): void {
     const { col, row } = context;
+    const field = grid.getField(col, row) as FieldDef<T>;
     const { timeline, branches } =
-      (this._cache ? grid[_]?.[col] : null) ??
-      calcBranchesInfo(this._start, grid, col);
+      (this._cache ? grid[_]?.get(field) : null) ??
+      calcBranchesInfo(this._start, grid, field);
 
     const {
       upLineIndexKey,

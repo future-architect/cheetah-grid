@@ -1,7 +1,8 @@
+import { CellRange, ListGridAPI } from "../ts-types";
 import { BaseTooltip } from "./BaseTooltip";
-import { EVENT_TYPE } from "../list-grid/EVENT_TYPE";
-import { ListGridAPI } from "../ts-types";
+import { LG_EVENT_TYPE } from "../list-grid/LG_EVENT_TYPE";
 import { Tooltip } from "./Tooltip";
+import { cellInRange } from "../internal/utils";
 
 const TOOLTIP_INSTANCE_FACTORY = {
   "overflow-text"<T>(grid: ListGridAPI<T>): BaseTooltip<T> {
@@ -32,8 +33,7 @@ function getTooltipInstanceInfo<T>(
 
 type AttachInfo<T> = {
   instance: BaseTooltip<T>;
-  col: number;
-  row: number;
+  range: CellRange;
 };
 
 export class TooltipHandler<T> {
@@ -65,11 +65,12 @@ export class TooltipHandler<T> {
     }
     const { instance } = instanceInfo;
     instance.attachTooltipElement(col, row, instanceInfo.content);
-    this._attachInfo = { col, row, instance };
+    const range = this._grid.getCellRange(col, row);
+    this._attachInfo = { range, instance };
   }
   _move(col: number, row: number): void {
     const info = this._attachInfo;
-    if (!info || info.col !== col || info.row !== row) {
+    if (!info || !cellInRange(info.range, col, row)) {
       return;
     }
     const { instance } = info;
@@ -89,28 +90,38 @@ export class TooltipHandler<T> {
     if (!info) {
       return false;
     }
-    return info.col === col && info.row === row;
+    return cellInRange(info.range, col, row);
   }
   _bindGridEvent(grid: ListGridAPI<T>): void {
-    grid.listen(EVENT_TYPE.MOUSEOVER_CELL, e => {
+    grid.listen(LG_EVENT_TYPE.MOUSEOVER_CELL, e => {
+      if (e.related) {
+        if (this._isAttachCell(e.col, e.row)) {
+          return;
+        }
+      }
       this._attach(e.col, e.row);
     });
-    grid.listen(EVENT_TYPE.MOUSEOUT_CELL, _e => {
+    grid.listen(LG_EVENT_TYPE.MOUSEOUT_CELL, e => {
+      if (e.related) {
+        if (this._isAttachCell(e.related.col, e.related.row)) {
+          return;
+        }
+      }
       this._detach();
     });
-    grid.listen(EVENT_TYPE.SELECTED_CELL, e => {
+    grid.listen(LG_EVENT_TYPE.SELECTED_CELL, e => {
       if (this._isAttachCell(e.col, e.row)) {
         this._detach();
       }
     });
-    grid.listen(EVENT_TYPE.SCROLL, () => {
+    grid.listen(LG_EVENT_TYPE.SCROLL, () => {
       const info = this._attachInfo;
       if (!info) {
         return;
       }
-      this._move(info.col, info.row);
+      this._move(info.range.start.col, info.range.start.row);
     });
-    grid.listen(EVENT_TYPE.CHANGED_VALUE, e => {
+    grid.listen(LG_EVENT_TYPE.CHANGED_VALUE, e => {
       if (this._isAttachCell(e.col, e.row)) {
         this._detach();
         this._attach(e.col, e.row);

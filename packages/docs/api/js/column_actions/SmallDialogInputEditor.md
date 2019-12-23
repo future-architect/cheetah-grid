@@ -175,4 +175,4 @@ grid.records = [
 
 </code-preview>
 
-<style scoped>.content >>> .al-right input { text-align: right; }</style>
+<style scoped>.code-preview >>> .al-right input { text-align: right; }</style>

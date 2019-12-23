@@ -100,3 +100,13 @@ export const gridUpdateWatcher = {
   },
   deep: true
 }
+
+export function extend (...objects) {
+  const result = {}
+  objects.forEach((obj) => {
+    for (const key in obj) {
+      result[key] = obj[key]
+    }
+  })
+  return result
+}

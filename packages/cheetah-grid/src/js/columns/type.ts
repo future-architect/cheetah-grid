@@ -20,13 +20,7 @@ import { MultilineTextColumn } from "./type/MultilineTextColumn";
 import { NumberColumn } from "./type/NumberColumn";
 import { PercentCompleteBarColumn } from "./type/PercentCompleteBarColumn";
 
-/**
- * column types
- * @type {Object}
- * @namespace cheetahGrid.columns.type
- * @memberof cheetahGrid.columns
- */
-export const TYPES = {
+const TYPES = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   DEFAULT: new Column<any>(),
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -40,6 +34,12 @@ export const TYPES = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   MULTILINETEXT: new MultilineTextColumn<any>()
 };
+
+/**
+ * column types
+ * @namespace cheetahGrid.columns.type
+ * @memberof cheetahGrid.columns
+ */
 export {
   Column,
   NumberColumn,
