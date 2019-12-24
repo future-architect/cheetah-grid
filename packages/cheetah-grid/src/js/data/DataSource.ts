@@ -152,6 +152,8 @@ function _getIndex(sortedIndexMap: null | number[], index: number): number {
 export interface DataSourceParam<T> {
   get: (index: number) => T;
   length: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  source?: any;
 }
 
 /**
@@ -163,6 +165,8 @@ export interface DataSourceParam<T> {
 export class DataSource<T> extends EventTarget implements DataSourceAPI<T> {
   private _get: (index: number) => MaybePromiseOrCall<T, []>;
   private _length: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private readonly _source: any;
   protected _sortedIndexMap: null | number[] = null;
   static get EVENT_TYPE(): typeof EVENT_TYPE {
     return EVENT_TYPE;
@@ -170,7 +174,8 @@ export class DataSource<T> extends EventTarget implements DataSourceAPI<T> {
   static ofArray<T>(array: T[]): DataSource<T> {
     return new DataSource<T>({
       get: (index: number): T => array[index],
-      length: array.length
+      length: array.length,
+      source: array
     });
   }
   constructor(obj?: DataSourceParam<T> | DataSource<T>) {
@@ -178,6 +183,11 @@ export class DataSource<T> extends EventTarget implements DataSourceAPI<T> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     this._get = obj?.get.bind(obj) || (undefined as any);
     this._length = obj?.length || 0;
+    this._source = obj?.source ?? obj;
+  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  get source(): any {
+    return this._source;
   }
   get(index: number): MaybePromiseOrUndef<T> {
     return this.getOriginal(_getIndex(this._sortedIndexMap, index));
@@ -241,6 +251,9 @@ export class DataSource<T> extends EventTarget implements DataSourceAPI<T> {
     }
     this._length = length;
     this.fireListeners(EVENT_TYPE.UPDATED_LENGTH, this._length);
+  }
+  get dataSource(): DataSource<T> {
+    return this;
   }
   dispose(): void {
     super.dispose();

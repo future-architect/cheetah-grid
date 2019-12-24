@@ -7,7 +7,7 @@ import {
   ListGridAPI
 } from "../../ts-types";
 import { GridInternal, InputEditorState } from "../../ts-types-internal";
-import { array, event, obj, then } from "../../internal/utils";
+import { array, cellEquals, event, obj, then } from "../../internal/utils";
 import { isDisabledRecord, isReadOnlyRecord } from "./action-utils";
 import { DG_EVENT_TYPE } from "../../core/DG_EVENT_TYPE";
 import { Editor } from "./Editor";
@@ -189,6 +189,17 @@ export class InlineMenuEditor<T> extends Editor<T> {
           // ignore multi cell values
           return;
         }
+        const selectionRange = grid.selection.range;
+        if (!cellEquals(selectionRange.start, selectionRange.end)) {
+          // ignore multi paste values
+          return;
+        }
+        if (
+          isReadOnlyRecord(this.readOnly, grid, e.row) ||
+          isDisabledRecord(this.disabled, grid, e.row)
+        ) {
+          return;
+        }
         if (!isTarget(e.col, e.row)) {
           return;
         }
@@ -209,5 +220,25 @@ export class InlineMenuEditor<T> extends Editor<T> {
         }
       })
     ];
+  }
+  onPasteCellRangeBox(
+    grid: ListGridAPI<T>,
+    cell: CellAddress,
+    value: string
+  ): void {
+    if (
+      isReadOnlyRecord(this.readOnly, grid, cell.row) ||
+      isDisabledRecord(this.disabled, grid, cell.row)
+    ) {
+      return;
+    }
+    const pasteValue = value.trim();
+    const pasteOpt = array.find(
+      this._options,
+      opt => `${opt.value}`.trim() === pasteValue
+    );
+    if (pasteOpt) {
+      grid.doChangeValue(cell.col, cell.row, () => pasteOpt.value);
+    }
   }
 }

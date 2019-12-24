@@ -17,6 +17,9 @@ export class Action<T> extends BaseAction<T> {
     super(option);
     this._action = option.action || ((): void => {});
   }
+  get editable(): boolean {
+    return false;
+  }
   get action(): ActionListener {
     return this._action;
   }
@@ -67,5 +70,8 @@ export class Action<T> extends BaseAction<T> {
         action
       })
     ];
+  }
+  onPasteCellRangeBox(): void {
+    // noop
   }
 }

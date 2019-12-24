@@ -82,6 +82,7 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 	const startTime = new Date();
 	const grid = new cheetahGrid.ListGrid({
 		parentElement: document.querySelector('#parent'),
+		allowRangePaste: true,
 		layout: [
 			[
 				{

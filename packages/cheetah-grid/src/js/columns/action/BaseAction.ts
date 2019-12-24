@@ -1,5 +1,6 @@
 import {
   BaseActionOption,
+  CellAddress,
   EventListenerId,
   LayoutObjectId,
   ListGridAPI
@@ -10,6 +11,7 @@ export abstract class BaseAction<T> {
   constructor(option: BaseActionOption = {}) {
     this._disabled = option.disabled || false;
   }
+  abstract get editable(): boolean;
   get disabled(): boolean {
     return this._disabled;
   }
@@ -18,13 +20,16 @@ export abstract class BaseAction<T> {
     this.onChangeDisabledInternal();
   }
   abstract clone(): BaseAction<T>;
-  bindGridEvent(
-    _grid: ListGridAPI<T>,
-    _cellId: LayoutObjectId
-  ): EventListenerId[] {
-    return [];
-  }
+  abstract bindGridEvent(
+    grid: ListGridAPI<T>,
+    cellId: LayoutObjectId
+  ): EventListenerId[];
   protected onChangeDisabledInternal(): void {
     // abstruct
   }
+  abstract onPasteCellRangeBox(
+    grid: ListGridAPI<T>,
+    cell: CellAddress,
+    value: string
+  ): void;
 }

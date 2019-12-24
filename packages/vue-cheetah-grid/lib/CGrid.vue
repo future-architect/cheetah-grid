@@ -43,36 +43,61 @@ function deepObjectEquals (a, b) {
     return false
   }
   for (let i = 0; i < aKeys.length; i++) {
-    const value = aKeys[i]
-    if (!deepObjectEquals(a[value], b[value])) {
+    const aKey = aKeys[i]
+    const bKey = bKeys[i]
+    if (aKey !== bKey) {
+      return false
+    }
+    if (!deepObjectEquals(a[aKey], b[aKey])) {
       return false
     }
   }
   return true
 }
 
-function _setGridData (grid, data, filter) {
+function _setGridData (vm, grid, data, filter) {
+  const oldDataSource = grid.dataSource && grid.dataSource.dataSource
+  const unusedDataSources = new Set(vm._dataSources || [])
+
+  const dataSources = vm._dataSources = []
   let dataSource
   if (Array.isArray(data)) {
-    if (filter) {
-      dataSource = cheetahGrid.data.CachedDataSource.ofArray(data)
+    if (oldDataSource && oldDataSource.source === data) {
+      oldDataSource.length = data.length
+      dataSource = oldDataSource
+      unusedDataSources.delete(dataSource)
     } else {
-      grid.records = data
-      return
+      if (filter) {
+        dataSource = cheetahGrid.data.CachedDataSource.ofArray(data)
+        dataSources.push(dataSource)
+      } else {
+        grid.records = data
+        return
+      }
     }
   } else if (data instanceof cheetahGrid.data.DataSource) {
     dataSource = data
   } else {
-    dataSource = new cheetahGrid.data.CachedDataSource(data)
+    if (oldDataSource && oldDataSource.source === data) {
+      oldDataSource.length = data.length
+      dataSource = oldDataSource
+      unusedDataSources.delete(dataSource)
+    } else {
+      dataSource = new cheetahGrid.data.CachedDataSource(data)
+      dataSources.push(dataSource)
+    }
   }
   if (filter) {
     if (dataSource instanceof cheetahGrid.data.FilterDataSource) {
       dataSource.filter = filter
     } else {
       dataSource = new cheetahGrid.data.FilterDataSource(dataSource, filter)
+      dataSources.push(dataSource)
     }
   }
   grid.dataSource = dataSource
+
+  unusedDataSources.forEach(dc => dc.dispose())
 }
 function _bindEvents (vm, grid) {
   const { EVENT_TYPE } = cheetahGrid.ListGrid
@@ -161,7 +186,13 @@ function _buildGridOption (vm) {
   return extend(
     {
       frozenColCount: vm.frozenColCount - 0,
-      theme: vm.theme || null
+      theme: vm.theme || null,
+      headerRowHeight: vm.headerRowHeight,
+      allowRangePaste: vm.allowRangePaste,
+      defaultRowHeight: vm.defaultRowHeight,
+      defaultColWidth: vm.defaultColWidth,
+      font: vm.font,
+      underlayBackgroundColor: vm.underlayBackgroundColor
     },
     headerLayoutOptions,
     vm.options
@@ -172,7 +203,7 @@ function _initGrid (vm) {
   const options = _buildGridOption(vm)
   options.parentElement = vm.$el
   const grid = vm.rawGrid = new cheetahGrid.ListGrid(options)
-  _setGridData(grid, vm.data, vm.filter)
+  _setGridData(vm, grid, vm.data, vm.filter)
   _bindEvents(vm, grid)
 }
 
@@ -204,10 +235,51 @@ export default {
       default: 0
     },
     /**
+     * Defines the header row height(s)
+     */
+    headerRowHeight: {
+      type: [Number, Array],
+      default: undefined
+    },
+    /**
+     * Allow pasting of range.
+     */
+    allowRangePaste: {
+      type: Boolean
+    },
+    /**
+     * Default grid row height.
+     */
+    defaultRowHeight: {
+      type: Number,
+      default: undefined
+    },
+    /**
+     * Default grid col width.
+     */
+    defaultColWidth: {
+      type: Number,
+      default: undefined
+    },
+    /**
      * Defines a records filter
      */
     filter: {
       type: [Function],
+      default: undefined
+    },
+    /**
+     * Default font.
+     */
+    font: {
+      type: String,
+      default: undefined
+    },
+    /**
+     * Underlay background color.
+     */
+    underlayBackgroundColor: {
+      type: String,
       default: undefined
     },
     /**
@@ -239,12 +311,12 @@ export default {
   watch: {
     data (data) {
       if (this.rawGrid) {
-        _setGridData(this.rawGrid, data, this.filter)
+        _setGridData(this, this.rawGrid, data, this.filter)
       }
     },
     filter (filter) {
       if (this.rawGrid) {
-        _setGridData(this.rawGrid, this.data, filter)
+        _setGridData(this, this.rawGrid, this.data, filter)
       }
     },
     frozenColCount (frozenColCount) {
@@ -276,6 +348,9 @@ export default {
     if (this.rawGrid) {
       this.rawGrid.dispose()
       this.rawGrid = null
+    }
+    if (this._dataSources) {
+      this._dataSources.forEach(dc => dc.dispose())
     }
     this.$_CGrid_defineColumns = []
   },
@@ -361,14 +436,44 @@ export default {
         delete newProps.frozenColCount
         delete beforeGridProps.theme
         delete newProps.theme
+        delete beforeGridProps.allowRangePaste
+        delete newProps.allowRangePaste
+        delete beforeGridProps.defaultRowHeight
+        delete newProps.defaultRowHeight
+        delete beforeGridProps.defaultColWidth
+        delete newProps.defaultColWidth
+        delete beforeGridProps.underlayBackgroundColor
+        delete newProps.underlayBackgroundColor
+        delete beforeGridProps.font
+        delete newProps.font
+
         if (deepObjectEquals(beforeGridProps, newProps)) {
           // 操作可能なoptionのみの変更。インスタンス再作成はしない
           const options = _buildGridOption(this)
-          const { header, layout, frozenColCount, theme } = options
+          const {
+            header,
+            layout,
+            frozenColCount,
+            theme,
+            allowRangePaste,
+            defaultRowHeight,
+            defaultColWidth,
+            font,
+            underlayBackgroundColor
+          } = options
           this.rawGrid.header = header
           this.rawGrid.layout = layout
           this.rawGrid.frozenColCount = frozenColCount
           this.rawGrid.theme = theme
+          this.rawGrid.allowRangePaste = !!allowRangePaste
+          if (defaultRowHeight != null) {
+            this.rawGrid.defaultRowHeight = defaultRowHeight
+          }
+          if (defaultColWidth != null) {
+            this.rawGrid.defaultColWidth = defaultColWidth
+          }
+          this.rawGrid.font = font
+          this.rawGrid.underlayBackgroundColor = underlayBackgroundColor
           this.rawGrid.invalidate()
           this._beforeGridProps = extend({}, gridProps)
           return

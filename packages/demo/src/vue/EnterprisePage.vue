@@ -24,6 +24,7 @@
         :data="data"
         :frozen-col-count="1"
         :filter="dataFilter"
+        allow-range-paste
         @changed-value="onChangedValue"
       >
         <c-grid-column
@@ -67,7 +68,7 @@
           <c-grid-input-column
             :min-width="150"
             :helper-text="value => { return `${value.length}/20` }"
-            :input-validator="value => { return value.length > 20 ? `over the max length. ${value.length}` : null }"
+            :input-validator="firstNameValidator"
             :message="firstNameValidateMessage"
             :column-style="{
               textOverflow: 'ellipsis'
@@ -80,7 +81,7 @@
           </c-grid-input-column>
           <c-grid-input-column
             :helper-text="value => { return `${value.length}/20` }"
-            :input-validator="value => { return value.length > 20 ? `over the max length. ${value.length}` : null }"
+            :input-validator="lastNameValidator"
             :message="lastNameValidateMessage"
             :column-style="{
               textOverflow: 'ellipsis'
@@ -107,9 +108,8 @@
               type: 'number',
               classList: ['al-right'],
               inputValidator (value) {
-                return value > 100 ? `over the max value. ${value}` : value < 0 ? `under the min value. ${value}` : null
+                return progressValidator(value)
               }
-
             }
           }"
           :message="progressValidateMessage"
@@ -120,10 +120,7 @@
           Progress
         </c-grid-percent-complete-bar-column>
         <c-grid-input-column
-          :validator="value => {
-            const ret = value.match(/^[-a-z0-9~!$%^&*_=+}{'?]+(\.[-a-z0-9~!$%^&*_=+}{'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i)
-            return ret ? null : 'Please enter email addr.'
-          }"
+          :validator="emailValidator"
           :message="emailValidateMessage"
           :column-style="{
             textOverflow: 'ellipsis'
@@ -141,10 +138,11 @@
               return rec.birthday
             },
             set (rec, val) {
-              rec.birthday = new Date(val)
+              const date = new Date(val)
+              rec.birthday = isNaN(date) ? val : date
             }
           }"
-          :validator="value => { return isNaN(new Date(value)) ? 'Please enter date.' : null }"
+          :validator="birthdayValidator"
           :message="birthdayValidateMessage"
           :column-style="{
             textOverflow: 'ellipsis'
@@ -198,15 +196,34 @@ const personsDataSource = (() => {
 })()
 
 const starsValidateMessage = (rec) => rec.stars ? null : 'Please select.'
-const firstNameValidateMessage = rec => rec.fname ? null : 'Please enter First Name.'
-const lastNameValidateMessage = rec => rec.lname ? null : 'Please enter Last Name.'
-const progressValidateMessage = rec => rec.progress > 0 ? null : 'Please enter progress.'
+const firstNameValidator = value => { return value.length > 20 ? `over the max length. ${value.length}` : null }
+const firstNameValidateMessage = rec => rec.fname ? firstNameValidator(rec.fname) : 'Please enter First Name.'
+const lastNameValidator = value => { return value.length > 20 ? `over the max length. ${value.length}` : null }
+const lastNameValidateMessage = rec => rec.lname ? lastNameValidator(rec.lname) : 'Please enter Last Name.'
+const progressValidator = value => { return value > 100 ? `over the max value. ${value}` : value < 0 ? `under the min value. ${value}` : null }
+const progressValidateMessage = rec => {
+  if (isNaN(rec.progress)) {
+    return 'Please enter number'
+  }
+  return rec.progress > 0 ? progressValidator(rec.progress) : 'Please enter progress.'
+}
+const emailValidator = value => {
+  const ret = value.match(/^[-a-z0-9~!$%^&*_=+}{'?]+(\.[-a-z0-9~!$%^&*_=+}{'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i)
+  return ret ? null : 'Please enter email addr.'
+}
 const emailValidateMessage = rec => {
   const { email } = rec
   if (!email) {
     return {
       type: 'error',
       message: 'Please enter Email address.'
+    }
+  }
+  const message = emailValidator(email)
+  if (message) {
+    return {
+      type: 'error',
+      message
     }
   }
   if ((`${rec.fname.replace('-', '_')}_${rec.lname.replace('-', '_')}@example.com`).toLowerCase() !== email) {
@@ -217,7 +234,8 @@ const emailValidateMessage = rec => {
   }
   return null
 }
-const birthdayValidateMessage = rec => rec.birthday ? null : 'Please enter birthday.'
+const birthdayValidator = value => { return isNaN(new Date(value)) ? 'Please enter date.' : null }
+const birthdayValidateMessage = rec => rec.birthday ? birthdayValidator(rec.birthday) : 'Please enter birthday.'
 
 export default {
   name: 'Enterprise',
@@ -268,10 +286,15 @@ export default {
       this.$refs.grid.invalidate()
     },
     starsValidateMessage,
+    firstNameValidator,
     firstNameValidateMessage,
+    lastNameValidator,
     lastNameValidateMessage,
+    progressValidator,
     progressValidateMessage,
+    emailValidator,
     emailValidateMessage,
+    birthdayValidator,
     birthdayValidateMessage
   }
 }

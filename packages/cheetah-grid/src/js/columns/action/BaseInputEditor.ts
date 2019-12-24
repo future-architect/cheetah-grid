@@ -5,10 +5,10 @@ import {
   LayoutObjectId,
   ListGridAPI
 } from "../../ts-types";
+import { cellEquals, event } from "../../internal/utils";
 import { isDisabledRecord, isReadOnlyRecord } from "./action-utils";
 import { DG_EVENT_TYPE } from "../../core/DG_EVENT_TYPE";
 import { Editor } from "./Editor";
-import { event } from "../../internal/utils";
 const KEY_ENTER = 13;
 const KEY_F2 = 113;
 
@@ -77,6 +77,11 @@ export abstract class BaseInputEditor<T> extends Editor<T> {
       grid.listen(DG_EVENT_TYPE.PASTE_CELL, e => {
         if (e.multi) {
           // ignore multi cell values
+          return;
+        }
+        const selectionRange = grid.selection.range;
+        if (!cellEquals(selectionRange.start, selectionRange.end)) {
+          // ignore multi paste values
           return;
         }
         if (!isTarget(e.col, e.row)) {
@@ -185,5 +190,18 @@ export abstract class BaseInputEditor<T> extends Editor<T> {
         );
       })
     ];
+  }
+  onPasteCellRangeBox(
+    grid: ListGridAPI<T>,
+    cell: CellAddress,
+    value: string
+  ): void {
+    if (
+      isReadOnlyRecord(this.readOnly, grid, cell.row) ||
+      isDisabledRecord(this.disabled, grid, cell.row)
+    ) {
+      return;
+    }
+    grid.doChangeValue(cell.col, cell.row, () => value);
   }
 }

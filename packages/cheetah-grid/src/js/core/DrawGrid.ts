@@ -13,7 +13,8 @@ import {
   DrawGridEventHandlersReturnMap,
   EventListenerId,
   KeyboardEventListener,
-  PasteCellEvent
+  PasteCellEvent,
+  PasteRangeBoxValues
 } from "../ts-types";
 import {
   array,
@@ -983,7 +984,9 @@ function _getMouseAbstractPoint(
   return { x, y };
 }
 
-function _bindEvents(grid: DrawGrid): void {
+function _bindEvents(this: DrawGrid): void {
+  // eslint-disable-next-line consistent-this, @typescript-eslint/no-this-alias
+  const grid = this;
   const { handler, element, scrollable } = grid[_];
   const getCellEventArgsSet = <EVT extends TouchEvent | MouseEvent>(
     e: EVT
@@ -1278,10 +1281,11 @@ function _bindEvents(grid: DrawGrid): void {
     _onKeyDownMove.call(grid, e);
   });
   grid.listen("copydata", range => {
+    const copyRange = grid.getCopyRangeInternal(range);
     let copyValue = "";
-    for (let { row } = range.start; row <= range.end.row; row++) {
-      for (let { col } = range.start; col <= range.end.col; col++) {
-        const copyCellValue = grid.getCopyCellValue(col, row);
+    for (let { row } = copyRange.start; row <= copyRange.end.row; row++) {
+      for (let { col } = copyRange.start; col <= copyRange.end.col; col++) {
+        const copyCellValue = grid.getCopyCellValue(col, row, copyRange);
         if (
           typeof Promise !== "undefined" &&
           copyCellValue instanceof Promise
@@ -1296,7 +1300,7 @@ function _bindEvents(grid: DrawGrid): void {
           }
         }
 
-        if (col < range.end.col) {
+        if (col < copyRange.end.col) {
           copyValue += "\t";
         }
       }
@@ -1311,14 +1315,36 @@ function _bindEvents(grid: DrawGrid): void {
     ({ value, event }: { value: string; event: ClipboardEvent }) => {
       const normalizeValue = value.replace(/\r?\n$/, "");
       const { col, row } = grid[_].selection.select;
-      grid.fireListeners(DG_EVENT_TYPE.PASTE_CELL, {
+      const multi = /[\r\n\u2028\u2029\t]/.test(normalizeValue); // is multi cell values
+      let rangeBoxValues: PasteRangeBoxValues | null = null;
+      const pasteCellEvent: PasteCellEvent = {
         col,
         row,
         value,
         normalizeValue,
-        multi: /[\r\n\u2028\u2029\t]/.test(normalizeValue), // is multi cell values
+        multi,
+        get rangeBoxValues(): PasteRangeBoxValues {
+          return rangeBoxValues ?? (rangeBoxValues = parseValues());
+        },
         event
-      } as PasteCellEvent);
+      };
+      grid.fireListeners(DG_EVENT_TYPE.PASTE_CELL, pasteCellEvent);
+
+      function parseValues(): PasteRangeBoxValues {
+        const lines = normalizeValue.split(/(?:\r?\n)|[\u2028\u2029]/g);
+        const values = lines.map(line => line.split(/\t/g));
+        const colCount = values.reduce(
+          (n, cells) => Math.max(n, cells.length),
+          0
+        );
+        return {
+          colCount,
+          rowCount: values.length,
+          getCellValue(offsetCol: number, offsetRow: number): string {
+            return values[offsetRow]?.[offsetCol] || "";
+          }
+        };
+      }
     }
   );
   grid[_].focusControl.onInput(value => {
@@ -2016,6 +2042,31 @@ class Selection extends EventTarget {
       }
     };
   }
+  set range(range) {
+    const startCol = Math.min(range.start.col, range.end.col);
+    const startRow = Math.min(range.start.row, range.end.row);
+    const endCol = Math.max(range.start.col, range.end.col);
+    const endRow = Math.max(range.start.row, range.end.row);
+
+    this._wrapFireSelectedEvent(() => {
+      this._sel = {
+        col: startCol,
+        row: startRow
+      };
+      this._focus = {
+        col: startCol,
+        row: startRow
+      };
+      this._start = {
+        col: startCol,
+        row: startRow
+      };
+      this._end = {
+        col: endCol,
+        row: endRow
+      };
+    });
+  }
   get focus(): CellAddress {
     const { col, row } = this._focus;
     return { col, row };
@@ -2543,7 +2594,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
     } else {
       this.updateSize();
     }
-    _bindEvents(this);
+    _bindEvents.call(this);
     this.bindEventsInternal();
   }
   /**
@@ -3104,13 +3155,15 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
    * </p>
    *
    * @protected
-   * @param  {number} col Column index of cell.
-   * @param  {number} row Row index of cell.
+   * @param col Column index of cell.
+   * @param row Row index of cell.
+   * @param range Copy range.
    * @return {string} the value of cell
    */
-  getCopyCellValue(
+  protected getCopyCellValue(
     _col: number,
-    _row: number
+    _row: number,
+    _range: CellRange
   ): string | Promise<string> | void {
     //Please implement get cell value!!
   }
@@ -3239,6 +3292,9 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
   }
   protected getOffsetInvalidateCells(): number {
     return 0;
+  }
+  protected getCopyRangeInternal(range: CellRange): CellRange {
+    return range;
   }
   protected _getInitContext(): CanvasRenderingContext2D {
     const ctx = this[_].context;

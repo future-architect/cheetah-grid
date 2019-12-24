@@ -1,6 +1,6 @@
 import { CellAddress, EventListenerId, LayoutObjectId } from "../../ts-types";
 import { bindCellClickAction, bindCellKeyAction } from "./actionBind";
-import { event, isPromise, obj } from "../../internal/utils";
+import { cellEquals, event, isPromise, obj } from "../../internal/utils";
 import { isDisabledRecord, isReadOnlyRecord } from "./action-utils";
 import { DG_EVENT_TYPE } from "../../core/DG_EVENT_TYPE";
 import { Editor } from "./Editor";
@@ -141,6 +141,11 @@ export class CheckEditor<T> extends Editor<T> {
           // ignore multi cell values
           return;
         }
+        const selectionRange = grid.selection.range;
+        if (!cellEquals(selectionRange.start, selectionRange.end)) {
+          // ignore multi paste values
+          return;
+        }
         if (!isTarget(e.col, e.row)) {
           return;
         }
@@ -158,5 +163,24 @@ export class CheckEditor<T> extends Editor<T> {
         });
       })
     ];
+  }
+  onPasteCellRangeBox(
+    grid: GridInternal<T>,
+    cell: CellAddress,
+    value: string
+  ): void {
+    if (
+      isReadOnlyRecord(this.readOnly, grid, cell.row) ||
+      isDisabledRecord(this.disabled, grid, cell.row)
+    ) {
+      return;
+    }
+    const pasteValue = value.trim();
+    grid.doGetCellValue(cell.col, cell.row, value => {
+      const newValue = toggleValue(value);
+      if (`${newValue}`.trim() === pasteValue) {
+        grid.doChangeValue(cell.col, cell.row, toggleValue);
+      }
+    });
   }
 }

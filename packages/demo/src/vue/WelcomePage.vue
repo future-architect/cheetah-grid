@@ -23,6 +23,7 @@ function createGrid (el, v) {
 
   const grid = new cheetahGrid.ListGrid({
     parentElement: el,
+    allowRangePaste: true,
     header: [
       { field: 'check', caption: '', width: 50, columnType: 'check', action: 'check' },
       { field: 'personid', caption: 'ID', width: 85 },
@@ -62,7 +63,11 @@ function createGrid (el, v) {
               inputValidator (value) {
                 return value.length > 20 ? `over the max length. ${value.length}` : null
               }
-            })
+            }),
+            message (record) {
+              const value = record.fname
+              return value.length > 20 ? `over the max length. ${value.length}` : null
+            }
           },
           {
             field: 'lname',
@@ -77,8 +82,11 @@ function createGrid (el, v) {
               inputValidator (value) {
                 return value.length > 20 ? `over the max length. ${value.length}` : null
               }
-            })
-
+            }),
+            message (record) {
+              const value = record.lname
+              return value.length > 20 ? `over the max length. ${value.length}` : null
+            }
           }
         ]
       },
@@ -100,7 +108,14 @@ function createGrid (el, v) {
           inputValidator (value) {
             return value > 100 ? `over the max value. ${value}` : value < 0 ? `under the min value. ${value}` : null
           }
-        })
+        }),
+        message (record) {
+          if (isNaN(record.progress)) {
+            return 'Not a number.'
+          }
+          const value = record.progress - 0
+          return value > 100 ? `over the max value. ${value}` : value < 0 ? `under the min value. ${value}` : null
+        }
       },
       {
         field: 'email',
@@ -115,16 +130,22 @@ function createGrid (el, v) {
             const ret = value.match(/^[-a-z0-9~!$%^&*_=+}{'?]+(\.[-a-z0-9~!$%^&*_=+}{'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i)
             return ret ? null : 'Please enter email addr.'
           }
-        })
+        }),
+        message (record) {
+          const value = record.email
+          const ret = value.match(/^[-a-z0-9~!$%^&*_=+}{'?]+(\.[-a-z0-9~!$%^&*_=+}{'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i)
+          return ret ? null : 'Please enter email addr.'
+        }
       },
       {
         field: {
           get (rec) {
             const d = rec.birthday
-            return `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`
+            return isNaN(d) ? d : `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`
           },
           set (rec, val) {
-            rec.birthday = new Date(val)
+            const date = new Date(val)
+            rec.birthday = isNaN(date) ? val : date
           }
         },
         caption: 'Birthday',
@@ -137,7 +158,11 @@ function createGrid (el, v) {
           validator (value) {
             return isNaN(new Date(value)) ? 'Please enter date.' : null
           }
-        })
+        }),
+        message (record) {
+          const value = record.birthday
+          return isNaN(new Date(value)) ? 'Please enter date.' : null
+        }
       },
       {
         caption: '',

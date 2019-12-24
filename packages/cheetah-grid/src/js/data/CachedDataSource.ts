@@ -35,7 +35,8 @@ export class CachedDataSource<T> extends DataSource<T> {
   static ofArray<T>(array: T[]): CachedDataSource<T> {
     return new CachedDataSource({
       get: (index: number): T => array[index],
-      length: array.length
+      length: array.length,
+      source: array
     });
   }
   constructor(opt?: DataSourceParam<T>) {
