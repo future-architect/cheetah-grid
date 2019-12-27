@@ -25,10 +25,16 @@ export type TouchCellEvent = CellAddress & {
   event: TouchEvent;
 };
 
+export interface PasteRangeBoxValues {
+  readonly colCount: number;
+  readonly rowCount: number;
+  getCellValue(offsetCol: number, offsetRow: number): string;
+}
 export type PasteCellEvent = CellAddress & {
   value: string;
   normalizeValue: string;
   multi: boolean;
+  rangeBoxValues: PasteRangeBoxValues;
   event: ClipboardEvent;
 };
 

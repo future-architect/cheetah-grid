@@ -12,7 +12,15 @@ Vue.use(CGrid)
 Vue.filter('numberDelimiter', (value) => value.toLocaleString())
 
 // todo use fmt
-Vue.filter('dateFormat', (d, fmt) => d ? `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}` : '')
+Vue.filter('dateFormat', (d, fmt) => {
+  if (!d) {
+    return ''
+  }
+  if (isNaN(new Date(d))) {
+    return d
+  }
+  return `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`
+})
 
 cheetahGrid.themes.default = cheetahGrid.themes.default.extends({
   // font: '16px Roboto, sans-serif'
@@ -28,5 +36,7 @@ new Vue({
   el: '#app',
   router,
   components: { App },
-  template: '<App/>'
+  render (h) {
+    return h(App)
+  }
 })

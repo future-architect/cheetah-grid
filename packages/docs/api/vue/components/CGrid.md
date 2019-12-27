@@ -109,7 +109,13 @@ The definition is set to `layout.body` property described in [Advanced Layout].
 |:------------|:-------:|:--------------------|:---------|
 | data | `Array`&#124;`object`  | Defines a records or data source. | `undefined` |
 | frozen-col-count | `number`&#124;`string`  | Defines a frozen col Count | `0` |
+| header-row-height | `number`&#124;`Array`  | Defines the header row height(s) | `undefined` |
+| allow-range-paste | `boolean`  | Allow pasting of range. | `undefined` |
+| default-row-height | `number`  | Default grid row height. | `undefined` |
+| default-col-width | `number`  | Default grid col width. | `undefined` |
 | filter | `function`  | Defines a records filter | `undefined` |
+| font | `string`  | Default font. | `undefined` |
+| underlay-background-color | `string`  | Underlay background color. | `undefined` |
 | theme | `object`&#124;`string`  | Defines the grid theme | `undefined` |
 | options | `object`  | Defines a raw options for Cheetah Grid | `undefined` |
 
@@ -201,7 +207,6 @@ and more...
 The events for which the column can be identified emit the same event to each column definition component.  
 e.g. `<c-grid-column>`
 :::
-
 
 <code-preview>
 

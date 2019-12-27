@@ -94,8 +94,6 @@ export interface DrawGridAPI {
   makeVisibleCell(col: number, row: number): void;
   setFocusCursor(col: number, row: number): void;
   focusCell(col: number, row: number): void;
-
-  getCopyCellValue(col: number, row: number): string | Promise<string> | void;
   getCellOverflowText(col: number, row: number): string | null;
   setCellOverflowText(
     col: number,
@@ -161,7 +159,6 @@ export interface ListGridAPI<T> extends DrawGridAPI {
   getCellRangeByField(field: FieldDef<T>, index: number): CellRange | null;
   focusGridCell(field: FieldDef<T>, index: number): void;
   makeVisibleGridCell(field: FieldDef<T>, index: number): void;
-  getCopyCellValue(col: number, row: number): string;
   getGridCanvasHelper(): GridCanvasHelperAPI;
   doChangeValue(
     col: number,

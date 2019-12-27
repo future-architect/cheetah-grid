@@ -54,12 +54,18 @@ export class EventTarget {
    * @return {void}
    */
   unlisten(id: EventListenerId): void {
+    if (!this[_]) {
+      return;
+    }
     this[_].listenerData[id].remove();
   }
   addEventListener(type: string, listener: AnyListener): void {
     this.listen(type, listener);
   }
   removeEventListener(type: string, listener: AnyListener): void {
+    if (!this[_]) {
+      return;
+    }
     each(this[_].listenerData, (obj, id) => {
       if (obj.type === type && obj.listener === listener) {
         this.unlisten(id);

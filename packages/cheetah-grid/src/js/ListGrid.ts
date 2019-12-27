@@ -9,6 +9,7 @@ import {
   ColorsPropertyDefine,
   ColumnIconOption,
   ColumnStyleOption,
+  DrawGridAPI,
   EventListenerId,
   FieldData,
   FieldDef,
@@ -20,6 +21,8 @@ import {
   MaybePromise,
   MaybePromiseOrUndef,
   Message,
+  PasteCellEvent,
+  SelectedCellEvent,
   SortState,
   ThemeDefine
 } from "./ts-types";
@@ -38,9 +41,17 @@ import {
   DrawGridConstructorOptions,
   DrawGridProtected
 } from "./core/DrawGrid";
-import { isDef, isPromise, obj, then } from "./internal/utils";
+import {
+  cellEquals,
+  event,
+  isDef,
+  isPromise,
+  obj,
+  then
+} from "./internal/utils";
 import { BaseColumn } from "./columns/type/BaseColumn";
 import { BaseStyle } from "./columns/style";
+import { ColumnData } from "./list-grid/layout-map/api";
 import { DrawCellInfo } from "./ts-types-internal";
 import { GridCanvasHelper } from "./GridCanvasHelper";
 import { BaseStyle as HeaderBaseStyle } from "./header/style";
@@ -494,7 +505,10 @@ function _tryWithUpdateDataSource<T>(
 function _setRecords<T>(grid: ListGrid<T>, records: T[] = []): void {
   _tryWithUpdateDataSource(grid, () => {
     grid[_].records = records;
-    grid[_].dataSource = CachedDataSource.ofArray(records);
+    const newDataSource = (grid[_].dataSource = CachedDataSource.ofArray(
+      records
+    ));
+    grid.addDisposable(newDataSource);
   });
 }
 function _setDataSource<T>(grid: ListGrid<T>, dataSource: DataSource<T>): void {
@@ -503,7 +517,10 @@ function _setDataSource<T>(grid: ListGrid<T>, dataSource: DataSource<T>): void {
       if (dataSource instanceof DataSource) {
         grid[_].dataSource = dataSource;
       } else {
-        grid[_].dataSource = new CachedDataSource(dataSource);
+        const newDataSource = (grid[_].dataSource = new CachedDataSource(
+          dataSource
+        ));
+        grid.addDisposable(newDataSource);
       }
     } else {
       grid[_].dataSource = DataSource.EMPTY;
@@ -515,6 +532,99 @@ function _setDataSource<T>(grid: ListGrid<T>, dataSource: DataSource<T>): void {
 function _getRecordIndexByRow<T>(grid: ListGrid<T>, row: number): number {
   const { layoutMap } = grid[_];
   return layoutMap.getRecordIndexByRow(row);
+}
+
+function _onRangePaste<T>(this: ListGrid<T>, event: PasteCellEvent): void {
+  const { layoutMap } = this[_];
+  const selectionRange = this.selection.range;
+  const { start } = this.getCellRange(
+    selectionRange.start.col,
+    selectionRange.start.row
+  );
+  const { end } = this.getCellRange(
+    selectionRange.end.col,
+    selectionRange.end.row
+  );
+  const values = event.rangeBoxValues;
+
+  const pasteRowCount = Math.min(
+    Math.max(end.row - start.row + 1, values.rowCount),
+    this.rowCount - start.row
+  );
+  const pasteColCount = Math.min(
+    Math.max(end.col - start.col + 1, values.colCount),
+    this.colCount - start.col
+  );
+
+  let hasEditable = false;
+  const actionColumnsBox: ColumnData<T>[][] = [];
+  for (let bodyRow = 0; bodyRow < layoutMap.bodyRowCount; bodyRow++) {
+    const actionColumnsRow: ColumnData<T>[] = [];
+    actionColumnsBox.push(actionColumnsRow);
+    for (let offsetCol = 0; offsetCol < pasteColCount; offsetCol++) {
+      const body = layoutMap.getBody(
+        start.col + offsetCol,
+        bodyRow + layoutMap.bodyRowCount
+      );
+      actionColumnsRow[offsetCol] = body;
+      if (!hasEditable && body.action?.editable) {
+        hasEditable = true;
+      }
+    }
+  }
+  if (!hasEditable) {
+    return;
+  }
+
+  const startRow = layoutMap.getRecordStartRowByRecordIndex(
+    layoutMap.getRecordIndexByRow(start.row)
+  );
+  const startRowOffset = start.row - startRow;
+
+  let duplicate: { [key: number]: boolean } = {};
+  let actionRow = startRowOffset;
+  let valuesRow = 0;
+  for (let offsetRow = 0; offsetRow < pasteRowCount; offsetRow++) {
+    let valuesCol = 0;
+    for (let offsetCol = 0; offsetCol < pasteColCount; offsetCol++) {
+      const { action, id } = actionColumnsBox[actionRow][offsetCol];
+      if (!duplicate[id as number] && action?.editable) {
+        duplicate[id as number] = true;
+        const col = start.col + offsetCol;
+        const row = start.row + offsetRow;
+        const cellValue = values.getCellValue(valuesCol, valuesRow);
+
+        then(this.getRowRecord(row), () => {
+          then(_getCellValue(this, col, row), () => {
+            action.onPasteCellRangeBox(this, { col, row }, cellValue);
+          });
+        });
+      }
+      valuesCol++;
+      if (valuesCol >= values.colCount) {
+        valuesCol = 0;
+      }
+    }
+    actionRow++;
+    if (actionRow >= layoutMap.bodyRowCount) {
+      actionRow = 0;
+      duplicate = {};
+    }
+    valuesRow++;
+    if (valuesRow >= values.rowCount) {
+      valuesRow = 0;
+    }
+  }
+
+  const newEnd = {
+    col: start.col + pasteColCount - 1,
+    row: start.row + pasteRowCount - 1
+  };
+  this.selection.range = {
+    start,
+    end: newEnd
+  };
+  this.invalidateCellRange(this.selection.range);
 }
 
 //end private methods
@@ -545,6 +655,7 @@ interface ListGridProtected<T> extends DrawGridProtected {
   sortState: SortState;
   dataSource: DataSource<T>;
   records?: T[] | null;
+  allowRangePaste: boolean;
 }
 export { ListGridProtected };
 
@@ -575,6 +686,10 @@ export interface ListGridConstructorOptions<T>
    */
   theme?: ThemeDefine | string;
   /**
+   * If set to true to allow pasting of ranges. default false
+   */
+  allowRangePaste?: boolean;
+  /**
    * @deprecated Cannot be used with ListGrid.
    * @override
    */
@@ -584,6 +699,11 @@ export interface ListGridConstructorOptions<T>
    * @override
    */
   colCount?: undefined;
+  /**
+   * @deprecated Cannot be used with ListGrid.
+   * @override
+   */
+  frozenRowCount?: undefined;
 }
 export { HeadersDefine, ColumnDefine, HeaderDefine, GroupHeaderDefine };
 /**
@@ -613,6 +733,7 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
     } else {
       _setRecords(this, options.records);
     }
+    protectedSpace.allowRangePaste = options.allowRangePaste ?? false;
     _refreshHeader(this);
     protectedSpace.sortState = {
       col: -1,
@@ -744,6 +865,15 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
   set theme(theme) {
     this[_].theme = themes.of(theme);
     this.invalidate();
+  }
+  /**
+   * If set to true to allow pasting of ranges.
+   */
+  get allowRangePaste(): boolean {
+    return this[_].allowRangePaste;
+  }
+  set allowRangePaste(allowRangePaste) {
+    this[_].allowRangePaste = allowRangePaste;
   }
   /**
    * Get the font definition as a string.
@@ -989,10 +1119,18 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
   getHeaderCellRange(col: number, row: number): CellRange {
     return this.getCellRange(col, row);
   }
-  getCopyCellValue(col: number, row: number): string {
-    const {
-      start: { col: startCol, row: startRow }
-    } = _getCellRange(this, col, row);
+  protected getCopyCellValue(
+    col: number,
+    row: number,
+    range?: CellRange
+  ): string {
+    const cellRange = _getCellRange(this, col, row);
+    const startCol = range
+      ? Math.max(range.start.col, cellRange.start.col)
+      : cellRange.start.col;
+    const startRow = range
+      ? Math.max(range.start.row, cellRange.start.row)
+      : cellRange.start.row;
     if (startCol !== col || startRow !== row) {
       return "";
     }
@@ -1104,7 +1242,8 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
     return this[_].layoutMap.getCellId(col, row);
   }
   protected bindEventsInternal(): void {
-    this.listen(LG_EVENT_TYPE.SELECTED_CELL, e => {
+    const grid: DrawGridAPI = this as DrawGridAPI;
+    grid.listen(LG_EVENT_TYPE.SELECTED_CELL, (e: SelectedCellEvent) => {
       const range = _getCellRange(this, e.col, e.row);
       const {
         start: { col: startCol, row: startRow },
@@ -1113,6 +1252,22 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
       if (startCol !== endCol || startRow !== endRow) {
         this.invalidateCellRange(range);
       }
+    });
+    grid.listen(LG_EVENT_TYPE.PASTE_CELL, (e: PasteCellEvent) => {
+      if (!this[_].allowRangePaste) {
+        return;
+      }
+      const { start, end } = this.selection.range;
+      if (!e.multi && cellEquals(start, end)) {
+        return;
+      }
+      const { layoutMap } = this[_];
+
+      if (start.row < layoutMap.headerRowCount) {
+        return;
+      }
+      event.cancel(e.event);
+      _onRangePaste.call<ListGrid<T>, [PasteCellEvent], void>(this, e);
     });
   }
   protected getMoveLeftColByKeyDownInternal({ col, row }: CellAddress): number {
@@ -1148,6 +1303,11 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
   }
   protected getOffsetInvalidateCells(): number {
     return 1;
+  }
+  protected getCopyRangeInternal(range: CellRange): CellRange {
+    const { start } = this.getCellRange(range.start.col, range.start.row);
+    const { end } = this.getCellRange(range.end.col, range.end.row);
+    return { start, end };
   }
   fireListeners<TYPE extends keyof ListGridEventHandlersEventMap<T>>(
     type: TYPE,

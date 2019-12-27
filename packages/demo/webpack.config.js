@@ -36,16 +36,16 @@ module.exports = (env, argv) => {
       app: ['@babel/polyfill', './src/main.js']
     },
     output: {
-      path: path.resolve(__dirname, '../../docs/assets'),
+      path: production ? path.resolve(__dirname, '../../docs/assets') : path.resolve(__dirname, './.devdocs/assets'),
       filename: '[name].js',
       publicPath: './',
       devtoolModuleFilenameTemplate,
       devtoolFallbackModuleFilenameTemplate: devtoolModuleFilenameTemplate
     },
-    externals: production ? {
+    externals: {
       'cheetah-grid': 'cheetahGrid',
       'vue-cheetah-grid': 'vueCheetahGrid'
-    } : undefined,
+    },
     resolveLoader: {
       modules: [path.resolve(__dirname, 'node_modules')]
     },
@@ -53,7 +53,7 @@ module.exports = (env, argv) => {
       modules: [path.resolve(__dirname, 'node_modules')],
       extensions: ['.js', '.json'],
       alias: {
-        vue$: 'vue/dist/vue.esm.js',
+        // vue$: 'vue/dist/vue.esm.js',
         'cheetah-grid': production ? 'cheetah-grid' : getCheetahGridPath(),
         // 'cheetah-grid': cheetahGridAliasPath,
         'vue-cheetah-grid': getVueCheetahGridPath()

@@ -62,6 +62,7 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 	const startTime = new Date();
 	const grid = new cheetahGrid.ListGrid({
 		parentElement: document.querySelector('#parent'),
+		allowRangePaste: true,
 		header: [
 			{field: 'check', caption: 'check', width: 50, columnType: 'check', action: 'check'},
 			{
@@ -83,8 +84,8 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 			{
 				caption: 'name',
 				columns: [
-					{field: 'fname', caption: 'First Name', width: 'auto', maxWidth: '200px'},
-					{field: 'lname', caption: 'Last Name', width: 'auto', minWidth: '150px'},
+					{field: 'fname', caption: 'First Name', width: 'auto', maxWidth: '200px', action: 'input'},
+					{field: 'lname', caption: 'Last Name', width: 'auto', minWidth: '150px', action: 'input'},
 				],
 			},
 			{

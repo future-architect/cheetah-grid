@@ -75,7 +75,7 @@ document.querySelector('.sample1mode').onchange = function() {
 
 </code-preview>
 
-### Properties
+## Properties
 
 |Property|Descrition|
 |---|---|
