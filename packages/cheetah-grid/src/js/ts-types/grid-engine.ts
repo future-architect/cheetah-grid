@@ -37,6 +37,10 @@ export interface DrawGridAPI {
   underlayBackgroundColor?: string;
   readonly selection: Selection;
   readonly canvas: HTMLCanvasElement;
+  readonly visibleRowCount: number;
+  readonly visibleColCount: number;
+  readonly topRow: number;
+  readonly leftCol: number;
   getElement(): HTMLElement;
   focus(): void;
   hasFocusGrid(): boolean;

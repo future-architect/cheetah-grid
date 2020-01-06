@@ -3149,6 +3149,116 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
     _invalidateRect(this, visibleRect);
   }
   /**
+   * Get the number of scrollable rows fully visible in the grid. visibleRowCount does not include the frozen rows counted by the frozenRowCount property. It does not include any partially visible rows on the bottom of the grid.
+   * @returns {number}
+   */
+  get visibleRowCount(): number {
+    const { frozenRowCount } = this;
+    const visibleRect = _getVisibleRect(this);
+    const visibleTop =
+      frozenRowCount > 0
+        ? visibleRect.top + _getRowsHeight.call(this, 0, frozenRowCount - 1)
+        : visibleRect.top;
+
+    const initRow = _getTargetRowAt.call(this, visibleTop);
+    if (!initRow) {
+      return 0;
+    }
+    const startRow = Math.max(
+      initRow.top >= visibleTop ? initRow.row : initRow.row + 1,
+      frozenRowCount
+    );
+    let absoluteTop = _getRowsHeight.call(this, 0, startRow - 1);
+    let count = 0;
+    const { rowCount } = this;
+    for (let row = startRow; row < rowCount; row++) {
+      const height = _getRowHeight.call(this, row);
+      const bottom = absoluteTop + height;
+      if (visibleRect.bottom < bottom) {
+        break;
+      }
+      count++;
+      absoluteTop = bottom;
+    }
+    return count;
+  }
+  /**
+   * Get the number of scrollable columns fully visible in the grid. visibleColCount does not include the frozen columns counted by the frozenColCount property. It does not include any partially visible columns on the right of the grid.
+   * @returns {number}
+   */
+  get visibleColCount(): number {
+    const { frozenColCount } = this;
+    const visibleRect = _getVisibleRect(this);
+    const visibleLeft =
+      frozenColCount > 0
+        ? visibleRect.left + _getColsWidth(this, 0, frozenColCount - 1)
+        : visibleRect.left;
+
+    const initCol = _getTargetColAt(this, visibleLeft);
+    if (!initCol) {
+      return 0;
+    }
+    const startCol = Math.max(
+      initCol.left >= visibleLeft ? initCol.col : initCol.col + 1,
+      frozenColCount
+    );
+    let absoluteLeft = _getColsWidth(this, 0, startCol - 1);
+    let count = 0;
+    const { colCount } = this;
+    for (let col = startCol; col < colCount; col++) {
+      const width = _getColWidth(this, col);
+      const right = absoluteLeft + width;
+      if (visibleRect.right < right) {
+        break;
+      }
+      count++;
+      absoluteLeft = right;
+    }
+    return count;
+  }
+  /**
+   * Get the index of the first row in the scrollable region that is visible.
+   * @returns {number}
+   */
+  get topRow(): number {
+    const { frozenRowCount } = this;
+    const visibleRect = _getVisibleRect(this);
+    const visibleTop =
+      frozenRowCount > 0
+        ? visibleRect.top + _getRowsHeight.call(this, 0, frozenRowCount - 1)
+        : visibleRect.top;
+
+    const initRow = _getTargetRowAt.call(this, visibleTop);
+    if (!initRow) {
+      return 0;
+    }
+    return Math.max(
+      initRow.top >= visibleTop ? initRow.row : initRow.row + 1,
+      frozenRowCount
+    );
+  }
+  /**
+   * Get the index of the first column in the scrollable region that is visible.
+   * @returns {number}
+   */
+  get leftCol(): number {
+    const { frozenColCount } = this;
+    const visibleRect = _getVisibleRect(this);
+    const visibleLeft =
+      frozenColCount > 0
+        ? visibleRect.left + _getColsWidth(this, 0, frozenColCount - 1)
+        : visibleRect.left;
+
+    const initCol = _getTargetColAt(this, visibleLeft);
+    if (!initCol) {
+      return 0;
+    }
+    return Math.max(
+      initCol.left >= visibleLeft ? initCol.col : initCol.col + 1,
+      frozenColCount
+    );
+  }
+  /**
    * Get the value of cell with the copy action.
    * <p>
    * Please implement
