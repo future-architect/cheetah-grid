@@ -20,6 +20,7 @@ export interface ThemeDefine {
   defaultBgColor?: ColorPropertyDefine;
   frozenRowsBgColor?: ColorPropertyDefine;
   selectionBgColor: ColorPropertyDefine;
+  highlightBgColor?: ColorPropertyDefine;
   // border
   borderColor: ColorsPropertyDefine;
   frozenRowsBorderColor: ColorsPropertyDefine;
