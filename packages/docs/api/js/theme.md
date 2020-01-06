@@ -90,6 +90,7 @@ const userTheme = {
   defaultBgColor: '#FDD',
   frozenRowsBgColor: '#EAA',
   selectionBgColor: '#FDA',
+  highlightBgColor: '#FDC',
   underlayBackgroundColor: '#FEE',
   // You can also change the theme apply in the state by using callback.
   frozenRowsBorderColor(args) {

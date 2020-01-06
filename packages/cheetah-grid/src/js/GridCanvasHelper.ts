@@ -697,6 +697,9 @@ class ThemeResolver<T> implements RequiredThemeDefine {
   get selectionBgColor(): ColorPropertyDefine {
     return getThemeColor(this._grid, "selectionBgColor");
   }
+  get highlightBgColor(): ColorPropertyDefine {
+    return getThemeColor(this._grid, "highlightBgColor");
+  }
   // border
   get borderColor(): ColorsPropertyDefine {
     return getThemeColor(this._grid, "borderColor");
@@ -1141,7 +1144,17 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
       return option.fillColor;
     }
     const isFrozenCell = this._grid.isFrozenCell(col, row);
-    if (isFrozenCell && isFrozenCell.row) {
+    if (
+      cellEquals(sel.select, context) &&
+      this.theme.highlightBgColor !== this.theme.defaultBgColor
+    ) {
+      return this.theme.highlightBgColor;
+    }
+    if (
+      isFrozenCell &&
+      isFrozenCell.row &&
+      this.theme.frozenRowsBgColor !== this.theme.defaultBgColor
+    ) {
       return this.theme.frozenRowsBgColor;
     }
     return this.theme.defaultBgColor;

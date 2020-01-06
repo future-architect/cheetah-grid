@@ -70,6 +70,10 @@ export class Theme implements RequiredThemeDefine {
     const { obj, superTheme } = this[_];
     return getProp(obj, superTheme, ["selectionBgColor"], ["defaultBgColor"]);
   }
+  get highlightBgColor(): ColorPropertyDefine {
+    const { obj, superTheme } = this[_];
+    return getProp(obj, superTheme, ["highlightBgColor"], ["defaultBgColor"]);
+  }
   // border
   get borderColor(): ColorsPropertyDefine {
     const { obj, superTheme } = this[_];
