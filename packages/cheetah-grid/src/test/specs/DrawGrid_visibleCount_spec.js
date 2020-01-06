@@ -22,7 +22,7 @@
 			mainEl.appendChild(parent);
 			return parent;
 		})(),
-		defaultRowHeight: 24,
+		defaultRowHeight: 52,
 	});
 	window.gridElement = grid.getElement();
 	window.grid = grid;
@@ -69,12 +69,12 @@
 	describe('DrawGrid visibleRowCount', function() {
 
 		it('"visibleRowCount" and "topRow" must be the expected values.', function() {
-			expect(grid.visibleRowCount).toBe(11);
+			expect(grid.visibleRowCount).toBe(4);
 			expect(grid.topRow).toBe(1);
 
 			setScrollTop(10);
 
-			expect(grid.visibleRowCount).toBe(10);
+			expect(grid.visibleRowCount).toBe(3);
 			expect(grid.topRow).toBe(2);
 		});
 
