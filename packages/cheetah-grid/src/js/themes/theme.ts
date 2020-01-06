@@ -3,6 +3,7 @@ import {
   ColorsPropertyDefine,
   PartialThemeDefine,
   RequiredThemeDefine,
+  StylePropertyFunctionArg,
   ThemeDefine
 } from "../ts-types";
 import { getChainSafe } from "../internal/utils";
@@ -71,8 +72,21 @@ export class Theme implements RequiredThemeDefine {
     return getProp(obj, superTheme, ["selectionBgColor"], ["defaultBgColor"]);
   }
   get highlightBgColor(): ColorPropertyDefine {
-    const { obj, superTheme } = this[_];
-    return getProp(obj, superTheme, ["highlightBgColor"], ["defaultBgColor"]);
+    if (this.hasProperty(["highlightBgColor"])) {
+      const { obj, superTheme } = this[_];
+      return getProp(obj, superTheme, ["highlightBgColor"]);
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (args: StylePropertyFunctionArg): any => {
+      const color =
+        args.row < args.grid.frozenRowCount
+          ? this.frozenRowsBgColor
+          : this.defaultBgColor;
+      if (typeof color === "function") {
+        return color(args);
+      }
+      return color;
+    };
   }
   // border
   get borderColor(): ColorsPropertyDefine {
@@ -154,7 +168,31 @@ export class Theme implements RequiredThemeDefine {
       })
     );
   }
+  hasProperty(names: string[]): boolean {
+    const { obj, superTheme } = this[_];
+    return hasThemeProperty(obj, names) || hasThemeProperty(superTheme, names);
+  }
   extends(obj: PartialThemeDefine): Theme {
     return new Theme(obj, this);
+  }
+}
+
+function hasThemeProperty(obj: PartialThemeDefine, names: string[]): boolean {
+  if (obj instanceof Theme) {
+    return obj.hasProperty(names);
+  } else {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let o: any = obj;
+    if (!o) {
+      return false;
+    }
+    for (let index = 0; index < names.length; index++) {
+      const name = names[index];
+      o = o[name];
+      if (!o) {
+        return false;
+      }
+    }
+    return !!o;
   }
 }

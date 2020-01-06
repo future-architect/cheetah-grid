@@ -1143,18 +1143,11 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
     if (option.fillColor) {
       return option.fillColor;
     }
-    const isFrozenCell = this._grid.isFrozenCell(col, row);
-    if (
-      cellEquals(sel.select, context) &&
-      this.theme.highlightBgColor !== this.theme.defaultBgColor
-    ) {
+    if (cellEquals(sel.select, context)) {
       return this.theme.highlightBgColor;
     }
-    if (
-      isFrozenCell &&
-      isFrozenCell.row &&
-      this.theme.frozenRowsBgColor !== this.theme.defaultBgColor
-    ) {
+    const isFrozenCell = this._grid.isFrozenCell(col, row);
+    if (isFrozenCell && isFrozenCell.row) {
       return this.theme.frozenRowsBgColor;
     }
     return this.theme.defaultBgColor;
