@@ -20,7 +20,6 @@
 	position: absolute;
 	width: 0;
 	height: 0;
-	letter-spacing: normal !important;
 }
 .cheetah-grid .grid-focus-control {
 	position: relative !important;
