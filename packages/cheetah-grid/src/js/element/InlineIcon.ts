@@ -21,10 +21,12 @@ export class InlineIcon extends Inline {
     }
     if (icon.font && fonts.check(icon.font, icon.content || "")) {
       ctx.save();
+      ctx.canvas.style.letterSpacing = "normal";
       try {
         ctx.font = icon.font || ctx.font;
         return ctx.measureText(icon.content || "").width;
       } finally {
+        ctx.canvas.style.letterSpacing = "";
         ctx.restore();
       }
     }
@@ -58,23 +60,30 @@ export class InlineIcon extends Inline {
   }: InlineDrawOption): void {
     const icon = this._icon;
     if (icon.content) {
-      canvashelper.fillTextRect(
-        ctx,
-        icon.content,
-        rect.left,
-        rect.top,
-        rect.width,
-        rect.height,
-        {
-          offset: offset + 1,
-          padding: {
-            left: offsetLeft,
-            right: offsetRight,
-            top: offsetTop,
-            bottom: offsetBottom
+      ctx.canvas.style.letterSpacing = "normal";
+      try {
+        // eslint-disable-next-line no-self-assign
+        ctx.font = ctx.font; // To apply letterSpacing, we need to reset it.
+        canvashelper.fillTextRect(
+          ctx,
+          icon.content,
+          rect.left,
+          rect.top,
+          rect.width,
+          rect.height,
+          {
+            offset: offset + 1,
+            padding: {
+              left: offsetLeft,
+              right: offsetRight,
+              top: offsetTop,
+              bottom: offsetBottom
+            }
           }
-        }
-      );
+        );
+      } finally {
+        ctx.canvas.style.letterSpacing = "";
+      }
     }
   }
   canBreak(): boolean {
