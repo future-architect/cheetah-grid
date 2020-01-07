@@ -22,7 +22,7 @@ const gettingStartedVue = require.resolve('../packages/docs/introduction/getting
 	let result;
 	while ((result = reUnpkg.exec(readme)) !== null) {
 		const rmVersion = result[1];
-		if (`${version}.x` !== rmVersion) {
+		if (`${version}` !== rmVersion) {
 			const msg = `Invalid cdn version. act:${rmVersion} @ "${readmePath}"`;
 			console.error(chalk.red(msg));
 			process.exit(1);//eslint-disable-line no-process-exit
@@ -33,7 +33,7 @@ const gettingStartedVue = require.resolve('../packages/docs/introduction/getting
 
 	while ((result = reUnpkgVue.exec(readme)) !== null) {
 		const rmVersion = result[1];
-		if (`${version}.x` !== rmVersion) {
+		if (`${version}` !== rmVersion) {
 			const msg = `Invalid cdn version. act:${rmVersion} @ "${readmePath}"`;
 			console.error(chalk.red(msg));
 			process.exit(1);//eslint-disable-line no-process-exit

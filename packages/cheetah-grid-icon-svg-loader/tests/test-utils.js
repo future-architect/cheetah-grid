@@ -14,7 +14,7 @@ module.exports = {
 		return require(path.join(FIXTURES_ROOT, `./expect/${name}`));
 	},
 	saveExpect(name, obj) {
-		const text = `var obj=${JSON.stringify(obj, null, ' ')}
+		const text = `var obj=${JSON.stringify(sortProps(obj), null, ' ')}
   if (typeof window !== 'undefined') {
     window['${name}']=obj
   } else {
@@ -33,3 +33,10 @@ module.exports = {
 		}
 	}
 };
+
+function sortProps(obj) {
+	return Object.keys(obj).sort().reduce((result, key) => {
+		result[key] = obj[key];
+		return result;
+	}, {});
+}
