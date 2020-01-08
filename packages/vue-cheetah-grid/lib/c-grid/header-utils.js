@@ -16,7 +16,7 @@ function getHeaderInstances (cgridVm, slots) {
 }
 
 function getColumnDefinesFromVNodes (cgridVm, vnodes) {
-  return getColumnDefinesFromInstances(vnodes.map(vnode => {
+  return getColumnDefinesFromInstances(cgridVm, vnodes.map(vnode => {
     if (!vnode.tag) {
       return null
     }
