@@ -51,8 +51,8 @@ class LayoutObjectGrid<T, D extends HasSpans> {
         this.objects.push(obj);
         this.objectMap[id] = obj;
         col = this._findStartCell(col, row);
-        const rowSpan = cell.rowSpan ?? 1;
-        const colSpan = cell.colSpan ?? 1;
+        const rowSpan = Number(cell.rowSpan ?? 1);
+        const colSpan = Number(cell.colSpan ?? 1);
         const endRow = row + rowSpan;
         const endCol = col + colSpan;
         for (let rowIndex = row; rowIndex < endRow; rowIndex++) {

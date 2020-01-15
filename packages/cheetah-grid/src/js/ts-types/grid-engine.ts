@@ -41,6 +41,9 @@ export interface DrawGridAPI {
   readonly visibleColCount: number;
   readonly topRow: number;
   readonly leftCol: number;
+  scrollLeft: number;
+  scrollTop: number;
+
   getElement(): HTMLElement;
   focus(): void;
   hasFocusGrid(): boolean;
