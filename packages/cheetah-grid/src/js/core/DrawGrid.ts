@@ -3259,6 +3259,24 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
     );
   }
   /**
+   * gets or sets the number of pixels that an element's content is scrolled vertically
+   */
+  get scrollTop(): number {
+    return this[_].scrollable.scrollTop;
+  }
+  set scrollTop(scrollTop) {
+    this[_].scrollable.scrollTop = scrollTop;
+  }
+  /**
+   * gets or sets the number of pixels that an element's content is scrolled from its left edge
+   */
+  get scrollLeft(): number {
+    return this[_].scrollable.scrollLeft;
+  }
+  set scrollLeft(scrollLeft) {
+    this[_].scrollable.scrollLeft = scrollLeft;
+  }
+  /**
    * Get the value of cell with the copy action.
    * <p>
    * Please implement
