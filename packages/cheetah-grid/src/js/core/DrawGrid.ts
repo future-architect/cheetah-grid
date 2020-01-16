@@ -1256,6 +1256,16 @@ function _bindEvents(this: DrawGrid): void {
     }
     grid.fireListeners(DG_EVENT_TYPE.CLICK_CELL, eventArgs);
   });
+  handler.on(element, "contextmenu", e => {
+    if (!grid.hasListeners(DG_EVENT_TYPE.CONTEXTMENU_CELL)) {
+      return;
+    }
+    const { eventArgs } = getCellEventArgsSet(e);
+    if (!eventArgs) {
+      return;
+    }
+    grid.fireListeners(DG_EVENT_TYPE.CONTEXTMENU_CELL, eventArgs);
+  });
   handler.on(element, "dblclick", e => {
     if (!grid.hasListeners(DG_EVENT_TYPE.DBLCLICK_CELL)) {
       return;

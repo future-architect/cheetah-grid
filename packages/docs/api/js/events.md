@@ -6,7 +6,7 @@ order: 200
 
 You can set an event listener using the `listen(type, listener)` method.  
 
-Please get the event type from `cheetahGrid.ListGrid.EVENT_TYPE`.  
+Please get the event type from [`cheetahGrid.ListGrid.EVENT_TYPE`](https://future-architect.github.io/cheetah-grid/documents/tsdoc/interfaces/listgidevents.html).  
 
 <code-preview>
 

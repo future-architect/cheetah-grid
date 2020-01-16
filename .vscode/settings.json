@@ -3,8 +3,10 @@
     "eslint.validate": [
         "javascript",
         "javascriptreact",
-        { "language": "html", "autoFix": true },
-        { "language": "handlebars", "autoFix": true },
-        { "language": "vue", "autoFix": true }
+        "html",
+        "vue"
     ],
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    }
 }
