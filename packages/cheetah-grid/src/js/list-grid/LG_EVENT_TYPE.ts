@@ -1,9 +1,14 @@
 import { DG_EVENT_TYPE, DrawGridEvents } from "../core/DG_EVENT_TYPE";
 import { extend } from "../internal/utils";
 
-// eslint-disable-next-line @typescript-eslint/class-name-casing
 export interface ListGidEvents extends DrawGridEvents {
+  /**
+   * Indicates when the cell value was changed.
+   */
   CHANGED_VALUE: "changed_value";
+  /**
+   * Indicates when the header cell value was changed.
+   */
   CHANGED_HEADER_VALUE: "changed_header_value";
 }
 
