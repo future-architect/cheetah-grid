@@ -179,8 +179,21 @@ export interface ListGridAPI<T> extends DrawGridAPI {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     valueCallback: (value: any) => void
   ): boolean;
+  doSetPasteValue(text: string): void;
+  doSetPasteValue(
+    text: string,
+    test: (data: SetPasteValueTestData<T>) => boolean
+  ): void;
   getLayoutCellId(col: number, row: number): LayoutObjectId;
 }
+
+export type SetPasteValueTestData<T> = CellAddress & {
+  grid: ListGridAPI<T>;
+  record: T;
+  value: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  oldValue: any;
+};
 
 export interface InlineAPI {
   width(arg: { ctx: CanvasRenderingContext2D }): number;
