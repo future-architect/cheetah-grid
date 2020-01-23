@@ -23,6 +23,7 @@ import {
   Message,
   PasteCellEvent,
   SelectedCellEvent,
+  SetPasteValueTestData,
   SortState,
   ThemeDefine
 } from "./ts-types";
@@ -62,6 +63,7 @@ import { Theme } from "./themes/theme";
 import { TooltipHandler } from "./tooltip/TooltipHandler";
 //protected symbol
 import { getProtectedSymbol } from "./internal/symbolManager";
+import { parsePasteRangeBoxValues } from "./internal/paste-utils";
 
 const _ = getProtectedSymbol();
 
@@ -534,7 +536,11 @@ function _getRecordIndexByRow<T>(grid: ListGrid<T>, row: number): number {
   return layoutMap.getRecordIndexByRow(row);
 }
 
-function _onRangePaste<T>(this: ListGrid<T>, event: PasteCellEvent): void {
+function _onRangePaste<T>(
+  this: ListGrid<T>,
+  text: string,
+  test: (data: SetPasteValueTestData<T>) => boolean = (): boolean => true
+): void {
   const { layoutMap } = this[_];
   const selectionRange = this.selection.range;
   const { start } = this.getCellRange(
@@ -545,7 +551,7 @@ function _onRangePaste<T>(this: ListGrid<T>, event: PasteCellEvent): void {
     selectionRange.end.col,
     selectionRange.end.row
   );
-  const values = event.rangeBoxValues;
+  const values = parsePasteRangeBoxValues(text);
 
   const pasteRowCount = Math.min(
     Math.max(end.row - start.row + 1, values.rowCount),
@@ -594,9 +600,20 @@ function _onRangePaste<T>(this: ListGrid<T>, event: PasteCellEvent): void {
         const row = start.row + offsetRow;
         const cellValue = values.getCellValue(valuesCol, valuesRow);
 
-        then(this.getRowRecord(row), () => {
-          then(_getCellValue(this, col, row), () => {
-            action.onPasteCellRangeBox(this, { col, row }, cellValue);
+        then(this.getRowRecord(row), record => {
+          then(_getCellValue(this, col, row), oldValue => {
+            if (
+              test({
+                grid: this,
+                record: record as T,
+                col,
+                row,
+                value: cellValue,
+                oldValue
+              })
+            ) {
+              action.onPasteCellRangeBox(this, { col, row }, cellValue);
+            }
           });
         });
       }
@@ -1218,6 +1235,16 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
       });
     }
   }
+  doSetPasteValue(
+    text: string,
+    test?: (data: SetPasteValueTestData<T>) => boolean
+  ): void {
+    _onRangePaste.call<
+      ListGrid<T>,
+      [string, (data: SetPasteValueTestData<T>) => boolean],
+      void
+    >(this, text, test as (data: SetPasteValueTestData<T>) => boolean);
+  }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getHeaderValue(col: number, row: number): any | undefined {
     const field = this.getHeaderField(col, row);
@@ -1267,7 +1294,7 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
         return;
       }
       event.cancel(e.event);
-      _onRangePaste.call<ListGrid<T>, [PasteCellEvent], void>(this, e);
+      _onRangePaste.call<ListGrid<T>, [string], void>(this, e.normalizeValue);
     });
   }
   protected getMoveLeftColByKeyDownInternal({ col, row }: CellAddress): number {
