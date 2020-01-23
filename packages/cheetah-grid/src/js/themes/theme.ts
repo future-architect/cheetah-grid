@@ -119,7 +119,7 @@ export class Theme implements RequiredThemeDefine {
             obj,
             superTheme,
             ["checkbox", "checkBgColor"],
-            ["defaultBgColor"]
+            ["borderColor"]
           );
         },
         get borderColor(): ColorPropertyDefine {
