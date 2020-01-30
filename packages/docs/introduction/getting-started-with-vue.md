@@ -11,8 +11,8 @@ order: 20
 [![npm](https://img.shields.io/npm/v/vue-cheetah-grid.svg)](https://www.npmjs.com/package/vue-cheetah-grid)
 
 ```html
-<script src="https://unpkg.com/cheetah-grid@0.16"></script>
-<script src="https://unpkg.com/vue-cheetah-grid@0.16"></script>
+<script src="https://unpkg.com/cheetah-grid@0.17"></script>
+<script src="https://unpkg.com/vue-cheetah-grid@0.17"></script>
 ```
 
 ```js
