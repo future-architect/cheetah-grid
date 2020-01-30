@@ -6,6 +6,7 @@ import {
 } from "../ts-types";
 import { BaseStyle } from "./style/BaseStyle";
 import { CheckHeaderStyle } from "./style/CheckHeaderStyle";
+import { MultilineTextHeaderStyle } from "./style/MultilineTextHeaderStyle";
 import { SortHeaderStyle } from "./style/SortHeaderStyle";
 import { Style } from "./style/Style";
 
@@ -17,6 +18,7 @@ export {
   // types
   BaseStyleOption,
   CheckHeaderStyleOption,
+  MultilineTextHeaderStyle,
   SortHeaderStyleOption
 };
 
