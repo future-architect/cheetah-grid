@@ -52,6 +52,12 @@ export interface MultilineTextStyleOption extends StyleOption {
   lineClamp?: LineClamp;
 }
 
+export interface MultilineTextHeaderStyleOption extends HeaderStdStyleOption {
+  lineHeight?: string | number;
+  autoWrapText?: boolean;
+  lineClamp?: LineClamp;
+}
+
 export interface MenuStyleOption extends StyleOption {
   appearance?: "menulist-button" | "none";
 }
@@ -121,10 +127,12 @@ export type HeaderStyleOption =
   | BaseStyleOption
   | HeaderStdStyleOption
   | CheckHeaderStyleOption
+  | MultilineTextHeaderStyleOption
   | SortHeaderStyleOption
   | (() =>
       | ColumnStyle
       | BaseStyleOption
       | HeaderStdStyleOption
       | CheckHeaderStyleOption
+      | MultilineTextHeaderStyleOption
       | SortHeaderStyleOption);
