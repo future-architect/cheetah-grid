@@ -192,7 +192,8 @@ function _buildGridOption (vm) {
       defaultRowHeight: vm.defaultRowHeight,
       defaultColWidth: vm.defaultColWidth,
       font: vm.font,
-      underlayBackgroundColor: vm.underlayBackgroundColor
+      underlayBackgroundColor: vm.underlayBackgroundColor,
+      keyboardOptions: { moveCellOnTab: vm.moveCellOnTabKey }
     },
     headerLayoutOptions,
     vm.options
@@ -288,6 +289,12 @@ export default {
     theme: {
       type: [Object, String],
       default: undefined
+    },
+    /**
+     * Specify `true` to enable cell movement by tab key.
+     */
+    moveCellOnTabKey: {
+      type: Boolean
     },
     /**
      * Defines a raw options for Cheetah Grid

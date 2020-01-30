@@ -63,6 +63,7 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 	const grid = new cheetahGrid.ListGrid({
 		parentElement: document.querySelector('#parent'),
 		allowRangePaste: true,
+		keyboardOptions: {moveCellOnTab: true},
 		header: [
 			{field: 'check', caption: 'check', width: 50, columnType: 'check', action: 'check'},
 			{

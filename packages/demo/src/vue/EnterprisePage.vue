@@ -25,6 +25,7 @@
         :frozen-col-count="1"
         :filter="dataFilter"
         allow-range-paste
+        move-cell-on-tab-key
         @changed-value="onChangedValue"
       >
         <c-grid-column

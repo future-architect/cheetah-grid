@@ -11,6 +11,7 @@ import {
   DrawGridAPI,
   DrawGridEventHandlersEventMap,
   DrawGridEventHandlersReturnMap,
+  DrawGridKeyboardOptions,
   EventListenerId,
   KeyboardEventListener,
   PasteCellEvent,
@@ -50,6 +51,7 @@ function createRootElement(): HTMLElement {
   return element;
 }
 
+const KEY_TAB = 9;
 const KEY_END = 35;
 const KEY_HOME = 36;
 const KEY_LEFT = 37;
@@ -883,46 +885,131 @@ function _onScroll(grid: DrawGrid, _e: Event): void {
   }
 }
 
+// eslint-disable-next-line complexity
 function _onKeyDownMove(this: DrawGrid, e: KeyboardEvent): void {
   const { shiftKey } = e;
   const keyCode = getKeyCode(e);
   const focusCell = shiftKey ? this.selection.focus : this.selection.select;
   if (keyCode === KEY_LEFT) {
-    const col = this.getMoveLeftColByKeyDownInternal(focusCell);
-    if (col < 0) {
-      return;
+    if (e.ctrlKey || e.metaKey) {
+      move(this, null, "W");
+    } else {
+      if (!hmove.call(this, "W")) {
+        return;
+      }
     }
-    _moveFocusCell.call(this, col, focusCell.row, shiftKey);
     cancelEvent(e);
   } else if (keyCode === KEY_UP) {
-    const row = this.getMoveUpRowByKeyDownInternal(focusCell);
-    if (row < 0) {
-      return;
+    if (e.ctrlKey || e.metaKey) {
+      move(this, "N", null);
+    } else {
+      if (!vmove.call(this, "N")) {
+        return;
+      }
     }
-    _moveFocusCell.call(this, focusCell.col, row, shiftKey);
     cancelEvent(e);
   } else if (keyCode === KEY_RIGHT) {
-    const col = this.getMoveRightColByKeyDownInternal(focusCell);
-    if (this.colCount <= col) {
-      return;
+    if (e.ctrlKey || e.metaKey) {
+      move(this, null, "E");
+    } else {
+      if (!hmove.call(this, "E")) {
+        return;
+      }
     }
-    _moveFocusCell.call(this, col, focusCell.row, shiftKey);
     cancelEvent(e);
   } else if (keyCode === KEY_DOWN) {
-    const row = this.getMoveDownRowByKeyDownInternal(focusCell);
-    if (this.rowCount <= row) {
-      return;
+    if (e.ctrlKey || e.metaKey) {
+      move(this, "S", null);
+    } else {
+      if (!vmove.call(this, "S")) {
+        return;
+      }
     }
-    _moveFocusCell.call(this, focusCell.col, row, shiftKey);
     cancelEvent(e);
   } else if (keyCode === KEY_HOME) {
-    const row = e.ctrlKey ? 0 : focusCell.row;
-    _moveFocusCell.call(this, 0, row, e.shiftKey);
+    if (e.ctrlKey || e.metaKey) {
+      move(this, "N", "W");
+    } else {
+      move(this, null, "W");
+    }
     cancelEvent(e);
   } else if (keyCode === KEY_END) {
-    const row = e.ctrlKey ? this.rowCount - 1 : focusCell.row;
-    _moveFocusCell.call(this, this.colCount - 1, row, shiftKey);
+    if (e.ctrlKey || e.metaKey) {
+      move(this, "S", "E");
+    } else {
+      move(this, null, "E");
+    }
     cancelEvent(e);
+  } else if (this.keyboardOptions?.moveCellOnTab && keyCode === KEY_TAB) {
+    if (shiftKey) {
+      if (!hmove.call(this, "W", false)) {
+        const row = this.getMoveUpRowByKeyDownInternal(focusCell);
+        if (0 > row) {
+          return;
+        }
+        _moveFocusCell.call(this, this.colCount - 1, row, false);
+      }
+    } else {
+      if (!hmove.call(this, "E", false)) {
+        const row = this.getMoveDownRowByKeyDownInternal(focusCell);
+        if (this.rowCount <= row) {
+          return;
+        }
+        _moveFocusCell.call(this, 0, row, false);
+      }
+    }
+    cancelEvent(e);
+  }
+
+  function move(
+    grid: DrawGrid,
+    vDir: "N" | "S" | null,
+    hDir: "W" | "E" | null
+  ): void {
+    const row =
+      vDir === "S" ? grid.rowCount - 1 : vDir === "N" ? 0 : focusCell.row;
+    const col =
+      hDir === "E" ? grid.colCount - 1 : hDir === "W" ? 0 : focusCell.col;
+    _moveFocusCell.call(grid, col, row, shiftKey);
+  }
+
+  function vmove(this: DrawGrid, vDir: "N" | "S"): boolean {
+    let row: number;
+    if (vDir === "S") {
+      row = this.getMoveDownRowByKeyDownInternal(focusCell);
+      if (this.rowCount <= row) {
+        return false;
+      }
+    } else {
+      row = this.getMoveUpRowByKeyDownInternal(focusCell);
+      if (row < 0) {
+        return false;
+      }
+    }
+    const { col } = focusCell;
+    _moveFocusCell.call(this, col, row, shiftKey);
+    return true;
+  }
+  function hmove(
+    this: DrawGrid,
+    hDir: "W" | "E",
+    shiftKeyFlg: boolean = shiftKey
+  ): boolean {
+    let col: number;
+    if (hDir === "E") {
+      col = this.getMoveRightColByKeyDownInternal(focusCell);
+      if (this.colCount <= col) {
+        return false;
+      }
+    } else {
+      col = this.getMoveLeftColByKeyDownInternal(focusCell);
+      if (col < 0) {
+        return false;
+      }
+    }
+    const { row } = focusCell;
+    _moveFocusCell.call(this, col, row, shiftKeyFlg);
+    return true;
   }
 }
 function _moveFocusCell(
@@ -1915,6 +2002,9 @@ class FocusControl extends EventTarget {
       ) {
         fn(e);
       }
+      if (this._grid.keyboardOptions?.moveCellOnTab && keyCode === KEY_TAB) {
+        fn(e);
+      }
     });
   }
   onKeyDown(fn: (keyCode: number, e: KeyboardEvent) => void): EventListenerId {
@@ -2449,6 +2539,7 @@ interface DrawGridProtected {
   defaultColWidth: string | number;
   font?: string;
   underlayBackgroundColor?: string;
+  keyboardOptions?: DrawGridKeyboardOptions;
 
   rowHeightsMap: NumberMap<number>;
   colWidthsMap: NumberMap<string | number>;
@@ -2501,6 +2592,7 @@ export interface DrawGridConstructorOptions {
   defaultColWidth?: string | number;
   font?: string;
   underlayBackgroundColor?: string;
+  keyboardOptions?: DrawGridKeyboardOptions;
   /**
    * Canvas parent element
    */
@@ -2528,6 +2620,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
       defaultColWidth = 80,
       font,
       underlayBackgroundColor,
+      keyboardOptions,
       parentElement
     } = options;
     const protectedSpace = (this[_] = {} as DrawGridProtected);
@@ -2557,6 +2650,8 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
 
     protectedSpace.font = font;
     protectedSpace.underlayBackgroundColor = underlayBackgroundColor;
+
+    protectedSpace.keyboardOptions = keyboardOptions;
 
     /////
     protectedSpace.rowHeightsMap = new NumberMap();
@@ -2733,6 +2828,12 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
    */
   set underlayBackgroundColor(underlayBackgroundColor: string | undefined) {
     this[_].underlayBackgroundColor = underlayBackgroundColor;
+  }
+  get keyboardOptions(): DrawGridKeyboardOptions | null {
+    return this[_].keyboardOptions ?? null;
+  }
+  set keyboardOptions(keyboardOptions) {
+    this[_].keyboardOptions = keyboardOptions ?? undefined;
   }
   configure(name: "fadeinWhenCallbackInPromise", value?: boolean): boolean;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -3383,6 +3484,9 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
       element: this.getElement(),
       rect: _toRelativeRect(this, this.getCellRangeRect(range))
     };
+  }
+  onKeyDownMove(evt: KeyboardEvent): void {
+    _onKeyDownMove.call(this, evt);
   }
   protected bindEventsInternal(): void {
     //nop
