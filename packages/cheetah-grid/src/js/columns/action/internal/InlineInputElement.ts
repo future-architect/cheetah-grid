@@ -2,6 +2,7 @@ import { EventHandler } from "../../../internal/EventHandler";
 import { ListGridAPI } from "../../../ts-types";
 import { createElement } from "../../../internal/dom";
 import { event } from "../../../internal/utils";
+const KEY_TAB = 9;
 const KEY_ENTER = 13;
 
 const CLASSNAME = "cheetah-grid__inline-input";
@@ -177,7 +178,8 @@ export class InlineInputElement<T> {
       if (input.classList.contains("composition")) {
         return;
       }
-      if (event.getKeyCode(e) === KEY_ENTER) {
+      const keyCode = event.getKeyCode(e);
+      if (keyCode === KEY_ENTER) {
         if (!this._isActive() || this._attaching) {
           return;
         }
@@ -189,6 +191,20 @@ export class InlineInputElement<T> {
         }
         this.detach();
         event.cancel(e);
+      } else if (keyCode === KEY_TAB) {
+        if (!this._isActive()) {
+          return;
+        }
+        const { grid } = this._activeData as ActiveData<T>;
+        if (!grid.keyboardOptions?.moveCellOnTab) {
+          return;
+        }
+        this.doChangeValue();
+        if (grid) {
+          grid.focus();
+        }
+        this.detach();
+        grid.onKeyDownMove(e);
       }
     });
     handler.on(input, "blur", _e => {

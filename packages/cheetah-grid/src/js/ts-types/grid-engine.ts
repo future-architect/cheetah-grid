@@ -26,6 +26,10 @@ import { SimpleColumnIconOption } from "../ts-types-internal/data";
 
 export type LayoutObjectId = number | string | symbol;
 
+export interface DrawGridKeyboardOptions {
+  moveCellOnTab?: boolean;
+}
+
 export interface DrawGridAPI {
   font?: string;
   rowCount: number;
@@ -35,6 +39,7 @@ export interface DrawGridAPI {
   defaultRowHeight: number;
   defaultColWidth: string | number;
   underlayBackgroundColor?: string;
+  keyboardOptions: DrawGridKeyboardOptions | null;
   readonly selection: Selection;
   readonly canvas: HTMLCanvasElement;
   readonly visibleRowCount: number;
@@ -114,6 +119,7 @@ export interface DrawGridAPI {
     element: HTMLElement;
     rect: RectProps;
   };
+  onKeyDownMove(evt: KeyboardEvent): void;
   dispose(): void;
   addDisposable(disposable: { dispose(): void }): void;
 }
