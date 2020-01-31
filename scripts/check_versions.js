@@ -43,7 +43,11 @@ function checkPackageJson(pkg, pkgs) {
 	if (minorVersion(pkg.version) !== minorVersion(version)) {
 		const message = `Invalid version. ${pkg.name}@${pkg.version}  root:${version} @ "${pkg.rootDir}/package.json"`;
 		console.error(message);
-		errors.push(Promise.reject(new Error(message)));
+
+		errors.push(
+				callNpm(pkg, 'version', [version], opts).
+					then(() => Promise.reject(new Error(message)))
+		);
 	}
 
 	// check dependencies
