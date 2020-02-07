@@ -1048,6 +1048,28 @@ function _moveFocusCell(
     _invalidateRect(this, afterRect);
   }
 }
+function _updatedSelection(this: DrawGrid): void {
+  const { focusControl } = this[_];
+  const { col: selCol, row: selRow } = this[_].selection.select;
+  const results = this.fireListeners(DG_EVENT_TYPE.EDITABLEINPUT_CELL, {
+    col: selCol,
+    row: selRow
+  });
+
+  const editMode = array.findIndex(results, v => !!v) >= 0;
+  focusControl.editMode = editMode;
+
+  if (editMode) {
+    focusControl.storeInputStatus();
+    focusControl.setDefaultInputStatus();
+    this.fireListeners(DG_EVENT_TYPE.MODIFY_STATUS_EDITABLEINPUT_CELL, {
+      col: selCol,
+      row: selRow,
+      input: focusControl.input
+    });
+  }
+}
+
 function _getMouseAbstractPoint(
   grid: DrawGrid,
   evt: TouchEvent | MouseEvent
@@ -2153,6 +2175,8 @@ class Selection extends EventTarget {
         col: endCol,
         row: endRow
       };
+
+      _updatedSelection.call(this._grid);
     });
   }
   get focus(): CellAddress {
@@ -2168,6 +2192,8 @@ class Selection extends EventTarget {
       const { col = 0, row = 0 } = cell;
       this._setSelectCell(col, row);
       this._setFocusCell(col, row, true);
+
+      _updatedSelection.call(this._grid);
     });
   }
   _setSelectCell(col: number, row: number): void {
@@ -3141,24 +3167,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
 
     focusControl.setFocusRect(this.getCellRect(col, row));
 
-    const { col: selCol, row: selRow } = this[_].selection.select;
-    const results = this.fireListeners(DG_EVENT_TYPE.EDITABLEINPUT_CELL, {
-      col: selCol,
-      row: selRow
-    });
-
-    const editMode = array.findIndex(results, v => !!v) >= 0;
-    focusControl.editMode = editMode;
-
-    if (editMode) {
-      focusControl.storeInputStatus();
-      focusControl.setDefaultInputStatus();
-      this.fireListeners(DG_EVENT_TYPE.MODIFY_STATUS_EDITABLEINPUT_CELL, {
-        col: selCol,
-        row: selRow,
-        input: focusControl.input
-      });
-    }
+    _updatedSelection.call(this);
   }
   /**
    * Focus the cell.
