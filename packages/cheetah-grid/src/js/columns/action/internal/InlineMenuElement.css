@@ -9,15 +9,12 @@
 	border-radius: 2px;
 	max-height: calc(100vh - 40px);
 	overflow-y: auto;
-
 }
 .cheetah-grid__inline-menu--hidden {
 	transform: scale(.9);
 	box-shadow: none;
 	opacity: 0;
-
 	pointer-events: none;
-
 	transition: all 50ms ease-out;
 }
 .cheetah-grid__inline-menu--hidden * {
@@ -25,32 +22,25 @@
 }
 .cheetah-grid__inline-menu--shown {
 	transform: translateY(-7px);
-	box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0px rgba(0, 0, 0, 0.14), 0 1px 5px 0px rgba(0, 0, 0, 0.12);
+	box-shadow: 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12);
 	opacity: 1;
-
 	transition: all 150ms ease-out;
 }
-
 .cheetah-grid__inline-menu__menu-item {
 	height: 100%;
 	box-sizing: border-box;
-
 	display: flex;
 	align-items: center;
 	justify-content: flex-start;
-
 	outline: none;
 	cursor: pointer;
-
 	position: relative;
 	overflow: hidden;
-
 	padding: 0 16px;
 }
 .cheetah-grid__inline-menu__menu-item--empty {
 	color: rgba(0, 0, 0, .38);
 }
-
 .cheetah-grid__inline-menu__menu-item::before {
 	content: "";
 	position: absolute;
