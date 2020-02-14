@@ -1,5 +1,5 @@
 /**
- * core styles 
+ * core styles
  */
 .cheetah-grid .grid-scrollable {
 	height: 100%;
@@ -35,7 +35,7 @@
 	float: none !important;
 }
 .cheetah-grid input.grid-focus-control::-ms-clear {
-	visibility:hidden;
+	visibility: hidden;
 }
 .cheetah-grid input.grid-focus-control.composition {
 	opacity: 1;
