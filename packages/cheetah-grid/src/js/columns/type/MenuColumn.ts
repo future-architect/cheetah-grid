@@ -25,7 +25,7 @@ export class MenuColumn<T> extends BaseColumn<T, unknown> {
   clone(): MenuColumn<T> {
     return new MenuColumn(this);
   }
-  get options(): ColumnMenuItemOptions {
+  get options(): SimpleColumnMenuItemOption[] {
     return this._options;
   }
   withOptions(options: ColumnMenuItemOptions): MenuColumn<T> {
@@ -111,5 +111,8 @@ export class MenuColumn<T> extends BaseColumn<T, unknown> {
       }
     }
     return super.convertInternal(value) as string;
+  }
+  getCopyCellValue(value: unknown): string {
+    return this._convertInternal(value);
   }
 }

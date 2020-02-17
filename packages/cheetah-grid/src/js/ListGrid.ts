@@ -9,6 +9,7 @@ import {
   ColorsPropertyDefine,
   ColumnIconOption,
   ColumnStyleOption,
+  ColumnTypeAPI,
   DrawGridAPI,
   EventListenerId,
   FieldData,
@@ -997,6 +998,9 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
       row ?? this[_].layoutMap.headerRowCount
     ).define;
   }
+  getColumnType(col: number, row: number): ColumnTypeAPI {
+    return this[_].layoutMap.getBody(col, row).columnType;
+  }
   /**
    * Get the header field of the given header cell.
    * @param  {number} col The column index.
@@ -1151,7 +1155,17 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
     if (startCol !== col || startRow !== row) {
       return "";
     }
-    return _getCellValue(this, col, row);
+
+    const value = _getCellValue(this, col, row);
+
+    if (row < this[_].layoutMap.headerRowCount) {
+      return value;
+    }
+
+    const columnData = this[_].layoutMap.getBody(col, row);
+    return (
+      columnData.columnType.getCopyCellValue(value, this, { col, row }) ?? value
+    );
   }
   protected onDrawCell(
     col: number,

@@ -1,7 +1,9 @@
 import * as styleContents from "../style";
 import {
   BaseColumnOption,
+  CellAddress,
   CellContext,
+  ColumnTypeAPI,
   EventListenerId,
   GridCanvasHelperAPI,
   LayoutObjectId,
@@ -132,7 +134,7 @@ const fadinMgr = {
   }
 };
 
-export abstract class BaseColumn<T, V> {
+export abstract class BaseColumn<T, V> implements ColumnTypeAPI {
   private _fadeinWhenCallbackInPromise: boolean;
   constructor(option: BaseColumnOption = {}) {
     this.onDrawCell = this.onDrawCell.bind(this); //スコープを固定させる
@@ -301,5 +303,13 @@ export abstract class BaseColumn<T, V> {
     _cellId: LayoutObjectId
   ): EventListenerId[] {
     return [];
+  }
+  getCopyCellValue(
+    value: V,
+    _grid: ListGridAPI<T>,
+    _cell: CellAddress
+  ): string {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return value as any;
   }
 }

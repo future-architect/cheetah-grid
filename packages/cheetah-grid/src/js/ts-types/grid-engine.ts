@@ -191,7 +191,11 @@ export interface ListGridAPI<T> extends DrawGridAPI {
     test: (data: SetPasteValueTestData<T>) => boolean
   ): void;
   getLayoutCellId(col: number, row: number): LayoutObjectId;
+  getColumnType(col: number, row: number): ColumnTypeAPI;
 }
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface ColumnTypeAPI {}
 
 export type SetPasteValueTestData<T> = CellAddress & {
   grid: ListGridAPI<T>;

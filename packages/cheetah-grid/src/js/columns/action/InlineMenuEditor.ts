@@ -1,10 +1,12 @@
 import {
   CellAddress,
   ColumnMenuItemOption,
+  ColumnTypeAPI,
   EventListenerId,
   InlineMenuEditorOption,
   LayoutObjectId,
-  ListGridAPI
+  ListGridAPI,
+  SimpleColumnMenuItemOption
 } from "../../ts-types";
 import { GridInternal, InputEditorState } from "../../ts-types-internal";
 import { array, cellEquals, event, obj, then } from "../../internal/utils";
@@ -12,6 +14,7 @@ import { isDisabledRecord, isReadOnlyRecord } from "./action-utils";
 import { DG_EVENT_TYPE } from "../../core/DG_EVENT_TYPE";
 import { Editor } from "./Editor";
 import { InlineMenuElement } from "./internal/InlineMenuElement";
+import { MenuColumn } from "../type";
 import { getInlineMenuEditorStateId } from "../../internal/symbolManager";
 import { normalize } from "../../internal/menu-items";
 const _ = getInlineMenuEditorStateId();
@@ -203,10 +206,10 @@ export class InlineMenuEditor<T> extends Editor<T> {
         if (!isTarget(e.col, e.row)) {
           return;
         }
-        const pasteValue = e.normalizeValue.trim();
-        const pasteOpt = array.find(
-          this._options,
-          opt => `${opt.value}`.trim() === pasteValue
+        const pasteOpt = this._pasteDataToOptionValue(
+          e.normalizeValue,
+          grid,
+          e
         );
         if (pasteOpt) {
           event.cancel(e.event);
@@ -232,13 +235,59 @@ export class InlineMenuEditor<T> extends Editor<T> {
     ) {
       return;
     }
-    const pasteValue = value.trim();
-    const pasteOpt = array.find(
-      this._options,
-      opt => `${opt.value}`.trim() === pasteValue
-    );
+    const pasteOpt = this._pasteDataToOptionValue(value, grid, cell);
     if (pasteOpt) {
       grid.doChangeValue(cell.col, cell.row, () => pasteOpt.value);
     }
   }
+  private _pasteDataToOptionValue(
+    value: string,
+    grid: ListGridAPI<T>,
+    cell: CellAddress
+  ): SimpleColumnMenuItemOption | undefined {
+    const pasteOpt = _textToOptionValue(value, this._options);
+    if (pasteOpt) {
+      return pasteOpt.value;
+    }
+    const columnType = grid.getColumnType(cell.col, cell.row);
+    if (hasOptions(columnType)) {
+      // Find with caption.
+      const pasteValue = value.trim();
+      const captionOpt = array.find(
+        columnType.options,
+        opt => `${opt.caption}`.trim() === pasteValue
+      );
+      if (captionOpt) {
+        return _textToOptionValue(captionOpt.value, this._options);
+      }
+    }
+    return undefined;
+  }
+}
+function _textToOptionValue(
+  value: string,
+  options: SimpleColumnMenuItemOption[]
+): SimpleColumnMenuItemOption | undefined {
+  const pasteValue = value.trim();
+  const pasteOpt = array.find(
+    options,
+    opt => `${opt.value}`.trim() === pasteValue
+  );
+  if (pasteOpt) {
+    return pasteOpt;
+  }
+  return undefined;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function hasOptions(columnType: ColumnTypeAPI): columnType is MenuColumn<any> {
+  if (columnType instanceof MenuColumn) {
+    return true;
+  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  if (Array.isArray((columnType as any).options)) {
+    return true;
+  }
+
+  return false;
 }
