@@ -247,15 +247,15 @@ export class InlineMenuEditor<T> extends Editor<T> {
   ): SimpleColumnMenuItemOption | undefined {
     const pasteOpt = _textToOptionValue(value, this._options);
     if (pasteOpt) {
-      return pasteOpt.value;
+      return pasteOpt;
     }
     const columnType = grid.getColumnType(cell.col, cell.row);
     if (hasOptions(columnType)) {
       // Find with caption.
-      const pasteValue = value.trim();
+      const pasteValue = normalizePasteValueStr(value);
       const captionOpt = array.find(
         columnType.options,
-        opt => `${opt.caption}`.trim() === pasteValue
+        opt => normalizePasteValueStr(opt.caption) === pasteValue
       );
       if (captionOpt) {
         return _textToOptionValue(captionOpt.value, this._options);
@@ -268,15 +268,22 @@ function _textToOptionValue(
   value: string,
   options: SimpleColumnMenuItemOption[]
 ): SimpleColumnMenuItemOption | undefined {
-  const pasteValue = value.trim();
+  const pasteValue = normalizePasteValueStr(value);
   const pasteOpt = array.find(
     options,
-    opt => `${opt.value}`.trim() === pasteValue
+    opt => normalizePasteValueStr(opt.value) === pasteValue
   );
   if (pasteOpt) {
     return pasteOpt;
   }
   return undefined;
+}
+
+function normalizePasteValueStr(value: any): string {
+  if (value == null) {
+    return "";
+  }
+  return `${value}`.trim();
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
