@@ -64,6 +64,11 @@ export default {
       default: undefined
     }
   },
+  computed: {
+    resolvedField () {
+      return this.filter ? filterToFn(this, this.field, this.filter) : this.field
+    }
+  },
   watch: {
     field: gridUpdateWatcher,
     filter: gridUpdateWatcher,
@@ -79,9 +84,8 @@ export default {
      * @private
      */
     createColumn () {
-      const field = this.filter ? filterToFn(this, this.field, this.filter) : this.field
       return {
-        field,
+        field: this.resolvedField,
         width: this.width,
         minWidth: this.minWidth,
         maxWidth: this.maxWidth,
