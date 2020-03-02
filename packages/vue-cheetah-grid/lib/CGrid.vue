@@ -193,7 +193,8 @@ function _buildGridOption (vm) {
       defaultColWidth: vm.defaultColWidth,
       font: vm.font,
       underlayBackgroundColor: vm.underlayBackgroundColor,
-      keyboardOptions: { moveCellOnTab: vm.moveCellOnTabKey }
+      keyboardOptions: { moveCellOnTab: vm.moveCellOnTabKey },
+      disableColumnResize: vm.disableColumnResize
     },
     headerLayoutOptions,
     vm.options
