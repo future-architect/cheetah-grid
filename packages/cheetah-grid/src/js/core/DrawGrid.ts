@@ -1128,6 +1128,9 @@ function _bindEvents(this: DrawGrid): void {
     };
   };
   const canResizeColumn = (col: number): boolean => {
+    if (grid[_].disableColumnResize) {
+      return false;
+    }
     const limit = grid[_].colWidthsLimit[col];
     if (!limit || !limit.min || !limit.max) {
       return true;
@@ -2566,6 +2569,7 @@ interface DrawGridProtected {
   font?: string;
   underlayBackgroundColor?: string;
   keyboardOptions?: DrawGridKeyboardOptions;
+  disableColumnResize?: boolean;
 
   rowHeightsMap: NumberMap<number>;
   colWidthsMap: NumberMap<string | number>;
@@ -2623,6 +2627,10 @@ export interface DrawGridConstructorOptions {
    * Canvas parent element
    */
   parentElement?: HTMLElement | null;
+  /**
+   * Disable column resizing
+   */
+  disableColumnResize?: boolean;
 }
 const protectedKey = _;
 /**
@@ -2647,7 +2655,8 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
       font,
       underlayBackgroundColor,
       keyboardOptions,
-      parentElement
+      parentElement,
+      disableColumnResize
     } = options;
     const protectedSpace = (this[_] = {} as DrawGridProtected);
     style.initDocument();
@@ -2678,6 +2687,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
     protectedSpace.underlayBackgroundColor = underlayBackgroundColor;
 
     protectedSpace.keyboardOptions = keyboardOptions;
+    protectedSpace.disableColumnResize = disableColumnResize;
 
     /////
     protectedSpace.rowHeightsMap = new NumberMap();
