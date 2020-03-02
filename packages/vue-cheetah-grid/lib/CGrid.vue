@@ -297,6 +297,12 @@ export default {
       type: Boolean
     },
     /**
+     * Specify `true` to disable column resizing
+     */
+    disableColumnResize: {
+      type: Boolean
+    },
+    /**
      * Defines a raw options for Cheetah Grid
      */
     options: {
