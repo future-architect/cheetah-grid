@@ -26,15 +26,18 @@
 import { cheetahGrid, gridUpdateWatcher, extend } from './c-grid/utils'
 import { slotsToHeaderOptions, slotsToHeaderProps } from './c-grid/header-utils'
 
+const primitives = {
+  function: true, string: true, number: true, boolean: true, undefined: true, bigint: true, symbol: true
+}
 function deepObjectEquals (a, b) {
   if (a === b) {
     return true
   }
-  if (typeof a !== typeof b ||
+  if (typeof a !== typeof b || a == null || b == null ||
     a.constructor !== b.constructor) {
     return false
   }
-  if (typeof a === 'function') {
+  if (primitives[typeof a]) {
     return false
   }
   const aKeys = Object.keys(a).sort()
