@@ -4,8 +4,6 @@ order: 150
 
 # Define Multiline Text Header
 
-## Advanced Header Action
-
 You can display multiline text in the header by setting the `headerType` property to `'multilinetext'`.
 
 <code-preview>
