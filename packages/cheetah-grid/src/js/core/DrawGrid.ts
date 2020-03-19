@@ -1850,7 +1850,10 @@ class FocusControl extends EventTarget {
       if (this._isComposition) {
         return;
       }
-      setSafeInputValue(input, "");
+
+      if (lastInputValue !== "") {
+        setSafeInputValue(input, "");
+      }
     };
 
     const handleCompositionEnd = (): void => {

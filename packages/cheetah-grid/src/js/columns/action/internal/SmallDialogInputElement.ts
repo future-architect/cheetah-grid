@@ -2,6 +2,7 @@ import { ListGridAPI, MaybePromise } from "../../../ts-types";
 import { browser, event, then } from "../../../internal/utils";
 import { EventHandler } from "../../../internal/EventHandler";
 import { createElement } from "../../../internal/dom";
+import { setInputValue } from "./input-value-handler";
 
 const CLASSNAME = "cheetah-grid__small-dialog-input";
 const INPUT_CLASSNAME = `${CLASSNAME}__input`;
@@ -174,7 +175,8 @@ export class SmallDialogInputElement<T> {
     input.style.height = `${rect.height.toFixed()}px`;
     element.appendChild(dialog);
 
-    input.value = value ?? "";
+    setInputValue(input, value);
+
     input.style.font = grid.font || "16px sans-serif";
     const activeData = { grid, col, row, editor };
     this._onInputValue(input, activeData);

@@ -2,6 +2,7 @@ import { EventHandler } from "../../../internal/EventHandler";
 import { ListGridAPI } from "../../../ts-types";
 import { createElement } from "../../../internal/dom";
 import { event } from "../../../internal/utils";
+import { setInputValue } from "./input-value-handler";
 const KEY_TAB = 9;
 const KEY_ENTER = 13;
 
@@ -88,7 +89,8 @@ export class InlineInputElement<T> {
     element.appendChild(input);
 
     setInputAttrs(editor, grid, input);
-    input.value = value ?? "";
+
+    setInputValue(input, value);
 
     this._activeData = { grid, col, row, editor };
     this._beforePropEditor = editor;
