@@ -77,8 +77,8 @@ export class EventHandler {
       target,
       type,
       (...args) => {
-        listener(...args);
         this.off(id);
+        listener(...args);
       },
       ...options
     );
