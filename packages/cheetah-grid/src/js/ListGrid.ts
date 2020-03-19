@@ -731,6 +731,8 @@ export { HeadersDefine, ColumnDefine, HeaderDefine, GroupHeaderDefine };
  */
 export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
   protected [_]: ListGridProtected<T>;
+  public disabled = false;
+  public readOnly = false;
   static get EVENT_TYPE(): typeof LG_EVENT_TYPE {
     return LG_EVENT_TYPE;
   }
