@@ -7,6 +7,29 @@ export function isDisabledRecord<T>(
   grid: ListGridAPI<T>,
   row: number
 ): boolean {
+  if (grid.disabled) {
+    return true;
+  }
+  return getBooleanOptionOfRecord(option, grid, row);
+}
+export function isReadOnlyRecord<T>(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  option: boolean | ((record: any) => boolean),
+  grid: ListGridAPI<T>,
+  row: number
+): boolean {
+  if (grid.readOnly) {
+    return true;
+  }
+  return getBooleanOptionOfRecord(option, grid, row);
+}
+
+function getBooleanOptionOfRecord<T>(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  option: boolean | ((record: any) => boolean),
+  grid: ListGridAPI<T>,
+  row: number
+): boolean {
   if (typeof option === "function") {
     const record = grid.getRowRecord(row);
     if (isPromise(record)) {
@@ -15,12 +38,4 @@ export function isDisabledRecord<T>(
     return !!option(record);
   }
   return !!option;
-}
-export function isReadOnlyRecord<T>(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  option: boolean | ((record: any) => boolean),
-  grid: ListGridAPI<T>,
-  row: number
-): boolean {
-  return isDisabledRecord(option, grid, row);
 }

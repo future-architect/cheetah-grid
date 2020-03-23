@@ -152,6 +152,8 @@ export interface ListGridAPI<T> extends DrawGridAPI {
   sortState: SortState | null;
   headerValues: HeaderValues;
   recordRowCount: number;
+  disabled: boolean;
+  readOnly: boolean;
   listen<TYPE extends keyof ListGridEventHandlersEventMap<T>>(
     type: TYPE,
     listener: (

@@ -208,6 +208,12 @@ function _initGrid (vm) {
   const options = _buildGridOption(vm)
   options.parentElement = vm.$el
   const grid = vm.rawGrid = new cheetahGrid.ListGrid(options)
+  if (vm.disabled) {
+    grid.disabled = true
+  }
+  if (vm.readonly) {
+    grid.readOnly = true
+  }
   _setGridData(vm, grid, vm.data, vm.filter)
   _bindEvents(vm, grid)
 }
@@ -307,6 +313,18 @@ export default {
       type: Boolean
     },
     /**
+     * Defines disabled
+     */
+    disabled: {
+      type: Boolean
+    },
+    /**
+     * Defines readonly
+     */
+    readonly: {
+      type: Boolean
+    },
+    /**
      * Defines a raw options for Cheetah Grid
      */
     options: {
@@ -347,6 +365,16 @@ export default {
         this.rawGrid.headerValues = headerValues
       },
       deep: true
+    },
+    disabled (disabled) {
+      if (this.rawGrid) {
+        this.rawGrid.disabled = disabled
+      }
+    },
+    readonly (readonly) {
+      if (this.rawGrid) {
+        this.rawGrid.readonly = readonly
+      }
     }
   },
   created () {
