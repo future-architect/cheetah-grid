@@ -119,6 +119,8 @@ The definition is set to `layout.body` property described in [Advanced Layout].
 | theme | `object`&#124;`string`  | Defines the grid theme | `undefined` |
 | move-cell-on-tab-key | `boolean`  | Specify `true` to enable cell movement by tab key. | `undefined` |
 | disable-column-resize | `boolean`  | Specify `true` to disable column resizing | `undefined` |
+| disabled | `boolean`  | Defines disabled | `undefined` |
+| readonly | `boolean`  | Defines readonly | `undefined` |
 | options | `object`  | Defines a raw options for Cheetah Grid | `undefined` |
 
 <!-- PROPS_TABLE_END -->
