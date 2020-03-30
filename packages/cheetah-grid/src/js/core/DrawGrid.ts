@@ -2075,6 +2075,9 @@ class FocusControl extends EventTarget {
   }
   resetInputStatus(): void {
     const el = this._input;
+    if (!el.classList.contains("grid-focus-control--stored-status")) {
+      return;
+    }
     const composition = el.classList.contains("composition");
 
     const atts = el.attributes;
@@ -2097,15 +2100,20 @@ class FocusControl extends EventTarget {
     } else {
       el.classList.remove("composition");
     }
+    el.classList.remove("grid-focus-control--stored-status");
   }
   storeInputStatus(): void {
     const el = this._input;
+    if (el.classList.contains("grid-focus-control--stored-status")) {
+      return;
+    }
     const inputStatus: FocusControl["_inputStatus"] = (this._inputStatus = {});
     const atts = el.attributes;
     for (let i = 0, n = atts.length; i < n; i++) {
       const att = atts[i];
       inputStatus[att.name] = att.value;
     }
+    el.classList.add("grid-focus-control--stored-status");
   }
   setDefaultInputStatus(): void {
     // なぜかスクロールが少しずつずれていくことがあるのでここではセットしない。
@@ -3174,13 +3182,14 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
   setFocusCursor(col: number, row: number): void {
     const { focusControl } = this[_];
     const oldEditMode = focusControl.editMode;
-    if (oldEditMode) {
-      focusControl.resetInputStatus();
-    }
 
     focusControl.setFocusRect(this.getCellRect(col, row));
 
     _updatedSelection.call(this);
+
+    if (oldEditMode && !focusControl.editMode) {
+      focusControl.resetInputStatus();
+    }
   }
   /**
    * Focus the cell.
