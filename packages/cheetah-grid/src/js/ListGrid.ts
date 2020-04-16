@@ -571,7 +571,7 @@ function _onRangePaste<T>(
     for (let offsetCol = 0; offsetCol < pasteColCount; offsetCol++) {
       const body = layoutMap.getBody(
         start.col + offsetCol,
-        bodyRow + layoutMap.bodyRowCount
+        bodyRow + layoutMap.headerRowCount
       );
       actionColumnsRow[offsetCol] = body;
       if (!hasEditable && body.action?.editable) {
