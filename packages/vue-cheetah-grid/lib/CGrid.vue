@@ -373,7 +373,7 @@ export default {
     },
     readonly (readonly) {
       if (this.rawGrid) {
-        this.rawGrid.readonly = readonly
+        this.rawGrid.readOnly = readonly
       }
     }
   },
