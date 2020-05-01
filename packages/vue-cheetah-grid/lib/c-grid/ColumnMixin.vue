@@ -86,7 +86,12 @@ export default {
     getPropsObjectInternal () {
       const props = extend({}, this.$props)
       props.textContent = this.$el.textContent.trim()
-      return props
+
+      if (typeof this.normalizeProps !== 'function') {
+        return props
+      }
+      const normalized = this.normalizeProps(props)
+      return extend(props, normalized)
     },
     /**
      * @private

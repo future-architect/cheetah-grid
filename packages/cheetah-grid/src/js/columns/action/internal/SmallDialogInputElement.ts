@@ -210,7 +210,7 @@ export class SmallDialogInputElement<T> {
       input.readOnly = true;
       input.tabIndex = -1;
 
-      const { grid, col, row } = this._activeData as ActiveData<T>;
+      const { grid, col, row } = this._activeData!;
 
       const range = grid.getCellRange(col, row);
       grid.invalidateCellRange(range);
@@ -229,7 +229,7 @@ export class SmallDialogInputElement<T> {
     const { value } = input;
     return then(this._validate(value), res => {
       if (res && value === input.value) {
-        const { grid, col, row } = this._activeData as ActiveData<T>;
+        const { grid, col, row } = this._activeData!;
         grid.doChangeValue(col, row, () => value);
         return true;
       }
@@ -279,19 +279,30 @@ export class SmallDialogInputElement<T> {
       if (keyCode === KEY_ESC) {
         this.detach(true);
         event.cancel(e);
-      } else if (keyCode === KEY_ENTER && !this._attaching) {
-        const input = this._input;
-        const { value } = input;
-        then(this._doChangeValue(), r => {
-          if (r && value === input.value) {
-            this.detach(true);
-          }
-        });
-        event.cancel(e);
+      } else if (keyCode === KEY_ENTER) {
+        this._onKeydownEnter(e);
       } else {
         this._onInputValue(input);
       }
     });
+  }
+  _onKeydownEnter(e: KeyboardEvent): void {
+    if (this._attaching) {
+      return;
+    }
+    const input = this._input;
+    const { value } = input;
+    then(this._doChangeValue(), r => {
+      if (r && value === input.value) {
+        const grid = this._isActive() ? this._activeData!.grid : null;
+        this.detach(true);
+
+        if (grid?.keyboardOptions?.moveCellOnEnter) {
+          grid.onKeyDownMove(e);
+        }
+      }
+    });
+    event.cancel(e);
   }
   _onInputValue(input: HTMLInputElement, activeData?: ActiveData<T>): void {
     const before = this._beforeValue;
@@ -302,7 +313,7 @@ export class SmallDialogInputElement<T> {
     this._beforeValue = value;
   }
   _onInputValueChange(after: string, activeData?: ActiveData<T>): void {
-    activeData = (activeData || this._activeData) as ActiveData<T>;
+    activeData = (activeData || this._activeData)!;
     const dialog = this._dialog;
     const { grid, col, row, editor } = activeData;
     if (typeof editor.helperText === "function") {
@@ -320,7 +331,7 @@ export class SmallDialogInputElement<T> {
   _validate(value: string, inputOnly?: boolean): MaybePromise<boolean> {
     const dialog = this._dialog;
     const input = this._input;
-    const { grid, col, row, editor } = this._activeData as ActiveData<T>;
+    const { grid, col, row, editor } = this._activeData!;
     let message: MaybePromise<string> = "";
     if (editor.inputValidator) {
       message = editor.inputValidator(value, { grid, col, row });

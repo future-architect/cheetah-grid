@@ -189,27 +189,27 @@
 				col: 0,
 				row: 1,
 			};
-			grid.fireListeners(cheetahGrid.ListGrid.EVENT_TYPE.KEYDOWN, 13, e);
+			grid.fireListeners(cheetahGrid.ListGrid.EVENT_TYPE.KEYDOWN, {keyCode: 13, event: e, stopCellMoving() {}});
 			grid.selection.select = {
 				col: 1,
 				row: 1,
 			};
-			grid.fireListeners(cheetahGrid.ListGrid.EVENT_TYPE.KEYDOWN, 32, e);
+			grid.fireListeners(cheetahGrid.ListGrid.EVENT_TYPE.KEYDOWN, {keyCode: 32, event: e, stopCellMoving() {}});
 			grid.selection.select = {
 				col: 2,
 				row: 1,
 			};
-			grid.fireListeners(cheetahGrid.ListGrid.EVENT_TYPE.KEYDOWN, 13, e);
+			grid.fireListeners(cheetahGrid.ListGrid.EVENT_TYPE.KEYDOWN, {keyCode: 13, event: e, stopCellMoving() {}});
 			grid.selection.select = {
 				col: 3,
 				row: 1,
 			};
-			grid.fireListeners(cheetahGrid.ListGrid.EVENT_TYPE.KEYDOWN, 32, e);
+			grid.fireListeners(cheetahGrid.ListGrid.EVENT_TYPE.KEYDOWN, {keyCode: 32, event: e, stopCellMoving() {}});
 			grid.selection.select = {
 				col: 4,
 				row: 1,
 			};
-			grid.fireListeners(cheetahGrid.ListGrid.EVENT_TYPE.KEYDOWN, 13, e);
+			grid.fireListeners(cheetahGrid.ListGrid.EVENT_TYPE.KEYDOWN, {keyCode: 13, event: e, stopCellMoving() {}});
 			grid.selection.select = {
 				col: 0,
 				row: 0,
@@ -238,12 +238,12 @@
 				col: 3,
 				row: 1,
 			};
-			grid.fireListeners(cheetahGrid.ListGrid.EVENT_TYPE.KEYDOWN, 32, e);
+			grid.fireListeners(cheetahGrid.ListGrid.EVENT_TYPE.KEYDOWN, {keyCode: 32, event: e, stopCellMoving() {}});
 			grid.selection.select = {
 				col: 4,
 				row: 1,
 			};
-			grid.fireListeners(cheetahGrid.ListGrid.EVENT_TYPE.KEYDOWN, 13, e);
+			grid.fireListeners(cheetahGrid.ListGrid.EVENT_TYPE.KEYDOWN, {keyCode: 13, event: e, stopCellMoving() {}});
 			grid.selection.select = {
 				col: 0,
 				row: 0,

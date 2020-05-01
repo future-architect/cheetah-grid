@@ -24,7 +24,8 @@ module.exports = {
           'error',
           {'vars': 'all', 'args': 'none'}
         ],
-        "no-unused-expressions": "off"
+        "no-unused-expressions": "off",
+        '@typescript-eslint/no-non-null-assertion': 'off',
       }
     }
   ]

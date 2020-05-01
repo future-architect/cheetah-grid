@@ -196,7 +196,7 @@ function _buildGridOption (vm) {
       defaultColWidth: vm.defaultColWidth,
       font: vm.font,
       underlayBackgroundColor: vm.underlayBackgroundColor,
-      keyboardOptions: { moveCellOnTab: vm.moveCellOnTabKey },
+      keyboardOptions: { moveCellOnTab: vm.moveCellOnTabKey, moveCellOnEnter: vm.moveCellOnEnterKey, deleteCellValueOnDel: vm.deleteCellValueOnDelKey, selectAllOnCtrlA: vm.selectAllOnCtrlAKey },
       disableColumnResize: vm.disableColumnResize
     },
     headerLayoutOptions,
@@ -301,9 +301,27 @@ export default {
       default: undefined
     },
     /**
-     * Specify `true` to enable cell movement by tab key.
+     * Specify `true` to enable cell movement by Tab key.
      */
     moveCellOnTabKey: {
+      type: Boolean
+    },
+    /**
+     * Specify `true` to enable cell movement by Enter key.
+     */
+    moveCellOnEnterKey: {
+      type: Boolean
+    },
+    /**
+     *  Specify `true` to enable enable deletion of cell values with the Del and BS keys.
+     */
+    deleteCellValueOnDelKey: {
+      type: Boolean
+    },
+    /**
+     *  Specify `true` to enable selectt all cells by Ctrl + A key.
+     */
+    selectAllOnCtrlAKey: {
       type: Boolean
     },
     /**
@@ -375,6 +393,18 @@ export default {
       if (this.rawGrid) {
         this.rawGrid.readOnly = readonly
       }
+    },
+    moveCellOnTabKey (moveCellOnTab) {
+      this.$_CGrid_updateKeyboardOptions({ moveCellOnTab })
+    },
+    moveCellOnEnterKey (moveCellOnEnter) {
+      this.$_CGrid_updateKeyboardOptions({ moveCellOnEnter })
+    },
+    deleteCellValueOnDelKey  (deleteCellValueOnDel) {
+      this.$_CGrid_updateKeyboardOptions({ deleteCellValueOnDel })
+    },
+    selectAllOnCtrlAKey  (selectAllOnCtrlA) {
+      this.$_CGrid_updateKeyboardOptions({ selectAllOnCtrlA })
     }
   },
   created () {
@@ -466,13 +496,13 @@ export default {
       this.$_CGrid_cancelNextTickUpdate()
       if (this.rawGrid) {
         const gridProps = _buildGridProps(this)
-        const beforeGridProps = extend({}, this._beforeGridProps)
-        if (deepObjectEquals(beforeGridProps, gridProps)) {
+        if (deepObjectEquals(this._beforeGridProps, gridProps)) {
           // optionの変更が無ければ、ここからの操作はしない
           return
         }
 
         const newProps = extend({}, gridProps)
+        const beforeGridProps = extend({}, this._beforeGridProps)
         delete beforeGridProps.header
         delete newProps.header
         delete beforeGridProps.layout
@@ -506,8 +536,12 @@ export default {
             font,
             underlayBackgroundColor
           } = options
-          this.rawGrid.header = header
-          this.rawGrid.layout = layout
+          if (!deepObjectEquals(this._beforeGridProps.header, gridProps.handler)) {
+            this.rawGrid.header = header
+          }
+          if (!deepObjectEquals(this._beforeGridProps.layout, gridProps.layout)) {
+            this.rawGrid.layout = layout
+          }
           this.rawGrid.frozenColCount = frozenColCount
           this.rawGrid.theme = theme
           this.rawGrid.allowRangePaste = !!allowRangePaste
@@ -594,6 +628,18 @@ export default {
         return
       }
       this.$_CGrid_defineColumns.splice(index, 1)
+    },
+    /**
+     * @private
+     */
+    $_CGrid_updateKeyboardOptions (options) {
+      if (this.rawGrid) {
+        if (this.rawGrid.keyboardOptions) {
+          this.rawGrid.keyboardOptions = Object.assign({}, this.rawGrid.keyboardOptions, options)
+        } else {
+          this.rawGrid.keyboardOptions = options
+        }
+      }
     }
   }
 }

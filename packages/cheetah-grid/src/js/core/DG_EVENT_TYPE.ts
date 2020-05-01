@@ -38,6 +38,7 @@ export interface DrawGridEvents {
   CONTEXTMENU_CELL: "contextmenu_cell";
   INPUT_CELL: "input_cell";
   PASTE_CELL: "paste_cell";
+  DELETE_CELL: "delete_cell";
   EDITABLEINPUT_CELL: "editableinput_cell";
   MODIFY_STATUS_EDITABLEINPUT_CELL: "modify_status_editableinput_cell";
   /**
@@ -72,6 +73,7 @@ export const DG_EVENT_TYPE: DrawGridEvents = {
   CONTEXTMENU_CELL: "contextmenu_cell",
   INPUT_CELL: "input_cell",
   PASTE_CELL: "paste_cell",
+  DELETE_CELL: "delete_cell",
   EDITABLEINPUT_CELL: "editableinput_cell",
   MODIFY_STATUS_EDITABLEINPUT_CELL: "modify_status_editableinput_cell",
   RESIZE_COLUMN: "resize_column",

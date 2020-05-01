@@ -32,4 +32,5 @@ export abstract class BaseAction<T> {
     cell: CellAddress,
     value: string
   ): void;
+  abstract onDeleteCellRangeBox(grid: ListGridAPI<T>, cell: CellAddress): void;
 }

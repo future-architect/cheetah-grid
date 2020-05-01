@@ -10,9 +10,6 @@ import { getCheckColumnStateId } from "../../internal/symbolManager";
 
 const CHECK_COLUMN_STATE_ID = getCheckColumnStateId();
 
-const KEY_ENTER = 13;
-const KEY_SPACE = 32;
-
 function toggleValue(val: number): number;
 function toggleValue(val: string): string;
 function toggleValue(val: unknown): boolean;
@@ -131,8 +128,7 @@ export class CheckEditor<T> extends Editor<T> {
               row
             });
           }
-        },
-        acceptKeys: [KEY_ENTER, KEY_SPACE]
+        }
       }),
 
       // paste value
@@ -182,5 +178,8 @@ export class CheckEditor<T> extends Editor<T> {
         grid.doChangeValue(cell.col, cell.row, toggleValue);
       }
     });
+  }
+  onDeleteCellRangeBox(): void {
+    // noop
   }
 }

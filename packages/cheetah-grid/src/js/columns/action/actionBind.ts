@@ -8,6 +8,7 @@ import { event, isPromise } from "../../internal/utils";
 import { DG_EVENT_TYPE } from "../../core/DG_EVENT_TYPE";
 
 const KEY_ENTER = 13;
+const KEY_SPACE = 32;
 export function bindCellClickAction<T>(
   grid: ListGridAPI<T>,
   cellId: LayoutObjectId,
@@ -86,11 +87,15 @@ export function bindCellKeyAction<T>(
   function isTarget(col: number, row: number): boolean {
     return grid.getLayoutCellId(col, row) === cellId;
   }
-  acceptKeys = [...acceptKeys, KEY_ENTER];
+  acceptKeys = [...acceptKeys, KEY_ENTER, KEY_SPACE];
   return [
     // enter key down
-    grid.listen(DG_EVENT_TYPE.KEYDOWN, (keyCode, e) => {
-      if (acceptKeys.indexOf(keyCode) === -1) {
+    grid.listen(DG_EVENT_TYPE.KEYDOWN, e => {
+      if (acceptKeys.indexOf(e.keyCode) === -1) {
+        return;
+      }
+      if (grid.keyboardOptions?.moveCellOnEnter && e.keyCode === KEY_ENTER) {
+        // When moving with the enter key, no action is taken with the enter key.
         return;
       }
       const sel = grid.selection.select;
@@ -104,7 +109,7 @@ export function bindCellKeyAction<T>(
         col: sel.col,
         row: sel.row
       });
-      event.cancel(e);
+      event.cancel(e.event);
     })
   ];
 }
