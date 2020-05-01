@@ -5,7 +5,9 @@ order: 500
 
 # FilterDataSource
 
-Filtering the data to be displayed using `FilterDataSource`.
+Filtering the data to be displayed using `FilterDataSource`.  
+Generate a `FilterDataSource` instance by passing `DataSource` as the constructor argument.  
+If you want to generate from array, describe as `new cheetahGrid.data.FilterDataSource(cheetahGrid.data.DataSource.ofArray(array))`.
 
 <code-preview>
 
@@ -15,7 +17,11 @@ Filtering the data to be displayed using `FilterDataSource`.
 ```
 
 ```js
+/**
+ * @type {DataSource}
+ */
 const personsDataSource = generatePersonsDataSource(1000000);
+const filterDataSource = new cheetahGrid.data.FilterDataSource(personsDataSource);
 
 const grid = new cheetahGrid.ListGrid({
   parentElement: document.querySelector('.sample1'),
@@ -54,7 +60,6 @@ const grid = new cheetahGrid.ListGrid({
   ],
   frozenColCount: 2,
 });
-const filterDataSource = new cheetahGrid.data.FilterDataSource(personsDataSource);
 grid.dataSource = filterDataSource;
 
 const input = document.querySelector('.sample1-filter-input');
