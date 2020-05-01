@@ -229,7 +229,7 @@ export class InlineMenuElement<T> {
   }
   detach(gridFocus?: boolean): void {
     if (this._isActive()) {
-      const { grid, col, row } = this._activeData as ActiveData<T>;
+      const { grid, col, row } = this._activeData!;
       const menu = this._menu;
       closeMenu(grid, col, row, menu);
 
@@ -245,7 +245,7 @@ export class InlineMenuElement<T> {
     if (!this._isActive()) {
       return;
     }
-    const { grid, col, row, editor } = this._activeData as ActiveData<T>;
+    const { grid, col, row, editor } = this._activeData!;
     const option = editor.options[Number(valueindex)];
     if (option) {
       const { value } = option;
@@ -289,10 +289,7 @@ export class InlineMenuElement<T> {
       }
       const keyCode = event.getKeyCode(e);
       if (keyCode === KEY_ENTER) {
-        const { valueindex } = item.dataset;
-        this._doChangeValue(valueindex || "");
-        this.detach(true);
-        event.cancel(e);
+        this._onKeydownEnter(menu, item, e);
       } else if (keyCode === KEY_ESC) {
         this.detach(true);
         event.cancel(e);
@@ -309,33 +306,68 @@ export class InlineMenuElement<T> {
           event.cancel(e);
         }
       } else if (keyCode === KEY_TAB) {
-        if (!e.shiftKey) {
-          if (!findNextSiblingFocusable(item)) {
-            let n: HTMLElement | null = menu.querySelector(
-              `.${ITEM_CLASSNAME}`
-            ) as HTMLElement;
-            if (!isFocusable(n)) {
-              n = findNextSiblingFocusable(n);
-            }
-            if (n) {
-              n.focus();
-              event.cancel(e);
-            }
-          }
-        } else {
-          if (!findPrevSiblingFocusable(item)) {
-            const items = menu.querySelectorAll(`.${ITEM_CLASSNAME}`);
-            let n: HTMLElement | null = items[items.length - 1] as HTMLElement;
-            if (!isFocusable(n)) {
-              n = findPrevSiblingFocusable(n);
-            }
-            if (n) {
-              n.focus();
-              event.cancel(e);
-            }
-          }
-        }
+        this._onKeydownTab(menu, item, e);
       }
     });
+  }
+  _onKeydownEnter(
+    _menu: HTMLUListElement,
+    item: HTMLElement,
+    e: KeyboardEvent
+  ): void {
+    const grid = this._isActive() ? this._activeData!.grid : null;
+    const { valueindex } = item.dataset;
+    this._doChangeValue(valueindex || "");
+    this.detach(true);
+    event.cancel(e);
+
+    if (grid) {
+      if (grid.keyboardOptions?.moveCellOnEnter) {
+        grid.onKeyDownMove(e);
+      }
+    }
+  }
+  _onKeydownTab(
+    menu: HTMLUListElement,
+    item: HTMLElement,
+    e: KeyboardEvent
+  ): void {
+    if (this._isActive()) {
+      const { grid } = this._activeData!;
+      if (grid.keyboardOptions?.moveCellOnTab) {
+        const { valueindex } = item.dataset;
+        this._doChangeValue(valueindex || "");
+        this.detach(true);
+        grid.onKeyDownMove(e);
+        return;
+      }
+    }
+
+    if (!e.shiftKey) {
+      if (!findNextSiblingFocusable(item)) {
+        let n: HTMLElement | null = menu.querySelector(
+          `.${ITEM_CLASSNAME}`
+        ) as HTMLElement;
+        if (!isFocusable(n)) {
+          n = findNextSiblingFocusable(n);
+        }
+        if (n) {
+          n.focus();
+          event.cancel(e);
+        }
+      }
+    } else {
+      if (!findPrevSiblingFocusable(item)) {
+        const items = menu.querySelectorAll(`.${ITEM_CLASSNAME}`);
+        let n: HTMLElement | null = items[items.length - 1] as HTMLElement;
+        if (!isFocusable(n)) {
+          n = findPrevSiblingFocusable(n);
+        }
+        if (n) {
+          n.focus();
+          event.cancel(e);
+        }
+      }
+    }
   }
 }

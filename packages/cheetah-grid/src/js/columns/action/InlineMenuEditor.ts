@@ -132,14 +132,15 @@ export class InlineMenuEditor<T> extends Editor<T> {
           row: cell.row
         });
       }),
-      grid.listen(DG_EVENT_TYPE.KEYDOWN, (keyCode, _e) => {
-        if (keyCode !== KEY_F2 && keyCode !== KEY_ENTER) {
+      grid.listen(DG_EVENT_TYPE.KEYDOWN, e => {
+        if (e.keyCode !== KEY_F2 && e.keyCode !== KEY_ENTER) {
           return;
         }
         const sel = grid.selection.select;
         if (!isTarget(sel.col, sel.row)) {
           return;
         }
+        e.stopCellMoving();
         open({
           col: sel.col,
           row: sel.row
@@ -240,6 +241,18 @@ export class InlineMenuEditor<T> extends Editor<T> {
       grid.doChangeValue(cell.col, cell.row, () => pasteOpt.value);
     }
   }
+  onDeleteCellRangeBox(grid: ListGridAPI<T>, cell: CellAddress): void {
+    if (
+      isReadOnlyRecord(this.readOnly, grid, cell.row) ||
+      isDisabledRecord(this.disabled, grid, cell.row)
+    ) {
+      return;
+    }
+    const pasteOpt = this._pasteDataToOptionValue("", grid, cell);
+    if (pasteOpt) {
+      grid.doChangeValue(cell.col, cell.row, () => pasteOpt.value);
+    }
+  }
   private _pasteDataToOptionValue(
     value: string,
     grid: ListGridAPI<T>,
@@ -279,6 +292,7 @@ function _textToOptionValue(
   return undefined;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function normalizePasteValueStr(value: any): string {
   if (value == null) {
     return "";

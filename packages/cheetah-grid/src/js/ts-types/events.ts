@@ -25,6 +25,12 @@ export type TouchCellEvent = CellAddress & {
   event: TouchEvent;
 };
 
+export type KeydownEvent = {
+  keyCode: number;
+  event: KeyboardEvent;
+  stopCellMoving(): void;
+};
+
 export interface PasteRangeBoxValues {
   readonly colCount: number;
   readonly rowCount: number;
@@ -40,6 +46,10 @@ export type PasteCellEvent = CellAddress & {
 
 export type InputCellEvent = CellAddress & {
   value: string;
+};
+
+export type DeleteCellEvent = CellAddress & {
+  event: KeyboardEvent;
 };
 
 export type ScrollEvent = {
@@ -65,9 +75,10 @@ export interface DrawGridEventHandlersEventMap {
   mouseup_cell: [MouseCellEvent];
   contextmenu_cell: [MouseCellEvent];
   dbltap_cell: [TouchCellEvent];
-  keydown: [number, KeyboardEvent];
+  keydown: [KeydownEvent];
   paste_cell: [PasteCellEvent];
   input_cell: [InputCellEvent];
+  delete_cell: [DeleteCellEvent];
   scroll: [ScrollEvent];
   editableinput_cell: [CellAddress];
   modify_status_editableinput_cell: [ModifyStatusEditableinputCellEvent];
@@ -92,6 +103,7 @@ export interface DrawGridEventHandlersReturnMap {
   keydown: void;
   paste_cell: void;
   input_cell: void;
+  delete_cell: void;
   scroll: void;
   editableinput_cell: boolean | void;
   modify_status_editableinput_cell: void;

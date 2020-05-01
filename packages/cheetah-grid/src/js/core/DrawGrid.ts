@@ -14,6 +14,7 @@ import {
   DrawGridKeyboardOptions,
   EventListenerId,
   KeyboardEventListener,
+  KeydownEvent,
   PasteCellEvent,
   PasteRangeBoxValues
 } from "../ts-types";
@@ -51,13 +52,17 @@ function createRootElement(): HTMLElement {
   return element;
 }
 
+const KEY_BS = 8;
 const KEY_TAB = 9;
+const KEY_ENTER = 13;
 const KEY_END = 35;
 const KEY_HOME = 36;
 const KEY_LEFT = 37;
 const KEY_UP = 38;
 const KEY_RIGHT = 39;
 const KEY_DOWN = 40;
+const KEY_DEL = 46;
+const KEY_ALPHA_A = 65;
 const KEY_ALPHA_C = 67;
 const KEY_ALPHA_V = 86;
 
@@ -959,6 +964,41 @@ function _onKeyDownMove(this: DrawGrid, e: KeyboardEvent): void {
       }
     }
     cancelEvent(e);
+  } else if (this.keyboardOptions?.moveCellOnEnter && keyCode === KEY_ENTER) {
+    if (shiftKey) {
+      if (!vmove.call(this, "N", false)) {
+        const col = this.getMoveLeftColByKeyDownInternal(focusCell);
+        if (0 > col) {
+          return;
+        }
+        _moveFocusCell.call(this, col, this.rowCount - 1, false);
+      }
+    } else {
+      if (!vmove.call(this, "S", false)) {
+        const col = this.getMoveRightColByKeyDownInternal(focusCell);
+        if (this.colCount <= col) {
+          return;
+        }
+        _moveFocusCell.call(
+          this,
+          col,
+          Math.min(this.frozenRowCount, this.rowCount - 1),
+          false
+        );
+      }
+    }
+    cancelEvent(e);
+  } else if (
+    this.keyboardOptions?.selectAllOnCtrlA &&
+    keyCode === KEY_ALPHA_A &&
+    (e.ctrlKey || e.metaKey)
+  ) {
+    this.selection.range = {
+      start: { col: 0, row: 0 },
+      end: { col: this.colCount - 1, row: this.rowCount - 1 }
+    };
+    this.invalidate();
+    cancelEvent(e);
   }
 
   function move(
@@ -973,7 +1013,11 @@ function _onKeyDownMove(this: DrawGrid, e: KeyboardEvent): void {
     _moveFocusCell.call(grid, col, row, shiftKey);
   }
 
-  function vmove(this: DrawGrid, vDir: "N" | "S"): boolean {
+  function vmove(
+    this: DrawGrid,
+    vDir: "N" | "S",
+    shiftKeyFlg: boolean = shiftKey
+  ): boolean {
     let row: number;
     if (vDir === "S") {
       row = this.getMoveDownRowByKeyDownInternal(focusCell);
@@ -987,7 +1031,7 @@ function _onKeyDownMove(this: DrawGrid, e: KeyboardEvent): void {
       }
     }
     const { col } = focusCell;
-    _moveFocusCell.call(this, col, row, shiftKey);
+    _moveFocusCell.call(this, col, row, shiftKeyFlg);
     return true;
   }
   function hmove(
@@ -1389,8 +1433,8 @@ function _bindEvents(this: DrawGrid): void {
     }
     grid.fireListeners(DG_EVENT_TYPE.DBLCLICK_CELL, eventArgs);
   });
-  grid[_].focusControl.onKeyDown((keyCode: number, e: KeyboardEvent) => {
-    grid.fireListeners(DG_EVENT_TYPE.KEYDOWN, keyCode, e);
+  grid[_].focusControl.onKeyDown((evt: KeydownEvent) => {
+    grid.fireListeners(DG_EVENT_TYPE.KEYDOWN, evt);
   });
   grid[_].selection.listen(DG_EVENT_TYPE.SELECTED_CELL, data => {
     grid.fireListeners(DG_EVENT_TYPE.SELECTED_CELL, data, data.selected);
@@ -1460,6 +1504,10 @@ function _bindEvents(this: DrawGrid): void {
   grid[_].focusControl.onInput(value => {
     const { col, row } = grid[_].selection.select;
     grid.fireListeners(DG_EVENT_TYPE.INPUT_CELL, { col, row, value });
+  });
+  grid[_].focusControl.onDelete(event => {
+    const { col, row } = grid[_].selection.select;
+    grid.fireListeners(DG_EVENT_TYPE.DELETE_CELL, { col, row, event });
   });
   grid[_].focusControl.onFocus((e: FocusEvent) => {
     grid.fireListeners(DG_EVENT_TYPE.FOCUS_GRID, e);
@@ -1820,6 +1868,7 @@ class FocusControl extends EventTarget {
   private _isComposition?: boolean;
   private _compositionEnd?: NodeJS.Timeout;
   private _inputStatus?: { [key: string]: string };
+  private _keyDownMoveCallback?: KeyboardEventListener;
   constructor(
     grid: DrawGrid,
     parentElement: HTMLElement,
@@ -1881,11 +1930,17 @@ class FocusControl extends EventTarget {
         return;
       }
       if (!input.readOnly && e.key && e.key.length === 1) {
-        if (e.key === "c" && (e.ctrlKey || e.metaKey)) {
-          //copy! for Firefox & Safari
-        } else if (e.key === "v" && (e.ctrlKey || e.metaKey)) {
-          //paste! for Firefox & Safari
+        if (e.ctrlKey || e.metaKey) {
+          if (e.key === "c") {
+            //copy! for Firefox & Safari
+          } else if (e.key === "v") {
+            //paste! for Firefox & Safari
+          }
         } else {
+          if (e.key === " ") {
+            // Since the full-width space cannot be determined, it is processed by "input".
+            return;
+          }
           this.fireListeners("input", e.key);
           cancelEvent(e);
         }
@@ -1901,11 +1956,26 @@ class FocusControl extends EventTarget {
         return;
       }
       const keyCode = getKeyCode(e);
-      this.fireListeners("keydown", keyCode, e);
+      let stopCellMove = false;
+      const evt: KeydownEvent = {
+        keyCode,
+        event: e,
+        stopCellMoving() {
+          stopCellMove = true;
+        }
+      };
+      this.fireListeners("keydown", evt);
 
       if (!input.readOnly && lastInputValue) {
         // for Safari
         this.fireListeners("input", lastInputValue);
+      }
+      if (!stopCellMove) this.fireKeyDownMove(keyCode, e);
+      if (
+        this._grid.keyboardOptions?.deleteCellValueOnDel &&
+        (keyCode === KEY_DEL || keyCode === KEY_BS)
+      ) {
+        this.fireListeners("delete", e);
       }
 
       inputClear();
@@ -1919,7 +1989,11 @@ class FocusControl extends EventTarget {
       inputClear();
     });
 
-    handler.on(input, "input", _e => {
+    handler.on(input, "input", (e: InputEvent) => {
+      if (e.data === " " || e.data === "　") {
+        // Since the full-width space cannot be determined on "keypress", it is processed by "input".
+        this.fireListeners("input", e.data);
+      }
       inputClear();
     });
     if (browser.IE) {
@@ -2014,32 +2088,52 @@ class FocusControl extends EventTarget {
       this.fireListeners("blur", e);
     });
   }
-  onKeyDownMove(fn: KeyboardEventListener): void {
-    this._handler.on(this._input, "keydown", e => {
-      if (this._isComposition) {
-        return;
-      }
-      const keyCode = getKeyCode(e);
-      if (
-        keyCode === KEY_LEFT ||
-        keyCode === KEY_UP ||
-        keyCode === KEY_RIGHT ||
-        keyCode === KEY_DOWN ||
-        keyCode === KEY_HOME ||
-        keyCode === KEY_END
-      ) {
-        fn(e);
-      }
-      if (this._grid.keyboardOptions?.moveCellOnTab && keyCode === KEY_TAB) {
-        fn(e);
-      }
-    });
+  fireKeyDownMove(keyCode: number, e: KeyboardEvent): void {
+    const fn = this._keyDownMoveCallback;
+    if (!fn) {
+      return;
+    }
+    if (this._isComposition) {
+      return;
+    }
+    if (
+      keyCode === KEY_LEFT ||
+      keyCode === KEY_UP ||
+      keyCode === KEY_RIGHT ||
+      keyCode === KEY_DOWN ||
+      keyCode === KEY_HOME ||
+      keyCode === KEY_END
+    ) {
+      fn(e);
+    } else if (
+      this._grid.keyboardOptions?.moveCellOnTab &&
+      keyCode === KEY_TAB
+    ) {
+      fn(e);
+    } else if (
+      this._grid.keyboardOptions?.moveCellOnEnter &&
+      keyCode === KEY_ENTER
+    ) {
+      fn(e);
+    } else if (
+      this._grid.keyboardOptions?.selectAllOnCtrlA &&
+      keyCode === KEY_ALPHA_A &&
+      (e.ctrlKey || e.metaKey)
+    ) {
+      fn(e);
+    }
   }
-  onKeyDown(fn: (keyCode: number, e: KeyboardEvent) => void): EventListenerId {
+  onKeyDownMove(fn: KeyboardEventListener): void {
+    this._keyDownMoveCallback = fn;
+  }
+  onKeyDown(fn: (e: KeydownEvent) => void): EventListenerId {
     return this.listen("keydown", fn);
   }
   onInput(fn: (value: string) => void): EventListenerId {
     return this.listen("input", fn);
+  }
+  onDelete(fn: (e: KeyboardEvent) => void): EventListenerId {
+    return this.listen("delete", fn);
   }
   onCopy(fn: (e: ClipboardEvent) => void): EventListenerId {
     return this.listen("copy", fn);

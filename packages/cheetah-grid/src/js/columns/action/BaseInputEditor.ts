@@ -116,8 +116,8 @@ export abstract class BaseInputEditor<T> extends Editor<T> {
 
         event.cancel(e.event);
       }),
-      grid.listen(DG_EVENT_TYPE.KEYDOWN, (keyCode, _e) => {
-        if (keyCode !== KEY_F2 && keyCode !== KEY_ENTER) {
+      grid.listen(DG_EVENT_TYPE.KEYDOWN, e => {
+        if (e.keyCode !== KEY_F2 && e.keyCode !== KEY_ENTER) {
           return;
         }
         const sel = grid.selection.select;
@@ -128,6 +128,7 @@ export abstract class BaseInputEditor<T> extends Editor<T> {
           col: sel.col,
           row: sel.row
         });
+        e.stopCellMoving();
       }),
       grid.listen(DG_EVENT_TYPE.SELECTED_CELL, e => {
         this.onChangeSelectCellInternal(
@@ -203,5 +204,14 @@ export abstract class BaseInputEditor<T> extends Editor<T> {
       return;
     }
     grid.doChangeValue(cell.col, cell.row, () => value);
+  }
+  onDeleteCellRangeBox(grid: ListGridAPI<T>, cell: CellAddress): void {
+    if (
+      isReadOnlyRecord(this.readOnly, grid, cell.row) ||
+      isDisabledRecord(this.disabled, grid, cell.row)
+    ) {
+      return;
+    }
+    grid.doChangeValue(cell.col, cell.row, () => "");
   }
 }

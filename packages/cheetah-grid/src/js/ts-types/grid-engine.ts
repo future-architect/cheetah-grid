@@ -28,6 +28,9 @@ export type LayoutObjectId = number | string | symbol;
 
 export interface DrawGridKeyboardOptions {
   moveCellOnTab?: boolean;
+  moveCellOnEnter?: boolean;
+  deleteCellValueOnDel?: boolean;
+  selectAllOnCtrlA?: boolean;
 }
 
 export interface DrawGridAPI {

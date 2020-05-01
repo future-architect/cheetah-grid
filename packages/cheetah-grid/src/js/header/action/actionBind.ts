@@ -95,8 +95,12 @@ export function bindCellKeyAction<T>(
   }
   return [
     // enter key down
-    grid.listen(DG_EVENT_TYPE.KEYDOWN, (keyCode, e) => {
-      if (acceptKeys.indexOf(keyCode) === -1) {
+    grid.listen(DG_EVENT_TYPE.KEYDOWN, e => {
+      if (acceptKeys.indexOf(e.keyCode) === -1) {
+        return;
+      }
+      if (grid.keyboardOptions?.moveCellOnEnter && e.keyCode === KEY_ENTER) {
+        // When moving with the enter key, no action is taken with the enter key.
         return;
       }
       const sel = grid.selection.select;
@@ -107,7 +111,7 @@ export function bindCellKeyAction<T>(
         col: sel.col,
         row: sel.row
       });
-      event.cancel(e);
+      event.cancel(e.event);
     })
   ];
 }

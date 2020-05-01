@@ -645,6 +645,79 @@ function _onRangePaste<T>(
   this.invalidateCellRange(this.selection.range);
 }
 
+function _onRangeDelete<T>(this: ListGrid<T>): void {
+  const { layoutMap } = this[_];
+  const selectionRange = this.selection.range;
+  const { start } = this.getCellRange(
+    selectionRange.start.col,
+    selectionRange.start.row
+  );
+  const { end } = this.getCellRange(
+    selectionRange.end.col,
+    selectionRange.end.row
+  );
+
+  const deleteRowCount = Math.min(
+    end.row - start.row + 1,
+    this.rowCount - start.row
+  );
+  const deleteColCount = Math.min(
+    end.col - start.col + 1,
+    this.colCount - start.col
+  );
+
+  let hasEditable = false;
+  const actionColumnsBox: ColumnData<T>[][] = [];
+  for (let bodyRow = 0; bodyRow < layoutMap.bodyRowCount; bodyRow++) {
+    const actionColumnsRow: ColumnData<T>[] = [];
+    actionColumnsBox.push(actionColumnsRow);
+    for (let offsetCol = 0; offsetCol < deleteColCount; offsetCol++) {
+      const body = layoutMap.getBody(
+        start.col + offsetCol,
+        bodyRow + layoutMap.headerRowCount
+      );
+      actionColumnsRow[offsetCol] = body;
+      if (!hasEditable && body.action?.editable) {
+        hasEditable = true;
+      }
+    }
+  }
+  if (!hasEditable) {
+    return;
+  }
+
+  const startRow = layoutMap.getRecordStartRowByRecordIndex(
+    layoutMap.getRecordIndexByRow(start.row)
+  );
+  const startRowOffset = start.row - startRow;
+
+  let duplicate: { [key: number]: boolean } = {};
+  let actionRow = startRowOffset;
+  for (let offsetRow = 0; offsetRow < deleteRowCount; offsetRow++) {
+    for (let offsetCol = 0; offsetCol < deleteColCount; offsetCol++) {
+      const { action, id } = actionColumnsBox[actionRow][offsetCol];
+      if (!duplicate[id as number] && action?.editable) {
+        duplicate[id as number] = true;
+        const col = start.col + offsetCol;
+        const row = start.row + offsetRow;
+
+        then(this.getRowRecord(row), _record => {
+          then(_getCellValue(this, col, row), _oldValue => {
+            action.onDeleteCellRangeBox(this, { col, row });
+          });
+        });
+      }
+    }
+    actionRow++;
+    if (actionRow >= layoutMap.bodyRowCount) {
+      actionRow = 0;
+      duplicate = {};
+    }
+  }
+
+  this.invalidateCellRange(selectionRange);
+}
+
 //end private methods
 //
 //
@@ -1311,6 +1384,16 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
       }
       event.cancel(e.event);
       _onRangePaste.call<ListGrid<T>, [string], void>(this, e.normalizeValue);
+    });
+    grid.listen(LG_EVENT_TYPE.DELETE_CELL, e => {
+      const { start } = this.selection.range;
+      const { layoutMap } = this[_];
+
+      if (start.row < layoutMap.headerRowCount) {
+        return;
+      }
+      event.cancel(e.event);
+      _onRangeDelete.call<ListGrid<T>, [], void>(this);
     });
   }
   protected getMoveLeftColByKeyDownInternal({ col, row }: CellAddress): number {

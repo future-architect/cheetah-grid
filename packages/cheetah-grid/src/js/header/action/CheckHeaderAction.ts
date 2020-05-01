@@ -7,8 +7,6 @@ import { getCheckHeaderStateId } from "../../internal/symbolManager";
 import { obj } from "../../internal/utils";
 
 const CHECK_HEADER_STATE_ID = getCheckHeaderStateId();
-const KEY_ENTER = 13;
-const KEY_SPACE = 32;
 
 function getState<T>(grid: GridInternal<T>): CheckHeaderState {
   let state = grid[CHECK_HEADER_STATE_ID];
@@ -74,8 +72,7 @@ export class CheckHeaderAction<T> extends BaseAction<T> {
         }
       }),
       ...bindCellKeyAction(grid, cellId, {
-        action,
-        acceptKeys: [KEY_ENTER, KEY_SPACE]
+        action
       })
     ];
   }

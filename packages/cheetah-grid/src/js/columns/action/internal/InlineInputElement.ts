@@ -129,7 +129,7 @@ export class InlineInputElement<T> {
   }
   detach(gridFocus?: boolean): void {
     if (this._isActive()) {
-      const { grid, col, row } = this._activeData as ActiveData<T>;
+      const { grid, col, row } = this._activeData!;
       const input = this._input;
       this._handler.tryWithOffEvents(input, "blur", () => {
         input.parentElement?.removeChild(input);
@@ -148,7 +148,7 @@ export class InlineInputElement<T> {
     }
     const input = this._input;
     const { value } = input;
-    const { grid, col, row } = this._activeData as ActiveData<T>;
+    const { grid, col, row } = this._activeData!;
     grid.doChangeValue(col, row, () => value);
   }
   _isActive(): boolean {
@@ -182,36 +182,41 @@ export class InlineInputElement<T> {
       }
       const keyCode = event.getKeyCode(e);
       if (keyCode === KEY_ENTER) {
-        if (!this._isActive() || this._attaching) {
-          return;
-        }
-        const { grid } = this._activeData as ActiveData<T>;
-
-        this.doChangeValue();
-        if (grid) {
-          grid.focus();
-        }
-        this.detach();
-        event.cancel(e);
+        this._onKeydownEnter(e);
       } else if (keyCode === KEY_TAB) {
-        if (!this._isActive()) {
-          return;
-        }
-        const { grid } = this._activeData as ActiveData<T>;
-        if (!grid.keyboardOptions?.moveCellOnTab) {
-          return;
-        }
-        this.doChangeValue();
-        if (grid) {
-          grid.focus();
-        }
-        this.detach();
-        grid.onKeyDownMove(e);
+        this._onKeydownTab(e);
       }
     });
     handler.on(input, "blur", _e => {
       this.doChangeValue();
       this.detach();
     });
+  }
+  _onKeydownEnter(e: KeyboardEvent): void {
+    if (!this._isActive() || this._attaching) {
+      return;
+    }
+
+    const { grid } = this._activeData!;
+
+    this.doChangeValue();
+    this.detach(true);
+    event.cancel(e);
+
+    if (grid.keyboardOptions?.moveCellOnEnter) {
+      grid.onKeyDownMove(e);
+    }
+  }
+  _onKeydownTab(e: KeyboardEvent): void {
+    if (!this._isActive()) {
+      return;
+    }
+    const { grid } = this._activeData!;
+    if (!grid.keyboardOptions?.moveCellOnTab) {
+      return;
+    }
+    this.doChangeValue();
+    this.detach(true);
+    grid.onKeyDownMove(e);
   }
 }

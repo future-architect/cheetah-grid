@@ -65,8 +65,11 @@ export default {
     }
   },
   computed: {
+    fieldProxy () {
+      return typeof this.field === 'function' ? this._fieldProxy : this.field
+    },
     resolvedField () {
-      return this.filter ? filterToFn(this, this.field, this.filter) : this.field
+      return this.filter ? filterToFn(this, this.fieldProxy, this.filter) : this.fieldProxy
     }
   },
   watch: {
@@ -92,6 +95,16 @@ export default {
         style: this.columnStyle,
         icon: this.icon,
         message: this.message
+      }
+    },
+
+    _fieldProxy (...args) {
+      return typeof this.field === 'function' ? this.field(...args) : undefined
+    },
+
+    normalizeProps () {
+      return {
+        field: this.fieldProxy
       }
     }
   }

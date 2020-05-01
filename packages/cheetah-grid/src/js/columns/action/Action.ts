@@ -74,4 +74,7 @@ export class Action<T> extends BaseAction<T> {
   onPasteCellRangeBox(): void {
     // noop
   }
+  onDeleteCellRangeBox(): void {
+    // noop
+  }
 }
