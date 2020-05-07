@@ -934,6 +934,7 @@ function _onScroll(grid: DrawGrid, _e: Event): void {
   }
 }
 /** @private */
+// eslint-disable-next-line complexity
 function _onKeyDownMove(this: DrawGrid, e: KeyboardEvent): void {
   const { shiftKey } = e;
   const keyCode = getKeyCode(e);
