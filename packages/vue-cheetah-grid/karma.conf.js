@@ -7,6 +7,7 @@ module.exports = function (config) {
     files: [
       require.resolve('promise-polyfills'),
       'test/polyfill.js',
+      'test/init.js',
       'test/**/*.spec.js'
     ],
 

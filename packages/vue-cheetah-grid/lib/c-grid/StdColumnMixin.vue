@@ -97,11 +97,15 @@ export default {
         message: this.message
       }
     },
-
+    /**
+     * @private
+     */
     _fieldProxy (...args) {
       return typeof this.field === 'function' ? this.field(...args) : undefined
     },
-
+    /**
+     * @private
+     */
     normalizeProps () {
       return {
         field: this.fieldProxy

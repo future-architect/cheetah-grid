@@ -7,6 +7,7 @@ import type {
 } from "../ts-types";
 import { PromiseCacheValue } from "./internal/types";
 
+/** @private */
 function _setFieldCache<T, F extends FieldDef<T>>(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   fCache: { [index: number]: Map<FieldDef<T>, any> },

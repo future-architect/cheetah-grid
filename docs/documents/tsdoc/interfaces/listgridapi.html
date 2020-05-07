@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>ListGridAPI | cheetah-grid</title>
-	<meta name="description" content="">
+	<meta name="description" content="Documentation for cheetah-grid">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
 </head>
@@ -13,7 +13,7 @@
 	<div class="tsd-page-toolbar">
 		<div class="container">
 			<div class="table-wrap">
-				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.js" data-base="..">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.json" data-base="..">
 					<div class="field">
 						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
 						<input id="tsd-search-field" type="text" />
@@ -38,8 +38,6 @@
 							</div>
 							<input type="checkbox" id="tsd-filter-inherited" checked />
 							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
-							<input type="checkbox" id="tsd-filter-externals" checked />
-							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
 						</div>
 					</div>
 					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
@@ -80,11 +78,6 @@
 						<ul class="tsd-hierarchy">
 							<li>
 								<span class="target">ListGridAPI</span>
-								<ul class="tsd-hierarchy">
-									<li>
-										<a href="gridinternal.html" class="tsd-signature-type">GridInternal</a>
-									</li>
-								</ul>
 							</li>
 						</ul>
 					</li>
@@ -195,13 +188,10 @@
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 					<a name="canvas" class="tsd-anchor"></a>
-					<h3>canvas</h3>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> canvas</h3>
 					<div class="tsd-signature tsd-kind-icon">canvas<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">HTMLCanvasElement</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#canvas">canvas</a></p>
-						<ul>
-							<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L44">cheetah-grid/src/js/ts-types/grid-engine.ts:44</a></li>
-						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
@@ -210,9 +200,6 @@
 					<div class="tsd-signature tsd-kind-icon">col<wbr>Count<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#colcount">colCount</a></p>
-						<ul>
-							<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L36">cheetah-grid/src/js/ts-types/grid-engine.ts:36</a></li>
-						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
@@ -220,9 +207,6 @@
 					<h3>data<wbr>Source</h3>
 					<div class="tsd-signature tsd-kind-icon">data<wbr>Source<span class="tsd-signature-symbol">:</span> <a href="datasourceapi.html" class="tsd-signature-type">DataSourceAPI</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L150">cheetah-grid/src/js/ts-types/grid-engine.ts:150</a></li>
-						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
@@ -231,9 +215,6 @@
 					<div class="tsd-signature tsd-kind-icon">default<wbr>Col<wbr>Width<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#defaultcolwidth">defaultColWidth</a></p>
-						<ul>
-							<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L40">cheetah-grid/src/js/ts-types/grid-engine.ts:40</a></li>
-						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
@@ -242,9 +223,6 @@
 					<div class="tsd-signature tsd-kind-icon">default<wbr>Row<wbr>Height<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#defaultrowheight">defaultRowHeight</a></p>
-						<ul>
-							<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L39">cheetah-grid/src/js/ts-types/grid-engine.ts:39</a></li>
-						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
@@ -252,9 +230,6 @@
 					<h3>disabled</h3>
 					<div class="tsd-signature tsd-kind-icon">disabled<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L155">cheetah-grid/src/js/ts-types/grid-engine.ts:155</a></li>
-						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
@@ -263,9 +238,6 @@
 					<div class="tsd-signature tsd-kind-icon">font<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#font">font</a></p>
-						<ul>
-							<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L34">cheetah-grid/src/js/ts-types/grid-engine.ts:34</a></li>
-						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
@@ -274,9 +246,6 @@
 					<div class="tsd-signature tsd-kind-icon">frozen<wbr>Col<wbr>Count<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#frozencolcount">frozenColCount</a></p>
-						<ul>
-							<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L38">cheetah-grid/src/js/ts-types/grid-engine.ts:38</a></li>
-						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
@@ -285,9 +254,6 @@
 					<div class="tsd-signature tsd-kind-icon">frozen<wbr>Row<wbr>Count<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#frozenrowcount">frozenRowCount</a></p>
-						<ul>
-							<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L37">cheetah-grid/src/js/ts-types/grid-engine.ts:37</a></li>
-						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
@@ -295,9 +261,6 @@
 					<h3>header<wbr>Values</h3>
 					<div class="tsd-signature tsd-kind-icon">header<wbr>Values<span class="tsd-signature-symbol">:</span> <a href="../globals.html#headervalues" class="tsd-signature-type">HeaderValues</a></div>
 					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L153">cheetah-grid/src/js/ts-types/grid-engine.ts:153</a></li>
-						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
@@ -306,20 +269,14 @@
 					<div class="tsd-signature tsd-kind-icon">keyboard<wbr>Options<span class="tsd-signature-symbol">:</span> <a href="drawgridkeyboardoptions.html" class="tsd-signature-type">DrawGridKeyboardOptions</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#keyboardoptions">keyboardOptions</a></p>
-						<ul>
-							<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L42">cheetah-grid/src/js/ts-types/grid-engine.ts:42</a></li>
-						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 					<a name="leftcol" class="tsd-anchor"></a>
-					<h3>left<wbr>Col</h3>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> left<wbr>Col</h3>
 					<div class="tsd-signature tsd-kind-icon">left<wbr>Col<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#leftcol">leftCol</a></p>
-						<ul>
-							<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L48">cheetah-grid/src/js/ts-types/grid-engine.ts:48</a></li>
-						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
@@ -327,9 +284,6 @@
 					<h3>read<wbr>Only</h3>
 					<div class="tsd-signature tsd-kind-icon">read<wbr>Only<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L156">cheetah-grid/src/js/ts-types/grid-engine.ts:156</a></li>
-						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
@@ -337,9 +291,6 @@
 					<h3>record<wbr>Row<wbr>Count</h3>
 					<div class="tsd-signature tsd-kind-icon">record<wbr>Row<wbr>Count<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L154">cheetah-grid/src/js/ts-types/grid-engine.ts:154</a></li>
-						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
@@ -347,9 +298,6 @@
 					<h3>records</h3>
 					<div class="tsd-signature tsd-kind-icon">records<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></div>
 					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L149">cheetah-grid/src/js/ts-types/grid-engine.ts:149</a></li>
-						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
@@ -358,9 +306,6 @@
 					<div class="tsd-signature tsd-kind-icon">row<wbr>Count<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#rowcount">rowCount</a></p>
-						<ul>
-							<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L35">cheetah-grid/src/js/ts-types/grid-engine.ts:35</a></li>
-						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
@@ -369,9 +314,6 @@
 					<div class="tsd-signature tsd-kind-icon">scroll<wbr>Left<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#scrollleft">scrollLeft</a></p>
-						<ul>
-							<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L49">cheetah-grid/src/js/ts-types/grid-engine.ts:49</a></li>
-						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
@@ -380,20 +322,14 @@
 					<div class="tsd-signature tsd-kind-icon">scroll<wbr>Top<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#scrolltop">scrollTop</a></p>
-						<ul>
-							<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L50">cheetah-grid/src/js/ts-types/grid-engine.ts:50</a></li>
-						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 					<a name="selection" class="tsd-anchor"></a>
-					<h3>selection</h3>
-					<div class="tsd-signature tsd-kind-icon">selection<span class="tsd-signature-symbol">:</span> <a href="selection.html" class="tsd-signature-type">Selection</a></div>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> selection</h3>
+					<div class="tsd-signature tsd-kind-icon">selection<span class="tsd-signature-symbol">:</span> <a href="../classes/selection.html" class="tsd-signature-type">Selection</a></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#selection">selection</a></p>
-						<ul>
-							<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L43">cheetah-grid/src/js/ts-types/grid-engine.ts:43</a></li>
-						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
@@ -401,9 +337,6 @@
 					<h3>sort<wbr>State</h3>
 					<div class="tsd-signature tsd-kind-icon">sort<wbr>State<span class="tsd-signature-symbol">:</span> <a href="sortstate.html" class="tsd-signature-type">SortState</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></div>
 					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L152">cheetah-grid/src/js/ts-types/grid-engine.ts:152</a></li>
-						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
@@ -411,20 +344,14 @@
 					<h3>theme</h3>
 					<div class="tsd-signature tsd-kind-icon">theme<span class="tsd-signature-symbol">:</span> <a href="../globals.html#requiredthemedefine" class="tsd-signature-type">RequiredThemeDefine</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></div>
 					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L151">cheetah-grid/src/js/ts-types/grid-engine.ts:151</a></li>
-						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 					<a name="toprow" class="tsd-anchor"></a>
-					<h3>top<wbr>Row</h3>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> top<wbr>Row</h3>
 					<div class="tsd-signature tsd-kind-icon">top<wbr>Row<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#toprow">topRow</a></p>
-						<ul>
-							<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L47">cheetah-grid/src/js/ts-types/grid-engine.ts:47</a></li>
-						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
@@ -433,31 +360,22 @@
 					<div class="tsd-signature tsd-kind-icon">underlay<wbr>Background<wbr>Color<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#underlaybackgroundcolor">underlayBackgroundColor</a></p>
-						<ul>
-							<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L41">cheetah-grid/src/js/ts-types/grid-engine.ts:41</a></li>
-						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 					<a name="visiblecolcount" class="tsd-anchor"></a>
-					<h3>visible<wbr>Col<wbr>Count</h3>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> visible<wbr>Col<wbr>Count</h3>
 					<div class="tsd-signature tsd-kind-icon">visible<wbr>Col<wbr>Count<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#visiblecolcount">visibleColCount</a></p>
-						<ul>
-							<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L46">cheetah-grid/src/js/ts-types/grid-engine.ts:46</a></li>
-						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 					<a name="visiblerowcount" class="tsd-anchor"></a>
-					<h3>visible<wbr>Row<wbr>Count</h3>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> visible<wbr>Row<wbr>Count</h3>
 					<div class="tsd-signature tsd-kind-icon">visible<wbr>Row<wbr>Count<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#visiblerowcount">visibleRowCount</a></p>
-						<ul>
-							<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L45">cheetah-grid/src/js/ts-types/grid-engine.ts:45</a></li>
-						</ul>
 					</aside>
 				</section>
 			</section>
@@ -467,21 +385,31 @@
 					<a name="adddisposable" class="tsd-anchor"></a>
 					<h3>add<wbr>Disposable</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">add<wbr>Disposable<span class="tsd-signature-symbol">(</span>disposable<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">add<wbr>Disposable<span class="tsd-signature-symbol">(</span>disposable<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>dispose<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#adddisposable">addDisposable</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L124">cheetah-grid/src/js/ts-types/grid-engine.ts:124</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>disposable: <span class="tsd-signature-type">object</span></h5>
+									<h5>disposable: <span class="tsd-signature-symbol">{ </span>dispose<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span></h5>
 									<ul class="tsd-parameters">
+										<li class="tsd-parameter">
+											<h5>dispose<span class="tsd-signature-symbol">: </span>function</h5>
+											<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal">
+												<li class="tsd-signature tsd-kind-icon">dispose<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+											</ul>
+											<ul class="tsd-descriptions">
+												<li class="tsd-description">
+													<aside class="tsd-sources">
+													</aside>
+													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+												</li>
+											</ul>
+										</li>
 									</ul>
 								</li>
 							</ul>
@@ -499,9 +427,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#configure">configure</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L63">cheetah-grid/src/js/ts-types/grid-engine.ts:63</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -526,9 +451,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#dispose">dispose</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L123">cheetah-grid/src/js/ts-types/grid-engine.ts:123</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
@@ -538,14 +460,11 @@
 					<a name="dochangevalue" class="tsd-anchor"></a>
 					<h3>do<wbr>Change<wbr>Value</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">do<wbr>Change<wbr>Value<span class="tsd-signature-symbol">(</span>col<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, row<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, changeValueCallback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../globals.html#maybepromise" class="tsd-signature-type">MaybePromise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">do<wbr>Change<wbr>Value<span class="tsd-signature-symbol">(</span>col<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, row<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, changeValueCallback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>before<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../globals.html#maybepromise" class="tsd-signature-type">MaybePromise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L178">cheetah-grid/src/js/ts-types/grid-engine.ts:178</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -556,10 +475,10 @@
 									<h5>row: <span class="tsd-signature-type">number</span></h5>
 								</li>
 								<li>
-									<h5>changeValueCallback: <span class="tsd-signature-type">function</span></h5>
+									<h5>changeValueCallback: <span class="tsd-signature-symbol">(</span>before<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">any</span></h5>
 									<ul class="tsd-parameters">
-										<li class="tsd-parameter-siganture">
-											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
+										<li class="tsd-parameter-signature">
+											<ul class="tsd-signatures tsd-kind-type-literal">
 												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>before<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
 											</ul>
 											<ul class="tsd-descriptions">
@@ -585,14 +504,11 @@
 					<a name="dogetcellvalue" class="tsd-anchor"></a>
 					<h3>do<wbr>Get<wbr>Cell<wbr>Value</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">do<wbr>Get<wbr>Cell<wbr>Value<span class="tsd-signature-symbol">(</span>col<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, row<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, valueCallback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">do<wbr>Get<wbr>Cell<wbr>Value<span class="tsd-signature-symbol">(</span>col<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, row<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, valueCallback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L184">cheetah-grid/src/js/ts-types/grid-engine.ts:184</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -603,10 +519,10 @@
 									<h5>row: <span class="tsd-signature-type">number</span></h5>
 								</li>
 								<li>
-									<h5>valueCallback: <span class="tsd-signature-type">function</span></h5>
+									<h5>valueCallback: <span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></h5>
 									<ul class="tsd-parameters">
-										<li class="tsd-parameter-siganture">
-											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
+										<li class="tsd-parameter-signature">
+											<ul class="tsd-signatures tsd-kind-type-literal">
 												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 											</ul>
 											<ul class="tsd-descriptions">
@@ -633,14 +549,11 @@
 					<h3>do<wbr>Set<wbr>Paste<wbr>Value</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
 						<li class="tsd-signature tsd-kind-icon">do<wbr>Set<wbr>Paste<wbr>Value<span class="tsd-signature-symbol">(</span>text<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-						<li class="tsd-signature tsd-kind-icon">do<wbr>Set<wbr>Paste<wbr>Value<span class="tsd-signature-symbol">(</span>text<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, test<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">do<wbr>Set<wbr>Paste<wbr>Value<span class="tsd-signature-symbol">(</span>text<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, test<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>data<span class="tsd-signature-symbol">: </span><a href="../globals.html#setpastevaluetestdata" class="tsd-signature-type">SetPasteValueTestData</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L190">cheetah-grid/src/js/ts-types/grid-engine.ts:190</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -652,9 +565,6 @@
 						</li>
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L191">cheetah-grid/src/js/ts-types/grid-engine.ts:191</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -662,10 +572,10 @@
 									<h5>text: <span class="tsd-signature-type">string</span></h5>
 								</li>
 								<li>
-									<h5>test: <span class="tsd-signature-type">function</span></h5>
+									<h5>test: <span class="tsd-signature-symbol">(</span>data<span class="tsd-signature-symbol">: </span><a href="../globals.html#setpastevaluetestdata" class="tsd-signature-type">SetPasteValueTestData</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">boolean</span></h5>
 									<ul class="tsd-parameters">
-										<li class="tsd-parameter-siganture">
-											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
+										<li class="tsd-parameter-signature">
+											<ul class="tsd-signatures tsd-kind-type-literal">
 												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>data<span class="tsd-signature-symbol">: </span><a href="../globals.html#setpastevaluetestdata" class="tsd-signature-type">SetPasteValueTestData</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 											</ul>
 											<ul class="tsd-descriptions">
@@ -697,9 +607,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#focus">focus</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L53">cheetah-grid/src/js/ts-types/grid-engine.ts:53</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
@@ -715,9 +622,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#focuscell">focusCell</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L108">cheetah-grid/src/js/ts-types/grid-engine.ts:108</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -741,9 +645,6 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L175">cheetah-grid/src/js/ts-types/grid-engine.ts:175</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -762,15 +663,12 @@
 					<a name="getattachcellsarea" class="tsd-anchor"></a>
 					<h3>get<wbr>Attach<wbr>Cells<wbr>Area</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Attach<wbr>Cells<wbr>Area<span class="tsd-signature-symbol">(</span>range<span class="tsd-signature-symbol">: </span><a href="cellrange.html" class="tsd-signature-type">CellRange</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Attach<wbr>Cells<wbr>Area<span class="tsd-signature-symbol">(</span>range<span class="tsd-signature-symbol">: </span><a href="cellrange.html" class="tsd-signature-type">CellRange</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>element<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLElement</span><span class="tsd-signature-symbol">; </span>rect<span class="tsd-signature-symbol">: </span><a href="rectprops.html" class="tsd-signature-type">RectProps</a><span class="tsd-signature-symbol"> }</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#getattachcellsarea">getAttachCellsArea</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L116">cheetah-grid/src/js/ts-types/grid-engine.ts:116</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -778,8 +676,14 @@
 									<h5>range: <a href="cellrange.html" class="tsd-signature-type">CellRange</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">object</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">{ </span>element<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLElement</span><span class="tsd-signature-symbol">; </span>rect<span class="tsd-signature-symbol">: </span><a href="rectprops.html" class="tsd-signature-type">RectProps</a><span class="tsd-signature-symbol"> }</span></h4>
 							<ul class="tsd-parameters">
+								<li class="tsd-parameter">
+									<h5>element<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLElement</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>rect<span class="tsd-signature-symbol">: </span><a href="rectprops.html" class="tsd-signature-type">RectProps</a></h5>
+								</li>
 							</ul>
 						</li>
 					</ul>
@@ -794,9 +698,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#getcellat">getCellAt</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L105">cheetah-grid/src/js/ts-types/grid-engine.ts:105</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -821,9 +722,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#getcelloverflowtext">getCellOverflowText</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L109">cheetah-grid/src/js/ts-types/grid-engine.ts:109</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -834,10 +732,7 @@
 									<h5>row: <span class="tsd-signature-type">number</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span>
-								<span class="tsd-signature-symbol"> | </span>
-								<span class="tsd-signature-type">null</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -850,9 +745,6 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L173">cheetah-grid/src/js/ts-types/grid-engine.ts:173</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -876,9 +768,6 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L174">cheetah-grid/src/js/ts-types/grid-engine.ts:174</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -889,10 +778,7 @@
 									<h5>index: <span class="tsd-signature-type">number</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="cellrange.html" class="tsd-signature-type">CellRange</a>
-								<span class="tsd-signature-symbol"> | </span>
-								<span class="tsd-signature-type">null</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <a href="cellrange.html" class="tsd-signature-type">CellRange</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -906,9 +792,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#getcellrangerect">getCellRangeRect</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L94">cheetah-grid/src/js/ts-types/grid-engine.ts:94</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -930,9 +813,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#getcellrect">getCellRect</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L86">cheetah-grid/src/js/ts-types/grid-engine.ts:86</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -957,9 +837,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#getcellrelativerect">getCellRelativeRect</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L87">cheetah-grid/src/js/ts-types/grid-engine.ts:87</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -984,9 +861,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#getcellsrect">getCellsRect</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L88">cheetah-grid/src/js/ts-types/grid-engine.ts:88</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1017,9 +891,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#getcolat">getColAt</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L104">cheetah-grid/src/js/ts-types/grid-engine.ts:104</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1041,9 +912,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#getcolwidth">getColWidth</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L80">cheetah-grid/src/js/ts-types/grid-engine.ts:80</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1064,9 +932,6 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L196">cheetah-grid/src/js/ts-types/grid-engine.ts:196</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1091,9 +956,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#getelement">getElement</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L52">cheetah-grid/src/js/ts-types/grid-engine.ts:52</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">HTMLElement</span></h4>
 						</li>
@@ -1108,9 +970,6 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L163">cheetah-grid/src/js/ts-types/grid-engine.ts:163</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1121,10 +980,7 @@
 									<h5>row: <span class="tsd-signature-type">number</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="../globals.html#fielddef" class="tsd-signature-type">FieldDef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>
-								<span class="tsd-signature-symbol"> | </span>
-								<span class="tsd-signature-type">undefined</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <a href="../globals.html#fielddef" class="tsd-signature-type">FieldDef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -1137,9 +993,6 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L177">cheetah-grid/src/js/ts-types/grid-engine.ts:177</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="gridcanvashelperapi.html" class="tsd-signature-type">GridCanvasHelperAPI</a></h4>
 						</li>
@@ -1154,9 +1007,6 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L168">cheetah-grid/src/js/ts-types/grid-engine.ts:168</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1167,10 +1017,7 @@
 									<h5>row: <span class="tsd-signature-type">number</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span>
-								<span class="tsd-signature-symbol"> | </span>
-								<span class="tsd-signature-type">undefined</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -1183,9 +1030,6 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L170">cheetah-grid/src/js/ts-types/grid-engine.ts:170</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1196,10 +1040,7 @@
 									<h5>row: <span class="tsd-signature-type">number</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span>
-								<span class="tsd-signature-symbol"> | </span>
-								<span class="tsd-signature-type">undefined</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -1212,9 +1053,6 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L195">cheetah-grid/src/js/ts-types/grid-engine.ts:195</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1239,9 +1077,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#getmaxcolwidth">getMaxColWidth</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L82">cheetah-grid/src/js/ts-types/grid-engine.ts:82</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1249,12 +1084,7 @@
 									<h5>col: <span class="tsd-signature-type">number</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span>
-								<span class="tsd-signature-symbol"> | </span>
-								<span class="tsd-signature-type">number</span>
-								<span class="tsd-signature-symbol"> | </span>
-								<span class="tsd-signature-type">undefined</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -1268,9 +1098,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#getmincolwidth">getMinColWidth</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L84">cheetah-grid/src/js/ts-types/grid-engine.ts:84</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1278,12 +1105,7 @@
 									<h5>col: <span class="tsd-signature-type">number</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span>
-								<span class="tsd-signature-symbol"> | </span>
-								<span class="tsd-signature-type">number</span>
-								<span class="tsd-signature-symbol"> | </span>
-								<span class="tsd-signature-type">undefined</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -1296,9 +1118,6 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L165">cheetah-grid/src/js/ts-types/grid-engine.ts:165</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1319,9 +1138,6 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L166">cheetah-grid/src/js/ts-types/grid-engine.ts:166</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1343,9 +1159,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#getrowat">getRowAt</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L103">cheetah-grid/src/js/ts-types/grid-engine.ts:103</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1367,9 +1180,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#getrowheight">getRowHeight</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L78">cheetah-grid/src/js/ts-types/grid-engine.ts:78</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1390,9 +1200,6 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L164">cheetah-grid/src/js/ts-types/grid-engine.ts:164</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1414,9 +1221,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#hasfocusgrid">hasFocusGrid</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L54">cheetah-grid/src/js/ts-types/grid-engine.ts:54</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
 						</li>
@@ -1432,9 +1236,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#invalidate">invalidate</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L68">cheetah-grid/src/js/ts-types/grid-engine.ts:68</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
@@ -1450,9 +1251,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#invalidatecell">invalidateCell</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L69">cheetah-grid/src/js/ts-types/grid-engine.ts:69</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1477,9 +1275,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#invalidatecellrange">invalidateCellRange</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L76">cheetah-grid/src/js/ts-types/grid-engine.ts:76</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1501,9 +1296,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#invalidategridrect">invalidateGridRect</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L70">cheetah-grid/src/js/ts-types/grid-engine.ts:70</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1528,15 +1320,12 @@
 					<a name="isfrozencell" class="tsd-anchor"></a>
 					<h3>is<wbr>Frozen<wbr>Cell</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">is<wbr>Frozen<wbr>Cell<span class="tsd-signature-symbol">(</span>col<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, row<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></li>
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Frozen<wbr>Cell<span class="tsd-signature-symbol">(</span>col<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, row<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>col<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span>row<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#isfrozencell">isFrozenCell</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L96">cheetah-grid/src/js/ts-types/grid-engine.ts:96</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1547,10 +1336,7 @@
 									<h5>row: <span class="tsd-signature-type">number</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">object</span>
-								<span class="tsd-signature-symbol"> | </span>
-								<span class="tsd-signature-type">null</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">{ </span>col<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span>row<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -1558,20 +1344,17 @@
 					<a name="listen" class="tsd-anchor"></a>
 					<h3>listen</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">listen&lt;TYPE&gt;<span class="tsd-signature-symbol">(</span>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TYPE</span>, listener<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../globals.html#eventlistenerid" class="tsd-signature-type">EventListenerId</a></li>
+						<li class="tsd-signature tsd-kind-icon">listen&lt;TYPE&gt;<span class="tsd-signature-symbol">(</span>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TYPE</span>, listener<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ListGridEventHandlersEventMap</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">TYPE</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">ListGridEventHandlersReturnMap</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">TYPE</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../globals.html#eventlistenerid" class="tsd-signature-type">EventListenerId</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Overrides <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#listen">listen</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L157">cheetah-grid/src/js/ts-types/grid-engine.ts:157</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>TYPE<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">keyof ListGridEventHandlersEventMap&lt;T&gt;</span></h4>
+									<h4>TYPE<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">keyof </span><a href="listgrideventhandlerseventmap.html" class="tsd-signature-type">ListGridEventHandlersEventMap</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1580,21 +1363,21 @@
 									<h5>type: <span class="tsd-signature-type">TYPE</span></h5>
 								</li>
 								<li>
-									<h5>listener: <span class="tsd-signature-type">function</span></h5>
+									<h5>listener: <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ListGridEventHandlersEventMap</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">TYPE</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">ListGridEventHandlersReturnMap</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">TYPE</span><span class="tsd-signature-symbol">]</span></h5>
 									<ul class="tsd-parameters">
-										<li class="tsd-parameter-siganture">
-											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
-												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ListGridEventHandlersEventMap&lt;T&gt;[TYPE]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ListGridEventHandlersReturnMap[TYPE]</span></li>
+										<li class="tsd-parameter-signature">
+											<ul class="tsd-signatures tsd-kind-type-literal">
+												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ListGridEventHandlersEventMap</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">TYPE</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ListGridEventHandlersReturnMap</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">TYPE</span><span class="tsd-signature-symbol">]</span></li>
 											</ul>
 											<ul class="tsd-descriptions">
 												<li class="tsd-description">
 													<h4 class="tsd-parameters-title">Parameters</h4>
 													<ul class="tsd-parameters">
 														<li>
-															<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>event: <span class="tsd-signature-type">ListGridEventHandlersEventMap&lt;T&gt;[TYPE]</span></h5>
+															<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>event: <span class="tsd-signature-type">ListGridEventHandlersEventMap</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">TYPE</span><span class="tsd-signature-symbol">]</span></h5>
 														</li>
 													</ul>
-													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ListGridEventHandlersReturnMap[TYPE]</span></h4>
+													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ListGridEventHandlersReturnMap</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">TYPE</span><span class="tsd-signature-symbol">]</span></h4>
 												</li>
 											</ul>
 										</li>
@@ -1615,9 +1398,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#makevisiblecell">makeVisibleCell</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L106">cheetah-grid/src/js/ts-types/grid-engine.ts:106</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1641,9 +1421,6 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L176">cheetah-grid/src/js/ts-types/grid-engine.ts:176</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1668,9 +1445,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#onkeydownmove">onKeyDownMove</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L122">cheetah-grid/src/js/ts-types/grid-engine.ts:122</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1692,9 +1466,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#setcelloverflowtext">setCellOverflowText</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L110">cheetah-grid/src/js/ts-types/grid-engine.ts:110</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1722,9 +1493,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#setcolwidth">setColWidth</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L81">cheetah-grid/src/js/ts-types/grid-engine.ts:81</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1749,9 +1517,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#setfocuscursor">setFocusCursor</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L107">cheetah-grid/src/js/ts-types/grid-engine.ts:107</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1775,9 +1540,6 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L172">cheetah-grid/src/js/ts-types/grid-engine.ts:172</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1805,9 +1567,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#setmaxcolwidth">setMaxColWidth</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L83">cheetah-grid/src/js/ts-types/grid-engine.ts:83</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1832,9 +1591,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#setmincolwidth">setMinColWidth</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L85">cheetah-grid/src/js/ts-types/grid-engine.ts:85</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1859,9 +1615,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#setrowheight">setRowHeight</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L79">cheetah-grid/src/js/ts-types/grid-engine.ts:79</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1886,9 +1639,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#updatescroll">updateScroll</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L66">cheetah-grid/src/js/ts-types/grid-engine.ts:66</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
 						</li>
@@ -1904,9 +1654,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="drawgridapi.html">DrawGridAPI</a>.<a href="drawgridapi.html#updatesize">updateSize</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/grid-engine.ts#L65">cheetah-grid/src/js/ts-types/grid-engine.ts:65</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
@@ -2177,57 +1924,21 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
-				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
-				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
-				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
-				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
-				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
-				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
-				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
-				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
-				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
-				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
-				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
-				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
 				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
 				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
 				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
-				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
 				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
 				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
 			</ul>
 		</div>
 	</div>

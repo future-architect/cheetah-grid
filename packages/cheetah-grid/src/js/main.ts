@@ -52,6 +52,7 @@ export {
   register,
 };
 
+/** @private */
 function getIcons(): { [key: string]: TYPES.IconDefine } {
   return icons.get();
 }

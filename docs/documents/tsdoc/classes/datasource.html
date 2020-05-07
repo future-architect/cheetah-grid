@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>DataSource | cheetah-grid</title>
-	<meta name="description" content="">
+	<meta name="description" content="Documentation for cheetah-grid">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
 </head>
@@ -13,7 +13,7 @@
 	<div class="tsd-page-toolbar">
 		<div class="container">
 			<div class="table-wrap">
-				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.js" data-base="..">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.json" data-base="..">
 					<div class="field">
 						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
 						<input id="tsd-search-field" type="text" />
@@ -38,8 +38,6 @@
 							</div>
 							<input type="checkbox" id="tsd-filter-inherited" checked />
 							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
-							<input type="checkbox" id="tsd-filter-externals" checked />
-							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
 						</div>
 					</div>
 					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
@@ -171,9 +169,6 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/data/DataSource.ts#L180">cheetah-grid/src/js/data/DataSource.ts:180</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -191,11 +186,8 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
 					<a name="empty" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> EMPTY</h3>
-					<div class="tsd-signature tsd-kind-icon">EMPTY<span class="tsd-signature-symbol">:</span> <a href="datasource.html" class="tsd-signature-type">DataSource</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;new DataSource&lt;any&gt;({get(): void {/*noop */},length: 0})</span></div>
+					<div class="tsd-signature tsd-kind-icon">EMPTY<span class="tsd-signature-symbol">:</span> <a href="datasource.html" class="tsd-signature-type">DataSource</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = new DataSource&lt;any&gt;({get(): void {/*noop */},length: 0,})</span></div>
 					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/data/DataSource.ts#L318">cheetah-grid/src/js/data/DataSource.ts:318</a></li>
-						</ul>
 					</aside>
 				</section>
 			</section>
@@ -210,9 +202,6 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/data/DataSource.ts#L255">cheetah-grid/src/js/data/DataSource.ts:255</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="datasource.html" class="tsd-signature-type">DataSource</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
@@ -228,17 +217,11 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/data/DataSource.ts#L240">cheetah-grid/src/js/data/DataSource.ts:240</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
 						</li>
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/data/DataSource.ts#L243">cheetah-grid/src/js/data/DataSource.ts:243</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -259,9 +242,6 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/data/DataSource.ts#L189">cheetah-grid/src/js/data/DataSource.ts:189</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
 						</li>
@@ -271,18 +251,13 @@
 					<a name="event_type" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> EVENT_<wbr>TYPE</h3>
 					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> EVENT_TYPE<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span></li>
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> EVENT_TYPE<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">EVENT_TYPE</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/data/DataSource.ts#L171">cheetah-grid/src/js/data/DataSource.ts:171</a></li>
-								</ul>
 							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">object</span></h4>
-							<ul class="tsd-parameters">
-							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">EVENT_TYPE</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -299,9 +274,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="eventtarget.html">EventTarget</a>.<a href="eventtarget.html#addeventlistener">addEventListener</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/core/EventTarget.ts#L62">cheetah-grid/src/js/core/EventTarget.ts:62</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -326,9 +298,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Overrides <a href="eventtarget.html">EventTarget</a>.<a href="eventtarget.html#dispose">dispose</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/data/DataSource.ts#L258">cheetah-grid/src/js/data/DataSource.ts:258</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
@@ -344,9 +313,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="eventtarget.html">EventTarget</a>.<a href="eventtarget.html#firelisteners">fireListeners</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/core/EventTarget.ts#L85">cheetah-grid/src/js/core/EventTarget.ts:85</a></li>
-								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
@@ -383,9 +349,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/datasourceapi.html">DataSourceAPI</a>.<a href="../interfaces/datasourceapi.html#get">get</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/data/DataSource.ts#L192">cheetah-grid/src/js/data/DataSource.ts:192</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -407,9 +370,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/datasourceapi.html">DataSourceAPI</a>.<a href="../interfaces/datasourceapi.html#getfield">getField</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/data/DataSource.ts#L195">cheetah-grid/src/js/data/DataSource.ts:195</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
@@ -440,9 +400,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/datasourceapi.html">DataSourceAPI</a>.<a href="../interfaces/datasourceapi.html#hasfield">hasField</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/data/DataSource.ts#L199">cheetah-grid/src/js/data/DataSource.ts:199</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -467,9 +424,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="eventtarget.html">EventTarget</a>.<a href="eventtarget.html#haslisteners">hasListeners</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/core/EventTarget.ts#L75">cheetah-grid/src/js/core/EventTarget.ts:75</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -491,9 +445,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="eventtarget.html">EventTarget</a>.<a href="eventtarget.html#listen">listen</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/core/EventTarget.ts#L32">cheetah-grid/src/js/core/EventTarget.ts:32</a></li>
-								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
@@ -530,9 +481,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="eventtarget.html">EventTarget</a>.<a href="eventtarget.html#removeeventlistener">removeEventListener</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/core/EventTarget.ts#L65">cheetah-grid/src/js/core/EventTarget.ts:65</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -557,9 +505,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/datasourceapi.html">DataSourceAPI</a>.<a href="../interfaces/datasourceapi.html#setfield">setField</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/data/DataSource.ts#L202">cheetah-grid/src/js/data/DataSource.ts:202</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
@@ -593,9 +538,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/datasourceapi.html">DataSourceAPI</a>.<a href="../interfaces/datasourceapi.html#sort">sort</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/data/DataSource.ts#L214">cheetah-grid/src/js/data/DataSource.ts:214</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -620,9 +562,6 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="eventtarget.html">EventTarget</a>.<a href="eventtarget.html#unlisten">unlisten</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/core/EventTarget.ts#L56">cheetah-grid/src/js/core/EventTarget.ts:56</a></li>
-								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
@@ -651,9 +590,6 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/data/DataSource.ts#L174">cheetah-grid/src/js/data/DataSource.ts:174</a></li>
-								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
@@ -759,57 +695,21 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
-				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
-				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
-				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
-				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
-				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
-				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
-				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
-				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
-				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
-				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
-				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
-				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
 				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
 				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
 				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
-				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
 				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
 				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
 			</ul>
 		</div>
 	</div>

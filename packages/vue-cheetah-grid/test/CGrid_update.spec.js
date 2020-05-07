@@ -31,14 +31,17 @@ describe('c-grid update', () => {
     }
     const wrapper = mount(Component, {
       localVue,
-      attachToDocument: true
+      attachTo: '.test-root-element'
     })
     wrapper.vm.data = [
       ...wrapper.vm.data,
       ...wrapper.vm.data
     ]
-    const { rawGrid } = wrapper.vm.$refs.grid
-    expect(rawGrid.records.length).to.equal(2)
+    return wrapper.vm.$nextTick()
+      .then(() => {
+        const { rawGrid } = wrapper.vm.$refs.grid
+        expect(rawGrid.records.length).to.equal(2)
+      })
   })
   it('CGrid update header', () => {
     const Component = {
@@ -69,7 +72,7 @@ describe('c-grid update', () => {
     }
     const wrapper = mount(Component, {
       localVue,
-      attachToDocument: true
+      attachTo: '.test-root-element'
     })
     let { rawGrid } = wrapper.vm.$refs.grid
     expect(rawGrid.header.length).to.equal(1)
@@ -112,18 +115,25 @@ describe('c-grid update', () => {
     }
     const wrapper = mount(Component, {
       localVue,
-      attachToDocument: true
+      attachTo: '.test-root-element'
     })
     let { rawGrid } = wrapper.vm.$refs.grid
     const before = rawGrid.header
 
-    wrapper.vm.showButton = 1234;
-    ({ rawGrid } = wrapper.vm.$refs.grid)
-    expect(rawGrid.header).to.equal(before)
-
-    wrapper.vm.caption = 'testCaption';
-    ({ rawGrid } = wrapper.vm.$refs.grid)
-    expect(rawGrid.header).to.equal(before)
+    wrapper.vm.showButton = 1234
+    return wrapper.vm.$nextTick()
+      .then(() => {
+        ({ rawGrid } = wrapper.vm.$refs.grid)
+        expect(rawGrid.header).to.equal(before)
+      })
+      .then(() => {
+        wrapper.vm.caption = 'testCaption'
+        return wrapper.vm.$nextTick()
+      })
+      .then(() => {
+        ({ rawGrid } = wrapper.vm.$refs.grid)
+        expect(rawGrid.header).to.equal(before)
+      })
   })
   it('CGrid update frozen-col-count', () => {
     const Component = {
@@ -154,14 +164,17 @@ describe('c-grid update', () => {
     }
     const wrapper = mount(Component, {
       localVue,
-      attachToDocument: true
+      attachTo: '.test-root-element'
     })
     let { rawGrid } = wrapper.vm.$refs.grid
     expect(rawGrid.frozenColCount).to.equal(1)
 
-    wrapper.vm.frozenColCount = 2;
-    ({ rawGrid } = wrapper.vm.$refs.grid)
-    expect(rawGrid.frozenColCount).to.equal(2)
+    wrapper.vm.frozenColCount = 2
+    return wrapper.vm.$nextTick()
+      .then(() => {
+        ({ rawGrid } = wrapper.vm.$refs.grid)
+        expect(rawGrid.frozenColCount).to.equal(2)
+      })
   })
   it('CGrid update filter', () => {
     const Component = {
@@ -191,14 +204,17 @@ describe('c-grid update', () => {
     }
     const wrapper = mount(Component, {
       localVue,
-      attachToDocument: true
+      attachTo: '.test-root-element'
     })
     let { rawGrid } = wrapper.vm.$refs.grid
     expect(rawGrid.dataSource.length).to.equal(2)
 
-    wrapper.vm.filter = (rec) => rec.text === 'text1';
-    ({ rawGrid } = wrapper.vm.$refs.grid)
-    expect(rawGrid.dataSource.length).to.equal(1)
+    wrapper.vm.filter = (rec) => rec.text === 'text1'
+    return wrapper.vm.$nextTick()
+      .then(() => {
+        ({ rawGrid } = wrapper.vm.$refs.grid)
+        expect(rawGrid.dataSource.length).to.equal(1)
+      })
   })
   it('CGrid update class & textContent', () => {
     const Component = {
@@ -228,7 +244,7 @@ describe('c-grid update', () => {
     }
     const wrapper = mount(Component, {
       localVue,
-      attachToDocument: true
+      attachTo: '.test-root-element'
     })
     let { rawGrid } = wrapper.vm.$refs.grid
     const before = rawGrid.header

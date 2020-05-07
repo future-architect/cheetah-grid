@@ -21,6 +21,7 @@ import {
 import { EventTarget } from "../core/EventTarget";
 import { PromiseCacheValue } from "./internal/types";
 
+/** @private */
 function isFieldAssessor<T>(field: FieldDef<T>): field is FieldAssessor<T> {
   if (obj.isObject(field)) {
     const a = field as FieldAssessor<T>;
@@ -31,6 +32,7 @@ function isFieldAssessor<T>(field: FieldDef<T>): field is FieldAssessor<T> {
   return false;
 }
 
+/** @private */
 const EVENT_TYPE: {
   UPDATE_LENGTH: "update_length";
   UPDATED_LENGTH: "updated_length";
@@ -41,8 +43,10 @@ const EVENT_TYPE: {
   UPDATED_ORDER: "updated_order",
 };
 
+/** @private */
 type PromiseBack<V> = (value: PromiseCacheValue<V>) => void;
 
+/** @private */
 function getValue<V>(
   value: MaybePromiseOrCallOrUndef<V, []>,
   setPromiseBack: PromiseBack<V>
@@ -61,6 +65,7 @@ function getValue<V>(
   }
 }
 
+/** @private */
 function getField<T, F extends FieldDef<T>>(
   record: MaybePromiseOrUndef<T>,
   field: F,
@@ -103,6 +108,8 @@ function getField<T, F extends FieldDef<T>>(
   );
   return getValue(fieldResult, setPromiseBack);
 }
+
+/** @private */
 function setField<T, F extends FieldDef<T>>(
   record: T | undefined,
   field: F,
@@ -139,6 +146,7 @@ function setField<T, F extends FieldDef<T>>(
   }
   return true;
 }
+/** @private */
 function _getIndex(sortedIndexMap: null | number[], index: number): number {
   if (!sortedIndexMap) {
     return index;

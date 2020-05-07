@@ -5,6 +5,9 @@ function resolve (arg) {
 
 module.exports = {
   name: 'cheetah-grid',
+  inputFiles: [
+    resolve('../cheetah-grid/src/js')
+  ],
   // theme: 'minimal',
   out: resolve('../../docs/documents/tsdoc'),
   tsconfig: resolve('../cheetah-grid/tsconfig.json'),
@@ -13,6 +16,8 @@ module.exports = {
   excludeProtected: true,
   excludeNotExported: true,
   includeDeclarations: true,
+  excludeExternals:true,
+  stripInternal:true,
   // entryPoint: 'cheetah-grid',
   // target: 'ES6',
   // mode: 'modules',
@@ -34,5 +39,6 @@ module.exports = {
     // internals
     '**/internal/**',
     '**/ts-types-internal/**'
-  ]
+  ],
+  disableSources:true
 }

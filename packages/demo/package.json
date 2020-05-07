@@ -1,7 +1,7 @@
 {
   "name": "cheetah-grid-demo",
   "private": true,
-  "version": "0.20.0",
+  "version": "0.21.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -35,7 +35,7 @@
     "babel-loader": "^8.0.2",
     "cheetah-grid": "^0.20.0",
     "css-loader": "^1.0.0",
-    "eslint": "^6.6.0",
+    "eslint": "^6.8.0",
     "eslint-config-standard": "^14.1.0",
     "eslint-config-vue-preset": "^0.2.0",
     "eslint-friendly-formatter": "^4.0.1",

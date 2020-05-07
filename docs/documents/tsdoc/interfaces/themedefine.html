@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>ThemeDefine | cheetah-grid</title>
-	<meta name="description" content="">
+	<meta name="description" content="Documentation for cheetah-grid">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
 </head>
@@ -13,7 +13,7 @@
 	<div class="tsd-page-toolbar">
 		<div class="container">
 			<div class="table-wrap">
-				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.js" data-base="..">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.json" data-base="..">
 					<div class="field">
 						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
 						<input id="tsd-search-field" type="text" />
@@ -38,8 +38,6 @@
 							</div>
 							<input type="checkbox" id="tsd-filter-inherited" checked />
 							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
-							<input type="checkbox" id="tsd-filter-externals" checked />
-							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
 						</div>
 					</div>
 					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
@@ -82,7 +80,7 @@
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="themedefine.html#bordercolor" class="tsd-kind-icon">border<wbr>Color</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="themedefine.html#button" class="tsd-kind-icon">button</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="themedefine.html#checkbox" class="tsd-kind-icon">checkbox</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="themedefine.html#color" class="tsd-kind-icon">color</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="themedefine.html#color-1" class="tsd-kind-icon">color</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="themedefine.html#defaultbgcolor" class="tsd-kind-icon">default<wbr>BgColor</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="themedefine.html#font" class="tsd-kind-icon">font</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="themedefine.html#frozenrowsbgcolor" class="tsd-kind-icon">frozen<wbr>Rows<wbr>BgColor</a></li>
@@ -105,49 +103,52 @@
 					<h3>border<wbr>Color</h3>
 					<div class="tsd-signature tsd-kind-icon">border<wbr>Color<span class="tsd-signature-symbol">:</span> <a href="../globals.html#colorspropertydefine" class="tsd-signature-type">ColorsPropertyDefine</a></div>
 					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/plugin.ts#L25">cheetah-grid/src/js/ts-types/plugin.ts:25</a></li>
-						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="button" class="tsd-anchor"></a>
 					<h3>button</h3>
-					<div class="tsd-signature tsd-kind-icon">button<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+					<div class="tsd-signature tsd-kind-icon">button<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>bgColor<span class="tsd-signature-symbol">?: </span><a href="../globals.html#colorpropertydefine" class="tsd-signature-type">ColorPropertyDefine</a><span class="tsd-signature-symbol">; </span>color<span class="tsd-signature-symbol">?: </span><a href="../globals.html#colorpropertydefine" class="tsd-signature-type">ColorPropertyDefine</a><span class="tsd-signature-symbol"> }</span></div>
 					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/plugin.ts#L33">cheetah-grid/src/js/ts-types/plugin.ts:33</a></li>
-						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
 						<ul class="tsd-parameters">
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> bg<wbr>Color<span class="tsd-signature-symbol">?: </span><a href="../globals.html#colorpropertydefine" class="tsd-signature-type">ColorPropertyDefine</a></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> color<span class="tsd-signature-symbol">?: </span><a href="../globals.html#colorpropertydefine" class="tsd-signature-type">ColorPropertyDefine</a></h5>
+							</li>
 						</ul>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="checkbox" class="tsd-anchor"></a>
 					<h3>checkbox</h3>
-					<div class="tsd-signature tsd-kind-icon">checkbox<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+					<div class="tsd-signature tsd-kind-icon">checkbox<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>borderColor<span class="tsd-signature-symbol">?: </span><a href="../globals.html#colorpropertydefine" class="tsd-signature-type">ColorPropertyDefine</a><span class="tsd-signature-symbol">; </span>checkBgColor<span class="tsd-signature-symbol">?: </span><a href="../globals.html#colorpropertydefine" class="tsd-signature-type">ColorPropertyDefine</a><span class="tsd-signature-symbol">; </span>uncheckBgColor<span class="tsd-signature-symbol">?: </span><a href="../globals.html#colorpropertydefine" class="tsd-signature-type">ColorPropertyDefine</a><span class="tsd-signature-symbol"> }</span></div>
 					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/plugin.ts#L28">cheetah-grid/src/js/ts-types/plugin.ts:28</a></li>
-						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
 						<ul class="tsd-parameters">
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> border<wbr>Color<span class="tsd-signature-symbol">?: </span><a href="../globals.html#colorpropertydefine" class="tsd-signature-type">ColorPropertyDefine</a></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> check<wbr>BgColor<span class="tsd-signature-symbol">?: </span><a href="../globals.html#colorpropertydefine" class="tsd-signature-type">ColorPropertyDefine</a></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> uncheck<wbr>BgColor<span class="tsd-signature-symbol">?: </span><a href="../globals.html#colorpropertydefine" class="tsd-signature-type">ColorPropertyDefine</a></h5>
+							</li>
 						</ul>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="color" class="tsd-anchor"></a>
+					<a name="color-1" class="tsd-anchor"></a>
 					<h3>color</h3>
 					<div class="tsd-signature tsd-kind-icon">color<span class="tsd-signature-symbol">:</span> <a href="../globals.html#colorpropertydefine" class="tsd-signature-type">ColorPropertyDefine</a></div>
 					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/plugin.ts#L17">cheetah-grid/src/js/ts-types/plugin.ts:17</a></li>
-						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
@@ -155,9 +156,6 @@
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> default<wbr>BgColor</h3>
 					<div class="tsd-signature tsd-kind-icon">default<wbr>BgColor<span class="tsd-signature-symbol">:</span> <a href="../globals.html#colorpropertydefine" class="tsd-signature-type">ColorPropertyDefine</a></div>
 					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/plugin.ts#L20">cheetah-grid/src/js/ts-types/plugin.ts:20</a></li>
-						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
@@ -165,9 +163,6 @@
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> font</h3>
 					<div class="tsd-signature tsd-kind-icon">font<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/plugin.ts#L14">cheetah-grid/src/js/ts-types/plugin.ts:14</a></li>
-						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
@@ -175,9 +170,6 @@
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> frozen<wbr>Rows<wbr>BgColor</h3>
 					<div class="tsd-signature tsd-kind-icon">frozen<wbr>Rows<wbr>BgColor<span class="tsd-signature-symbol">:</span> <a href="../globals.html#colorpropertydefine" class="tsd-signature-type">ColorPropertyDefine</a></div>
 					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/plugin.ts#L21">cheetah-grid/src/js/ts-types/plugin.ts:21</a></li>
-						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
@@ -185,9 +177,6 @@
 					<h3>frozen<wbr>Rows<wbr>Border<wbr>Color</h3>
 					<div class="tsd-signature tsd-kind-icon">frozen<wbr>Rows<wbr>Border<wbr>Color<span class="tsd-signature-symbol">:</span> <a href="../globals.html#colorspropertydefine" class="tsd-signature-type">ColorsPropertyDefine</a></div>
 					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/plugin.ts#L26">cheetah-grid/src/js/ts-types/plugin.ts:26</a></li>
-						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
@@ -195,23 +184,20 @@
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> frozen<wbr>Rows<wbr>Color</h3>
 					<div class="tsd-signature tsd-kind-icon">frozen<wbr>Rows<wbr>Color<span class="tsd-signature-symbol">:</span> <a href="../globals.html#colorpropertydefine" class="tsd-signature-type">ColorPropertyDefine</a></div>
 					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/plugin.ts#L18">cheetah-grid/src/js/ts-types/plugin.ts:18</a></li>
-						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="header" class="tsd-anchor"></a>
 					<h3>header</h3>
-					<div class="tsd-signature tsd-kind-icon">header<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+					<div class="tsd-signature tsd-kind-icon">header<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>sortArrowColor<span class="tsd-signature-symbol">?: </span><a href="../globals.html#colorpropertydefine" class="tsd-signature-type">ColorPropertyDefine</a><span class="tsd-signature-symbol"> }</span></div>
 					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/plugin.ts#L37">cheetah-grid/src/js/ts-types/plugin.ts:37</a></li>
-						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
 						<ul class="tsd-parameters">
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> sort<wbr>Arrow<wbr>Color<span class="tsd-signature-symbol">?: </span><a href="../globals.html#colorpropertydefine" class="tsd-signature-type">ColorPropertyDefine</a></h5>
+							</li>
 						</ul>
 					</div>
 				</section>
@@ -220,9 +206,6 @@
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> highlight<wbr>BgColor</h3>
 					<div class="tsd-signature tsd-kind-icon">highlight<wbr>BgColor<span class="tsd-signature-symbol">:</span> <a href="../globals.html#colorpropertydefine" class="tsd-signature-type">ColorPropertyDefine</a></div>
 					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/plugin.ts#L23">cheetah-grid/src/js/ts-types/plugin.ts:23</a></li>
-						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
@@ -230,9 +213,6 @@
 					<h3>highlight<wbr>Border<wbr>Color</h3>
 					<div class="tsd-signature tsd-kind-icon">highlight<wbr>Border<wbr>Color<span class="tsd-signature-symbol">:</span> <a href="../globals.html#colorspropertydefine" class="tsd-signature-type">ColorsPropertyDefine</a></div>
 					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/plugin.ts#L27">cheetah-grid/src/js/ts-types/plugin.ts:27</a></li>
-						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
@@ -240,9 +220,6 @@
 					<h3>selection<wbr>BgColor</h3>
 					<div class="tsd-signature tsd-kind-icon">selection<wbr>BgColor<span class="tsd-signature-symbol">:</span> <a href="../globals.html#colorpropertydefine" class="tsd-signature-type">ColorPropertyDefine</a></div>
 					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/plugin.ts#L22">cheetah-grid/src/js/ts-types/plugin.ts:22</a></li>
-						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
@@ -250,9 +227,6 @@
 					<h3>underlay<wbr>Background<wbr>Color</h3>
 					<div class="tsd-signature tsd-kind-icon">underlay<wbr>Background<wbr>Color<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/future-architect/cheetah-grid/blob/11d2a10/packages/cheetah-grid/src/js/ts-types/plugin.ts#L15">cheetah-grid/src/js/ts-types/plugin.ts:15</a></li>
-						</ul>
 					</aside>
 				</section>
 			</section>
@@ -282,7 +256,7 @@
 								<a href="themedefine.html#checkbox" class="tsd-kind-icon">checkbox</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="themedefine.html#color" class="tsd-kind-icon">color</a>
+								<a href="themedefine.html#color-1" class="tsd-kind-icon">color</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="themedefine.html#defaultbgcolor" class="tsd-kind-icon">default<wbr>BgColor</a>
@@ -328,57 +302,21 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
-				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
-				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
-				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
-				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
-				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
-				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
-				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
-				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
-				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
-				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
-				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
-				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
 				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
 				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
 				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
-				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
 				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
 				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
 			</ul>
 		</div>
 	</div>
