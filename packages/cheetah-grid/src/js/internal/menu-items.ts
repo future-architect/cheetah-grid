@@ -1,4 +1,5 @@
 import type { ColumnMenuItemOption, ColumnMenuItemOptions } from "../ts-types";
+import { extend } from "./utils";
 
 /**
  * Normalize the given menu options.
@@ -16,12 +17,8 @@ export function normalize(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return (options as any).map(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (e: any): ColumnMenuItemOption => ({
-        value: e.value,
-        label: e.caption || e.label,
-        classList: e.classList,
-        html: e.html,
-      })
+      (e: any): ColumnMenuItemOption =>
+        extend(e, { label: e.caption || e.label })
     );
   }
   if (typeof options === "string") {
