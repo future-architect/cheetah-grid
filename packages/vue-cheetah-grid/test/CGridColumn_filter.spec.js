@@ -36,7 +36,7 @@ describe('c-grid-column filter', () => {
     }
     const wrapper = mount(Component, {
       localVue,
-      attachToDocument: true
+      attachTo: '.test-root-element'
     })
     const { rawGrid } = wrapper.vm.$refs.grid
     const value = rawGrid.getCopyCellValue(0, 1)
@@ -66,7 +66,7 @@ describe('c-grid-column filter', () => {
     }
     const wrapper = mount(Component, {
       localVue,
-      attachToDocument: true
+      attachTo: '.test-root-element'
     })
     const { rawGrid } = wrapper.vm.$refs.grid
     const value = rawGrid.getCopyCellValue(0, 1)
@@ -96,7 +96,7 @@ describe('c-grid-column filter', () => {
     }
     const wrapper = mount(Component, {
       localVue,
-      attachToDocument: true
+      attachTo: '.test-root-element'
     })
     const { rawGrid } = wrapper.vm.$refs.grid
     const value = rawGrid.getCopyCellValue(0, 1)
@@ -126,7 +126,7 @@ describe('c-grid-column filter', () => {
     }
     const wrapper = mount(Component, {
       localVue,
-      attachToDocument: true
+      attachTo: '.test-root-element'
     })
     const { rawGrid } = wrapper.vm.$refs.grid
     const value = rawGrid.getCopyCellValue(0, 1)
@@ -156,7 +156,7 @@ describe('c-grid-column filter', () => {
     }
     const wrapper = mount(Component, {
       localVue,
-      attachToDocument: true
+      attachTo: '.test-root-element'
     })
     const { rawGrid } = wrapper.vm.$refs.grid
     const value = rawGrid.getCopyCellValue(0, 1)
@@ -189,7 +189,7 @@ describe('c-grid-column filter', () => {
     }
     const wrapper = mount(Component, {
       localVue,
-      attachToDocument: true
+      attachTo: '.test-root-element'
     })
     const { rawGrid } = wrapper.vm.$refs.grid
     const value = rawGrid.getCopyCellValue(0, 1)
@@ -221,7 +221,7 @@ describe('c-grid-column filter', () => {
     }
     const wrapper = mount(Component, {
       localVue,
-      attachToDocument: true
+      attachTo: '.test-root-element'
     })
     const { rawGrid } = wrapper.vm.$refs.grid
     const value = rawGrid.getCopyCellValue(0, 1)
@@ -251,7 +251,7 @@ describe('c-grid-column filter', () => {
     }
     const wrapper = mount(Component, {
       localVue,
-      attachToDocument: true
+      attachTo: '.test-root-element'
     })
     const { rawGrid } = wrapper.vm.$refs.grid
     const value = rawGrid.getCopyCellValue(0, 1)

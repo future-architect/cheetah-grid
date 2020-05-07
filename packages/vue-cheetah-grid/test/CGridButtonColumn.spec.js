@@ -36,7 +36,7 @@ describe('c-grid-button-column', () => {
     }
     const wrapper = mount(Component, {
       localVue,
-      attachToDocument: true
+      attachTo: '.test-root-element'
     })
     const { rawGrid } = wrapper.vm.$refs.grid
     expect(rawGrid.header.length).to.equal(1)
@@ -75,7 +75,7 @@ describe('c-grid-button-column', () => {
     }
     const wrapper = mount(Component, {
       localVue,
-      attachToDocument: true
+      attachTo: '.test-root-element'
     })
     const { rawGrid } = wrapper.vm.$refs.grid
     rawGrid.fireListeners('click_cell', { row: 1, col: 0 })
@@ -112,20 +112,27 @@ describe('c-grid-button-column', () => {
     }
     const wrapper = mount(Component, {
       localVue,
-      attachToDocument: true
+      attachTo: '.test-root-element'
     })
     const { rawGrid } = wrapper.vm.$refs.grid
     rawGrid.fireListeners('click_cell', { row: 1, col: 0 })
     expect(onAction.called).to.equal(true)
 
     wrapper.vm.disabled = true
-    onAction = sinon.spy()
-    rawGrid.fireListeners('click_cell', { row: 1, col: 0 })
-    expect(onAction.called).to.equal(false)
-
-    wrapper.vm.disabled = false
-    onAction = sinon.spy()
-    rawGrid.fireListeners('click_cell', { row: 1, col: 0 })
-    expect(onAction.called).to.equal(true)
+    return wrapper.vm.$nextTick()
+      .then(() => {
+        onAction = sinon.spy()
+        rawGrid.fireListeners('click_cell', { row: 1, col: 0 })
+        expect(onAction.called).to.equal(false)
+      })
+      .then(() => {
+        wrapper.vm.disabled = false
+        return wrapper.vm.$nextTick()
+      })
+      .then(() => {
+        onAction = sinon.spy()
+        rawGrid.fireListeners('click_cell', { row: 1, col: 0 })
+        expect(onAction.called).to.equal(true)
+      })
   })
 })

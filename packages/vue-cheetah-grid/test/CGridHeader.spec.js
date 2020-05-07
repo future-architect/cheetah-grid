@@ -48,7 +48,7 @@ describe('c-grid-header', () => {
     }
     const wrapper = mount(Component, {
       localVue,
-      attachToDocument: true
+      attachTo: '.test-root-element'
     })
     const { rawGrid } = wrapper.vm.$refs.grid
     expect(rawGrid.layout.header.length).to.equal(2)
@@ -93,7 +93,7 @@ describe('c-grid-header', () => {
     }
     const wrapper = mount(Component, {
       localVue,
-      attachToDocument: true
+      attachTo: '.test-root-element'
     })
     const { rawGrid } = wrapper.vm.$refs.grid
     expect(rawGrid.layout.header.length).to.equal(2)

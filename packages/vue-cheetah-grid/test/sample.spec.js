@@ -8,7 +8,7 @@ const localVue = createLocalVue()
 localVue.use(CGrid)
 
 describe('sample', () => {
-  const wrapper = mount(Sample, { localVue, attachToDocument: true })
+  const wrapper = mount(Sample, { localVue, attachTo: '.test-root-element' })
   const { rawGrid } = wrapper.vm.$refs.grid
   it('header config', () => {
     expect(rawGrid.header.length).to.equal(7)
