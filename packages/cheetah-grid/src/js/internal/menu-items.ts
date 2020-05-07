@@ -1,5 +1,16 @@
 import type { ColumnMenuItemOption, ColumnMenuItemOptions } from "../ts-types";
-import { extend } from "./utils";
+/** @private */
+function extend<T, U>(a: T, b: U): T & U {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const o: any = {};
+  for (const k in a) {
+    o[k] = a[k];
+  }
+  for (const k in b) {
+    o[k] = b[k];
+  }
+  return o;
+}
 
 /**
  * Normalize the given menu options.
