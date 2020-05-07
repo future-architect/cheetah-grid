@@ -9,14 +9,21 @@ import type {
   SimpleColumnMenuItemOption,
 } from "../../ts-types";
 import type { GridInternal, InputEditorState } from "../../ts-types-internal";
-import { array, cellEquals, event, obj, then } from "../../internal/utils";
+import {
+  array,
+  cellEquals,
+  event,
+  isPromise,
+  obj,
+  then,
+} from "../../internal/utils";
 import { isDisabledRecord, isReadOnlyRecord } from "./action-utils";
 import { DG_EVENT_TYPE } from "../../core/DG_EVENT_TYPE";
 import { Editor } from "./Editor";
 import { InlineMenuElement } from "./internal/InlineMenuElement";
 import { MenuColumn } from "../type";
 import { getInlineMenuEditorStateId } from "../../internal/symbolManager";
-import { normalize } from "../../internal/menu-items";
+import { normalizeToFn } from "../../internal/menu-items";
 const _ = getInlineMenuEditorStateId();
 
 function getState<T>(grid: GridInternal<T>): InputEditorState {
@@ -34,7 +41,8 @@ function attachMenu<T>(
   grid: ListGridAPI<T>,
   cell: CellAddress,
   editor: InlineMenuEditor<T>,
-  value: string
+  value: string,
+  record: T | undefined
 ): void {
   const state = getState(grid);
   if (!globalElement) {
@@ -55,7 +63,7 @@ function attachMenu<T>(
     });
   }
 
-  globalElement.attach(grid, editor, cell.col, cell.row, value);
+  globalElement.attach(grid, editor, cell.col, cell.row, value, record);
 }
 function detachMenu(gridFocus?: boolean): void {
   if (globalElement) {
@@ -68,11 +76,11 @@ const KEY_F2 = 113;
 
 export class InlineMenuEditor<T> extends Editor<T> {
   private _classList?: string | string[];
-  private _options: ColumnMenuItemOption[];
-  constructor(option: InlineMenuEditorOption = {}) {
+  private _options: (record: T | undefined) => ColumnMenuItemOption[];
+  constructor(option: InlineMenuEditorOption<T> = {}) {
     super(option);
     this._classList = option.classList;
-    this._options = normalize(option.options);
+    this._options = normalizeToFn(option.options);
   }
   dispose(): void {
     // noop
@@ -86,11 +94,11 @@ export class InlineMenuEditor<T> extends Editor<T> {
   set classList(classList) {
     this._classList = classList;
   }
-  get options(): ColumnMenuItemOption[] {
+  get options(): (record: T | undefined) => ColumnMenuItemOption[] {
     return this._options;
   }
   set options(options) {
-    this._options = normalize(options);
+    this._options = normalizeToFn(options);
   }
   clone(): InlineMenuEditor<T> {
     return new InlineMenuEditor(this);
@@ -115,7 +123,11 @@ export class InlineMenuEditor<T> extends Editor<T> {
         return;
       }
       grid.doGetCellValue(cell.col, cell.row, (value) => {
-        attachMenu(grid, cell, this, value);
+        const record = grid.getRowRecord(cell.row);
+        if (isPromise(record)) {
+          return;
+        }
+        attachMenu(grid, cell, this, value, record);
       });
     };
 
@@ -207,10 +219,15 @@ export class InlineMenuEditor<T> extends Editor<T> {
         if (!isTarget(e.col, e.row)) {
           return;
         }
+        const record = grid.getRowRecord(e.row);
+        if (isPromise(record)) {
+          return;
+        }
         const pasteOpt = this._pasteDataToOptionValue(
           e.normalizeValue,
           grid,
-          e
+          e,
+          record
         );
         if (pasteOpt) {
           event.cancel(e.event);
@@ -236,7 +253,11 @@ export class InlineMenuEditor<T> extends Editor<T> {
     ) {
       return;
     }
-    const pasteOpt = this._pasteDataToOptionValue(value, grid, cell);
+    const record = grid.getRowRecord(cell.row);
+    if (isPromise(record)) {
+      return;
+    }
+    const pasteOpt = this._pasteDataToOptionValue(value, grid, cell, record);
     if (pasteOpt) {
       grid.doChangeValue(cell.col, cell.row, () => pasteOpt.value);
     }
@@ -248,7 +269,11 @@ export class InlineMenuEditor<T> extends Editor<T> {
     ) {
       return;
     }
-    const pasteOpt = this._pasteDataToOptionValue("", grid, cell);
+    const record = grid.getRowRecord(cell.row);
+    if (isPromise(record)) {
+      return;
+    }
+    const pasteOpt = this._pasteDataToOptionValue("", grid, cell, record);
     if (pasteOpt) {
       grid.doChangeValue(cell.col, cell.row, () => pasteOpt.value);
     }
@@ -256,9 +281,11 @@ export class InlineMenuEditor<T> extends Editor<T> {
   private _pasteDataToOptionValue(
     value: string,
     grid: ListGridAPI<T>,
-    cell: CellAddress
+    cell: CellAddress,
+    record: T | undefined
   ): SimpleColumnMenuItemOption | undefined {
-    const pasteOpt = _textToOptionValue(value, this._options);
+    const options = this._options(record);
+    const pasteOpt = _textToOptionValue(value, options);
     if (pasteOpt) {
       return pasteOpt;
     }
@@ -268,10 +295,10 @@ export class InlineMenuEditor<T> extends Editor<T> {
       const pasteValue = normalizePasteValueStr(value);
       const captionOpt = array.find(
         columnType.options,
-        (opt) => normalizePasteValueStr(opt.caption) === pasteValue
+        (opt) => normalizePasteValueStr(opt.label) === pasteValue
       );
       if (captionOpt) {
-        return _textToOptionValue(captionOpt.value, this._options);
+        return _textToOptionValue(captionOpt.value, options);
       }
     }
     return undefined;

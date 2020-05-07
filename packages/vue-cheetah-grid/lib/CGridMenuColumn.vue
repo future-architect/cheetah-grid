@@ -45,7 +45,7 @@ export default {
      * Defines a menu options for popup
      */
     editorOptions: {
-      type: [Object, Array],
+      type: [Object, Array, Function],
       default: undefined
     },
     /**

@@ -180,7 +180,9 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 					caption: 'InlineMenuEditor',
 					width: 260,
 					columnType: new cheetahGrid.columns.type.MenuColumn({options: displayOptions}),
-					action: new cheetahGrid.columns.action.InlineMenuEditor({options: menuOptions}),
+					action: new cheetahGrid.columns.action.InlineMenuEditor({
+						options: (rec) => rec.sel ? [{value: rec.sel, label: rec.sel}] : menuOptions
+					}),
 					rowSpan: 2,
 					colSpan: 2
 				},
