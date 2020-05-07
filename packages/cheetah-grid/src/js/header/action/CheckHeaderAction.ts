@@ -1,5 +1,9 @@
-import { CellAddress, EventListenerId, LayoutObjectId } from "../../ts-types";
-import { CheckHeaderState, GridInternal } from "../../ts-types-internal";
+import type {
+  CellAddress,
+  EventListenerId,
+  LayoutObjectId,
+} from "../../ts-types";
+import type { CheckHeaderState, GridInternal } from "../../ts-types-internal";
 import { bindCellClickAction, bindCellKeyAction } from "./actionBind";
 import { BaseAction } from "./BaseAction";
 import { animate } from "../../internal/animate";
@@ -38,7 +42,7 @@ export class CheckHeaderAction<T> extends BaseAction<T> {
 
       const onChange = (): void => {
         // checkbox animation
-        animate(200, point => {
+        animate(200, (point) => {
           if (point === 1) {
             delete state.elapsed[cellKey];
           } else {
@@ -52,28 +56,28 @@ export class CheckHeaderAction<T> extends BaseAction<T> {
     return [
       ...bindCellClickAction(grid, cellId, {
         action,
-        mouseOver: e => {
+        mouseOver: (e) => {
           if (this.disabled) {
             return false;
           }
           state.mouseActiveCell = {
             col: e.col,
-            row: e.row
+            row: e.row,
           };
 
           const range = grid.getCellRange(e.col, e.row);
           grid.invalidateCellRange(range);
           return true;
         },
-        mouseOut: e => {
+        mouseOut: (e) => {
           delete state.mouseActiveCell;
           const range = grid.getCellRange(e.col, e.row);
           grid.invalidateCellRange(range);
-        }
+        },
       }),
       ...bindCellKeyAction(grid, cellId, {
-        action
-      })
+        action,
+      }),
     ];
   }
 }

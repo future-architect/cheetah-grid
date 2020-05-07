@@ -1,5 +1,5 @@
 import { Column } from "./Column";
-import { NumberColumnOption } from "../../ts-types";
+import type { NumberColumnOption } from "../../ts-types";
 import { NumberStyle } from "../style/NumberStyle";
 let defaultFotmat: Intl.NumberFormat;
 export class NumberColumn<T> extends Column<T> {

@@ -1,4 +1,4 @@
-import { ColorDef, SortHeaderStyleOption } from "../../ts-types";
+import type { ColorDef, SortHeaderStyleOption } from "../../ts-types";
 import { Style } from "./Style";
 
 let defaultStyle: SortHeaderStyle;

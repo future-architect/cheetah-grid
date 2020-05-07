@@ -1,19 +1,17 @@
-import { AnyFunction, ColorDef } from "../ts-types";
+import type { AnyFunction, ColorDef } from "../ts-types";
 import { Inline, InlineDrawOption } from "./Inline";
 
 export type InlineDrawerFunction = (options: InlineDrawOption) => void;
 export class InlineDrawer extends Inline {
   private _draw: InlineDrawerFunction;
   private _width: number;
-  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-  /// @ts-ignore
-  private _height: number;
+  // private _height: number;
   private _color?: ColorDef;
   constructor({
     draw,
     width,
-    height,
-    color
+    // height,
+    color,
   }: {
     draw: InlineDrawerFunction;
     width: number;
@@ -24,7 +22,7 @@ export class InlineDrawer extends Inline {
 
     this._draw = draw;
     this._width = width;
-    this._height = height;
+    // this._height = height;
     this._color = color;
   }
   width(_arg: { ctx: CanvasRenderingContext2D }): number {
@@ -49,7 +47,7 @@ export class InlineDrawer extends Inline {
     offsetLeft,
     offsetRight,
     offsetTop,
-    offsetBottom
+    offsetBottom,
   }: InlineDrawOption): void {
     this._draw({
       ctx,
@@ -59,7 +57,7 @@ export class InlineDrawer extends Inline {
       offsetLeft,
       offsetRight,
       offsetTop,
-      offsetBottom
+      offsetBottom,
     });
   }
   canBreak(): boolean {

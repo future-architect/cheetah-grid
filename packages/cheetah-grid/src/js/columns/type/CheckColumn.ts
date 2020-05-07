@@ -1,5 +1,5 @@
-import { CellContext, GridCanvasHelperAPI } from "../../ts-types";
-import { DrawCellInfo, GridInternal } from "../../ts-types-internal";
+import type { CellContext, GridCanvasHelperAPI } from "../../ts-types";
+import type { DrawCellInfo, GridInternal } from "../../ts-types-internal";
 import { BaseColumn } from "./BaseColumn";
 import { CheckStyle } from "../style/CheckStyle";
 import { getCheckColumnStateId } from "../../internal/symbolManager";
@@ -13,7 +13,7 @@ function toBoolean(val: unknown): boolean {
       return false;
     } else if (val === "off") {
       return false;
-    } else if (val.match(/^0+$/)) {
+    } else if (/^0+$/.exec(val)) {
       return false;
     }
   }
@@ -44,11 +44,11 @@ export class CheckColumn<T> extends BaseColumn<T, boolean> {
       borderColor,
       checkBgColor,
       uncheckBgColor,
-      bgColor
+      bgColor,
     } = style;
     if (bgColor) {
       drawCellBase({
-        bgColor
+        bgColor,
       });
     }
 
@@ -62,7 +62,7 @@ export class CheckColumn<T> extends BaseColumn<T, boolean> {
       textBaseline,
       borderColor,
       checkBgColor,
-      uncheckBgColor
+      uncheckBgColor,
     };
     if (isDef(elapsed)) {
       opt.animElapsedTime = elapsed;

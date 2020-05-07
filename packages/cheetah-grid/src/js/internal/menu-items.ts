@@ -1,4 +1,4 @@
-import { ColumnMenuItemOption, ColumnMenuItemOptions } from "../ts-types";
+import type { ColumnMenuItemOption, ColumnMenuItemOptions } from "../ts-types";
 
 /**
  * Normalize the given menu options.
@@ -22,7 +22,7 @@ export function normalize(
   for (const k in options) {
     result.push({
       value: k,
-      caption: options[k]
+      caption: options[k],
     });
   }
   return result;

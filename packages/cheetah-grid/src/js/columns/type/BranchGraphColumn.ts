@@ -1,4 +1,4 @@
-import {
+import type {
   BranchGraphColumnOption,
   BranchGraphCommand,
   CellContext,
@@ -7,9 +7,9 @@ import {
   GridCanvasHelperAPI,
   ListGridAPI,
   MaybePromise,
-  MaybePromiseOrUndef
+  MaybePromiseOrUndef,
 } from "../../ts-types";
-import { DrawCellInfo, GridInternal } from "../../ts-types-internal";
+import type { DrawCellInfo, GridInternal } from "../../ts-types-internal";
 import { getOrApply, isDef, isPromise, obj } from "../../internal/utils";
 import { BaseColumn } from "./BaseColumn";
 import { BranchGraphStyle } from "../style/BranchGraphStyle";
@@ -35,13 +35,13 @@ function getAllColumnData<T>(
       const dataIndex = allData.length;
       allData.push(undefined);
       if (!promise) {
-        promise = data.then(d => {
+        promise = data.then((d) => {
           allData[dataIndex] = d;
         });
       } else {
         promise = promise
           .then(() => data)
-          .then(d => {
+          .then((d) => {
             allData[dataIndex] = d;
           });
       }
@@ -66,7 +66,7 @@ class BranchLine {
     fromIndex,
     toIndex,
     colorIndex,
-    point
+    point,
   }: {
     fromIndex?: number;
     toIndex?: number;
@@ -88,7 +88,7 @@ class BranchPoint {
     index,
     commit = false,
     lines = [],
-    tag
+    tag,
   }: {
     index: number;
     commit?: boolean;
@@ -101,12 +101,12 @@ class BranchPoint {
     this.tag = tag;
   }
   static mergeLines(lines: BranchLine[]): BranchLine[] {
-    const result = lines.filter(l => isDef(l.fromIndex) && isDef(l.toIndex));
+    const result = lines.filter((l) => isDef(l.fromIndex) && isDef(l.toIndex));
 
-    const froms = lines.filter(l => isDef(l.fromIndex) && !isDef(l.toIndex));
-    const tos = lines.filter(l => !isDef(l.fromIndex) && isDef(l.toIndex));
+    const froms = lines.filter((l) => isDef(l.fromIndex) && !isDef(l.toIndex));
+    const tos = lines.filter((l) => !isDef(l.fromIndex) && isDef(l.toIndex));
 
-    froms.forEach(f => {
+    froms.forEach((f) => {
       for (let i = 0; i < tos.length; i++) {
         const t = tos[i];
         if (t.point) {
@@ -132,7 +132,7 @@ class BranchPoint {
       index: a.index,
       commit: a.commit || b.commit,
       lines: BranchPoint.mergeLines(a.lines.concat(b.lines)),
-      tag: a.tag || b.tag
+      tag: a.tag || b.tag,
     });
   }
 }
@@ -146,8 +146,8 @@ function joinLine(timeline: BranchPoint[][], branchIndex: number): boolean {
         f.lines.concat([
           new BranchLine({
             toIndex: branchIndex,
-            colorIndex: branchIndex
-          })
+            colorIndex: branchIndex,
+          }),
         ])
       );
 
@@ -159,9 +159,9 @@ function joinLine(timeline: BranchPoint[][], branchIndex: number): boolean {
             new BranchLine({
               fromIndex: branchIndex,
               toIndex: branchIndex,
-              colorIndex: branchIndex
-            })
-          ]
+              colorIndex: branchIndex,
+            }),
+          ],
         });
       }
       return true;
@@ -195,7 +195,7 @@ function branch(
 
   if (fromIndex < 0) {
     return new BranchPoint({
-      index: toIndex
+      index: toIndex,
     });
   } else {
     const fromTargetIndex = findBranchRootIndex();
@@ -208,9 +208,9 @@ function branch(
       lines: [
         new BranchLine({
           fromIndex,
-          colorIndex: toIndex
-        })
-      ]
+          colorIndex: toIndex,
+        }),
+      ],
     });
     let point;
     let result = null;
@@ -230,8 +230,8 @@ function branch(
         new BranchLine({
           toIndex,
           colorIndex: toIndex,
-          point
-        })
+          point,
+        }),
       ])
     );
     return result;
@@ -248,7 +248,7 @@ function commit(
   }
   const result = new BranchPoint({
     index,
-    commit: true
+    commit: true,
   });
 
   if (joinLine(timeline, index)) {
@@ -256,8 +256,8 @@ function commit(
       result.lines.concat([
         new BranchLine({
           fromIndex: index,
-          colorIndex: index
-        })
+          colorIndex: index,
+        }),
       ])
     );
   }
@@ -276,7 +276,7 @@ function commitTag(
   }
   return new BranchPoint({
     index,
-    tag
+    tag,
   });
 }
 
@@ -290,7 +290,7 @@ function commitMerge(
   if (toIndex < 0 || fromIndex < 0) {
     return new BranchPoint({
       index: toIndex,
-      commit: true
+      commit: true,
     });
   }
   const result = new BranchPoint({
@@ -299,13 +299,13 @@ function commitMerge(
     lines: [
       new BranchLine({
         fromIndex,
-        colorIndex: fromIndex
+        colorIndex: fromIndex,
       }),
       new BranchLine({
         fromIndex: toIndex,
-        colorIndex: toIndex
-      })
-    ]
+        colorIndex: toIndex,
+      }),
+    ],
   });
   const froms = [...timeline];
   const fromTargetLine = froms.pop();
@@ -317,9 +317,9 @@ function commitMerge(
         lines: [
           new BranchLine({
             toIndex,
-            colorIndex: fromIndex
-          })
-        ]
+            colorIndex: fromIndex,
+          }),
+        ],
       })
     );
   }
@@ -329,8 +329,8 @@ function commitMerge(
       fromTargetLine[fromIndex].lines.concat([
         new BranchLine({
           fromIndex,
-          colorIndex: fromIndex
-        })
+          colorIndex: fromIndex,
+        }),
       ])
     );
   }
@@ -344,7 +344,7 @@ function calcCommand(info: Timelines, command: BranchGraphCommand): void {
   const timelineData: BranchPoint[] = [];
   // const last = timeline.length > 0 ? timeline[timeline.length - 1] : null;
   const commands = Array.isArray(command) ? command : [command];
-  commands.forEach(cmd => {
+  commands.forEach((cmd) => {
     if (!cmd) {
       return;
     }
@@ -380,13 +380,13 @@ function calcBranchesInfo<T>(
 ): Timelines {
   const result = {
     branches: [],
-    timeline: []
+    timeline: [],
   };
-  getAllColumnData(grid, field, data => {
+  getAllColumnData(grid, field, (data) => {
     if (start !== "top") {
       data = [...data].reverse();
     }
-    data.forEach(command => {
+    data.forEach((command) => {
       calcCommand(result, command);
     });
   });
@@ -402,7 +402,7 @@ function calcBranchXPoints(
   timeline: BranchPoint[][]
 ): number[] {
   let w = Math.max(width / branches.length + 1, 5);
-  timeline.forEach(tl => {
+  timeline.forEach((tl) => {
     tl.forEach((p, index) => {
       if (index <= 0) {
         // 計算の意味が無い
@@ -438,7 +438,7 @@ function renderMerge<T>(
     // margin,
     branchColors,
     branchLineWidth,
-    mergeStyle
+    mergeStyle,
   }: {
     branchXPoints: number[];
     margin: number;
@@ -450,7 +450,7 @@ function renderMerge<T>(
     // width,
     col,
     row,
-    branches
+    branches,
   }: {
     width: number;
     col: number;
@@ -611,7 +611,7 @@ export class BranchGraphColumn<T> extends BaseColumn<T, unknown> {
 
     const {
       upLineIndexKey,
-      downLineIndexKey
+      downLineIndexKey,
     }: {
       upLineIndexKey: "fromIndex" | "toIndex";
       downLineIndexKey: "fromIndex" | "toIndex";
@@ -630,11 +630,11 @@ export class BranchGraphColumn<T> extends BaseColumn<T, unknown> {
       circleSize,
       mergeStyle,
       margin,
-      bgColor
+      bgColor,
     } = style;
     if (bgColor) {
       drawCellBase({
-        bgColor
+        bgColor,
       });
     }
 
@@ -642,7 +642,7 @@ export class BranchGraphColumn<T> extends BaseColumn<T, unknown> {
     const radius = circleSize / 2;
     const width = rect.width - margin * 2;
 
-    helper.drawWithClip(context, ctx => {
+    helper.drawWithClip(context, (ctx) => {
       ctx.textAlign = "left";
       ctx.textBaseline = "middle";
       const branchXPoints = calcBranchXPoints(
@@ -660,18 +660,18 @@ export class BranchGraphColumn<T> extends BaseColumn<T, unknown> {
       data
         .map((point, index) =>
           point
-            ? point.lines.map(line => ({
+            ? point.lines.map((line) => ({
                 colorIndex: line.colorIndex,
                 upLineIndex: line[upLineIndexKey],
                 downLineIndex: line[downLineIndexKey],
-                pointIndex: index
+                pointIndex: index,
               }))
             : []
         )
         .reduce((p, c) => p.concat(c), []) // flatMap
         // order of overlap
         .sort((a, b) => b.colorIndex - a.colorIndex)
-        .forEach(line => {
+        .forEach((line) => {
           const x = branchXPoints[line.pointIndex];
           renderMerge(
             grid,
@@ -686,13 +686,13 @@ export class BranchGraphColumn<T> extends BaseColumn<T, unknown> {
               branchXPoints,
               branchLineWidth,
               branchColors,
-              mergeStyle
+              mergeStyle,
             },
             {
               width,
               col,
               row,
-              branches
+              branches,
             }
           );
         });

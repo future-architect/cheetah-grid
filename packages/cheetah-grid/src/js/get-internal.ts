@@ -5,6 +5,6 @@ export function getInternal(): unknown {
     sort: require("./internal/sort"),
     calc: require("./internal/calc"),
     symbolManager: require("./internal/symbolManager"),
-    path2DManager: require("./internal/path2DManager")
+    path2DManager: require("./internal/path2DManager"),
   };
 }

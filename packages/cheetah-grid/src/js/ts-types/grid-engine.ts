@@ -1,28 +1,28 @@
-import {
+import type {
   AnyFunction,
   ColorDef,
   MaybePromise,
   MaybePromiseOrUndef,
-  RectProps
+  RectProps,
 } from "./base";
-import {
+import type {
   AnyListener,
   DrawGridEventHandlersEventMap,
   DrawGridEventHandlersReturnMap,
   EventListenerId,
   ListGridEventHandlersEventMap,
-  ListGridEventHandlersReturnMap
+  ListGridEventHandlersReturnMap,
 } from "./events";
-import { CellAddress, CellRange, FieldData, FieldDef } from "./grid";
-import {
+import type { CellAddress, CellRange, FieldData, FieldDef } from "./grid";
+import type {
   ColorPropertyDefine,
   ColorsPropertyDefine,
   FontPropertyDefine,
   LineClamp,
-  TextOverflow
+  TextOverflow,
 } from "./define";
-import { RequiredThemeDefine } from "./plugin";
-import { SimpleColumnIconOption } from "../ts-types-internal/data";
+import type { RequiredThemeDefine } from "./plugin";
+import type { SimpleColumnIconOption } from "../ts-types-internal/data";
 
 export type LayoutObjectId = number | string | symbol;
 

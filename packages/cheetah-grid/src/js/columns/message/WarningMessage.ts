@@ -1,13 +1,13 @@
 import * as messageUtils from "./messageUtils";
-import {
+import type {
   CellContext,
   ColumnStyle,
   GridCanvasHelperAPI,
   ListGridAPI,
-  MessageObject
+  MessageObject,
 } from "../../ts-types";
 import { BaseMessage } from "./BaseMessage";
-import { DrawCellInfo } from "../../ts-types-internal";
+import type { DrawCellInfo } from "../../ts-types-internal";
 import { WarningMessageElement } from "./internal/WarningMessageElement";
 import { cellInRange } from "../../internal/utils";
 
@@ -42,7 +42,7 @@ export class WarningMessage<T> extends BaseMessage<T> {
             context,
             {
               bgColor: DEEP_ORANGE_A100,
-              color: bgColor
+              color: bgColor,
             },
             helper
           );

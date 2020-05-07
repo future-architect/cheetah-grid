@@ -1,18 +1,18 @@
-import { AnyFunction } from "../ts-types";
+import type { AnyFunction } from "../ts-types";
 import { isNode } from "./utils";
 
 const loads: { [key: string]: boolean } = {};
 let load: (font: string, testStr: string, callback: AnyFunction) => void;
 let check: (font: string, testStr: string) => boolean;
 if (isNode) {
-  load = function(
+  load = function (
     _font: string,
     _testStr: string,
     callback: AnyFunction
   ): void {
     callback();
   };
-  check = function(): boolean {
+  check = function (): boolean {
     return false;
   };
 } else {
@@ -20,7 +20,7 @@ if (isNode) {
   const fontFaceSet = (document as any).fonts;
   const legacy = !fontFaceSet;
   load = legacy
-    ? function(font: string, testStr: string, callback: AnyFunction): void {
+    ? function (font: string, testStr: string, callback: AnyFunction): void {
         //for legacy(IE)
         if (loads[`${font} @ ${testStr}`]) {
           callback();
@@ -39,7 +39,7 @@ if (isNode) {
           }
         );
       }
-    : function(font: string, _testStr: string, callback: AnyFunction): void {
+    : function (font: string, _testStr: string, callback: AnyFunction): void {
         if (loads.all || loads[font]) {
           callback();
           return;
@@ -53,7 +53,7 @@ if (isNode) {
         });
       };
   check = legacy
-    ? function(font: string, testStr: string): boolean {
+    ? function (font: string, testStr: string): boolean {
         //for legacy(IE)
         if (loads[`${font} @ ${testStr}`]) {
           return true;
@@ -61,7 +61,7 @@ if (isNode) {
         load(font, testStr, () => {});
         return false;
       }
-    : function(font: string, testStr: string): boolean {
+    : function (font: string, testStr: string): boolean {
         if (loads.all || loads[font]) {
           return true;
         }

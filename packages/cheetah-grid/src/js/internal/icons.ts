@@ -1,12 +1,12 @@
-import {
+import type {
   ColumnIconOption,
   FontIcon,
   ImageIcon,
   NamedIcon,
   PathIcon,
-  SvgIcon
+  SvgIcon,
 } from "../ts-types";
-import { SimpleColumnIconOption } from "../ts-types-internal";
+import type { SimpleColumnIconOption } from "../ts-types-internal";
 import { isDef } from "./utils";
 
 type ColumnIconArrayOption = {
@@ -42,7 +42,7 @@ const ICON_PROP_KEYS: IconPropKey[] = [
   "src",
   "svg",
   "name",
-  "path"
+  "path",
 ];
 
 function quote(name: string): string {
@@ -117,7 +117,7 @@ export function getIconProps(
       font,
       color,
       width,
-      isLiga
+      isLiga,
     });
   } finally {
     document.body.removeChild(dom);
@@ -151,7 +151,7 @@ function toSimpleArray(
   const workData = {} as Required<ColumnIconArrayOption>;
 
   let count = 0;
-  ICON_PROP_KEYS.forEach(k => {
+  ICON_PROP_KEYS.forEach((k) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const prop = (iconProps as any)[k];
     if (prop) {
@@ -163,7 +163,7 @@ function toSimpleArray(
     }
   });
 
-  ICON_PROP_KEYS.forEach(k => {
+  ICON_PROP_KEYS.forEach((k) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const arr = toPropArray((iconProps as any)[k], count);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -173,7 +173,7 @@ function toSimpleArray(
   const result: SimpleColumnIconOption[] = [];
   for (let i = 0; i < count; i++) {
     const data = {} as SimpleColumnIconOption;
-    ICON_PROP_KEYS.forEach(k => {
+    ICON_PROP_KEYS.forEach((k) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const val = (workData as any)[k][i];
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -216,7 +216,7 @@ export function toNormarizeArray(
   if (!icons) {
     return icons;
   }
-  return icons.map(icon => normarize(icon));
+  return icons.map((icon) => normarize(icon));
 }
 export const iconPropKeys = ICON_PROP_KEYS;
 

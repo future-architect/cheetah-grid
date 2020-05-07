@@ -1,12 +1,12 @@
-import {
+import type {
   CellContext,
   ColorPropertyDefine,
-  GridCanvasHelperAPI
+  GridCanvasHelperAPI,
 } from "../../ts-types";
-import {
+import type {
   CheckHeaderState,
   DrawCellInfo,
-  GridInternal
+  GridInternal,
 } from "../../ts-types-internal";
 import { isDef, obj } from "../../internal/utils";
 import { BaseHeader } from "./BaseHeader";
@@ -49,11 +49,11 @@ export class CheckHeader<T> extends BaseHeader<T> {
       bgColor,
       color,
       font,
-      textOverflow
+      textOverflow,
     } = style;
     if (bgColor) {
       drawCellBase({
-        bgColor
+        bgColor,
       });
     }
 
@@ -61,7 +61,7 @@ export class CheckHeader<T> extends BaseHeader<T> {
     const range = grid.getCellRange(col, row);
     const cellKey = `${range.start.col}:${range.start.row}`;
     const {
-      elapsed: { [cellKey]: elapsed }
+      elapsed: { [cellKey]: elapsed },
     } = getState(grid);
 
     const checked = grid.getHeaderValue(range.start.col, range.start.row);
@@ -78,7 +78,7 @@ export class CheckHeader<T> extends BaseHeader<T> {
       textBaseline,
       borderColor,
       checkBgColor,
-      uncheckBgColor
+      uncheckBgColor,
     };
     if (isDef(elapsed)) {
       opt.animElapsedTime = elapsed;
@@ -90,7 +90,7 @@ export class CheckHeader<T> extends BaseHeader<T> {
       textBaseline,
       color,
       font,
-      textOverflow
+      textOverflow,
     });
   }
 }

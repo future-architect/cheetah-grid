@@ -1,9 +1,9 @@
 import { DataSource, DataSourceParam } from "./DataSource";
-import {
+import type {
   FieldData,
   FieldDef,
   MaybePromise,
-  MaybePromiseOrUndef
+  MaybePromiseOrUndef,
 } from "../ts-types";
 import { PromiseCacheValue } from "./internal/types";
 
@@ -36,7 +36,7 @@ export class CachedDataSource<T> extends DataSource<T> {
     return new CachedDataSource({
       get: (index: number): T => array[index],
       length: array.length,
-      source: array
+      source: array,
     });
   }
   constructor(opt?: DataSourceParam<T>) {

@@ -1,4 +1,4 @@
-import {
+import type {
   CellAddress,
   ColumnMenuItemOption,
   ColumnTypeAPI,
@@ -6,9 +6,9 @@ import {
   InlineMenuEditorOption,
   LayoutObjectId,
   ListGridAPI,
-  SimpleColumnMenuItemOption
+  SimpleColumnMenuItemOption,
 } from "../../ts-types";
-import { GridInternal, InputEditorState } from "../../ts-types-internal";
+import type { GridInternal, InputEditorState } from "../../ts-types-internal";
 import { array, cellEquals, event, obj, then } from "../../internal/utils";
 import { isDisabledRecord, isReadOnlyRecord } from "./action-utils";
 import { DG_EVENT_TYPE } from "../../core/DG_EVENT_TYPE";
@@ -51,7 +51,7 @@ function attachMenu<T>(
           globalElement = null;
           state.element = null;
         }
-      }
+      },
     });
   }
 
@@ -114,7 +114,7 @@ export class InlineMenuEditor<T> extends Editor<T> {
       ) {
         return;
       }
-      grid.doGetCellValue(cell.col, cell.row, value => {
+      grid.doGetCellValue(cell.col, cell.row, (value) => {
         attachMenu(grid, cell, this, value);
       });
     };
@@ -123,16 +123,16 @@ export class InlineMenuEditor<T> extends Editor<T> {
       return grid.getLayoutCellId(col, row) === cellId;
     }
     return [
-      grid.listen(DG_EVENT_TYPE.CLICK_CELL, cell => {
+      grid.listen(DG_EVENT_TYPE.CLICK_CELL, (cell) => {
         if (!isTarget(cell.col, cell.row)) {
           return;
         }
         open({
           col: cell.col,
-          row: cell.row
+          row: cell.row,
         });
       }),
-      grid.listen(DG_EVENT_TYPE.KEYDOWN, e => {
+      grid.listen(DG_EVENT_TYPE.KEYDOWN, (e) => {
         if (e.keyCode !== KEY_F2 && e.keyCode !== KEY_ENTER) {
           return;
         }
@@ -143,10 +143,10 @@ export class InlineMenuEditor<T> extends Editor<T> {
         e.stopCellMoving();
         open({
           col: sel.col,
-          row: sel.row
+          row: sel.row,
         });
       }),
-      grid.listen(DG_EVENT_TYPE.SELECTED_CELL, _e => {
+      grid.listen(DG_EVENT_TYPE.SELECTED_CELL, (_e) => {
         detachMenu();
       }),
       grid.listen(DG_EVENT_TYPE.SCROLL, () => {
@@ -154,7 +154,7 @@ export class InlineMenuEditor<T> extends Editor<T> {
       }),
 
       // mouse move
-      grid.listen(DG_EVENT_TYPE.MOUSEOVER_CELL, e => {
+      grid.listen(DG_EVENT_TYPE.MOUSEOVER_CELL, (e) => {
         if (
           isReadOnlyRecord(this.readOnly, grid, e.row) ||
           isDisabledRecord(this.disabled, grid, e.row)
@@ -166,7 +166,7 @@ export class InlineMenuEditor<T> extends Editor<T> {
         }
         grid.getElement().style.cursor = "pointer";
       }),
-      grid.listen(DG_EVENT_TYPE.MOUSEMOVE_CELL, e => {
+      grid.listen(DG_EVENT_TYPE.MOUSEMOVE_CELL, (e) => {
         if (
           isReadOnlyRecord(this.readOnly, grid, e.row) ||
           isDisabledRecord(this.disabled, grid, e.row)
@@ -180,7 +180,7 @@ export class InlineMenuEditor<T> extends Editor<T> {
           grid.getElement().style.cursor = "pointer";
         }
       }),
-      grid.listen(DG_EVENT_TYPE.MOUSEOUT_CELL, e => {
+      grid.listen(DG_EVENT_TYPE.MOUSEOUT_CELL, (e) => {
         if (!isTarget(e.col, e.row)) {
           return;
         }
@@ -188,7 +188,7 @@ export class InlineMenuEditor<T> extends Editor<T> {
       }),
 
       // paste value
-      grid.listen(DG_EVENT_TYPE.PASTE_CELL, e => {
+      grid.listen(DG_EVENT_TYPE.PASTE_CELL, (e) => {
         if (e.multi) {
           // ignore multi cell values
           return;
@@ -222,7 +222,7 @@ export class InlineMenuEditor<T> extends Editor<T> {
             }
           );
         }
-      })
+      }),
     ];
   }
   onPasteCellRangeBox(
@@ -268,7 +268,7 @@ export class InlineMenuEditor<T> extends Editor<T> {
       const pasteValue = normalizePasteValueStr(value);
       const captionOpt = array.find(
         columnType.options,
-        opt => normalizePasteValueStr(opt.caption) === pasteValue
+        (opt) => normalizePasteValueStr(opt.caption) === pasteValue
       );
       if (captionOpt) {
         return _textToOptionValue(captionOpt.value, this._options);
@@ -284,7 +284,7 @@ function _textToOptionValue(
   const pasteValue = normalizePasteValueStr(value);
   const pasteOpt = array.find(
     options,
-    opt => normalizePasteValueStr(opt.value) === pasteValue
+    (opt) => normalizePasteValueStr(opt.value) === pasteValue
   );
   if (pasteOpt) {
     return pasteOpt;

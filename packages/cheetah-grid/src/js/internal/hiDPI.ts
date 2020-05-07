@@ -1,4 +1,4 @@
-import { AnyFunction } from "../ts-types";
+import type { AnyFunction } from "../ts-types";
 import { EventHandler } from "./EventHandler";
 import { isNode } from "./utils";
 const handler = new EventHandler();
@@ -23,14 +23,14 @@ export function transform(canvas: HTMLCanvasElement): HTMLCanvasElement {
   const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
 
   const { getAttribute, setAttribute } = canvas;
-  canvas.getAttribute = function(name: string): string | null {
+  canvas.getAttribute = function (name: string): string | null {
     let result = getAttribute.call(this, name);
     if (name === "width" || name === "height") {
       result = `${Number(result) / ratio}`;
     }
     return result;
   };
-  canvas.setAttribute = function(name, val: string): void {
+  canvas.setAttribute = function (name, val: string): void {
     const wh = name === "width" || name === "height";
     if (wh) {
       val = `${Number(val) * ratio}`;
@@ -50,7 +50,7 @@ export function transform(canvas: HTMLCanvasElement): HTMLCanvasElement {
       canvas.setAttribute("width", `${Math.floor(val)}`);
     },
     configurable: true,
-    enumerable: true
+    enumerable: true,
   });
   Object.defineProperty(canvas, "height", {
     get(): number {
@@ -60,11 +60,11 @@ export function transform(canvas: HTMLCanvasElement): HTMLCanvasElement {
       canvas.setAttribute("height", `${Math.floor(val)}`);
     },
     configurable: true,
-    enumerable: true
+    enumerable: true,
   });
   const { drawImage } = ctx;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ctx.drawImage = function(img: CanvasImageSource, ...args: any[]): void {
+  ctx.drawImage = function (img: CanvasImageSource, ...args: any[]): void {
     if (img !== canvas || ratio === 1) {
       return (drawImage as AnyFunction).call(this, img, ...args);
     }

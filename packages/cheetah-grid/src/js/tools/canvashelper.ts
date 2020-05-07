@@ -2,9 +2,9 @@ import {
   PaddingOption,
   calcBasePosition,
   calcStartPosition,
-  getFontSize
+  getFontSize,
 } from "../internal/canvases";
-import { ColorDef } from "../ts-types";
+import type { ColorDef } from "../ts-types";
 const { ceil, PI } = Math;
 
 export function strokeColorsRect(
@@ -67,7 +67,7 @@ export function strokeColorsRect(
       { x: left + width, y: top },
       { x: left + width, y: top + height },
       { x: left, y: top + height },
-      { x: left, y: top }
+      { x: left, y: top },
     ]);
   }
 }
@@ -135,7 +135,7 @@ export function fillTextRect(
     width,
     height,
     right: left + width,
-    bottom: top + height
+    bottom: top + height,
   };
   ctx.save();
   try {
@@ -147,7 +147,7 @@ export function fillTextRect(
     //文字描画
     const pos = calcBasePosition(ctx, rect, {
       offset,
-      padding
+      padding,
     });
 
     ctx.fillText(text, pos.x, pos.y);
@@ -181,7 +181,7 @@ export function drawInlineImageRect(
     width,
     height,
     right: left + width,
-    bottom: top + height
+    bottom: top + height,
   };
   ctx.save();
   try {
@@ -193,7 +193,7 @@ export function drawInlineImageRect(
     //文字描画
     const pos = calcStartPosition(ctx, rect, destWidth, destHeight, {
       offset,
-      padding
+      padding,
     });
 
     ctx.drawImage(
@@ -222,7 +222,7 @@ export function measureCheckbox(
   ctx: CanvasRenderingContext2D
 ): { width: number } {
   return {
-    width: getFontSize(ctx, null).width
+    width: getFontSize(ctx, null).width,
   };
 }
 
@@ -251,7 +251,7 @@ export function drawCheckbox(
     uncheckBgColor = "#FFF",
     checkBgColor = "rgb(76, 73, 72)",
     borderColor = "#000",
-    boxSize = measureCheckbox(ctx).width
+    boxSize = measureCheckbox(ctx).width,
   }: DrawCheckboxOption = {}
 ): void {
   const checkPoint = typeof check === "number" ? (check > 1 ? 1 : check) : 1;
@@ -336,7 +336,7 @@ export function drawButton(
     backgroundColor = "#FFF",
     bgColor = backgroundColor,
     radius = 4,
-    shadow = {}
+    shadow = {},
   } = option;
   ctx.save();
   try {
@@ -348,7 +348,7 @@ export function drawButton(
         blur = 1,
         offsetX = 0,
         offsetY = 2,
-        offset: { x: ox = offsetX, y: oy = offsetY } = {}
+        offset: { x: ox = offsetX, y: oy = offsetY } = {},
       } = shadow;
       ctx.shadowColor = color;
       ctx.shadowBlur = blur; //ぼかし

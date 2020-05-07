@@ -1,4 +1,4 @@
-import { CheckHeaderStyleOption, ColorDef } from "../../ts-types";
+import type { CheckHeaderStyleOption, ColorDef } from "../../ts-types";
 import { Style } from "./Style";
 
 function adj(style: CheckHeaderStyleOption): CheckHeaderStyleOption {

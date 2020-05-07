@@ -1,4 +1,4 @@
-import { FieldDef, MaybePromise, MaybePromiseOrUndef } from "../ts-types";
+import type { FieldDef, MaybePromise, MaybePromiseOrUndef } from "../ts-types";
 import { each, isPromise } from "../internal/utils";
 import { DataSource } from "./DataSource";
 import { EventHandler } from "../internal/EventHandler";
@@ -40,7 +40,7 @@ class DataSourceIterator<T> {
     const record = this._dataSource.get(index);
     data[index] = record;
     if (isPromise(record)) {
-      record.then(val => {
+      record.then((val) => {
         data[index] = val;
       });
       if (!nest) {
@@ -120,7 +120,7 @@ class FilterData<T> {
       const record = dataSourceItr.next();
       if (isPromise(record)) {
         dataSourceItr.movePrev();
-        const queue = record.then(_value => {
+        const queue = record.then((_value) => {
           queues[index] = null;
           return this.get(index);
         });
@@ -134,7 +134,7 @@ class FilterData<T> {
         }
       }
       if (testTimeout()) {
-        const promise = new Promise(resolve => {
+        const promise = new Promise((resolve) => {
           setTimeout(() => {
             resolve();
           }, 300);
@@ -176,7 +176,7 @@ export class FilterDataSource<T> extends DataSource<T> {
       // eslint-disable-next-line no-self-assign
       this.filter = this.filter;
     });
-    each(DataSource.EVENT_TYPE, type => {
+    each(DataSource.EVENT_TYPE, (type) => {
       handler.on(dataSource, type, (...args) =>
         this.fireListeners(type, ...args)
       );

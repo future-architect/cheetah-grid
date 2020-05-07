@@ -1,10 +1,10 @@
-import {
+import type {
   ColorPropertyDefine,
   ColorsPropertyDefine,
   PartialThemeDefine,
   RequiredThemeDefine,
   StylePropertyFunctionArg,
-  ThemeDefine
+  ThemeDefine,
 } from "../ts-types";
 import { getChainSafe } from "../internal/utils";
 import { get as getSymbol } from "../internal/symbolManager";
@@ -38,7 +38,7 @@ export class Theme implements RequiredThemeDefine {
   constructor(obj: PartialThemeDefine | ThemeDefine, superTheme?: ThemeDefine) {
     this[_] = {
       obj,
-      superTheme: superTheme as ThemeDefine
+      superTheme: superTheme as ThemeDefine,
     };
   }
   get font(): string {
@@ -129,7 +129,7 @@ export class Theme implements RequiredThemeDefine {
             ["checkbox", "borderColor"],
             ["borderColor"]
           );
-        }
+        },
       })
     );
   }
@@ -148,7 +148,7 @@ export class Theme implements RequiredThemeDefine {
             ["button", "bgColor"],
             ["defaultBgColor"]
           );
-        }
+        },
       })
     );
   }
@@ -164,7 +164,7 @@ export class Theme implements RequiredThemeDefine {
             ["header", "sortArrowColor"],
             ["color"]
           );
-        }
+        },
       })
     );
   }

@@ -1,8 +1,8 @@
-import {
+import type {
   BaseStyleOption,
   CheckHeaderStyleOption,
   HeaderStyleOption,
-  SortHeaderStyleOption
+  SortHeaderStyleOption,
 } from "../ts-types";
 import { BaseStyle } from "./style/BaseStyle";
 import { CheckHeaderStyle } from "./style/CheckHeaderStyle";
@@ -19,7 +19,7 @@ export {
   BaseStyleOption,
   CheckHeaderStyleOption,
   MultilineTextHeaderStyle,
-  SortHeaderStyleOption
+  SortHeaderStyleOption,
 };
 
 export function of(

@@ -1,4 +1,4 @@
-import { NumberStyleOption } from "../../ts-types";
+import type { NumberStyleOption } from "../../ts-types";
 import { Style } from "./Style";
 
 function adj(style: NumberStyleOption): NumberStyleOption {

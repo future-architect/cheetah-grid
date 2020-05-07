@@ -1,9 +1,9 @@
-import {
+import type {
   CellAddress,
   EditorOption,
   EventListenerId,
   LayoutObjectId,
-  ListGridAPI
+  ListGridAPI,
 } from "../../ts-types";
 import { cellEquals, event } from "../../internal/utils";
 import { isDisabledRecord, isReadOnlyRecord } from "./action-utils";
@@ -62,19 +62,19 @@ export abstract class BaseInputEditor<T> extends Editor<T> {
       return grid.getLayoutCellId(col, row) === cellId;
     }
     return [
-      grid.listen(DG_EVENT_TYPE.INPUT_CELL, e => {
+      grid.listen(DG_EVENT_TYPE.INPUT_CELL, (e) => {
         if (!isTarget(e.col, e.row)) {
           return;
         }
         input(
           {
             col: e.col,
-            row: e.row
+            row: e.row,
           },
           e.value
         );
       }),
-      grid.listen(DG_EVENT_TYPE.PASTE_CELL, e => {
+      grid.listen(DG_EVENT_TYPE.PASTE_CELL, (e) => {
         if (e.multi) {
           // ignore multi cell values
           return;
@@ -91,32 +91,32 @@ export abstract class BaseInputEditor<T> extends Editor<T> {
         input(
           {
             col: e.col,
-            row: e.row
+            row: e.row,
           },
           e.normalizeValue
         );
       }),
-      grid.listen(DG_EVENT_TYPE.DBLCLICK_CELL, cell => {
+      grid.listen(DG_EVENT_TYPE.DBLCLICK_CELL, (cell) => {
         if (!isTarget(cell.col, cell.row)) {
           return;
         }
         open({
           col: cell.col,
-          row: cell.row
+          row: cell.row,
         });
       }),
-      grid.listen(DG_EVENT_TYPE.DBLTAP_CELL, e => {
+      grid.listen(DG_EVENT_TYPE.DBLTAP_CELL, (e) => {
         if (!isTarget(e.col, e.row)) {
           return;
         }
         open({
           col: e.col,
-          row: e.row
+          row: e.row,
         });
 
         event.cancel(e.event);
       }),
-      grid.listen(DG_EVENT_TYPE.KEYDOWN, e => {
+      grid.listen(DG_EVENT_TYPE.KEYDOWN, (e) => {
         if (e.keyCode !== KEY_F2 && e.keyCode !== KEY_ENTER) {
           return;
         }
@@ -126,11 +126,11 @@ export abstract class BaseInputEditor<T> extends Editor<T> {
         }
         open({
           col: sel.col,
-          row: sel.row
+          row: sel.row,
         });
         e.stopCellMoving();
       }),
-      grid.listen(DG_EVENT_TYPE.SELECTED_CELL, e => {
+      grid.listen(DG_EVENT_TYPE.SELECTED_CELL, (e) => {
         this.onChangeSelectCellInternal(
           grid,
           { col: e.col, row: e.row },
@@ -140,7 +140,7 @@ export abstract class BaseInputEditor<T> extends Editor<T> {
       grid.listen(DG_EVENT_TYPE.SCROLL, () => {
         this.onGridScrollInternal(grid);
       }),
-      grid.listen(DG_EVENT_TYPE.EDITABLEINPUT_CELL, cell => {
+      grid.listen(DG_EVENT_TYPE.EDITABLEINPUT_CELL, (cell) => {
         if (!isTarget(cell.col, cell.row)) {
           return false;
         }
@@ -152,7 +152,7 @@ export abstract class BaseInputEditor<T> extends Editor<T> {
         }
         return true;
       }),
-      grid.listen(DG_EVENT_TYPE.MODIFY_STATUS_EDITABLEINPUT_CELL, cell => {
+      grid.listen(DG_EVENT_TYPE.MODIFY_STATUS_EDITABLEINPUT_CELL, (cell) => {
         if (!isTarget(cell.col, cell.row)) {
           return;
         }
@@ -185,11 +185,11 @@ export abstract class BaseInputEditor<T> extends Editor<T> {
           grid,
           {
             col: cell.col,
-            row: cell.row
+            row: cell.row,
           },
           cell.input
         );
-      })
+      }),
     ];
   }
   onPasteCellRangeBox(

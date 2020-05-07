@@ -1,4 +1,4 @@
-import { LineClamp, MultilineTextStyleOption } from "../../ts-types";
+import type { LineClamp, MultilineTextStyleOption } from "../../ts-types";
 import { Style } from "./Style";
 
 function adj(style: MultilineTextStyleOption): MultilineTextStyleOption {

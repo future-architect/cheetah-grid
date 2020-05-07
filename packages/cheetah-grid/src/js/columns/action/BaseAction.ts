@@ -1,9 +1,9 @@
-import {
+import type {
   BaseActionOption,
   CellAddress,
   EventListenerId,
   LayoutObjectId,
-  ListGridAPI
+  ListGridAPI,
 } from "../../ts-types";
 
 export abstract class BaseAction<T> {

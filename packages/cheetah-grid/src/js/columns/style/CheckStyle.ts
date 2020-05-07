@@ -1,4 +1,4 @@
-import { CheckStyleOption, ColorDef } from "../../ts-types";
+import type { CheckStyleOption, ColorDef } from "../../ts-types";
 import { StdBaseStyle } from "./StdBaseStyle";
 
 function adj(style: CheckStyleOption): CheckStyleOption {

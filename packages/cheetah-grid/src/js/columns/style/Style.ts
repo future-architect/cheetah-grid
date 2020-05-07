@@ -1,4 +1,4 @@
-import { ColorDef, StyleOption, TextOverflow } from "../../ts-types";
+import type { ColorDef, StyleOption, TextOverflow } from "../../ts-types";
 import { StdBaseStyle } from "./StdBaseStyle";
 let defaultStyle: Style;
 export class Style extends StdBaseStyle {

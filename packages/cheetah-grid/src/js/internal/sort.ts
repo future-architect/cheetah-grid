@@ -1,4 +1,4 @@
-import { MaybePromise } from "../ts-types";
+import type { MaybePromise } from "../ts-types";
 import { isPromise } from "./utils";
 
 function createArray<T>(get: (i: number) => T, length: number): T[] {
@@ -24,19 +24,19 @@ function createArrayPromise<R, F>(
   length: number
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<any[]> {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     const plist = [];
     const array = new Array<{ v: MaybePromise<R>; f: MaybePromise<R> }>(length);
     for (let i = 0; i < length; i++) {
       const data = get(i);
       const record = {
         v: data,
-        f: data
+        f: data,
       };
       array[i] = record;
       if (isPromise(data)) {
         plist.push(
-          data.then(v => {
+          data.then((v) => {
             record.v = v;
             record.f = v;
           })
@@ -58,7 +58,7 @@ function setArrayField<R, F>(
   array: { v: R; f: R | F }[],
   getField: (r: R) => MaybePromise<F>
 ): Promise<{ v: R; f: F }[]> {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     const { length } = array;
     const plist = [];
     for (let i = 0; i < length; i++) {
@@ -66,7 +66,7 @@ function setArrayField<R, F>(
       const f = getField(record.v);
       if (isPromise(f)) {
         plist.push(
-          f.then(v => {
+          f.then((v) => {
             record.f = v;
           })
         );
@@ -140,7 +140,7 @@ export function sortPromise<R, F>(
   getField?: any
 ): Promise<void> {
   if (typeof Promise !== "undefined") {
-    return createArrayPromise(get, getField, length).then(array => {
+    return createArrayPromise(get, getField, length).then((array) => {
       array.sort((r1, r2) => compare(r1.f, r2.f));
       for (let i = 0; i < length; i++) {
         set(i, array[i].v);
@@ -161,7 +161,7 @@ export function sortPromise<R, F>(
       },
       catch(): Promise<undefined> {
         return dummyPromise;
-      }
+      },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any;
     return dummyPromise;

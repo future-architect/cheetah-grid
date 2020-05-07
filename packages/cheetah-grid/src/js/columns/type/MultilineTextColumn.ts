@@ -1,7 +1,11 @@
 import * as utils from "./columnUtils";
-import { CellContext, GridCanvasHelperAPI, ListGridAPI } from "../../ts-types";
+import type {
+  CellContext,
+  GridCanvasHelperAPI,
+  ListGridAPI,
+} from "../../ts-types";
 import { BaseColumn } from "./BaseColumn";
-import { DrawCellInfo } from "../../ts-types-internal";
+import type { DrawCellInfo } from "../../ts-types-internal";
 import { MultilineTextStyle } from "../style/MultilineTextStyle";
 
 export class MultilineTextColumn<T> extends BaseColumn<T, string> {
@@ -32,11 +36,11 @@ export class MultilineTextColumn<T> extends BaseColumn<T, string> {
       lineHeight,
       autoWrapText,
       lineClamp,
-      textOverflow
+      textOverflow,
     } = style;
     if (bgColor) {
       drawCellBase({
-        bgColor
+        bgColor,
       });
     }
     const multilines = value
@@ -55,7 +59,7 @@ export class MultilineTextColumn<T> extends BaseColumn<T, string> {
         autoWrapText,
         lineClamp,
         textOverflow,
-        icons
+        icons,
       });
     });
   }

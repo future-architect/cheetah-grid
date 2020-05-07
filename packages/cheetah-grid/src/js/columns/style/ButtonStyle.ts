@@ -1,4 +1,4 @@
-import { ButtonStyleOption, ColorDef } from "../../ts-types";
+import type { ButtonStyleOption, ColorDef } from "../../ts-types";
 import { Style } from "./Style";
 
 function adj(style: ButtonStyleOption): ButtonStyleOption {

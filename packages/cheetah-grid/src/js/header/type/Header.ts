@@ -1,6 +1,10 @@
-import { CellContext, GridCanvasHelperAPI, ListGridAPI } from "../../ts-types";
+import type {
+  CellContext,
+  GridCanvasHelperAPI,
+  ListGridAPI,
+} from "../../ts-types";
 import { BaseHeader } from "./BaseHeader";
-import { DrawCellInfo } from "../../ts-types-internal";
+import type { DrawCellInfo } from "../../ts-types-internal";
 import { Style } from "../style/Style";
 
 export class Header<T> extends BaseHeader<T> {
@@ -21,12 +25,12 @@ export class Header<T> extends BaseHeader<T> {
       color,
       font,
       bgColor,
-      textOverflow
+      textOverflow,
     } = style;
 
     if (bgColor) {
       drawCellBase({
-        bgColor
+        bgColor,
       });
     }
 
@@ -35,7 +39,7 @@ export class Header<T> extends BaseHeader<T> {
       textBaseline,
       color,
       font,
-      textOverflow
+      textOverflow,
     });
   }
 }

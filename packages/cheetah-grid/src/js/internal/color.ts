@@ -32,7 +32,7 @@ function sextupleHexToRGB({
   3: g1,
   4: g2,
   5: b1,
-  6: b2
+  6: b2,
 }: string): RGBA {
   return createRGB(hexToNum(r1 + r2), hexToNum(g1 + g2), hexToNum(b1 + b2));
 }
@@ -53,14 +53,14 @@ function rateToByte(r: number): number {
   return Math.ceil((r * 255) / 100);
 }
 function colorToRGB0(color: string): RGBA | null {
-  if (color.match(/^#[0-9a-f]{3}$/i)) {
+  if (/^#[0-9a-f]{3}$/i.exec(color)) {
     return tripleHexToRGB(color);
   }
-  if (color.match(/^#[0-9a-f]{6}$/i)) {
+  if (/^#[0-9a-f]{6}$/i.exec(color)) {
     return sextupleHexToRGB(color);
   }
-  let ret = color.match(
-    /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/i
+  let ret = /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/i.exec(
+    color
   );
   if (ret) {
     const rgb = createRGB(Number(ret[1]), Number(ret[2]), Number(ret[3]));
@@ -68,8 +68,8 @@ function colorToRGB0(color: string): RGBA | null {
       return rgb;
     }
   }
-  ret = color.match(
-    /^rgba\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d(\.\d)?)\s*\)$/i
+  ret = /^rgba\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d(\.\d)?)\s*\)$/i.exec(
+    color
   );
   if (ret) {
     const rgb = createRGB(
@@ -82,8 +82,8 @@ function colorToRGB0(color: string): RGBA | null {
       return rgb;
     }
   }
-  ret = color.match(
-    /^rgb\(\s*(\d{1,3}(\.\d)?)%\s*,\s*(\d{1,3}(\.\d)?)%\s*,\s*(\d{1,3}(\.\d)?)%\s*\)$/i
+  ret = /^rgb\(\s*(\d{1,3}(\.\d)?)%\s*,\s*(\d{1,3}(\.\d)?)%\s*,\s*(\d{1,3}(\.\d)?)%\s*\)$/i.exec(
+    color
   );
   if (ret) {
     const rgb = createRGB(
@@ -95,8 +95,8 @@ function colorToRGB0(color: string): RGBA | null {
       return rgb;
     }
   }
-  ret = color.match(
-    /^rgba\(\s*(\d{1,3}(\.\d)?)%\s*,\s*(\d{1,3}(\.\d)?)%\s*,\s*(\d{1,3}(\.\d)?)%\s*,\s*(\d(\.\d)?)\s*\)$/i
+  ret = /^rgba\(\s*(\d{1,3}(\.\d)?)%\s*,\s*(\d{1,3}(\.\d)?)%\s*,\s*(\d{1,3}(\.\d)?)%\s*,\s*(\d(\.\d)?)\s*\)$/i.exec(
+    color
   );
   if (ret) {
     const rgb = createRGB(

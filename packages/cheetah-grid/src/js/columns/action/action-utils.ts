@@ -1,4 +1,4 @@
-import { ListGridAPI } from "../../ts-types";
+import type { ListGridAPI } from "../../ts-types";
 import { isPromise } from "../../internal/utils";
 
 export function isDisabledRecord<T>(

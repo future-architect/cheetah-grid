@@ -1,4 +1,4 @@
-import {
+import type {
   BaseStyleOption,
   ButtonStyleOption,
   CheckStyleOption,
@@ -9,7 +9,7 @@ import {
   MultilineTextStyleOption,
   NumberStyleOption,
   PercentCompleteBarStyleOption,
-  StyleOption
+  StyleOption,
 } from "../ts-types";
 import { BaseStyle } from "./style/BaseStyle";
 import { ButtonStyle } from "./style/ButtonStyle";
@@ -45,7 +45,7 @@ export {
   MultilineTextStyleOption,
   NumberStyleOption,
   PercentCompleteBarStyleOption,
-  StyleOption
+  StyleOption,
 };
 export function of(
   columnStyle: ColumnStyleOption | null | undefined,

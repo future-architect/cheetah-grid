@@ -1,11 +1,11 @@
 import * as icons from "../../internal/icons";
-import {
+import type {
   CellContext,
   ColumnIconOption,
   GridCanvasHelperAPI,
-  MaybePromise
+  MaybePromise,
 } from "../../ts-types";
-import { SimpleColumnIconOption } from "../../ts-types-internal";
+import type { SimpleColumnIconOption } from "../../ts-types-internal";
 import { isPromise } from "../../internal/utils";
 
 export function loadIcons(
@@ -21,12 +21,12 @@ export function loadIcons(
   let argIcon = undefined;
   if (icon) {
     if (isPromise(icon)) {
-      icon.then(i => {
+      icon.then((i) => {
         loadIcons(i, context.toCurrentContext(), helper, callback);
       });
     } else {
       const iconList = icons.toNormarizeArray(icon);
-      iconList.forEach(i => {
+      iconList.forEach((i) => {
         if (i.font && i.content) {
           helper.testFontLoad(i.font, i.content, context);
         }

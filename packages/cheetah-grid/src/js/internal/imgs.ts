@@ -1,5 +1,5 @@
 import { LRUCache } from "./LRUCache";
-import { MaybePromise } from "../ts-types";
+import type { MaybePromise } from "../ts-types";
 import { then } from "./utils";
 
 const allCache: {
@@ -15,14 +15,13 @@ export function loadImage(src: string): Promise<HTMLImageElement> {
     console.error("Promise is not loaded. load Promise before this process.");
     return {
       then(): Promise<HTMLImageElement> {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return this as any;
-      }
+        return this;
+      },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any;
   }
   const img = new Image();
-  const result = new Promise<HTMLImageElement>(resolve => {
+  const result = new Promise<HTMLImageElement>((resolve) => {
     img.onload = (): void => {
       resolve(img);
     };
@@ -40,12 +39,12 @@ function getCacheOrLoad0(
   cache: LRUCache<MaybePromise<HTMLImageElement>>,
   src: MaybePromise<string>
 ): MaybePromise<HTMLImageElement> {
-  return then(src, src => {
+  return then(src, (src) => {
     const c = cache.get(src);
     if (c) {
       return c;
     }
-    const result = loadImage(src).then(img => {
+    const result = loadImage(src).then((img) => {
       cache.put(src, img);
       return img;
     });

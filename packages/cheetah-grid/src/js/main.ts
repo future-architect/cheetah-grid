@@ -1,4 +1,4 @@
-import * as TYPES from "./ts-types";
+import type * as TYPES from "./ts-types";
 import * as columns from "./columns";
 import * as core from "./core";
 import * as data from "./data";
@@ -13,7 +13,7 @@ import {
   HeaderDefine,
   HeadersDefine,
   ListGrid,
-  ListGridConstructorOptions
+  ListGridConstructorOptions,
 } from "./ListGrid";
 import { GridCanvasHelper } from "./GridCanvasHelper";
 import { Theme } from "./themes/theme";
@@ -49,7 +49,7 @@ export {
   GridCanvasHelper,
   getIcons,
   //plugin registers
-  register
+  register,
 };
 
 function getIcons(): { [key: string]: TYPES.IconDefine } {
@@ -74,7 +74,7 @@ export default {
   register,
   get icons(): { [key: string]: TYPES.IconDefine } {
     return getIcons();
-  }
+  },
 };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 Object.defineProperty(themes as any, "default", {
@@ -85,7 +85,7 @@ Object.defineProperty(themes as any, "default", {
   },
   set(defaultTheme: Theme): void {
     themes.setDefault(defaultTheme);
-  }
+  },
 });
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 Object.defineProperty(themes as any, "choices", {
@@ -93,5 +93,5 @@ Object.defineProperty(themes as any, "choices", {
   configurable: true,
   get() {
     return themes.getChoices();
-  }
+  },
 });

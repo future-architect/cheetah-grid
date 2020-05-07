@@ -1,11 +1,11 @@
-import {
+import type {
   CellAddress,
   EventListenerId,
   LayoutObjectId,
   ListGridAPI,
   SortHeaderActionOption,
   SortOption,
-  SortState
+  SortState,
 } from "../../ts-types";
 import { BaseAction } from "./BaseAction";
 import { bindCellClickAction } from "./actionBind";
@@ -32,7 +32,7 @@ export class SortHeaderAction<T> extends BaseAction<T> {
         order: newState.order || "asc",
         col: newState.col,
         row: newState.row,
-        grid
+        grid,
       });
     } else {
       const fieldRow =
@@ -62,13 +62,13 @@ export class SortHeaderAction<T> extends BaseAction<T> {
         newState = {
           col: range.start.col,
           row: range.start.row,
-          order: state.order === "asc" ? "desc" : "asc"
+          order: state.order === "asc" ? "desc" : "asc",
         };
       } else {
         newState = {
           col: range.start.col,
           row: range.start.row,
-          order: "asc"
+          order: "asc",
         };
       }
       grid.sortState = newState;
@@ -79,13 +79,13 @@ export class SortHeaderAction<T> extends BaseAction<T> {
     return [
       ...bindCellClickAction(grid, cellId, {
         action,
-        mouseOver: _e => {
+        mouseOver: (_e) => {
           if (this.disabled) {
             return false;
           }
           return true;
-        }
-      })
+        },
+      }),
     ];
   }
 }

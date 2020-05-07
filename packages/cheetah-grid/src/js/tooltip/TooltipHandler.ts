@@ -1,4 +1,4 @@
-import { CellRange, ListGridAPI } from "../ts-types";
+import type { CellRange, ListGridAPI } from "../ts-types";
 import { BaseTooltip } from "./BaseTooltip";
 import { LG_EVENT_TYPE } from "../list-grid/LG_EVENT_TYPE";
 import { Tooltip } from "./Tooltip";
@@ -7,7 +7,7 @@ import { cellInRange } from "../internal/utils";
 const TOOLTIP_INSTANCE_FACTORY = {
   "overflow-text"<T>(grid: ListGridAPI<T>): BaseTooltip<T> {
     return new Tooltip(grid);
-  }
+  },
 };
 
 function getTooltipInstanceInfo<T>(
@@ -25,7 +25,7 @@ function getTooltipInstanceInfo<T>(
   if (overflowText) {
     return {
       type: "overflow-text",
-      content: overflowText
+      content: overflowText,
     };
   }
   return null;
@@ -93,7 +93,7 @@ export class TooltipHandler<T> {
     return cellInRange(info.range, col, row);
   }
   _bindGridEvent(grid: ListGridAPI<T>): void {
-    grid.listen(LG_EVENT_TYPE.MOUSEOVER_CELL, e => {
+    grid.listen(LG_EVENT_TYPE.MOUSEOVER_CELL, (e) => {
       if (e.related) {
         if (this._isAttachCell(e.col, e.row)) {
           return;
@@ -101,7 +101,7 @@ export class TooltipHandler<T> {
       }
       this._attach(e.col, e.row);
     });
-    grid.listen(LG_EVENT_TYPE.MOUSEOUT_CELL, e => {
+    grid.listen(LG_EVENT_TYPE.MOUSEOUT_CELL, (e) => {
       if (e.related) {
         if (this._isAttachCell(e.related.col, e.related.row)) {
           return;
@@ -109,7 +109,7 @@ export class TooltipHandler<T> {
       }
       this._detach();
     });
-    grid.listen(LG_EVENT_TYPE.SELECTED_CELL, e => {
+    grid.listen(LG_EVENT_TYPE.SELECTED_CELL, (e) => {
       if (this._isAttachCell(e.col, e.row)) {
         this._detach();
       }
@@ -121,7 +121,7 @@ export class TooltipHandler<T> {
       }
       this._move(info.range.start.col, info.range.start.row);
     });
-    grid.listen(LG_EVENT_TYPE.CHANGED_VALUE, e => {
+    grid.listen(LG_EVENT_TYPE.CHANGED_VALUE, (e) => {
       if (this._isAttachCell(e.col, e.row)) {
         this._detach();
         this._attach(e.col, e.row);
@@ -149,7 +149,7 @@ export class TooltipHandler<T> {
     return {
       instance,
       type,
-      content: info.content
+      content: info.content,
     };
   }
 }

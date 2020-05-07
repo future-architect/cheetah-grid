@@ -1,11 +1,11 @@
-import {
+import type {
   CellContext,
   GridCanvasHelperAPI,
   ListGridAPI,
-  MaybePromise
+  MaybePromise,
 } from "../../ts-types";
 import { BaseColumn } from "./BaseColumn";
-import { DrawCellInfo } from "../../ts-types-internal";
+import type { DrawCellInfo } from "../../ts-types-internal";
 import { ImageStyle } from "../style/ImageStyle";
 import { calcStartPosition } from "../../internal/canvases";
 import { getCacheOrLoad } from "../../internal/imgs";
@@ -36,7 +36,7 @@ function calcKeepAspectRatioSize(
   }
   return {
     width: newWidth,
-    height: newHeight
+    height: newHeight,
   };
 }
 
@@ -67,10 +67,10 @@ export class ImageColumn<T> extends BaseColumn<T, HTMLImageElement> {
       const { textAlign, textBaseline, margin, bgColor } = style;
       if (bgColor) {
         drawCellBase({
-          bgColor
+          bgColor,
         });
       }
-      helper.drawWithClip(context, ctx => {
+      helper.drawWithClip(context, (ctx) => {
         ctx.textAlign = textAlign;
         ctx.textBaseline = textBaseline;
         const rect = context.getRect();
@@ -82,7 +82,7 @@ export class ImageColumn<T> extends BaseColumn<T, HTMLImageElement> {
             rect.height - margin * 2
           );
           const pos = calcStartPosition(ctx, rect, width, height, {
-            offset: margin
+            offset: margin,
           });
           ctx.drawImage(
             value,

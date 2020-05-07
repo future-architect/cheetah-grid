@@ -1,5 +1,5 @@
-import { CellContext, GridCanvasHelperAPI } from "../../ts-types";
-import { DrawCellInfo, GridInternal } from "../../ts-types-internal";
+import type { CellContext, GridCanvasHelperAPI } from "../../ts-types";
+import type { DrawCellInfo, GridInternal } from "../../ts-types-internal";
 import { BaseHeader } from "./BaseHeader";
 import { MultilineTextHeaderStyle } from "../style/MultilineTextHeaderStyle";
 
@@ -27,12 +27,12 @@ export class MultilineTextHeader<T> extends BaseHeader<T> {
       lineHeight,
       autoWrapText,
       lineClamp,
-      textOverflow
+      textOverflow,
     } = style;
 
     if (bgColor) {
       drawCellBase({
-        bgColor
+        bgColor,
       });
     }
     const multilines = value
@@ -48,7 +48,7 @@ export class MultilineTextHeader<T> extends BaseHeader<T> {
       lineHeight,
       autoWrapText,
       lineClamp,
-      textOverflow
+      textOverflow,
     });
   }
 }

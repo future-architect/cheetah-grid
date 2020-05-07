@@ -1,8 +1,8 @@
-import {
+import type {
   BaseActionOption,
   EventListenerId,
   LayoutObjectId,
-  ListGridAPI
+  ListGridAPI,
 } from "../../ts-types";
 
 export class BaseAction<T> {

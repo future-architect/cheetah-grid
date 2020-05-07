@@ -1,5 +1,5 @@
 import { EventHandler } from "../../internal/EventHandler";
-import { ListGridAPI } from "../../ts-types";
+import type { ListGridAPI } from "../../ts-types";
 import { createElement } from "../../internal/dom";
 
 const CLASSNAME = "cheetah-grid__tooltip-element";
@@ -10,10 +10,10 @@ const SHOWN_CLASSNAME = `${CLASSNAME}--shown`;
 function createTooltipDomElement(): HTMLElement {
   require("@/tooltip/internal/TooltipElement.css");
   const rootElement = createElement("div", {
-    classList: [CLASSNAME, HIDDEN_CLASSNAME]
+    classList: [CLASSNAME, HIDDEN_CLASSNAME],
   });
   const messageElement = createElement("pre", {
-    classList: [CONTENT_CLASSNAME]
+    classList: [CONTENT_CLASSNAME],
   });
   rootElement.appendChild(messageElement);
   return rootElement;

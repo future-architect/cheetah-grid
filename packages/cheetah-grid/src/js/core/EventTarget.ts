@@ -1,4 +1,4 @@
-import { AnyListener, EventListenerId } from "../ts-types";
+import type { AnyListener, EventListenerId } from "../ts-types";
 import { each, isDef } from "../internal/utils";
 import { get as getSymbol } from "../internal/symbolManager";
 
@@ -21,7 +21,7 @@ export class EventTarget {
     };
   } = {
     listeners: {},
-    listenerData: {}
+    listenerData: {},
   };
   /**
    * Adds an event listener.
@@ -44,7 +44,7 @@ export class EventTarget {
         if (!this[_].listeners[type].length) {
           delete this[_].listeners[type];
         }
-      }
+      },
     };
     return id;
   }
@@ -87,7 +87,7 @@ export class EventTarget {
     if (!list) {
       return [];
     }
-    return list.map(listener => listener.call(this, ...args)).filter(isDef);
+    return list.map((listener) => listener.call(this, ...args)).filter(isDef);
   }
   dispose(): void {
     delete this[_];

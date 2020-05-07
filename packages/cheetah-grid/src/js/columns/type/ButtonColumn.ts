@@ -1,10 +1,10 @@
 import * as utils from "./columnUtils";
-import {
+import type {
   ButtonColumnOption,
   CellContext,
-  GridCanvasHelperAPI
+  GridCanvasHelperAPI,
 } from "../../ts-types";
-import { DrawCellInfo, GridInternal } from "../../ts-types-internal";
+import type { DrawCellInfo, GridInternal } from "../../ts-types-internal";
 import { ButtonStyle } from "../style/ButtonStyle";
 import { Column } from "./Column";
 import { cellInRange } from "../../internal/utils";
@@ -51,11 +51,11 @@ export class ButtonColumn<T> extends Column<T> {
       buttonBgColor,
       font,
       padding,
-      textOverflow
+      textOverflow,
     } = style;
     if (bgColor) {
       drawCellBase({
-        bgColor
+        bgColor,
       });
     }
     helper.testFontLoad(font, value, context);
@@ -90,11 +90,11 @@ export class ButtonColumn<T> extends Column<T> {
           ? {
               color: "rgba(0, 0, 0, 0.48)",
               blur: 6,
-              offsetY: 3
+              offsetY: 3,
             }
           : {},
         textOverflow,
-        icons
+        icons,
       });
     });
   }

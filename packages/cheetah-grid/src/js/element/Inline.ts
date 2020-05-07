@@ -1,4 +1,4 @@
-import { AnyFunction, ColorDef, InlineAPI, RectProps } from "../ts-types";
+import type { AnyFunction, ColorDef, InlineAPI, RectProps } from "../ts-types";
 import { GenWordsResult, isDef, str } from "../internal/utils";
 import { Canvashelper } from "../tools/canvashelper";
 
@@ -45,7 +45,7 @@ function breakWidth(
   const afterContent = content.slice(beforeContent.length).replace(/^\s+/, "");
   return {
     before: beforeContent ? new Inline(beforeContent) : null,
-    after: afterContent ? new Inline(afterContent) : null
+    after: afterContent ? new Inline(afterContent) : null,
   };
 }
 
@@ -86,7 +86,7 @@ export class Inline implements InlineAPI {
     offsetLeft,
     offsetRight,
     offsetTop,
-    offsetBottom
+    offsetBottom,
   }: InlineDrawOption): void {
     canvashelper.fillTextRect(
       ctx,
@@ -101,8 +101,8 @@ export class Inline implements InlineAPI {
           left: offsetLeft,
           right: offsetRight,
           top: offsetTop,
-          bottom: offsetBottom
-        }
+          bottom: offsetBottom,
+        },
       }
     );
   }
@@ -126,7 +126,7 @@ export class Inline implements InlineAPI {
     const afterContent = content.slice(beforeContent.length);
     return {
       before: beforeContent ? new Inline(beforeContent) : null,
-      after: afterContent ? new Inline(afterContent) : null
+      after: afterContent ? new Inline(afterContent) : null,
     };
   }
   breakWord(

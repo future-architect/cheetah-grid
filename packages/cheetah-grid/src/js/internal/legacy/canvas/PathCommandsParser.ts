@@ -1,4 +1,4 @@
-import { AnyFunction } from "../../../ts-types";
+import type { AnyFunction } from "../../../ts-types";
 import { CanvasOperations } from "./internal";
 import { PathCommands } from "./PathCommands";
 
@@ -44,7 +44,7 @@ function pathTokens(d: string): Tokens {
         }
       }
       return s || null;
-    }
+    },
   };
 }
 
@@ -129,7 +129,7 @@ export class PathCommandsParser implements CanvasOperations {
     const buildPush = (op: CanvasOperation) => (...args: any[]): void => {
       this._ops.push({
         op,
-        args
+        args,
       });
     };
     this.moveTo = buildPush("moveTo");
@@ -175,7 +175,7 @@ export class PathCommandsParser implements CanvasOperations {
                 return cmd;
               }
               return tokens.next();
-            }
+            },
           };
           subsequentCommand =
             command(this, subsequentCommand, argsProvider) || "Z";

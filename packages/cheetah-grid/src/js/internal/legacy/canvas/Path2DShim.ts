@@ -1,4 +1,4 @@
-import { AnyFunction } from "../../../ts-types";
+import type { AnyFunction } from "../../../ts-types";
 import { CanvasOperations } from "./internal";
 import { PathCommandsParser } from "./PathCommandsParser";
 
@@ -51,7 +51,7 @@ export class Path2DShim implements CanvasPath {
       // 	throw e;
       // }
     } else if (arg.hasOwnProperty("_ops")) {
-      this._ops = [...(arg as Path2DShim)._ops];
+      this._ops = [...arg._ops];
     } else {
       throw new Error(`Error: ${typeof arg} is not a valid argument to Path`);
     }
@@ -63,13 +63,13 @@ const { CanvasRenderingContext2D } = window;
 const originalFill: AnyFunction = CanvasRenderingContext2D.prototype.fill;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-(CanvasRenderingContext2D.prototype as any).fill = function(
+(CanvasRenderingContext2D.prototype as any).fill = function (
   ...args: Parameters<typeof CanvasRenderingContext2D.prototype.fill>
 ): void {
   if (args[0] instanceof Path2DShim) {
     const path = args[0];
     this.beginPath();
-    path._ops.forEach(op => {
+    path._ops.forEach((op) => {
       const fn: AnyFunction = this[op.op];
       fn.apply(this, op.args);
     });

@@ -1,4 +1,4 @@
-import { ListGridAPI, MaybePromise } from "../../../ts-types";
+import type { ListGridAPI, MaybePromise } from "../../../ts-types";
 import { browser, event, then } from "../../../internal/utils";
 import { EventHandler } from "../../../internal/EventHandler";
 import { createElement } from "../../../internal/dom";
@@ -44,7 +44,7 @@ function _focus(input: HTMLInputElement, handler: EventHandler): void {
 function createDialogElement(): HTMLDivElement {
   require("@/columns/action/internal/SmallDialogInputElement.css");
   const element = createElement("div", {
-    classList: [CLASSNAME, HIDDEN_CLASSNAME]
+    classList: [CLASSNAME, HIDDEN_CLASSNAME],
   });
   const input = createElement("input", { classList: INPUT_CLASSNAME });
   input.readOnly = true;
@@ -227,7 +227,7 @@ export class SmallDialogInputElement<T> {
     }
     const input = this._input;
     const { value } = input;
-    return then(this._validate(value), res => {
+    return then(this._validate(value), (res) => {
       if (res && value === input.value) {
         const { grid, col, row } = this._activeData!;
         grid.doChangeValue(col, row, () => value);
@@ -256,10 +256,10 @@ export class SmallDialogInputElement<T> {
     handler.on(dialog, "mousedown", stopPropagationOnly);
     handler.on(dialog, "touchstart", stopPropagationOnly);
 
-    handler.on(input, "compositionstart", _e => {
+    handler.on(input, "compositionstart", (_e) => {
       input.classList.add("composition");
     });
-    handler.on(input, "compositionend", _e => {
+    handler.on(input, "compositionend", (_e) => {
       input.classList.remove("composition");
       this._onInputValue(input);
     });
@@ -271,7 +271,7 @@ export class SmallDialogInputElement<T> {
     };
     handler.on(input, "keyup", onKeyupAndPress);
     handler.on(input, "keypress", onKeyupAndPress);
-    handler.on(input, "keydown", e => {
+    handler.on(input, "keydown", (e) => {
       if (input.classList.contains("composition")) {
         return;
       }
@@ -292,7 +292,7 @@ export class SmallDialogInputElement<T> {
     }
     const input = this._input;
     const { value } = input;
-    then(this._doChangeValue(), r => {
+    then(this._doChangeValue(), (r) => {
       if (r && value === input.value) {
         const grid = this._isActive() ? this._activeData!.grid : null;
         this.detach(true);
@@ -340,7 +340,7 @@ export class SmallDialogInputElement<T> {
       if (!message && editor.validator && !inputOnly) {
         message = editor.validator(value, { grid, col, row });
       }
-      return then(message, message => {
+      return then(message, (message) => {
         if (message && value === input.value) {
           dialog.dataset.errorMessage = message;
         } else {

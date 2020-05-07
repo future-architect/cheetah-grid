@@ -1,4 +1,4 @@
-import { RectProps } from "../ts-types";
+import type { RectProps } from "../ts-types";
 
 export type PaddingOption = {
   left?: number;
@@ -30,7 +30,7 @@ export function getFontSize(
     const em = ctx.measureText("あ").width;
     return (fontSizeCache[fontName] = {
       width: em,
-      height: em
+      height: em,
     });
   } finally {
     ctx.font = bk;
@@ -46,8 +46,8 @@ export function calcBasePosition(
       left: paddingLeft = 0,
       right: paddingRight = 0,
       top: paddingTop = 0,
-      bottom: paddingBottom = 0
-    } = {}
+      bottom: paddingBottom = 0,
+    } = {},
   }: {
     offset?: number;
     padding?: PaddingOption;
@@ -59,8 +59,8 @@ export function calcBasePosition(
       left: paddingLeft,
       right: paddingRight,
       top: paddingTop,
-      bottom: paddingBottom
-    }
+      bottom: paddingBottom,
+    },
   });
 }
 export function calcStartPosition(
@@ -74,8 +74,8 @@ export function calcStartPosition(
       left: paddingLeft = 0,
       right: paddingRight = 0,
       top: paddingTop = 0,
-      bottom: paddingBottom = 0
-    } = {}
+      bottom: paddingBottom = 0,
+    } = {},
   }: {
     offset?: number;
     padding?: PaddingOption;

@@ -1,5 +1,5 @@
 import * as sort from "../internal/sort";
-import {
+import type {
   DataSourceAPI,
   FieldAssessor,
   FieldData,
@@ -7,7 +7,7 @@ import {
   MaybePromise,
   MaybePromiseOrCall,
   MaybePromiseOrCallOrUndef,
-  MaybePromiseOrUndef
+  MaybePromiseOrUndef,
 } from "../ts-types";
 import {
   applyChainSafe,
@@ -16,7 +16,7 @@ import {
   getOrApply,
   isDef,
   isPromise,
-  obj
+  obj,
 } from "../internal/utils";
 import { EventTarget } from "../core/EventTarget";
 import { PromiseCacheValue } from "./internal/types";
@@ -38,7 +38,7 @@ const EVENT_TYPE: {
 } = {
   UPDATE_LENGTH: "update_length",
   UPDATED_LENGTH: "updated_length",
-  UPDATED_ORDER: "updated_order"
+  UPDATED_ORDER: "updated_order",
 };
 
 type PromiseBack<V> = (value: PromiseCacheValue<V>) => void;
@@ -85,15 +85,14 @@ function getField<T, F extends FieldDef<T>>(
   if (typeof fieldGet === "function") {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const fieldResult = (fieldGet as any)(record);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return getValue(fieldResult, setPromiseBack);
   }
 
+  // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
   const ss = `${fieldGet}`.split(".");
   if (ss.length <= 1) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const fieldResult = (record as any)[fieldGet];
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return getValue(fieldResult, setPromiseBack);
   }
   const fieldResult = applyChainSafe(
@@ -102,7 +101,6 @@ function getField<T, F extends FieldDef<T>>(
     (val, name) => getField(val, name, emptyFn as any),
     ...ss
   );
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return getValue(fieldResult, setPromiseBack);
 }
 function setField<T, F extends FieldDef<T>>(
@@ -175,7 +173,7 @@ export class DataSource<T> extends EventTarget implements DataSourceAPI<T> {
     return new DataSource<T>({
       get: (index: number): T => array[index],
       length: array.length,
-      source: array
+      source: array,
     });
   }
   constructor(obj?: DataSourceParam<T> | DataSource<T>) {
@@ -221,7 +219,7 @@ export class DataSource<T> extends EventTarget implements DataSourceAPI<T> {
 
     return sort
       .sortPromise(
-        index =>
+        (index) =>
           isDef(sortedIndexMap[index])
             ? sortedIndexMap[index]
             : (sortedIndexMap[index] = index),
@@ -230,7 +228,7 @@ export class DataSource<T> extends EventTarget implements DataSourceAPI<T> {
         },
         this._length,
         orderFn,
-        index => this.getOriginalField(index, field)
+        (index) => this.getOriginalField(index, field)
       )
       .then(() => {
         this._sortedIndexMap = sortedIndexMap;
@@ -246,7 +244,7 @@ export class DataSource<T> extends EventTarget implements DataSourceAPI<T> {
     }
 
     const results = this.fireListeners(EVENT_TYPE.UPDATE_LENGTH, length);
-    if (array.findIndex(results, v => !v) >= 0) {
+    if (array.findIndex(results, (v) => !v) >= 0) {
       return;
     }
     this._length = length;
@@ -271,7 +269,7 @@ export class DataSource<T> extends EventTarget implements DataSourceAPI<T> {
       return undefined;
     }
     const record = this.getOriginal(index);
-    return getField(record, field, val => {
+    return getField(record, field, (val) => {
       this.fieldPromiseCallBackInternal(index, field, val);
     });
   }
@@ -296,7 +294,7 @@ export class DataSource<T> extends EventTarget implements DataSourceAPI<T> {
     }
     const record = this.getOriginal(index);
     if (isPromise(record)) {
-      return record.then(r => setField(r, field, value));
+      return record.then((r) => setField(r, field, value));
     }
     return setField(record, field, value);
   }
@@ -319,6 +317,6 @@ export class DataSource<T> extends EventTarget implements DataSourceAPI<T> {
     get(): void {
       /*noop */
     },
-    length: 0
+    length: 0,
   });
 }

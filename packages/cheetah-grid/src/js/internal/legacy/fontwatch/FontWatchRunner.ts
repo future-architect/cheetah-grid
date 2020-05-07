@@ -1,4 +1,4 @@
-import { AnyFunction } from "../../../ts-types";
+import type { AnyFunction } from "../../../ts-types";
 //see https://github.com/typekit/webfontloader
 
 //http://defghi1977.html.xdomain.jp/tech/canvasMemo/canvasMemo.htm
@@ -6,7 +6,7 @@ import { FontRuler } from "./FontRuler";
 
 const LastResortFonts: { [key: string]: string } = {
   SERIF: "serif",
-  SANS_SERIF: "sans-serif"
+  SANS_SERIF: "sans-serif",
 };
 
 const watchRunners: {
@@ -141,7 +141,7 @@ class FontWatchRunner {
     setTimeout(() => {
       this.fontRulerA_.remove();
       this.fontRulerB_.remove();
-      callbacks.forEach(cb => cb());
+      callbacks.forEach((cb) => cb());
     }, 0);
   }
 }

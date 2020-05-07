@@ -1,4 +1,4 @@
-import {
+import type {
   BaseColumnOption,
   BranchGraphColumnOption,
   ButtonColumnOption,
@@ -6,7 +6,7 @@ import {
   IconColumnOption,
   MenuColumnOption,
   NumberColumnOption,
-  PercentCompleteBarColumnOption
+  PercentCompleteBarColumnOption,
 } from "../ts-types";
 import { BaseColumn } from "./type/BaseColumn";
 import { BranchGraphColumn } from "./type/BranchGraphColumn";
@@ -32,7 +32,7 @@ const TYPES = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   IMAGE: new ImageColumn<any>(),
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  MULTILINETEXT: new MultilineTextColumn<any>()
+  MULTILINETEXT: new MultilineTextColumn<any>(),
 };
 
 /**
@@ -58,7 +58,7 @@ export {
   IconColumnOption,
   MenuColumnOption,
   NumberColumnOption,
-  PercentCompleteBarColumnOption
+  PercentCompleteBarColumnOption,
 };
 export function of<T>(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

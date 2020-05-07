@@ -1,4 +1,4 @@
-import {
+import type {
   ActionOption,
   BaseActionOption,
   ButtonActionOption,
@@ -6,7 +6,7 @@ import {
   EditorOption,
   InlineInputEditorOption,
   InlineMenuEditorOption,
-  SmallDialogInputEditorOption
+  SmallDialogInputEditorOption,
 } from "../ts-types";
 import { Action } from "./action/Action";
 import { BaseAction } from "./action/BaseAction";
@@ -38,7 +38,7 @@ class ImmutableInputEditor extends SmallDialogInputEditor<any> {
 
 export const ACTIONS = {
   CHECK: new ImmutableCheckEditor(),
-  INPUT: new ImmutableInputEditor()
+  INPUT: new ImmutableInputEditor(),
 };
 /**
  * column actions
@@ -61,7 +61,7 @@ export {
   EditorOption,
   InlineInputEditorOption,
   InlineMenuEditorOption,
-  SmallDialogInputEditorOption
+  SmallDialogInputEditorOption,
 };
 export function of<T>(
   columnAction: ColumnActionOption | BaseAction<T> | null | undefined

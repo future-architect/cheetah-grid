@@ -1,6 +1,6 @@
 /*eslint-disable @typescript-eslint/camelcase*/
 
-import { IconDefine } from "./ts-types";
+import type { IconDefine } from "./ts-types";
 import { extend } from "./internal/utils";
 import { icons as plugins } from "./plugins/icons";
 const builtins = {
@@ -24,7 +24,7 @@ const builtins = {
   },
   get star_half(): IconDefine {
     return require("cheetah-grid-icon-svg-loader!material-design-icons/toggle/svg/production/ic_star_half_24px.svg");
-  }
+  },
 };
 
 export function get(): { [key: string]: IconDefine } {

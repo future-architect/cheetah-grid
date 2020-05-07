@@ -3,7 +3,7 @@ import * as canvashelper from "./tools/canvashelper";
 import * as fonts from "./internal/fonts";
 import * as inlineUtils from "./element/inlines";
 import * as themes from "./themes";
-import {
+import type {
   CellContext,
   ColorDef,
   ColorPropertyDefine,
@@ -15,9 +15,9 @@ import {
   RectProps,
   RequiredThemeDefine,
   StylePropertyFunctionArg,
-  TextOverflow
+  TextOverflow,
 } from "./ts-types";
-import { Inline, InlineDrawOption } from "./element/Inline";
+import type { Inline, InlineDrawOption } from "./element/Inline";
 import { RGBA, colorToRGB } from "./internal/color";
 import { calcStartPosition, getFontSize } from "./internal/canvases";
 import {
@@ -26,11 +26,11 @@ import {
   getChainSafe,
   getOrApply,
   isDef,
-  style
+  style,
 } from "./internal/utils";
 import { InlineDrawer } from "./element/InlineDrawer";
 import { Rect } from "./internal/Rect";
-import { SimpleColumnIconOption } from "./ts-types-internal";
+import type { SimpleColumnIconOption } from "./ts-types-internal";
 
 const { toBoxArray } = style;
 
@@ -74,7 +74,7 @@ function getColor<T>(
     col,
     row,
     grid,
-    context
+    context,
   });
 }
 function getFont<T>(
@@ -91,7 +91,7 @@ function getFont<T>(
     col,
     row,
     grid,
-    context
+    context,
   });
 }
 function getThemeColor<
@@ -171,7 +171,7 @@ function drawInlines<T>(
           offsetLeft,
           offsetRight,
           offsetTop,
-          offsetBottom
+          offsetBottom,
         });
       } finally {
         ctx.restore();
@@ -187,7 +187,7 @@ function drawInlines<T>(
     drawInline(inline, 0, 0);
   } else {
     const inlineWidths = inlines.map(
-      inline => (inline.width({ ctx }) || 0) - 0
+      (inline) => (inline.width({ ctx }) || 0) - 0
     );
     let offsetRight = inlineWidths.reduce((a, b) => a + b);
 
@@ -238,7 +238,7 @@ function getOverflowInlinesIndex(
   lineWidth: number;
   remWidth: number;
 } | null {
-  const maxWidth = width - 3 /*buffer*/;
+  const maxWidth = width - 3; /*buffer*/
   let lineWidth = 0;
   for (let i = 0; i < inlines.length; i++) {
     const inline = inlines[i];
@@ -247,7 +247,7 @@ function getOverflowInlinesIndex(
       return {
         index: i,
         lineWidth,
-        remWidth: maxWidth - lineWidth
+        remWidth: maxWidth - lineWidth,
       };
     }
     lineWidth += inlineWidth;
@@ -277,7 +277,7 @@ function breakWidthInlines(
     return {
       beforeInlines: inlines,
       overflow: false,
-      afterInlines: []
+      afterInlines: [],
     };
   }
   const { index, remWidth } = indexData;
@@ -310,7 +310,7 @@ function breakWidthInlines(
   return {
     beforeInlines,
     overflow: true,
-    afterInlines
+    afterInlines,
   };
 }
 
@@ -327,7 +327,7 @@ function truncateInlines(
   if (!indexData) {
     return {
       inlines,
-      overflow: false
+      overflow: false,
     };
   }
   const { index, lineWidth } = indexData;
@@ -345,7 +345,7 @@ function truncateInlines(
   result.push(overflowInline);
   return {
     inlines: result,
-    overflow: true
+    overflow: true,
   };
 }
 
@@ -363,7 +363,7 @@ function _inlineRect<T>(
     textBaseline,
     font,
     textOverflow,
-    icons
+    icons,
   }: {
     offset: number;
     color?: ColorPropertyDefine;
@@ -418,7 +418,7 @@ function _multiInlineRect<T>(
     autoWrapText,
     lineClamp,
     textOverflow,
-    icons
+    icons,
   }: {
     offset: number;
     color?: ColorPropertyDefine;
@@ -440,7 +440,7 @@ function _multiInlineRect<T>(
 
   if (lineClamp === "auto") {
     const rectHeight =
-        rect.height - offset * 2 - 2 /*offset added by Inline#draw*/;
+      rect.height - offset * 2 - 2; /*offset added by Inline#draw*/
     lineClamp = Math.max(Math.floor(rectHeight / lineHeight), 1);
   }
 
@@ -567,7 +567,7 @@ function _multiInlineRect<T>(
     paddingTop -= pad;
     paddingBottom += pad;
   }
-  buildedMultiInlines.forEach(buildedInline => {
+  buildedMultiInlines.forEach((buildedInline) => {
     drawInlines(
       ctx,
       buildedInline,
@@ -597,7 +597,7 @@ function drawCheckbox<T>(
     checkBgColor = helper.theme.checkbox.checkBgColor,
     borderColor = helper.theme.checkbox.borderColor,
     textAlign = "center",
-    textBaseline = "middle"
+    textBaseline = "middle",
   }: {
     animElapsedTime?: number;
     uncheckBgColor?: ColorPropertyDefine;
@@ -656,7 +656,7 @@ function drawCheckbox<T>(
     {
       uncheckBgColor,
       checkBgColor,
-      borderColor
+      borderColor,
     }
   );
 }
@@ -723,7 +723,7 @@ class ThemeResolver<T> implements RequiredThemeDefine {
         },
         get borderColor(): ColorPropertyDefine {
           return getThemeColor(grid, "checkbox", "borderColor");
-        }
+        },
       })
     );
   }
@@ -737,7 +737,7 @@ class ThemeResolver<T> implements RequiredThemeDefine {
         },
         get bgColor(): ColorPropertyDefine {
           return getThemeColor(grid, "button", "bgColor");
-        }
+        },
       })
     );
   }
@@ -748,7 +748,7 @@ class ThemeResolver<T> implements RequiredThemeDefine {
       (this._header = {
         get sortArrowColor(): ColorPropertyDefine {
           return getThemeColor(grid, "header", "sortArrowColor");
-        }
+        },
       })
     );
   }
@@ -796,7 +796,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
           },
           get em() {
             return getFontSize(context.getContext(), font).width;
-          }
+          },
         });
       },
       calcHeight(height: number | string): number {
@@ -807,9 +807,9 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
           },
           get em() {
             return getFontSize(context.getContext(), font).height;
-          }
+          },
         });
-      }
+      },
     };
   }
   getColor(
@@ -849,7 +849,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
         calculator.calcHeight(box[0]),
         calculator.calcWidth(box[1]),
         calculator.calcHeight(box[2]),
-        calculator.calcWidth(box[3])
+        calculator.calcWidth(box[3]),
       ];
     }
     return toBoxArray(value);
@@ -924,7 +924,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
       textBaseline = "middle",
       font,
       textOverflow = "clip",
-      icons
+      icons,
     }: {
       padding?: number | string | (number | string)[];
       offset?: number;
@@ -949,7 +949,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
       }
     }
 
-    this.drawWithClip(context, ctx => {
+    this.drawWithClip(context, (ctx) => {
       font = getFont(font, context.col, context.row, this._grid, ctx);
       if (padding) {
         const paddingNums = this.toBoxPixelArray(padding, context, font);
@@ -966,7 +966,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
         textBaseline,
         font,
         textOverflow,
-        icons
+        icons,
       });
     });
   }
@@ -984,7 +984,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
       autoWrapText = false,
       lineClamp = 0,
       textOverflow = "clip",
-      icons
+      icons,
     }: {
       padding?: number | string | (number | string)[];
       offset?: number;
@@ -1012,7 +1012,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
       }
     }
 
-    this.drawWithClip(context, ctx => {
+    this.drawWithClip(context, (ctx) => {
       font = getFont(font, context.col, context.row, this._grid, ctx);
       if (padding) {
         const paddingNums = this.toBoxPixelArray(padding, context, font);
@@ -1034,7 +1034,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
         autoWrapText,
         lineClamp,
         textOverflow,
-        icons
+        icons,
       });
     });
   }
@@ -1047,7 +1047,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
       color,
       textAlign = "left",
       textBaseline = "top",
-      font
+      font,
     }: {
       color?: ColorPropertyDefine;
       textAlign?: CanvasTextAlign;
@@ -1081,12 +1081,12 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
   fillCell(
     context: CellContext,
     {
-      fillColor = this.theme.defaultBgColor
+      fillColor = this.theme.defaultBgColor,
     }: { fillColor?: ColorPropertyDefine } = {}
   ): void {
     const rect = context.getRect();
 
-    this.drawWithClip(context, ctx => {
+    this.drawWithClip(context, (ctx) => {
       const { col, row } = context;
       ctx.fillStyle = getColor(fillColor, col, row, this._grid, ctx);
 
@@ -1106,7 +1106,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
     rect: RectProps,
     context: CellContext,
     {
-      fillColor = this.theme.defaultBgColor
+      fillColor = this.theme.defaultBgColor,
     }: { fillColor?: ColorPropertyDefine } = {}
   ): void {
     const ctx = context.getContext();
@@ -1156,12 +1156,12 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
     context: CellContext,
     {
       borderColor = this.theme.borderColor,
-      lineWidth = 1
+      lineWidth = 1,
     }: { borderColor?: ColorsPropertyDefine; lineWidth?: number } = {}
   ): void {
     const rect = context.getRect();
 
-    this.drawBorderWithClip(context, ctx => {
+    this.drawBorderWithClip(context, (ctx) => {
       const { col, row } = context;
       const borderColors = getColor(borderColor, col, row, this._grid, ctx);
 
@@ -1227,7 +1227,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
       const sel = this._grid.selection.select;
       if (sel.col + 1 === col && sel.row === row) {
         //右が選択されている
-        this.drawBorderWithClip(context, ctx => {
+        this.drawBorderWithClip(context, (ctx) => {
           const borderColors = toBoxArray(
             getColor(
               this.theme.highlightBorderColor,
@@ -1246,7 +1246,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
         });
       } else if (sel.col === col && sel.row + 1 === row) {
         //上が選択されている
-        this.drawBorderWithClip(context, ctx => {
+        this.drawBorderWithClip(context, (ctx) => {
           const borderColors = toBoxArray(
             getColor(
               this.theme.highlightBorderColor,
@@ -1286,7 +1286,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
       draw,
       width: boxWidth + 3,
       height: boxWidth + 1,
-      color: undefined
+      color: undefined,
     });
 
     function draw({
@@ -1296,7 +1296,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
       offsetLeft,
       offsetRight,
       offsetTop,
-      offsetBottom
+      offsetBottom,
     }: InlineDrawOption): void {
       const { col, row } = context;
       drawCheckbox(ctx, rect, col, row, check, self, option, {
@@ -1305,8 +1305,8 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
           left: offsetLeft + 1,
           right: offsetRight,
           top: offsetTop,
-          bottom: offsetBottom
-        }
+          bottom: offsetBottom,
+        },
       });
     }
   }
@@ -1322,7 +1322,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
       textBaseline?: CanvasTextBaseline;
     } = {}
   ): void {
-    this.drawWithClip(context, ctx => {
+    this.drawWithClip(context, (ctx) => {
       const { col, row } = context;
       drawCheckbox(ctx, context.getRect(), col, row, check, this, option);
     });
@@ -1340,7 +1340,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
       shadow,
       font,
       textOverflow = "clip",
-      icons
+      icons,
     }: {
       bgColor?: ColorPropertyDefine;
       padding?: number | string | (number | string)[];
@@ -1356,7 +1356,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
   ): void {
     const rect = context.getRect();
 
-    this.drawWithClip(context, ctx => {
+    this.drawWithClip(context, (ctx) => {
       font = getFont(font, context.col, context.row, this._grid, ctx);
       const { col, row } = context;
       const paddingNums = this.toBoxPixelArray(
@@ -1375,7 +1375,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
         bgColor,
         radius: rect.height / 8,
         // offset,
-        shadow
+        shadow,
       });
       _inlineRect(
         this._grid,
@@ -1391,7 +1391,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
           textBaseline,
           font,
           textOverflow,
-          icons
+          icons,
         }
       );
     });
