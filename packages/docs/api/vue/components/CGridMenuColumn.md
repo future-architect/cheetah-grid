@@ -34,7 +34,7 @@ Use this slot to set the header caption
 | readonly | `boolean`&#124;`function`  | Defines readonly | `false` |
 | colspan | `number`&#124;`string`  | Defines the layout colspan.<br>This property can be used when defining in the `layout-header` and `layout-body` slots. | `undefined` |
 | display-options | `object`&#124;`Array`  | Defines a menu options for display | `undefined` |
-| editor-options | `object`&#124;`Array`  | Defines a menu options for popup | `undefined` |
+| editor-options | `object`&#124;`Array`&#124;`function`  | Defines a menu options for popup | `undefined` |
 | filter | `string`&#124;`function`  | Defines a vue filter name | `undefined` |
 | header-action | `object`&#124;`string`&#124;`function`  | Defines a column header action | `undefined` |
 | header-field | `string`  | Defines a column header data field | `undefined` |
