@@ -1,14 +1,14 @@
 import * as columns from "../../../columns";
 import * as headerAction from "../../../header/action";
 import * as headerType from "../../../header/type";
-import { CellRange, LayoutObjectId } from "../../../ts-types";
+import type { CellRange, LayoutObjectId } from "../../../ts-types";
 import {
   ColumnData,
   ColumnDefine,
   GroupHeaderDefine,
   HeaderData,
   HeadersDefine,
-  LayoutMapAPI
+  LayoutMapAPI,
 } from "../api";
 import { EmptyDataCache } from "./utils";
 
@@ -67,7 +67,7 @@ export class SimpleHeaderLayoutMap<T> implements LayoutMapAPI<T> {
       if (id === this._columns[col].id) {
         return {
           start: { col, row: 0 },
-          end: { col, row: 0 }
+          end: { col, row: 0 },
         };
       }
     }
@@ -123,7 +123,7 @@ export class SimpleHeaderLayoutMap<T> implements LayoutMapAPI<T> {
   ): HeaderData<T>[] {
     const results: HeaderData<T>[] = [];
     const rowCells = this._headerCellIds[row] || this._newRow(row);
-    header.forEach(hd => {
+    header.forEach((hd) => {
       const col = this._columns.length;
       const id = seqId++;
       const cell: HeaderData<T> = {
@@ -133,7 +133,7 @@ export class SimpleHeaderLayoutMap<T> implements LayoutMapAPI<T> {
         style: hd.headerStyle,
         headerType: headerType.ofCell(hd),
         action: headerAction.ofCell(hd),
-        define: hd
+        define: hd,
       };
       results[id] = cell;
       rowCells[col] = id;
@@ -143,8 +143,8 @@ export class SimpleHeaderLayoutMap<T> implements LayoutMapAPI<T> {
       if ((hd as GroupHeaderDefine<T>).columns) {
         this._addHeaders(row + 1, (hd as GroupHeaderDefine<T>).columns, [
           ...roots,
-          id
-        ]).forEach(c => results.push(c));
+          id,
+        ]).forEach((c) => results.push(c));
       } else {
         const colDef = hd as ColumnDefine<T>;
         this._columns.push({
@@ -158,7 +158,7 @@ export class SimpleHeaderLayoutMap<T> implements LayoutMapAPI<T> {
           columnType: columns.type.of(colDef.columnType),
           action: columns.action.of(colDef.action),
           style: colDef.style,
-          define: colDef
+          define: colDef,
         });
         for (let r = row + 1; r < this._headerCellIds.length; r++) {
           this._headerCellIds[r][col] = id;

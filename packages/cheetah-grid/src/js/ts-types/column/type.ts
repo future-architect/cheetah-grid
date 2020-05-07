@@ -1,4 +1,4 @@
-import { ColumnMenuItemOptions } from "../define";
+import type { ColumnMenuItemOptions } from "../define";
 
 export interface BaseColumnOption {
   fadeinWhenCallbackInPromise?: boolean;

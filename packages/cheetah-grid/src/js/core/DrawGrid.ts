@@ -1,7 +1,7 @@
 import * as calc from "../internal/calc";
 import * as hiDPI from "../internal/hiDPI";
 import * as style from "../internal/style";
-import {
+import type {
   AfterSelectedCellEvent,
   AnyFunction,
   BeforeSelectedCellEvent,
@@ -16,7 +16,7 @@ import {
   KeyboardEventListener,
   KeydownEvent,
   PasteCellEvent,
-  PasteRangeBoxValues
+  PasteRangeBoxValues,
 } from "../ts-types";
 import {
   array,
@@ -24,7 +24,7 @@ import {
   event,
   isDef,
   isDescendantElement,
-  isPromise
+  isPromise,
 } from "../internal/utils";
 
 import { DG_EVENT_TYPE } from "./DG_EVENT_TYPE";
@@ -42,7 +42,7 @@ const {
   isTouchEvent,
   getMouseButtons,
   getKeyCode,
-  cancel: cancelEvent
+  cancel: cancelEvent,
 } = event;
 const _ = getProtectedSymbol();
 
@@ -94,7 +94,7 @@ function _getTargetRowAt(
       if (top <= absoluteY && absoluteY < bottom) {
         return {
           top,
-          row
+          row,
         };
       }
       bottom = top;
@@ -116,7 +116,7 @@ function _getTargetRowAt(
       if (top <= absoluteY && absoluteY < bottom) {
         return {
           top,
-          row
+          row,
         };
       }
       top = bottom;
@@ -149,7 +149,7 @@ function _getTargetColAt(
     if (right > absoluteX) {
       return {
         left,
-        col
+        col,
       };
     }
     left = right;
@@ -174,7 +174,7 @@ function _getTargetFrozenRowAt(
     if (bottom > absoluteY) {
       return {
         top,
-        row
+        row,
       };
     }
     top = bottom;
@@ -199,7 +199,7 @@ function _getTargetFrozenColAt(
     if (right > absoluteX) {
       return {
         left,
-        col
+        col,
       };
     }
     left = right;
@@ -431,14 +431,14 @@ function _invalidateRect(grid: DrawGrid, drawRect: Rect): void {
     Math.max(visibleRect.top, drawRect.top)
   ) || {
     top: _getRowsHeight.call(grid, 0, rowCount - 1),
-    row: rowCount
+    row: rowCount,
   };
   const initCol = _getTargetColAt(
     grid,
     Math.max(visibleRect.left, drawRect.left)
   ) || {
     left: _getColsWidth(grid, 0, grid[_].colCount - 1),
-    col: grid[_].colCount
+    col: grid[_].colCount,
   };
   const drawBottom = Math.min(visibleRect.bottom, drawRect.bottom);
   const drawRight = Math.min(visibleRect.right, drawRect.right);
@@ -812,7 +812,7 @@ function _getScrollHeight(this: DrawGrid, row?: number): number {
     return internal;
   }
   let h = this[_].defaultRowHeight * this[_].rowCount;
-  this[_].rowHeightsMap.each(0, this[_].rowCount - 1, height => {
+  this[_].rowHeightsMap.each(0, this[_].rowCount - 1, (height) => {
     h += height - this[_].defaultRowHeight;
   });
   return h;
@@ -826,7 +826,7 @@ function _onScroll(grid: DrawGrid, _e: Event): void {
   //次回計算用情報を保持
   grid[_].scroll = {
     left: grid[_].scrollable.scrollLeft,
-    top: grid[_].scrollable.scrollTop
+    top: grid[_].scrollable.scrollTop,
   };
   const visibleRect = _getVisibleRect(grid);
   if (
@@ -995,7 +995,7 @@ function _onKeyDownMove(this: DrawGrid, e: KeyboardEvent): void {
   ) {
     this.selection.range = {
       start: { col: 0, row: 0 },
-      end: { col: this.colCount - 1, row: this.rowCount - 1 }
+      end: { col: this.colCount - 1, row: this.rowCount - 1 },
     };
     this.invalidate();
     cancelEvent(e);
@@ -1097,10 +1097,10 @@ function _updatedSelection(this: DrawGrid): void {
   const { col: selCol, row: selRow } = this[_].selection.select;
   const results = this.fireListeners(DG_EVENT_TYPE.EDITABLEINPUT_CELL, {
     col: selCol,
-    row: selRow
+    row: selRow,
   });
 
-  const editMode = array.findIndex(results, v => !!v) >= 0;
+  const editMode = array.findIndex(results, (v) => !!v) >= 0;
   focusControl.editMode = editMode;
 
   if (editMode) {
@@ -1109,7 +1109,7 @@ function _updatedSelection(this: DrawGrid): void {
     this.fireListeners(DG_EVENT_TYPE.MODIFY_STATUS_EDITABLEINPUT_CELL, {
       col: selCol,
       row: selRow,
-      input: focusControl.input
+      input: focusControl.input,
     });
   }
 }
@@ -1157,18 +1157,18 @@ function _bindEvents(this: DrawGrid): void {
     if (cell.col < 0 || cell.row < 0) {
       return {
         abstractPos,
-        cell
+        cell,
       };
     }
     const eventArgs = {
       col: cell.col,
       row: cell.row,
-      event: e
+      event: e,
     };
     return {
       abstractPos,
       cell,
-      eventArgs
+      eventArgs,
     };
   };
   const canResizeColumn = (col: number): boolean => {
@@ -1181,7 +1181,7 @@ function _bindEvents(this: DrawGrid): void {
     }
     return limit.max !== limit.min;
   };
-  handler.on(element, "mousedown", e => {
+  handler.on(element, "mousedown", (e) => {
     const eventArgsSet = getCellEventArgsSet(e);
     const { abstractPos, eventArgs } = eventArgsSet;
     if (!abstractPos) {
@@ -1192,7 +1192,7 @@ function _bindEvents(this: DrawGrid): void {
         DG_EVENT_TYPE.MOUSEDOWN_CELL,
         eventArgs
       );
-      if (array.findIndex(results, v => !v) >= 0) {
+      if (array.findIndex(results, (v) => !v) >= 0) {
         return;
       }
     }
@@ -1208,7 +1208,7 @@ function _bindEvents(this: DrawGrid): void {
       grid[_].cellSelector.start(e);
     }
   });
-  handler.on(element, "mouseup", e => {
+  handler.on(element, "mouseup", (e) => {
     if (!grid.hasListeners(DG_EVENT_TYPE.MOUSEUP_CELL)) {
       return;
     }
@@ -1222,7 +1222,7 @@ function _bindEvents(this: DrawGrid): void {
     | null
     | undefined = null;
   let longTouchId: NodeJS.Timeout | null = null;
-  handler.on(element, "touchstart", e => {
+  handler.on(element, "touchstart", (e) => {
     if (!doubleTapBefore) {
       doubleTapBefore = getCellEventArgsSet(e).eventArgs;
       setTimeout(() => {
@@ -1272,7 +1272,7 @@ function _bindEvents(this: DrawGrid): void {
   }
   handler.on(element, "touchcancel", cancel);
   handler.on(element, "touchmove", cancel);
-  handler.on(element, "touchend", e => {
+  handler.on(element, "touchend", (e) => {
     if (longTouchId) {
       clearTimeout(longTouchId);
       grid[_].cellSelector.select(e);
@@ -1287,7 +1287,7 @@ function _bindEvents(this: DrawGrid): void {
     grid.fireListeners(DG_EVENT_TYPE.MOUSEENTER_CELL, {
       col: cell.col,
       row: cell.row,
-      related
+      related,
     });
     mouseEnterCell = cell;
   }
@@ -1298,7 +1298,7 @@ function _bindEvents(this: DrawGrid): void {
       grid.fireListeners(DG_EVENT_TYPE.MOUSELEAVE_CELL, {
         col: beforeMouseCell.col,
         row: beforeMouseCell.row,
-        related
+        related,
       });
     }
     return beforeMouseCell || undefined;
@@ -1307,7 +1307,7 @@ function _bindEvents(this: DrawGrid): void {
     grid.fireListeners(DG_EVENT_TYPE.MOUSEOVER_CELL, {
       col: cell.col,
       row: cell.row,
-      related
+      related,
     });
     mouseOverCell = cell;
   }
@@ -1318,7 +1318,7 @@ function _bindEvents(this: DrawGrid): void {
       grid.fireListeners(DG_EVENT_TYPE.MOUSEOUT_CELL, {
         col: beforeMouseCell.col,
         row: beforeMouseCell.row,
-        related
+        related,
       });
     }
     return beforeMouseCell || undefined;
@@ -1336,7 +1336,7 @@ function _bindEvents(this: DrawGrid): void {
     onMouseleaveCell();
   });
 
-  handler.on(element, "mousemove", e => {
+  handler.on(element, "mousemove", (e) => {
     const eventArgsSet = getCellEventArgsSet(e);
     const { abstractPos, eventArgs } = eventArgsSet;
     if (eventArgs) {
@@ -1349,7 +1349,7 @@ function _bindEvents(this: DrawGrid): void {
         ) {
           const enterCell = {
             col: eventArgs.col,
-            row: eventArgs.row
+            row: eventArgs.row,
           };
           const outCell = onMouseoutCell(enterCell);
           const leaveCell = onMouseleaveCell(enterCell);
@@ -1360,13 +1360,13 @@ function _bindEvents(this: DrawGrid): void {
         } else if (isMouseover && !mouseOverCell) {
           onMouseoverCell({
             col: eventArgs.col,
-            row: eventArgs.row
+            row: eventArgs.row,
           });
         }
       } else {
         const enterCell = {
           col: eventArgs.col,
-          row: eventArgs.row
+          row: eventArgs.row,
         };
         onMouseenterCell(enterCell);
         if (isMouseover) {
@@ -1397,7 +1397,7 @@ function _bindEvents(this: DrawGrid): void {
       }
     }
   });
-  handler.on(element, "click", e => {
+  handler.on(element, "click", (e) => {
     if (
       grid[_].columnResizer.lastMoving(e) ||
       grid[_].cellSelector.lastMoving(e)
@@ -1413,7 +1413,7 @@ function _bindEvents(this: DrawGrid): void {
     }
     grid.fireListeners(DG_EVENT_TYPE.CLICK_CELL, eventArgs);
   });
-  handler.on(element, "contextmenu", e => {
+  handler.on(element, "contextmenu", (e) => {
     if (!grid.hasListeners(DG_EVENT_TYPE.CONTEXTMENU_CELL)) {
       return;
     }
@@ -1423,7 +1423,7 @@ function _bindEvents(this: DrawGrid): void {
     }
     grid.fireListeners(DG_EVENT_TYPE.CONTEXTMENU_CELL, eventArgs);
   });
-  handler.on(element, "dblclick", e => {
+  handler.on(element, "dblclick", (e) => {
     if (!grid.hasListeners(DG_EVENT_TYPE.DBLCLICK_CELL)) {
       return;
     }
@@ -1436,18 +1436,18 @@ function _bindEvents(this: DrawGrid): void {
   grid[_].focusControl.onKeyDown((evt: KeydownEvent) => {
     grid.fireListeners(DG_EVENT_TYPE.KEYDOWN, evt);
   });
-  grid[_].selection.listen(DG_EVENT_TYPE.SELECTED_CELL, data => {
+  grid[_].selection.listen(DG_EVENT_TYPE.SELECTED_CELL, (data) => {
     grid.fireListeners(DG_EVENT_TYPE.SELECTED_CELL, data, data.selected);
   });
 
-  scrollable.onScroll(e => {
+  scrollable.onScroll((e) => {
     _onScroll(grid, e);
     grid.fireListeners(DG_EVENT_TYPE.SCROLL, { event: e });
   });
-  grid[_].focusControl.onKeyDownMove(e => {
+  grid[_].focusControl.onKeyDownMove((e) => {
     _onKeyDownMove.call(grid, e);
   });
-  grid.listen("copydata", range => {
+  grid.listen("copydata", (range) => {
     const copyRange = grid.getCopyRangeInternal(range);
     let copyValue = "";
     for (let { row } = copyRange.start; row <= copyRange.end.row; row++) {
@@ -1459,8 +1459,9 @@ function _bindEvents(this: DrawGrid): void {
         ) {
           //非同期データは取得できない
         } else {
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
           const strCellValue = `${copyCellValue}`;
-          if (strCellValue.match(/^\[object .*\]$/)) {
+          if (/^\[object .*\]$/.exec(strCellValue)) {
             //object は無視
           } else {
             copyValue += strCellValue;
@@ -1496,16 +1497,16 @@ function _bindEvents(this: DrawGrid): void {
             (rangeBoxValues = parsePasteRangeBoxValues(normalizeValue))
           );
         },
-        event
+        event,
       };
       grid.fireListeners(DG_EVENT_TYPE.PASTE_CELL, pasteCellEvent);
     }
   );
-  grid[_].focusControl.onInput(value => {
+  grid[_].focusControl.onInput((value) => {
     const { col, row } = grid[_].selection.select;
     grid.fireListeners(DG_EVENT_TYPE.INPUT_CELL, { col, row, value });
   });
-  grid[_].focusControl.onDelete(event => {
+  grid[_].focusControl.onDelete((event) => {
     const { col, row } = grid[_].selection.select;
     grid.fireListeners(DG_EVENT_TYPE.DELETE_CELL, { col, row, event });
   });
@@ -1516,7 +1517,7 @@ function _bindEvents(this: DrawGrid): void {
     const { col, row } = grid[_].selection.select;
     grid.invalidateCell(col, row);
   });
-  grid[_].focusControl.onBlur(e => {
+  grid[_].focusControl.onBlur((e) => {
     grid.fireListeners(DG_EVENT_TYPE.BLUR_GRID, e);
     grid[_].focusedGrid = false;
 
@@ -1551,7 +1552,7 @@ function _getResizeColAt(
 function _getVisibleRect(grid: DrawGrid): Rect {
   const {
     scroll: { left, top },
-    canvas: { width, height }
+    canvas: { width, height },
   } = grid[_];
   return new Rect(left, top, width, height);
 }
@@ -1633,23 +1634,23 @@ class BaseMouseDownMover {
     const events = this._events;
     const handler = this._handler;
     if (!isTouchEvent(e)) {
-      events.mousemove = handler.on(document.body, "mousemove", e =>
+      events.mousemove = handler.on(document.body, "mousemove", (e) =>
         this._mouseMove(e)
       );
-      events.mouseup = handler.on(document.body, "mouseup", e =>
+      events.mouseup = handler.on(document.body, "mouseup", (e) =>
         this._mouseUp(e)
       );
     } else {
       events.touchmove = handler.on(
         document.body,
         "touchmove",
-        e => this._mouseMove(e),
+        (e) => this._mouseMove(e),
         { passive: false }
       );
-      events.touchend = handler.on(document.body, "touchend", e =>
+      events.touchend = handler.on(document.body, "touchend", (e) =>
         this._mouseUp(e)
       );
-      events.touchcancel = handler.on(document.body, "touchcancel", e =>
+      events.touchcancel = handler.on(document.body, "touchcancel", (e) =>
         this._mouseUp(e)
       );
     }
@@ -1834,7 +1835,7 @@ class ColumnResizer extends BaseMouseDownMover {
     _invalidateRect(this._grid, rect);
 
     this._grid.fireListeners(DG_EVENT_TYPE.RESIZE_COLUMN, {
-      col: this._targetCol
+      col: this._targetCol,
     });
 
     return true;
@@ -1925,7 +1926,7 @@ class FocusControl extends EventTarget {
     handler.on(input, "compositionend", (_e: Event): void => {
       this._compositionEnd = setTimeout(handleCompositionEnd, 1);
     });
-    handler.on(input, "keypress", e => {
+    handler.on(input, "keypress", (e) => {
       if (this._isComposition) {
         return;
       }
@@ -1947,7 +1948,7 @@ class FocusControl extends EventTarget {
       }
       inputClear();
     });
-    handler.on(input, "keydown", e => {
+    handler.on(input, "keydown", (e) => {
       if (this._isComposition) {
         if (this._compositionEnd) {
           handleCompositionEnd();
@@ -1962,7 +1963,7 @@ class FocusControl extends EventTarget {
         event: e,
         stopCellMoving() {
           stopCellMove = true;
-        }
+        },
       };
       this.fireListeners("keydown", evt);
 
@@ -1980,7 +1981,7 @@ class FocusControl extends EventTarget {
 
       inputClear();
     });
-    handler.on(input, "keyup", _e => {
+    handler.on(input, "keyup", (_e) => {
       if (this._isComposition) {
         if (this._compositionEnd) {
           handleCompositionEnd();
@@ -1997,7 +1998,7 @@ class FocusControl extends EventTarget {
       inputClear();
     });
     if (browser.IE) {
-      handler.on(document, "keydown", e => {
+      handler.on(document, "keydown", (e) => {
         if (e.target !== input) {
           return;
         }
@@ -2022,7 +2023,7 @@ class FocusControl extends EventTarget {
       });
     }
     if (browser.Edge) {
-      handler.once(document, "keydown", e => {
+      handler.once(document, "keydown", (e) => {
         if (!isDescendantElement(parentElement, e.target as HTMLElement)) {
           return;
         }
@@ -2034,7 +2035,7 @@ class FocusControl extends EventTarget {
         dummyInput.parentElement?.removeChild(dummyInput);
       });
     }
-    handler.on(document, "paste", e => {
+    handler.on(document, "paste", (e) => {
       if (!isDescendantElement(parentElement, e.target)) {
         return;
       }
@@ -2062,7 +2063,7 @@ class FocusControl extends EventTarget {
         this.fireListeners("paste", { value: pasteText, event: e });
       }
     });
-    handler.on(document, "copy", e => {
+    handler.on(document, "copy", (e) => {
       if (this._isComposition) {
         return;
       }
@@ -2081,10 +2082,10 @@ class FocusControl extends EventTarget {
         }
       }
     });
-    handler.on(input, "focus", e => {
+    handler.on(input, "focus", (e) => {
       this.fireListeners("focus", e);
     });
-    handler.on(input, "blur", e => {
+    handler.on(input, "blur", (e) => {
       this.fireListeners("blur", e);
     });
   }
@@ -2182,7 +2183,7 @@ class FocusControl extends EventTarget {
         removeNames.push(att.name);
       }
     }
-    removeNames.forEach(removeName => {
+    removeNames.forEach((removeName) => {
       el.removeAttribute(removeName);
     });
     for (const name in this._inputStatus) {
@@ -2252,12 +2253,12 @@ class Selection extends EventTarget {
     return {
       start: {
         col: startCol,
-        row: startRow
+        row: startRow,
       },
       end: {
         col: endCol,
-        row: endRow
-      }
+        row: endRow,
+      },
     };
   }
   set range(range) {
@@ -2269,19 +2270,19 @@ class Selection extends EventTarget {
     this._wrapFireSelectedEvent(() => {
       this._sel = {
         col: startCol,
-        row: startRow
+        row: startRow,
       };
       this._focus = {
         col: startCol,
-        row: startRow
+        row: startRow,
       };
       this._start = {
         col: startCol,
-        row: startRow
+        row: startRow,
       };
       this._end = {
         col: endCol,
-        row: endRow
+        row: endRow,
       };
 
       _updatedSelection.call(this._grid);
@@ -2328,7 +2329,7 @@ class Selection extends EventTarget {
         const before: BeforeSelectedCellEvent = {
           col: this._sel.col,
           row: this._sel.row,
-          selected: false
+          selected: false,
         } as BeforeSelectedCellEvent;
         callback();
         const after: AfterSelectedCellEvent = {
@@ -2337,12 +2338,12 @@ class Selection extends EventTarget {
           selected: true,
           before: {
             col: before.col,
-            row: before.row
-          }
+            row: before.row,
+          },
         };
         before.after = {
           col: after.col,
-          row: after.row
+          row: after.row,
         };
         this.fireListeners(DG_EVENT_TYPE.SELECTED_CELL, before);
         this.fireListeners(DG_EVENT_TYPE.SELECTED_CELL, after);
@@ -2365,7 +2366,7 @@ class Selection extends EventTarget {
       return false;
     }
     this._wrapFireSelectedEvent(() => {
-      points.forEach(p => {
+      points.forEach((p) => {
         p.col = Math.min(colCount - 1, p.col);
         p.row = Math.min(rowCount - 1, p.row);
       });
@@ -2394,7 +2395,7 @@ class DrawLayers {
       list.push(this._layers[k]);
     }
     list.sort((a, b) => a.level - b.level);
-    list.forEach(l => l.draw(ctx));
+    list.forEach((l) => l.draw(ctx));
   }
 }
 class DrawLayer {
@@ -2411,7 +2412,7 @@ class DrawLayer {
     this._list.push(fn);
   }
   draw(ctx: CanvasRenderingContext2D): void {
-    this._list.forEach(fn => {
+    this._list.forEach((fn) => {
       ctx.save();
       try {
         fn(ctx);
@@ -2489,7 +2490,7 @@ class DrawCellContext implements CellContext {
   }
   cancel(): void {
     this._cancel = true;
-    this._childContexts.forEach(ctx => {
+    this._childContexts.forEach((ctx) => {
       ctx.cancel();
     });
   }
@@ -2500,7 +2501,7 @@ class DrawCellContext implements CellContext {
   getSelection(): { select: CellAddress; range: CellRange } {
     return {
       select: this._selection.select,
-      range: this._selection.range
+      range: this._selection.range,
     };
   }
   /**
@@ -2761,7 +2762,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
       underlayBackgroundColor,
       keyboardOptions,
       parentElement,
-      disableColumnResize
+      disableColumnResize,
     } = options;
     const protectedSpace = (this[_] = {} as DrawGridProtected);
     style.initDocument();
@@ -2777,7 +2778,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
 
     protectedSpace.canvas = hiDPI.transform(document.createElement("canvas"));
     protectedSpace.context = protectedSpace.canvas.getContext("2d", {
-      alpha: false
+      alpha: false,
     }) as CanvasRenderingContext2D;
 
     protectedSpace.rowCount = rowCount;
@@ -2805,7 +2806,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
       },
       get em(): number {
         return getFontSize(this._.context, this._.font).width;
-      }
+      },
     };
 
     protectedSpace.columnResizer = new ColumnResizer(this);
@@ -2819,7 +2820,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
     protectedSpace.element.appendChild(protectedSpace.scrollable.getElement());
     protectedSpace.scroll = {
       left: 0,
-      top: 0
+      top: 0,
     };
     this.updateScroll();
     if (parentElement) {
@@ -3032,7 +3033,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
     scrollable.setScrollSize(newWidth, newHeight);
     this[_].scroll = {
       left: scrollable.scrollLeft,
-      top: scrollable.scrollTop
+      top: scrollable.scrollTop,
     };
     return true;
   }
@@ -3207,7 +3208,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
     if (isFrozenRow || isFrozenCol) {
       return {
         row: isFrozenRow,
-        col: isFrozenCol
+        col: isFrozenCol,
       };
     } else {
       return null;
@@ -3232,7 +3233,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
   getCellAt(absoluteX: number, absoluteY: number): CellAddress {
     return {
       row: this.getRowAt(absoluteY),
-      col: this.getColAt(absoluteX)
+      col: this.getColAt(absoluteX),
     };
   }
   /**
@@ -3590,7 +3591,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
     protectedSpace.columnResizer.dispose();
     protectedSpace.cellSelector.dispose();
     if (protectedSpace.disposables) {
-      protectedSpace.disposables.forEach(disposable => disposable.dispose());
+      protectedSpace.disposables.forEach((disposable) => disposable.dispose());
       protectedSpace.disposables = null;
     }
 
@@ -3607,7 +3608,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
   } {
     return {
       element: this.getElement(),
-      rect: _toRelativeRect(this, this.getCellRangeRect(range))
+      rect: _toRelativeRect(this, this.getCellRangeRect(range)),
     };
   }
   onKeyDownMove(evt: KeyboardEvent): void {

@@ -5,7 +5,7 @@ export function createElement<K extends keyof HTMLElementTagNameMap>(
   {
     classList,
     text,
-    html
+    html,
   }: { classList?: string[] | string; text?: string; html?: string } = {}
 ): HTMLElementTagNameMap[K] {
   const element = document.createElement(tagName);
@@ -46,20 +46,20 @@ export function toNodeList(
 ): HTMLElement[] {
   if (Array.isArray(arg)) {
     const result: HTMLElement[] = [];
-    arg.forEach(e => {
+    arg.forEach((e) => {
       result.push(...toNodeList(e));
     });
     return result;
   }
   const node = toNode(arg);
-  return Array.isArray(node) ? (node as HTMLElement[]) : [node];
+  return Array.isArray(node) ? node : [node];
 }
 
 export function appendHtml(
   dom: HTMLElement,
   inner: HTMLElement | HTMLElement[] | string
 ): void {
-  toNodeList(inner).forEach(node => {
+  toNodeList(inner).forEach((node) => {
     dom.appendChild(node);
   });
 }

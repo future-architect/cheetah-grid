@@ -1,5 +1,5 @@
 import * as fonts from "../internal/fonts";
-import { AnyFunction, ColorDef } from "../ts-types";
+import type { AnyFunction, ColorDef } from "../ts-types";
 import { Inline, InlineDrawOption } from "./Inline";
 
 export type InlineIconConstructorOption = {
@@ -56,7 +56,7 @@ export class InlineIcon extends Inline {
     offsetLeft,
     offsetRight,
     offsetTop,
-    offsetBottom
+    offsetBottom,
   }: InlineDrawOption): void {
     const icon = this._icon;
     if (icon.content) {
@@ -77,8 +77,8 @@ export class InlineIcon extends Inline {
               left: offsetLeft,
               right: offsetRight,
               top: offsetTop,
-              bottom: offsetBottom
-            }
+              bottom: offsetBottom,
+            },
           }
         );
       } finally {

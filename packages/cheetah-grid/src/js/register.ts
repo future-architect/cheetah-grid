@@ -1,5 +1,5 @@
-import { IconDefine } from "./ts-types";
-import { Theme } from "./themes/theme";
+import type { IconDefine } from "./ts-types";
+import type { Theme } from "./themes/theme";
 import { icons as iconPlugins } from "./plugins/icons";
 import { themes as themePlugins } from "./plugins/themes";
 

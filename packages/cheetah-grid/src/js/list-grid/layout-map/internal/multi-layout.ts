@@ -9,9 +9,9 @@ import {
   HeaderData,
   LayoutDefine,
   LayoutMapAPI,
-  WidthData
+  WidthData,
 } from "../api";
-import { CellRange, LayoutObjectId } from "../../../ts-types";
+import type { CellRange, LayoutObjectId } from "../../../ts-types";
 import { EmptyDataCache } from "./utils";
 
 interface HasSpans {
@@ -28,7 +28,7 @@ function normalizeLayout<T>(
   if (Array.isArray(layout)) {
     return {
       header: layout,
-      body: layout
+      body: layout,
     };
   }
   return layout;
@@ -45,7 +45,7 @@ class LayoutObjectGrid<T, D extends HasSpans> {
   constructor(layout: D[][], transform: (d: D, id: LayoutObjectId) => T) {
     layout.forEach((rowLayout, row) => {
       let col = 0;
-      rowLayout.forEach(cell => {
+      rowLayout.forEach((cell) => {
         const id = seqId++;
         const obj = transform(cell, id);
         this.objects.push(obj);
@@ -100,7 +100,7 @@ class LayoutObjectGrid<T, D extends HasSpans> {
         this.columnWidths[col] = {
           width: cell.width,
           maxWidth: cell.maxWidth,
-          minWidth: cell.minWidth
+          minWidth: cell.minWidth,
         };
       }
     }
@@ -125,7 +125,7 @@ export class MultiLayoutMap<T> implements LayoutMapAPI<T> {
           style: hd.headerStyle,
           headerType: headerType.ofCell(hd),
           action: headerAction.ofCell(hd),
-          define: hd
+          define: hd,
         };
       }
     ));
@@ -143,7 +143,7 @@ export class MultiLayoutMap<T> implements LayoutMapAPI<T> {
           columnType: columns.type.of(colDef.columnType),
           action: columns.action.of(colDef.action),
           style: colDef.style,
-          define: colDef
+          define: colDef,
         };
       }
     ));
@@ -242,7 +242,7 @@ export class MultiLayoutMap<T> implements LayoutMapAPI<T> {
   ): CellRange {
     const result: CellRange = {
       start: { col, row: layoutRow + offsetRow },
-      end: { col, row: layoutRow + offsetRow }
+      end: { col, row: layoutRow + offsetRow },
     };
     const { objectGrid } = layout;
     const id = objectGrid[layoutRow]?.[col]?.id;

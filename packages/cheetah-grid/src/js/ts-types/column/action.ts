@@ -1,6 +1,6 @@
-import { ColumnMenuItemOptions } from "../define";
-import { ListGridAPI } from "../grid-engine";
-import { MaybePromise } from "../base";
+import type { ColumnMenuItemOptions } from "../define";
+import type { ListGridAPI } from "../grid-engine";
+import type { MaybePromise } from "../base";
 
 export interface BaseActionOption {
   disabled?: boolean;

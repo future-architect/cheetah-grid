@@ -1,5 +1,5 @@
-import { CellAddress, CellRange, FieldDef } from "./grid";
-import { AnyFunction } from "./base";
+import type { CellAddress, CellRange, FieldDef } from "./grid";
+import type { AnyFunction } from "./base";
 
 export type KeyboardEventListener = (e: KeyboardEvent) => void;
 export type AnyListener = AnyFunction;

@@ -1,8 +1,8 @@
-import {
+import type {
   BaseActionOption,
   HeaderActionOption,
   SortHeaderActionOption,
-  SortOption
+  SortOption,
 } from "../ts-types";
 import { BaseAction } from "./action/BaseAction";
 import { BaseHeaderDefine } from "../list-grid/layout-map/api";
@@ -24,7 +24,7 @@ export const ACTIONS = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   SORT: new ImmutableSortHeaderAction<any>(),
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  CHECK: new ImmutableCheckHeaderAction<any>()
+  CHECK: new ImmutableCheckHeaderAction<any>(),
 };
 /**
  * column actions
@@ -37,7 +37,7 @@ export {
   CheckHeaderAction,
   // types
   BaseActionOption,
-  SortHeaderActionOption
+  SortHeaderActionOption,
 };
 
 export function of<T>(

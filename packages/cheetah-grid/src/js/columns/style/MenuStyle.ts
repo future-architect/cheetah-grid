@@ -1,4 +1,4 @@
-import { MenuStyleOption } from "../../ts-types";
+import type { MenuStyleOption } from "../../ts-types";
 import { Style } from "./Style";
 
 let defaultStyle: MenuStyle;

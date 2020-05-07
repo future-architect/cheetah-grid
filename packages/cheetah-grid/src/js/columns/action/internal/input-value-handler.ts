@@ -12,11 +12,11 @@ export function setInputValue(input: HTMLInputElement, value: string): void {
         handler = null;
       }
     };
-    handler.once(input, "input", _e => {
+    handler.once(input, "input", (_e) => {
       input.type = "number";
       dispose();
     });
-    handler.once(input, "blur", _e => {
+    handler.once(input, "blur", (_e) => {
       dispose();
     });
   }

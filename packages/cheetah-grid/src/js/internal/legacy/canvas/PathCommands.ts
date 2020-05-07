@@ -3,7 +3,7 @@ import { CanvasOperations } from "./internal";
 /*eslint new-cap: "off"*/
 
 function mag(v: [number, number]): number {
-  return Math.sqrt(Math.pow(v[0], 2) + Math.pow(v[1], 2));
+  return Math.sqrt(v[0] ** 2 + v[1] ** 2);
 }
 
 function dot(u: [number, number], v: [number, number]): number {
@@ -90,15 +90,15 @@ function ellipseFromEllipticalArc(
   ry = Math.abs(ry);
   const xPrime = rotClockwise(midPoint([x1, y1], [x2, y2]), phi); // F.6.5.1
   const xPrime2 = pointMul(xPrime, xPrime);
-  let rx2 = Math.pow(rx, 2);
-  let ry2 = Math.pow(ry, 2);
+  let rx2 = rx ** 2;
+  let ry2 = ry ** 2;
 
   const lambda = Math.sqrt(xPrime2[0] / rx2 + xPrime2[1] / ry2);
   if (lambda > 1) {
     rx *= lambda;
     ry *= lambda;
-    rx2 = Math.pow(rx, 2);
-    ry2 = Math.pow(ry, 2);
+    rx2 = rx ** 2;
+    ry2 = ry ** 2;
   }
   let factor = Math.sqrt(
     Math.abs(rx2 * ry2 - rx2 * xPrime2[1] - ry2 * xPrime2[0]) /
@@ -111,11 +111,11 @@ function ellipseFromEllipticalArc(
   const c = sum(rotCounterClockwise(cPrime, phi), meanVec([x1, y1], [x2, y2])); // F.6.5.3
   const x1UnitVector: [number, number] = [
     (xPrime[0] - cPrime[0]) / rx,
-    (xPrime[1] - cPrime[1]) / ry
+    (xPrime[1] - cPrime[1]) / ry,
   ];
   const x2UnitVector: [number, number] = [
     (-1.0 * xPrime[0] - cPrime[0]) / rx,
-    (-1.0 * xPrime[1] - cPrime[1]) / ry
+    (-1.0 * xPrime[1] - cPrime[1]) / ry,
   ];
   const theta = angle([1, 0], x1UnitVector); // F.6.5.5
   const deltaTheta = angle(x1UnitVector, x2UnitVector); // F.6.5.6
@@ -237,7 +237,7 @@ export class PathCommands {
       ly = py;
       reflected = {
         x: 2 * px - cp2x,
-        y: 2 * py - cp2y
+        y: 2 * py - cp2y,
       };
       lastCommand = "C";
       return this;
@@ -258,7 +258,7 @@ export class PathCommands {
       ly = py;
       reflected = {
         x: 2 * px - cpx,
-        y: 2 * py - cpy
+        y: 2 * py - cpy,
       };
       lastCommand = "Q";
       return this;

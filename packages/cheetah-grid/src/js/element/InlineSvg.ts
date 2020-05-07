@@ -1,6 +1,6 @@
 import { isPromise, then } from "../internal/utils";
 import { InlineImage } from "./InlineImage";
-import { MaybePromise } from "../ts-types";
+import type { MaybePromise } from "../ts-types";
 
 function buildSvgDataUrl(svg: string | Node): string {
   const data =
@@ -40,7 +40,7 @@ export class InlineSvg extends InlineImage {
       width: width || numElmWidth,
       height: height || numElmHeight,
       imageWidth: numElmWidth,
-      imageHeight: numElmHeight
+      imageHeight: numElmHeight,
     });
   }
   canBreak(): boolean {

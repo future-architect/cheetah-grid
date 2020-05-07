@@ -34,15 +34,15 @@ function computeStyle(font: string): [Styles1, Styles2] {
       margin: "0",
       padding: "0",
       "white-space": "nowrap",
-      font
+      font,
     },
     {
       "font-variant": "normal",
       "font-size": "300px",
       "font-style": "normal",
       "font-weight": "400",
-      "line-height": "normal"
-    }
+      "line-height": "normal",
+    },
   ];
 }
 

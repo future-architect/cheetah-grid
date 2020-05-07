@@ -2,7 +2,7 @@ import { BaseHeader } from "./type/BaseHeader";
 import { BaseHeaderDefine } from "../list-grid/layout-map/api";
 import { CheckHeader } from "./type/CheckHeader";
 import { Header } from "./type/Header";
-import { HeaderTypeOption } from "../ts-types";
+import type { HeaderTypeOption } from "../ts-types";
 import { MultilineTextHeader } from "./type/MultilineTextHeader";
 import { SortHeader } from "./type/SortHeader";
 
@@ -14,7 +14,7 @@ const TYPES = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   CHECK: new CheckHeader<any>(),
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  MULTILINETEXT: new MultilineTextHeader<any>()
+  MULTILINETEXT: new MultilineTextHeader<any>(),
 };
 export { BaseHeader, Header, SortHeader, CheckHeader, MultilineTextHeader };
 

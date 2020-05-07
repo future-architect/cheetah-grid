@@ -1,5 +1,5 @@
 import * as path2DManager from "../internal/path2DManager";
-import { AnyFunction, ColorDef } from "../ts-types";
+import type { AnyFunction, ColorDef } from "../ts-types";
 import { Inline, InlineDrawOption } from "./Inline";
 import { calcStartPosition } from "../internal/canvases";
 
@@ -45,14 +45,14 @@ export class InlinePath2D extends Inline {
     offsetLeft,
     offsetRight,
     offsetTop,
-    offsetBottom
+    offsetBottom,
   }: InlineDrawOption): void {
     offset++;
     const padding = {
       left: offsetLeft,
       right: offsetRight,
       top: offsetTop,
-      bottom: offsetBottom
+      bottom: offsetBottom,
     };
     ctx.save();
     try {
@@ -64,7 +64,7 @@ export class InlinePath2D extends Inline {
       //文字描画
       const pos = calcStartPosition(ctx, rect, this._width, this._height, {
         offset,
-        padding
+        padding,
       });
       ctx.translate(pos.x, pos.y);
       ctx.fill(this._path);

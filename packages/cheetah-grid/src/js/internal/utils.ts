@@ -1,4 +1,9 @@
-import { CellAddress, CellRange, MaybeCall, MaybePromise } from "../ts-types";
+import type {
+  CellAddress,
+  CellRange,
+  MaybeCall,
+  MaybePromise,
+} from "../ts-types";
 
 const isNode =
   typeof window === "undefined" || typeof window.window === "undefined";
@@ -70,7 +75,7 @@ const array = {
       };
     }
     return arrayFindIndex;
-  }
+  },
 };
 
 function isDef<T>(data: T | null | undefined | void): data is T {
@@ -89,16 +94,16 @@ function analyzeUserAgent(): {
       Edge: false,
       Chrome: false,
       Firefox: false,
-      Safari: false
+      Safari: false,
     };
   } else {
     const ua = window.navigator.userAgent.toLowerCase();
     return {
-      IE: !!(ua.match(/(msie)/) || ua.match(/trident/)),
+      IE: !!/(msie|trident)/.exec(ua),
       Edge: ua.indexOf("edge") > -1,
       Chrome: ua.indexOf("chrome") > -1 && ua.indexOf("edge") === -1,
       Firefox: ua.indexOf("firefox") > -1,
-      Safari: ua.indexOf("safari") > -1 && ua.indexOf("edge") === -1
+      Safari: ua.indexOf("safari") > -1 && ua.indexOf("edge") === -1,
     };
   }
 }
@@ -108,7 +113,7 @@ function setReadonly<T, K extends keyof T>(obj: T, name: K, value: T[K]): void {
   Object.defineProperty(obj, name, {
     enumerable: false,
     configurable: true,
-    value
+    value,
   });
 }
 
@@ -134,7 +139,7 @@ function extend<T, U, V>(t: T, u: U, v: V): T & U & V;
 function extend<T>(...args: T[]): T;
 function extend<T>(...args: T[]): T {
   const result = {} as T;
-  args.forEach(source => {
+  args.forEach((source) => {
     for (const key in source) {
       Object.defineProperty(result, key, {
         get() {
@@ -144,7 +149,7 @@ function extend<T>(...args: T[]): T {
           source[key] = val;
         },
         configurable: true,
-        enumerable: true
+        enumerable: true,
       });
     }
   });
@@ -219,7 +224,7 @@ function genChars(s: string): { next(): string | null } {
     next(): string | null {
       const res = re.exec(s);
       return res !== null ? res[0] : null;
-    }
+    },
   };
 }
 export type GenWordsResult = {
@@ -231,7 +236,7 @@ function genWords(s: string): GenWordsResult {
     next(): string | null {
       const res = re.exec(s);
       return res !== null ? res[0] : null;
-    }
+    },
   };
 }
 
@@ -250,7 +255,7 @@ function then<T, R>(
   result: MaybePromise<T>,
   callback: (arg: T) => R
 ): MaybePromise<R> {
-  return isPromise(result) ? result.then(r => callback(r)) : callback(result);
+  return isPromise(result) ? result.then((r) => callback(r)) : callback(result);
 }
 function getMouseButtons(e: MouseEvent): number {
   if (isDef(e.buttons)) {
@@ -317,7 +322,7 @@ function toBoxArray<T>(obj: T | T[]): [T, T, T, T] {
       obj[0] /*top*/,
       obj[1] /*right*/,
       obj[2] /*bottom*/,
-      obj[1] /*left*/
+      obj[1] /*left*/,
     ];
   }
   if (obj.length === 2) {
@@ -325,7 +330,7 @@ function toBoxArray<T>(obj: T | T[]): [T, T, T, T] {
       obj[0] /*top*/,
       obj[1] /*right*/,
       obj[0] /*bottom*/,
-      obj[1] /*left*/
+      obj[1] /*left*/,
     ];
   }
   if (obj.length === 1) {
@@ -333,7 +338,7 @@ function toBoxArray<T>(obj: T | T[]): [T, T, T, T] {
       obj[0] /*top*/,
       obj[0] /*right*/,
       obj[0] /*bottom*/,
-      obj[0] /*left*/
+      obj[0] /*left*/,
     ];
   }
   return obj as [T, T, T, T];
@@ -350,7 +355,7 @@ export {
   getIgnoreCase,
   isPromise,
   then,
-  array
+  array,
 };
 
 export function cellEquals(a: CellAddress, b: CellAddress): boolean {
@@ -378,25 +383,25 @@ export const browser = {
   // Chrome 33554431
   // FireFox 17895588
   // IE 10737433
-  heightLimit: Chrome ? 33554431 : Firefox ? 17895588 : 10737433 // default IE limit
+  heightLimit: Chrome ? 33554431 : Firefox ? 17895588 : 10737433, // default IE limit
 };
 
 export const obj = {
   setReadonly,
-  isObject
+  isObject,
 };
 export const str = {
   endsWith,
   genChars,
-  genWords
+  genWords,
 };
 export const event = {
   getMouseButtons,
   getKeyCode,
   isTouchEvent,
-  cancel
+  cancel,
 };
 export const style = {
-  toBoxArray
+  toBoxArray,
 };
 export const emptyFn = Function.prototype;

@@ -1,5 +1,5 @@
-import { ColorDef } from "./base";
-import { ListGridAPI } from "./grid-engine";
+import type { ColorDef } from "./base";
+import type { ListGridAPI } from "./grid-engine";
 
 // ****** Column Icon Options *******
 export interface FontIcon<T> {

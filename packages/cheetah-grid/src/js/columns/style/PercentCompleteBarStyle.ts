@@ -1,4 +1,4 @@
-import { ColorDef, PercentCompleteBarStyleOption } from "../../ts-types";
+import type { ColorDef, PercentCompleteBarStyleOption } from "../../ts-types";
 import { Style } from "./Style";
 let defaultStyle: PercentCompleteBarStyle;
 const DEFAULT_BAR_COLOR = (num: number): string => {

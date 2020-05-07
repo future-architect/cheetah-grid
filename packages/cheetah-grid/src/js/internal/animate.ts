@@ -14,7 +14,7 @@ function cubicBezier(
   x3 *= 3;
   y3 *= 3;
 
-  return function(t: number): number {
+  return function (t: number): number {
     let p, a, b, c, d, x, s;
     if (t < 0 || 1 < t) {
       throw new Error(`${t}`);
@@ -44,7 +44,7 @@ const EASINGS = {
   },
   easeIn: cubicBezier(0.42, 0.0, 1.0, 1.0),
   easeOut: cubicBezier(0.0, 0.0, 0.58, 1.0),
-  easeInOut: cubicBezier(0.42, 0.0, 0.58, 1.0)
+  easeInOut: cubicBezier(0.42, 0.0, 0.58, 1.0),
 };
 
 const raf: typeof requestAnimationFrame = (isNode
@@ -133,7 +133,7 @@ export function animate(
     step(0);
     anim();
     return {
-      cancel
+      cancel,
     };
   }
 }

@@ -1,5 +1,5 @@
 import { BaseAction } from "./BaseAction";
-import { EditorOption } from "../../ts-types";
+import type { EditorOption } from "../../ts-types";
 export abstract class Editor<T> extends BaseAction<T> {
   protected _readOnly: boolean;
   constructor(option: EditorOption = {}) {

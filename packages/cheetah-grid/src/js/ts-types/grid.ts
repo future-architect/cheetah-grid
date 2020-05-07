@@ -1,4 +1,4 @@
-import { MaybePromiseOrUndef } from "./base";
+import type { MaybePromiseOrUndef } from "./base";
 
 export interface CellAddress {
   col: number;

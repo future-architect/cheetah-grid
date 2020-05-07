@@ -1,4 +1,4 @@
-import { ImageStyleOption } from "../../ts-types";
+import type { ImageStyleOption } from "../../ts-types";
 import { StdBaseStyle } from "./StdBaseStyle";
 let defaultStyle: ImageStyle;
 function adj(style: ImageStyleOption): ImageStyleOption {

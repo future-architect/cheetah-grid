@@ -1,4 +1,8 @@
-import { CellContext, ColorDef, GridCanvasHelperAPI } from "../../ts-types";
+import type {
+  CellContext,
+  ColorDef,
+  GridCanvasHelperAPI,
+} from "../../ts-types";
 import { Rect } from "../../internal/Rect";
 export function drawExclamationMarkBox(
   context: CellContext,
@@ -58,7 +62,7 @@ export function drawInfomationMarkBox(
   const left = boxRect.left + (boxRect.width - width) / 2;
   const top = boxRect.top + (boxRect.height - height) / 2;
   helper.fillRectWithState(new Rect(left, top, width, height / 5), context, {
-    fillColor
+    fillColor,
   });
   helper.fillRectWithState(
     new Rect(left, top + (height / 5) * 2, width, (height / 5) * 3),

@@ -1,13 +1,13 @@
 import * as icons from "../../internal/icons";
-import {
+import type {
   CellContext,
   ColumnIconOption,
   GridCanvasHelperAPI,
   IconColumnOption,
-  ListGridAPI
+  ListGridAPI,
 } from "../../ts-types";
 import { Column } from "./Column";
-import { DrawCellInfo } from "../../ts-types-internal";
+import type { DrawCellInfo } from "../../ts-types-internal";
 import { IconStyle } from "../style/IconStyle";
 
 function repeatArray(
@@ -55,7 +55,7 @@ export class IconColumn<T> extends Column<T> {
     const num = Number(value);
     if (!isNaN(num)) {
       const icon: IconColumnOption & { width?: number } = {};
-      icons.iconPropKeys.forEach(k => {
+      icons.iconPropKeys.forEach((k) => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (icon as any)[k] = (style as any)[k];
       });

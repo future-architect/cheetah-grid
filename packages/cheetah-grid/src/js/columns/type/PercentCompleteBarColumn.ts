@@ -1,12 +1,12 @@
-import {
+import type {
   CellContext,
   GridCanvasHelperAPI,
   ListGridAPI,
-  PercentCompleteBarColumnOption
+  PercentCompleteBarColumnOption,
 } from "../../ts-types";
 import { getOrApply, str } from "../../internal/utils";
 import { Column } from "./Column";
-import { DrawCellInfo } from "../../ts-types-internal";
+import type { DrawCellInfo } from "../../ts-types-internal";
 import { PercentCompleteBarStyle } from "../style/PercentCompleteBarStyle";
 
 const MARGIN = 2;
@@ -60,11 +60,11 @@ export class PercentCompleteBarColumn<T> extends Column<T> {
         ? 1
         : (num - this._min) / (this._max - this._min);
 
-    helper.drawWithClip(context, ctx => {
+    helper.drawWithClip(context, (ctx) => {
       const rect = context.getRect();
 
-      const barMaxWidth = rect.width - MARGIN * 2 - 1 /*罫線*/;
-      const barTop = rect.bottom - MARGIN - barHeight - 1 /*罫線*/;
+      const barMaxWidth = rect.width - MARGIN * 2 - 1; /*罫線*/
+      const barTop = rect.bottom - MARGIN - barHeight - 1; /*罫線*/
       const barLeft = rect.left + MARGIN;
       ctx.fillStyle = getOrApply(barBgColor, rate * 100) || "#f0f3f5";
       ctx.beginPath();

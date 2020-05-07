@@ -1,12 +1,12 @@
-import {
+import type {
   CellContext,
   GridCanvasHelperAPI,
   ListGridAPI,
-  SortState
+  SortState,
 } from "../../ts-types";
 import { cellInRange, isDef } from "../../internal/utils";
 import { BaseHeader } from "./BaseHeader";
-import { DrawCellInfo } from "../../ts-types-internal";
+import type { DrawCellInfo } from "../../ts-types-internal";
 import { SortHeaderStyle } from "../style/SortHeaderStyle";
 import { getFontSize } from "../../internal/canvases";
 
@@ -29,12 +29,12 @@ export class SortHeader<T> extends BaseHeader<T> {
       bgColor,
       font,
       textOverflow,
-      sortArrowColor
+      sortArrowColor,
     } = style;
 
     if (bgColor) {
       drawCellBase({
-        bgColor
+        bgColor,
       });
     }
 
@@ -69,9 +69,9 @@ export class SortHeader<T> extends BaseHeader<T> {
               col,
               row,
               ctx
-            ) || "rgba(0, 0, 0, 0.38)"
-        }
-      ]
+            ) || "rgba(0, 0, 0, 0.38)",
+        },
+      ],
     });
   }
 }

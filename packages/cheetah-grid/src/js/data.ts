@@ -12,5 +12,5 @@ export {
   CachedDataSource,
   FilterDataSource,
   //types
-  DataSourceParam
+  DataSourceParam,
 };

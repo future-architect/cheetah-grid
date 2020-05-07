@@ -9,7 +9,7 @@ export function newEmptyHeaderData(): HeaderData<any> {
   return {
     id: seqId--,
     define: {},
-    headerType: headerType.of(null) // default
+    headerType: headerType.of(null), // default
   };
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -18,7 +18,7 @@ export function newEmptyColumnData(): ColumnData<any> {
     id: seqId--,
     define: {},
     columnType: columns.type.of(null), // default
-    style: null
+    style: null,
   };
 }
 

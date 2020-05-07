@@ -1,10 +1,10 @@
-import {
+import type {
   CellAddress,
   ListGridAPI,
   MaybePromise,
-  SmallDialogInputEditorOption
+  SmallDialogInputEditorOption,
 } from "../../ts-types";
-import { GridInternal, InputEditorState } from "../../ts-types-internal";
+import type { GridInternal, InputEditorState } from "../../ts-types-internal";
 import { BaseInputEditor } from "./BaseInputEditor";
 import { SmallDialogInputElement } from "./internal/SmallDialogInputElement";
 import { getSmallDialogInputEditorStateId } from "../../internal/symbolManager";
@@ -43,7 +43,7 @@ function attachInput<T>(
           globalElement = null;
           state.element = null;
         }
-      }
+      },
     });
   }
 
@@ -111,7 +111,7 @@ export class SmallDialogInputEditor<T> extends BaseInputEditor<T> {
     attachInput(grid, cell, this, inputValue);
   }
   onOpenCellInternal(grid: ListGridAPI<T>, cell: CellAddress): void {
-    grid.doGetCellValue(cell.col, cell.row, value => {
+    grid.doGetCellValue(cell.col, cell.row, (value) => {
       attachInput(grid, cell, this, value);
     });
   }

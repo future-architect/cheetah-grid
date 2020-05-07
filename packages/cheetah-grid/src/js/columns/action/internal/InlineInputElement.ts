@@ -1,5 +1,5 @@
 import { EventHandler } from "../../../internal/EventHandler";
-import { ListGridAPI } from "../../../ts-types";
+import type { ListGridAPI } from "../../../ts-types";
 import { createElement } from "../../../internal/dom";
 import { event } from "../../../internal/utils";
 import { setInputValue } from "./input-value-handler";
@@ -170,13 +170,13 @@ export class InlineInputElement<T> {
     handler.on(input, "touchstart", stopPropagationOnly);
     handler.on(input, "dblclick", stopPropagationOnly);
 
-    handler.on(input, "compositionstart", _e => {
+    handler.on(input, "compositionstart", (_e) => {
       input.classList.add("composition");
     });
-    handler.on(input, "compositionend", _e => {
+    handler.on(input, "compositionend", (_e) => {
       input.classList.remove("composition");
     });
-    handler.on(input, "keydown", e => {
+    handler.on(input, "keydown", (e) => {
       if (input.classList.contains("composition")) {
         return;
       }
@@ -187,7 +187,7 @@ export class InlineInputElement<T> {
         this._onKeydownTab(e);
       }
     });
-    handler.on(input, "blur", _e => {
+    handler.on(input, "blur", (_e) => {
       this.doChangeValue();
       this.detach();
     });

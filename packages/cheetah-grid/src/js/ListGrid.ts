@@ -1,7 +1,7 @@
 import * as icons from "./internal/icons";
 import * as themes from "./themes";
 import { CachedDataSource, DataSource } from "./data";
-import {
+import type {
   CellAddress,
   CellContext,
   CellRange,
@@ -26,7 +26,7 @@ import {
   SelectedCellEvent,
   SetPasteValueTestData,
   SortState,
-  ThemeDefine
+  ThemeDefine,
 } from "./ts-types";
 import {
   ColumnDefine,
@@ -36,12 +36,12 @@ import {
   LayoutDefine,
   LayoutMapAPI,
   MultiLayoutMap,
-  SimpleHeaderLayoutMap
+  SimpleHeaderLayoutMap,
 } from "./list-grid/layout-map";
 import {
   DrawGrid,
   DrawGridConstructorOptions,
-  DrawGridProtected
+  DrawGridProtected,
 } from "./core/DrawGrid";
 import {
   cellEquals,
@@ -49,18 +49,18 @@ import {
   isDef,
   isPromise,
   obj,
-  then
+  then,
 } from "./internal/utils";
-import { BaseColumn } from "./columns/type/BaseColumn";
+import type { BaseColumn } from "./columns/type/BaseColumn";
 import { BaseStyle } from "./columns/style";
-import { ColumnData } from "./list-grid/layout-map/api";
-import { DrawCellInfo } from "./ts-types-internal";
+import type { ColumnData } from "./list-grid/layout-map/api";
+import type { DrawCellInfo } from "./ts-types-internal";
 import { GridCanvasHelper } from "./GridCanvasHelper";
 import { BaseStyle as HeaderBaseStyle } from "./header/style";
 import { LG_EVENT_TYPE } from "./list-grid/LG_EVENT_TYPE";
 import { MessageHandler } from "./columns/message/MessageHandler";
 import { Rect } from "./internal/Rect";
-import { Theme } from "./themes/theme";
+import type { Theme } from "./themes/theme";
 import { TooltipHandler } from "./tooltip/TooltipHandler";
 //protected symbol
 import { getProtectedSymbol } from "./internal/symbolManager";
@@ -82,11 +82,11 @@ function _updateRect<T>(
   row: number,
   context: CellContext
 ): void {
-  context.setRectFilter(rect => {
+  context.setRectFilter((rect) => {
     let { left, right, top, bottom } = rect;
     const {
       start: { col: startCol, row: startRow },
-      end: { col: endCol, row: endRow }
+      end: { col: endCol, row: endRow },
     } = _getCellRange(grid, col, row);
     for (let c = col - 1; c >= startCol; c--) {
       left -= grid.getColWidth(c);
@@ -170,7 +170,7 @@ function _getCellIcon0<T>(
   row: number
 ): ColumnIconOption<T> | ColumnIconOption<T>[] {
   if (Array.isArray(icon)) {
-    return icon.map(i => _getCellIcon0(grid, i, row));
+    return icon.map((i) => _getCellIcon0(grid, i, row));
   }
   if (!obj.isObject(icon) || typeof icon === "function") {
     return _getField(grid, icon, row);
@@ -179,7 +179,7 @@ function _getCellIcon0<T>(
   const retIcon: any = {};
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const iconOpt: any = icon;
-  icons.iconPropKeys.forEach(k => {
+  icons.iconPropKeys.forEach((k) => {
     if (iconOpt[k]) {
       const f = _getField(grid, iconOpt[k], row);
       if (isDef(f)) {
@@ -246,10 +246,10 @@ function _onDrawValue<T>(
   const helper = grid[_].gridCanvasHelper;
 
   const drawCellBg = ({
-    bgColor
+    bgColor,
   }: { bgColor?: ColorPropertyDefine } = {}): void => {
     const fillOpt = {
-      fillColor: bgColor
+      fillColor: bgColor,
     };
     //cell全体を描画
     helper.fillCellWithState(context, fillOpt);
@@ -258,7 +258,7 @@ function _onDrawValue<T>(
     if (context.col === grid.frozenColCount - 1) {
       //固定列罫線
       const rect = context.getRect();
-      helper.drawWithClip(context, ctx => {
+      helper.drawWithClip(context, (ctx) => {
         const borderColor =
           context.row >= grid.frozenRowCount
             ? helper.theme.borderColor
@@ -282,7 +282,7 @@ function _onDrawValue<T>(
   };
 
   const drawCellBase = ({
-    bgColor
+    bgColor,
   }: { bgColor?: ColorPropertyDefine } = {}): void => {
     drawCellBg({ bgColor });
     drawCellBorder();
@@ -295,7 +295,7 @@ function _onDrawValue<T>(
     style,
     drawCellBase,
     drawCellBg,
-    drawCellBorder
+    drawCellBorder,
   };
 
   return draw(cellValue, info, context, grid);
@@ -342,7 +342,7 @@ function _borderWithState<T>(
     //追加処理
     if (col > 0 && isSelectCell(col - 1, row)) {
       //右が選択されている
-      helper.drawBorderWithClip(context, ctx => {
+      helper.drawBorderWithClip(context, (ctx) => {
         const borderColors = helper.toBoxArray(
           helper.getColor(
             helper.theme.highlightBorderColor,
@@ -362,7 +362,7 @@ function _borderWithState<T>(
       });
     } else if (row > 0 && isSelectCell(col, row - 1)) {
       //上が選択されている
-      helper.drawBorderWithClip(context, ctx => {
+      helper.drawBorderWithClip(context, (ctx) => {
         const borderColors = helper.toBoxArray(
           helper.getColor(
             helper.theme.highlightBorderColor,
@@ -386,12 +386,12 @@ function _borderWithState<T>(
 function _refreshHeader<T>(grid: ListGrid<T>): void {
   const protectedSpace = grid[_];
   if (protectedSpace.headerEvents) {
-    protectedSpace.headerEvents.forEach(id => grid.unlisten(id));
+    protectedSpace.headerEvents.forEach((id) => grid.unlisten(id));
   }
 
   const headerEvents: EventListenerId[] = (grid[_].headerEvents = []);
 
-  headerEvents.forEach(id => grid.unlisten(id));
+  headerEvents.forEach((id) => grid.unlisten(id));
   let layoutMap: LayoutMapAPI<T>;
   if (
     protectedSpace.layout &&
@@ -405,7 +405,7 @@ function _refreshHeader<T>(grid: ListGrid<T>): void {
       protectedSpace.header ?? []
     );
   }
-  layoutMap.headerObjects.forEach(cell => {
+  layoutMap.headerObjects.forEach((cell) => {
     const ids = cell.headerType.bindGridEvent(grid, cell.id);
     headerEvents.push(...ids);
     if (cell.style) {
@@ -424,7 +424,7 @@ function _refreshHeader<T>(grid: ListGrid<T>): void {
       headerEvents.push(...ids);
     }
   });
-  layoutMap.columnObjects.forEach(col => {
+  layoutMap.columnObjects.forEach((col) => {
     if (col.action) {
       const ids = col.action.bindGridEvent(grid, col.id);
       headerEvents.push(...ids);
@@ -482,7 +482,7 @@ function _tryWithUpdateDataSource<T>(
   const { dataSourceEventIds } = grid[_];
 
   if (dataSourceEventIds) {
-    dataSourceEventIds.forEach(id => grid[_].handler.off(id));
+    dataSourceEventIds.forEach((id) => grid[_].handler.off(id));
   }
 
   fn(grid);
@@ -502,7 +502,7 @@ function _tryWithUpdateDataSource<T>(
       () => {
         grid.invalidate();
       }
-    )
+    ),
   ];
 }
 function _setRecords<T>(grid: ListGrid<T>, records: T[] = []): void {
@@ -601,8 +601,8 @@ function _onRangePaste<T>(
         const row = start.row + offsetRow;
         const cellValue = values.getCellValue(valuesCol, valuesRow);
 
-        then(this.getRowRecord(row), record => {
-          then(_getCellValue(this, col, row), oldValue => {
+        then(this.getRowRecord(row), (record) => {
+          then(_getCellValue(this, col, row), (oldValue) => {
             if (
               test({
                 grid: this,
@@ -610,7 +610,7 @@ function _onRangePaste<T>(
                 col,
                 row,
                 value: cellValue,
-                oldValue
+                oldValue,
               })
             ) {
               action.onPasteCellRangeBox(this, { col, row }, cellValue);
@@ -636,11 +636,11 @@ function _onRangePaste<T>(
 
   const newEnd = {
     col: start.col + pasteColCount - 1,
-    row: start.row + pasteRowCount - 1
+    row: start.row + pasteRowCount - 1,
   };
   this.selection.range = {
     start,
-    end: newEnd
+    end: newEnd,
   };
   this.invalidateCellRange(this.selection.range);
 }
@@ -701,8 +701,8 @@ function _onRangeDelete<T>(this: ListGrid<T>): void {
         const col = start.col + offsetCol;
         const row = start.row + offsetRow;
 
-        then(this.getRowRecord(row), _record => {
-          then(_getCellValue(this, col, row), _oldValue => {
+        then(this.getRowRecord(row), (_record) => {
+          then(_getCellValue(this, col, row), (_oldValue) => {
             action.onDeleteCellRangeBox(this, { col, row });
           });
         });
@@ -831,7 +831,7 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
     protectedSpace.sortState = {
       col: -1,
       row: -1,
-      order: undefined
+      order: undefined,
     };
     protectedSpace.gridCanvasHelper = new GridCanvasHelper(this);
     protectedSpace.theme = themes.of(options.theme);
@@ -1021,7 +1021,7 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
       : {
           col: -1,
           row: -1,
-          order: undefined
+          order: undefined,
         });
 
     let newField;
@@ -1142,19 +1142,19 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
    */
   getCellRangeByField(field: FieldDef<T>, index: number): CellRange | null {
     const { layoutMap } = this[_];
-    const colObj = layoutMap.columnObjects.find(col => col.field === field);
+    const colObj = layoutMap.columnObjects.find((col) => col.field === field);
     if (colObj) {
       const layoutRange = layoutMap.getBodyLayoutRangeById(colObj.id);
       const startRow = layoutMap.getRecordStartRowByRecordIndex(index);
       return {
         start: {
           col: layoutRange.start.col,
-          row: startRow + layoutRange.start.row
+          row: startRow + layoutRange.start.row,
         },
         end: {
           col: layoutRange.end.col,
-          row: startRow + layoutRange.end.row
-        }
+          row: startRow + layoutRange.end.row,
+        },
       };
     }
     return null;
@@ -1168,7 +1168,7 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
   focusGridCell(field: FieldDef<T>, index: number): void {
     const {
       start: { col: startCol, row: startRow },
-      end: { col: endCol, row: endRow }
+      end: { col: endCol, row: endRow },
     } = this.selection.range;
 
     const newFocus = this.getCellRangeByField(field, index)?.start;
@@ -1308,7 +1308,7 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
       if (after === undefined) {
         return false;
       }
-      return then(_setCellValue(this, col, row, after), ret => {
+      return then(_setCellValue(this, col, row, after), (ret) => {
         if (ret) {
           const { field } = this[_].layoutMap.getBody(col, row);
           this.fireListeners(LG_EVENT_TYPE.CHANGED_VALUE, {
@@ -1317,7 +1317,7 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
             record: record as T,
             field: field as FieldDef<T>,
             value: after,
-            oldValue: before
+            oldValue: before,
           });
         }
         return ret;
@@ -1351,7 +1351,7 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
       row,
       field,
       value: newValue,
-      oldValue
+      oldValue,
     });
   }
   getLayoutCellId(col: number, row: number): LayoutObjectId {
@@ -1363,7 +1363,7 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
       const range = _getCellRange(this, e.col, e.row);
       const {
         start: { col: startCol, row: startRow },
-        end: { col: endCol, row: endRow }
+        end: { col: endCol, row: endRow },
       } = range;
       if (startCol !== endCol || startRow !== endRow) {
         this.invalidateCellRange(range);
@@ -1385,7 +1385,7 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
       event.cancel(e.event);
       _onRangePaste.call<ListGrid<T>, [string], void>(this, e.normalizeValue);
     });
-    grid.listen(LG_EVENT_TYPE.DELETE_CELL, e => {
+    grid.listen(LG_EVENT_TYPE.DELETE_CELL, (e) => {
       const { start } = this.selection.range;
       const { layoutMap } = this[_];
 
@@ -1398,31 +1398,31 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
   }
   protected getMoveLeftColByKeyDownInternal({ col, row }: CellAddress): number {
     const {
-      start: { col: startCol }
+      start: { col: startCol },
     } = _getCellRange(this, col, row);
     col = startCol;
     return super.getMoveLeftColByKeyDownInternal({ col, row });
   }
   protected getMoveRightColByKeyDownInternal({
     col,
-    row
+    row,
   }: CellAddress): number {
     const {
-      end: { col: endCol }
+      end: { col: endCol },
     } = _getCellRange(this, col, row);
     col = endCol;
     return super.getMoveRightColByKeyDownInternal({ col, row });
   }
   protected getMoveUpRowByKeyDownInternal({ col, row }: CellAddress): number {
     const {
-      start: { row: startRow }
+      start: { row: startRow },
     } = _getCellRange(this, col, row);
     row = startRow;
     return super.getMoveUpRowByKeyDownInternal({ col, row });
   }
   protected getMoveDownRowByKeyDownInternal({ col, row }: CellAddress): number {
     const {
-      end: { row: endRow }
+      end: { row: endRow },
     } = _getCellRange(this, col, row);
     row = endRow;
     return super.getMoveDownRowByKeyDownInternal({ col, row });

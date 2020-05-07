@@ -1,14 +1,14 @@
 import * as styleContents from "../style";
-import {
+import type {
   CellContext,
   EventListenerId,
   GridCanvasHelperAPI,
   HeaderStyleOption,
   LayoutObjectId,
-  ListGridAPI
+  ListGridAPI,
 } from "../../ts-types";
 import { BaseStyle } from "../style/BaseStyle";
-import { DrawCellInfo } from "../../ts-types-internal";
+import type { DrawCellInfo } from "../../ts-types-internal";
 import { isDef } from "../../internal/utils";
 
 export abstract class BaseHeader<T> {
@@ -38,6 +38,7 @@ export abstract class BaseHeader<T> {
     );
   }
   convertInternal(value: unknown): string {
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     return isDef(value) ? `${value}` : "";
   }
   abstract drawInternal(

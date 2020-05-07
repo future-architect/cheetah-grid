@@ -1,4 +1,4 @@
-import { IconStyleOption } from "../../ts-types";
+import type { IconStyleOption } from "../../ts-types";
 import { Style } from "./Style";
 
 function adj(style: IconStyleOption): IconStyleOption {

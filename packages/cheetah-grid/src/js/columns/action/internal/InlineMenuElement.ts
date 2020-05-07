@@ -1,7 +1,7 @@
-import {
+import type {
   ColumnMenuItemOption,
   ListGridAPI,
-  RectProps
+  RectProps,
 } from "../../../ts-types";
 import {
   appendHtml,
@@ -10,7 +10,7 @@ import {
   empty,
   findNextSiblingFocusable,
   findPrevSiblingFocusable,
-  isFocusable
+  isFocusable,
 } from "../../../internal/dom";
 import { event, isDef } from "../../../internal/utils";
 import { EventHandler } from "../../../internal/EventHandler";
@@ -135,8 +135,9 @@ function openMenu<T>(
     allHeight += offsetHeight;
   }
   (rect as Rect).offsetTop(-offset);
-  menu.style.transformOrigin = `center ${offset +
-    Math.ceil(children[focusIndex].offsetHeight / 2)}px 0px`;
+  menu.style.transformOrigin = `center ${
+    offset + Math.ceil(children[focusIndex].offsetHeight / 2)
+  }px 0px`;
   attachElement(element, rect, menu);
 
   // Control not to overflow the screen range
@@ -272,7 +273,7 @@ export class InlineMenuElement<T> {
     handler.on(menu, "touchstart", stopPropagationOnly);
     handler.on(menu, "dblclick", stopPropagationOnly);
 
-    handler.on(menu, "click", e => {
+    handler.on(menu, "click", (e) => {
       e.stopPropagation();
       const item = findItemParents(e.target as HTMLElement);
       if (!item) {
@@ -282,7 +283,7 @@ export class InlineMenuElement<T> {
       this._doChangeValue(valueindex || "");
       this.detach(true);
     });
-    handler.on(menu, "keydown", e => {
+    handler.on(menu, "keydown", (e) => {
       const item = findItemParents(e.target as HTMLElement);
       if (!item) {
         return;

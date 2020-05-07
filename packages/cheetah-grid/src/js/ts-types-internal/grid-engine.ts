@@ -1,16 +1,16 @@
-import { CellAddress, FieldDef } from "../ts-types/grid";
-import {
+import type { CellAddress, FieldDef } from "../ts-types/grid";
+import type {
   CellContext,
   GridCanvasHelperAPI,
-  ListGridAPI
+  ListGridAPI,
 } from "../ts-types/grid-engine";
-import { ColorPropertyDefine, ColumnIconOption } from "../ts-types/define";
-import {
+import type { ColorPropertyDefine, ColumnIconOption } from "../ts-types/define";
+import type {
   ColumnStyle,
   ColumnStyleOption,
-  HeaderStyleOption
+  HeaderStyleOption,
 } from "../ts-types/column";
-import { Message } from "../ts-types/data";
+import type { Message } from "../ts-types/data";
 
 export interface MessageHandler<T> {
   drawCellMessage(

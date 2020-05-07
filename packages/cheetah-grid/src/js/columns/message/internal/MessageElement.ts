@@ -1,4 +1,4 @@
-import { ListGridAPI, MessageObject } from "../../../ts-types";
+import type { ListGridAPI, MessageObject } from "../../../ts-types";
 import { EventHandler } from "../../../internal/EventHandler";
 import { createElement } from "../../../internal/dom";
 
@@ -10,10 +10,10 @@ const SHOWN_CLASSNAME = `${CLASSNAME}--shown`;
 function createMessageDomElement(): HTMLElement {
   require("@/columns/message/internal/MessageElement.css");
   const rootElement = createElement("div", {
-    classList: [CLASSNAME, HIDDEN_CLASSNAME]
+    classList: [CLASSNAME, HIDDEN_CLASSNAME],
   });
   const messageElement = createElement("span", {
-    classList: [MESSAGE_CLASSNAME]
+    classList: [MESSAGE_CLASSNAME],
   });
   rootElement.appendChild(messageElement);
   return rootElement;

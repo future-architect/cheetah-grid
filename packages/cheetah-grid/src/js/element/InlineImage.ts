@@ -1,4 +1,4 @@
-import { AnyFunction, MaybePromise } from "../ts-types";
+import type { AnyFunction, MaybePromise } from "../ts-types";
 import { Inline, InlineDrawOption } from "./Inline";
 import { getCacheOrLoad } from "../internal/imgs";
 import { isPromise } from "../internal/utils";
@@ -31,7 +31,7 @@ export class InlineImage extends Inline {
     imageLeft,
     imageTop,
     imageWidth,
-    imageHeight
+    imageHeight,
   }: InlineImageConstructorOption) {
     super();
     this._src = src;
@@ -45,7 +45,7 @@ export class InlineImage extends Inline {
     this._onloaded = [];
 
     if (isPromise(src)) {
-      src.then(s => {
+      src.then((s) => {
         this._src = s;
         this._loadImage(s);
       });
@@ -60,10 +60,10 @@ export class InlineImage extends Inline {
       src
     ));
     if (isPromise(img)) {
-      img.then(i => {
+      img.then((i) => {
         this._inlineImg = i;
 
-        this._onloaded.forEach(fn => fn());
+        this._onloaded.forEach((fn) => fn());
       });
     } else {
       this._inlineImg = img;
@@ -94,7 +94,7 @@ export class InlineImage extends Inline {
     offsetLeft,
     offsetRight,
     offsetTop,
-    offsetBottom
+    offsetBottom,
   }: InlineDrawOption): void {
     const img = this._inlineImg as HTMLImageElement;
     canvashelper.drawInlineImageRect(
@@ -116,8 +116,8 @@ export class InlineImage extends Inline {
           left: offsetLeft,
           right: offsetRight,
           top: offsetTop,
-          bottom: offsetBottom
-        }
+          bottom: offsetBottom,
+        },
       }
     );
   }

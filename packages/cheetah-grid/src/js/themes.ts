@@ -1,6 +1,6 @@
 import { extend, getIgnoreCase } from "./internal/utils";
 import { Theme } from "./themes/theme";
-import { ThemeDefine } from "./ts-types";
+import type { ThemeDefine } from "./ts-types";
 import basicTheme from "./themes/BASIC";
 import materialDesignTheme from "./themes/MATERIAL_DESIGN";
 import { themes as plugins } from "./plugins/themes";
@@ -10,7 +10,7 @@ export const MATERIAL_DESIGN = new Theme(materialDesignTheme);
 
 const builtin: { [key: string]: Theme } = {
   BASIC,
-  MATERIAL_DESIGN
+  MATERIAL_DESIGN,
 };
 let defTheme = MATERIAL_DESIGN;
 

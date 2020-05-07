@@ -1,4 +1,4 @@
-import { ButtonColumnState, GridInternal } from "../../ts-types-internal";
+import type { ButtonColumnState, GridInternal } from "../../ts-types-internal";
 import { Action } from "./Action";
 import { getButtonColumnStateId } from "../../internal/symbolManager";
 import { obj } from "../../internal/utils";

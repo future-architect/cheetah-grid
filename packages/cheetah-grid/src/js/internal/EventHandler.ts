@@ -1,4 +1,4 @@
-import { AnyFunction, EventListenerId } from "../ts-types";
+import type { AnyFunction, EventListenerId } from "../ts-types";
 import { EventTarget as CustomEventTarget } from "../core/EventTarget";
 import { each } from "./utils";
 
@@ -47,7 +47,7 @@ export class EventHandler {
       target,
       type,
       listener,
-      options
+      options,
     };
     const id = nextId++;
     this._listeners[id] = obj;
@@ -91,7 +91,7 @@ export class EventHandler {
   ): void {
     const list: EventListenerObject[] = [];
     try {
-      each(this._listeners, obj => {
+      each(this._listeners, (obj) => {
         if (obj.target === target && obj.type === type) {
           if (obj.target.removeEventListener) {
             obj.target.removeEventListener(
@@ -105,7 +105,7 @@ export class EventHandler {
       });
       call();
     } finally {
-      list.forEach(obj => {
+      list.forEach((obj) => {
         if (obj.target.addEventListener) {
           obj.target.addEventListener(
             obj.type,
@@ -135,7 +135,7 @@ export class EventHandler {
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   fire(target: EventTarget, type: string, ...args: any[]): void {
-    each(this._listeners, obj => {
+    each(this._listeners, (obj) => {
       if (obj.target === target && obj.type === type) {
         obj.listener.call(obj.target, ...args);
       }
@@ -143,7 +143,7 @@ export class EventHandler {
   }
   hasListener(target: EventTarget, type: string): boolean {
     let result = false;
-    each(this._listeners, obj => {
+    each(this._listeners, (obj) => {
       if (obj.target === target && obj.type === type) {
         result = true;
       }
@@ -151,7 +151,7 @@ export class EventHandler {
     return result;
   }
   clear(): void {
-    each(this._listeners, obj => {
+    each(this._listeners, (obj) => {
       if (obj.target.removeEventListener) {
         obj.target.removeEventListener(
           obj.type,

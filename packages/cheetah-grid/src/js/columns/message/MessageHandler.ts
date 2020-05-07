@@ -1,11 +1,14 @@
-import { MessageHandler as Base, DrawCellInfo } from "../../ts-types-internal";
-import {
+import type {
+  MessageHandler as Base,
+  DrawCellInfo,
+} from "../../ts-types-internal";
+import type {
   CellContext,
   ColumnStyle,
   GridCanvasHelperAPI,
   ListGridAPI,
   Message,
-  MessageObject
+  MessageObject,
 } from "../../ts-types";
 import { BaseMessage } from "./BaseMessage";
 import { ErrorMessage } from "./ErrorMessage";
@@ -16,7 +19,7 @@ import { isPromise } from "../../internal/utils";
 
 const EMPTY_MESSAGE: MessageObject = {
   type: "error",
-  message: null
+  message: null,
 };
 
 const MESSAGE_INSTANCE_FACTORY = {
@@ -28,7 +31,7 @@ const MESSAGE_INSTANCE_FACTORY = {
   },
   warning<T>(grid: ListGridAPI<T>): BaseMessage<T> {
     return new WarningMessage(grid);
-  }
+  },
 };
 
 function normalizeMessage(message: Message): MessageObject {
@@ -39,21 +42,22 @@ function normalizeMessage(message: Message): MessageObject {
     return {
       type: "error",
       message,
-      original: message
+      original: message,
     };
   }
   const type = message.type || "error";
   if (type && type in MESSAGE_INSTANCE_FACTORY) {
     return {
       type: type.toLowerCase() as MessageObject["type"],
-      message: `${message.message}`,
-      original: message
+      message: message.message,
+      original: message,
     };
   }
   return {
     type: "error",
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     message: `${message}`,
-    original: message
+    original: message,
   };
 }
 function hasMessage(message: Message): boolean {
@@ -144,7 +148,7 @@ export class MessageHandler<T> implements Base<T> {
         this._attach(sel.col, sel.row, message);
       }
     };
-    grid.listen(LG_EVENT_TYPE.SELECTED_CELL, e => {
+    grid.listen(LG_EVENT_TYPE.SELECTED_CELL, (e) => {
       if (!e.selected) {
         return;
       }
@@ -157,18 +161,18 @@ export class MessageHandler<T> implements Base<T> {
       const sel = grid.selection.select;
       this._move(sel.col, sel.row);
     });
-    grid.listen(LG_EVENT_TYPE.CHANGED_VALUE, e => {
+    grid.listen(LG_EVENT_TYPE.CHANGED_VALUE, (e) => {
       const sel = grid.selection.select;
       if (sel.col !== e.col || sel.row !== e.row) {
         return;
       }
       onSelectMessage(e);
     });
-    grid.listen(LG_EVENT_TYPE.FOCUS_GRID, _e => {
+    grid.listen(LG_EVENT_TYPE.FOCUS_GRID, (_e) => {
       const sel = grid.selection.select;
       onSelectMessage(sel);
     });
-    grid.listen(LG_EVENT_TYPE.BLUR_GRID, _e => {
+    grid.listen(LG_EVENT_TYPE.BLUR_GRID, (_e) => {
       this._detach();
     });
   }

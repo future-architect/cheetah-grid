@@ -1,11 +1,11 @@
 /*eslint no-bitwise:0*/
 
-import { StylePropertyFunctionArg, ThemeDefine } from "../ts-types";
+import type { StylePropertyFunctionArg, ThemeDefine } from "../ts-types";
 
 function FROZEN_ROWS_BORDER_COLOR(args: StylePropertyFunctionArg): string[] {
   const {
     row,
-    grid: { frozenRowCount }
+    grid: { frozenRowCount },
   } = args;
   if (frozenRowCount - 1 === row) {
     return ["#f2f2f2", "#f2f2f2", "#ccc7c7", "#f2f2f2"];
@@ -59,14 +59,14 @@ export default {
   checkbox: {
     // uncheckBgColor: '#FFF',
     checkBgColor: "rgb(76, 73, 72)",
-    borderColor: "rgba(0, 0, 0, 0.26)"
+    borderColor: "rgba(0, 0, 0, 0.26)",
   },
   button: {
     color: "#FFF",
-    bgColor: "#2196F3"
+    bgColor: "#2196F3",
   },
   header: {
-    sortArrowColor: "rgba(0, 0, 0, 0.38)"
+    sortArrowColor: "rgba(0, 0, 0, 0.38)",
   },
-  underlayBackgroundColor: "#FFF"
+  underlayBackgroundColor: "#FFF",
 } as ThemeDefine;

@@ -1,8 +1,8 @@
-import {
+import type {
   CellAddress,
   EventListenerId,
   LayoutObjectId,
-  ListGridAPI
+  ListGridAPI,
 } from "../../ts-types";
 import { DG_EVENT_TYPE } from "../../core/DG_EVENT_TYPE";
 import { event } from "../../internal/utils";
@@ -13,7 +13,7 @@ export function bindCellClickAction<T>(
   {
     action,
     mouseOver,
-    mouseOut
+    mouseOut,
   }: {
     action: (cell: CellAddress) => void;
     mouseOver?: (cell: CellAddress) => boolean;
@@ -26,17 +26,17 @@ export function bindCellClickAction<T>(
   let inMouse: boolean;
   return [
     // click
-    grid.listen(DG_EVENT_TYPE.CLICK_CELL, e => {
+    grid.listen(DG_EVENT_TYPE.CLICK_CELL, (e) => {
       if (!isTarget(e.col, e.row)) {
         return;
       }
       action({
         col: e.col,
-        row: e.row
+        row: e.row,
       });
     }),
     // mouse move
-    grid.listen(DG_EVENT_TYPE.MOUSEOVER_CELL, e => {
+    grid.listen(DG_EVENT_TYPE.MOUSEOVER_CELL, (e) => {
       if (!isTarget(e.col, e.row)) {
         return;
       }
@@ -44,7 +44,7 @@ export function bindCellClickAction<T>(
         if (
           !mouseOver({
             col: e.col,
-            row: e.row
+            row: e.row,
           })
         ) {
           return;
@@ -54,7 +54,7 @@ export function bindCellClickAction<T>(
       inMouse = true;
     }),
     //横からMOUSEENTERした場合、'col-resize'の処理と競合するのでmoveを監視して処理する
-    grid.listen(DG_EVENT_TYPE.MOUSEMOVE_CELL, e => {
+    grid.listen(DG_EVENT_TYPE.MOUSEMOVE_CELL, (e) => {
       if (!isTarget(e.col, e.row)) {
         return;
       }
@@ -62,19 +62,19 @@ export function bindCellClickAction<T>(
         grid.getElement().style.cursor = "pointer";
       }
     }),
-    grid.listen(DG_EVENT_TYPE.MOUSEOUT_CELL, e => {
+    grid.listen(DG_EVENT_TYPE.MOUSEOUT_CELL, (e) => {
       if (!isTarget(e.col, e.row)) {
         return;
       }
       if (mouseOut) {
         mouseOut({
           col: e.col,
-          row: e.row
+          row: e.row,
         });
       }
       grid.getElement().style.cursor = "";
       inMouse = false;
-    })
+    }),
   ];
 }
 export function bindCellKeyAction<T>(
@@ -82,7 +82,7 @@ export function bindCellKeyAction<T>(
   cellId: LayoutObjectId,
   {
     action,
-    acceptKeys = []
+    acceptKeys = [],
   }: {
     action: (cell: CellAddress) => void;
     acceptKeys?: number[];
@@ -95,7 +95,7 @@ export function bindCellKeyAction<T>(
   }
   return [
     // enter key down
-    grid.listen(DG_EVENT_TYPE.KEYDOWN, e => {
+    grid.listen(DG_EVENT_TYPE.KEYDOWN, (e) => {
       if (acceptKeys.indexOf(e.keyCode) === -1) {
         return;
       }
@@ -109,9 +109,9 @@ export function bindCellKeyAction<T>(
       }
       action({
         col: sel.col,
-        row: sel.row
+        row: sel.row,
       });
       event.cancel(e.event);
-    })
+    }),
   ];
 }

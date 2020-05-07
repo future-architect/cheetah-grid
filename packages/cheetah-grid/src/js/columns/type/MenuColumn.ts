@@ -1,14 +1,14 @@
 import * as utils from "./columnUtils";
-import {
+import type {
   CellContext,
   ColumnMenuItemOptions,
   GridCanvasHelperAPI,
   ListGridAPI,
   MenuColumnOption,
-  SimpleColumnMenuItemOption
+  SimpleColumnMenuItemOption,
 } from "../../ts-types";
 import { BaseColumn } from "./BaseColumn";
-import { DrawCellInfo } from "../../ts-types-internal";
+import type { DrawCellInfo } from "../../ts-types-internal";
 import { MenuStyle } from "../style/MenuStyle";
 import { isDef } from "../../internal/utils";
 import { normalize } from "../../internal/menu-items";
@@ -48,12 +48,12 @@ export class MenuColumn<T> extends BaseColumn<T, unknown> {
       bgColor,
       padding,
       textOverflow,
-      appearance
+      appearance,
     } = style;
     let { color } = style;
     if (bgColor) {
       drawCellBase({
-        bgColor
+        bgColor,
       });
     }
     const text = this._convertInternal(value);
@@ -74,7 +74,7 @@ export class MenuColumn<T> extends BaseColumn<T, unknown> {
         font,
         padding: textPadding,
         textOverflow,
-        icons
+        icons,
       });
 
       if (appearance === "menulist-button") {
@@ -88,12 +88,13 @@ export class MenuColumn<T> extends BaseColumn<T, unknown> {
             {
               path: "M0 2 5 7 10 2z",
               width: 10,
-              color: "rgba(0, 0, 0, .54)"
-            }
+              color: "rgba(0, 0, 0, .54)",
+            },
           ],
-          padding: iconPadding
+          padding: iconPadding,
         });
       } else if (appearance !== "none") {
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         console.warn(`unsupported appearance:${appearance}`);
       }
     });

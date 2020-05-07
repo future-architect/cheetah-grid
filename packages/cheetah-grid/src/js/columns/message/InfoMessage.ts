@@ -1,13 +1,13 @@
 import * as messageUtils from "./messageUtils";
-import {
+import type {
   CellContext,
   ColumnStyle,
   GridCanvasHelperAPI,
   ListGridAPI,
-  MessageObject
+  MessageObject,
 } from "../../ts-types";
 import { BaseMessage } from "./BaseMessage";
-import { DrawCellInfo } from "../../ts-types-internal";
+import type { DrawCellInfo } from "../../ts-types-internal";
 import { MessageElement } from "./internal/MessageElement";
 import { cellInRange } from "../../internal/utils";
 const GREY_L2 = "#e0e0e0";
@@ -41,7 +41,7 @@ export class InfoMessage<T> extends BaseMessage<T> {
             context,
             {
               bgColor: GREY_L2,
-              color: bgColor
+              color: bgColor,
             },
             helper
           );

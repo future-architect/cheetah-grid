@@ -1,7 +1,11 @@
 import * as utils from "./columnUtils";
-import { CellContext, GridCanvasHelperAPI, ListGridAPI } from "../../ts-types";
+import type {
+  CellContext,
+  GridCanvasHelperAPI,
+  ListGridAPI,
+} from "../../ts-types";
 import { BaseColumn } from "./BaseColumn";
-import { DrawCellInfo } from "../../ts-types-internal";
+import type { DrawCellInfo } from "../../ts-types-internal";
 import { Style } from "../style/Style";
 
 export class Column<T> extends BaseColumn<T, string> {
@@ -26,11 +30,11 @@ export class Column<T> extends BaseColumn<T, string> {
       font,
       bgColor,
       padding,
-      textOverflow
+      textOverflow,
     } = style;
     if (bgColor) {
       drawCellBase({
-        bgColor
+        bgColor,
       });
     }
     helper.testFontLoad(font, value, context);
@@ -42,7 +46,7 @@ export class Column<T> extends BaseColumn<T, string> {
         font,
         padding,
         textOverflow,
-        icons
+        icons,
       });
     });
   }

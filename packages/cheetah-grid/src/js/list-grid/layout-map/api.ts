@@ -1,6 +1,6 @@
 import * as headerAction from "../../header/action";
 import * as headerType from "../../header/type";
-import {
+import type {
   CellRange,
   ColumnActionOption,
   ColumnIconOption,
@@ -12,7 +12,7 @@ import {
   HeaderTypeOption,
   LayoutObjectId,
   ListGridAPI,
-  Message
+  Message,
 } from "../../ts-types";
 import { BaseAction } from "../../columns/action";
 import { BaseColumn } from "../../columns/type/BaseColumn";

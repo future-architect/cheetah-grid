@@ -2,13 +2,13 @@ import * as icons from "../icons";
 import * as path2DManager from "../internal/path2DManager";
 import { Inline, InlineDrawOption } from "./Inline";
 import { PaddingOption, calcStartPosition } from "../internal/canvases";
-import { IconDefine } from "../ts-types";
+import type { IconDefine } from "../ts-types";
 import { InlineDrawer } from "./InlineDrawer";
 import { InlineIcon } from "./InlineIcon";
 import { InlineImage } from "./InlineImage";
 import { InlinePath2D } from "./InlinePath2D";
 import { InlineSvg } from "./InlineSvg";
-import { SimpleColumnIconOption } from "../ts-types-internal";
+import type { SimpleColumnIconOption } from "../ts-types-internal";
 import { isDef } from "../internal/utils";
 
 function drawRegisteredIcon(
@@ -28,7 +28,7 @@ function drawRegisteredIcon(
     width,
     height,
     right: left + width,
-    bottom: top + height
+    bottom: top + height,
   };
   ctx.save();
   try {
@@ -40,7 +40,7 @@ function drawRegisteredIcon(
     //文字描画
     const pos = calcStartPosition(ctx, rect, drawWidth, drawHeight, {
       offset,
-      padding
+      padding,
     });
     path2DManager.fill(icon, ctx, pos.x, pos.y, drawWidth, drawHeight);
   } finally {
@@ -93,14 +93,14 @@ export function iconOf(icon: SimpleColumnIconOption | null): Inline | null {
     return new InlineImage({
       src: icon.src,
       width: icon.width,
-      height: icon.width
+      height: icon.width,
     });
   }
   if (icon.svg) {
     return new InlineSvg({
       svg: icon.svg,
       width: icon.width,
-      height: icon.width
+      height: icon.width,
     });
   }
   if (isInlineSvgConstructorOption(icon)) {
@@ -108,7 +108,7 @@ export function iconOf(icon: SimpleColumnIconOption | null): Inline | null {
       path: icon.path,
       width: icon.width,
       height: icon.width,
-      color: icon.color
+      color: icon.color,
     });
   }
   const regedIcons = icons.get();
@@ -123,7 +123,7 @@ export function iconOf(icon: SimpleColumnIconOption | null): Inline | null {
         offsetLeft,
         offsetRight,
         offsetTop,
-        offsetBottom
+        offsetBottom,
       }: InlineDrawOption): void {
         drawRegisteredIcon(
           ctx,
@@ -140,14 +140,14 @@ export function iconOf(icon: SimpleColumnIconOption | null): Inline | null {
               left: offsetLeft,
               right: offsetRight,
               top: offsetTop,
-              bottom: offsetBottom
-            }
+              bottom: offsetBottom,
+            },
           }
         );
       },
       width,
       height: width,
-      color: icon.color
+      color: icon.color,
     });
   }
   return new InlineIcon(icon);
@@ -169,13 +169,13 @@ export function buildInlines(
 ): Inline[] {
   const result = [];
   if (icons) {
-    result.push(...icons.map(icon => iconOf(icon)).filter(isDef));
+    result.push(...icons.map((icon) => iconOf(icon)).filter(isDef));
   }
   if (
     Array.isArray(inline)
     // && inline.filter(il => il instanceof Inline).length <- ?
   ) {
-    result.push(...inline.map(il => of(il)).filter(isDef));
+    result.push(...inline.map((il) => of(il)).filter(isDef));
   } else {
     const il = of(inline);
     if (il) {

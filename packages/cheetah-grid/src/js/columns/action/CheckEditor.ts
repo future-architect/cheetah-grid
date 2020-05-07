@@ -1,10 +1,14 @@
-import { CellAddress, EventListenerId, LayoutObjectId } from "../../ts-types";
+import type {
+  CellAddress,
+  EventListenerId,
+  LayoutObjectId,
+} from "../../ts-types";
 import { bindCellClickAction, bindCellKeyAction } from "./actionBind";
 import { cellEquals, event, isPromise, obj } from "../../internal/utils";
 import { isDisabledRecord, isReadOnlyRecord } from "./action-utils";
 import { DG_EVENT_TYPE } from "../../core/DG_EVENT_TYPE";
 import { Editor } from "./Editor";
-import { GridInternal } from "../../ts-types-internal";
+import type { GridInternal } from "../../ts-types-internal";
 import { animate } from "../../internal/animate";
 import { getCheckColumnStateId } from "../../internal/symbolManager";
 
@@ -27,13 +31,13 @@ function toggleValue(
       return "true";
     } else if (val === "off") {
       return "on";
-    } else if (val.match(/^0+$/)) {
+    } else if (/^0+$/.exec(val)) {
       return val.replace(/^(0*)0$/, "$11");
     } else if (val === "true") {
       return "false";
     } else if (val === "on") {
       return "off";
-    } else if (val.match(/^0*1$/)) {
+    } else if (/^0*1$/.exec(val)) {
       return val.replace(/^(0*)1$/, "$10");
     }
   }
@@ -70,7 +74,7 @@ export class CheckEditor<T> extends Editor<T> {
       if (ret) {
         const onChange = (): void => {
           // checkbox animation
-          animate(200, point => {
+          animate(200, (point) => {
             if (point === 1) {
               delete state.elapsed[cellKey];
             } else {
@@ -97,26 +101,26 @@ export class CheckEditor<T> extends Editor<T> {
     return [
       ...bindCellClickAction(grid, cellId, {
         action,
-        mouseOver: e => {
+        mouseOver: (e) => {
           if (isDisabledRecord(this.disabled, grid, e.row)) {
             return false;
           }
           state.mouseActiveCell = {
             col: e.col,
-            row: e.row
+            row: e.row,
           };
           const range = grid.getCellRange(e.col, e.row);
           grid.invalidateCellRange(range);
           return true;
         },
-        mouseOut: e => {
+        mouseOut: (e) => {
           delete state.mouseActiveCell;
           const range = grid.getCellRange(e.col, e.row);
           grid.invalidateCellRange(range);
-        }
+        },
       }),
       ...bindCellKeyAction(grid, cellId, {
-        action: _e => {
+        action: (_e) => {
           const selrange = grid.selection.range;
           const { col } = grid.selection.select;
           for (let { row } = selrange.start; row <= selrange.end.row; row++) {
@@ -125,14 +129,14 @@ export class CheckEditor<T> extends Editor<T> {
             }
             action({
               col,
-              row
+              row,
             });
           }
-        }
+        },
       }),
 
       // paste value
-      grid.listen(DG_EVENT_TYPE.PASTE_CELL, e => {
+      grid.listen(DG_EVENT_TYPE.PASTE_CELL, (e) => {
         if (e.multi) {
           // ignore multi cell values
           return;
@@ -146,18 +150,18 @@ export class CheckEditor<T> extends Editor<T> {
           return;
         }
         const pasteValue = e.normalizeValue.trim();
-        grid.doGetCellValue(e.col, e.row, value => {
+        grid.doGetCellValue(e.col, e.row, (value) => {
           const newValue = toggleValue(value);
           if (`${newValue}`.trim() === pasteValue) {
             event.cancel(e.event);
 
             action({
               col: e.col,
-              row: e.row
+              row: e.row,
             });
           }
         });
-      })
+      }),
     ];
   }
   onPasteCellRangeBox(
@@ -172,7 +176,7 @@ export class CheckEditor<T> extends Editor<T> {
       return;
     }
     const pasteValue = value.trim();
-    grid.doGetCellValue(cell.col, cell.row, value => {
+    grid.doGetCellValue(cell.col, cell.row, (value) => {
       const newValue = toggleValue(value);
       if (`${newValue}`.trim() === pasteValue) {
         grid.doChangeValue(cell.col, cell.row, toggleValue);

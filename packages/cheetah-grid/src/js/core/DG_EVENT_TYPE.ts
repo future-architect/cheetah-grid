@@ -79,5 +79,5 @@ export const DG_EVENT_TYPE: DrawGridEvents = {
   RESIZE_COLUMN: "resize_column",
   SCROLL: "scroll",
   FOCUS_GRID: "focus_grid",
-  BLUR_GRID: "blur_grid"
+  BLUR_GRID: "blur_grid",
 } as DrawGridEvents;

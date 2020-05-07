@@ -1,5 +1,5 @@
 import * as styleContents from "../style";
-import {
+import type {
   BaseColumnOption,
   CellAddress,
   CellContext,
@@ -9,12 +9,12 @@ import {
   LayoutObjectId,
   ListGridAPI,
   MaybePromise,
-  Message
+  Message,
 } from "../../ts-types";
-import {
+import type {
   ColumnFadeinState,
   DrawCellInfo,
-  GridInternal
+  GridInternal,
 } from "../../ts-types-internal";
 import { isDef, isPromise, obj } from "../../internal/utils";
 import { BaseStyle } from "../style/BaseStyle";
@@ -57,7 +57,7 @@ function _generateFadinPointAction<T>(
       delete state.cells[stateKey];
     } else {
       state.cells[stateKey] = {
-        opacity: point
+        opacity: point,
       };
     }
     drawCellBase();
@@ -97,12 +97,12 @@ const fadinMgr = {
         context,
         drawInternal,
         drawCellBase
-      )
+      ),
     ];
     state.activeFadeins = activeFadeins;
 
     animate(500, (point: number) => {
-      activeFadeins.forEach(f => f(point));
+      activeFadeins.forEach((f) => f(point));
       if (point === 1) {
         delete state.activeFadeins;
       }
@@ -131,7 +131,7 @@ const fadinMgr = {
     } else {
       drawInternal();
     }
-  }
+  },
 };
 
 export abstract class BaseColumn<T, V> implements ColumnTypeAPI {
@@ -169,7 +169,7 @@ export abstract class BaseColumn<T, V> implements ColumnTypeAPI {
     //文字描画
     if (promise) {
       const start = Date.now();
-      return promise.then(val => {
+      return promise.then((val) => {
         const currentContext = context.toCurrentContext();
         const drawRect = currentContext.getDrawRect();
         if (!drawRect) {

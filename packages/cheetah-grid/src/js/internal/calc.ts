@@ -75,7 +75,7 @@ function tokenize(calc: string): Token[] {
     } else if ((re = reOp.exec(exp))) {
       tokens.push({
         value: re[0] as Ops,
-        type: TYPE_OPERATOR
+        type: TYPE_OPERATOR,
       });
       exp = exp.slice(re[0].length);
     } else {
@@ -89,7 +89,7 @@ const PRECEDENCE = {
   "*": 3,
   "/": 3,
   "+": 2,
-  "-": 2
+  "-": 2,
 };
 
 function lex(tokens: Token[], calc: string): Node {
@@ -112,7 +112,7 @@ function lex(tokens: Token[], calc: string): Node {
       nodeType: NODE_TYPE_BINARY_EXPRESSION,
       left,
       op,
-      right
+      right,
     };
   }
 
@@ -122,7 +122,7 @@ function lex(tokens: Token[], calc: string): Node {
     const token = tokens.shift() as Token;
     if (token.type === TYPE_PUNCTURE && token.value === "(") {
       let deep = 0;
-      const closeIndex = array.findIndex(tokens, t => {
+      const closeIndex = array.findIndex(tokens, (t) => {
         if (t.type === TYPE_PUNCTURE && t.value === "(") {
           deep++;
         } else if (t.type === TYPE_PUNCTURE && t.value === ")") {
@@ -153,12 +153,12 @@ function lex(tokens: Token[], calc: string): Node {
       stack.push({
         nodeType: NODE_TYPE_UNIT,
         value: num,
-        unit
+        unit,
       });
     } else if (token.type === TYPE_NUMBER) {
       stack.push({
         nodeType: NODE_TYPE_NUMBER,
-        value: parseFloat(token.value)
+        value: parseFloat(token.value),
       });
     }
   }
@@ -188,6 +188,7 @@ function calcNode(node: Node, context: CalcContext): number {
       case "/":
         return left / right;
       default:
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         throw new Error(`calc error. unknown operator: ${node.op.value}`);
     }
   } else if (node.nodeType === NODE_TYPE_UNIT) {
