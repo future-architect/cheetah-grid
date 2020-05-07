@@ -47,9 +47,9 @@
       <c-grid-menu-column
         :width="75"
         :options="[
-          { value: '', caption: 'Empty' },
-          { value: 1, caption: 'Opt1' },
-          { value: 2, caption: 'Opt2' }
+          { value: '', label: 'Empty' },
+          { value: 1, label: 'Opt1' },
+          { value: 2, label: 'Opt2' }
         ]"
         field="menu"
       >

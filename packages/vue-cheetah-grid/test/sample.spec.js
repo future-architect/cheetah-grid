@@ -39,7 +39,7 @@ describe('sample', () => {
     expect(menu.columnType).to.be.an.instanceof(cheetahGrid.columns.type.MenuColumn)
     expect(menu.columnType.options).to.deep.equal([{ value: '', label: 'Empty' }, { value: 1, label: 'Opt1' }, { value: 2, label: 'Opt2' }])
     expect(menu.action).to.be.an.instanceof(cheetahGrid.columns.action.InlineMenuEditor)
-    expect(menu.action.options).to.deep.equal([{ value: '', label: 'Empty' }, { value: 1, label: 'Opt1' }, { value: 2, label: 'Opt2' }])
+    expect(menu.action.options(rawGrid.records[0])).to.deep.equal([{ value: '', label: 'Empty' }, { value: 1, label: 'Opt1' }, { value: 2, label: 'Opt2' }])
 
     expect(percent).to.own.include({ caption: 'PERCENT', field: 'percent', width: 90 })
     expect(percent.columnType).to.be.an.instanceof(cheetahGrid.columns.type.PercentCompleteBarColumn)

@@ -14,24 +14,24 @@ Define the message to display in each cell of the column by using `message` prop
 
 ```js
 const menuOptions = [
-  {value: '', caption: 'Empty'},
-  {value: '1', caption: 'Option 1'},
-  {value: '2', caption: 'Option 2'},
-  {value: '3', caption: 'Option 3'},
-  {value: '4', caption: 'Option 4'},
-  {value: '5', caption: 'Option 5'},
-  {value: '6', caption: 'Option 6'},
-  {value: '7', caption: 'Option 7'},
+  {value: '', label: 'Empty'},
+  {value: '1', label: 'Option 1'},
+  {value: '2', label: 'Option 2'},
+  {value: '3', label: 'Option 3'},
+  {value: '4', label: 'Option 4'},
+  {value: '5', label: 'Option 5'},
+  {value: '6', label: 'Option 6'},
+  {value: '7', label: 'Option 7'},
 ];
 const displayOptions = [
-  {value: '', caption: 'Choose your option'},
-  {value: '1', caption: 'Option 1'},
-  {value: '2', caption: 'Option 2'},
-  {value: '3', caption: 'Option 3'},
-  {value: '4', caption: 'Option 4'},
-  {value: '5', caption: 'Option 5'},
-  {value: '6', caption: 'Option 6'},
-  {value: '7', caption: 'Option 7'},
+  {value: '', label: 'Choose your option'},
+  {value: '1', label: 'Option 1'},
+  {value: '2', label: 'Option 2'},
+  {value: '3', label: 'Option 3'},
+  {value: '4', label: 'Option 4'},
+  {value: '5', label: 'Option 5'},
+  {value: '6', label: 'Option 6'},
+  {value: '7', label: 'Option 7'},
 ];
 
 const grid = new cheetahGrid.ListGrid({
