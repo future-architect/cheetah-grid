@@ -15,14 +15,14 @@ order: 10
 
 ```js
 const menuOptions = [
-  {value: '', caption: 'Empty'},
-  {value: '1', caption: 'Option 1'},
-  {value: '2', caption: 'Option 2'},
-  {value: '3', caption: 'Option 3'},
-  {value: '4', caption: 'Option 4'},
-  {value: '5', caption: 'Option 5'},
-  {value: '6', caption: 'Option 6'},
-  {value: '7', caption: 'Option 7'},
+  {value: '', label: 'Empty'},
+  {value: '1', label: 'Option 1'},
+  {value: '2', label: 'Option 2'},
+  {value: '3', label: 'Option 3'},
+  {value: '4', label: 'Option 4'},
+  {value: '5', label: 'Option 5'},
+  {value: '6', label: 'Option 6'},
+  {value: '7', label: 'Option 7'},
 ];
 const grid = new cheetahGrid.ListGrid({
   parentElement: document.querySelector('.sample1'),
@@ -67,14 +67,14 @@ grid.records = [
 
 ```js
 const menuOptions = [
-  {value: '', caption: 'Empty'},
-  {value: '1', caption: 'Option 1'},
-  {value: '2', caption: 'Option 2'},
-  {value: '3', caption: 'Option 3'},
-  {value: '4', caption: 'Option 4'},
-  {value: '5', caption: 'Option 5'},
-  {value: '6', caption: 'Option 6'},
-  {value: '7', caption: 'Option 7'},
+  {value: '', label: 'Empty'},
+  {value: '1', label: 'Option 1'},
+  {value: '2', label: 'Option 2'},
+  {value: '3', label: 'Option 3'},
+  {value: '4', label: 'Option 4'},
+  {value: '5', label: 'Option 5'},
+  {value: '6', label: 'Option 6'},
+  {value: '7', label: 'Option 7'},
 ];
 const grid = new cheetahGrid.ListGrid({
   parentElement: document.querySelector('.sample2'),

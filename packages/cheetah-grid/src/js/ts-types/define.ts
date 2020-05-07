@@ -49,16 +49,22 @@ export type ColumnIconOption<T> =
 export type ColumnMenuItemOptions =
   | ColumnMenuItemOption[]
   | SimpleColumnMenuItemOption[]
+  | OldSimpleColumnMenuItemOption[]
   | string
   | ColumnMenuItemObjectOptions;
 export interface ColumnMenuItemOption {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   value: any;
-  caption: string;
+  label: string;
   classList?: string[];
   html?: string;
 }
 export interface SimpleColumnMenuItemOption {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  value: any;
+  label: string;
+}
+export interface OldSimpleColumnMenuItemOption {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   value: any;
   caption: string;

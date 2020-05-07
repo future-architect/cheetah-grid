@@ -56,7 +56,7 @@ function attachElement(
 }
 
 function optionToLi(
-  { classList, caption, value, html }: ColumnMenuItemOption,
+  { classList, label, value, html }: ColumnMenuItemOption,
   index: number
 ): HTMLLIElement {
   const item = createElement("li", { classList: ITEM_CLASSNAME });
@@ -66,8 +66,8 @@ function optionToLi(
     item.classList.add(...(Array.isArray(classList) ? classList : [classList]));
   }
 
-  if (caption) {
-    const span = createElement("span", { text: caption });
+  if (label) {
+    const span = createElement("span", { text: label });
     item.appendChild(span);
   } else if (html) {
     appendHtml(item, html);
@@ -82,13 +82,14 @@ function optionToLi(
 
 function openMenu<T>(
   grid: ListGridAPI<T>,
-  editor: EditorProps,
+  editor: EditorProps<T>,
   col: number,
   row: number,
   value: string,
+  options: ColumnMenuItemOption[],
   menu: HTMLUListElement
 ): void {
-  const { options, classList } = editor;
+  const { classList } = editor;
   menu.classList.remove(SHOWN_CLASSNAME);
   menu.classList.add(HIDDEN_CLASSNAME);
   empty(menu);
@@ -179,21 +180,22 @@ function closeMenu<T>(
   disableFocus(menu);
 }
 
-type EditorProps = {
+type EditorProps<T> = {
   classList?: string[];
-  options: ColumnMenuItemOption[];
+  options: (record: T | undefined) => ColumnMenuItemOption[];
 };
 type ActiveData<T> = {
   grid: ListGridAPI<T>;
   col: number;
   row: number;
-  editor: EditorProps;
+  editor: EditorProps<T>;
+  options: ColumnMenuItemOption[];
 };
 
 export class InlineMenuElement<T> {
   private _handler: EventHandler;
   private _menu: HTMLUListElement;
-  private _beforePropEditor?: EditorProps | null;
+  private _beforePropEditor?: EditorProps<T> | null;
   private _activeData?: ActiveData<T> | null;
   constructor() {
     this._handler = new EventHandler();
@@ -210,10 +212,11 @@ export class InlineMenuElement<T> {
   }
   attach(
     grid: ListGridAPI<T>,
-    editor: EditorProps,
+    editor: EditorProps<T>,
     col: number,
     row: number,
-    value: string
+    value: string,
+    record: T | undefined
   ): void {
     const menu = this._menu;
 
@@ -224,8 +227,10 @@ export class InlineMenuElement<T> {
       }
     }
 
-    openMenu(grid, editor, col, row, value, menu);
-    this._activeData = { grid, col, row, editor };
+    const options = editor.options(record);
+
+    openMenu(grid, editor, col, row, value, options, menu);
+    this._activeData = { grid, col, row, editor, options };
     this._beforePropEditor = editor;
   }
   detach(gridFocus?: boolean): void {
@@ -246,8 +251,8 @@ export class InlineMenuElement<T> {
     if (!this._isActive()) {
       return;
     }
-    const { grid, col, row, editor } = this._activeData!;
-    const option = editor.options[Number(valueindex)];
+    const { grid, col, row, options } = this._activeData!;
+    const option = options[Number(valueindex)];
     if (option) {
       const { value } = option;
       grid.doChangeValue(col, row, () => value);

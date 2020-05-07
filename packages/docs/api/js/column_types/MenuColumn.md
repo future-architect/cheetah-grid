@@ -4,21 +4,21 @@ order: 300
 
 # MenuColumn
 
-Maps from `value` to `caption` and display it.
+Maps from `value` to `label` and display it.
 
 To make it editable, please use [InlineMenuEditor](../column_actions/InlineMenuEditor.md).
 
 ## Constructor Properties
 
-|Property|Description|
-|---|---|
-|`options`|Define mapping options.|
+| Property  | Description             |
+| --------- | ----------------------- |
+| `options` | Define mapping options. |
 
 ## Style Properties
 
-|Property|Description|Default|
-|---|---|---|
-|`appearance`|Defines whether to display a dropdown arrow. (you can set `'menulist-button'` or `'none'`) |`'menulist-button'`|
+| Property     | Description                                                                                | Default             |
+| ------------ | ------------------------------------------------------------------------------------------ | ------------------- |
+| `appearance` | Defines whether to display a dropdown arrow. (you can set `'menulist-button'` or `'none'`) | `'menulist-button'` |
 
 In addition to this, Standard styles is available.
 
@@ -32,14 +32,14 @@ In addition to this, Standard styles is available.
 
 ```js
 const options = [
-  {value: '', caption: 'Empty'},
-  {value: '1', caption: 'Option 1'},
-  {value: '2', caption: 'Option 2'},
-  {value: '3', caption: 'Option 3'},
-  {value: '4', caption: 'Option 4'},
-  {value: '5', caption: 'Option 5'},
-  {value: '6', caption: 'Option 6'},
-  {value: '7', caption: 'Option 7'},
+  {value: '', label: 'Empty'},
+  {value: '1', label: 'Option 1'},
+  {value: '2', label: 'Option 2'},
+  {value: '3', label: 'Option 3'},
+  {value: '4', label: 'Option 4'},
+  {value: '5', label: 'Option 5'},
+  {value: '6', label: 'Option 6'},
+  {value: '7', label: 'Option 7'},
 ];
 const grid = new cheetahGrid.ListGrid({
   parentElement: document.querySelector('.sample1'),

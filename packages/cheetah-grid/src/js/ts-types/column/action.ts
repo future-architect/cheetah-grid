@@ -16,9 +16,11 @@ export interface EditorOption extends BaseActionOption {
 }
 export type ButtonActionOption = ActionOption;
 
-export interface InlineMenuEditorOption extends EditorOption {
+export interface InlineMenuEditorOption<T> extends EditorOption {
   classList?: string | string[];
-  options?: ColumnMenuItemOptions;
+  options?:
+    | ColumnMenuItemOptions
+    | ((record: T | undefined) => ColumnMenuItemOptions);
 }
 
 export interface InlineInputEditorOption extends EditorOption {
