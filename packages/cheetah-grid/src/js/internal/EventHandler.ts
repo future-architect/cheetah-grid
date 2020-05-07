@@ -2,10 +2,14 @@ import type { AnyFunction, EventListenerId } from "../ts-types";
 import { EventTarget as CustomEventTarget } from "../core/EventTarget";
 import { each } from "./utils";
 
+/** @private */
 let nextId = 1;
 
+/** @private */
 type EventHandlerTarget = EventTarget | CustomEventTarget;
+/** @private */
 type Listener = AnyFunction;
+/** @private */
 type EventListenerObject = {
   target: EventHandlerTarget;
   type: string;

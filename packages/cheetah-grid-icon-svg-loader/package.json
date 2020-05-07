@@ -1,6 +1,6 @@
 {
   "name": "cheetah-grid-icon-svg-loader",
-  "version": "0.20.0",
+  "version": "0.21.0",
   "description": "Webpack loader that loads the icon module for Cheetah Grid from SVG.",
   "main": "lib/index.js",
   "files": [
@@ -38,7 +38,7 @@
   },
   "homepage": "https://github.com/future-architect/cheetah-grid/tree/master/packages/cheetah-grid-icon-svg-loader",
   "devDependencies": {
-    "eslint": "^6.6.0",
+    "eslint": "^6.8.0",
     "eslint-plugin-node": "^10.0.0",
     "font-awesome": "^4.7.0",
     "mocha": "^5.2.0",

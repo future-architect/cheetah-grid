@@ -3,8 +3,10 @@ import { each, isPromise } from "../internal/utils";
 import { DataSource } from "./DataSource";
 import { EventHandler } from "../internal/EventHandler";
 
+/** @private */
 type Filter<T> = (record: T | undefined) => boolean;
 
+/** @private */
 class DataSourceIterator<T> {
   _dataSource: DataSource<T>;
   _curIndex: number;
@@ -52,6 +54,7 @@ class DataSourceIterator<T> {
     return record;
   }
 }
+/** @private */
 class FilterData<T> {
   _owner: FilterDataSource<T>;
   _dataSourceItr: DataSourceIterator<T>;

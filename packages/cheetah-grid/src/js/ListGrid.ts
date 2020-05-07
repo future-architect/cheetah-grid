@@ -66,9 +66,11 @@ import { TooltipHandler } from "./tooltip/TooltipHandler";
 import { getProtectedSymbol } from "./internal/symbolManager";
 import { parsePasteRangeBoxValues } from "./internal/paste-utils";
 
+/** @private */
 const _ = getProtectedSymbol();
 
 //private methods
+/** @private */
 function _getCellRange<T>(
   grid: ListGrid<T>,
   col: number,
@@ -76,6 +78,7 @@ function _getCellRange<T>(
 ): CellRange {
   return grid[_].layoutMap.getCellRange(col, row);
 }
+/** @private */
 function _updateRect<T>(
   grid: ListGrid<T>,
   col: number,
@@ -103,6 +106,7 @@ function _updateRect<T>(
     return Rect.bounds(left, top, right, bottom);
   });
 }
+/** @private */
 function _getCellValue<T>(
   grid: ListGrid<T>,
   col: number,
@@ -115,6 +119,7 @@ function _getCellValue<T>(
     return _getField(grid, field, row);
   }
 }
+/** @private */
 function _setCellValue<T>(
   grid: ListGrid<T>,
   col: number,
@@ -134,6 +139,7 @@ function _setCellValue<T>(
     return grid[_].dataSource.setField(index, field, value);
   }
 }
+/** @private */
 function _getCellMessage<T>(
   grid: ListGrid<T>,
   col: number,
@@ -149,6 +155,7 @@ function _getCellMessage<T>(
     return _getField(grid, message as FieldDef<T>, row);
   }
 }
+/** @private */
 function _getCellIcon0<T>(
   grid: ListGrid<T>,
   icon: ColumnIconOption<T>,
@@ -193,6 +200,7 @@ function _getCellIcon0<T>(
   });
   return retIcon;
 }
+/** @private */
 function _getCellIcon<T>(
   grid: ListGrid<T>,
   col: number,
@@ -204,6 +212,7 @@ function _getCellIcon<T>(
   }
   return _getCellIcon0(grid, icon, row);
 }
+/** @private */
 function _getField<T>(
   grid: ListGrid<T>,
   field: FieldDef<T> | undefined,
@@ -219,6 +228,7 @@ function _getField<T>(
     return grid[_].dataSource.getField(index, field);
   }
 }
+/** @private */
 function _hasField<T>(
   grid: ListGrid<T>,
   field: FieldDef<T>,
@@ -234,6 +244,7 @@ function _hasField<T>(
     return grid[_].dataSource.hasField(index, field);
   }
 }
+/** @private */
 function _onDrawValue<T>(
   grid: ListGrid<T>,
   cellValue: MaybePromise<unknown>,
@@ -300,6 +311,7 @@ function _onDrawValue<T>(
 
   return draw(cellValue, info, context, grid);
 }
+/** @private */
 function _borderWithState<T>(
   grid: ListGrid<T>,
   helper: GridCanvasHelper<T>,
@@ -383,6 +395,7 @@ function _borderWithState<T>(
     }
   }
 }
+/** @private */
 function _refreshHeader<T>(grid: ListGrid<T>): void {
   const protectedSpace = grid[_];
   if (protectedSpace.headerEvents) {
@@ -469,12 +482,14 @@ function _refreshHeader<T>(grid: ListGrid<T>): void {
   grid.frozenRowCount = layoutMap.headerRowCount;
 }
 
+/** @private */
 function _refreshRowCount<T>(grid: ListGrid<T>): void {
   const { layoutMap } = grid[_];
   grid.rowCount =
     grid[_].dataSource.length * layoutMap.bodyRowCount +
     layoutMap.headerRowCount;
 }
+/** @private */
 function _tryWithUpdateDataSource<T>(
   grid: ListGrid<T>,
   fn: (grid: ListGrid<T>) => void
@@ -505,6 +520,7 @@ function _tryWithUpdateDataSource<T>(
     ),
   ];
 }
+/** @private */
 function _setRecords<T>(grid: ListGrid<T>, records: T[] = []): void {
   _tryWithUpdateDataSource(grid, () => {
     grid[_].records = records;
@@ -514,6 +530,7 @@ function _setRecords<T>(grid: ListGrid<T>, records: T[] = []): void {
     grid.addDisposable(newDataSource);
   });
 }
+/** @private */
 function _setDataSource<T>(grid: ListGrid<T>, dataSource: DataSource<T>): void {
   _tryWithUpdateDataSource(grid, () => {
     if (dataSource) {
@@ -532,11 +549,13 @@ function _setDataSource<T>(grid: ListGrid<T>, dataSource: DataSource<T>): void {
   });
 }
 
+/** @private */
 function _getRecordIndexByRow<T>(grid: ListGrid<T>, row: number): number {
   const { layoutMap } = grid[_];
   return layoutMap.getRecordIndexByRow(row);
 }
 
+/** @private */
 function _onRangePaste<T>(
   this: ListGrid<T>,
   text: string,
@@ -645,6 +664,7 @@ function _onRangePaste<T>(
   this.invalidateCellRange(this.selection.range);
 }
 
+/** @private */
 function _onRangeDelete<T>(this: ListGrid<T>): void {
   const { layoutMap } = this[_];
   const selectionRange = this.selection.range;
@@ -718,11 +738,7 @@ function _onRangeDelete<T>(this: ListGrid<T>): void {
   this.invalidateCellRange(selectionRange);
 }
 
-//end private methods
-//
-//
-//
-
+/** @private */
 function adjustListGridOption<T>(
   options: ListGridConstructorOptions<T>
 ): ListGridConstructorOptions<T> {
@@ -731,6 +747,12 @@ function adjustListGridOption<T>(
   delete options.rowCount;
   return options;
 }
+//end private methods
+//
+//
+//
+
+/** @protected */
 interface ListGridProtected<T> extends DrawGridProtected {
   dataSourceEventIds?: EventListenerId[];
   headerEvents?: EventListenerId[];

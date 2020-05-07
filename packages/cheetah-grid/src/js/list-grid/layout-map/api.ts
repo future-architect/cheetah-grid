@@ -100,6 +100,7 @@ export type HeaderBodyLayoutDefine<T> = {
 export type ArrayLayoutDefine<T> = CellDefine<T>[][];
 export type LayoutDefine<T> = HeaderBodyLayoutDefine<T> | ArrayLayoutDefine<T>;
 
+/** @internal */
 interface LayoutMapAPI<T> {
   readonly headerRowCount: number;
   readonly bodyRowCount: number;

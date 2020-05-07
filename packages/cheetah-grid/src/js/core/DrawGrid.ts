@@ -39,39 +39,60 @@ import { getProtectedSymbol } from "../internal/symbolManager";
 import { parsePasteRangeBoxValues } from "../internal/paste-utils";
 
 const {
+  /** @private */
   isTouchEvent,
+  /** @private */
   getMouseButtons,
+  /** @private */
   getKeyCode,
+  /** @private */
   cancel: cancelEvent,
 } = event;
+/** @private */
 const _ = getProtectedSymbol();
 
+/** @private */
 function createRootElement(): HTMLElement {
   const element = document.createElement("div");
   element.classList.add("cheetah-grid");
   return element;
 }
 
+/** @private */
 const KEY_BS = 8;
+/** @private */
 const KEY_TAB = 9;
+/** @private */
 const KEY_ENTER = 13;
+/** @private */
 const KEY_END = 35;
+/** @private */
 const KEY_HOME = 36;
+/** @private */
 const KEY_LEFT = 37;
+/** @private */
 const KEY_UP = 38;
+/** @private */
 const KEY_RIGHT = 39;
+/** @private */
 const KEY_DOWN = 40;
+/** @private */
 const KEY_DEL = 46;
+/** @private */
 const KEY_ALPHA_A = 65;
+/** @private */
 const KEY_ALPHA_C = 67;
+/** @private */
 const KEY_ALPHA_V = 86;
 
 //private methods
+/** @private */
 function _vibrate(e: TouchEvent | MouseEvent): void {
   if (navigator.vibrate && isTouchEvent(e)) {
     navigator.vibrate(50);
   }
 }
+/** @private */
 function _getTargetRowAt(
   this: DrawGrid,
   absoluteY: number
@@ -134,6 +155,7 @@ function _getTargetRowAt(
     return findBefore(candRow, bottom);
   }
 }
+/** @private */
 function _getTargetColAt(
   grid: DrawGrid,
   absoluteX: number
@@ -156,6 +178,7 @@ function _getTargetColAt(
   }
   return null;
 }
+/** @private */
 function _getTargetFrozenRowAt(
   grid: DrawGrid,
   absoluteY: number
@@ -181,6 +204,7 @@ function _getTargetFrozenRowAt(
   }
   return null;
 }
+/** @private */
 function _getTargetFrozenColAt(
   grid: DrawGrid,
   absoluteX: number
@@ -206,6 +230,7 @@ function _getTargetFrozenColAt(
   }
   return null;
 }
+/** @private */
 function _getFrozenRowsRect(grid: DrawGrid): Rect | null {
   if (!grid[_].frozenRowCount) {
     return null;
@@ -218,6 +243,7 @@ function _getFrozenRowsRect(grid: DrawGrid): Rect | null {
   }
   return new Rect(grid[_].scroll.left, top, grid[_].canvas.width, height);
 }
+/** @private */
 function _getFrozenColsRect(grid: DrawGrid): Rect | null {
   if (!grid[_].frozenColCount) {
     return null;
@@ -230,6 +256,7 @@ function _getFrozenColsRect(grid: DrawGrid): Rect | null {
   }
   return new Rect(left, grid[_].scroll.top, width, grid[_].canvas.height);
 }
+/** @private */
 function _getCellDrawing(
   grid: DrawGrid,
   col: number,
@@ -240,6 +267,7 @@ function _getCellDrawing(
   }
   return grid[_].drawCells[row][col];
 }
+/** @private */
 function _putCellDrawing(
   grid: DrawGrid,
   col: number,
@@ -251,6 +279,7 @@ function _putCellDrawing(
   }
   grid[_].drawCells[row][col] = context;
 }
+/** @private */
 function _removeCellDrawing(grid: DrawGrid, col: number, row: number): void {
   if (!grid[_].drawCells[row]) {
     return;
@@ -260,6 +289,7 @@ function _removeCellDrawing(grid: DrawGrid, col: number, row: number): void {
     delete grid[_].drawCells[row];
   }
 }
+/** @private */
 function _drawCell(
   this: DrawGrid,
   ctx: CanvasRenderingContext2D,
@@ -324,6 +354,7 @@ function _drawCell(
   }
 }
 
+/** @private */
 function _drawRow(
   grid: DrawGrid,
   ctx: CanvasRenderingContext2D,
@@ -418,9 +449,11 @@ function _drawRow(
   }
   drawOuter(colCount - 1, absoluteLeft);
 }
+/** @private */
 function _getInitContext(this: DrawGrid): CanvasRenderingContext2D {
   return this._getInitContext();
 }
+/** @private */
 function _invalidateRect(grid: DrawGrid, drawRect: Rect): void {
   const visibleRect = _getVisibleRect(grid);
   const { rowCount } = grid[_];
@@ -536,10 +569,11 @@ function _invalidateRect(grid: DrawGrid, drawRect: Rect): void {
 
   drawLayers.draw(ctx);
 }
-
+/** @private */
 function _toPxWidth(grid: DrawGrid, width: string | number): number {
   return Math.round(calc.toPx(width, grid[_].calcWidthContext));
 }
+/** @private */
 function _adjustColWidth(
   grid: DrawGrid,
   col: number,
@@ -551,6 +585,7 @@ function _adjustColWidth(
     0
   );
 }
+/** @private */
 function _applyColWidthLimits(
   limits: { min?: number; max?: number },
   orgWidth: number
@@ -717,10 +752,12 @@ function _colWidthDefineToPxWidth(
   return _toPxWidth(grid, width);
 }
 
+/** @private */
 function _getColWidth(grid: DrawGrid, col: number): number {
   const width = _getColWidthDefine(grid, col);
   return _adjustColWidth(grid, col, _colWidthDefineToPxWidth(grid, width));
 }
+/** @private */
 function _setColWidth(
   grid: DrawGrid,
   col: number,
@@ -744,6 +781,7 @@ function _storeAutoColWidthExprs(grid: DrawGrid): void {
     }
   }
 }
+/** @private */
 function _getColsWidth(
   grid: DrawGrid,
   startCol: number,
@@ -772,6 +810,7 @@ function _getColsWidth(
   return w;
 }
 
+/** @private */
 function _getRowHeight(this: DrawGrid, row: number): number {
   const internal = this.getRowHeightInternal(row);
   if (isDef(internal)) {
@@ -783,9 +822,11 @@ function _getRowHeight(this: DrawGrid, row: number): number {
   }
   return this[_].defaultRowHeight;
 }
+/** @private */
 function _setRowHeight(grid: DrawGrid, row: number, height: number): void {
   grid[_].rowHeightsMap.put(row, height);
 }
+/** @private */
 function _getRowsHeight(
   this: DrawGrid,
   startRow: number,
@@ -803,9 +844,11 @@ function _getRowsHeight(
   return h;
 }
 
+/** @private */
 function _getScrollWidth(grid: DrawGrid): number {
   return _getColsWidth(grid, 0, grid[_].colCount - 1);
 }
+/** @private */
 function _getScrollHeight(this: DrawGrid, row?: number): number {
   const internal = this.getScrollHeightInternal(row);
   if (isDef(internal)) {
@@ -817,6 +860,7 @@ function _getScrollHeight(this: DrawGrid, row?: number): number {
   });
   return h;
 }
+/** @private */
 function _onScroll(grid: DrawGrid, _e: Event): void {
   const lastLeft = grid[_].scroll.left;
   const lastTop = grid[_].scroll.top;
@@ -889,8 +933,7 @@ function _onScroll(grid: DrawGrid, _e: Event): void {
     }
   }
 }
-
-// eslint-disable-next-line complexity
+/** @private */
 function _onKeyDownMove(this: DrawGrid, e: KeyboardEvent): void {
   const { shiftKey } = e;
   const keyCode = getKeyCode(e);
@@ -1056,6 +1099,7 @@ function _onKeyDownMove(this: DrawGrid, e: KeyboardEvent): void {
     return true;
   }
 }
+/** @private */
 function _moveFocusCell(
   this: DrawGrid,
   col: number,
@@ -1092,6 +1136,7 @@ function _moveFocusCell(
     _invalidateRect(this, afterRect);
   }
 }
+/** @private */
 function _updatedSelection(this: DrawGrid): void {
   const { focusControl } = this[_];
   const { col: selCol, row: selRow } = this[_].selection.select;
@@ -1114,6 +1159,7 @@ function _updatedSelection(this: DrawGrid): void {
   }
 }
 
+/** @private */
 function _getMouseAbstractPoint(
   grid: DrawGrid,
   evt: TouchEvent | MouseEvent
@@ -1138,6 +1184,7 @@ function _getMouseAbstractPoint(
   return { x, y };
 }
 
+/** @private */
 function _bindEvents(this: DrawGrid): void {
   // eslint-disable-next-line consistent-this, @typescript-eslint/no-this-alias
   const grid = this;
@@ -1526,6 +1573,7 @@ function _bindEvents(this: DrawGrid): void {
   });
 }
 
+/** @private */
 function _getResizeColAt(
   grid: DrawGrid,
   abstractX: number,
@@ -1549,6 +1597,7 @@ function _getResizeColAt(
   }
   return -1;
 }
+/** @private */
 function _getVisibleRect(grid: DrawGrid): Rect {
   const {
     scroll: { left, top },
@@ -1556,6 +1605,7 @@ function _getVisibleRect(grid: DrawGrid): Rect {
   } = grid[_];
   return new Rect(left, top, width, height);
 }
+/** @private */
 function _getScrollableVisibleRect(grid: DrawGrid): Rect {
   let frozenColsWidth = 0;
   if (grid[_].frozenColCount > 0) {
@@ -1577,6 +1627,7 @@ function _getScrollableVisibleRect(grid: DrawGrid): Rect {
   );
 }
 
+/** @private */
 function _toRelativeRect(grid: DrawGrid, absoluteRect: Rect): Rect {
   const rect = absoluteRect.copy();
   const visibleRect = _getVisibleRect(grid);
@@ -1848,6 +1899,7 @@ class ColumnResizer extends BaseMouseDownMover {
   }
 }
 
+/** @private */
 function setSafeInputValue(input: HTMLInputElement, value: string): void {
   const { type } = input;
   input.type = "";
@@ -2375,10 +2427,12 @@ class Selection extends EventTarget {
   }
 }
 
+/** @private */
 type DrawLayerFunction = (ctx: CanvasRenderingContext2D) => void;
 /**
  * This class manages the drawing process for each layer
  */
+/** @private */
 class DrawLayers {
   private _layers: { [level: number]: DrawLayer };
   constructor() {
@@ -2398,6 +2452,7 @@ class DrawLayers {
     list.forEach((l) => l.draw(ctx));
   }
 }
+/** @private */
 class DrawLayer {
   private _level: number;
   private _list: DrawLayerFunction[];
@@ -2424,6 +2479,7 @@ class DrawLayer {
 }
 /**
  * Context of cell drawing
+ * @private
  */
 class DrawCellContext implements CellContext {
   private _col: number;
@@ -2658,6 +2714,7 @@ class DrawCellContext implements CellContext {
     }
   }
 }
+/** @protected */
 interface DrawGridProtected {
   element: HTMLElement;
   scrollable: Scrollable;
@@ -2738,6 +2795,7 @@ export interface DrawGridConstructorOptions {
    */
   disableColumnResize?: boolean;
 }
+/** @private */
 const protectedKey = _;
 /**
  * DrawGrid
