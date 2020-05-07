@@ -58,7 +58,6 @@ function getIcons(): { [key: string]: TYPES.IconDefine } {
 
 // backward compatibility
 export default {
-  TYPES,
   core,
   tools,
   // impl Grids
