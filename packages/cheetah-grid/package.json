@@ -80,7 +80,7 @@
     "@typescript-eslint/eslint-plugin": "^2.30.0",
     "@typescript-eslint/parser": "^2.30.0",
     "babel-loader": "^8.0.2",
-    "cheetah-grid-icon-svg-loader": "^0.20.0",
+    "cheetah-grid-icon-svg-loader": "^0.21.0",
     "cross-env": "^5.2.0",
     "css-loader": "^1.0.0",
     "dts-bundle": "^0.7.3",
