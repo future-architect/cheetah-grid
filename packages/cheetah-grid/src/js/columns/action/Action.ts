@@ -42,7 +42,7 @@ export class Action<T> extends BaseAction<T> {
         return;
       }
       const record = grid.getRowRecord(cell.row);
-      this._action(record);
+      this._action(record, cell);
     };
 
     return [
