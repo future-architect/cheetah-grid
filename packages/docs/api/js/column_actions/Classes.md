@@ -6,10 +6,18 @@ order: 100
 
 ## Namespace `cheetahGrid.columns.action`
 
-| Class Name | Function | Others |
-|----------|-----|---|
-| [`CheckEditor`](./CheckEditor.md) | The behavior when clicking the checkbox | same as `action: 'check'` |
-| [`ButtonAction`](./ButtonAction.md) | The behavior when clicking the button | --- |
-| [`SmallDialogInputEditor`](./SmallDialogInputEditor.md) | The behavior when input the cell (Material Design Small edit dialog) | --- |
-| [`InlineInputEditor`](./InlineInputEditor.md) | The behavior when input the cell | InlineInputEditor is an experiment stage |
-| [`InlineMenuEditor`](./InlineMenuEditor.md) | The behavior when select menu the cell  | --- |
+| Class Name                 | Function                                                             | Others                                   |
+| -------------------------- | -------------------------------------------------------------------- | ---------------------------------------- |
+| [`CheckEditor`]            | The behavior when clicking the checkbox                              | same as `action: 'check'`                |
+| [`ButtonAction`]           | The behavior when clicking the button                                | ---                                      |
+| [`SmallDialogInputEditor`] | The behavior when input the cell (Material Design Small edit dialog) | ---                                      |
+| [`InlineInputEditor`]      | The behavior when input the cell                                     | InlineInputEditor is an experiment stage |
+| [`InlineMenuEditor`]       | The behavior when select menu the cell                               | ---                                      |
+| [`RadioEditor`]            | The behavior when clicking the radio button                          | same as `action: 'radio'`                |
+
+[`CheckEditor`]: ./CheckEditor.md
+[`ButtonAction`]: ./ButtonAction.md
+[`SmallDialogInputEditor`]: ./SmallDialogInputEditor.md
+[`InlineInputEditor`]: ./InlineInputEditor.md
+[`InlineMenuEditor`]: ./InlineMenuEditor.md
+[`RadioEditor`]: ./RadioEditor.md
