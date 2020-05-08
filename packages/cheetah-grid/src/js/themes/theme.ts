@@ -31,6 +31,7 @@ export class Theme implements RequiredThemeDefine {
     superTheme: ThemeDefine;
   };
   private _checkbox: RequiredThemeDefine["checkbox"] | null = null;
+  private _radioButton: RequiredThemeDefine["radioButton"] | null = null;
   private _button: RequiredThemeDefine["button"] | null = null;
   private _header: RequiredThemeDefine["header"] | null = null;
   constructor(obj: ThemeDefine);
@@ -128,6 +129,54 @@ export class Theme implements RequiredThemeDefine {
             superTheme,
             ["checkbox", "borderColor"],
             ["borderColor"]
+          );
+        },
+      })
+    );
+  }
+  get radioButton(): RequiredThemeDefine["radioButton"] {
+    const { obj, superTheme } = this[_];
+    return (
+      this._radioButton ||
+      (this._radioButton = {
+        get checkColor(): ColorPropertyDefine {
+          return getProp(
+            obj,
+            superTheme,
+            ["radioButton", "checkColor"],
+            ["color"]
+          );
+        },
+        get uncheckBorderColor(): ColorPropertyDefine {
+          return getProp(
+            obj,
+            superTheme,
+            ["radioButton", "uncheckBorderColor"],
+            ["borderColor"]
+          );
+        },
+        get checkBorderColor(): ColorPropertyDefine {
+          return getProp(
+            obj,
+            superTheme,
+            ["radioButton", "checkBorderColor"],
+            ["borderColor"]
+          );
+        },
+        get uncheckBgColor(): ColorPropertyDefine {
+          return getProp(
+            obj,
+            superTheme,
+            ["radioButton", "uncheckBgColor"],
+            ["defaultBgColor"]
+          );
+        },
+        get checkBgColor(): ColorPropertyDefine {
+          return getProp(
+            obj,
+            superTheme,
+            ["radioButton", "checkBgColor"],
+            ["defaultBgColor"]
           );
         },
       })

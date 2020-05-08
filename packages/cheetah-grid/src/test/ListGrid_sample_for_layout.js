@@ -100,6 +100,14 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 					rowSpan: 3
 				},
 				{
+					field: 'check',
+					caption: 'radio',
+					width: 50,
+					columnType: 'radio',
+					action: 'radio',
+					rowSpan: 3
+				},
+				{
 					field: 'personid',
 					caption: 'ID',
 					width: 100,

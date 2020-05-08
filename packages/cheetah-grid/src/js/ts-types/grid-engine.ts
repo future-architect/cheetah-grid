@@ -273,6 +273,21 @@ export interface GridCanvasHelperAPI {
       textBaseline?: CanvasTextBaseline;
     }
   ): void;
+  radioButton(
+    check: boolean,
+    context: CellContext,
+    option: {
+      animElapsedTime?: number;
+      bgColor?: ColorPropertyDefine;
+      checkColor?: ColorPropertyDefine;
+      uncheckBorderColor?: ColorPropertyDefine;
+      checkBorderColor?: ColorPropertyDefine;
+      uncheckBgColor?: ColorPropertyDefine;
+      checkBgColor?: ColorPropertyDefine;
+      textAlign?: CanvasTextAlign;
+      textBaseline?: CanvasTextBaseline;
+    }
+  ): void;
   multilineText(
     multilines: string[],
     context: CellContext,

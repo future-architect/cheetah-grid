@@ -61,6 +61,13 @@ export default {
     checkBgColor: "rgb(76, 73, 72)",
     borderColor: "rgba(0, 0, 0, 0.26)",
   },
+  radioButton: {
+    checkColor: "rgb(76, 73, 72)",
+    checkBorderColor: "rgb(76, 73, 72)",
+    uncheckBorderColor: "rgb(189, 189, 189)",
+    // uncheckBgColor: "#FFF",
+    // checkBgColor: "#FFF",
+  },
   button: {
     color: "#FFF",
     bgColor: "#2196F3",

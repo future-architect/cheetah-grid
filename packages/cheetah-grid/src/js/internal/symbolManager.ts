@@ -42,6 +42,9 @@ export function getProtectedSymbol(): "$$$$protected symbol$$$$" /* It is treate
 export function getCheckColumnStateId(): "$$$$chkcol.stateID symbol$$$$" /* It is treated as a string so that it can be handled easily with typescript. */ {
   return get("chkcol.stateID") as any;
 }
+export function getRadioColumnStateId(): "$$$$rdcol.stateID symbol$$$$" /* It is treated as a string so that it can be handled easily with typescript. */ {
+  return get("rdcol.stateID") as any;
+}
 export function getButtonColumnStateId(): "$$$$btncol.stateID symbol$$$$" /* It is treated as a string so that it can be handled easily with typescript. */ {
   return get("btncol.stateID") as any;
 }

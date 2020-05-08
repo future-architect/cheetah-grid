@@ -75,7 +75,14 @@ export default {
   checkbox: {
     uncheckBgColor: "#FFF",
     checkBgColor: "rgb(76, 73, 72)",
-    // borderColor: '#000',
+    borderColor: "#000",
+  },
+  radioButton: {
+    checkColor: "rgb(76, 73, 72)",
+    checkBorderColor: "#000",
+    uncheckBorderColor: "#000",
+    uncheckBgColor: "#FFF",
+    checkBgColor: "#FFF",
   },
   button: {
     color: "#FFF",

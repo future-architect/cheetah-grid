@@ -1,3 +1,4 @@
+import type { CellAddress } from "../grid";
 import type { ColumnMenuItemOptions } from "../define";
 import type { ListGridAPI } from "../grid-engine";
 import type { MaybePromise } from "../base";
@@ -38,6 +39,16 @@ export interface SmallDialogInputEditorOption<T> extends EditorOption {
   helperText?: string | GetValueResult<T, string>;
   inputValidator?: GetValueResult<T, MaybePromise<string>>;
   validator?: GetValueResult<T, MaybePromise<string>>;
+}
+
+export type GetRadioEditorGroup<T> = (target: {
+  grid: ListGridAPI<T>;
+  col: number;
+  row: number;
+}) => CellAddress[];
+
+export interface RadioEditorOption<T> extends EditorOption {
+  group?: GetRadioEditorGroup<T>;
 }
 
 export type SortOption<T> =
