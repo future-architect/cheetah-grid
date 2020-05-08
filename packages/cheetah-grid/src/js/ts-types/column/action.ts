@@ -1,3 +1,4 @@
+import type { CellAddress } from "../grid";
 import type { ColumnMenuItemOptions } from "../define";
 import type { ListGridAPI } from "../grid-engine";
 import type { MaybePromise } from "../base";
@@ -7,7 +8,7 @@ export interface BaseActionOption {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type ActionListener = (record: any) => void;
+export type ActionListener = (record: any, cell: CellAddress) => void;
 export interface ActionOption extends BaseActionOption {
   action?: ActionListener;
 }
