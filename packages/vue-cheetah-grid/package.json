@@ -43,7 +43,7 @@
   },
   "homepage": "https://github.com/future-architect/cheetah-grid/tree/master/packages/vue-cheetah-grid",
   "dependencies": {
-    "cheetah-grid": "^0.21.0"
+    "cheetah-grid": "^0.22.0"
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",
