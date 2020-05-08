@@ -299,25 +299,14 @@ export function drawCheckbox(
   ctx.save();
   try {
     ctx.fillStyle = check ? checkBgColor : uncheckBgColor;
+    const leftX = ceil(x);
+    const topY = ceil(y);
+    const size = ceil(boxSize);
 
-    fillRoundRect(
-      ctx,
-      ceil(x) - 1,
-      ceil(y) - 1,
-      ceil(boxSize + 1),
-      ceil(boxSize + 1),
-      boxSize / 5
-    );
+    fillRoundRect(ctx, leftX - 1, topY - 1, size + 1, size + 1, boxSize / 5);
     ctx.lineWidth = 1;
     ctx.strokeStyle = borderColor;
-    strokeRoundRect(
-      ctx,
-      ceil(x) - 0.5,
-      ceil(y) - 0.5,
-      ceil(boxSize),
-      ceil(boxSize),
-      boxSize / 5
-    );
+    strokeRoundRect(ctx, leftX - 0.5, topY - 0.5, size, size, boxSize / 5);
     if (check) {
       ctx.lineWidth = ceil(boxSize / 10);
       ctx.strokeStyle = uncheckBgColor;
@@ -382,31 +371,22 @@ export function drawRadioButton(
   ctx.save();
   try {
     ctx.fillStyle = bgColor;
-    fillCircle(
-      ctx,
-      ceil(x) - 1,
-      ceil(y) - 1,
-      ceil(boxSize + 1),
-      ceil(boxSize + 1)
-    );
+    const leftX = ceil(x);
+    const topY = ceil(y);
+    const size = ceil(boxSize);
+    fillCircle(ctx, leftX - 1, topY - 1, size + 1, size + 1);
 
     ctx.lineWidth = 1;
     ctx.strokeStyle = borderColor;
-    strokeCircle(
-      ctx,
-      ceil(x) - 0.5,
-      ceil(y) - 0.5,
-      ceil(boxSize),
-      ceil(boxSize)
-    );
+    strokeCircle(ctx, leftX - 0.5, topY - 0.5, size, size);
     if (check) {
-      const checkSize = (boxSize / 2) * ratio;
-      const padding = (boxSize - checkSize) / 2;
+      const checkSize = (size * ratio) / 2;
+      const padding = (size - checkSize) / 2;
       ctx.fillStyle = checkColor;
       fillCircle(
         ctx,
-        ceil((x + padding) * 100) / 100,
-        ceil((y + padding) * 100) / 100,
+        ceil((leftX - 0.5 + padding) * 100) / 100,
+        ceil((topY - 0.5 + padding) * 100) / 100,
         ceil(checkSize * 100) / 100,
         ceil(checkSize * 100) / 100
       );
