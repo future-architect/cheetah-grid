@@ -139,6 +139,8 @@
 								<li class="tsd-kind-interface tsd-has-type-parameter"><a href="interfaces/pathicon.html" class="tsd-kind-icon">Path<wbr>Icon</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/percentcompletebarcolumnoption.html" class="tsd-kind-icon">Percent<wbr>Complete<wbr>Bar<wbr>Column<wbr>Option</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/percentcompletebarstyleoption.html" class="tsd-kind-icon">Percent<wbr>Complete<wbr>Bar<wbr>Style<wbr>Option</a></li>
+								<li class="tsd-kind-interface tsd-has-type-parameter"><a href="interfaces/radioeditoroption.html" class="tsd-kind-icon">Radio<wbr>Editor<wbr>Option</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/radiostyleoption.html" class="tsd-kind-icon">Radio<wbr>Style<wbr>Option</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/rectprops.html" class="tsd-kind-icon">Rect<wbr>Props</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/simplecolumnmenuitemoption.html" class="tsd-kind-icon">Simple<wbr>Column<wbr>Menu<wbr>Item<wbr>Option</a></li>
 								<li class="tsd-kind-interface tsd-has-type-parameter"><a href="interfaces/smalldialoginputeditoroption.html" class="tsd-kind-icon">Small<wbr>Dialog<wbr>Input<wbr>Editor<wbr>Option</a></li>
@@ -182,6 +184,7 @@
 								<li class="tsd-kind-type-alias tsd-has-type-parameter"><a href="globals.html#fieldgetter" class="tsd-kind-icon">Field<wbr>Getter</a></li>
 								<li class="tsd-kind-type-alias tsd-has-type-parameter"><a href="globals.html#fieldsetter" class="tsd-kind-icon">Field<wbr>Setter</a></li>
 								<li class="tsd-kind-type-alias"><a href="globals.html#fontpropertydefine" class="tsd-kind-icon">Font<wbr>Property<wbr>Define</a></li>
+								<li class="tsd-kind-type-alias tsd-has-type-parameter"><a href="globals.html#getradioeditorgroup" class="tsd-kind-icon">Get<wbr>Radio<wbr>Editor<wbr>Group</a></li>
 								<li class="tsd-kind-type-alias tsd-has-type-parameter"><a href="globals.html#getvalueresult" class="tsd-kind-icon">Get<wbr>Value<wbr>Result</a></li>
 								<li class="tsd-kind-type-alias"><a href="globals.html#headeractionoption" class="tsd-kind-icon">Header<wbr>Action<wbr>Option</a></li>
 								<li class="tsd-kind-type-alias tsd-has-type-parameter"><a href="globals.html#headerbodylayoutdefine" class="tsd-kind-icon">Header<wbr>Body<wbr>Layout<wbr>Define</a></li>
@@ -240,7 +243,7 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias">
 					<a name="actionlistener" class="tsd-anchor"></a>
 					<h3>Action<wbr>Listener</h3>
-					<div class="tsd-signature tsd-kind-icon">Action<wbr>Listener<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>record<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
+					<div class="tsd-signature tsd-kind-icon">Action<wbr>Listener<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>record<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, cell<span class="tsd-signature-symbol">: </span><a href="interfaces/celladdress.html" class="tsd-signature-type">CellAddress</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
 					<aside class="tsd-sources">
 					</aside>
 					<div class="tsd-type-declaration">
@@ -248,7 +251,7 @@
 						<ul class="tsd-parameters">
 							<li class="tsd-parameter-signature">
 								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>record<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>record<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, cell<span class="tsd-signature-symbol">: </span><a href="interfaces/celladdress.html" class="tsd-signature-type">CellAddress</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
 									<li class="tsd-description">
@@ -256,6 +259,9 @@
 										<ul class="tsd-parameters">
 											<li>
 												<h5>record: <span class="tsd-signature-type">any</span></h5>
+											</li>
+											<li>
+												<h5>cell: <a href="interfaces/celladdress.html" class="tsd-signature-type">CellAddress</a></h5>
 											</li>
 										</ul>
 										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -541,6 +547,51 @@
 					<div class="tsd-signature tsd-kind-icon">Font<wbr>Property<wbr>Define<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>args<span class="tsd-signature-symbol">: </span><a href="interfaces/stylepropertyfunctionarg.html" class="tsd-signature-type">StylePropertyFunctionArg</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span></div>
 					<aside class="tsd-sources">
 					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-has-type-parameter">
+					<a name="getradioeditorgroup" class="tsd-anchor"></a>
+					<h3>Get<wbr>Radio<wbr>Editor<wbr>Group</h3>
+					<div class="tsd-signature tsd-kind-icon">Get<wbr>Radio<wbr>Editor<wbr>Group&lt;T&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>col<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>grid<span class="tsd-signature-symbol">: </span><a href="interfaces/listgridapi.html" class="tsd-signature-type">ListGridAPI</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>row<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="interfaces/celladdress.html" class="tsd-signature-type">CellAddress</a><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+					</aside>
+					<h4 class="tsd-type-parameters-title">Type parameters</h4>
+					<ul class="tsd-type-parameters">
+						<li>
+							<h4>T</h4>
+						</li>
+					</ul>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-signature">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>col<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>grid<span class="tsd-signature-symbol">: </span><a href="interfaces/listgridapi.html" class="tsd-signature-type">ListGridAPI</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>row<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="interfaces/celladdress.html" class="tsd-signature-type">CellAddress</a><span class="tsd-signature-symbol">[]</span></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>target: <span class="tsd-signature-symbol">{ </span>col<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>grid<span class="tsd-signature-symbol">: </span><a href="interfaces/listgridapi.html" class="tsd-signature-type">ListGridAPI</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>row<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> }</span></h5>
+												<ul class="tsd-parameters">
+													<li class="tsd-parameter">
+														<h5>col<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5>
+													</li>
+													<li class="tsd-parameter">
+														<h5>grid<span class="tsd-signature-symbol">: </span><a href="interfaces/listgridapi.html" class="tsd-signature-type">ListGridAPI</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
+													</li>
+													<li class="tsd-parameter">
+														<h5>row<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5>
+													</li>
+												</ul>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="interfaces/celladdress.html" class="tsd-signature-type">CellAddress</a><span class="tsd-signature-symbol">[]</span></h4>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-has-type-parameter">
 					<a name="getvalueresult" class="tsd-anchor"></a>
@@ -984,7 +1035,7 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias">
 					<a name="requiredthemedefine" class="tsd-anchor"></a>
 					<h3>Required<wbr>Theme<wbr>Define</h3>
-					<div class="tsd-signature tsd-kind-icon">Required<wbr>Theme<wbr>Define<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Required</span><span class="tsd-signature-symbol">&lt;</span><a href="interfaces/themedefine.html" class="tsd-signature-type">ThemeDefine</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>button<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Required</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ThemeDefine</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"button"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>checkbox<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Required</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ThemeDefine</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"checkbox"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>header<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Required</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ThemeDefine</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"header"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span></div>
+					<div class="tsd-signature tsd-kind-icon">Required<wbr>Theme<wbr>Define<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Required</span><span class="tsd-signature-symbol">&lt;</span><a href="interfaces/themedefine.html" class="tsd-signature-type">ThemeDefine</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>button<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Required</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ThemeDefine</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"button"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>checkbox<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Required</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ThemeDefine</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"checkbox"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>header<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Required</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ThemeDefine</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"header"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>radioButton<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Required</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ThemeDefine</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"radioButton"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span></div>
 					<aside class="tsd-sources">
 					</aside>
 				</section>
@@ -1303,6 +1354,12 @@
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/percentcompletebarstyleoption.html" class="tsd-kind-icon">Percent<wbr>Complete<wbr>Bar<wbr>Style<wbr>Option</a>
 					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/radioeditoroption.html" class="tsd-kind-icon">Radio<wbr>Editor<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/radiostyleoption.html" class="tsd-kind-icon">Radio<wbr>Style<wbr>Option</a>
+					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/rectprops.html" class="tsd-kind-icon">Rect<wbr>Props</a>
 					</li>
@@ -1416,6 +1473,9 @@
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="globals.html#fontpropertydefine" class="tsd-kind-icon">Font<wbr>Property<wbr>Define</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#getradioeditorgroup" class="tsd-kind-icon">Get<wbr>Radio<wbr>Editor<wbr>Group</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
 						<a href="globals.html#getvalueresult" class="tsd-kind-icon">Get<wbr>Value<wbr>Result</a>
