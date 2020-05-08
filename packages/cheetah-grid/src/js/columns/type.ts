@@ -19,6 +19,7 @@ import { MenuColumn } from "./type/MenuColumn";
 import { MultilineTextColumn } from "./type/MultilineTextColumn";
 import { NumberColumn } from "./type/NumberColumn";
 import { PercentCompleteBarColumn } from "./type/PercentCompleteBarColumn";
+import { RadioColumn } from "./type/RadioColumn";
 
 const TYPES = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -27,6 +28,8 @@ const TYPES = {
   NUMBER: new NumberColumn<any>(),
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   CHECK: new CheckColumn<any>(),
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  RADIO: new RadioColumn<any>(),
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   BUTTON: new ButtonColumn<any>(),
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -44,6 +47,7 @@ export {
   Column,
   NumberColumn,
   CheckColumn,
+  RadioColumn,
   ButtonColumn,
   ImageColumn,
   PercentCompleteBarColumn,

@@ -30,6 +30,13 @@ export interface ThemeDefine {
     checkBgColor?: ColorPropertyDefine;
     borderColor?: ColorPropertyDefine;
   };
+  radioButton: {
+    checkColor?: ColorPropertyDefine;
+    uncheckBorderColor?: ColorPropertyDefine;
+    checkBorderColor?: ColorPropertyDefine;
+    uncheckBgColor?: ColorPropertyDefine;
+    checkBgColor?: ColorPropertyDefine;
+  };
   button: {
     color?: ColorPropertyDefine;
     bgColor?: ColorPropertyDefine;
@@ -41,6 +48,7 @@ export interface ThemeDefine {
 
 export type RequiredThemeDefine = Required<ThemeDefine> & {
   checkbox: Required<ThemeDefine["checkbox"]>;
+  radioButton: Required<ThemeDefine["radioButton"]>;
   button: Required<ThemeDefine["button"]>;
   header: Required<ThemeDefine["header"]>;
 };

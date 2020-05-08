@@ -55,6 +55,15 @@ export type CheckColumnState = {
   };
   mouseActiveCell?: CellAddress;
 };
+export type RadioColumnState = {
+  elapsed: {
+    [key: string]: number;
+  };
+  block: {
+    [key: string]: boolean;
+  };
+  mouseActiveCell?: CellAddress;
+};
 
 interface BranchLine {
   readonly fromIndex?: number;
@@ -92,6 +101,7 @@ export interface GridInternal<T> extends ListGridAPI<T> {
   "$$$$col.fadein_stateID symbol$$$$"?: ColumnFadeinState;
   "$$$$btncol.stateID symbol$$$$"?: ButtonColumnState;
   "$$$$chkcol.stateID symbol$$$$"?: CheckColumnState;
+  "$$$$rdcol.stateID symbol$$$$"?: RadioColumnState;
   "$$$$branch_graph_col.stateID symbol$$$$"?: BranchGraphColumnState<T>;
   "$$$$inline_menu_editor.stateID symbol$$$$"?: InputEditorState;
   "$$$$inline_input_editor.stateID symbol$$$$"?: InputEditorState;

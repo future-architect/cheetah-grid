@@ -20,6 +20,7 @@ import { MenuStyle } from "./style/MenuStyle";
 import { MultilineTextStyle } from "./style/MultilineTextStyle";
 import { NumberStyle } from "./style/NumberStyle";
 import { PercentCompleteBarStyle } from "./style/PercentCompleteBarStyle";
+import { RadioStyle } from "./style/RadioStyle";
 import { Style } from "./style/Style";
 
 const { EVENT_TYPE } = BaseStyle;
@@ -29,6 +30,7 @@ export {
   Style,
   NumberStyle,
   CheckStyle,
+  RadioStyle,
   ButtonStyle,
   ImageStyle,
   IconStyle,

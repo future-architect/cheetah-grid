@@ -41,6 +41,16 @@ export interface SmallDialogInputEditorOption<T> extends EditorOption {
   validator?: GetValueResult<T, MaybePromise<string>>;
 }
 
+export type GetRadioEditorGroup<T> = (target: {
+  grid: ListGridAPI<T>;
+  col: number;
+  row: number;
+}) => CellAddress[];
+
+export interface RadioEditorOption<T> extends EditorOption {
+  group?: GetRadioEditorGroup<T>;
+}
+
 export type SortOption<T> =
   | boolean
   | ((arg: {

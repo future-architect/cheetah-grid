@@ -15,10 +15,20 @@ import { CheckEditor } from "./action/CheckEditor";
 import { Editor } from "./action/Editor";
 import { InlineInputEditor } from "./action/InlineInputEditor";
 import { InlineMenuEditor } from "./action/InlineMenuEditor";
+import { RadioEditor } from "./action/RadioEditor";
 import { SmallDialogInputEditor } from "./action/SmallDialogInputEditor";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 class ImmutableCheckEditor extends CheckEditor<any> {
+  get disabled(): boolean {
+    return this._disabled;
+  }
+  get readOnly(): boolean {
+    return this._readOnly;
+  }
+}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+class ImmutableRadioEditor extends RadioEditor<any> {
   get disabled(): boolean {
     return this._disabled;
   }
@@ -39,6 +49,7 @@ class ImmutableInputEditor extends SmallDialogInputEditor<any> {
 export const ACTIONS = {
   CHECK: new ImmutableCheckEditor(),
   INPUT: new ImmutableInputEditor(),
+  RADIO: new ImmutableRadioEditor(),
 };
 /**
  * column actions
@@ -50,6 +61,7 @@ export {
   Editor,
   Action,
   CheckEditor,
+  RadioEditor,
   ButtonAction,
   SmallDialogInputEditor,
   InlineInputEditor,

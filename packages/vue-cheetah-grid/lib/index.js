@@ -10,6 +10,7 @@ import CGridIconColumn from './CGridIconColumn.vue'
 import CGridInputColumn from './CGridInputColumn.vue'
 import CGridLinkColumn from './CGridLinkColumn.vue'
 import CGridMenuColumn from './CGridMenuColumn.vue'
+import CGridRadioColumn from './CGridRadioColumn.vue'
 
 import CGridLayoutRow from './CGridLayoutRow.vue'
 import CGridHeader from './CGridHeader.vue'
@@ -25,6 +26,7 @@ export {
   CGridInputColumn,
   CGridLinkColumn,
   CGridMenuColumn,
+  CGridRadioColumn,
   CGridLayoutRow,
   CGridHeader,
   cheetahGrid
@@ -44,6 +46,7 @@ export function install (Vue) {
     CGridInputColumn,
     CGridLinkColumn,
     CGridMenuColumn,
+    CGridRadioColumn,
     CGridLayoutRow,
     CGridHeader
   }

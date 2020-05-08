@@ -38,6 +38,14 @@ export interface CheckStyleOption extends StdBaseStyleOption {
   borderColor?: ColorDef;
 }
 
+export interface RadioStyleOption extends StdBaseStyleOption {
+  checkColor?: ColorDef;
+  uncheckBorderColor?: ColorDef;
+  checkBorderColor?: ColorDef;
+  uncheckBgColor?: ColorDef;
+  checkBgColor?: ColorDef;
+}
+
 export interface CheckHeaderStyleOption extends HeaderStdStyleOption {
   uncheckBgColor?: ColorDef;
   checkBgColor?: ColorDef;

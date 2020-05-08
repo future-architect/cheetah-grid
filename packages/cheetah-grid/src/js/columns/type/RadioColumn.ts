@@ -1,19 +1,19 @@
 import type { CellContext, GridCanvasHelperAPI } from "../../ts-types";
 import type { DrawCellInfo, GridInternal } from "../../ts-types-internal";
 import { BaseColumn } from "./BaseColumn";
-import { CheckStyle } from "../style/CheckStyle";
-import { getCheckColumnStateId } from "../../internal/symbolManager";
+import { RadioStyle } from "../style/RadioStyle";
+import { getRadioColumnStateId } from "../../internal/symbolManager";
 import { isDef } from "../../internal/utils";
 import { toBoolean } from "../utils";
 
-const CHECK_COLUMN_STATE_ID = getCheckColumnStateId();
+const RADIO_COLUMN_STATE_ID = getRadioColumnStateId();
 
-export class CheckColumn<T> extends BaseColumn<T, boolean> {
-  get StyleClass(): typeof CheckStyle {
-    return CheckStyle;
+export class RadioColumn<T> extends BaseColumn<T, boolean> {
+  get StyleClass(): typeof RadioStyle {
+    return RadioStyle;
   }
-  clone(): CheckColumn<T> {
-    return new CheckColumn(this);
+  clone(): RadioColumn<T> {
+    return new RadioColumn(this);
   }
   convertInternal(value: unknown): boolean {
     return toBoolean(value);
@@ -21,7 +21,7 @@ export class CheckColumn<T> extends BaseColumn<T, boolean> {
   drawInternal(
     value: boolean,
     context: CellContext,
-    style: CheckStyle,
+    style: RadioStyle,
     helper: GridCanvasHelperAPI,
     grid: GridInternal<T>,
     { drawCellBase }: DrawCellInfo<T>
@@ -29,9 +29,11 @@ export class CheckColumn<T> extends BaseColumn<T, boolean> {
     const {
       textAlign,
       textBaseline,
-      borderColor,
-      checkBgColor,
+      checkColor,
+      uncheckBorderColor,
+      checkBorderColor,
       uncheckBgColor,
+      checkBgColor,
       bgColor,
     } = style;
     if (bgColor) {
@@ -43,18 +45,20 @@ export class CheckColumn<T> extends BaseColumn<T, boolean> {
     const { col, row } = context;
     const range = grid.getCellRange(col, row);
     const cellKey = `${range.start.col}:${range.start.row}`;
-    const elapsed = grid[CHECK_COLUMN_STATE_ID]?.elapsed[cellKey];
+    const elapsed = grid[RADIO_COLUMN_STATE_ID]?.elapsed[cellKey];
 
-    const opt: Parameters<GridCanvasHelperAPI["checkbox"]>[2] = {
+    const opt: Parameters<GridCanvasHelperAPI["radioButton"]>[2] = {
       textAlign,
       textBaseline,
-      borderColor,
-      checkBgColor,
+      checkColor,
+      uncheckBorderColor,
+      checkBorderColor,
       uncheckBgColor,
+      checkBgColor,
     };
     if (isDef(elapsed)) {
       opt.animElapsedTime = elapsed;
     }
-    helper.checkbox(value, context, opt);
+    helper.radioButton(value, context, opt);
   }
 }

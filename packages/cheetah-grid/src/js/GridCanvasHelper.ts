@@ -583,7 +583,27 @@ function _multiInlineRect<T>(
     paddingBottom -= lineHeight;
   });
 }
-
+function calcElapsedColor(
+  startColor: string,
+  endColor: string,
+  elapsedTime: number
+): string {
+  const startColorRGB = colorToRGB(startColor);
+  const endColorRGB = colorToRGB(endColor);
+  const getRGB = (colorName: keyof RGBA): number => {
+    const start = startColorRGB[colorName];
+    const end = endColorRGB[colorName];
+    if (elapsedTime >= 1) {
+      return end;
+    }
+    if (elapsedTime <= 0) {
+      return start;
+    }
+    const diff = start - end;
+    return Math.ceil(start - diff * elapsedTime);
+  };
+  return `rgb(${getRGB("r")}, ${getRGB("g")}, ${getRGB("b")})`;
+}
 function drawCheckbox<T>(
   ctx: CanvasRenderingContext2D,
   rect: RectProps,
@@ -622,30 +642,20 @@ function drawCheckbox<T>(
   checkBgColor = helper.getColor(checkBgColor, col, row, ctx);
   borderColor = helper.getColor(borderColor, col, row, ctx);
   if (0 < animElapsedTime && animElapsedTime < 1) {
-    const uncheckBgRGB = colorToRGB(uncheckBgColor as string);
-    const checkBgRGB = colorToRGB(checkBgColor as string);
-    const checkRGB = (colorName: keyof RGBA): number => {
-      const start = uncheckBgRGB[colorName];
-      const end = checkBgRGB[colorName];
-      if (animElapsedTime >= 1) {
-        return end;
-      }
-      const diff = start - end;
-      return Math.ceil(start - diff * animElapsedTime);
-    };
-    const uncheckRGB = (colorName: keyof RGBA): number => {
-      const end = uncheckBgRGB[colorName];
-      const start = checkBgRGB[colorName];
-      if (animElapsedTime >= 1) {
-        return end;
-      }
-      const diff = end - start;
-      return Math.ceil(start + diff * animElapsedTime);
-    };
     uncheckBgColor = check
       ? uncheckBgColor
-      : `rgb(${uncheckRGB("r")} , ${uncheckRGB("g")}, ${uncheckRGB("b")})`;
-    checkBgColor = `rgb(${checkRGB("r")} , ${checkRGB("g")}, ${checkRGB("b")})`;
+      : calcElapsedColor(
+          checkBgColor as string,
+          uncheckBgColor as string,
+          animElapsedTime
+        );
+    checkBgColor = check
+      ? calcElapsedColor(
+          uncheckBgColor as string,
+          checkBgColor as string,
+          animElapsedTime
+        )
+      : checkBgColor;
   }
 
   canvashelper.drawCheckbox(
@@ -661,9 +671,92 @@ function drawCheckbox<T>(
   );
 }
 
+function drawRadioButton<T>(
+  ctx: CanvasRenderingContext2D,
+  rect: RectProps,
+  col: number,
+  row: number,
+  check: boolean,
+  helper: GridCanvasHelper<T>,
+  {
+    animElapsedTime = 1,
+    checkColor = helper.theme.radioButton.checkColor,
+    uncheckBorderColor = helper.theme.radioButton.uncheckBorderColor,
+    checkBorderColor = helper.theme.radioButton.checkBorderColor,
+    uncheckBgColor = helper.theme.radioButton.uncheckBgColor,
+    checkBgColor = helper.theme.radioButton.checkBgColor,
+    textAlign = "center",
+    textBaseline = "middle",
+  }: {
+    animElapsedTime?: number;
+    checkColor?: ColorPropertyDefine;
+    uncheckBorderColor?: ColorPropertyDefine;
+    checkBorderColor?: ColorPropertyDefine;
+    uncheckBgColor?: ColorPropertyDefine;
+    checkBgColor?: ColorPropertyDefine;
+    textAlign?: CanvasTextAlign;
+    textBaseline?: CanvasTextBaseline;
+  },
+  positionOpt = {}
+): void {
+  const boxWidth = canvashelper.measureRadioButton(ctx).width;
+  ctx.textAlign = textAlign;
+  ctx.textBaseline = textBaseline;
+  const pos = calcStartPosition(
+    ctx,
+    rect,
+    boxWidth + 1 /*罫線分+1*/,
+    boxWidth + 1 /*罫線分+1*/,
+    positionOpt
+  );
+  checkColor = helper.getColor(checkColor, col, row, ctx);
+  uncheckBorderColor = helper.getColor(uncheckBorderColor, col, row, ctx);
+  checkBorderColor = helper.getColor(checkBorderColor, col, row, ctx);
+  uncheckBgColor = helper.getColor(uncheckBgColor, col, row, ctx);
+  checkBgColor = helper.getColor(checkBgColor, col, row, ctx);
+  let borderColor = check ? checkBorderColor : uncheckBorderColor;
+  let bgColor = check ? checkBgColor : uncheckBgColor;
+  if (0 < animElapsedTime && animElapsedTime < 1) {
+    borderColor = check
+      ? calcElapsedColor(
+          uncheckBorderColor as string,
+          checkBorderColor as string,
+          animElapsedTime
+        )
+      : calcElapsedColor(
+          checkBorderColor as string,
+          uncheckBorderColor as string,
+          animElapsedTime
+        );
+    bgColor = check
+      ? calcElapsedColor(
+          uncheckBgColor as string,
+          checkBgColor as string,
+          animElapsedTime
+        )
+      : calcElapsedColor(
+          checkBgColor as string,
+          uncheckBgColor as string,
+          animElapsedTime
+        );
+  }
+
+  canvashelper.drawRadioButton(
+    ctx,
+    pos.x,
+    pos.y,
+    check ? animElapsedTime : 1 - animElapsedTime,
+    {
+      checkColor,
+      borderColor,
+      bgColor,
+    }
+  );
+}
 class ThemeResolver<T> implements RequiredThemeDefine {
   private _grid: ListGridAPI<T>;
   private _checkbox: RequiredThemeDefine["checkbox"] | null = null;
+  private _radioButton: RequiredThemeDefine["radioButton"] | null = null;
   private _button: RequiredThemeDefine["button"] | null = null;
   private _header: RequiredThemeDefine["header"] | null = null;
   constructor(grid: ListGridAPI<T>) {
@@ -723,6 +816,29 @@ class ThemeResolver<T> implements RequiredThemeDefine {
         },
         get borderColor(): ColorPropertyDefine {
           return getThemeColor(grid, "checkbox", "borderColor");
+        },
+      })
+    );
+  }
+  get radioButton(): RequiredThemeDefine["radioButton"] {
+    const grid = this._grid;
+    return (
+      this._radioButton ||
+      (this._radioButton = {
+        get checkColor(): ColorPropertyDefine {
+          return getThemeColor(grid, "radioButton", "checkColor");
+        },
+        get uncheckBorderColor(): ColorPropertyDefine {
+          return getThemeColor(grid, "radioButton", "uncheckBorderColor");
+        },
+        get checkBorderColor(): ColorPropertyDefine {
+          return getThemeColor(grid, "radioButton", "checkBorderColor");
+        },
+        get uncheckBgColor(): ColorPropertyDefine {
+          return getThemeColor(grid, "radioButton", "uncheckBgColor");
+        },
+        get checkBgColor(): ColorPropertyDefine {
+          return getThemeColor(grid, "radioButton", "checkBgColor");
         },
       })
     );
@@ -1325,6 +1441,24 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
     this.drawWithClip(context, (ctx) => {
       const { col, row } = context;
       drawCheckbox(ctx, context.getRect(), col, row, check, this, option);
+    });
+  }
+  radioButton(
+    check: boolean,
+    context: CellContext,
+    option: {
+      animElapsedTime?: number;
+      checkColor?: ColorPropertyDefine;
+      uncheckBorderColor?: ColorPropertyDefine;
+      checkBorderColor?: ColorPropertyDefine;
+      bgColor?: ColorPropertyDefine;
+      textAlign?: CanvasTextAlign;
+      textBaseline?: CanvasTextBaseline;
+    } = {}
+  ): void {
+    this.drawWithClip(context, (ctx) => {
+      const { col, row } = context;
+      drawRadioButton(ctx, context.getRect(), col, row, check, this, option);
     });
   }
   button(

@@ -5,7 +5,11 @@ import type {
 } from "../../ts-types";
 import { bindCellClickAction, bindCellKeyAction } from "./actionBind";
 import { cellEquals, event, isPromise, obj } from "../../internal/utils";
-import { isDisabledRecord, isReadOnlyRecord } from "./action-utils";
+import {
+  isDisabledRecord,
+  isReadOnlyRecord,
+  toggleValue,
+} from "./action-utils";
 import { DG_EVENT_TYPE } from "../../core/DG_EVENT_TYPE";
 import { Editor } from "./Editor";
 import type { GridInternal } from "../../ts-types-internal";
@@ -13,36 +17,6 @@ import { animate } from "../../internal/animate";
 import { getCheckColumnStateId } from "../../internal/symbolManager";
 
 const CHECK_COLUMN_STATE_ID = getCheckColumnStateId();
-
-function toggleValue(val: number): number;
-function toggleValue(val: string): string;
-function toggleValue(val: unknown): boolean;
-function toggleValue(
-  val: number | string | unknown
-): number | string | boolean {
-  if (typeof val === "number") {
-    if (val === 0) {
-      return 1;
-    } else {
-      return 0;
-    }
-  } else if (typeof val === "string") {
-    if (val === "false") {
-      return "true";
-    } else if (val === "off") {
-      return "on";
-    } else if (/^0+$/.exec(val)) {
-      return val.replace(/^(0*)0$/, "$11");
-    } else if (val === "true") {
-      return "false";
-    } else if (val === "on") {
-      return "off";
-    } else if (/^0*1$/.exec(val)) {
-      return val.replace(/^(0*)1$/, "$10");
-    }
-  }
-  return !val;
-}
 
 export class CheckEditor<T> extends Editor<T> {
   clone(): CheckEditor<T> {

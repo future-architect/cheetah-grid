@@ -115,6 +115,32 @@ export function strokeRoundRect(
   roundRect(ctx, left, top, width, height, radius);
   ctx.stroke();
 }
+export function fillCircle(
+  ctx: CanvasRenderingContext2D,
+  left: number,
+  top: number,
+  width: number,
+  height: number
+): void {
+  const min = Math.min(width, height) / 2;
+  ctx.beginPath();
+  ctx.arc(left + min, top + min, min, 0, 2 * Math.PI);
+  ctx.closePath();
+  ctx.fill();
+}
+export function strokeCircle(
+  ctx: CanvasRenderingContext2D,
+  left: number,
+  top: number,
+  width: number,
+  height: number
+): void {
+  const min = Math.min(width, height) / 2;
+  ctx.beginPath();
+  ctx.arc(left + min, top + min, min, 0, 2 * Math.PI);
+  ctx.closePath();
+  ctx.stroke();
+}
 
 export type FillTextRectOption = {
   offset?: number;
@@ -226,6 +252,20 @@ export function measureCheckbox(
   };
 }
 
+/**
+ * Returns an object containing the width of the radio button.
+ * @param  {CanvasRenderingContext2D} ctx canvas context
+ * @return {Object} Object containing the width of the radio button
+ * @memberof cheetahGrid.tools.canvashelper
+ */
+export function measureRadioButton(
+  ctx: CanvasRenderingContext2D
+): { width: number } {
+  return {
+    width: getFontSize(ctx, null).width,
+  };
+}
+
 export type DrawCheckboxOption = {
   uncheckBgColor?: ColorDef;
   checkBgColor?: ColorDef;
@@ -259,25 +299,14 @@ export function drawCheckbox(
   ctx.save();
   try {
     ctx.fillStyle = check ? checkBgColor : uncheckBgColor;
+    const leftX = ceil(x);
+    const topY = ceil(y);
+    const size = ceil(boxSize);
 
-    fillRoundRect(
-      ctx,
-      ceil(x) - 1,
-      ceil(y) - 1,
-      ceil(boxSize + 1),
-      ceil(boxSize + 1),
-      boxSize / 5
-    );
+    fillRoundRect(ctx, leftX - 1, topY - 1, size + 1, size + 1, boxSize / 5);
     ctx.lineWidth = 1;
     ctx.strokeStyle = borderColor;
-    strokeRoundRect(
-      ctx,
-      ceil(x) - 0.5,
-      ceil(y) - 0.5,
-      ceil(boxSize),
-      ceil(boxSize),
-      boxSize / 5
-    );
+    strokeRoundRect(ctx, leftX - 0.5, topY - 0.5, size, size, boxSize / 5);
     if (check) {
       ctx.lineWidth = ceil(boxSize / 10);
       ctx.strokeStyle = uncheckBgColor;
@@ -303,6 +332,64 @@ export function drawCheckbox(
         );
       }
       ctx.stroke();
+    }
+  } finally {
+    ctx.restore();
+  }
+}
+
+export type DrawRadioButtonOption = {
+  checkColor?: ColorDef;
+  borderColor?: ColorDef;
+  bgColor?: ColorDef;
+  boxSize?: number;
+};
+/**
+ * draw Radio button
+ * @param  {CanvasRenderingContext2D} ctx canvas context
+ * @param  {number} x The x coordinate where to start drawing the radio button (relative to the canvas)
+ * @param  {number} y The y coordinate where to start drawing the radio button (relative to the canvas)
+ * @param  {boolean|number} check radio button check status
+ * @param  {object} option option
+ * @return {void}
+ * @memberof cheetahGrid.tools.canvashelper
+ */
+export function drawRadioButton(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  check: number | boolean,
+  {
+    checkColor = "rgb(76, 73, 72)",
+    borderColor = "#000",
+    bgColor = "#FFF",
+    boxSize = measureRadioButton(ctx).width,
+  }: DrawRadioButtonOption = {}
+): void {
+  const ratio = typeof check === "number" ? (check > 1 ? 1 : check) : 1;
+
+  ctx.save();
+  try {
+    ctx.fillStyle = bgColor;
+    const leftX = ceil(x);
+    const topY = ceil(y);
+    const size = ceil(boxSize);
+    fillCircle(ctx, leftX - 1, topY - 1, size + 1, size + 1);
+
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = borderColor;
+    strokeCircle(ctx, leftX - 0.5, topY - 0.5, size, size);
+    if (check) {
+      const checkSize = (size * ratio) / 2;
+      const padding = (size - checkSize) / 2;
+      ctx.fillStyle = checkColor;
+      fillCircle(
+        ctx,
+        ceil((leftX - 0.5 + padding) * 100) / 100,
+        ceil((topY - 0.5 + padding) * 100) / 100,
+        ceil(checkSize * 100) / 100,
+        ceil(checkSize * 100) / 100
+      );
     }
   } finally {
     ctx.restore();
