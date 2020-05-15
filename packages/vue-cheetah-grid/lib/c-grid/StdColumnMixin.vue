@@ -1,5 +1,5 @@
 <script>
-import { gridUpdateWatcher, filterToFn } from './utils'
+import { gridUpdateWatcher, filterToFn, resolveProxyComputedProps, resolveProxyPropsMethod } from './utils'
 
 /**
  * The Mixin for `<c-grid-column>` components.
@@ -65,24 +65,41 @@ export default {
     }
   },
   computed: {
-    fieldProxy () {
-      return typeof this.field === 'function' ? this._fieldProxy : this.field
-    },
+    resolvedField0: resolveProxyComputedProps('field'),
     resolvedField () {
-      return this.filter ? filterToFn(this, this.fieldProxy, this.filter) : this.fieldProxy
-    }
+      return this.resolvedFilter ? filterToFn(this, this.resolvedField0, this.resolvedFilter) : this.resolvedField0
+    },
+    resolvedFilter: resolveProxyComputedProps('filter'),
+    resolvedColumnStyle: resolveProxyComputedProps('columnStyle'),
+    resolvedIcon: resolveProxyComputedProps('icon'),
+    resolvedMessage: resolveProxyComputedProps('message')
   },
   watch: {
-    field: gridUpdateWatcher,
-    filter: gridUpdateWatcher,
+    resolvedField: gridUpdateWatcher,
     width: gridUpdateWatcher,
     minWidth: gridUpdateWatcher,
     maxWidth: gridUpdateWatcher,
-    columnStyle: gridUpdateWatcher,
-    icon: gridUpdateWatcher,
-    message: gridUpdateWatcher
+    resolvedColumnStyle: gridUpdateWatcher,
+    resolvedIcon: gridUpdateWatcher,
+    resolvedMessage: gridUpdateWatcher
   },
   methods: {
+    /**
+     * @private
+     * @override
+     */
+    getPropsObjectInternal () {
+      return {
+        field: this.resolvedField0,
+        filter: this.resolvedFilter,
+        width: this.width,
+        minWidth: this.minWidth,
+        maxWidth: this.maxWidth,
+        style: this.resolvedColumnStyle,
+        icon: this.resolvedIcon,
+        message: this.resolvedMessage
+      }
+    },
     /**
      * @private
      */
@@ -92,25 +109,32 @@ export default {
         width: this.width,
         minWidth: this.minWidth,
         maxWidth: this.maxWidth,
-        style: this.columnStyle,
-        icon: this.icon,
-        message: this.message
+        style: this.resolvedColumnStyle,
+        icon: this.resolvedIcon,
+        message: this.resolvedMessage
       }
     },
+
     /**
      * @private
      */
-    _fieldProxy (...args) {
-      return typeof this.field === 'function' ? this.field(...args) : undefined
-    },
+    $_CGridColumn_fieldProxy: resolveProxyPropsMethod('field'),
     /**
      * @private
      */
-    normalizeProps () {
-      return {
-        field: this.fieldProxy
-      }
-    }
+    $_CGridColumn_filterProxy: resolveProxyPropsMethod('filter'),
+    /**
+     * @private
+     */
+    $_CGridColumn_columnStyleProxy: resolveProxyPropsMethod('columnStyle'),
+    /**
+     * @private
+     */
+    $_CGridColumn_iconProxy: resolveProxyPropsMethod('icon'),
+    /**
+     * @private
+     */
+    $_CGridColumn_messageProxy: resolveProxyPropsMethod('message')
   }
 }
 </script>

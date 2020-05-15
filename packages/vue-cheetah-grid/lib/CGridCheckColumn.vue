@@ -53,10 +53,15 @@ export default {
      * @override
      */
     getPropsObjectInternal () {
-      const props = LayoutColumnMixin.methods.getPropsObjectInternal.apply(this)
-      delete props.disabled
-      delete props.readonly
-      return props
+      const baseCol = LayoutColumnMixin.methods.getPropsObjectInternal.apply(this)
+      const stdCol = StdColumnMixin.methods.getPropsObjectInternal.apply(this)
+      return extend(
+        baseCol,
+        stdCol,
+        {
+          caption: this.caption || this.$el.textContent.trim()
+        }
+      )
     },
     /**
      * @private

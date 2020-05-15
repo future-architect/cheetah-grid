@@ -8,7 +8,7 @@
 <script>
 import LayoutColumnMixin from './c-grid/LayoutColumnMixin.vue'
 import StdColumnMixin from './c-grid/StdColumnMixin.vue'
-import { extend, normalizeColumnType, normalizeAction, gridUpdateWatcher } from './c-grid/utils'
+import { extend, normalizeColumnType, normalizeAction, gridUpdateWatcher, resolveProxyComputedProps, resolveProxyPropsMethod } from './c-grid/utils'
 
 /**
  * Defines column.
@@ -35,17 +35,37 @@ export default {
       default: undefined
     }
   },
+  computed: {
+    resolvedAction: resolveProxyComputedProps('action')
+  },
   watch: {
     columnType: gridUpdateWatcher,
-    action: gridUpdateWatcher
+    resolvedAction: gridUpdateWatcher
   },
   methods: {
+    /**
+     * @private
+     * @override
+     */
+    getPropsObjectInternal () {
+      const baseCol = LayoutColumnMixin.methods.getPropsObjectInternal.apply(this)
+      const stdCol = StdColumnMixin.methods.getPropsObjectInternal.apply(this)
+      return extend(
+        baseCol,
+        stdCol,
+        {
+          caption: this.caption || this.$el.textContent.trim(),
+          columnType: this.columnType,
+          action: this.resolvedAction
+        }
+      )
+    },
     /**
      * @private
      */
     createColumn () {
       const columnType = normalizeColumnType(this.columnType)
-      const action = normalizeAction(this.action)
+      const action = normalizeAction(this.resolvedAction)
       const baseCol = LayoutColumnMixin.methods.createColumn.apply(this)
       const stdCol = StdColumnMixin.methods.createColumn.apply(this)
       return extend(
@@ -57,7 +77,12 @@ export default {
           action
         }
       )
-    }
+    },
+
+    /**
+     * @private
+     */
+    $_CGridColumn_actionProxy: resolveProxyPropsMethod('action')
   }
 }
 </script>

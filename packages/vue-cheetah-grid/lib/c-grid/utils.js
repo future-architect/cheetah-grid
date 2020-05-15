@@ -110,3 +110,20 @@ export function extend (...objects) {
   })
   return result
 }
+export function resolveProxyComputedProps (propName) {
+  return function () {
+    const vm = this
+    const proxyName = `$_CGridColumn_${propName}Proxy`
+    const prop = vm[propName]
+    return typeof prop === 'function' ? vm[proxyName] : prop
+  }
+}
+
+export function resolveProxyPropsMethod (propName) {
+  return function (...args) {
+    const vm = this
+    const prop = vm[propName]
+
+    return typeof prop === 'function' ? prop(...args) : undefined
+  }
+}

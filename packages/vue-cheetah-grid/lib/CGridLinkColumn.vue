@@ -8,7 +8,7 @@
 <script>
 import LayoutColumnMixin from './c-grid/LayoutColumnMixin.vue'
 import StdColumnMixin from './c-grid/StdColumnMixin.vue'
-import { cheetahGrid, extend, normalizeColumnType, gridUpdateWatcher } from './c-grid/utils'
+import { cheetahGrid, extend, normalizeColumnType, gridUpdateWatcher, resolveProxyComputedProps, resolveProxyPropsMethod } from './c-grid/utils'
 
 /**
  * Defines link column.
@@ -49,9 +49,12 @@ export default {
       default: false
     }
   },
+  computed: {
+    resolvedHref: resolveProxyComputedProps('href')
+  },
   watch: {
     columnType: gridUpdateWatcher,
-    href: gridUpdateWatcher,
+    resolvedHref: gridUpdateWatcher,
     target: gridUpdateWatcher,
     disabled (disabled) {
       if (this._action) {
@@ -65,15 +68,26 @@ export default {
      * @override
      */
     getPropsObjectInternal () {
-      const props = LayoutColumnMixin.methods.getPropsObjectInternal.apply(this)
-      delete props.disabled
-      return props
+      const baseCol = LayoutColumnMixin.methods.getPropsObjectInternal.apply(this)
+      const stdCol = StdColumnMixin.methods.getPropsObjectInternal.apply(this)
+      return extend(
+        baseCol,
+        stdCol,
+        {
+          caption: this.caption || this.$el.textContent.trim(),
+
+          columnType: this.columnType,
+
+          href: this.resolvedHref,
+          target: this.target
+        }
+      )
     },
     /**
      * @private
      */
     createColumn () {
-      const { href, target = '_blank' } = this
+      const { resolvedHref: href, target = '_blank' } = this
       const action = typeof href === 'function'
         ? new cheetahGrid.columns.action.Action({
           action: href,
@@ -98,7 +112,12 @@ export default {
           action
         }
       )
-    }
+    },
+
+    /**
+     * @private
+     */
+    $_CGridColumn_hrefProxy: resolveProxyPropsMethod('href')
   }
 }
 </script>
