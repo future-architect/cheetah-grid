@@ -115,12 +115,12 @@ export class InlineMenuEditor<T> extends Editor<T> {
     grid: ListGridAPI<T>,
     cellId: LayoutObjectId
   ): EventListenerId[] {
-    const open = (cell: CellAddress): void => {
+    const open = (cell: CellAddress): boolean => {
       if (
         isReadOnlyRecord(this.readOnly, grid, cell.row) ||
         isDisabledRecord(this.disabled, grid, cell.row)
       ) {
-        return;
+        return false;
       }
       grid.doGetCellValue(cell.col, cell.row, (value) => {
         const record = grid.getRowRecord(cell.row);
@@ -129,6 +129,7 @@ export class InlineMenuEditor<T> extends Editor<T> {
         }
         attachMenu(grid, cell, this, value, record);
       });
+      return true;
     };
 
     function isTarget(col: number, row: number): boolean {
@@ -152,11 +153,15 @@ export class InlineMenuEditor<T> extends Editor<T> {
         if (!isTarget(sel.col, sel.row)) {
           return;
         }
-        e.stopCellMoving();
-        open({
-          col: sel.col,
-          row: sel.row,
-        });
+
+        if (
+          open({
+            col: sel.col,
+            row: sel.row,
+          })
+        ) {
+          e.stopCellMoving();
+        }
       }),
       grid.listen(DG_EVENT_TYPE.SELECTED_CELL, (_e) => {
         detachMenu();

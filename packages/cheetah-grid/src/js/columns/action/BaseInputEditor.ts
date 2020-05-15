@@ -38,14 +38,15 @@ export abstract class BaseInputEditor<T> extends Editor<T> {
     grid: ListGridAPI<T>,
     cellId: LayoutObjectId
   ): EventListenerId[] {
-    const open = (cell: CellAddress): void => {
+    const open = (cell: CellAddress): boolean => {
       if (
         isReadOnlyRecord(this.readOnly, grid, cell.row) ||
         isDisabledRecord(this.disabled, grid, cell.row)
       ) {
-        return;
+        return false;
       }
       this.onOpenCellInternal(grid, cell);
+      return true;
     };
 
     const input = (cell: CellAddress, value: string): void => {
@@ -124,11 +125,14 @@ export abstract class BaseInputEditor<T> extends Editor<T> {
         if (!isTarget(sel.col, sel.row)) {
           return;
         }
-        open({
-          col: sel.col,
-          row: sel.row,
-        });
-        e.stopCellMoving();
+        if (
+          open({
+            col: sel.col,
+            row: sel.row,
+          })
+        ) {
+          e.stopCellMoving();
+        }
       }),
       grid.listen(DG_EVENT_TYPE.SELECTED_CELL, (e) => {
         this.onChangeSelectCellInternal(
