@@ -54,7 +54,7 @@ export default {
         baseCol,
         stdCol,
         {
-          caption: this.$el.textContent.trim()
+          caption: this.caption
         }
       )
     },
@@ -77,7 +77,7 @@ export default {
         baseCol,
         stdCol,
         {
-          caption: this.$el.textContent.trim(),
+          caption: this.$_CGridColumn_getTextContent,
           columnType: new cheetahGrid.columns.type.ButtonColumn({
             caption: this.caption
           }),

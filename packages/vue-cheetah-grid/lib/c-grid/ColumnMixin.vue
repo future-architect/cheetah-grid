@@ -11,7 +11,7 @@ export default {
      * Defines a header caption
      */
     caption: {
-      type: [String],
+      type: [String, Function],
       default: ''
     },
     /**
@@ -51,13 +51,18 @@ export default {
     }
   },
   computed: {
+    resolvedCaption () {
+      const vm = this
+      const { caption } = vm
+      return typeof caption === 'function' ? vm.$_CGridColumn_captionProxy : caption || vm.$_CGridColumn_getTextContent
+    },
     resolvedSort: resolveProxyComputedProps('sort'),
     resolvedHeaderStyle: resolveProxyComputedProps('headerStyle'),
     resolvedHeaderType: resolveProxyComputedProps('headerType'),
     resolvedHeaderAction: resolveProxyComputedProps('headerAction')
   },
   watch: {
-    caption: gridUpdateWatcher,
+    resolvedCaption: gridUpdateWatcher,
     resolvedSort: gridUpdateWatcher,
     resolvedHeaderStyle: gridUpdateWatcher,
     headerField: gridUpdateWatcher,
@@ -91,7 +96,7 @@ export default {
      */
     getPropsObjectInternal () {
       return {
-        caption: this.caption,
+        caption: this.resolvedCaption,
         headerStyle: this.resolvedHeaderStyle,
         headerField: this.headerField,
         headerType: this.resolvedHeaderType,
@@ -105,7 +110,7 @@ export default {
     createColumn () {
       return {
         vm: this,
-        caption: this.caption,
+        caption: this.resolvedCaption,
         headerStyle: this.resolvedHeaderStyle,
         headerField: this.headerField,
         headerType: this.resolvedHeaderType,
@@ -130,6 +135,16 @@ export default {
       }
     },
 
+    /**
+     * @private
+     */
+    $_CGridColumn_captionProxy: resolveProxyPropsMethod('caption'),
+    /**
+     * @private
+     */
+    $_CGridColumn_getTextContent () {
+      return this.$el.textContent.trim()
+    },
     /**
      * @private
      */
