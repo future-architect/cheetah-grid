@@ -71,8 +71,6 @@ export default {
         baseCol,
         stdCol,
         {
-          caption: this.caption || this.$el.textContent.trim(),
-
           min: this.min,
           max: this.max,
           formatter: this.resolvedFormatter,
@@ -98,7 +96,6 @@ export default {
         baseCol,
         stdCol,
         {
-          caption: this.caption || this.$el.textContent.trim(),
           columnType,
           action
         }

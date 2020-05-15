@@ -23,7 +23,7 @@ export default {
      * Defines a header caption
      */
     caption: {
-      type: [String],
+      type: [String, Function],
       default: ''
     },
     /**
@@ -46,20 +46,6 @@ export default {
     maxWidth: {
       type: [Number, String],
       default: undefined
-    },
-    /**
-     * Defines the layout colspan.
-     */
-    colspan: {
-      type: [Number, String],
-      default: undefined
-    },
-    /**
-     * Defines the layout rowspan.
-     */
-    rowspan: {
-      type: [Number, String],
-      default: undefined
     }
   },
   watch: {
@@ -77,7 +63,6 @@ export default {
       return extend(
         baseCol,
         {
-          caption: this.caption || this.$el.textContent.trim(),
           width: this.width,
           minWidth: this.minWidth,
           maxWidth: this.maxWidth
@@ -92,7 +77,6 @@ export default {
       return extend(
         baseCol,
         {
-          caption: this.caption || this.$el.textContent.trim(),
           width: this.width,
           minWidth: this.minWidth,
           maxWidth: this.maxWidth

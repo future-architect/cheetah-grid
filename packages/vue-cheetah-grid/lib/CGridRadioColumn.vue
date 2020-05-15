@@ -69,10 +69,7 @@ export default {
       const stdCol = StdColumnMixin.methods.getPropsObjectInternal.apply(this)
       return extend(
         baseCol,
-        stdCol,
-        {
-          caption: this.caption || this.$el.textContent.trim()
-        }
+        stdCol
       )
     },
     /**
@@ -90,7 +87,6 @@ export default {
         baseCol,
         stdCol,
         {
-          caption: this.caption || this.$el.textContent.trim(),
           columnType: 'radio',
           action
         }

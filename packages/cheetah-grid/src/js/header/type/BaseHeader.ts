@@ -38,6 +38,9 @@ export abstract class BaseHeader<T> {
     );
   }
   convertInternal(value: unknown): string {
+    if (typeof value === "function") {
+      value = value();
+    }
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     return isDef(value) ? `${value}` : "";
   }

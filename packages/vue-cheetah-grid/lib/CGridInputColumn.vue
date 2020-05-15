@@ -114,8 +114,6 @@ export default {
         baseCol,
         stdCol,
         {
-          caption: this.caption || this.$el.textContent.trim(),
-
           columnType: this.columnType,
 
           helperText: this.resolvedHelperText,
@@ -147,7 +145,6 @@ export default {
         baseCol,
         stdCol,
         {
-          caption: this.caption || this.$el.textContent.trim(),
           columnType,
           action
         }

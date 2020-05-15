@@ -91,8 +91,6 @@ export default {
         baseCol,
         stdCol,
         {
-          caption: this.caption || this.$el.textContent.trim(),
-
           tagName: this.resolvedIconTagName,
           className: this.resolvedIconClassName,
           content: this.resolvedIconContent,
@@ -122,7 +120,6 @@ export default {
         baseCol,
         stdCol,
         {
-          caption: this.caption || this.$el.textContent.trim(),
           columnType,
           action
         }
