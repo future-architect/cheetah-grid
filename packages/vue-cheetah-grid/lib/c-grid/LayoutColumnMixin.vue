@@ -37,7 +37,14 @@ export default {
      * @override
      */
     getPropsObjectInternal () {
-      return ColumnMixin.methods.getPropsObjectInternal.apply(this)
+      const baseCol = ColumnMixin.methods.getPropsObjectInternal.apply(this)
+      return extend(
+        baseCol,
+        {
+          colSpan: this.colspan,
+          rowSpan: this.rowspan
+        }
+      )
     },
     /**
      * @private

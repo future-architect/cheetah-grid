@@ -1,5 +1,5 @@
 <script>
-import { gridUpdateWatcher, extend } from './utils'
+import { gridUpdateWatcher, resolveProxyComputedProps, resolveProxyPropsMethod } from './utils'
 
 /**
  * The Mixin for `<c-grid-column>` components.
@@ -50,13 +50,19 @@ export default {
       default: undefined
     }
   },
+  computed: {
+    resolvedSort: resolveProxyComputedProps('sort'),
+    resolvedHeaderStyle: resolveProxyComputedProps('headerStyle'),
+    resolvedHeaderType: resolveProxyComputedProps('headerType'),
+    resolvedHeaderAction: resolveProxyComputedProps('headerAction')
+  },
   watch: {
     caption: gridUpdateWatcher,
-    sort: gridUpdateWatcher,
-    headerStyle: gridUpdateWatcher,
+    resolvedSort: gridUpdateWatcher,
+    resolvedHeaderStyle: gridUpdateWatcher,
     headerField: gridUpdateWatcher,
-    headerType: gridUpdateWatcher,
-    headerAction: gridUpdateWatcher
+    resolvedHeaderType: gridUpdateWatcher,
+    resolvedHeaderAction: gridUpdateWatcher
   },
   mounted () {
     this.$_CGridInstance.$_CGrid_setColumnDefine(this)
@@ -84,14 +90,14 @@ export default {
      * @returns {object}
      */
     getPropsObjectInternal () {
-      const props = extend({}, this.$props)
-      props.textContent = this.$el.textContent.trim()
-
-      if (typeof this.normalizeProps !== 'function') {
-        return props
+      return {
+        caption: this.caption,
+        headerStyle: this.resolvedHeaderStyle,
+        headerField: this.headerField,
+        headerType: this.resolvedHeaderType,
+        headerAction: this.resolvedHeaderAction,
+        sort: this.resolvedSort
       }
-      const normalized = this.normalizeProps(props)
-      return extend(props, normalized)
     },
     /**
      * @private
@@ -100,11 +106,11 @@ export default {
       return {
         vm: this,
         caption: this.caption,
-        headerStyle: this.headerStyle,
+        headerStyle: this.resolvedHeaderStyle,
         headerField: this.headerField,
-        headerType: this.headerType,
-        headerAction: this.headerAction,
-        sort: this.sort
+        headerType: this.resolvedHeaderType,
+        headerAction: this.resolvedHeaderAction,
+        sort: this.resolvedSort
       }
     },
     /**
@@ -122,7 +128,24 @@ export default {
       if (this.$_CGridInstance && this.$_CGridInstance.$_CGrid_nextTickUpdate) {
         this.$_CGridInstance.$_CGrid_nextTickUpdate()
       }
-    }
+    },
+
+    /**
+     * @private
+     */
+    $_CGridColumn_sortProxy: resolveProxyPropsMethod('sort'),
+    /**
+     * @private
+     */
+    $_CGridColumn_headerStyleProxy: resolveProxyPropsMethod('headerStyle'),
+    /**
+     * @private
+     */
+    $_CGridColumn_headerTypeProxy: resolveProxyPropsMethod('headerType'),
+    /**
+     * @private
+     */
+    $_CGridColumn_headerActionProxy: resolveProxyPropsMethod('headerAction')
   }
 }
 </script>

@@ -8,7 +8,7 @@
 <script>
 import LayoutColumnMixin from './c-grid/LayoutColumnMixin.vue'
 import StdColumnMixin from './c-grid/StdColumnMixin.vue'
-import { cheetahGrid, extend, gridUpdateWatcher } from './c-grid/utils'
+import { cheetahGrid, extend, gridUpdateWatcher, resolveProxyComputedProps, resolveProxyPropsMethod } from './c-grid/utils'
 
 function isDisabledRecord (option, record) {
   if (typeof option === 'function') {
@@ -63,22 +63,25 @@ export default {
       default: false
     }
   },
+  computed: {
+    resolvedEditorOptions: resolveProxyComputedProps('editorOptions')
+  },
   watch: {
     options: gridUpdateWatcher,
     displayOptions: gridUpdateWatcher,
-    editorOptions: gridUpdateWatcher,
+    resolvedEditorOptions: gridUpdateWatcher,
     disabled (disabled) {
       if (this._action) {
         this._action.disabled = disabled
         // apply style
-        this.invalidate()
+        this.$nextTick(this.invalidate)
       }
     },
     readonly (readonly) {
       if (this._action) {
         this._action.readOnly = readonly
         // apply style
-        this.invalidate()
+        this.$nextTick(this.invalidate)
       }
     }
   },
@@ -88,17 +91,26 @@ export default {
      * @override
      */
     getPropsObjectInternal () {
-      const props = LayoutColumnMixin.methods.getPropsObjectInternal.apply(this)
-      delete props.disabled
-      delete props.readonly
-      return props
+      const baseCol = LayoutColumnMixin.methods.getPropsObjectInternal.apply(this)
+      const stdCol = StdColumnMixin.methods.getPropsObjectInternal.apply(this)
+      return extend(
+        baseCol,
+        stdCol,
+        {
+          caption: this.caption || this.$el.textContent.trim(),
+
+          options: this.options,
+          displayOptions: this.displayOptions,
+          editorOptions: this.resolvedEditorOptions
+        }
+      )
     },
     /**
      * @private
      */
     createColumn () {
       const dispOpt = this.displayOptions || this.options
-      const actionOpt = this.editorOptions || this.options
+      const actionOpt = this.resolvedEditorOptions || this.options
       const action = this._action = actionOpt ? new cheetahGrid.columns.action.InlineMenuEditor({
         options: actionOpt,
         disabled: this.disabled,
@@ -122,7 +134,7 @@ export default {
             }
             if (
               isDisabledRecord(this.disabled, ...args) ||
-            isDisabledRecord(this.readonly, ...args)
+              isDisabledRecord(this.readonly, ...args)
             ) {
               if (style) {
                 if (style.clone) {
@@ -139,7 +151,12 @@ export default {
           }
         }
       )
-    }
+    },
+
+    /**
+     * @private
+     */
+    $_CGridColumn_editorOptionsProxy: resolveProxyPropsMethod('editorOptions')
   }
 }
 </script>

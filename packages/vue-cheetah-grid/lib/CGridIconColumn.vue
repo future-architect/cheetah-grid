@@ -8,7 +8,7 @@
 <script>
 import LayoutColumnMixin from './c-grid/LayoutColumnMixin.vue'
 import StdColumnMixin from './c-grid/StdColumnMixin.vue'
-import { cheetahGrid, extend, normalizeAction, gridUpdateWatcher } from './c-grid/utils'
+import { cheetahGrid, extend, normalizeAction, gridUpdateWatcher, resolveProxyComputedProps, resolveProxyPropsMethod } from './c-grid/utils'
 
 /**
  * Defines icon column.
@@ -63,27 +63,58 @@ export default {
       default: undefined
     }
   },
+  computed: {
+    resolvedIconTagName: resolveProxyComputedProps('iconTagName'),
+    resolvedIconClassName: resolveProxyComputedProps('iconClassName'),
+    resolvedIconContent: resolveProxyComputedProps('iconContent'),
+    resolvedIconName: resolveProxyComputedProps('iconName'),
+    resolvedIconWidth: resolveProxyComputedProps('iconWidth'),
+    resolvedAction: resolveProxyComputedProps('action')
+  },
   watch: {
-    iconTagName: gridUpdateWatcher,
-    iconClassName: gridUpdateWatcher,
-    iconContent: gridUpdateWatcher,
-    iconName: gridUpdateWatcher,
-    iconWidth: gridUpdateWatcher,
-    action: gridUpdateWatcher
+    resolvedIconTagName: gridUpdateWatcher,
+    resolvedIconClassName: gridUpdateWatcher,
+    resolvedIconContent: gridUpdateWatcher,
+    resolvedIconName: gridUpdateWatcher,
+    resolvedIconWidth: gridUpdateWatcher,
+    resolvedAction: gridUpdateWatcher
   },
   methods: {
+    /**
+     * @private
+     * @override
+     */
+    getPropsObjectInternal () {
+      const baseCol = LayoutColumnMixin.methods.getPropsObjectInternal.apply(this)
+      const stdCol = StdColumnMixin.methods.getPropsObjectInternal.apply(this)
+      return extend(
+        baseCol,
+        stdCol,
+        {
+          caption: this.caption || this.$el.textContent.trim(),
+
+          tagName: this.resolvedIconTagName,
+          className: this.resolvedIconClassName,
+          content: this.resolvedIconContent,
+          name: this.resolvedIconName,
+          iconWidth: this.resolvedIconWidth,
+
+          action: this.resolvedAction
+        }
+      )
+    },
     /**
      * @private
      */
     createColumn () {
       const columnType = new cheetahGrid.columns.type.IconColumn({
-        tagName: this.iconTagName,
-        className: this.iconClassName,
-        content: this.iconContent,
-        name: this.iconName,
-        iconWidth: this.iconWidth
+        tagName: this.resolvedIconTagName,
+        className: this.resolvedIconClassName,
+        content: this.resolvedIconContent,
+        name: this.resolvedIconName,
+        iconWidth: this.resolvedIconWidth
       })
-      const action = normalizeAction(this.action)
+      const action = normalizeAction(this.resolvedAction)
 
       const baseCol = LayoutColumnMixin.methods.createColumn.apply(this)
       const stdCol = StdColumnMixin.methods.createColumn.apply(this)
@@ -96,7 +127,32 @@ export default {
           action
         }
       )
-    }
+    },
+
+    /**
+     * @private
+     */
+    $_CGridColumn_iconTagNameProxy: resolveProxyPropsMethod('iconTagName'),
+    /**
+     * @private
+     */
+    $_CGridColumn_iconClassNameProxy: resolveProxyPropsMethod('iconClassName'),
+    /**
+     * @private
+     */
+    $_CGridColumn_iconContentProxy: resolveProxyPropsMethod('iconContent'),
+    /**
+     * @private
+     */
+    $_CGridColumn_iconNameProxy: resolveProxyPropsMethod('iconName'),
+    /**
+     * @private
+     */
+    $_CGridColumn_iconWidthProxy: resolveProxyPropsMethod('iconWidth'),
+    /**
+     * @private
+     */
+    $_CGridColumn_actionProxy: resolveProxyPropsMethod('action')
   }
 }
 </script>

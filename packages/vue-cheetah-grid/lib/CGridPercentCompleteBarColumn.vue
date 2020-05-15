@@ -8,7 +8,7 @@
 <script>
 import LayoutColumnMixin from './c-grid/LayoutColumnMixin.vue'
 import StdColumnMixin from './c-grid/StdColumnMixin.vue'
-import { cheetahGrid, normalizeAction, extend, gridUpdateWatcher } from './c-grid/utils'
+import { cheetahGrid, normalizeAction, extend, gridUpdateWatcher, resolveProxyComputedProps, resolveProxyPropsMethod } from './c-grid/utils'
 
 /**
  * Defines percent complete bar column.
@@ -49,13 +49,38 @@ export default {
       default: undefined
     }
   },
+  computed: {
+    resolvedFormatter: resolveProxyComputedProps('formatter'),
+    resolvedAction: resolveProxyComputedProps('action')
+  },
   watch: {
-    formatter: gridUpdateWatcher,
+    resolvedFormatter: gridUpdateWatcher,
     min: gridUpdateWatcher,
     max: gridUpdateWatcher,
-    action: gridUpdateWatcher
+    resolvedAction: gridUpdateWatcher
   },
   methods: {
+    /**
+     * @private
+     * @override
+     */
+    getPropsObjectInternal () {
+      const baseCol = LayoutColumnMixin.methods.getPropsObjectInternal.apply(this)
+      const stdCol = StdColumnMixin.methods.getPropsObjectInternal.apply(this)
+      return extend(
+        baseCol,
+        stdCol,
+        {
+          caption: this.caption || this.$el.textContent.trim(),
+
+          min: this.min,
+          max: this.max,
+          formatter: this.resolvedFormatter,
+
+          action: this.resolvedAction
+        }
+      )
+    },
     /**
      * @private
      */
@@ -63,9 +88,9 @@ export default {
       const columnType = new cheetahGrid.columns.type.PercentCompleteBarColumn({
         min: this.min,
         max: this.max,
-        formatter: this.formatter
+        formatter: this.resolvedFormatter
       })
-      const action = normalizeAction(this.action)
+      const action = normalizeAction(this.resolvedAction)
 
       const baseCol = LayoutColumnMixin.methods.createColumn.apply(this)
       const stdCol = StdColumnMixin.methods.createColumn.apply(this)
@@ -78,7 +103,16 @@ export default {
           action
         }
       )
-    }
+    },
+
+    /**
+     * @private
+     */
+    $_CGridColumn_formatterProxy: resolveProxyPropsMethod('formatter'),
+    /**
+     * @private
+     */
+    $_CGridColumn_actionProxy: resolveProxyPropsMethod('action')
   }
 }
 </script>

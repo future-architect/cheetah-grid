@@ -536,7 +536,7 @@ export default {
             font,
             underlayBackgroundColor
           } = options
-          if (!deepObjectEquals(this._beforeGridProps.header, gridProps.handler)) {
+          if (!deepObjectEquals(this._beforeGridProps.header, gridProps.header)) {
             this.rawGrid.header = header
           }
           if (!deepObjectEquals(this._beforeGridProps.layout, gridProps.layout)) {

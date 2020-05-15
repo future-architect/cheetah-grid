@@ -8,7 +8,7 @@
 <script>
 import LayoutColumnMixin from './c-grid/LayoutColumnMixin.vue'
 import StdColumnMixin from './c-grid/StdColumnMixin.vue'
-import { cheetahGrid, extend, normalizeColumnType, gridUpdateWatcher } from './c-grid/utils'
+import { cheetahGrid, extend, normalizeColumnType, gridUpdateWatcher, resolveProxyComputedProps, resolveProxyPropsMethod } from './c-grid/utils'
 
 /**
  * Defines input column.
@@ -77,13 +77,20 @@ export default {
       default: false
     }
   },
+  computed: {
+    resolvedHelperText: resolveProxyComputedProps('helperText'),
+    resolvedInputValidator: resolveProxyComputedProps('inputValidator'),
+    resolvedValidator: resolveProxyComputedProps('validator'),
+    resolvedInputClassList: resolveProxyComputedProps('inputClassList'),
+    resolvedInputType: resolveProxyComputedProps('inputType')
+  },
   watch: {
     columnType: gridUpdateWatcher,
-    helperText: gridUpdateWatcher,
-    inputValidator: gridUpdateWatcher,
-    validator: gridUpdateWatcher,
-    inputClassList: gridUpdateWatcher,
-    inputType: gridUpdateWatcher,
+    resolvedHelperText: gridUpdateWatcher,
+    resolvedInputValidator: gridUpdateWatcher,
+    resolvedValidator: gridUpdateWatcher,
+    resolvedInputClassList: gridUpdateWatcher,
+    resolvedInputType: gridUpdateWatcher,
     disabled (disabled) {
       if (this._action) {
         this._action.disabled = disabled
@@ -101,21 +108,34 @@ export default {
      * @override
      */
     getPropsObjectInternal () {
-      const props = LayoutColumnMixin.methods.getPropsObjectInternal.apply(this)
-      delete props.disabled
-      delete props.readonly
-      return props
+      const baseCol = LayoutColumnMixin.methods.getPropsObjectInternal.apply(this)
+      const stdCol = StdColumnMixin.methods.getPropsObjectInternal.apply(this)
+      return extend(
+        baseCol,
+        stdCol,
+        {
+          caption: this.caption || this.$el.textContent.trim(),
+
+          columnType: this.columnType,
+
+          helperText: this.resolvedHelperText,
+          inputValidator: this.resolvedInputValidator,
+          validator: this.resolvedValidator,
+          classList: this.resolvedInputClassList,
+          type: this.resolvedInputType
+        }
+      )
     },
     /**
      * @private
      */
     createColumn () {
       const action = this._action = new cheetahGrid.columns.action.SmallDialogInputEditor({
-        helperText: this.helperText,
-        inputValidator: this.inputValidator,
-        validator: this.validator,
-        classList: this.inputClassList,
-        type: this.inputType,
+        helperText: this.resolvedHelperText,
+        inputValidator: this.resolvedInputValidator,
+        validator: this.resolvedValidator,
+        classList: this.resolvedInputClassList,
+        type: this.resolvedInputType,
         disabled: this.disabled,
         readOnly: this.readonly
       })
@@ -132,7 +152,28 @@ export default {
           action
         }
       )
-    }
+    },
+
+    /**
+     * @private
+     */
+    $_CGridColumn_helperTextProxy: resolveProxyPropsMethod('helperText'),
+    /**
+     * @private
+     */
+    $_CGridColumn_inputValidatorProxy: resolveProxyPropsMethod('inputValidator'),
+    /**
+     * @private
+     */
+    $_CGridColumn_validatorProxy: resolveProxyPropsMethod('validator'),
+    /**
+     * @private
+     */
+    $_CGridColumn_inputClassListProxy: resolveProxyPropsMethod('inputClassList'),
+    /**
+     * @private
+     */
+    $_CGridColumn_inputTypeProxy: resolveProxyPropsMethod('inputType')
   }
 }
 </script>
