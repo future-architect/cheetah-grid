@@ -86,13 +86,13 @@ document.querySelector('.sample1mode').onchange = function() {
 
 The following properties can be set with the constructor argument of `SmallDialogInputEditor`.
 
-|Property|Descrition|
-|---|---|
-|`type`|Specify the `type` attribute of the `<input>` element.|
-|`classList`|Specify `class` of the dialog element.|
-|`helperText`|Specify helper text. You can also specify a function.|
-|`validator`|Specify the validation function to be call before confirming the input value. If there is an error, please use the function to return the message.|
-|`inputValidator`|Specify the validation function of the value of `<input>`. If there is an error, please use the function to return the message.|
+| Property         | Description                                                                                                                                        |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `type`           | Specify the `type` attribute of the `<input>` element.                                                                                             |
+| `classList`      | Specify `class` of the dialog element.                                                                                                             |
+| `helperText`     | Specify helper text. You can also specify a function.                                                                                              |
+| `validator`      | Specify the validation function to be call before confirming the input value. If there is an error, please use the function to return the message. |
+| `inputValidator` | Specify the validation function of the value of `<input>`. If there is an error, please use the function to return the message.                    |
 
 <code-preview>
 

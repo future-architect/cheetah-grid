@@ -30,7 +30,7 @@ Use this slot to set the header caption
 | max-width | `number`&#124;`string`  | Defines a column max width | `undefined` |
 | column-style | `object`&#124;`string`&#124;`function`  | Defines a column style | `undefined` |
 | action | `object`&#124;`string`&#124;`function`  | Defines an action | `undefined` |
-| caption | `string`  | Defines a header caption | `''` |
+| caption | `string`&#124;`function`  | Defines a header caption | `''` |
 | colspan | `number`&#124;`string`  | Defines the layout colspan.<br>This property can be used when defining in the `layout-header` and `layout-body` slots. | `undefined` |
 | filter | `string`&#124;`function`  | Defines a vue filter name | `undefined` |
 | header-action | `object`&#124;`string`&#124;`function`  | Defines a column header action | `undefined` |

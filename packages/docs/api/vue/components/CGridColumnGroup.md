@@ -69,7 +69,7 @@ Use this slot to set the children columns definition
 
 | Name        | Type    | Description         | Default  |
 |:------------|:-------:|:--------------------|:---------|
-| caption | `string`  | Defines a header caption | `''` |
+| caption | `string`&#124;`function`  | Defines a header caption | `''` |
 | header-action | `object`&#124;`string`&#124;`function`  | Defines a column header action | `undefined` |
 | header-field | `string`  | Defines a column header data field | `undefined` |
 | header-style | `object`&#124;`string`&#124;`function`  | Defines a column header style | `undefined` |

@@ -45,7 +45,7 @@ grid.listen(CHANGED_VALUE, ({value, field}) => {
   }
   // check value on change
 
-  grid.headerValues[field] = false;
+  grid.headerValues.set(field, false);
 
   grid.invalidate();
 });
@@ -112,7 +112,7 @@ export default {
       // check value on change
       const {grid} = this.$refs;
 
-      grid.headerValues.check = false;
+      grid.headerValues.set('check', false);
 
       grid.invalidate();
     }

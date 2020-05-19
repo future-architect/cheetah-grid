@@ -189,7 +189,7 @@ export default {
 
 | Name        | Type | Initial Value | Description         |
 |:------------|:-----|:--------------|:--------------------|
-| headerValues | object | `{}` | Header values. |
+| headerValues | Map<any, any> | `new Map()` | Header values. |
 
 <!-- DATA_TABLE_END -->
 

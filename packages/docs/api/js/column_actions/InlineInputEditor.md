@@ -77,10 +77,10 @@ document.querySelector('.sample1mode').onchange = function() {
 
 ## Properties
 
-|Property|Descrition|
-|---|---|
-|`type`|Specify the `type` attribute of the `<input>` element.|
-|`classList`|Specify `class` of the `<input>` element.|
+| Property    | Description                                            |
+| ----------- | ------------------------------------------------------ |
+| `type`      | Specify the `type` attribute of the `<input>` element. |
+| `classList` | Specify `class` of the `<input>` element.              |
 
 <code-preview>
 

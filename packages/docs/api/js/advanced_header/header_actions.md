@@ -9,10 +9,10 @@ order: 200
 Define header action by using `headerAction` property.  
 Please select suitable Action class for `headerType` of same header.  
 
-| `headerType` | Specified `headerAction` by string | descrition |
-|---|---|---|---|
-| `check` | `'check'` | Define the behaviour when checkbox is clicked. |
-| `sort`  | `'sort'`  | Define the behaviour on clicked. the default behavior is to sort the data. |
+| `headerType` | Specified `headerAction` by string | Description                                                               |
+| ------------ | ---------------------------------- | ------------------------------------------------------------------------- |
+| `check`      | `'check'`                          | Define the behavior when checkbox is clicked.                             |
+| `sort`       | `'sort'`                           | Define the behavior on clicked. the default behavior is to sort the data. |
 
 <code-preview>
 
@@ -53,7 +53,7 @@ grid.listen(CHANGED_VALUE, ({value, field}) => {
   }
   // check value on change
 
-  grid.headerValues[field] = false;
+  grid.headerValues.set(field, false);
 
   grid.invalidate();
 });
@@ -122,7 +122,7 @@ export default {
       // check value on change
       const {grid} = this.$refs;
 
-      grid.headerValues.check = false;
+      grid.headerValues.set('check', false);
 
       grid.invalidate();
     }

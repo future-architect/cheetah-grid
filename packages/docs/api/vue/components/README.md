@@ -4,7 +4,7 @@ order: 50
 
 # Available Vue Components
 
-| Component Name                         | Descrition                                                    | LINK                            |
+| Component Name                         | Description                                                   | LINK                            |
 | -------------------------------------- | ------------------------------------------------------------- | ------------------------------- |
 | `<c-grid>`                             | Grid.                                                         | [CGrid]                         |
 | `<c-grid-column>`                      | Column definition to display in the grid.                     | [CGridColumn]                   |

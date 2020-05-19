@@ -9,7 +9,7 @@ order: 9000
 
 ### Constructor Options
 
-| Property                             | Type                 | Descrition                                                                                                                   |
+| Property                             | Type                 | Description                                                                                                                  |
 | :----------------------------------- | :------------------- | :--------------------------------------------------------------------------------------------------------------------------- |
 | header                               | HeadersDefine        | Define simple headers and layout. This property cannot be used with the `layout` property. See [Define Headers and Columns]. |
 | layout                               | LayoutDefine         | Define advanced headers and layout. This property cannot be used with the `header` property. See [Advanced Layout].          |
