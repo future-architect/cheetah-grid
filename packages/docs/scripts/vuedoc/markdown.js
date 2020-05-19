@@ -75,7 +75,18 @@ function createData (comp) {
       const typeKeyword = data.keywords.find(k => k.name === 'type')
       const type = (typeKeyword && typeKeyword.description.replace(/\{(.+?)\}/, '$1')) || '---'
 
-      dataTable.push(`| ${data.name} | ${type} | \`${JSON.stringify(data.value)}\` | ${data.description.replace(/\r?\n/g, '<br>')} |`)
+      let init = JSON.stringify(data.value)
+      if (data.value && data.value.type) {
+        if (data.value.type === 'NewExpression' && data.value.callee.type === 'Identifier') {
+          init = `new ${data.value.callee.name}()`
+        } else {
+          init = '?'
+        }
+      } else {
+        init = JSON.stringify(data.value)
+      }
+
+      dataTable.push(`| ${data.name} | ${type} | \`${init}\` | ${data.description.replace(/\r?\n/g, '<br>')} |`)
     }
   }
   const md = `

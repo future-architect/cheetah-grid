@@ -9,11 +9,11 @@ order: 140
 Define column action by using `action` property.  
 Please select suitable Action class for `columnType` of same column.  
 
-| `columnType` | specified `action` by string | Descrition | LINK |
-|---|---|---|---|---|
-| `check`  | `'check'` | Define the behaviour when checkbox is clicked. | [CheckEditor](./CheckEditor.md) |
-| `button` | ---       | Define the behaviour when button is clicked. | [ButtonAction](./ButtonAction.md) |
-| `input`  | `'input'` | Define the behaviour when cell input. | [SmallDialogInputEditor](./SmallDialogInputEditor.md) |
+| `columnType` | specified `action` by string | Description                                   | LINK                                                  |
+| ------------ | ---------------------------- | --------------------------------------------- | ----------------------------------------------------- |  |
+| `check`      | `'check'`                    | Define the behavior when checkbox is clicked. | [CheckEditor](./CheckEditor.md)                       |
+| `button`     | ---                          | Define the behavior when button is clicked.   | [ButtonAction](./ButtonAction.md)                     |
+| `input`      | `'input'`                    | Define the behavior when cell input.          | [SmallDialogInputEditor](./SmallDialogInputEditor.md) |
 
 <code-preview>
 
