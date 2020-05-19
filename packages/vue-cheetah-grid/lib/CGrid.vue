@@ -354,9 +354,9 @@ export default {
     return {
       /**
        * Header values.
-       * @type {object}
+       * @type {Map<any, any>}
        */
-      headerValues: {}
+      headerValues: new Map()
     }
   },
   computed: {
