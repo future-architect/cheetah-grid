@@ -468,7 +468,7 @@ function _refreshHeader<T>(grid: ListGrid<T>): void {
       grid.setMaxColWidth(col, maxWidth);
     }
   }
-  const headerRowHeight = grid[_];
+  const { headerRowHeight } = grid[_];
   for (let row = 0; row < layoutMap.headerRowCount; row++) {
     const height = Array.isArray(headerRowHeight)
       ? headerRowHeight[row]
