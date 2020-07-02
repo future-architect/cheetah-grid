@@ -172,25 +172,25 @@ export class InlineMenuEditor<T> extends Editor<T> {
 
       // mouse move
       grid.listen(DG_EVENT_TYPE.MOUSEOVER_CELL, (e) => {
+        if (!isTarget(e.col, e.row)) {
+          return;
+        }
         if (
           isReadOnlyRecord(this.readOnly, grid, e.row) ||
           isDisabledRecord(this.disabled, grid, e.row)
         ) {
-          return;
-        }
-        if (!isTarget(e.col, e.row)) {
           return;
         }
         grid.getElement().style.cursor = "pointer";
       }),
       grid.listen(DG_EVENT_TYPE.MOUSEMOVE_CELL, (e) => {
+        if (!isTarget(e.col, e.row)) {
+          return;
+        }
         if (
           isReadOnlyRecord(this.readOnly, grid, e.row) ||
           isDisabledRecord(this.disabled, grid, e.row)
         ) {
-          return;
-        }
-        if (!isTarget(e.col, e.row)) {
           return;
         }
         if (!grid.getElement().style.cursor) {
@@ -215,13 +215,13 @@ export class InlineMenuEditor<T> extends Editor<T> {
           // ignore multi paste values
           return;
         }
+        if (!isTarget(e.col, e.row)) {
+          return;
+        }
         if (
           isReadOnlyRecord(this.readOnly, grid, e.row) ||
           isDisabledRecord(this.disabled, grid, e.row)
         ) {
-          return;
-        }
-        if (!isTarget(e.col, e.row)) {
           return;
         }
         const record = grid.getRowRecord(e.row);
