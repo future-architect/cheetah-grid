@@ -6,10 +6,6 @@ const allCache: {
   [key: string]: LRUCache<MaybePromise<HTMLImageElement>>;
 } = {};
 
-function isDataUrl(url: string): boolean {
-  return url.search(/^(data:)/) !== -1;
-}
-
 export function loadImage(src: string): Promise<HTMLImageElement> {
   if (typeof Promise === "undefined") {
     console.error("Promise is not loaded. load Promise before this process.");
@@ -31,7 +27,7 @@ export function loadImage(src: string): Promise<HTMLImageElement> {
     console.warn(`cannot load: ${url}`);
     throw new Error(`IMAGE LOAD ERROR: ${url}`);
   };
-  img.src = isDataUrl(src) ? src : `${src}?${Date.now()}`;
+  img.src = src;
   return result;
 }
 
