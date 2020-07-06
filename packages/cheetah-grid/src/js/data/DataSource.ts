@@ -33,15 +33,11 @@ function isFieldAssessor<T>(field: FieldDef<T>): field is FieldAssessor<T> {
 }
 
 /** @private */
-const EVENT_TYPE: {
-  UPDATE_LENGTH: "update_length";
-  UPDATED_LENGTH: "updated_length";
-  UPDATED_ORDER: "updated_order";
-} = {
+const EVENT_TYPE = {
   UPDATE_LENGTH: "update_length",
   UPDATED_LENGTH: "updated_length",
   UPDATED_ORDER: "updated_order",
-};
+} as const;
 
 /** @private */
 type PromiseBack<V> = (value: PromiseCacheValue<V>) => void;
