@@ -1,9 +1,8 @@
-import type { ListGridAPI } from "../../ts-types";
+import type { ListGridAPI, RecordBoolean } from "../../ts-types";
 import { isPromise } from "../../internal/utils";
 
 export function isDisabledRecord<T>(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  option: boolean | ((record: any) => boolean),
+  option: RecordBoolean,
   grid: ListGridAPI<T>,
   row: number
 ): boolean {
@@ -13,8 +12,7 @@ export function isDisabledRecord<T>(
   return getBooleanOptionOfRecord(option, grid, row);
 }
 export function isReadOnlyRecord<T>(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  option: boolean | ((record: any) => boolean),
+  option: RecordBoolean,
   grid: ListGridAPI<T>,
   row: number
 ): boolean {
@@ -55,8 +53,7 @@ export function toggleValue(
 }
 
 function getBooleanOptionOfRecord<T>(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  option: boolean | ((record: any) => boolean),
+  option: RecordBoolean,
   grid: ListGridAPI<T>,
   row: number
 ): boolean {

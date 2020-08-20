@@ -6,6 +6,7 @@ import type {
   EditorOption,
   InlineInputEditorOption,
   InlineMenuEditorOption,
+  RecordBoolean,
   SmallDialogInputEditorOption,
 } from "../ts-types";
 import { Action } from "./action/Action";
@@ -20,28 +21,28 @@ import { SmallDialogInputEditor } from "./action/SmallDialogInputEditor";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 class ImmutableCheckEditor extends CheckEditor<any> {
-  get disabled(): boolean {
+  get disabled(): RecordBoolean {
     return this._disabled;
   }
-  get readOnly(): boolean {
+  get readOnly(): RecordBoolean {
     return this._readOnly;
   }
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 class ImmutableRadioEditor extends RadioEditor<any> {
-  get disabled(): boolean {
+  get disabled(): RecordBoolean {
     return this._disabled;
   }
-  get readOnly(): boolean {
+  get readOnly(): RecordBoolean {
     return this._readOnly;
   }
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 class ImmutableInputEditor extends SmallDialogInputEditor<any> {
-  get disabled(): boolean {
+  get disabled(): RecordBoolean {
     return this._disabled;
   }
-  get readOnly(): boolean {
+  get readOnly(): RecordBoolean {
     return this._readOnly;
   }
 }

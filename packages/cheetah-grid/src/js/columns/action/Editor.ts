@@ -1,7 +1,7 @@
+import type { EditorOption, RecordBoolean } from "../../ts-types";
 import { BaseAction } from "./BaseAction";
-import type { EditorOption } from "../../ts-types";
 export abstract class Editor<T> extends BaseAction<T> {
-  protected _readOnly: boolean;
+  protected _readOnly: RecordBoolean;
   constructor(option: EditorOption = {}) {
     super(option);
     this._readOnly = option.readOnly || false;
@@ -9,11 +9,11 @@ export abstract class Editor<T> extends BaseAction<T> {
   get editable(): boolean {
     return true;
   }
-  get readOnly(): boolean {
+  get readOnly(): RecordBoolean {
     return this._readOnly;
   }
-  set readOnly(readOnly: boolean) {
-    this._readOnly = !!readOnly;
+  set readOnly(readOnly: RecordBoolean) {
+    this._readOnly = readOnly;
     this.onChangeReadOnlyInternal();
   }
   onChangeReadOnlyInternal(): void {

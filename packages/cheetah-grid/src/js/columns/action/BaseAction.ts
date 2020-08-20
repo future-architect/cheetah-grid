@@ -4,18 +4,19 @@ import type {
   EventListenerId,
   LayoutObjectId,
   ListGridAPI,
+  RecordBoolean,
 } from "../../ts-types";
 
 export abstract class BaseAction<T> {
-  protected _disabled: boolean;
+  protected _disabled: RecordBoolean;
   constructor(option: BaseActionOption = {}) {
     this._disabled = option.disabled || false;
   }
   abstract get editable(): boolean;
-  get disabled(): boolean {
+  get disabled(): RecordBoolean {
     return this._disabled;
   }
-  set disabled(disabled: boolean) {
+  set disabled(disabled: RecordBoolean) {
     this._disabled = disabled;
     this.onChangeDisabledInternal();
   }
