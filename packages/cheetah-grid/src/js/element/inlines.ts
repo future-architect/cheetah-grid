@@ -1,14 +1,16 @@
 import * as icons from "../icons";
 import * as path2DManager from "../internal/path2DManager";
-import { Inline, InlineDrawOption } from "./Inline";
-import { PaddingOption, calcStartPosition } from "../internal/canvases";
 import type { IconDefine } from "../ts-types";
+import { Inline } from "./Inline";
+import type { InlineDrawOption } from "./Inline";
 import { InlineDrawer } from "./InlineDrawer";
 import { InlineIcon } from "./InlineIcon";
 import { InlineImage } from "./InlineImage";
 import { InlinePath2D } from "./InlinePath2D";
 import { InlineSvg } from "./InlineSvg";
+import type { PaddingOption } from "../internal/canvases";
 import type { SimpleColumnIconOption } from "../ts-types-internal";
+import { calcStartPosition } from "../internal/canvases";
 import { isDef } from "../internal/utils";
 
 function drawRegisteredIcon(

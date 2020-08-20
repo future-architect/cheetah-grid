@@ -23,7 +23,7 @@ export class Action<T> extends BaseAction<T> {
   get action(): ActionListener {
     return this._action;
   }
-  set action(action) {
+  set action(action: ActionListener) {
     this._action = action;
   }
   clone(): Action<T> {

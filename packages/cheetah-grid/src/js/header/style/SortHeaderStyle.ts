@@ -14,7 +14,7 @@ export class SortHeaderStyle extends Style {
   get sortArrowColor(): ColorDef | undefined {
     return this._sortArrowColor;
   }
-  set sortArrowColor(sortArrowColor) {
+  set sortArrowColor(sortArrowColor: ColorDef | undefined) {
     this._sortArrowColor = sortArrowColor;
     this.doChangeStyle();
   }

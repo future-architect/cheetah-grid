@@ -26,6 +26,7 @@ if (isNode) {
           callback();
           return;
         }
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
         require("./legacy/fontwatch/FontWatchRunner").load(
           font,
           testStr,

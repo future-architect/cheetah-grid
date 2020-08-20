@@ -55,7 +55,7 @@ export class RadioEditor<T> extends Editor<T> {
   get group(): GetRadioEditorGroup<T> {
     return this._group;
   }
-  set group(group) {
+  set group(group: GetRadioEditorGroup<T>) {
     this._group = group;
   }
   bindGridEvent(

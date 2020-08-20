@@ -34,35 +34,35 @@ export class RadioStyle extends StdBaseStyle {
   get checkColor(): ColorDef | undefined {
     return this._checkColor;
   }
-  set checkColor(checkColor) {
+  set checkColor(checkColor: ColorDef | undefined) {
     this._checkColor = checkColor;
     this.doChangeStyle();
   }
   get uncheckBorderColor(): ColorDef | undefined {
     return this._uncheckBorderColor;
   }
-  set uncheckBorderColor(uncheckBorderColor) {
+  set uncheckBorderColor(uncheckBorderColor: ColorDef | undefined) {
     this._uncheckBorderColor = uncheckBorderColor;
     this.doChangeStyle();
   }
   get checkBorderColor(): ColorDef | undefined {
     return this._checkBorderColor;
   }
-  set checkBorderColor(checkBorderColor) {
+  set checkBorderColor(checkBorderColor: ColorDef | undefined) {
     this._checkBorderColor = checkBorderColor;
     this.doChangeStyle();
   }
   get uncheckBgColor(): ColorDef | undefined {
     return this._uncheckBgColor;
   }
-  set uncheckBgColor(uncheckBgColor) {
+  set uncheckBgColor(uncheckBgColor: ColorDef | undefined) {
     this._uncheckBgColor = uncheckBgColor;
     this.doChangeStyle();
   }
   get checkBgColor(): ColorDef | undefined {
     return this._checkBgColor;
   }
-  set checkBgColor(checkBgColor) {
+  set checkBgColor(checkBgColor: ColorDef | undefined) {
     this._checkBgColor = checkBgColor;
     this.doChangeStyle();
   }

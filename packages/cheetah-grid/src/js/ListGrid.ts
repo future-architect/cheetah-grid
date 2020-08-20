@@ -33,16 +33,14 @@ import {
   GroupHeaderDefine,
   HeaderDefine,
   HeadersDefine,
-  LayoutDefine,
-  LayoutMapAPI,
   MultiLayoutMap,
   SimpleHeaderLayoutMap,
 } from "./list-grid/layout-map";
-import {
-  DrawGrid,
+import type {
   DrawGridConstructorOptions,
   DrawGridProtected,
 } from "./core/DrawGrid";
+import type { LayoutDefine, LayoutMapAPI } from "./list-grid/layout-map";
 import {
   cellEquals,
   event,
@@ -55,6 +53,7 @@ import type { BaseColumn } from "./columns/type/BaseColumn";
 import { BaseStyle } from "./columns/style";
 import type { ColumnData } from "./list-grid/layout-map/api";
 import type { DrawCellInfo } from "./ts-types-internal";
+import { DrawGrid } from "./core/DrawGrid";
 import { GridCanvasHelper } from "./GridCanvasHelper";
 import { BaseStyle as HeaderBaseStyle } from "./header/style";
 import { LG_EVENT_TYPE } from "./list-grid/LG_EVENT_TYPE";
@@ -914,7 +913,7 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
    * -----
    * </pre>
    */
-  set header(header) {
+  set header(header: HeadersDefine<T>) {
     this[_].header = header;
     _refreshHeader(this);
   }
@@ -927,7 +926,7 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
   /**
    * Sets the define of the layout with the given data.
    */
-  set layout(layout) {
+  set layout(layout: LayoutDefine<T>) {
     this[_].layout = layout;
     _refreshHeader(this);
   }
@@ -946,7 +945,7 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
   /**
    * Set the records from given
    */
-  set records(records) {
+  set records(records: T[] | null) {
     if (records == null) {
       return;
     }
@@ -963,7 +962,7 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
   /**
    * Set the data source from given
    */
-  set dataSource(dataSource) {
+  set dataSource(dataSource: DataSource<T>) {
     _setDataSource(this, dataSource);
     _refreshRowCount(this);
     this.invalidate();
@@ -977,7 +976,7 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
   /**
    * Set the theme from given
    */
-  set theme(theme) {
+  set theme(theme: Theme | null) {
     this[_].theme = themes.of(theme);
     this.invalidate();
   }
@@ -987,7 +986,7 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
   get allowRangePaste(): boolean {
     return this[_].allowRangePaste;
   }
-  set allowRangePaste(allowRangePaste) {
+  set allowRangePaste(allowRangePaste: boolean) {
     this[_].allowRangePaste = allowRangePaste;
   }
   /**
@@ -1001,7 +1000,7 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
    * Set the font definition with the given string.
    * @override
    */
-  set font(font) {
+  set font(font: string) {
     super.font = font;
   }
   /**
@@ -1018,7 +1017,7 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
    * Set the background color of the underlay.
    * @override
    */
-  set underlayBackgroundColor(underlayBackgroundColor) {
+  set underlayBackgroundColor(underlayBackgroundColor: string) {
     super.underlayBackgroundColor = underlayBackgroundColor;
   }
   /**
@@ -1031,7 +1030,7 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
    * Sets the sort state.
    * If `null` to set, the sort state is initialized.
    */
-  set sortState(sortState) {
+  set sortState(sortState: SortState) {
     const oldState = this.sortState;
     let oldField;
     if (oldState.col >= 0 && oldState.row >= 0) {
@@ -1068,7 +1067,7 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
   /**
    * Sets the header values.
    */
-  set headerValues(headerValues) {
+  set headerValues(headerValues: HeaderValues) {
     this[_].headerValues = headerValues || new Map();
   }
   /**

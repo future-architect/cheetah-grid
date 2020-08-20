@@ -3033,7 +3033,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
   get keyboardOptions(): DrawGridKeyboardOptions | null {
     return this[_].keyboardOptions ?? null;
   }
-  set keyboardOptions(keyboardOptions) {
+  set keyboardOptions(keyboardOptions: DrawGridKeyboardOptions | null) {
     this[_].keyboardOptions = keyboardOptions ?? undefined;
   }
   configure(name: "fadeinWhenCallbackInPromise", value?: boolean): boolean;
@@ -3548,7 +3548,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
   get scrollTop(): number {
     return this[_].scrollable.scrollTop;
   }
-  set scrollTop(scrollTop) {
+  set scrollTop(scrollTop: number) {
     this[_].scrollable.scrollTop = scrollTop;
   }
   /**
@@ -3557,7 +3557,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
   get scrollLeft(): number {
     return this[_].scrollable.scrollLeft;
   }
-  set scrollLeft(scrollLeft) {
+  set scrollLeft(scrollLeft: number) {
     this[_].scrollable.scrollLeft = scrollLeft;
   }
   /**

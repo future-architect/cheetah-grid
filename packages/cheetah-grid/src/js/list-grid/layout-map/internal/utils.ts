@@ -1,6 +1,6 @@
 import * as columns from "../../../columns";
 import * as headerType from "../../../header/type";
-import { ColumnData, HeaderData } from "../api";
+import type { ColumnData, HeaderData } from "../api";
 
 let seqId = -1;
 

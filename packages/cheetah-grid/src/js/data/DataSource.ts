@@ -19,7 +19,7 @@ import {
   obj,
 } from "../internal/utils";
 import { EventTarget } from "../core/EventTarget";
-import { PromiseCacheValue } from "./internal/types";
+import type { PromiseCacheValue } from "./internal/types";
 
 /** @private */
 function isFieldAssessor<T>(field: FieldDef<T>): field is FieldAssessor<T> {
@@ -242,7 +242,7 @@ export class DataSource<T> extends EventTarget implements DataSourceAPI<T> {
   get length(): number {
     return this._length;
   }
-  set length(length) {
+  set length(length: number) {
     if (this._length === length) {
       return;
     }

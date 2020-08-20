@@ -1,4 +1,4 @@
-/*eslint-disable @typescript-eslint/camelcase*/
+/*eslint-disable camelcase*/
 
 import type { IconDefine } from "./ts-types";
 import { extend } from "./internal/utils";

@@ -14,7 +14,7 @@ import {
 } from "../../../internal/dom";
 import { event, isDef } from "../../../internal/utils";
 import { EventHandler } from "../../../internal/EventHandler";
-import { Rect } from "../../../internal/Rect";
+import type { Rect } from "../../../internal/Rect";
 
 const KEY_TAB = 9;
 const KEY_ENTER = 13;

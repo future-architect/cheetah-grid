@@ -1,4 +1,5 @@
-import { DG_EVENT_TYPE, DrawGridEvents } from "../core/DG_EVENT_TYPE";
+import { DG_EVENT_TYPE } from "../core/DG_EVENT_TYPE";
+import type { DrawGridEvents } from "../core/DG_EVENT_TYPE";
 import { extend } from "../internal/utils";
 
 export interface ListGridEvents extends DrawGridEvents {

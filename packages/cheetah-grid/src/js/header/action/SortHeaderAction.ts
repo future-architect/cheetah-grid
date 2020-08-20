@@ -19,7 +19,7 @@ export class SortHeaderAction<T> extends BaseAction<T> {
   get sort(): SortOption<T> {
     return this._sort;
   }
-  set sort(sort) {
+  set sort(sort: SortOption<T>) {
     this._sort = sort;
     this.onChangeDisabledInternal();
   }

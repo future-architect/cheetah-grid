@@ -2,7 +2,7 @@ import * as columns from "../../../columns";
 import * as headerAction from "../../../header/action";
 import * as headerType from "../../../header/type";
 import type { CellRange, LayoutObjectId } from "../../../ts-types";
-import {
+import type {
   ColumnData,
   ColumnDefine,
   GroupHeaderDefine,

@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import type { CellAddress, CellRange, FieldDef } from "./grid";
 import type { AnyFunction } from "./base";
 

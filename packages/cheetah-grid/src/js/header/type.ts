@@ -1,5 +1,5 @@
 import { BaseHeader } from "./type/BaseHeader";
-import { BaseHeaderDefine } from "../list-grid/layout-map/api";
+import type { BaseHeaderDefine } from "../list-grid/layout-map/api";
 import { CheckHeader } from "./type/CheckHeader";
 import { Header } from "./type/Header";
 import type { HeaderTypeOption } from "../ts-types";

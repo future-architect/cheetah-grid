@@ -91,13 +91,13 @@ export class InlineMenuEditor<T> extends Editor<T> {
     }
     return Array.isArray(this._classList) ? this._classList : [this._classList];
   }
-  set classList(classList) {
+  set classList(classList: string[] | undefined) {
     this._classList = classList;
   }
   get options(): (record: T | undefined) => ColumnMenuItemOption[] {
     return this._options;
   }
-  set options(options) {
+  set options(options: (record: T | undefined) => ColumnMenuItemOption[]) {
     this._options = normalizeToFn(options);
   }
   clone(): InlineMenuEditor<T> {

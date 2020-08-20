@@ -5,7 +5,7 @@ import type {
   SortOption,
 } from "../ts-types";
 import { BaseAction } from "./action/BaseAction";
-import { BaseHeaderDefine } from "../list-grid/layout-map/api";
+import type { BaseHeaderDefine } from "../list-grid/layout-map/api";
 import { CheckHeaderAction } from "./action/CheckHeaderAction";
 import { SortHeaderAction } from "./action/SortHeaderAction";
 

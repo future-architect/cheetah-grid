@@ -20,14 +20,14 @@ export class ImageStyle extends StdBaseStyle {
   get imageSizing(): "keep-aspect-ratio" | undefined {
     return this._imageSizing;
   }
-  set imageSizing(imageSizing) {
+  set imageSizing(imageSizing: "keep-aspect-ratio" | undefined) {
     this._imageSizing = imageSizing;
     this.doChangeStyle();
   }
   get margin(): number {
     return this._margin;
   }
-  set margin(margin) {
+  set margin(margin: number) {
     this._margin = margin;
     this.doChangeStyle();
   }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars -- bug? */
 export type MaybeUndef<T> = T | undefined;
 export type PromiseOrUndef<T> = undefined | Promise<T | undefined>;
 export type PromiseMaybeUndef<T> = Promise<T | undefined>;

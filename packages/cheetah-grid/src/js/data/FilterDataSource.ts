@@ -188,7 +188,7 @@ export class FilterDataSource<T> extends DataSource<T> {
   get filter(): Filter<T> | null {
     return this._filterData?._filter || null;
   }
-  set filter(filter) {
+  set filter(filter: Filter<T> | null) {
     if (this._filterData) {
       this._filterData.cancel();
     }

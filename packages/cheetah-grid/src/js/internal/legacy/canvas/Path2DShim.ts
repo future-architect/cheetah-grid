@@ -1,5 +1,5 @@
 import type { AnyFunction } from "../../../ts-types";
-import { CanvasOperations } from "./internal";
+import type { CanvasOperations } from "./internal";
 import { PathCommandsParser } from "./PathCommandsParser";
 
 const parser = new PathCommandsParser();

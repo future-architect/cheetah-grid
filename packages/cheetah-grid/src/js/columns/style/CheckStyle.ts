@@ -24,21 +24,21 @@ export class CheckStyle extends StdBaseStyle {
   get uncheckBgColor(): ColorDef | undefined {
     return this._uncheckBgColor;
   }
-  set uncheckBgColor(uncheckBgColor) {
+  set uncheckBgColor(uncheckBgColor: ColorDef | undefined) {
     this._uncheckBgColor = uncheckBgColor;
     this.doChangeStyle();
   }
   get checkBgColor(): ColorDef | undefined {
     return this._checkBgColor;
   }
-  set checkBgColor(checkBgColor) {
+  set checkBgColor(checkBgColor: ColorDef | undefined) {
     this._checkBgColor = checkBgColor;
     this.doChangeStyle();
   }
   get borderColor(): ColorDef | undefined {
     return this._borderColor;
   }
-  set borderColor(borderColor) {
+  set borderColor(borderColor: ColorDef | undefined) {
     this._borderColor = borderColor;
     this.doChangeStyle();
   }

@@ -16,7 +16,7 @@ import {
   ListGridConstructorOptions,
 } from "./ListGrid";
 import { GridCanvasHelper } from "./GridCanvasHelper";
-import { Theme } from "./themes/theme";
+import type { Theme } from "./themes/theme";
 
 export { getInternal as _getInternal } from "./get-internal";
 

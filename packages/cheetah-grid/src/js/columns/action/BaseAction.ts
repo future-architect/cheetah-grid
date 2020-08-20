@@ -15,7 +15,7 @@ export abstract class BaseAction<T> {
   get disabled(): boolean {
     return this._disabled;
   }
-  set disabled(disabled) {
+  set disabled(disabled: boolean) {
     this._disabled = disabled;
     this.onChangeDisabledInternal();
   }

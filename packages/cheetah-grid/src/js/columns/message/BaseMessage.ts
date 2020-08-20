@@ -6,7 +6,7 @@ import type {
   MessageObject,
 } from "../../ts-types";
 import type { DrawCellInfo } from "../../ts-types-internal";
-import { MessageElement } from "./internal/MessageElement";
+import type { MessageElement } from "./internal/MessageElement";
 
 export abstract class BaseMessage<T> {
   private _grid: ListGridAPI<T>;

@@ -1,11 +1,12 @@
-import { DataSource, DataSourceParam } from "./DataSource";
 import type {
   FieldData,
   FieldDef,
   MaybePromise,
   MaybePromiseOrUndef,
 } from "../ts-types";
-import { PromiseCacheValue } from "./internal/types";
+import { DataSource } from "./DataSource";
+import type { DataSourceParam } from "./DataSource";
+import type { PromiseCacheValue } from "./internal/types";
 
 /** @private */
 function _setFieldCache<T, F extends FieldDef<T>>(

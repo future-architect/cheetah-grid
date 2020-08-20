@@ -1,5 +1,5 @@
-import * as headerAction from "../../header/action";
-import * as headerType from "../../header/type";
+import type * as headerAction from "../../header/action";
+import type * as headerType from "../../header/type";
 import type {
   CellRange,
   ColumnActionOption,
@@ -14,9 +14,9 @@ import type {
   ListGridAPI,
   Message,
 } from "../../ts-types";
-import { BaseAction } from "../../columns/action";
-import { BaseColumn } from "../../columns/type/BaseColumn";
-import { BaseStyle as HeaderBaseStyle } from "../../header/style";
+import type { BaseAction } from "../../columns/action";
+import type { BaseColumn } from "../../columns/type/BaseColumn";
+import type { BaseStyle as HeaderBaseStyle } from "../../header/style";
 
 export type OldSortOption<T> =
   | boolean
@@ -119,4 +119,4 @@ interface LayoutMapAPI<T> {
   getRecordStartRowByRecordIndex(index: number): number;
 }
 
-export { LayoutMapAPI };
+export type { LayoutMapAPI };

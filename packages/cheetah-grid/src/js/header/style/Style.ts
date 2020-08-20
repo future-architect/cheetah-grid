@@ -21,21 +21,21 @@ export class Style extends StdBaseStyle {
   get color(): ColorDef | undefined {
     return this._color;
   }
-  set color(color) {
+  set color(color: ColorDef | undefined) {
     this._color = color;
     this.doChangeStyle();
   }
   get font(): string | undefined {
     return this._font;
   }
-  set font(font) {
+  set font(font: string | undefined) {
     this._font = font;
     this.doChangeStyle();
   }
   get textOverflow(): TextOverflow {
     return this._textOverflow;
   }
-  set textOverflow(textOverflow) {
+  set textOverflow(textOverflow: TextOverflow) {
     this._textOverflow = textOverflow;
     this.doChangeStyle();
   }
