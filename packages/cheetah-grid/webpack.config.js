@@ -93,8 +93,23 @@ const newDefaultProps = (opt = {}) => {
 				{
 					test: /\.css$/,
 					exclude: /node_modules/,
-					use: ['style-loader', 'css-loader?minimize']
-				}
+					use: ['style-loader', 'css-loader',
+						{
+							loader: 'postcss-loader',
+							options: {
+								sourceMap: true,
+								plugins: [
+									require('cssnano')({
+										preset: 'default',
+									}),
+									require('autoprefixer')({
+										grid: true,
+									})
+								]
+							}
+						}
+					]
+				},
 			]
 		},
 		plugins: [
