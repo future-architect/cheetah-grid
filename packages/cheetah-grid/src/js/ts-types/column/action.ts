@@ -3,8 +3,11 @@ import type { ColumnMenuItemOptions } from "../define";
 import type { ListGridAPI } from "../grid-engine";
 import type { MaybePromise } from "../base";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type RecordBoolean<T = any> = boolean | ((record: T) => boolean);
+
 export interface BaseActionOption {
-  disabled?: boolean;
+  disabled?: RecordBoolean;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -13,7 +16,7 @@ export interface ActionOption extends BaseActionOption {
   action?: ActionListener;
 }
 export interface EditorOption extends BaseActionOption {
-  readOnly?: boolean;
+  readOnly?: RecordBoolean;
 }
 export type ButtonActionOption = ActionOption;
 
