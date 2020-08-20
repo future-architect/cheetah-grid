@@ -1,4 +1,5 @@
 'use strict'
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const path = require('path')
 const rm = require('rimraf')
 const webpack = require('webpack')
@@ -74,11 +75,42 @@ module.exports = (env, argv) => {
         {
           test: /\.js$/,
           loader: 'babel-loader',
-          exclude: /node_modules/
+          exclude: file => (
+            /node_modules/.test(file) &&
+            !/\.vue\.js/.test(file)
+          )
+        },
+        {
+          test: /\.css$/,
+          exclude: /node_modules/,
+          use: [
+            'style-loader',
+            {
+              loader: 'css-loader',
+              options: {
+                sourceMap: false
+              }
+            },
+            {
+              loader: 'postcss-loader',
+              options: {
+                sourceMap: false,
+                plugins: [
+                  require('cssnano')({
+                    preset: 'default'
+                  }),
+                  require('autoprefixer')({
+                    grid: true
+                  })
+                ]
+              }
+            }
+          ]
         }
       ]
     },
     plugins: [
+      new VueLoaderPlugin(),
       new webpack.BannerPlugin({ banner: BANNER, raw: true, entryOnly: true }),
       new webpack.DefinePlugin(argv.mode === 'production' ? {
         'process.env': {

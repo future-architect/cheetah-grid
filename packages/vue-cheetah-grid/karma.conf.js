@@ -27,7 +27,9 @@ module.exports = function (config) {
       ]
     },
 
-    browsers: ['Chrome', 'IE_no_addons'],
+    browsers: ['Chrome'
+    // 'IE_no_addons'
+    ],
     customLaunchers: {
       IE_no_addons: {
         base: 'IE',
