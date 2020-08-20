@@ -93,11 +93,17 @@ const newDefaultProps = (opt = {}) => {
 				{
 					test: /\.css$/,
 					exclude: /node_modules/,
-					use: ['style-loader', 'css-loader',
+					use: ['style-loader',
+						{
+							loader: 'css-loader',
+							options: {
+								sourceMap: false
+							}
+						},
 						{
 							loader: 'postcss-loader',
 							options: {
-								sourceMap: true,
+								sourceMap: false,
 								plugins: [
 									require('cssnano')({
 										preset: 'default',

@@ -108,7 +108,7 @@
     "prettier": "^2.0.5",
     "promise-polyfills": "^7.0.4",
     "raw-loader": "^0.5.1",
-    "style-loader": "^0.23.0",
+    "style-loader": "^1.2.1",
     "stylelint": "^13.6.1",
     "stylelint-config-standard": "^20.0.0",
     "typescript": "^3.9.7",
