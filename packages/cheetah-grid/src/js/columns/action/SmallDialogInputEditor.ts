@@ -82,13 +82,13 @@ export class SmallDialogInputEditor<T> extends BaseInputEditor<T> {
     }
     return Array.isArray(this._classList) ? this._classList : [this._classList];
   }
-  set classList(classList) {
+  set classList(classList: string[] | undefined) {
     this._classList = classList;
   }
   get type(): string | undefined {
     return this._type;
   }
-  set type(type) {
+  set type(type: string | undefined) {
     this._type = type;
   }
   get helperText(): string | GetValueResult<T, string> | undefined {

@@ -20,7 +20,7 @@ export class ButtonStyle extends Style {
   get buttonBgColor(): ColorDef | undefined {
     return this._buttonBgColor;
   }
-  set buttonBgColor(buttonBgColor) {
+  set buttonBgColor(buttonBgColor: ColorDef | undefined) {
     this._buttonBgColor = buttonBgColor;
     this.doChangeStyle();
   }

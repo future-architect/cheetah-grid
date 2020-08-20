@@ -16,14 +16,14 @@ export class StdBaseStyle extends BaseStyle {
   get textAlign(): CanvasTextAlign {
     return this._textAlign;
   }
-  set textAlign(textAlign) {
+  set textAlign(textAlign: CanvasTextAlign) {
     this._textAlign = textAlign;
     this.doChangeStyle();
   }
   get textBaseline(): CanvasTextBaseline {
     return this._textBaseline;
   }
-  set textBaseline(textBaseline) {
+  set textBaseline(textBaseline: CanvasTextBaseline) {
     this._textBaseline = textBaseline;
     this.doChangeStyle();
   }

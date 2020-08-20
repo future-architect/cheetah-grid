@@ -23,21 +23,21 @@ export class MultilineTextHeaderStyle extends Style {
   get lineHeight(): string | number {
     return this._lineHeight;
   }
-  set lineHeight(lineHeight) {
+  set lineHeight(lineHeight: string | number) {
     this._lineHeight = lineHeight;
     this.doChangeStyle();
   }
   get lineClamp(): LineClamp | undefined {
     return this._lineClamp;
   }
-  set lineClamp(lineClamp) {
+  set lineClamp(lineClamp: LineClamp | undefined) {
     this._lineClamp = lineClamp;
     this.doChangeStyle();
   }
   get autoWrapText(): boolean {
     return this._autoWrapText;
   }
-  set autoWrapText(autoWrapText) {
+  set autoWrapText(autoWrapText: boolean) {
     this._autoWrapText = autoWrapText;
     this.doChangeStyle();
   }

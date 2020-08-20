@@ -31,21 +31,21 @@ export class PercentCompleteBarStyle extends Style {
   get barColor(): ColorDef | ((num: number) => ColorDef) {
     return this._barColor;
   }
-  set barColor(barColor) {
+  set barColor(barColor: ColorDef | ((num: number) => ColorDef)) {
     this._barColor = barColor;
     this.doChangeStyle();
   }
   get barBgColor(): ColorDef {
     return this._barBgColor;
   }
-  set barBgColor(barBgColor) {
+  set barBgColor(barBgColor: ColorDef) {
     this._barBgColor = barBgColor;
     this.doChangeStyle();
   }
   get barHeight(): number {
     return this._barHeight;
   }
-  set barHeight(barHeight) {
+  set barHeight(barHeight: number) {
     this._barHeight = barHeight;
     this.doChangeStyle();
   }

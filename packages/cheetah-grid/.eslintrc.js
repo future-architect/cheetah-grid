@@ -1,3 +1,3 @@
-'use strict'
+'use strict';
 
-module.exports = require('../../eslint/eslint-config.js')
+module.exports = require('../../eslint/eslint-config.js');

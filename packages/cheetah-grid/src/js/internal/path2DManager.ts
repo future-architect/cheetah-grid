@@ -4,6 +4,7 @@ export function getPath2D(): typeof Path2D {
   if (typeof Path2D !== "undefined" && !browser.Edge) {
     return Path2D;
   }
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   return require("./legacy/canvas/Path2DShim").Path2DShim;
 }
 

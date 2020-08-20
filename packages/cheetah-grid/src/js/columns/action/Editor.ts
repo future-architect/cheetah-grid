@@ -12,7 +12,7 @@ export abstract class Editor<T> extends BaseAction<T> {
   get readOnly(): boolean {
     return this._readOnly;
   }
-  set readOnly(readOnly) {
+  set readOnly(readOnly: boolean) {
     this._readOnly = !!readOnly;
     this.onChangeReadOnlyInternal();
   }

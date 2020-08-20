@@ -1,5 +1,5 @@
 import type { AnyFunction, EventListenerId } from "../ts-types";
-import { EventTarget as CustomEventTarget } from "../core/EventTarget";
+import type { EventTarget as CustomEventTarget } from "../core/EventTarget";
 import { each } from "./utils";
 
 /** @private */

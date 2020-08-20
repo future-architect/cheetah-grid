@@ -64,7 +64,7 @@ const doms: {
 } = {};
 const props: {
   [tagName: string]: {
-    [className: string]: {};
+    [className: string]: { [key: string]: string | number | boolean };
   };
 } = {};
 

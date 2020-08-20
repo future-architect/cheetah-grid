@@ -15,7 +15,7 @@ export class MenuStyle extends Style {
   get appearance(): "menulist-button" | "none" | undefined {
     return this._appearance || "menulist-button";
   }
-  set appearance(appearance) {
+  set appearance(appearance: "menulist-button" | "none" | undefined) {
     this._appearance = appearance;
     this.doChangeStyle();
   }

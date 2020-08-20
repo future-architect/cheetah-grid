@@ -18,7 +18,6 @@ import type {
   TextOverflow,
 } from "./ts-types";
 import type { Inline, InlineDrawOption } from "./element/Inline";
-import { RGBA, colorToRGB } from "./internal/color";
 import { calcStartPosition, getFontSize } from "./internal/canvases";
 import {
   cellEquals,
@@ -29,8 +28,10 @@ import {
   style,
 } from "./internal/utils";
 import { InlineDrawer } from "./element/InlineDrawer";
+import type { RGBA } from "./internal/color";
 import { Rect } from "./internal/Rect";
 import type { SimpleColumnIconOption } from "./ts-types-internal";
+import { colorToRGB } from "./internal/color";
 
 const { toBoxArray } = style;
 

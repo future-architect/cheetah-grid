@@ -1,5 +1,6 @@
 import type { AnyFunction, ColorDef } from "../ts-types";
-import { Inline, InlineDrawOption } from "./Inline";
+import { Inline } from "./Inline";
+import type { InlineDrawOption } from "./Inline";
 
 export type InlineDrawerFunction = (options: InlineDrawOption) => void;
 export class InlineDrawer extends Inline {

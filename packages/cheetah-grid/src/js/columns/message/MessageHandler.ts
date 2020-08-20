@@ -10,7 +10,7 @@ import type {
   Message,
   MessageObject,
 } from "../../ts-types";
-import { BaseMessage } from "./BaseMessage";
+import type { BaseMessage } from "./BaseMessage";
 import { ErrorMessage } from "./ErrorMessage";
 import { InfoMessage } from "./InfoMessage";
 import { LG_EVENT_TYPE } from "../../list-grid/LG_EVENT_TYPE";

@@ -7,7 +7,7 @@ export class NumberColumn<T> extends Column<T> {
   static get defaultFotmat(): Intl.NumberFormat {
     return defaultFotmat || (defaultFotmat = new Intl.NumberFormat());
   }
-  static set defaultFotmat(fmt) {
+  static set defaultFotmat(fmt: Intl.NumberFormat) {
     defaultFotmat = fmt;
   }
   constructor(option: NumberColumnOption = {}) {

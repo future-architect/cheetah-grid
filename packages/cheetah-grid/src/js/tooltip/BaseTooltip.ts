@@ -1,5 +1,5 @@
 import type { ListGridAPI } from "../ts-types";
-import { TooltipElement } from "./internal/TooltipElement";
+import type { TooltipElement } from "./internal/TooltipElement";
 
 export abstract class BaseTooltip<T> {
   private _grid: ListGridAPI<T>;

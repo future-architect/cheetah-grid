@@ -180,11 +180,11 @@ function applyChainSafe(
 function getChainSafe(obj: any, ...names: string[]): any {
   return applyChainSafe(obj, (val, name) => val[name], ...names);
 }
-function getOrApply<T, A extends any[]>(
+function getOrApply<_T, A extends any[]>(
   value: undefined,
   ...args: A
 ): undefined;
-function getOrApply<T, A extends any[]>(value: null, ...args: A): null;
+function getOrApply<_T, A extends any[]>(value: null, ...args: A): null;
 function getOrApply<T, A extends any[]>(value: MaybeCall<T, A>, ...args: A): T;
 function getOrApply<T, A extends any[]>(value: MaybeCall<T, A>, ...args: A): T {
   if (typeof value === "function") {

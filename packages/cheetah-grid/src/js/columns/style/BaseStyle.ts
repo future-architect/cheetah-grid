@@ -21,7 +21,7 @@ export class BaseStyle extends EventTarget implements ColumnStyle {
   get bgColor(): ColorDef | undefined {
     return this._bgColor;
   }
-  set bgColor(bgColor) {
+  set bgColor(bgColor: ColorDef | undefined) {
     this._bgColor = bgColor;
     this.doChangeStyle();
   }

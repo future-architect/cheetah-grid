@@ -1,6 +1,7 @@
 import * as fonts from "../internal/fonts";
 import type { AnyFunction, ColorDef } from "../ts-types";
-import { Inline, InlineDrawOption } from "./Inline";
+import { Inline } from "./Inline";
+import type { InlineDrawOption } from "./Inline";
 
 export type InlineIconConstructorOption = {
   width?: number;

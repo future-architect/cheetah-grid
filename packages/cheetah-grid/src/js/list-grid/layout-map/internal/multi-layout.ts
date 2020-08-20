@@ -1,7 +1,7 @@
 import * as columns from "../../../columns";
 import * as headerAction from "../../../header/action";
 import * as headerType from "../../../header/type";
-import {
+import type {
   CellDefine,
   ColumnData,
   HeaderBodyLayoutDefine,

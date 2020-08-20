@@ -69,7 +69,8 @@ export class IconColumn<T> extends Column<T> {
         icon.width = this._iconWidth;
       }
 
-      info.getIcon = (): ColumnIconOption<unknown>[] => repeatArray(icon, num);
+      info.getIcon = (): ColumnIconOption<unknown>[] =>
+        repeatArray(icon as ColumnIconOption<unknown>, num);
     } else {
       info.getIcon = (): null => null;
     }

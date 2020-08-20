@@ -46,27 +46,27 @@ export class Scrollable {
   get scrollWidth(): number {
     return this._width;
   }
-  set scrollWidth(width) {
+  set scrollWidth(width: number) {
     this._width = width;
     this._update();
   }
   get scrollHeight(): number {
     return this._height;
   }
-  set scrollHeight(height) {
+  set scrollHeight(height: number) {
     this._height = height;
     this._update();
   }
   get scrollLeft(): number {
     return Math.max(Math.ceil(this._scrollable.scrollLeft), 0);
   }
-  set scrollLeft(scrollLeft) {
+  set scrollLeft(scrollLeft: number) {
     this._scrollable.scrollLeft = scrollLeft;
   }
   get scrollTop(): number {
     return Math.max(Math.ceil(this._scrollable.scrollTop / this._p), 0);
   }
-  set scrollTop(scrollTop) {
+  set scrollTop(scrollTop: number) {
     this._scrollable.scrollTop = scrollTop * this._p;
   }
   onScroll(fn: (evt: Event) => void): void {

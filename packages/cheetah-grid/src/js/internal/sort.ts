@@ -84,7 +84,7 @@ export function sortArray<T>(
   Array.prototype.sort.call(array, compare);
 }
 
-export function sort<R, F>(
+export function sort<R, _F>(
   get: (i: number) => R,
   set: (i: number, r: R) => void,
   length: number,
@@ -117,7 +117,7 @@ export function sort<R, F>(
   }
 }
 
-export function sortPromise<R, F>(
+export function sortPromise<R, _F>(
   get: (i: number) => MaybePromise<R>,
   set: (i: number, r: R) => void,
   length: number,

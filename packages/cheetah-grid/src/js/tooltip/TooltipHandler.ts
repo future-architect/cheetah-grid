@@ -1,5 +1,5 @@
 import type { CellRange, ListGridAPI } from "../ts-types";
-import { BaseTooltip } from "./BaseTooltip";
+import type { BaseTooltip } from "./BaseTooltip";
 import { LG_EVENT_TYPE } from "../list-grid/LG_EVENT_TYPE";
 import { Tooltip } from "./Tooltip";
 import { cellInRange } from "../internal/utils";
