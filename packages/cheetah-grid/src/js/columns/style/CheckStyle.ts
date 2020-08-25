@@ -1,11 +1,7 @@
 import type { CheckStyleOption, ColorDef } from "../../ts-types";
 import { StdBaseStyle } from "./StdBaseStyle";
+import { defaults } from "../../internal/utils";
 
-function adj(style: CheckStyleOption): CheckStyleOption {
-  const { textAlign = "center" } = style;
-  style.textAlign = textAlign;
-  return style;
-}
 let defaultStyle: CheckStyle;
 export class CheckStyle extends StdBaseStyle {
   private _uncheckBgColor?: ColorDef;
@@ -15,7 +11,7 @@ export class CheckStyle extends StdBaseStyle {
     return defaultStyle ? defaultStyle : (defaultStyle = new CheckStyle());
   }
   constructor(style: CheckStyleOption = {}) {
-    super(adj(style));
+    super(defaults(style, { textAlign: "center" }));
     const { uncheckBgColor, checkBgColor, borderColor } = style;
     this._uncheckBgColor = uncheckBgColor;
     this._checkBgColor = checkBgColor;

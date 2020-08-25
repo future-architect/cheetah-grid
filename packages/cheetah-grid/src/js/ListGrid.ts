@@ -47,6 +47,7 @@ import {
   isDef,
   isPromise,
   obj,
+  omit,
   then,
 } from "./internal/utils";
 import type { BaseColumn } from "./columns/type/BaseColumn";
@@ -737,15 +738,6 @@ function _onRangeDelete<T>(this: ListGrid<T>): void {
   this.invalidateCellRange(selectionRange);
 }
 
-/** @private */
-function adjustListGridOption<T>(
-  options: ListGridConstructorOptions<T>
-): ListGridConstructorOptions<T> {
-  delete options.frozenRowCount;
-  delete options.colCount;
-  delete options.rowCount;
-  return options;
-}
 //end private methods
 //
 //
@@ -837,7 +829,7 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
    * @param options Constructor options
    */
   constructor(options: ListGridConstructorOptions<T> = {}) {
-    super(adjustListGridOption(options));
+    super(omit(options, ["colCount", "rowCount", "frozenRowCount"]));
     const protectedSpace = this[_];
     protectedSpace.header = options.header || [];
     protectedSpace.layout = options.layout || [];

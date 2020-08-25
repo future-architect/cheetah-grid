@@ -1,11 +1,7 @@
 import type { LineClamp, MultilineTextStyleOption } from "../../ts-types";
 import { Style } from "./Style";
+import { defaults } from "../../internal/utils";
 
-function adj(style: MultilineTextStyleOption): MultilineTextStyleOption {
-  const { textBaseline = "top" } = style;
-  style.textBaseline = textBaseline;
-  return style;
-}
 let defaultStyle: MultilineTextStyle;
 export class MultilineTextStyle extends Style {
   private _lineHeight: string | number;
@@ -17,7 +13,7 @@ export class MultilineTextStyle extends Style {
       : (defaultStyle = new MultilineTextStyle());
   }
   constructor(style: MultilineTextStyleOption = {}) {
-    super(adj(style));
+    super(defaults(style, { textBaseline: "top" }));
     this._lineHeight = style.lineHeight || "1em";
     this._autoWrapText = style.autoWrapText || false;
     this._lineClamp = style.lineClamp;
