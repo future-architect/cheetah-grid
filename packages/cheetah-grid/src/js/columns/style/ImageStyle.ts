@@ -1,11 +1,7 @@
 import type { ImageStyleOption } from "../../ts-types";
 import { StdBaseStyle } from "./StdBaseStyle";
+import { defaults } from "../../internal/utils";
 let defaultStyle: ImageStyle;
-function adj(style: ImageStyleOption): ImageStyleOption {
-  const { textAlign = "center" } = style;
-  style.textAlign = textAlign;
-  return style;
-}
 export class ImageStyle extends StdBaseStyle {
   private _imageSizing?: "keep-aspect-ratio";
   private _margin: number;
@@ -13,7 +9,7 @@ export class ImageStyle extends StdBaseStyle {
     return defaultStyle ? defaultStyle : (defaultStyle = new ImageStyle());
   }
   constructor(style: ImageStyleOption = {}) {
-    super(adj(style));
+    super(defaults(style, { textAlign: "center" }));
     this._imageSizing = style.imageSizing;
     this._margin = style.margin || 4;
   }

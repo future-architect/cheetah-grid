@@ -1,18 +1,14 @@
 import type { IconStyleOption } from "../../ts-types";
 import { Style } from "./Style";
+import { defaults } from "../../internal/utils";
 
-function adj(style: IconStyleOption): IconStyleOption {
-  const { textAlign = "center" } = style;
-  style.textAlign = textAlign;
-  return style;
-}
 let defaultStyle: IconStyle;
 export class IconStyle extends Style {
   static get DEFAULT(): IconStyle {
     return defaultStyle ? defaultStyle : (defaultStyle = new IconStyle());
   }
   constructor(style: IconStyleOption = {}) {
-    super(adj(style));
+    super(defaults(style, { textAlign: "center" }));
   }
   clone(): IconStyle {
     return new IconStyle(this);

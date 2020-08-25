@@ -1,11 +1,7 @@
 import type { CheckHeaderStyleOption, ColorDef } from "../../ts-types";
 import { Style } from "./Style";
+import { defaults } from "../../internal/utils";
 
-function adj(style: CheckHeaderStyleOption): CheckHeaderStyleOption {
-  const { textAlign = "center" } = style;
-  style.textAlign = textAlign;
-  return style;
-}
 let defaultStyle: CheckHeaderStyle;
 export class CheckHeaderStyle extends Style {
   private _uncheckBgColor?: ColorDef;
@@ -17,7 +13,7 @@ export class CheckHeaderStyle extends Style {
       : (defaultStyle = new CheckHeaderStyle());
   }
   constructor(style: CheckHeaderStyleOption = {}) {
-    super(adj(style));
+    super(defaults(style, { textAlign: "center" }));
     const { uncheckBgColor, checkBgColor, borderColor } = style;
     this._uncheckBgColor = uncheckBgColor;
     this._checkBgColor = checkBgColor;

@@ -1,11 +1,7 @@
 import type { ColorDef, RadioStyleOption } from "../../ts-types";
 import { StdBaseStyle } from "./StdBaseStyle";
+import { defaults } from "../../internal/utils";
 
-function adj(style: RadioStyleOption): RadioStyleOption {
-  const { textAlign = "center" } = style;
-  style.textAlign = textAlign;
-  return style;
-}
 let defaultStyle: RadioStyle;
 export class RadioStyle extends StdBaseStyle {
   private _checkColor?: ColorDef;
@@ -17,7 +13,7 @@ export class RadioStyle extends StdBaseStyle {
     return defaultStyle ? defaultStyle : (defaultStyle = new RadioStyle());
   }
   constructor(style: RadioStyleOption = {}) {
-    super(adj(style));
+    super(defaults(style, { textAlign: "center" }));
     const {
       checkColor,
       uncheckBorderColor,

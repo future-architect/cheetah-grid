@@ -134,10 +134,66 @@ function isObject(obj: any): obj is Record<string, any> {
   return obj === Object(obj);
 }
 
-function extend<T, U>(t: T, u: U): T & U;
-function extend<T, U, V>(t: T, u: U, v: V): T & U & V;
-function extend<T>(...args: T[]): T;
-function extend<T>(...args: T[]): T {
+export function omit<T, K extends keyof T>(source: T, omits: K[]): Omit<T, K> {
+  const result = {} as Omit<T, K>;
+  for (const key in source) {
+    if (omits.indexOf(key as never) >= 0) {
+      continue;
+    }
+    Object.defineProperty(result, key, {
+      get() {
+        return source[key];
+      },
+      set(val) {
+        source[key] = val;
+      },
+      configurable: true,
+      enumerable: true,
+    });
+  }
+  return result;
+}
+
+export function defaults<T>(source: T, defs: Partial<T>): T {
+  const keys: string[] = [];
+  const result = {} as T;
+  for (const key in source) {
+    keys.push(key);
+    Object.defineProperty(result, key, {
+      get() {
+        const val = source[key];
+        return val === undefined ? defs[key] : val;
+      },
+      set(val) {
+        source[key] = val;
+      },
+      configurable: true,
+      enumerable: true,
+    });
+  }
+  for (const key in defs) {
+    if (keys.indexOf(key) >= 0) {
+      continue;
+    }
+    Object.defineProperty(result, key, {
+      get() {
+        const val = source[key];
+        return val === undefined ? defs[key] : val;
+      },
+      set(val) {
+        source[key] = val;
+      },
+      configurable: true,
+      enumerable: true,
+    });
+  }
+  return result;
+}
+
+export function extend<T, U>(t: T, u: U): T & U;
+export function extend<T, U, V>(t: T, u: U, v: V): T & U & V;
+export function extend<T>(...args: T[]): T;
+export function extend<T>(...args: T[]): T {
   const result = {} as T;
   args.forEach((source) => {
     for (const key in source) {
@@ -347,7 +403,6 @@ function toBoxArray<T>(obj: T | T[]): [T, T, T, T] {
 export {
   isNode,
   isDef,
-  extend,
   isDescendantElement,
   getChainSafe,
   applyChainSafe,
