@@ -222,7 +222,7 @@
 					lineClamp: 'auto',
 					autoWrapText: true,
 				}},
-			], {defaultRowHeight: 48, records: [{}]});
+			], {defaultRowHeight: 46, records: [{}]});
 			function createAnswerCanvas() {
 
 				const base = createAnswerCanvasBase(grid);
