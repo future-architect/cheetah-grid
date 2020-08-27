@@ -23,7 +23,7 @@ export type OldSortOption<T> =
   | ((order: "asc" | "desc", col: number, grid: ListGridAPI<T>) => void);
 
 export interface BaseHeaderDefine<T> {
-  caption?: string;
+  caption?: string | (() => string);
   headerField?: string;
   headerStyle?: HeaderStyleOption | HeaderBaseStyle | null;
   headerType?: HeaderTypeOption | headerType.BaseHeader<T> | null;
@@ -47,7 +47,7 @@ export interface ColumnDefine<T> extends BaseHeaderDefine<T> {
 
 export interface HeaderData<T> {
   id: LayoutObjectId;
-  caption?: string;
+  caption?: string | (() => string);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   field?: any;
   style?: HeaderStyleOption | HeaderBaseStyle | null;

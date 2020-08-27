@@ -113,7 +113,8 @@ function _getCellValue<T>(
   row: number
 ): FieldData {
   if (row < grid[_].layoutMap.headerRowCount) {
-    return grid[_].layoutMap.getHeader(col, row).caption;
+    const { caption } = grid[_].layoutMap.getHeader(col, row);
+    return typeof caption === "function" ? caption() : caption;
   } else {
     const { field } = grid[_].layoutMap.getBody(col, row);
     return _getField(grid, field, row);
