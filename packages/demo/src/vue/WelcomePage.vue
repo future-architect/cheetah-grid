@@ -4,7 +4,7 @@
       <h1>Welcome to Cheetah Grid</h1>
       <span>Cheetah Grid is the fastest open-source data table for web.</span>
     </div>
-    <label>Grid initial processing time : </label><strong>{{ time }}ms</strong> / <label>Number of records : </label><strong>{{ count | numberDelimiter }}</strong>
+    <label>Grid initial processing time : </label><strong>{{ time }}ms</strong> / <label>Number of records : </label><strong>{{ numberDelimiter(count) }}</strong>
     <br>
     <div
       ref="grid"
@@ -204,7 +204,7 @@ export default {
     }
     this.grid = createGrid(this.$refs.grid, this)
   },
-  destroyed () {
+  unmounted () {
     if (this.grid) {
       this.grid.dispose()
       this.grid = null
@@ -214,13 +214,13 @@ export default {
 </script>
 
 <style scoped>
-  .grid >>> .cheetah-grid__inline-menu__menu-item.stars {
+  .grid ::v-deep(.cheetah-grid__inline-menu__menu-item.stars) {
     text-align: center;
     color: gold;
     display: block;
     white-space: nowrap;
   }
-  .grid >>> .cheetah-grid__inline-menu__menu-item.stars .material-icons {
+  .grid ::v-deep(.cheetah-grid__inline-menu__menu-item.stars .material-icons) {
     line-height: 40px;
   }
 </style>

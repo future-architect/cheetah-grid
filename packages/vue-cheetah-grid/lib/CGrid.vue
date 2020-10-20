@@ -1,30 +1,49 @@
 <template>
   <div class="c-grid">
     <div class="define">
-      <!--
-        Use this slot to set the simple header definition.
-        The definition is set to `header` property described in [Define Headers and Columns]
-      -->
-      <slot />
-      <!--
-        Use this slot to set the layout header definition.
-        Use this slot in combination with the `layout-body` slot.
-        The definition is set to `layout.header` property described in [Advanced Layout].
-      -->
-      <slot name="layout-header" />
-      <!--
-        Use this slot to set the layout body definition.
-        Use this slot in combination with the `layout-header` slot.
-        The definition is set to `layout.body` property described in [Advanced Layout].
-      -->
-      <slot name="layout-body" />
+      <div
+        ref="defaultSlotContainer"
+      >
+        <!--
+          Use this slot to set the simple header definition.
+          The definition is set to `header` property described in [Define Headers and Columns]
+        -->
+        <slot />
+      </div>
+      <div
+        ref="layoutHeaderSlotContainer"
+      >
+        <!--
+          Use this slot to set the layout header definition.
+          Use this slot in combination with the `layout-body` slot.
+          The definition is set to `layout.header` property described in [Advanced Layout].
+        -->
+        <slot name="layout-header" />
+      </div>
+      <div
+        ref="layoutBodySlotContainer"
+      >
+        <!--
+          Use this slot to set the layout body definition.
+          Use this slot in combination with the `layout-header` slot.
+          The definition is set to `layout.body` property described in [Advanced Layout].
+        -->
+        <slot name="layout-body" />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { cheetahGrid, gridUpdateWatcher, extend } from './c-grid/utils'
-import { slotsToHeaderOptions, slotsToHeaderProps } from './c-grid/header-utils'
+import {
+  cheetahGrid,
+  gridUpdateWatcher,
+  extend,
+  vue3Emits,
+  getSlotChildren,
+  hackVue3
+} from './c-grid/utils'
+import { slotElementsToHeaderOptions, slotElementsToHeaderProps } from './c-grid/header-utils'
 
 const primitives = {
   function: true, string: true, number: true, boolean: true, undefined: true, bigint: true, symbol: true
@@ -145,20 +164,21 @@ function _bindEvents (vm, grid) {
 }
 function _buildGridProps (vm) {
   const headerLayoutOptions = {}
-  if (vm.$slots['layout-body']) {
-    if (vm.$slots['layout-header']) {
+
+  if (getSlotChildren(vm, 'layoutBodySlotContainer')) {
+    if (getSlotChildren(vm, 'layoutHeaderSlotContainer')) {
       headerLayoutOptions.layout = {
-        header: slotsToHeaderProps(vm, vm.$slots['layout-header']),
-        body: slotsToHeaderProps(vm, vm.$slots['layout-body'])
+        header: slotElementsToHeaderProps(vm, 'layoutHeaderSlotContainer'),
+        body: slotElementsToHeaderProps(vm, 'layoutBodySlotContainer')
       }
     } else {
       headerLayoutOptions.layout = {
-        header: slotsToHeaderProps(vm, vm.$slots['layout-body']),
-        body: slotsToHeaderProps(vm, vm.$slots['layout-body'])
+        header: slotElementsToHeaderProps(vm, 'layoutBodySlotContainer'),
+        body: slotElementsToHeaderProps(vm, 'layoutBodySlotContainer')
       }
     }
   } else {
-    headerLayoutOptions.header = slotsToHeaderProps(vm, vm.$slots.default)
+    headerLayoutOptions.header = slotElementsToHeaderProps(vm, 'defaultSlotContainer')
   }
   return extend(
     {
@@ -171,20 +191,20 @@ function _buildGridProps (vm) {
 }
 function _buildGridOption (vm) {
   const headerLayoutOptions = {}
-  if (vm.$slots['layout-body']) {
-    if (vm.$slots['layout-header']) {
+  if (getSlotChildren(vm, 'layoutBodySlotContainer')) {
+    if (getSlotChildren(vm, 'layoutHeaderSlotContainer')) {
       headerLayoutOptions.layout = {
-        header: slotsToHeaderOptions(vm, vm.$slots['layout-header']),
-        body: slotsToHeaderOptions(vm, vm.$slots['layout-body'])
+        header: slotElementsToHeaderOptions(vm, 'layoutHeaderSlotContainer'),
+        body: slotElementsToHeaderOptions(vm, 'layoutBodySlotContainer')
       }
     } else {
       headerLayoutOptions.layout = {
-        header: slotsToHeaderOptions(vm, vm.$slots['layout-body']),
-        body: slotsToHeaderOptions(vm, vm.$slots['layout-body'])
+        header: slotElementsToHeaderOptions(vm, 'layoutBodySlotContainer'),
+        body: slotElementsToHeaderOptions(vm, 'layoutBodySlotContainer')
       }
     }
   } else {
-    headerLayoutOptions.header = slotsToHeaderOptions(vm, vm.$slots.default)
+    headerLayoutOptions.header = slotElementsToHeaderOptions(vm, 'defaultSlotContainer')
   }
   return extend(
     {
@@ -225,6 +245,10 @@ let seq = 0
  */
 export default {
   name: 'CGrid',
+  get mixins () {
+    hackVue3(this)
+    return undefined
+  },
   provide () {
     return {
       $_CGridInstance: this
@@ -350,6 +374,15 @@ export default {
       default: undefined
     }
   },
+  emits: {
+    'click-cell': null,
+    'dblclick-cell': null,
+    'selected-cell': null,
+    'paste-cell': null,
+    'changed-value': null,
+    'changed-header-value': null,
+    ...vue3Emits
+  },
   data () {
     return {
       /**
@@ -418,16 +451,14 @@ export default {
     }
     _initGrid(this)
   },
+  // for Vue 3
+  unmounted () {
+    destroyed(this)
+  },
+  // for Vue 2
+  // eslint-disable-next-line vue/no-deprecated-destroyed-lifecycle
   destroyed () {
-    this.$_CGrid_cancelNextTickUpdate()
-    if (this.rawGrid) {
-      this.rawGrid.dispose()
-      this.rawGrid = null
-    }
-    if (this._dataSources) {
-      this._dataSources.forEach(dc => dc.dispose())
-    }
-    this.$_CGrid_defineColumns = []
+    destroyed(this)
   },
   updated () {
     this.$_CGrid_nextTickUpdate()
@@ -642,6 +673,17 @@ export default {
       }
     }
   }
+}
+function destroyed (vm) {
+  vm.$_CGrid_cancelNextTickUpdate()
+  if (vm.rawGrid) {
+    vm.rawGrid.dispose()
+    vm.rawGrid = null
+  }
+  if (vm._dataSources) {
+    vm._dataSources.forEach(dc => dc.dispose())
+  }
+  vm.$_CGrid_defineColumns = []
 }
 </script>
 

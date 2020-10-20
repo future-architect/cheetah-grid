@@ -1,20 +1,28 @@
 <template>
-  <div class="c-grid-layout-row">
+  <div
+    ref="defaultSlotContainer"
+    class="c-grid-layout-row"
+  >
     <!-- Use this slot to set the row layout definition -->
     <slot />
   </div>
 </template>
 
 <script>
-import { slotsToHeaderOptions, slotsToHeaderProps } from './c-grid/header-utils'
+import { slotElementsToHeaderOptions, slotElementsToHeaderProps } from './c-grid/header-utils'
+import { getSlotChildren, hackVue3 } from './c-grid/utils'
 
 /**
  * Defines layout row.
  * Can be used in the `layout-header` slot and the `layout-body` slot of `CGrid`.
  */
 export default {
-  inject: ['$_CGridInstance'],
   name: 'CGridLayoutRow',
+  get mixins () {
+    hackVue3(this)
+    return undefined
+  },
+  inject: ['$_CGridInstance'],
   mounted () {
     this.$_CGridInstance.$_CGrid_setColumnDefine(this)
     this.$_CGrid_nextTickUpdate()
@@ -22,21 +30,27 @@ export default {
   updated () {
     this.$_CGrid_nextTickUpdate()
   },
+  // for Vue 3
+  beforeUnmount () {
+    beforeDestroy(this)
+  },
+  // for Vue 2
+  // eslint-disable-next-line vue/no-deprecated-destroyed-lifecycle
   beforeDestroy () {
-    this.$_CGridInstance.$_CGrid_removeColumnDefine(this)
+    beforeDestroy(this)
   },
   methods: {
     /**
      * @private
      */
     getPropsObjectInternal () {
-      return slotsToHeaderProps(this.$_CGridInstance, this.$slots.default)
+      return slotElementsToHeaderProps(this.$_CGridInstance, getSlotChildren(this))
     },
     /**
      * @private
      */
     createColumn () {
-      return slotsToHeaderOptions(this.$_CGridInstance, this.$slots.default)
+      return slotElementsToHeaderOptions(this.$_CGridInstance, getSlotChildren(this))
     },
     /**
      * @private
@@ -47,6 +61,10 @@ export default {
       }
     }
   }
+}
+
+function beforeDestroy (vm) {
+  vm.$_CGridInstance.$_CGrid_removeColumnDefine(vm)
 }
 </script>
 

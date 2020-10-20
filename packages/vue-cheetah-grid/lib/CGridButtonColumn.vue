@@ -35,6 +35,7 @@ export default {
       default: false
     }
   },
+  emits: { click: null },
   watch: {
     disabled (disabled) {
       if (this._action) {

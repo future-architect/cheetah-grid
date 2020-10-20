@@ -75,6 +75,9 @@ export class EventTarget {
     });
   }
   hasListeners(type: string): boolean {
+    if (!this[_]) {
+      return false;
+    }
     return !!this[_].listeners[type];
   }
   /**
@@ -85,6 +88,9 @@ export class EventTarget {
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   fireListeners(type: string, ...args: any[]): any {
+    if (!this[_]) {
+      return [];
+    }
     const list = this[_].listeners[type];
     if (!list) {
       return [];

@@ -162,14 +162,23 @@ export abstract class BaseColumn<T, V> implements ColumnTypeAPI {
     const record = getRecord();
     let promise;
     if (isPromise(record)) {
-      promise = record.then(() => cellValue);
+      promise = record;
     } else if (isPromise(cellValue)) {
       promise = cellValue;
+    } else {
+      const msg = info.getMessage();
+      if (isPromise(msg)) {
+        promise = msg;
+      }
     }
     //文字描画
     if (promise) {
       const start = Date.now();
-      return promise.then((val) => {
+      return Promise.all([
+        record,
+        cellValue,
+        promise.then(() => info.getMessage()),
+      ]).then(([record, val, message]) => {
         const currentContext = context.toCurrentContext();
         const drawRect = currentContext.getDrawRect();
         if (!drawRect) {
@@ -183,10 +192,6 @@ export abstract class BaseColumn<T, V> implements ColumnTypeAPI {
           if (!drawRect) {
             return;
           }
-          const record = getRecord();
-          if (isPromise(record)) {
-            return;
-          }
 
           const actStyle = styleContents.of(style, record, this.StyleClass);
           this.drawInternal(
@@ -198,7 +203,7 @@ export abstract class BaseColumn<T, V> implements ColumnTypeAPI {
             info
           );
           this.drawMessageInternal(
-            info.getMessage(),
+            message,
             currentContext,
             actStyle,
             helper,

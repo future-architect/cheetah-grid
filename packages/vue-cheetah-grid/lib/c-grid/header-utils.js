@@ -1,47 +1,48 @@
+import { getSlotChildren } from './utils'
 
-export function slotsToHeaderOptions (cgridVm, slots) {
-  return getHeaderInstances(cgridVm, slots)
+export function slotElementsToHeaderOptions (cgridVm, childrenOrName) {
+  return getHeaderInstances(cgridVm, childrenOrName)
     .map(instance => instance.createColumn())
     .filter(c => c)
 }
 
-export function slotsToHeaderProps (cgridVm, slots) {
-  return getHeaderInstances(cgridVm, slots)
+export function slotElementsToHeaderProps (cgridVm, childrenOrName) {
+  return getHeaderInstances(cgridVm, childrenOrName)
     .map(instance => instance.getPropsObjectInternal())
     .filter(p => p)
 }
 
-function getHeaderInstances (cgridVm, slots) {
-  return slots ? getColumnDefinesFromVNodes(cgridVm, slots) : []
+function getHeaderInstances (cgridVm, childrenOrName) {
+  const elements = typeof childrenOrName === 'string' ? getSlotChildren(cgridVm, childrenOrName) : childrenOrName
+
+  return elements ? getColumnDefinesFromElements(cgridVm, elements) : []
 }
 
-function getColumnDefinesFromVNodes (cgridVm, vnodes) {
-  return getColumnDefinesFromInstances(cgridVm, vnodes.map(vnode => {
-    if (!vnode.tag) {
-      return null
-    }
-    if (!vnode.componentInstance) {
-      return null
-    }
-    return vnode.componentInstance
-  }))
-}
-
-function getColumnDefinesFromInstances (cgridVm, instances) {
+/**
+ * @param {VueInstance} cgridVm
+ * @param {HTMLCollection} elements
+ */
+function getColumnDefinesFromElements (cgridVm, elements, colsMap) {
   const results = []
-  instances.forEach(componentInstance => {
-    if (!componentInstance) {
-      return
+  if (!colsMap) {
+    colsMap = new Map()
+    cgridVm.$_CGrid_defineColumns.forEach(col => {
+      colsMap.set(col.$el, col)
+    })
+  }
+  for (let index = 0; index < elements.length; index++) {
+    const el = elements[index]
+    if (!el) {
+      continue
     }
-    if (typeof componentInstance.createColumn === 'function') {
-      const defineColumns = cgridVm.$_CGrid_defineColumns
-      if (defineColumns.indexOf(componentInstance) >= 0) {
-        results.push(componentInstance)
-        return
-      }
+    const col = colsMap.get(el)
+    if (col && typeof col.createColumn === 'function') {
+      results.push(col)
+    } else {
+      const { children } = el
+      results.push(...getColumnDefinesFromElements(cgridVm, children, colsMap))
     }
-    results.push(...getColumnDefinesFromInstances(cgridVm, componentInstance.$children))
-  })
+  }
 
   return results
 }

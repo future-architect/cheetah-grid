@@ -41,6 +41,7 @@ import type {
   DrawGridProtected,
 } from "./core/DrawGrid";
 import type { LayoutDefine, LayoutMapAPI } from "./list-grid/layout-map";
+import { MessageHandler, hasMessage } from "./columns/message/MessageHandler";
 import {
   cellEquals,
   event,
@@ -58,7 +59,6 @@ import { DrawGrid } from "./core/DrawGrid";
 import { GridCanvasHelper } from "./GridCanvasHelper";
 import { BaseStyle as HeaderBaseStyle } from "./header/style";
 import { LG_EVENT_TYPE } from "./list-grid/LG_EVENT_TYPE";
-import { MessageHandler } from "./columns/message/MessageHandler";
 import { Rect } from "./internal/Rect";
 import type { Theme } from "./themes/theme";
 import { TooltipHandler } from "./tooltip/TooltipHandler";
@@ -153,7 +153,30 @@ function _getCellMessage<T>(
     if (!message) {
       return null;
     }
-    return _getField(grid, message as FieldDef<T>, row);
+    if (!Array.isArray(message)) {
+      return _getField(grid, message as FieldDef<T>, row);
+    }
+    const promises: Promise<Message>[] = [];
+    for (let index = 0; index < message.length; index++) {
+      const msg = _getField(grid, message[index] as FieldDef<T>, row);
+      if (isPromise(msg)) {
+        promises.push(msg);
+      } else if (hasMessage(msg)) {
+        return msg;
+      }
+    }
+    if (!promises.length) {
+      return null;
+    }
+    return new Promise((resolve, reject) => {
+      promises.forEach((p) => {
+        p.then((msg) => {
+          if (hasMessage(msg)) {
+            resolve(msg);
+          }
+        }, reject);
+      });
+    });
   }
 }
 /** @private */

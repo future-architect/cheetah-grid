@@ -1,5 +1,8 @@
 <template>
-  <div class="c-grid-column-group">
+  <div
+    ref="defaultSlotContainer"
+    class="c-grid-column-group"
+  >
     <!-- Use this slot to set the children columns definition -->
     <slot />
   </div>
@@ -7,8 +10,8 @@
 
 <script>
 import ColumnMixin from './c-grid/ColumnMixin.vue'
-import { slotsToHeaderOptions, slotsToHeaderProps } from './c-grid/header-utils'
-import { extend } from './c-grid/utils'
+import { slotElementsToHeaderOptions, slotElementsToHeaderProps } from './c-grid/header-utils'
+import { extend, getSlotChildren } from './c-grid/utils'
 
 /**
  * Defines multiple header.
@@ -27,7 +30,7 @@ export default {
      */
     getPropsObjectInternal () {
       const props = ColumnMixin.methods.getPropsObjectInternal.apply(this)
-      props.columns = slotsToHeaderProps(this.$_CGridInstance, this.$slots.default)
+      props.columns = slotElementsToHeaderProps(this.$_CGridInstance, getSlotChildren(this))
       return props
     },
     /**
@@ -38,7 +41,7 @@ export default {
       return extend(
         baseCol,
         {
-          columns: slotsToHeaderOptions(this.$_CGridInstance, this.$slots.default)
+          columns: slotElementsToHeaderOptions(this.$_CGridInstance, getSlotChildren(this))
         }
       )
     }

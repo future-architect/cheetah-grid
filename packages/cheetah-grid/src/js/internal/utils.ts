@@ -296,7 +296,9 @@ function genWords(s: string): GenWordsResult {
   };
 }
 
-function isPromise<T>(data: T | Promise<T> | undefined): data is Promise<T> {
+export function isPromise<T>(
+  data: T | Promise<T> | undefined
+): data is Promise<T> {
   return Boolean(data && typeof (data as Promise<T>).then === "function");
 }
 function then<T, R>(
@@ -408,7 +410,6 @@ export {
   applyChainSafe,
   getOrApply,
   getIgnoreCase,
-  isPromise,
   then,
   array,
 };
