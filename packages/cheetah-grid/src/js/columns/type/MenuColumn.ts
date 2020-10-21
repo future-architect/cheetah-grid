@@ -10,7 +10,6 @@ import type {
 import { BaseColumn } from "./BaseColumn";
 import type { DrawCellInfo } from "../../ts-types-internal";
 import { MenuStyle } from "../style/MenuStyle";
-import { isDef } from "../../internal/utils";
 import { normalize } from "../../internal/menu-items";
 
 export class MenuColumn<T> extends BaseColumn<T, unknown> {
@@ -64,7 +63,7 @@ export class MenuColumn<T> extends BaseColumn<T, unknown> {
       textPadding[1] += 26; // icon padding
       const iconPadding = basePadding.slice(0);
       iconPadding[1] += 8;
-      if (!isDef(color) && (!isDef(value) || value === "")) {
+      if (color == null && (value == null || value === "")) {
         color = "rgba(0, 0, 0, .38)";
       }
       helper.text(text, context, {

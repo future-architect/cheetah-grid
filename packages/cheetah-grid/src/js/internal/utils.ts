@@ -78,9 +78,6 @@ const array = {
   },
 };
 
-function isDef<T>(data: T | null | undefined | void): data is T {
-  return data !== null && typeof data !== "undefined";
-}
 function analyzeUserAgent(): {
   IE: boolean;
   Edge: boolean;
@@ -228,7 +225,7 @@ function applyChainSafe(
   ...names: string[]
 ): any {
   let value = obj;
-  for (let i = 0; i < names.length && isDef(value); i++) {
+  for (let i = 0; i < names.length && value != null; i++) {
     value = fn(value, names[i]);
   }
   return value;
@@ -316,11 +313,11 @@ function then<T, R>(
   return isPromise(result) ? result.then((r) => callback(r)) : callback(result);
 }
 function getMouseButtons(e: MouseEvent): number {
-  if (isDef(e.buttons)) {
+  if (e.buttons != null) {
     return e.buttons;
   }
   /*for legacy*/
-  if (isDef(e.which)) {
+  if (e.which != null) {
     if (e.which === 3) {
       //right?
       return 4;
@@ -404,7 +401,6 @@ function toBoxArray<T>(obj: T | T[]): [T, T, T, T] {
 
 export {
   isNode,
-  isDef,
   isDescendantElement,
   getChainSafe,
   applyChainSafe,

@@ -16,7 +16,7 @@ import type {
   DrawCellInfo,
   GridInternal,
 } from "../../ts-types-internal";
-import { isDef, isPromise, obj } from "../../internal/utils";
+import { isPromise, obj } from "../../internal/utils";
 import { BaseStyle } from "../style/BaseStyle";
 import { animate } from "../../internal/animate";
 import { getColumnFadeinStateId } from "../../internal/symbolManager";
@@ -28,7 +28,7 @@ function isFadeinWhenCallbackInPromise<T>(
   column: BaseColumn<T, unknown>,
   grid: ListGridAPI<T>
 ): boolean {
-  if (isDef(column.fadeinWhenCallbackInPromise)) {
+  if (column.fadeinWhenCallbackInPromise != null) {
     return column.fadeinWhenCallbackInPromise;
   }
   return !!grid.configure("fadeinWhenCallbackInPromise");
@@ -275,7 +275,7 @@ export abstract class BaseColumn<T, V> implements ColumnTypeAPI {
   }
   abstract clone(): BaseColumn<T, V>;
   convertInternal(value: unknown): V {
-    return (isDef(value) ? value : "") as V;
+    return (value != null ? value : "") as V;
   }
   abstract drawInternal(
     value: V,

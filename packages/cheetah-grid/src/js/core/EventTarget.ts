@@ -1,5 +1,5 @@
 import type { AnyListener, EventListenerId } from "../ts-types";
-import { each, isDef } from "../internal/utils";
+import { each } from "../internal/utils";
 import { get as getSymbol } from "../internal/symbolManager";
 
 //private symbol
@@ -95,7 +95,9 @@ export class EventTarget {
     if (!list) {
       return [];
     }
-    return list.map((listener) => listener.call(this, ...args)).filter(isDef);
+    return list
+      .map((listener) => listener.call(this, ...args))
+      .filter((r) => r != null);
   }
   dispose(): void {
     delete this[_];

@@ -1,5 +1,3 @@
-import { isDef } from "./utils";
-
 export function createElement<K extends keyof HTMLElementTagNameMap>(
   tagName: K,
   {
@@ -78,7 +76,7 @@ export function enableFocus(el: HTMLElement): void {
 
 export function isFocusable(el: Node): el is HTMLElement {
   return (
-    isDef((el as HTMLElement).tabIndex) && (el as HTMLElement).tabIndex > -1
+    (el as HTMLElement).tabIndex != null && (el as HTMLElement).tabIndex > -1
   );
 }
 export function findPrevSiblingFocusable(el: HTMLElement): HTMLElement | null {

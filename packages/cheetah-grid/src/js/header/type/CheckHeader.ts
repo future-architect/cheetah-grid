@@ -8,10 +8,10 @@ import type {
   DrawCellInfo,
   GridInternal,
 } from "../../ts-types-internal";
-import { isDef, obj } from "../../internal/utils";
 import { BaseHeader } from "./BaseHeader";
 import { CheckHeaderStyle } from "../style/CheckHeaderStyle";
 import { getCheckHeaderStateId } from "../../internal/symbolManager";
+import { obj } from "../../internal/utils";
 
 const CHECK_HEADER_STATE_ID = getCheckHeaderStateId();
 
@@ -80,7 +80,7 @@ export class CheckHeader<T> extends BaseHeader<T> {
       checkBgColor,
       uncheckBgColor,
     };
-    if (isDef(elapsed)) {
+    if (elapsed != null) {
       opt.animElapsedTime = elapsed;
     }
     const inlineCheck = helper.buildCheckBoxInline(!!checked, context, opt);

@@ -9,7 +9,6 @@ import type {
 } from "../../ts-types";
 import { BaseStyle } from "../style/BaseStyle";
 import type { DrawCellInfo } from "../../ts-types-internal";
-import { isDef } from "../../internal/utils";
 
 export abstract class BaseHeader<T> {
   constructor(_options = {}) {
@@ -42,7 +41,7 @@ export abstract class BaseHeader<T> {
       value = value();
     }
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return isDef(value) ? `${value}` : "";
+    return value != null ? `${value}` : "";
   }
   abstract drawInternal(
     value: string,

@@ -10,7 +10,7 @@ import type {
   MaybePromiseOrUndef,
 } from "../../ts-types";
 import type { DrawCellInfo, GridInternal } from "../../ts-types-internal";
-import { getOrApply, isDef, isPromise, obj } from "../../internal/utils";
+import { getOrApply, isPromise, obj } from "../../internal/utils";
 import { BaseColumn } from "./BaseColumn";
 import { BranchGraphStyle } from "../style/BranchGraphStyle";
 import { getBranchGraphColumnStateId } from "../../internal/symbolManager";
@@ -101,10 +101,12 @@ class BranchPoint {
     this.tag = tag;
   }
   static mergeLines(lines: BranchLine[]): BranchLine[] {
-    const result = lines.filter((l) => isDef(l.fromIndex) && isDef(l.toIndex));
+    const result = lines.filter(
+      (l) => l.fromIndex != null && l.toIndex != null
+    );
 
-    const froms = lines.filter((l) => isDef(l.fromIndex) && !isDef(l.toIndex));
-    const tos = lines.filter((l) => !isDef(l.fromIndex) && isDef(l.toIndex));
+    const froms = lines.filter((l) => l.fromIndex != null && l.toIndex == null);
+    const tos = lines.filter((l) => l.fromIndex == null && l.toIndex != null);
 
     froms.forEach((f) => {
       for (let i = 0; i < tos.length; i++) {
@@ -458,7 +460,7 @@ function renderMerge<T>(
     branches: string[];
   }
 ): void {
-  if (isDef(upLineIndex) || isDef(downLineIndex)) {
+  if (upLineIndex != null || downLineIndex != null) {
     ctx.strokeStyle = getOrApply(
       branchColors,
       branches[colorIndex],
@@ -468,7 +470,7 @@ function renderMerge<T>(
     ctx.lineCap = "round";
     ctx.beginPath();
 
-    if (isDef(upLineIndex)) {
+    if (upLineIndex != null) {
       const upX = branchXPoints[upLineIndex];
       const upRect = grid.getCellRelativeRect(col, row - 1);
       const upY = upRect.top + upRect.height / 2;
@@ -482,7 +484,7 @@ function renderMerge<T>(
       ctx.moveTo(x, y);
     }
 
-    if (isDef(downLineIndex)) {
+    if (downLineIndex != null) {
       const downX = branchXPoints[downLineIndex];
       const downRect = grid.getCellRelativeRect(col, row + 1);
       const downY = downRect.top + downRect.height / 2;
@@ -568,7 +570,7 @@ export class BranchGraphColumn<T> extends BaseColumn<T, unknown> {
   constructor(option: BranchGraphColumnOption = {}) {
     super(option);
     this._start = option.start || "bottom";
-    this._cache = isDef(option.cache) ? option.cache : false;
+    this._cache = option.cache != null ? option.cache : false;
   }
   get StyleClass(): typeof BranchGraphStyle {
     return BranchGraphStyle;
