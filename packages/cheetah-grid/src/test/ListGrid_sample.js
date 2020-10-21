@@ -175,6 +175,7 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 		],
 		frozenColCount: 2,
 	});
+	grid.configure('fadeinWhenCallbackInPromise', true);
 	grid.records = records;
 	const endTime = new Date();
 	document.body.insertBefore(document.createTextNode(endTime - startTime + 'ms'), document.body.childNodes[0]);
