@@ -56,8 +56,8 @@
   "dependencies": {},
   "devDependencies": {
     "cross-env": "^5.2.0",
-    "eslint": "^6.8.0",
-    "eslint-plugin-html": "^6.0.0",
+    "eslint": "^7.11.0",
+    "eslint-plugin-html": "^6.1.0",
     "mrpm": "^2.0.2"
   }
 }
