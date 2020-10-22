@@ -3,7 +3,7 @@
 module.exports = {
 	'root': true,
 	'parserOptions': {
-		'ecmaVersion': 6,
+		'ecmaVersion': 2020,
 		'sourceType': 'script',
 	},
 	'env': {

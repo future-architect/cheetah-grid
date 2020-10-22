@@ -20,35 +20,56 @@ function handleDone(err) {
 
 checkPackageJsons(opts, handleDone);
 
-
-function checkPackageJsons(opts, cb) {
+async function checkPackageJsons(opts, cb) {
 	try {
-		packages(opts, cb).
-			then((pkgs) => Promise.all(
-					pkgs.list.map((pkg) => checkPackageJson(pkg, pkgs))
-			)).
-			then(() => {
-				cb(null);
-			}).
-			catch(cb);
+		const pkgs = await packages(opts);
+		await	Promise.all(
+				pkgs.list.map((pkg) => checkPackageJson(pkg, pkgs))
+		);
+		cb(null);
 	} catch (err) {
 		cb(err);
 	}
 }
 
 
-function checkPackageJson(pkg, pkgs) {
-	const errors = [];
+async function checkPackageJson(pkg, pkgs) {
 	// check root version
 	if (minorVersion(pkg.version) !== minorVersion(version)) {
 		const message = `Invalid version. ${pkg.name}@${pkg.version}  root:${version} @ "${pkg.rootDir}/package.json"`;
 		console.error(message);
 
-		errors.push(
-				callNpm(pkg, 'version', [version], opts).
-					then(() => Promise.reject(new Error(message)))
-		);
+		await callNpm(pkg, 'version', [version], opts);
+
+		throw new Error(message);
 	}
+
+	for (const {depsName, version: v, name} of genVersions(pkg, pkgs)) {
+		if (minorVersion(v) !== minorVersion(pkgs.pkgs[name].version)) {
+			// eslint-disable-next-line no-await-in-loop
+			const isPublished = await	checkPublished(pkg, name, pkgs.pkgs[name].version);
+
+			if (isPublished) {
+				if (depsName === 'dependencies' || depsName === 'devDependencies') {
+					// eslint-disable-next-line no-await-in-loop
+					await callNpm(pkg, 'i', [depsName === 'dependencies' ? '-S' : '-D', `${name}@latest`], opts);
+				}
+				const message = `${name} version numbers do not match. expect:${pkgs.pkgs[name].version} "${pkg.rootDir}/package.json".${depsName}.${name}:"${v}" `;
+				console.error(message);
+				throw new Error(message);
+			}
+		}
+	}
+}
+
+function checkPublished(pkg, name, actVer) {
+	return callNpm(pkg, 'info', [name, 'versions', '--json'], opts).then((vers) => {
+		vers = JSON.parse(vers);
+		return (vers.indexOf(actVer) >= 0);
+	});
+}
+
+function *genVersions(pkg, pkgs) {
 
 	// check dependencies
 	const dependenciesKeys = [
@@ -61,42 +82,19 @@ function checkPackageJson(pkg, pkgs) {
 	for (const depsName of dependenciesKeys) {
 		const dependencies = pkg[depsName];
 		for (const name in dependencies) {
-			if (!pkgs[name]) {
+			if (!pkgs.pkgs[name]) {
 				continue;
 			}
 			const depVer = dependencies[name].match(/(\d+\.\d+\.\d+)/g);
 			if (!depVer) {
 				continue;
 			}
-			const v = depVer[0];
-			if (minorVersion(v) !== minorVersion(pkgs[name].version)) {
-				const p = checkPublished(pkg, name, pkgs[name].version).
-					then((isPublished) => {
-						if (isPublished) {
-							let install;
-							if (depsName === 'dependencies' || depsName === 'devDependencies') {
-								install = callNpm(pkg, 'i', [depsName === 'dependencies' ? '-S' : '-D', `${name}@latest`], opts);
-							} else {
-								install = Promise.resolve();
-							}
-							return install.then(() => {
-								const message = `${name} version numbers do not match. expect:${pkgs[name].version} "${pkg.rootDir}/package.json".${depsName}.${name}:"${dependencies[name]}" `;
-								console.error(message);
-								return Promise.reject(new Error(message));
-							});
-						}
-						return undefined;
-					});
-				errors.push(p);
-			}
+			yield {
+				depsName,
+				name,
+				version: depVer[0]
+			};
 		}
 	}
-	return Promise.all(errors);
-}
 
-function checkPublished(pkg, name, actVer) {
-	return callNpm(pkg, 'info', [name, 'versions', '--json'], opts).then((vers) => {
-		vers = JSON.parse(vers);
-		return (vers.indexOf(actVer) >= 0);
-	});
 }
