@@ -10,6 +10,7 @@ The record is edited after select the cell by clicking it and then push Enter or
 
 You can control the property of `readOnly` and `disabled` by setting the instance of `CheckEditor` class to `action` of the column.  
 But if you define `'check'`, as string, to `action` of the column, you can't control these properties.  
+You can also disable or read-only each record by specifying a function for the `disabled` and `readOnly` properties.  
 
 <code-preview>
 
@@ -83,14 +84,14 @@ Basic behavior is switching `true` and `false`.
 
 Switchings shown below can be done as the special behavior.  
 
-| Type | Truthy Value | Falsy Value |
-|----|-----|---|
-| number | `1` | `0` |
-| string | `'true'` | `'false'` |
-| string | `'on'` | `'off'` |
-| string | `'1'` | `'0'` |
-| string | `'01'` | `'00'` |
-| string | `'00001'` | `'00000'` |
+| Type   | Truthy Value | Falsy Value |
+| ------ | ------------ | ----------- |
+| number | `1`          | `0`         |
+| string | `'true'`     | `'false'`   |
+| string | `'on'`       | `'off'`     |
+| string | `'1'`        | `'0'`       |
+| string | `'01'`       | `'00'`      |
+| string | `'00001'`    | `'00000'`   |
 
 The value regarded as truthy value in JavaScript is switched to `false`.  
 The value regarded as falsy value is switched to `true`.  

@@ -6,8 +6,9 @@ order: 400
 
 Enables data editing by input.
 
-You can dynamically control the `readOnly` and `disabled` property by defining an instance of the `SmallDialogInputEditor` class to the `action` column.
-If defined with the string `'input'`, you can not control `readOnly` and `disabled` property.
+You can dynamically control the `readOnly` and `disabled` property by defining an instance of the `SmallDialogInputEditor` class to the `action` column.  
+But if you define `'input'`, as string, to `action` of the column, you can't control these properties.  
+You can also disable or read-only each record by specifying a function for the `disabled` and `readOnly` properties.  
 
 <code-preview>
 

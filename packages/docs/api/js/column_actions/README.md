@@ -9,11 +9,13 @@ order: 140
 Define column action by using `action` property.  
 Please select suitable Action class for `columnType` of same column.  
 
-| `columnType` | specified `action` by string | Description                                   | LINK                                                  |
-| ------------ | ---------------------------- | --------------------------------------------- | ----------------------------------------------------- |  |
-| `check`      | `'check'`                    | Define the behavior when checkbox is clicked. | [CheckEditor](./CheckEditor.md)                       |
-| `button`     | ---                          | Define the behavior when button is clicked.   | [ButtonAction](./ButtonAction.md)                     |
-| `input`      | `'input'`                    | Define the behavior when cell input.          | [SmallDialogInputEditor](./SmallDialogInputEditor.md) |
+| `columnType` | Specified `action` by string | Description                                       | LINK                     |
+| ------------ | ---------------------------- | ------------------------------------------------- | ------------------------ |
+| `check`      | `'check'`                    | Define the behavior when checkbox is clicked.     | [CheckEditor]            |
+| `button`     | ---                          | Define the behavior when button is clicked.       | [ButtonAction]           |
+| `input`      | `'input'`                    | Define the behavior when cell input.              | [SmallDialogInputEditor] |
+| [MenuColumn] | ---                          | Define the behavior when select a menu.           | [InlineMenuEditor]       |
+| `radio`      | `'radio'`                    | Define the behavior when radio button is clicked. | [RadioEditor]            |
 
 <code-preview>
 
@@ -63,3 +65,9 @@ You can change the properties of the action (disable, readonly, etc.) in the whe
 
 Please refer to [here](./Classes.md)
 
+[MenuColumn]: ../column_types/MenuColumn.md
+[CheckEditor]: ./CheckEditor.md
+[ButtonAction]: ./ButtonAction.md
+[SmallDialogInputEditor]: ./SmallDialogInputEditor.md
+[InlineMenuEditor]: ./InlineMenuEditor.md
+[RadioEditor]: ./RadioEditor.md

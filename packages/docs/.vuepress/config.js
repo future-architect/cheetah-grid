@@ -7,27 +7,34 @@ const semver = require('semver')
 const rm = require('rimraf')
 const { compare, inferTitle } = require('./frontmatter')
 const gridVersion = `${semver.major(pkg.version)}.${semver.minor(pkg.version)}`
-const failbackVersion = `${semver.major(pkg.version)}.${semver.minor(pkg.version) - 1}`
+const fallbackVersion = `${semver.major(pkg.version)}.${semver.minor(pkg.version) - 1}`
 
 const DOC_ROOT = path.resolve(__dirname, '../')
 
 const production = process.env.NODE_ENV === 'production'
+
+function devPath(basePath) {
+  const rootPath = resolve(basePath)
+  const pkg = require( path.join(rootPath, 'package.json'))
+  const p = path.join(rootPath, pkg.unpkg || pkg.main)
+  return require.resolve(p)
+}
 
 const scriptPaths = []
 const devdir = resolve('./public/dev')
 if (production) {
   rm.sync(path.join(devdir, '*'))
   scriptPaths.push(
-    `https://unpkg.com/cheetah-grid@${gridVersion}||${failbackVersion}`,
-    `https://unpkg.com/vue-cheetah-grid@${gridVersion}||${failbackVersion}`
+    `https://unpkg.com/cheetah-grid@${gridVersion}||${fallbackVersion}`,
+    `https://unpkg.com/vue-cheetah-grid@${gridVersion}||${fallbackVersion}`
   )
 } else {
   if (!fs.existsSync(devdir)) {
     fs.mkdirSync(devdir)
   }
   for (const p of [
-    require.resolve(resolve('../../cheetah-grid/')),
-    require.resolve(resolve('../../vue-cheetah-grid/'))
+    devPath('../../cheetah-grid/'),
+    devPath('../../vue-cheetah-grid/')
   ]) {
     const jsname = path.basename(p)
     const dest = path.join(devdir, jsname)

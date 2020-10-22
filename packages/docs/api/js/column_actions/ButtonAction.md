@@ -9,6 +9,7 @@ Define the behavior when the button is clicked.
 The specified method is executed after select the cell by clicking it and then push Enter.  
 
 You can control the property of `disabled` and `action` by manipulating the instance of `ButtonAction` class.  
+You can also disable each record by specifying a function for the `disabled` property.  
 
 <code-preview>
 

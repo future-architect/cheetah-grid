@@ -7,7 +7,7 @@ footer: © 2017 - 2019 Future Corporation. Author Yosuke Ota. Code licensed unde
 
 ---
 
-# Docoments
+# Documents
 
 ## DOCUMENTS & DEMOs
 

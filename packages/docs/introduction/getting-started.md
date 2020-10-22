@@ -6,14 +6,6 @@ order: 10
 
 ## Installation
 
-### Via CDN
-
-[![npm](https://img.shields.io/npm/v/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
-
-```html
-<script src="https://unpkg.com/cheetah-grid@0.22"></script>
-```
-
 ### Via npm
 
 [![npm](https://img.shields.io/npm/v/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
@@ -26,15 +18,23 @@ npm install -S cheetah-grid
 const cheetahGrid = require("cheetah-grid")
 ```
 
+### Via CDN
+
+[![npm](https://img.shields.io/npm/v/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
+
+```html
+<script src="https://unpkg.com/cheetah-grid@0.23"></script>
+```
+
 ### Via Source Code
 
 [![npm](https://img.shields.io/npm/v/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
 
-[cheetahGrid.es5.min.js](https://unpkg.com/cheetah-grid@0.22/dist/cheetahGrid.es5.min.js)  
+[cheetahGrid.es5.min.js](https://unpkg.com/cheetah-grid@0.23/dist/cheetahGrid.es5.min.js)  
 
 #### SourceMap  
 
-[cheetahGrid.es5.min.js.map](https://unpkg.com/cheetah-grid@0.22/dist/cheetahGrid.es5.min.js.map)  
+[cheetahGrid.es5.min.js.map](https://unpkg.com/cheetah-grid@0.23/dist/cheetahGrid.es5.min.js.map)  
 
 ### Via GitHub
 

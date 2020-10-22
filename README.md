@@ -23,7 +23,7 @@ The fastest open-source data table for web.
 [![npm](https://img.shields.io/npm/v/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
 
 ```html
-<script src="https://unpkg.com/cheetah-grid@0.22"></script>
+<script src="https://unpkg.com/cheetah-grid@0.23"></script>
 ```
 
 ### Downloading Cheetah Grid using npm
@@ -46,11 +46,10 @@ const cheetahGrid = require("cheetah-grid")
 
 [![npm](https://img.shields.io/npm/v/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
 
-[cheetahGrid.es5.min.js](https://unpkg.com/cheetah-grid@0.22/dist/cheetahGrid.es5.min.js)  
+[cheetahGrid.es5.min.js](https://unpkg.com/cheetah-grid@0.23/dist/cheetahGrid.es5.min.js)  
 
 SourceMap  
-[cheetahGrid.es5.min.js.map](https://unpkg.com/cheetah-grid@0.22/dist/cheetahGrid.es5.min.js.map)  
-
+[cheetahGrid.es5.min.js.map](https://unpkg.com/cheetah-grid@0.23/dist/cheetahGrid.es5.min.js.map)  
 
 ### Downloading Cheetah Grid using GitHub
 
@@ -112,14 +111,14 @@ We can set this property by constructor arguments or instance property.
 The `header` property must be set by objects array (`Array<object>`).
 In the standard definition, each object consists of following properties.
 
-| property | description |
-|---|---|
-| caption               | define the header caption |
+| property              | description                                                            |
+| --------------------- | ---------------------------------------------------------------------- |
+| caption               | define the header caption                                              |
 | field                 | define the field name or function of the record to display in the cell |
-| width (optional)      | define the width of column |
-| columnType (optional) | define the type of column |
-| style (optional)      | define the style of column |
-| action (optional)     | define the action of column |
+| width (optional)      | define the width of column                                             |
+| columnType (optional) | define the type of column                                              |
+| style (optional)      | define the style of column                                             |
+| action (optional)     | define the action of column                                            |
 
 To use multiple header, set the hierarchical structured Object to the `header` property.  
 
@@ -147,14 +146,14 @@ Set the column type by using `columnType`.
 
 For example, you can set the following strings:
 
-|property|description|
-|---|---|
-|none|draw text in the cell|
-|`'number'`|draw number in the cell with comma-separated|
-|`'check'`|draw checkbox in the cell|
-|`'button'`|draw button in the cell|
-|`'image'`|draw image in the cell|
-|`'multilinetext'`|draw multiline text in the cell|
+| property          | description                                  |
+| ----------------- | -------------------------------------------- |
+| none              | draw text in the cell                        |
+| `'number'`        | draw number in the cell with comma-separated |
+| `'check'`         | draw checkbox in the cell                    |
+| `'button'`        | draw button in the cell                      |
+| `'image'`         | draw image in the cell                       |
+| `'multilinetext'` | draw multiline text in the cell              |
 
 If you define a class instance you can define an advanced column types.
 
@@ -164,10 +163,10 @@ Please refer to the [column types documents](https://future-architect.github.io/
 
 Define column action by using `action` property.  
 
-| `action` | descrition |
-|---|---|
-|`'check'` | make the check box clickable. |
-|`'input'` | make the cell enterable. |
+| `action`  | description                   |
+| --------- | ----------------------------- |
+| `'check'` | make the check box clickable. |
+| `'input'` | make the cell enterable.      |
 
 If you define a class instance you can define an advanced column actions.
 
@@ -179,15 +178,15 @@ Define column style by using `style` property.
 
 Properties below are prepared in standard.  
 
-|property|description|
-|---|---|
-|color|define the color of cell.|
-|textAlign|define the horizontal position of text in cell.|
-|textBaseline|define the vertical position of text in cell.|
-|bgColor|define the background color of cell.|
-|font|define the font of cell.|
-|padding|define the padding of cell. if you set 4 values separately, please set the `Array`.|
-|textOverflow|define how to display when text overflows the area of a cell. `clip` or `ellipsis` is available.|
+| property     | description                                                                                      |
+| ------------ | ------------------------------------------------------------------------------------------------ |
+| color        | define the color of cell.                                                                        |
+| textAlign    | define the horizontal position of text in cell.                                                  |
+| textBaseline | define the vertical position of text in cell.                                                    |
+| bgColor      | define the background color of cell.                                                             |
+| font         | define the font of cell.                                                                         |
+| padding      | define the padding of cell. if you set 4 values separately, please set the `Array`.              |
+| textOverflow | define how to display when text overflows the area of a cell. `clip` or `ellipsis` is available. |
 
 In addition, there is an extended style property for each column type.
 
