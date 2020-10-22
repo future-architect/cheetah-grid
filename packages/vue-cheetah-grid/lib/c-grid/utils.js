@@ -156,7 +156,9 @@ export const vue3Emits = Object.keys(EVENT_TYPE)
 
 export function hackVue3 (options) {
   // eslint-disable-next-line no-undef
-  if (typeof __VUE_OPTIONS_API__ !== 'undefined' && __VUE_OPTIONS_API__) {
+  if ((typeof __VUE_OPTIONS_API__ !== 'undefined' && __VUE_OPTIONS_API__) ||
+    // eslint-disable-next-line no-undef
+    (typeof Vue !== 'undefined' && `${Vue.version}`.startsWith('3'))) {
     delete options.beforeDestroy
     delete options.destroyed
   }

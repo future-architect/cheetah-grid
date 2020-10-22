@@ -46,8 +46,9 @@ module.exports = (env, argv) => {
       devtoolFallbackModuleFilenameTemplate: devtoolModuleFilenameTemplate
     },
     externals: production ? {
-      'cheetah-grid': 'cheetahGrid'
-    } : {},
+      'cheetah-grid': 'cheetahGrid',
+      vue: 'Vue'
+    } : { vue: 'Vue' },
     resolveLoader: {
       modules: [path.resolve(__dirname, 'node_modules')]
     },
