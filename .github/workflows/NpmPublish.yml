@@ -1,0 +1,26 @@
+name: publish
+on:
+  push:
+    tags:
+      - "*"
+jobs:
+  release:
+    name: check version, and release
+    runs-on: macos-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2
+    - name: setup Node
+      uses: actions/setup-node@v1
+      with:
+        registry-url: 'https://registry.npmjs.org'
+    - name: Install Packages
+      run: npm install
+    - name: Build
+      run: npm run build:ci
+    - name: test
+      run: npm run test
+    - name: release
+      run: npm run publish:all
+      env:
+        NODE_TOKEN: ${{ secrets.NPM_TOKEN }}
