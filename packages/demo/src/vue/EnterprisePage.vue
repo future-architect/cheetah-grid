@@ -48,14 +48,16 @@
           }"
           :action="{
             actionName: 'InlineMenuEditor',
-            option: { options: [
-              { value: '', caption: 'Empty' },
-              { value: 1, classList: 'stars', html: `<i class='material-icons'>star</i>` },
-              { value: 2, classList: 'stars', html: `<i class='material-icons'>star</i>`.repeat(2) },
-              { value: 3, classList: 'stars', html: `<i class='material-icons'>star</i>`.repeat(3) },
-              { value: 4, classList: 'stars', html: `<i class='material-icons'>star</i>`.repeat(4) },
-              { value: 5, classList: 'stars', html: `<i class='material-icons'>star</i>`.repeat(5) }
-            ] }
+            option: {
+              options: [
+                { value: '', caption: 'Empty' },
+                { value: 1, classList: 'stars', html: `<i class='material-icons'>star</i>` },
+                { value: 2, classList: 'stars', html: `<i class='material-icons'>star</i>`.repeat(2) },
+                { value: 3, classList: 'stars', html: `<i class='material-icons'>star</i>`.repeat(3) },
+                { value: 4, classList: 'stars', html: `<i class='material-icons'>star</i>`.repeat(4) },
+                { value: 5, classList: 'stars', html: `<i class='material-icons'>star</i>`.repeat(5) }
+              ]
+            }
           }"
           :message="starsValidateMessage"
           icon-name="star"
@@ -134,15 +136,7 @@
           Email
         </c-grid-input-column>
         <c-grid-input-column
-          :field="{
-            get (rec) {
-              return rec.birthday
-            },
-            set (rec, val) {
-              const date = new Date(val)
-              rec.birthday = isNaN(date) ? val : date
-            }
-          }"
+          :field="birthdayField"
           :validator="birthdayValidator"
           :message="birthdayValidateMessage"
           :column-style="{
@@ -150,7 +144,7 @@
           }"
           helper-text="birthday"
           width="100"
-          filter="dateFormat('yyyy/m/d')"
+          :filter="v => dateFormat(v, 'yyyy/m/d')"
         >
           Birthday
         </c-grid-input-column>
@@ -248,6 +242,19 @@ export default {
       dataFilter: undefined
     }
   },
+  computed: {
+    birthdayField () {
+      return {
+        get (rec) {
+          return rec.birthday
+        },
+        set (rec, val) {
+          const date = new Date(val)
+          rec.birthday = isNaN(date) ? val : date
+        }
+      }
+    }
+  },
   watch: {
     filterText (filterText) {
       this.onChangeFilter(filterText, this.filterErrorOnly)
@@ -302,13 +309,13 @@ export default {
 </script>
 
 <style scoped>
-  .grid >>> .cheetah-grid__inline-menu__menu-item.stars {
+  .grid ::v-deep(.cheetah-grid__inline-menu__menu-item.stars) {
     text-align: center;
     color: gold;
     display: block;
     white-space: nowrap;
   }
-  .grid >>> .cheetah-grid__inline-menu__menu-item.stars .material-icons {
+  .grid ::v-deep(.cheetah-grid__inline-menu__menu-item.stars .material-icons) {
     line-height: 40px;
   }
   .filter-input {

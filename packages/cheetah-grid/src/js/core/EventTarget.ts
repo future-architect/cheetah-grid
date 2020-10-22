@@ -1,5 +1,5 @@
 import type { AnyListener, EventListenerId } from "../ts-types";
-import { each, isDef } from "../internal/utils";
+import { each } from "../internal/utils";
 import { get as getSymbol } from "../internal/symbolManager";
 
 //private symbol
@@ -75,6 +75,9 @@ export class EventTarget {
     });
   }
   hasListeners(type: string): boolean {
+    if (!this[_]) {
+      return false;
+    }
     return !!this[_].listeners[type];
   }
   /**
@@ -85,11 +88,16 @@ export class EventTarget {
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   fireListeners(type: string, ...args: any[]): any {
+    if (!this[_]) {
+      return [];
+    }
     const list = this[_].listeners[type];
     if (!list) {
       return [];
     }
-    return list.map((listener) => listener.call(this, ...args)).filter(isDef);
+    return list
+      .map((listener) => listener.call(this, ...args))
+      .filter((r) => r != null);
   }
   dispose(): void {
     delete this[_];

@@ -17,7 +17,7 @@ function applyChainSafe (obj, fn, ...names) {
   return value
 }
 
-function getField (record, field) {
+export function getField (record, field) {
   if (!isDef(record)) {
     return undefined
   }
@@ -54,6 +54,11 @@ export function filterToFn (instance, field, filter) {
     return (rec) => applyFilter(getField(rec, field), filter)
   }
   const Vue = instance.constructor
+  const maybeV2 = Vue && Vue.filter
+  if (!maybeV2) {
+    return (rec) => applyFilter(getField(rec, field), filter)
+  }
+  // maybe Vue v2
   filter = filter.trim()
   const i = filter.indexOf('(')
   if (i < 0) {
@@ -125,5 +130,34 @@ export function resolveProxyPropsMethod (propName) {
     const prop = vm[propName]
 
     return typeof prop === 'function' ? prop(...args) : undefined
+  }
+}
+
+/**
+ * @param {VueInstance} vm
+ * @param {string} name
+ * @returns {HTMLCollection}
+ */
+export function getSlotChildren (vm, name = 'defaultSlotContainer') {
+  /** @type {HTMLElement} */
+  const el = vm.$refs[name]
+  const list = el.children
+  return list[0] ? list : null
+}
+
+// for compatibility
+const { EVENT_TYPE } = cheetahGrid.ListGrid
+export const vue3Emits = Object.keys(EVENT_TYPE)
+  .map(k => EVENT_TYPE[k].replace(/_/g, '-').toLowerCase())
+  .reduce((r, v) => {
+    r[v] = null
+    return r
+  }, {})
+
+export function hackVue3 (options) {
+  // eslint-disable-next-line no-undef
+  if (typeof __VUE_OPTIONS_API__ !== 'undefined' && __VUE_OPTIONS_API__) {
+    delete options.beforeDestroy
+    delete options.destroyed
   }
 }

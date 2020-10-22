@@ -22,7 +22,6 @@ import {
   array,
   browser,
   event,
-  isDef,
   isDescendantElement,
   isPromise,
 } from "../internal/utils";
@@ -98,7 +97,7 @@ function _getTargetRowAt(
   absoluteY: number
 ): { row: number; top: number } | null {
   const internal = this.getTargetRowAtInternal(absoluteY);
-  if (isDef(internal)) {
+  if (internal != null) {
     return internal;
   }
   const findBefore = (
@@ -813,7 +812,7 @@ function _getColsWidth(
 /** @private */
 function _getRowHeight(this: DrawGrid, row: number): number {
   const internal = this.getRowHeightInternal(row);
-  if (isDef(internal)) {
+  if (internal != null) {
     return internal;
   }
   const height = this[_].rowHeightsMap.get(row);
@@ -833,7 +832,7 @@ function _getRowsHeight(
   endRow: number
 ): number {
   const internal = this.getRowsHeightInternal(startRow, endRow);
-  if (isDef(internal)) {
+  if (internal != null) {
     return internal;
   }
   const rowCount = endRow - startRow + 1;
@@ -851,7 +850,7 @@ function _getScrollWidth(grid: DrawGrid): number {
 /** @private */
 function _getScrollHeight(this: DrawGrid, row?: number): number {
   const internal = this.getScrollHeightInternal(row);
-  if (isDef(internal)) {
+  if (internal != null) {
     return internal;
   }
   let h = this[_].defaultRowHeight * this[_].rowCount;
@@ -1525,7 +1524,10 @@ function _bindEvents(this: DrawGrid): void {
     return copyValue;
   });
   grid[_].focusControl.onCopy((_e: ClipboardEvent): string | void =>
-    array.find(grid.fireListeners("copydata", grid[_].selection.range), isDef)
+    array.find(
+      grid.fireListeners("copydata", grid[_].selection.range),
+      (r) => r != null
+    )
   );
   grid[_].focusControl.onPaste(
     ({ value, event }: { value: string; event: ClipboardEvent }) => {
@@ -2112,7 +2114,7 @@ class FocusControl extends EventTarget {
           }
         }
       }
-      if (isDef(pasteText) && pasteText.length) {
+      if (pasteText != null && pasteText.length) {
         this.fireListeners("paste", { value: pasteText, event: e });
       }
     });
@@ -2124,8 +2126,8 @@ class FocusControl extends EventTarget {
         return;
       }
       setSafeInputValue(input, "");
-      const data = array.find(this.fireListeners("copy"), isDef);
-      if (isDef(data)) {
+      const data = array.find(this.fireListeners("copy"), (r) => r != null);
+      if (data != null) {
         cancelEvent(e);
         if (browser.IE) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -3040,7 +3042,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   configure(name: string, value?: any): any {
     const cfg = this[_].config || (this[_].config = {});
-    if (isDef(value)) {
+    if (value != null) {
       cfg[name] = value;
     }
     return cfg[name];

@@ -50,14 +50,15 @@
     "check": "node ./scripts/check_readme.js && node ./scripts/check_versions.js",
     "publish:all": "mrpm publish",
     "update:all": "mrpm update",
-    "postinstall": "cross-env NO_UPDATE_NOTIFIER=1 mrpm install",
+    "postinstall": "npm run install:all",
+    "install:all": "cross-env NO_UPDATE_NOTIFIER=1 mrpm install",
     "mrpm": "mrpm"
   },
   "dependencies": {},
   "devDependencies": {
     "cross-env": "^5.2.0",
-    "eslint": "^6.8.0",
-    "eslint-plugin-html": "^6.0.0",
+    "eslint": "^7.11.0",
+    "eslint-plugin-html": "^6.1.0",
     "mrpm": "^2.0.2"
   }
 }

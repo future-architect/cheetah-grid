@@ -3,7 +3,6 @@ import type { DrawCellInfo, GridInternal } from "../../ts-types-internal";
 import { BaseColumn } from "./BaseColumn";
 import { CheckStyle } from "../style/CheckStyle";
 import { getCheckColumnStateId } from "../../internal/symbolManager";
-import { isDef } from "../../internal/utils";
 import { toBoolean } from "../utils";
 
 const CHECK_COLUMN_STATE_ID = getCheckColumnStateId();
@@ -52,7 +51,7 @@ export class CheckColumn<T> extends BaseColumn<T, boolean> {
       checkBgColor,
       uncheckBgColor,
     };
-    if (isDef(elapsed)) {
+    if (elapsed != null) {
       opt.animElapsedTime = elapsed;
     }
     helper.checkbox(value, context, opt);

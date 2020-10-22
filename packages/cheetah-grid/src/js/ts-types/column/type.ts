@@ -1,7 +1,7 @@
 import type { ColumnMenuItemOptions } from "../define";
 
 export interface BaseColumnOption {
-  fadeinWhenCallbackInPromise?: boolean;
+  fadeinWhenCallbackInPromise?: boolean | null;
 }
 export interface NumberColumnOption extends BaseColumnOption {
   format?: Intl.NumberFormat;

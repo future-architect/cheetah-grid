@@ -1,5 +1,10 @@
 <script>
-import { gridUpdateWatcher, filterToFn, resolveProxyComputedProps, resolveProxyPropsMethod } from './utils'
+import {
+  gridUpdateWatcher,
+  filterToFn,
+  resolveProxyComputedProps,
+  resolveProxyPropsMethod
+} from './utils'
 
 /**
  * The Mixin for `<c-grid-column>` components.
@@ -64,6 +69,11 @@ export default {
       default: undefined
     }
   },
+  data () {
+    return {
+      pluginMessageFunctions: []
+    }
+  },
   computed: {
     resolvedField0: resolveProxyComputedProps('field'),
     resolvedField () {
@@ -72,7 +82,16 @@ export default {
     resolvedFilter: resolveProxyComputedProps('filter'),
     resolvedColumnStyle: resolveProxyComputedProps('columnStyle'),
     resolvedIcon: resolveProxyComputedProps('icon'),
-    resolvedMessage: resolveProxyComputedProps('message')
+    resolvedMessage: resolveProxyComputedProps('message'),
+    compositedMessages () {
+      const { resolvedMessage, pluginMessageFunctions } = this
+      const results = []
+      if (resolvedMessage) {
+        results.push(resolvedMessage)
+      }
+      results.push(...pluginMessageFunctions)
+      return results
+    }
   },
   watch: {
     resolvedField: gridUpdateWatcher,
@@ -81,7 +100,8 @@ export default {
     maxWidth: gridUpdateWatcher,
     resolvedColumnStyle: gridUpdateWatcher,
     resolvedIcon: gridUpdateWatcher,
-    resolvedMessage: gridUpdateWatcher
+    resolvedMessage: gridUpdateWatcher,
+    compositedMessages: gridUpdateWatcher
   },
   methods: {
     /**
@@ -97,7 +117,7 @@ export default {
         maxWidth: this.maxWidth,
         style: this.resolvedColumnStyle,
         icon: this.resolvedIcon,
-        message: this.resolvedMessage
+        message: this.compositedMessages
       }
     },
     /**
@@ -111,7 +131,7 @@ export default {
         maxWidth: this.maxWidth,
         style: this.resolvedColumnStyle,
         icon: this.resolvedIcon,
-        message: this.resolvedMessage
+        message: this.compositedMessages
       }
     },
 

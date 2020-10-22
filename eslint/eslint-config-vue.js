@@ -4,8 +4,7 @@
 module.exports = {
 	'root': true,
 	'parserOptions': {
-		parser: 'babel-eslint',
-		ecmaVersion: 2017,
+		ecmaVersion: 2020,
 		sourceType: 'module'
 	},
 	'env': {
@@ -18,6 +17,7 @@ module.exports = {
 		'standard',
 		// https://github.com/vuejs/eslint-plugin-vue#gear-configs
 		'plugin:vue/recommended',
+		'plugin:vue/vue3-recommended',
 		// https://www.npmjs.com/package/eslint-config-vue-preset
 		'vue-preset/vue/recommended-e',
 		'vue-preset/standard'

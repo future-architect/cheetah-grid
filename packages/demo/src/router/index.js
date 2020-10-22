@@ -1,16 +1,14 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import WelcomePage from '../vue/WelcomePage.vue'
 import BranchGraphPage from '../vue/BranchGraphPage.vue'
 import EnterprisePage from '../vue/EnterprisePage.vue'
 import AnimalsPage from '../vue/AnimalsPage.vue'
 
-Vue.use(VueRouter)
-
-export default new VueRouter({
+export default createRouter({
   scrollBehavior (to, from, savedPosition) {
     return { x: 0, y: 0 }
   },
+  history: createWebHashHistory(),
   routes: [
     {
       path: '/',

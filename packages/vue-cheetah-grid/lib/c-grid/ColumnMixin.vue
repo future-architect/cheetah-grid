@@ -1,10 +1,14 @@
 <script>
-import { gridUpdateWatcher, resolveProxyComputedProps, resolveProxyPropsMethod } from './utils'
+import { gridUpdateWatcher, resolveProxyComputedProps, resolveProxyPropsMethod, vue3Emits, hackVue3 } from './utils'
 
 /**
  * The Mixin for `<c-grid-column>` components.
  */
 export default {
+  get mixins () {
+    hackVue3(this)
+    return undefined
+  },
   inject: ['$_CGridInstance'],
   props: {
     /**
@@ -50,6 +54,7 @@ export default {
       default: undefined
     }
   },
+  emits: { ...vue3Emits },
   computed: {
     resolvedCaption () {
       const vm = this
@@ -76,8 +81,14 @@ export default {
   updated () {
     this.$_CGrid_nextTickUpdate()
   },
+  // for Vue 3
+  beforeUnmount () {
+    beforeDestroy(this)
+  },
+  // for Vue 2
+  // eslint-disable-next-line vue/no-deprecated-destroyed-lifecycle
   beforeDestroy () {
-    this.$_CGridInstance.$_CGrid_removeColumnDefine(this)
+    beforeDestroy(this)
   },
   methods: {
     /**
@@ -162,5 +173,9 @@ export default {
      */
     $_CGridColumn_headerActionProxy: resolveProxyPropsMethod('headerAction')
   }
+}
+
+function beforeDestroy (vm) {
+  vm.$_CGridInstance.$_CGrid_removeColumnDefine(vm)
 }
 </script>

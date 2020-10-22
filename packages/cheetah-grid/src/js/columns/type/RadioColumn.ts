@@ -3,7 +3,6 @@ import type { DrawCellInfo, GridInternal } from "../../ts-types-internal";
 import { BaseColumn } from "./BaseColumn";
 import { RadioStyle } from "../style/RadioStyle";
 import { getRadioColumnStateId } from "../../internal/symbolManager";
-import { isDef } from "../../internal/utils";
 import { toBoolean } from "../utils";
 
 const RADIO_COLUMN_STATE_ID = getRadioColumnStateId();
@@ -56,7 +55,7 @@ export class RadioColumn<T> extends BaseColumn<T, boolean> {
       uncheckBgColor,
       checkBgColor,
     };
-    if (isDef(elapsed)) {
+    if (elapsed != null) {
       opt.animElapsedTime = elapsed;
     }
     helper.radioButton(value, context, opt);

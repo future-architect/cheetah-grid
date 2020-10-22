@@ -14,7 +14,6 @@ import {
   array,
   emptyFn,
   getOrApply,
-  isDef,
   isPromise,
   obj,
 } from "../internal/utils";
@@ -68,7 +67,7 @@ function getField<T, F extends FieldDef<T>>(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setPromiseBack: PromiseBack<any>
 ): FieldData {
-  if (!isDef(record)) {
+  if (record == null) {
     return undefined;
   }
   if (isPromise(record)) {
@@ -148,7 +147,7 @@ function _getIndex(sortedIndexMap: null | number[], index: number): number {
     return index;
   }
   const mapIndex = sortedIndexMap[index];
-  return isDef(mapIndex) ? mapIndex : index;
+  return mapIndex != null ? mapIndex : index;
 }
 
 export interface DataSourceParam<T> {
@@ -224,7 +223,7 @@ export class DataSource<T> extends EventTarget implements DataSourceAPI<T> {
     return sort
       .sortPromise(
         (index) =>
-          isDef(sortedIndexMap[index])
+          sortedIndexMap[index] != null
             ? sortedIndexMap[index]
             : (sortedIndexMap[index] = index),
         (index, rel) => {
@@ -269,7 +268,7 @@ export class DataSource<T> extends EventTarget implements DataSourceAPI<T> {
     index: number,
     field: F
   ): FieldData {
-    if (!isDef(field)) {
+    if (field == null) {
       return undefined;
     }
     const record = this.getOriginal(index);
@@ -278,7 +277,7 @@ export class DataSource<T> extends EventTarget implements DataSourceAPI<T> {
     });
   }
   protected hasOriginalField(index: number, field: FieldDef<T>): boolean {
-    if (!isDef(field)) {
+    if (field == null) {
       return false;
     }
     if (typeof field === "function") {
@@ -293,7 +292,7 @@ export class DataSource<T> extends EventTarget implements DataSourceAPI<T> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     value: any
   ): MaybePromise<boolean> {
-    if (!isDef(field)) {
+    if (field == null) {
       return false;
     }
     const record = this.getOriginal(index);

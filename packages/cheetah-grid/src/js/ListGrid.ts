@@ -41,10 +41,10 @@ import type {
   DrawGridProtected,
 } from "./core/DrawGrid";
 import type { LayoutDefine, LayoutMapAPI } from "./list-grid/layout-map";
+import { MessageHandler, hasMessage } from "./columns/message/MessageHandler";
 import {
   cellEquals,
   event,
-  isDef,
   isPromise,
   obj,
   omit,
@@ -58,7 +58,6 @@ import { DrawGrid } from "./core/DrawGrid";
 import { GridCanvasHelper } from "./GridCanvasHelper";
 import { BaseStyle as HeaderBaseStyle } from "./header/style";
 import { LG_EVENT_TYPE } from "./list-grid/LG_EVENT_TYPE";
-import { MessageHandler } from "./columns/message/MessageHandler";
 import { Rect } from "./internal/Rect";
 import type { Theme } from "./themes/theme";
 import { TooltipHandler } from "./tooltip/TooltipHandler";
@@ -153,7 +152,30 @@ function _getCellMessage<T>(
     if (!message) {
       return null;
     }
-    return _getField(grid, message as FieldDef<T>, row);
+    if (!Array.isArray(message)) {
+      return _getField(grid, message as FieldDef<T>, row);
+    }
+    const promises: Promise<Message>[] = [];
+    for (let index = 0; index < message.length; index++) {
+      const msg = _getField(grid, message[index] as FieldDef<T>, row);
+      if (isPromise(msg)) {
+        promises.push(msg);
+      } else if (hasMessage(msg)) {
+        return msg;
+      }
+    }
+    if (!promises.length) {
+      return null;
+    }
+    return new Promise((resolve, reject) => {
+      promises.forEach((p) => {
+        p.then((msg) => {
+          if (hasMessage(msg)) {
+            resolve(msg);
+          }
+        }, reject);
+      });
+    });
   }
 }
 /** @private */
@@ -190,7 +212,7 @@ function _getCellIcon0<T>(
   icons.iconPropKeys.forEach((k) => {
     if (iconOpt[k]) {
       const f = _getField(grid, iconOpt[k], row);
-      if (isDef(f)) {
+      if (f != null) {
         retIcon[k] = f;
       } else {
         if (!_hasField(grid, iconOpt[k], row)) {
@@ -219,7 +241,7 @@ function _getField<T>(
   field: FieldDef<T> | undefined,
   row: number
 ): FieldData {
-  if (!isDef(field)) {
+  if (field == null) {
     return null;
   }
   if (row < grid[_].layoutMap.headerRowCount) {
@@ -235,7 +257,7 @@ function _hasField<T>(
   field: FieldDef<T>,
   row: number
 ): boolean {
-  if (!isDef(field)) {
+  if (field == null) {
     return false;
   }
   if (row < grid[_].layoutMap.headerRowCount) {
@@ -1030,13 +1052,14 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
       oldField = this.getHeaderField(oldState.col, oldState.row);
     }
 
-    const newState = (this[_].sortState = isDef(sortState)
-      ? sortState
-      : {
-          col: -1,
-          row: -1,
-          order: undefined,
-        });
+    const newState = (this[_].sortState =
+      sortState != null
+        ? sortState
+        : {
+            col: -1,
+            row: -1,
+            order: undefined,
+          });
 
     let newField;
     if (newState.col >= 0 && newState.row >= 0) {
@@ -1044,10 +1067,10 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
     }
 
     // bind header value
-    if (isDef(oldField) && oldField !== newField) {
+    if (oldField != null && oldField !== newField) {
       this.setHeaderValue(oldState.col, oldState.row, undefined);
     }
-    if (isDef(newField)) {
+    if (newField != null) {
       this.setHeaderValue(newState.col, newState.row, newState.order);
     }
   }

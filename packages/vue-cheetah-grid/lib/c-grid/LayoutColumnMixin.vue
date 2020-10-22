@@ -7,8 +7,8 @@ import ColumnMixin from './ColumnMixin.vue'
  * @mixin column-mixin
  */
 export default {
-  inject: ['$_CGridInstance'],
   mixins: [ColumnMixin],
+  inject: ['$_CGridInstance'],
   props: {
     /**
      * Defines the layout colspan.

@@ -1,26 +1,13 @@
-
-import cheetahGrid from 'cheetah-grid'
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import { createApp } from 'vue'
 import router from './router'
+import cheetahGrid from 'cheetah-grid'
 import CGrid from 'vue-cheetah-grid'
 import App from './App.vue'
 
-Vue.use(VueRouter)
-Vue.use(CGrid)
+const app = createApp(App)
 
-Vue.filter('numberDelimiter', (value) => value.toLocaleString())
-
-// todo use fmt
-Vue.filter('dateFormat', (d, fmt) => {
-  if (!d) {
-    return ''
-  }
-  if (isNaN(new Date(d))) {
-    return d
-  }
-  return `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`
-})
+app.use(router)
+app.use(CGrid)
 
 cheetahGrid.themes.default = cheetahGrid.themes.default.extends({
   // font: '16px Roboto, sans-serif'
@@ -30,13 +17,18 @@ router.beforeEach((to, from, next) => {
   document.title = `${to.meta.title} | Cheetah Grid Demo`
   next()
 })
-
-/* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  router,
-  components: { App },
-  render (h) {
-    return h(App)
+app.mixin({
+  methods: {
+    numberDelimiter: (value) => value.toLocaleString(),
+    dateFormat (d, fmt) {
+      if (!d) {
+        return ''
+      }
+      if (isNaN(new Date(d))) {
+        return d
+      }
+      return `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`
+    }
   }
 })
+app.mount('#app')

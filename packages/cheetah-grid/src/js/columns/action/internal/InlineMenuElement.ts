@@ -12,9 +12,9 @@ import {
   findPrevSiblingFocusable,
   isFocusable,
 } from "../../../internal/dom";
-import { event, isDef } from "../../../internal/utils";
 import { EventHandler } from "../../../internal/EventHandler";
 import type { Rect } from "../../../internal/Rect";
+import { event } from "../../../internal/utils";
 
 const KEY_TAB = 9;
 const KEY_ENTER = 13;
@@ -73,7 +73,7 @@ function optionToLi(
     appendHtml(item, html);
   }
 
-  if (value === "" || !isDef(value)) {
+  if (value === "" || value == null) {
     item.classList.add(EMPTY_ITEM_CLASSNAME);
   }
 

@@ -24,7 +24,6 @@ import {
   cellInRange,
   getChainSafe,
   getOrApply,
-  isDef,
   style,
 } from "./internal/utils";
 import { InlineDrawer } from "./element/InlineDrawer";
@@ -100,7 +99,7 @@ function getThemeColor<
   T extends ColorPropertyDefine | ColorsPropertyDefine | string
 >(grid: ListGridAPI<R>, ...names: string[]): T {
   const gridThemeColor = getChainSafe(grid.theme, ...names);
-  if (!isDef(gridThemeColor)) {
+  if (gridThemeColor == null) {
     // use default theme
     return getChainSafe(themes.getDefault(), ...names);
   }
@@ -111,7 +110,7 @@ function getThemeColor<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return ((args: StylePropertyFunctionArg): any => {
     const color = gridThemeColor(args);
-    if (isDef(color)) {
+    if (color != null) {
       // use grid theme
       return color;
     }

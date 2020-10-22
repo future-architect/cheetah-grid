@@ -2,9 +2,12 @@
 const path = require('path')
 const fs = require('fs')
 const webpack = require('webpack')
+const {
+  VueLoaderPlugin
+} = require('vue-loader')
 
 function getVueCheetahGridPath () {
-  const vcgPath = path.resolve(__dirname, '../vue-cheetah-grid/dist/vueCheetahGrid.js')
+  const vcgPath = path.resolve(__dirname, '../vue-cheetah-grid')
   try {
     fs.statSync(vcgPath)
     return vcgPath
@@ -42,10 +45,9 @@ module.exports = (env, argv) => {
       devtoolModuleFilenameTemplate,
       devtoolFallbackModuleFilenameTemplate: devtoolModuleFilenameTemplate
     },
-    externals: {
-      'cheetah-grid': 'cheetahGrid',
-      'vue-cheetah-grid': 'vueCheetahGrid'
-    },
+    externals: production ? {
+      'cheetah-grid': 'cheetahGrid'
+    } : {},
     resolveLoader: {
       modules: [path.resolve(__dirname, 'node_modules')]
     },
@@ -61,15 +63,6 @@ module.exports = (env, argv) => {
     },
     module: {
       rules: [
-        {
-          test: /\.(js|vue)$/,
-          loader: 'eslint-loader',
-          enforce: 'pre',
-          include: [path.resolve(__dirname, 'src')],
-          options: {
-            formatter: require('eslint-friendly-formatter')
-          }
-        },
         {
           test: /\.vue$/,
           loader: 'vue-loader'
@@ -87,6 +80,10 @@ module.exports = (env, argv) => {
           ]
         },
         {
+          test: /\.css$/i,
+          use: ['style-loader', 'css-loader']
+        },
+        {
           test: /\.(png|jpg|gif)$/,
           use: [
             {
@@ -102,6 +99,7 @@ module.exports = (env, argv) => {
       ]
     },
     plugins: [
+      new VueLoaderPlugin(),
       new webpack.DefinePlugin(production ? {
         'process.env': {
           NODE_ENV: '"production"'

@@ -16,7 +16,7 @@ import type {
   DrawCellInfo,
   GridInternal,
 } from "../../ts-types-internal";
-import { isDef, isPromise, obj } from "../../internal/utils";
+import { isPromise, obj } from "../../internal/utils";
 import { BaseStyle } from "../style/BaseStyle";
 import { animate } from "../../internal/animate";
 import { getColumnFadeinStateId } from "../../internal/symbolManager";
@@ -28,13 +28,13 @@ function isFadeinWhenCallbackInPromise<T>(
   column: BaseColumn<T, unknown>,
   grid: ListGridAPI<T>
 ): boolean {
-  if (isDef(column.fadeinWhenCallbackInPromise)) {
+  if (column.fadeinWhenCallbackInPromise != null) {
     return column.fadeinWhenCallbackInPromise;
   }
   return !!grid.configure("fadeinWhenCallbackInPromise");
 }
 
-function getFadinState<T>(grid: GridInternal<T>): ColumnFadeinState {
+function getFadeinState<T>(grid: GridInternal<T>): ColumnFadeinState {
   let state = grid[COLUMN_FADEIN_STATE_ID];
   if (!state) {
     state = { cells: {} };
@@ -42,7 +42,7 @@ function getFadinState<T>(grid: GridInternal<T>): ColumnFadeinState {
   }
   return state;
 }
-function _generateFadinPointAction<T>(
+function _generateFadeinPointAction<T>(
   grid: ListGridAPI<T>,
   col: number,
   row: number,
@@ -51,7 +51,7 @@ function _generateFadinPointAction<T>(
   drawCellBase: () => void
 ): (point: number) => void {
   return (point: number): void => {
-    const state = getFadinState(grid);
+    const state = getFadeinState(grid);
     const stateKey = `${row}:${col}`;
     if (point === 1) {
       delete state.cells[stateKey];
@@ -77,7 +77,7 @@ function _generateFadinPointAction<T>(
     }
   };
 }
-const fadinMgr = {
+const fadeinMgr = {
   animate<T>(
     grid: ListGridAPI<T>,
     col: number,
@@ -87,10 +87,10 @@ const fadinMgr = {
     drawCellBase: () => void
   ): void {
     // fadein animation
-    const state = getFadinState(grid);
+    const state = getFadeinState(grid);
 
     const activeFadeins = [
-      _generateFadinPointAction(
+      _generateFadeinPointAction(
         grid,
         col,
         row,
@@ -116,10 +116,10 @@ const fadinMgr = {
     drawInternal: () => void,
     drawCellBase: () => void
   ): void {
-    const state = getFadinState(grid);
+    const state = getFadeinState(grid);
     if (state.activeFadeins) {
       state.activeFadeins.push(
-        _generateFadinPointAction(
+        _generateFadeinPointAction(
           grid,
           col,
           row,
@@ -135,15 +135,14 @@ const fadinMgr = {
 };
 
 export abstract class BaseColumn<T, V> implements ColumnTypeAPI {
-  private _fadeinWhenCallbackInPromise: boolean;
-  constructor(option: BaseColumnOption = {}) {
+  private _fadeinWhenCallbackInPromise?: boolean | null;
+  constructor(option?: BaseColumnOption) {
     this.onDrawCell = this.onDrawCell.bind(this); //スコープを固定させる
 
     //Promiseのcallbackでフェードイン表示する
-    this._fadeinWhenCallbackInPromise =
-      option.fadeinWhenCallbackInPromise || false;
+    this._fadeinWhenCallbackInPromise = option?.fadeinWhenCallbackInPromise;
   }
-  get fadeinWhenCallbackInPromise(): boolean | undefined {
+  get fadeinWhenCallbackInPromise(): boolean | undefined | null {
     return this._fadeinWhenCallbackInPromise;
   }
   get StyleClass(): typeof BaseStyle {
@@ -162,14 +161,23 @@ export abstract class BaseColumn<T, V> implements ColumnTypeAPI {
     const record = getRecord();
     let promise;
     if (isPromise(record)) {
-      promise = record.then(() => cellValue);
+      promise = record;
     } else if (isPromise(cellValue)) {
       promise = cellValue;
+    } else {
+      const msg = info.getMessage();
+      if (isPromise(msg)) {
+        promise = msg;
+      }
     }
     //文字描画
     if (promise) {
       const start = Date.now();
-      return promise.then((val) => {
+      return Promise.all([
+        record,
+        cellValue,
+        promise.then(() => cellValue).then(() => info.getMessage()),
+      ]).then(({ 0: record, 1: val, 2: message }) => {
         const currentContext = context.toCurrentContext();
         const drawRect = currentContext.getDrawRect();
         if (!drawRect) {
@@ -183,10 +191,6 @@ export abstract class BaseColumn<T, V> implements ColumnTypeAPI {
           if (!drawRect) {
             return;
           }
-          const record = getRecord();
-          if (isPromise(record)) {
-            return;
-          }
 
           const actStyle = styleContents.of(style, record, this.StyleClass);
           this.drawInternal(
@@ -198,7 +202,7 @@ export abstract class BaseColumn<T, V> implements ColumnTypeAPI {
             info
           );
           this.drawMessageInternal(
-            info.getMessage(),
+            message,
             currentContext,
             actStyle,
             helper,
@@ -213,7 +217,7 @@ export abstract class BaseColumn<T, V> implements ColumnTypeAPI {
           const { col, row } = context;
           if (time < 80) {
             //80ms以内のPromiseCallbackは前アニメーションに統合
-            fadinMgr.margeAnimate(
+            fadeinMgr.margeAnimate(
               grid,
               col,
               row,
@@ -223,7 +227,7 @@ export abstract class BaseColumn<T, V> implements ColumnTypeAPI {
             );
           } else {
             //アニメーション
-            fadinMgr.animate(
+            fadeinMgr.animate(
               grid,
               col,
               row,
@@ -271,7 +275,7 @@ export abstract class BaseColumn<T, V> implements ColumnTypeAPI {
   }
   abstract clone(): BaseColumn<T, V>;
   convertInternal(value: unknown): V {
-    return (isDef(value) ? value : "") as V;
+    return (value != null ? value : "") as V;
   }
   abstract drawInternal(
     value: V,

@@ -60,7 +60,7 @@ function normalizeMessage(message: Message): MessageObject {
     original: message,
   };
 }
-function hasMessage(message: Message): boolean {
+export function hasMessage(message: Message): boolean {
   return !!normalizeMessage(message).message;
 }
 export class MessageHandler<T> implements Base<T> {
@@ -141,12 +141,27 @@ export class MessageHandler<T> implements Base<T> {
     getMessage: (col: number, row: number) => Message
   ): void {
     const onSelectMessage = (sel: { col: number; row: number }): void => {
+      const setMessageData = (msg: Message) => {
+        if (!hasMessage(msg)) {
+          this._detach();
+        } else {
+          this._attach(sel.col, sel.row, msg);
+        }
+      };
+
       const message = getMessage(sel.col, sel.row);
-      if (!hasMessage(message)) {
+      if (isPromise(message)) {
         this._detach();
-      } else {
-        this._attach(sel.col, sel.row, message);
+        message.then((msg) => {
+          const newSel = grid.selection.select;
+          if (newSel.col !== sel.col || newSel.row !== sel.row) {
+            return;
+          }
+          setMessageData(msg);
+        });
+        return;
       }
+      setMessageData(message);
     };
     grid.listen(LG_EVENT_TYPE.SELECTED_CELL, (e) => {
       if (!e.selected) {

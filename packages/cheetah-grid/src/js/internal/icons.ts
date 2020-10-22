@@ -7,7 +7,6 @@ import type {
   SvgIcon,
 } from "../ts-types";
 import type { SimpleColumnIconOption } from "../ts-types-internal";
-import { isDef } from "./utils";
 
 type ColumnIconArrayOption = {
   content?: (string | null)[];
@@ -199,7 +198,7 @@ function normarize(iconProps: SimpleColumnIconOption): SimpleColumnIconOption {
     const prop = getIconProps(iconProps.tagName || "i", iconProps.className);
     for (const k in prop) {
       if (isIconKey(k)) {
-        if (!isDef(iconProps[k])) {
+        if (iconProps[k] == null) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           data[k] = prop[k] as any;
         }
