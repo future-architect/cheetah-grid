@@ -23,4 +23,4 @@ jobs:
     - name: release
       run: npm run publish:all
       env:
-        NODE_TOKEN: ${{ secrets.NPM_TOKEN }}
+        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
