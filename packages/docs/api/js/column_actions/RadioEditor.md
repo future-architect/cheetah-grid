@@ -10,6 +10,7 @@ The record is edited after select the cell by clicking it and then push Enter or
 
 You can control the property of `readOnly` and `disabled` by setting the instance of `RadioEditor` class to `action` of the column.  
 But if you define `'radio'`, as string, to `action` of the column, you can't control these properties.  
+You can also disable or read-only each record by specifying a function for the `disabled` and `readOnly` properties.  
 
 <code-preview>
 

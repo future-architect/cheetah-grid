@@ -8,14 +8,15 @@ order: 120
 
 Set the column type by using `columnType`.
 
-|property|description|LINK|
-|---|---|---|
-|none|draw text in the cell|---|
-|`'number'`|draw number in the cell with comma-separated| [NumberColumn](./NumberColumn.md) |
-|`'check'`|draw checkbox in the cell| [CheckColumn](./CheckColumn.md) |
-|`'button'`|draw button in the cell| [ButtonColumn](./ButtonColumn.md) |
-|`'image'`|draw image in the cell| [ImageColumn](./ImageColumn.md) |
-|`'multilinetext'`|draw multiline text in the cell| [MultilineTextColumn](./MultilineTextColumn.md) |
+| property          | description                                  | LINK                                            |
+| ----------------- | -------------------------------------------- | ----------------------------------------------- |
+| none              | draw text in the cell                        | ---                                             |
+| `'number'`        | draw number in the cell with comma-separated | [NumberColumn](./NumberColumn.md)               |
+| `'check'`         | draw checkbox in the cell                    | [CheckColumn](./CheckColumn.md)                 |
+| `'button'`        | draw button in the cell                      | [ButtonColumn](./ButtonColumn.md)               |
+| `'image'`         | draw image in the cell                       | [ImageColumn](./ImageColumn.md)                 |
+| `'multilinetext'` | draw multiline text in the cell              | [MultilineTextColumn](./MultilineTextColumn.md) |
+| `'radio'`         | draw radio button in the cell                | [RadioColumn](./RadioColumn.md)                 |
 
 <code-preview>
 
