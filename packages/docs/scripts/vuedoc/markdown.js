@@ -149,7 +149,7 @@ module.exports = {
     }
 
     // data
-    if (comp.data.length) {
+    if (comp.data.some(d=>d.description)) {
       contents = replaceOrAppend(contents, /\n##\s*Data\s*/i, '\n## Data\n\n')
       contents = replaceBlock(contents, '<!-- DATA_TABLE_START -->', '<!-- DATA_TABLE_END -->', createData(comp))
     }
