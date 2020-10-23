@@ -50,8 +50,7 @@
     "check": "node ./scripts/check_readme.js && node ./scripts/check_versions.js",
     "publish:all": "mrpm publish",
     "update:all": "mrpm update",
-    "ci:all": "mrpm ci",
-    "postinstall": "npm run install:all",
+    "ci:all": "cross-env NO_UPDATE_NOTIFIER=1 mrpm ci",
     "install:all": "cross-env NO_UPDATE_NOTIFIER=1 mrpm install",
     "mrpm": "mrpm"
   },
