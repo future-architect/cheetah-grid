@@ -25,8 +25,8 @@ const devdir = resolve('./public/dev')
 if (production) {
   rm.sync(path.join(devdir, '*'))
   scriptPaths.push(
-    `https://unpkg.com/cheetah-grid@${gridVersion}||${fallbackVersion}`,
-    `https://unpkg.com/vue-cheetah-grid@${gridVersion}||${fallbackVersion}`
+    `https://unpkg.com/cheetah-grid@^${gridVersion}.0-0||^${fallbackVersion}.0-0`,
+    `https://unpkg.com/vue-cheetah-grid@^${gridVersion}.0-0||^${fallbackVersion}.0-0`
   )
 } else {
   if (!fs.existsSync(devdir)) {
