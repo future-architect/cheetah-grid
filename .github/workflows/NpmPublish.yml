@@ -23,6 +23,12 @@ jobs:
     - name: test
       run: npm run test
     - name: release
-      run: npm run publish:all
+      run: |+
+        npm run echo:v
+        cp ./README.md ./packages/cheetah-grid/README.md
+        cp ./LICENSE ./packages/cheetah-grid/LICENSE
+        cp ./LICENSE ./packages/vue-cheetah-grid/LICENSE
+        cp ./LICENSE ./packages/cheetah-grid-icon-svg-loader/LICENSE
+        npm run publish:all
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
