@@ -67,7 +67,9 @@
     "test:svg-to-icon-js-loader": "node webpack/test/svg-to-icon-js-loader/test.js",
     "test:loader": "npm run test:font-svg-to-icons-js-loader && npm run test:svg-to-icon-js-loader",
     "test:node": "node ./dist/cheetahGrid.js",
-    "build:ci": "npm run build"
+    "build:ci": "npm run build",
+    "coverage:remap": "remap-istanbul -i coverage/dist/report-json/coverage-final.json -o coverage/remap/html-report -t html",
+    "coverage:open": "open coverage/remap/html-report/index.html"
   },
   "directories": {
     "src": "src/js",
@@ -102,12 +104,12 @@
     "karma-jasmine": "^1.1.2",
     "karma-junit-reporter": "^1.2.0",
     "karma-mocha-reporter": "^2.2.5",
-    "karma-remap-istanbul": "^0.6.0",
     "material-design-icons": "^3.0.1",
     "postcss-loader": "^3.0.0",
     "prettier": "^2.1.1",
     "promise-polyfills": "^7.0.4",
     "raw-loader": "^0.5.1",
+    "remap-istanbul": "^0.13.0",
     "style-loader": "^1.2.1",
     "stylelint": "^13.6.1",
     "stylelint-config-standard": "^20.0.0",
