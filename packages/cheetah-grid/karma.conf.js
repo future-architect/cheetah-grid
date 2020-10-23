@@ -58,7 +58,7 @@ module.exports = function(config) {
 		// test results reporter to use
 		// possible values: 'dots', 'progress'
 		// available reporters: https://npmjs.org/browse/keyword/karma-reporter
-		reporters: ['html', 'mocha', 'coverage', 'junit', 'karma-remap-istanbul'],
+		reporters: ['html', 'mocha', 'coverage', 'junit'],
 		htmlReporter: {
 			outputFile: 'report/units.html',
 			pageTitle: 'Unit Tests',
@@ -78,16 +78,8 @@ module.exports = function(config) {
 					type: 'cobertura',
 					file: 'cobertura.xml'
 				},
+				{type: 'json', subdir: 'report-json'},
 			]
-		},
-		remapIstanbulReporter: {
-			remapOptions: {}, //additional remap options
-			reportOptions: {}, //additional report options
-			reports: {
-				lcovonly: 'coverage/remap/lcov/lcov.info',
-				html: 'coverage/remap/html',
-				cobertura: 'coverage/remap/cobertura/cobertura.xml'
-			}
 		},
 		junitReporter: {
 			outputDir: 'report'
