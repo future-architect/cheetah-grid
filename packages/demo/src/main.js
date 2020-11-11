@@ -31,4 +31,4 @@ app.mixin({
     }
   }
 })
-app.mount('#app')
+app.mount('#app-root')

@@ -152,6 +152,7 @@ module.exports = {
     ['link', { rel: 'icon', href: '/icon_512x512.ico' }],
     ['link', { rel: 'stylesheet', href: 'https://fonts.googleapis.com/icon?family=Material+Icons' }],
     ['link', { rel: 'stylesheet', href: 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css' }],
+    ['script', { src: 'https://cdnjs.cloudflare.com/ajax/libs/core-js/3.7.0/minified.js'}],
     ['script', { src: 'https://cdn.jsdelivr.net/npm/vue@2.6/dist/vue.min.js' }],
 
     ...scriptPaths.map(p => ['script', { src: p }])
@@ -172,7 +173,6 @@ module.exports = {
     // serviceWorker: {
     //   updatePopup: true
     // },
-    evergreen: true,
     nav: [
       {
         text: 'Introduction',

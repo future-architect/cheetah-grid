@@ -43,9 +43,9 @@ const grid = new cheetahGrid.ListGrid({
     {field: 'email', caption: 'Email', width: 250},
     {
       /* callback field */
-      field(rec) {
+      field: function (rec) {
         const d = rec.birthday;
-        return `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`;
+        return '' + d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate();
       },
       caption: 'Birthday',
       width: 100
@@ -58,7 +58,7 @@ const grid = new cheetahGrid.ListGrid({
         caption: 'SHOW REC',
       }),
       action: new cheetahGrid.columns.action.ButtonAction({
-        action(rec) {
+        action: function (rec) {
           alert(JSON.stringify(rec));
         },
       }),
@@ -70,7 +70,7 @@ grid.dataSource = personsDataSource;
 
 const endTime = new Date();
 
-document.querySelector('.time').textContent = `${endTime - startTime}ms`;
+document.querySelector('.time').textContent = (endTime - startTime) + 'ms';
 
 // THEME
 const themeSelect = document.querySelector('.theme');
@@ -82,7 +82,7 @@ themeSelect.onchange = function() {
   }
   console.log(themeSelect.value);
 };
-for (const name in cheetahGrid.themes.choices) {
+for (let name in cheetahGrid.themes.choices) {
   const opt = document.createElement('option');
   opt.value = name;
   opt.textContent = name;
@@ -174,13 +174,13 @@ grid = new cheetahGrid.ListGrid({
 
 ```js
 export default {
-  data() {
+  data: function () {
     return {
       records: generatePersons(1000)
     }
   },
   methods: {
-    onClickRecord(rec) { alert(JSON.stringify(rec)); }
+    onClickRecord: function (rec) { alert(JSON.stringify(rec)); }
   }
 };
 ```
