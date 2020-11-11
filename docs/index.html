@@ -40,7 +40,22 @@
   <!-- <script src="https://unpkg.com/vue-cheetah-grid"></script> -->
 </head>
 <body>
-  <div id="app"></div>
+  <div id="app-root"></div>
   <script type="text/javascript" src="./assets/app.js"></script>
+  <script>
+    if (!document.getElementById('app')) {  
+      var ua = window.navigator.userAgent;
+
+      if (ua.indexOf("MSIE ") > 0 || !!ua.match(/Trident.*rv\:11\./)) {
+        var aTag = '<a style="font-weight: 500; text-decoration: none; color: #ff9933;" href="https://future-architect.github.io/cheetah-grid/documents/introduction/">' 
+        document.getElementById('app-root').innerHTML = '<div style="max-width: 740px; margin: 0 auto; padding: 2rem 2.5rem;">'+
+          '<h1>Cheetah Grid - Demo</h1>'+
+          '<blockquote style="font-size: 1.2rem; color: #999; border-left: .25rem solid #ff9933; margin-left: 0; padding-left: 1rem;">'+
+          'Sorry... This demo site does not currently support IE.</blockquote>'+
+          'Please '+aTag+'Go to the introduction</a>.'+
+          '</div>'
+      }
+    }
+  </script>
 </body>
 </html>
