@@ -679,15 +679,21 @@ function isAutoDefine(width: string | number): width is "auto" {
  * @private
  */
 function _calcAutoColWidthExpr(grid: DrawGrid): string {
+  const fullWidth = grid[_].calcWidthContext.full;
+  let sumMin = 0;
   const others = [];
   let autoCount = 0;
   const hasLimitsOnAuto = [];
   for (let col = 0; col < grid[_].colCount; col++) {
     const def = _getColWidthDefine(grid, col);
     const limits = _getColWidthLimits(grid, col);
+
     if (isAutoDefine(def)) {
       if (limits) {
         hasLimitsOnAuto.push(limits);
+        if (limits.min) {
+          sumMin += limits.min;
+        }
       }
       autoCount++;
     } else {
@@ -698,13 +704,18 @@ function _calcAutoColWidthExpr(grid: DrawGrid): string {
         if (orgWidth !== newWidth) {
           expr = `${newWidth}px`;
         }
+        sumMin += newWidth;
       }
       others.push(expr);
+    }
+    if (sumMin > fullWidth) {
+      // Returns 0px because it has consumed the full width.
+      return "0px";
     }
   }
   if (hasLimitsOnAuto.length && others.length) {
     const autoPx =
-      _toPxWidth(grid, `calc(100% - (${others.join(" + ")}))`) / autoCount;
+      (fullWidth - _toPxWidth(grid, `calc(${others.join(" + ")})`)) / autoCount;
     for (let index = 0; index < hasLimitsOnAuto.length; index++) {
       const limits = hasLimitsOnAuto[index];
       if (limits.min && autoPx < limits.min) {
