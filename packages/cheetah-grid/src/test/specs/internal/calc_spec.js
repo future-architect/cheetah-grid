@@ -78,6 +78,18 @@
 			});
 			expect(ret).toEqual((1200 * 0.30 - (60 * 3 * 2 / 2 * 2)));
 		});
+		it('toPx dot (1', function() {
+			const ret = calc.toPx('calc(30% - 14.567px)', {
+				full: 1200,
+			});
+			expect(ret).toEqual((1200 * 0.30 - (14.567)));
+		});
+		it('toPx dot (2', function() {
+			const ret = calc.toPx('calc(30% - -14.567px)', {
+				full: 1200,
+			});
+			expect(ret).toEqual((1200 * 0.30 + (14.567)));
+		});
 
 	});
 })();

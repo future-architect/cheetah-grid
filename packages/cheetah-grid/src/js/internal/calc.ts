@@ -1,21 +1,22 @@
 import { array } from "./utils";
 
-const TYPE_PUNCTURE = "p";
-const TYPE_UNIT = "u";
-const TYPE_OPERATOR = "o";
-const TYPE_NUMBER = "n";
+const TYPE_PAREN = 0;
+const TYPE_UNIT = 1;
+const TYPE_OPERATOR = 2;
+const TYPE_NUMBER = 3;
 
-const NODE_TYPE_UNIT = "u";
-const NODE_TYPE_BINARY_EXPRESSION = "b";
-const NODE_TYPE_NUMBER = "n";
+const NODE_TYPE_UNIT = 10;
+const NODE_TYPE_BINARY_EXPRESSION = 11;
+const NODE_TYPE_NUMBER = 12;
 
 type Ops = "-" | "+" | "*" | "/";
-type PuncToken = {
-  value: string;
-  type: typeof TYPE_PUNCTURE;
+type ParenToken = {
+  value: "(" | ")";
+  type: typeof TYPE_PAREN;
 };
 type UnitToken = {
-  value: string;
+  unit: string;
+  value: number;
   type: typeof TYPE_UNIT;
 };
 type OpToken = {
@@ -23,10 +24,10 @@ type OpToken = {
   type: typeof TYPE_OPERATOR;
 };
 type NumToken = {
-  value: string;
+  value: number;
   type: typeof TYPE_NUMBER;
 };
-type Token = PuncToken | UnitToken | OpToken | NumToken;
+type Token = ParenToken | UnitToken | OpToken | NumToken;
 type UnitNode = {
   nodeType: typeof NODE_TYPE_UNIT;
   unit: string;
@@ -44,6 +45,47 @@ type NumNode = {
 };
 type Node = UnitNode | BinaryNode | NumNode;
 
+const TABULATION = 0x09;
+const CARRIAGE_RETURN = 0x0d;
+const LINE_FEED = 0x0a;
+const FORM_FEED = 0x0c;
+const SPACE = 0x20;
+const PERCENT = 0x25;
+const FULL_STOP = 0x2e;
+const DIGIT_0 = 0x30;
+const DIGIT_9 = 0x39;
+const LATIN_CAPITAL_A = 0x41;
+const LATIN_CAPITAL_Z = 0x5a;
+const LATIN_SMALL_A = 0x61;
+const LATIN_SMALL_Z = 0x7a;
+function isUpperLetter(cp: number): boolean {
+  return cp >= LATIN_CAPITAL_A && cp <= LATIN_CAPITAL_Z;
+}
+function isLowerLetter(cp: number): boolean {
+  return cp >= LATIN_SMALL_A && cp <= LATIN_SMALL_Z;
+}
+function isLetter(cp: number): boolean {
+  return isLowerLetter(cp) || isUpperLetter(cp);
+}
+function isWhitespace(cp: number): boolean {
+  return (
+    cp === TABULATION ||
+    cp === LINE_FEED ||
+    cp === FORM_FEED ||
+    cp === CARRIAGE_RETURN ||
+    cp === SPACE
+  );
+}
+function isDigit(cp: number): boolean {
+  return cp >= DIGIT_0 && cp <= DIGIT_9;
+}
+function isDot(cp: number): boolean {
+  return cp === FULL_STOP;
+}
+function isUnit(cp: number): boolean {
+  return isLetter(cp) || cp === PERCENT;
+}
+
 function createError(calc: string): Error {
   return new Error(`calc parse error: ${calc}`);
 }
@@ -55,32 +97,76 @@ function createError(calc: string): Error {
  * @private
  */
 function tokenize(calc: string): Token[] {
-  let exp = calc.replace(/calc\(/g, "(");
-  const reUnit = /^[-+]?(\d*\.\d+|\d+)[a-z%]+/i;
-  const reNum = /^[-+]?(\d*\.\d+|\d+)/i;
-  const reOp = /^[-+*/]/;
+  const exp = calc.replace(/calc\(/g, "(").trim();
 
   const tokens: Token[] = [];
-  let re;
-  while ((exp = exp.trim())) {
-    if (exp[0] === "(" || exp[0] === ")") {
-      tokens.push({ value: exp[0], type: TYPE_PUNCTURE });
-      exp = exp.slice(1);
-    } else if ((re = reUnit.exec(exp))) {
-      tokens.push({ value: re[0], type: TYPE_UNIT });
-      exp = exp.slice(re[0].length);
-    } else if ((re = reNum.exec(exp))) {
-      tokens.push({ value: re[0], type: TYPE_NUMBER });
-      exp = exp.slice(re[0].length);
-    } else if ((re = reOp.exec(exp))) {
-      tokens.push({
-        value: re[0] as Ops,
-        type: TYPE_OPERATOR,
-      });
-      exp = exp.slice(re[0].length);
+  const len = exp.length;
+  for (let index = 0; index < len; index++) {
+    const c = exp[index];
+    const cp = c.charCodeAt(0);
+    if (c === "(" || c === ")") {
+      tokens.push({ value: c, type: TYPE_PAREN });
+    } else if (c === "*" || c === "/") {
+      tokens.push({ value: c, type: TYPE_OPERATOR });
+    } else if (c === "+" || c === "-") {
+      index = parseSign(c, index + 1) - 1;
+    } else if (isDigit(cp) || isDot(cp)) {
+      index = parseNum(c, index + 1) - 1;
+    } else if (isWhitespace(cp)) {
+      // skip
     } else {
       throw createError(calc);
     }
+  }
+
+  function parseSign(sign: "+" | "-", start: number): number {
+    if (start < len) {
+      const c = exp[start];
+      const cp = c.charCodeAt(0);
+      if (isDigit(cp) || isDot(cp)) {
+        return parseNum(sign + c, start + 1);
+      }
+    }
+    tokens.push({ value: sign, type: TYPE_OPERATOR });
+    return start;
+  }
+  function parseNum(num: string, start: number): number {
+    let index = start;
+    for (; index < len; index++) {
+      const c = exp[index];
+      const cp = c.charCodeAt(0);
+      if (isDigit(cp)) {
+        num += c;
+      } else if (c === ".") {
+        if (num.indexOf(".") >= 0) {
+          throw createError(calc);
+        }
+        num += c;
+      } else if (isUnit(cp)) {
+        return parseUnit(num, c, index + 1);
+      } else {
+        break;
+      }
+    }
+    if (num === ".") {
+      throw createError(calc);
+    }
+    tokens.push({ value: parseFloat(num), type: TYPE_NUMBER });
+    return index;
+  }
+  function parseUnit(num: string, unit: string, start: number): number {
+    let index = start;
+    for (; index < len; index++) {
+      const c = exp[index];
+      const cp = c.charCodeAt(0);
+      if (isUnit(cp)) {
+        unit += c;
+      } else {
+        break;
+      }
+    }
+    tokens.push({ value: parseFloat(num), unit, type: TYPE_UNIT });
+    return index;
   }
   return tokens;
 }
@@ -120,12 +206,12 @@ function lex(tokens: Token[], calc: string): Node {
 
   while (tokens.length) {
     const token = tokens.shift() as Token;
-    if (token.type === TYPE_PUNCTURE && token.value === "(") {
+    if (token.type === TYPE_PAREN && token.value === "(") {
       let deep = 0;
       const closeIndex = array.findIndex(tokens, (t) => {
-        if (t.type === TYPE_PUNCTURE && t.value === "(") {
+        if (t.type === TYPE_PAREN && t.value === "(") {
           deep++;
-        } else if (t.type === TYPE_PUNCTURE && t.value === ")") {
+        } else if (t.type === TYPE_PAREN && t.value === ")") {
           if (!deep) {
             return true;
           }
@@ -136,8 +222,9 @@ function lex(tokens: Token[], calc: string): Node {
       if (closeIndex === -1) {
         throw createError(calc);
       }
-      stack.push(lex(tokens.slice(0, closeIndex), calc));
-      tokens.splice(0, closeIndex + 1);
+
+      stack.push(lex(tokens.splice(0, closeIndex), calc));
+      tokens.shift();
     } else if (token.type === TYPE_OPERATOR) {
       if (stack.length >= 3) {
         const beforeOp = (stack[stack.length - 2] as OpToken).value;
@@ -147,9 +234,7 @@ function lex(tokens: Token[], calc: string): Node {
       }
       stack.push(token);
     } else if (token.type === TYPE_UNIT) {
-      const { value } = token;
-      const num = parseFloat(value);
-      const unit = /[a-z%]+/i.exec(value)?.[0] || "";
+      const { value: num, unit } = token;
       stack.push({
         nodeType: NODE_TYPE_UNIT,
         value: num,
@@ -158,7 +243,7 @@ function lex(tokens: Token[], calc: string): Node {
     } else if (token.type === TYPE_NUMBER) {
       stack.push({
         nodeType: NODE_TYPE_NUMBER,
-        value: parseFloat(token.value),
+        value: token.value,
       });
     }
   }
