@@ -579,14 +579,11 @@ function _adjustColWidth(
   orgWidth: number
 ): number {
   const limits = _getColWidthLimits(grid, col);
-  return Math.max(
-    _applyColWidthLimits(limits as { min?: number; max?: number }, orgWidth),
-    0
-  );
+  return Math.max(_applyColWidthLimits(limits, orgWidth), 0);
 }
 /** @private */
 function _applyColWidthLimits(
-  limits: { min?: number; max?: number },
+  limits: { min?: number; max?: number } | void | null,
   orgWidth: number
 ): number {
   if (!limits) {
@@ -631,12 +628,26 @@ function _getColWidthDefine(grid: DrawGrid, col: number): string | number {
 function _getColWidthLimits(
   grid: DrawGrid,
   col: number
-): {
-  min?: number;
-  max?: number;
-  minDef?: string | number;
-  maxDef?: string | number;
-} | null {
+):
+  | {
+      min?: undefined;
+      minDef?: undefined;
+      max?: undefined;
+      maxDef?: undefined;
+    }
+  | {
+      min: number;
+      minDef: string | number;
+      max?: undefined;
+      maxDef?: undefined;
+    }
+  | {
+      min?: undefined;
+      minDef?: undefined;
+      max: number;
+      maxDef: string | number;
+    }
+  | null {
   const limit = grid[_].colWidthsLimit[col];
   if (!limit) {
     return null;
@@ -657,7 +668,7 @@ function _getColWidthLimits(
     result.max = _toPxWidth(grid, limit.max);
     result.maxDef = limit.max;
   }
-  return result;
+  return result as never;
 }
 
 /**
@@ -678,57 +689,76 @@ function isAutoDefine(width: string | number): width is "auto" {
  * @returns {string} formula
  * @private
  */
-function _calcAutoColWidthExpr(grid: DrawGrid): string {
-  const others = [];
+function _calcAutoColWidthExpr(grid: DrawGrid, shortCircuit = true): string {
+  const fullWidth = grid[_].calcWidthContext.full;
+  let sumMin = 0;
+  const others: (string | number)[] = [];
   let autoCount = 0;
   const hasLimitsOnAuto = [];
   for (let col = 0; col < grid[_].colCount; col++) {
     const def = _getColWidthDefine(grid, col);
     const limits = _getColWidthLimits(grid, col);
+
     if (isAutoDefine(def)) {
       if (limits) {
         hasLimitsOnAuto.push(limits);
+        if (limits.min) {
+          sumMin += limits.min;
+        }
       }
       autoCount++;
     } else {
-      let expr = typeof def === "number" ? `${def}px` : def;
+      let expr = def;
       if (limits) {
         const orgWidth = _toPxWidth(grid, expr);
         const newWidth = _applyColWidthLimits(limits, orgWidth);
         if (orgWidth !== newWidth) {
           expr = `${newWidth}px`;
         }
+        sumMin += newWidth;
       }
       others.push(expr);
+    }
+    if (shortCircuit && sumMin > fullWidth) {
+      // Returns 0px because it has consumed the full width.
+      return "0px";
     }
   }
   if (hasLimitsOnAuto.length && others.length) {
     const autoPx =
-      _toPxWidth(grid, `calc(100% - (${others.join(" + ")}))`) / autoCount;
-    for (let index = 0; index < hasLimitsOnAuto.length; index++) {
-      const limits = hasLimitsOnAuto[index];
+      (fullWidth -
+        _toPxWidth(
+          grid,
+          `calc(${others
+            .map((c) => (typeof c === "number" ? `${c}px` : c))
+            .join(" + ")})`
+        )) /
+      autoCount;
+    hasLimitsOnAuto.forEach((limits) => {
       if (limits.min && autoPx < limits.min) {
-        others.push(
-          typeof limits.minDef === "number"
-            ? `${limits.minDef}px`
-            : limits.minDef
-        );
+        others.push(limits.minDef);
         autoCount--;
       } else if (limits.max && limits.max < autoPx) {
-        others.push(
-          typeof limits.maxDef === "number"
-            ? `${limits.maxDef}px`
-            : limits.maxDef
-        );
+        others.push(limits.maxDef);
         autoCount--;
       }
-    }
-    if (autoCount <= 0) {
+    });
+    if (shortCircuit && autoCount <= 0) {
       return `${autoPx}px`;
     }
   }
   if (others.length) {
-    return `calc((100% - (${others.join(" + ")})) / ${autoCount})`;
+    const strDefs: string[] = [];
+    let num = 0;
+    others.forEach((c) => {
+      if (typeof c === "number") {
+        num += c;
+      } else {
+        strDefs.push(c);
+      }
+    });
+    strDefs.push(`${num}px`);
+    return `calc((100% - (${strDefs.join(" + ")})) / ${autoCount})`;
   } else {
     return `${100 / autoCount}%`;
   }
@@ -776,7 +806,11 @@ function _storeAutoColWidthExprs(grid: DrawGrid): void {
   for (let col = 0; col < grid[_].colCount; col++) {
     const def = _getColWidthDefine(grid, col);
     if (isAutoDefine(def)) {
-      _setColWidth(grid, col, expr || (expr = _calcAutoColWidthExpr(grid)));
+      _setColWidth(
+        grid,
+        col,
+        expr || (expr = _calcAutoColWidthExpr(grid, false))
+      );
     }
   }
 }
@@ -889,7 +923,7 @@ function _onScroll(grid: DrawGrid, _e: Event): void {
         redrawRect.width = -moveX;
         if (grid[_].frozenColCount > 0) {
           //固定列がある場合固定列分描画
-          const frozenRect = _getFrozenColsRect(grid) as Rect;
+          const frozenRect = _getFrozenColsRect(grid)!;
           redrawRect.width += frozenRect.width;
         }
       } else if (moveX > 0) {
@@ -902,7 +936,7 @@ function _onScroll(grid: DrawGrid, _e: Event): void {
       if (moveX > 0) {
         if (grid[_].frozenColCount > 0) {
           //固定列がある場合固定列描画
-          _invalidateRect(grid, _getFrozenColsRect(grid) as Rect);
+          _invalidateRect(grid, _getFrozenColsRect(grid)!);
         }
       }
     }
@@ -913,7 +947,7 @@ function _onScroll(grid: DrawGrid, _e: Event): void {
         redrawRect.height = -moveY;
         if (grid[_].frozenRowCount > 0) {
           //固定行がある場合固定行分描画
-          const frozenRect = _getFrozenRowsRect(grid) as Rect;
+          const frozenRect = _getFrozenRowsRect(grid)!;
           redrawRect.height += frozenRect.height;
         }
       } else if (moveY > 0) {
@@ -926,7 +960,7 @@ function _onScroll(grid: DrawGrid, _e: Event): void {
       if (moveY > 0) {
         if (grid[_].frozenRowCount > 0) {
           //固定行がある場合固定行描画
-          _invalidateRect(grid, _getFrozenRowsRect(grid) as Rect);
+          _invalidateRect(grid, _getFrozenRowsRect(grid)!);
         }
       }
     }
@@ -1586,7 +1620,7 @@ function _getResizeColAt(
   if (grid[_].frozenRowCount <= 0) {
     return -1;
   }
-  const frozenRect = _getFrozenRowsRect(grid) as Rect;
+  const frozenRect = _getFrozenRowsRect(grid)!;
   if (!frozenRect.inPoint(abstractX, abstractY)) {
     return -1;
   }
@@ -1613,13 +1647,13 @@ function _getScrollableVisibleRect(grid: DrawGrid): Rect {
   let frozenColsWidth = 0;
   if (grid[_].frozenColCount > 0) {
     //固定列がある場合固定列分描画
-    const frozenRect = _getFrozenColsRect(grid) as Rect;
+    const frozenRect = _getFrozenColsRect(grid)!;
     frozenColsWidth = frozenRect.width;
   }
   let frozenRowsHeight = 0;
   if (grid[_].frozenRowCount > 0) {
     //固定列がある場合固定列分描画
-    const frozenRect = _getFrozenRowsRect(grid) as Rect;
+    const frozenRect = _getFrozenRowsRect(grid)!;
     frozenRowsHeight = frozenRect.height;
   }
   return new Rect(
@@ -1790,7 +1824,7 @@ class CellSelector extends BaseMouseDownMover {
     if (!cell) {
       return false;
     }
-    const { col: oldCol, row: oldRow } = this._cell as CellAddress;
+    const { col: oldCol, row: oldRow } = this._cell!;
     const { col: newCol, row: newRow } = cell;
     if (oldCol === newCol && oldRow === newRow) {
       return false;
@@ -2385,7 +2419,8 @@ class Selection extends EventTarget {
           col: this._sel.col,
           row: this._sel.row,
           selected: false,
-        } as BeforeSelectedCellEvent;
+          after: null as never,
+        };
         callback();
         const after: AfterSelectedCellEvent = {
           col: this._sel.col,
@@ -2569,9 +2604,9 @@ class DrawCellContext implements CellContext {
    */
   getContext(): CanvasRenderingContext2D {
     if (this._mode === 0) {
-      return this._ctx as CanvasRenderingContext2D;
+      return this._ctx!;
     } else {
-      return _getInitContext.call(this._grid as DrawGrid);
+      return _getInitContext.call(this._grid!);
     }
   }
   /**
@@ -2602,15 +2637,12 @@ class DrawCellContext implements CellContext {
         return null;
       }
 
-      const absoluteRect = (this._grid as DrawGrid).getCellRect(
-        this._col,
-        this._row
-      );
+      const absoluteRect = this._grid!.getCellRect(this._col, this._row);
       return this._toRelativeDrawRect(absoluteRect);
     }
   }
   private _isOutOfRange(): boolean {
-    const { colCount, rowCount } = this._grid as DrawGrid;
+    const { colCount, rowCount } = this._grid!;
     return colCount <= this._col || rowCount <= this._row;
   }
   /**
@@ -2621,11 +2653,8 @@ class DrawCellContext implements CellContext {
     if (this._mode === 0) {
       return this;
     } else {
-      const absoluteRect = (this._grid as DrawGrid).getCellRect(
-        this._col,
-        this._row
-      );
-      const rect = _toRelativeRect(this._grid as DrawGrid, absoluteRect);
+      const absoluteRect = this._grid!.getCellRect(this._col, this._row);
+      const rect = _toRelativeRect(this._grid!, absoluteRect);
       const drawRect = this._isOutOfRange()
         ? null
         : this._toRelativeDrawRect(absoluteRect);
@@ -2653,13 +2682,13 @@ class DrawCellContext implements CellContext {
     this._drawLayers.addDraw(level, fn);
   }
   private _toRelativeDrawRect(absoluteRect: Rect): Rect | null {
-    const visibleRect = _getVisibleRect(this._grid as DrawGrid);
+    const visibleRect = _getVisibleRect(this._grid!);
     let rect = absoluteRect.copy();
     if (!rect.intersection(visibleRect)) {
       return null;
     }
 
-    const grid = this._grid as DrawGrid;
+    const grid = this._grid!;
 
     const isFrozenCell = grid.isFrozenCell(this._col, this._row);
     if (grid.frozenColCount >= 0 && (!isFrozenCell || !isFrozenCell.col)) {
@@ -2708,12 +2737,12 @@ class DrawCellContext implements CellContext {
   }
   private _getRectInternal(): Rect {
     if (this._mode === 0) {
-      return this._rect as Rect;
+      return this._rect!;
     } else {
       if (this._rect) {
         return this._rect;
       }
-      return (this._grid as DrawGrid).getCellRelativeRect(this._col, this._row);
+      return this._grid!.getCellRelativeRect(this._col, this._row);
     }
   }
 }
@@ -2840,7 +2869,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
     protectedSpace.canvas = hiDPI.transform(document.createElement("canvas"));
     protectedSpace.context = protectedSpace.canvas.getContext("2d", {
       alpha: false,
-    }) as CanvasRenderingContext2D;
+    })!;
 
     protectedSpace.rowCount = rowCount;
     protectedSpace.colCount = colCount;
@@ -3058,12 +3087,12 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
     canvas.style.height = "";
     const width = Math.floor(
       canvas.offsetWidth ||
-        (canvas.parentElement as HTMLElement).offsetWidth -
+        canvas.parentElement!.offsetWidth -
           style.getScrollBarSize() /*for legacy*/
     );
     const height = Math.floor(
       canvas.offsetHeight ||
-        (canvas.parentElement as HTMLElement).offsetHeight -
+        canvas.parentElement!.offsetHeight -
           style.getScrollBarSize() /*for legacy*/
     );
 
@@ -3396,7 +3425,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
     if (invalidateTarget) {
       const { frozenColCount, frozenRowCount } = this[_];
       if (frozenColCount > 0 && endCol >= frozenColCount) {
-        const frozenRect = _getFrozenColsRect(this) as Rect;
+        const frozenRect = _getFrozenColsRect(this)!;
         if (frozenRect.intersection(invalidateTarget)) {
           invalidateTarget.left = Math.min(
             frozenRect.right - 1,
@@ -3406,7 +3435,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
       }
 
       if (frozenRowCount > 0 && endRow >= frozenRowCount) {
-        const frozenRect = _getFrozenRowsRect(this) as Rect;
+        const frozenRect = _getFrozenRowsRect(this)!;
         if (frozenRect.intersection(invalidateTarget)) {
           invalidateTarget.top = Math.min(
             frozenRect.bottom - 1,
