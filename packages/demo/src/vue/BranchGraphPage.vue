@@ -12,18 +12,13 @@
         ref="grid"
         :data="data"
       >
-        <c-grid-column
+        <c-grid-branch-graph-column
           :width="200"
-          :column-type="{
-            typeName: 'BranchGraphColumn',
-            option: {
-              cache: true
-            }
-          }"
+          cache
           field="command"
         >
           Graph
-        </c-grid-column>
+        </c-grid-branch-graph-column>
         <c-grid-input-column
           field="user"
           width="120"
@@ -46,7 +41,7 @@
 const records = [
 
   {
-    command: [{ command: 'commit', branch: 'mastar' }, { command: 'tag', branch: 'mastar', tag: 'v1.1.0' }],
+    command: [{ command: 'commit', branch: 'main' }, { command: 'tag', branch: 'main', tag: 'v1.1.0' }],
     comment: 'release 1.1.0',
     user: 'user1'
   },
@@ -56,12 +51,12 @@ const records = [
     user: 'user2'
   },
   {
-    command: [{ command: 'merge', branch: { from: 'mastar', to: 'develop2' } }],
+    command: [{ command: 'merge', branch: { from: 'main', to: 'develop2' } }],
     comment: 'merge',
     user: 'user2'
   },
   {
-    command: [{ command: 'merge', branch: { from: 'develop3', to: 'mastar' } }],
+    command: [{ command: 'merge', branch: { from: 'develop3', to: 'main' } }],
     comment: 'merge',
     user: 'user1'
   },
@@ -71,17 +66,17 @@ const records = [
     user: 'user2'
   },
   {
-    command: [{ command: 'branch', branch: { from: 'mastar', to: 'develop3' } }, { command: 'commit', branch: 'develop3' }],
+    command: [{ command: 'branch', branch: { from: 'main', to: 'develop3' } }, { command: 'commit', branch: 'develop3' }],
     comment: 'Fix A to B',
     user: 'user3'
   },
   {
-    command: [{ command: 'branch', branch: { from: 'mastar', to: 'develop2' } }],
+    command: [{ command: 'branch', branch: { from: 'main', to: 'develop2' } }],
     comment: 'fork user2',
     user: 'user2'
   },
   {
-    command: [{ command: 'merge', branch: { from: 'develop', to: 'mastar' } }],
+    command: [{ command: 'merge', branch: { from: 'develop', to: 'main' } }],
     comment: 'merge',
     user: 'user2'
   },
@@ -91,12 +86,12 @@ const records = [
     user: 'user2'
   },
   {
-    command: [{ command: 'commit', branch: 'mastar' }, { command: 'tag', branch: 'mastar', tag: 'v1.0.0' }, { command: 'branch', branch: { from: 'mastar', to: 'develop' } }],
+    command: [{ command: 'commit', branch: 'main' }, { command: 'tag', branch: 'main', tag: 'v1.0.0' }, { command: 'branch', branch: { from: 'main', to: 'develop' } }],
     comment: 'release 1.0.0',
     user: 'user1'
   },
   {
-    command: [{ command: 'branch', branch: 'mastar' }, { command: 'commit', branch: 'mastar' }],
+    command: [{ command: 'branch', branch: 'main' }, { command: 'commit', branch: 'main' }],
     comment: 'initial commit',
     user: 'user1'
   }
