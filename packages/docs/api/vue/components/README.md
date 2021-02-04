@@ -17,19 +17,21 @@ order: 50
 | `<c-grid-icon-column>`                 | Icon column definition.                                       | [CGridIconColumn]               |
 | `<c-grid-percent-complete-bar-column>` | Percent complete bar column definition.                       | [CGridPercentCompleteBarColumn] |
 | `<c-grid-radio-column>`                | Radio button column definition.                               | [CGridRadioColumn]              |
+| `<c-grid-branch-graph-column>`         | Branch graph column definition.                               | [CGridBranchGraphColumn]        |
 | `<c-grid-layout-row>`                  | Define advanced layout row.                                   | [CGridLayoutRow]                |
 | `<c-grid-header>`                      | Define advanced layout header.                                | [CGridHeader]                   |
 
-[CGrid]: ./CGrid.md
-[CGridColumn]: ./CGridColumn.md
-[CGridColumnGroup]: ./CGridColumnGroup.md
-[CGridButtonColumn]: ./CGridButtonColumn.md
-[CGridCheckColumn]: ./CGridCheckColumn.md
-[CGridInputColumn]: ./CGridInputColumn.md
-[CGridMenuColumn]: ./CGridMenuColumn.md
-[CGridLinkColumn]: ./CGridLinkColumn.md
-[CGridIconColumn]: ./CGridIconColumn.md
-[CGridRadioColumn]: ./CGridRadioColumn.md
-[CGridPercentCompleteBarColumn]: ./CGridPercentCompleteBarColumn.md
-[CGridLayoutRow]: ./CGridLayoutRow.md
-[CGridHeader]: ./CGridHeader.md
+[cgrid]: ./CGrid.md
+[cgridcolumn]: ./CGridColumn.md
+[cgridcolumngroup]: ./CGridColumnGroup.md
+[cgridbuttoncolumn]: ./CGridButtonColumn.md
+[cgridcheckcolumn]: ./CGridCheckColumn.md
+[cgridinputcolumn]: ./CGridInputColumn.md
+[cgridmenucolumn]: ./CGridMenuColumn.md
+[cgridlinkcolumn]: ./CGridLinkColumn.md
+[cgridiconcolumn]: ./CGridIconColumn.md
+[cgridradiocolumn]: ./CGridRadioColumn.md
+[cgridpercentcompletebarcolumn]: ./CGridPercentCompleteBarColumn.md
+[cgridbranchgraphcolumn]: ./CGridBranchGraphColumn.md
+[cgridlayoutrow]: ./CGridLayoutRow.md
+[cgridheader]: ./CGridHeader.md
