@@ -1,6 +1,6 @@
 <script>
 import { gridUpdateWatcher, resolveProxyComputedProps, resolveProxyPropsMethod, vue3Emits, hackVue3 } from './utils'
-import { storeElement, removeElement } from './c-grid/elements'
+import { storeElement, removeElement } from './elements'
 
 /**
  * The Mixin for `<c-grid-column>` components.
