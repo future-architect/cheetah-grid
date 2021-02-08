@@ -1,5 +1,6 @@
 <script>
 import { gridUpdateWatcher, resolveProxyComputedProps, resolveProxyPropsMethod, vue3Emits, hackVue3 } from './utils'
+import { storeElement, removeElement } from './elements'
 
 /**
  * The Mixin for `<c-grid-column>` components.
@@ -75,6 +76,7 @@ export default {
     resolvedHeaderAction: gridUpdateWatcher
   },
   mounted () {
+    storeElement(this)
     this.$_CGridInstance.$_CGrid_setColumnDefine(this)
     this.$_CGrid_nextTickUpdate()
   },
@@ -176,6 +178,7 @@ export default {
 }
 
 function beforeDestroy (vm) {
+  removeElement(vm)
   vm.$_CGridInstance.$_CGrid_removeColumnDefine(vm)
 }
 </script>

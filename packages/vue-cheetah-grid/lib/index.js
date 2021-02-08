@@ -16,6 +16,8 @@ import CGridBranchGraphColumn from './CGridBranchGraphColumn.vue'
 import CGridLayoutRow from './CGridLayoutRow.vue'
 import CGridHeader from './CGridHeader.vue'
 
+export * from './c-grid/elements'
+
 export {
   CGrid,
   CGridColumn,
