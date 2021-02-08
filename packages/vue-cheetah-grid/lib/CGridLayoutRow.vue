@@ -11,6 +11,7 @@
 <script>
 import { slotElementsToHeaderOptions, slotElementsToHeaderProps } from './c-grid/header-utils'
 import { getSlotChildren, hackVue3 } from './c-grid/utils'
+import { storeElement, removeElement } from './c-grid/elements'
 
 /**
  * Defines layout row.
@@ -24,6 +25,7 @@ export default {
   },
   inject: ['$_CGridInstance'],
   mounted () {
+    storeElement(this)
     this.$_CGridInstance.$_CGrid_setColumnDefine(this)
     this.$_CGrid_nextTickUpdate()
   },
@@ -64,6 +66,7 @@ export default {
 }
 
 function beforeDestroy (vm) {
+  removeElement(vm)
   vm.$_CGridInstance.$_CGrid_removeColumnDefine(vm)
 }
 </script>
