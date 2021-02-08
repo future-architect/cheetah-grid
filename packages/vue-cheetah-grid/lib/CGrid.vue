@@ -400,6 +400,11 @@ export default {
         _setGridData(this, this.rawGrid, data, this.filter)
       }
     },
+    'data.length' (data) {
+      if (this.rawGrid) {
+        _setGridData(this, this.rawGrid, this.data, this.filter)
+      }
+    },
     filter (filter) {
       if (this.rawGrid) {
         _setGridData(this, this.rawGrid, this.data, filter)
