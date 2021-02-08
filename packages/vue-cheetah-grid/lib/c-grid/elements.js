@@ -7,5 +7,5 @@ export function removeElement (vm) {
   map.delete(vm.$el)
 }
 export function getComponentFromElement (element) {
-  map.delete(element)
+  return map.get(element)
 }
