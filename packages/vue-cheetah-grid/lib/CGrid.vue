@@ -84,18 +84,19 @@ function _setGridData (vm, grid, data, filter) {
   const dataSources = vm._dataSources = []
   let dataSource
   if (Array.isArray(data)) {
-    if (oldDataSource && oldDataSource.source === data) {
-      oldDataSource.length = data.length
-      dataSource = oldDataSource
-      unusedDataSources.delete(dataSource)
-    } else {
-      if (filter) {
+    if (filter) {
+      if (oldDataSource && oldDataSource.source === data) {
+        oldDataSource.length = data.length
+        dataSource = oldDataSource
+        unusedDataSources.delete(dataSource)
+      } else {
         dataSource = cheetahGrid.data.CachedDataSource.ofArray(data)
         dataSources.push(dataSource)
-      } else {
-        grid.records = data
-        return
       }
+    } else {
+      grid.records = data
+      unusedDataSources.forEach(dc => dc.dispose())
+      return
     }
   } else if (data instanceof cheetahGrid.data.DataSource) {
     dataSource = data
@@ -393,11 +394,19 @@ export default {
     }
   },
   computed: {
+    dataLengthForWatch () {
+      return (this.data && this.data.length) || 0
+    }
   },
   watch: {
     data (data) {
       if (this.rawGrid) {
         _setGridData(this, this.rawGrid, data, this.filter)
+      }
+    },
+    dataLengthForWatch () {
+      if (this.rawGrid) {
+        _setGridData(this, this.rawGrid, this.data, this.filter)
       }
     },
     filter (filter) {
