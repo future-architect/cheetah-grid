@@ -1,0 +1,821 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>cheetah-grid</title>
+	<meta name="description" content="Documentation for cheetah-grid">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">cheetah-grid</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="globals.html">Globals</a>
+				</li>
+			</ul>
+			<h1>cheetah-grid</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<a href="#cheetah-grid" id="cheetah-grid" style="color: inherit; text-decoration: none;">
+					<h1>Cheetah Grid</h1>
+				</a>
+				<p><a href="https://github.com/future-architect/cheetah-grid"><img src="https://img.shields.io/github/license/future-architect/cheetah-grid.svg" alt="GitHub"></a>
+					<a href="https://www.npmjs.com/package/cheetah-grid"><img src="https://img.shields.io/npm/v/cheetah-grid.svg" alt="npm"></a>
+					<a href="http://www.npmtrends.com/cheetah-grid"><img src="https://img.shields.io/npm/dw/cheetah-grid.svg" alt="npm"></a>
+					<a href="http://www.npmtrends.com/cheetah-grid"><img src="https://img.shields.io/npm/dm/cheetah-grid.svg" alt="npm"></a>
+					<a href="http://www.npmtrends.com/cheetah-grid"><img src="https://img.shields.io/npm/dy/cheetah-grid.svg" alt="npm"></a>
+					<a href="http://www.npmtrends.com/cheetah-grid"><img src="https://img.shields.io/npm/dt/cheetah-grid.svg" alt="npm"></a>
+				<a href="https://github.com/future-architect/cheetah-grid/actions?query=workflow%3ACI"><img src="https://github.com/future-architect/cheetah-grid/workflows/CI/badge.svg?branch=master" alt="Build Status"></a>  </p>
+				<p><a href="https://future-architect.github.io/cheetah-grid/"><img src="https://future-architect.github.io/cheetah-grid/logo.png" alt="Cheetah Grid"></a>  </p>
+				<p>The fastest open-source data table for web.</p>
+				<p><a href="https://future-architect.github.io/cheetah-grid/"><img src="https://github.com/future-architect/cheetah-grid/raw/master/images/capture.png" alt="capture.png"></a></p>
+				<p><a href="https://future-architect.github.io/cheetah-grid/">DEMO &amp; Documents</a></p>
+				<a href="#downloading-cheetah-grid" id="downloading-cheetah-grid" style="color: inherit; text-decoration: none;">
+					<h2>Downloading Cheetah Grid</h2>
+				</a>
+				<a href="#using-cheetah-grid-with-a-cdn" id="using-cheetah-grid-with-a-cdn" style="color: inherit; text-decoration: none;">
+					<h3>Using Cheetah Grid with a CDN</h3>
+				</a>
+				<p><a href="https://www.npmjs.com/package/cheetah-grid"><img src="https://img.shields.io/npm/v/cheetah-grid.svg" alt="npm"></a></p>
+				<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"https://unpkg.com/cheetah-grid@0.23"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+				<a href="#downloading-cheetah-grid-using-npm" id="downloading-cheetah-grid-using-npm" style="color: inherit; text-decoration: none;">
+					<h3>Downloading Cheetah Grid using npm</h3>
+				</a>
+				<p><a href="https://www.npmjs.com/package/cheetah-grid"><img src="https://img.shields.io/npm/v/cheetah-grid.svg" alt="npm"></a></p>
+				<pre><code class="language-sh">npm install -S cheetah-grid</code></pre>
+				<pre><code class="language-js"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> cheetahGrid <span class="hljs-keyword">from</span> <span class="hljs-string">'cheetah-grid'</span>
+
+<span class="hljs-comment">// or</span>
+
+<span class="hljs-keyword">const</span> cheetahGrid = <span class="hljs-built_in">require</span>(<span class="hljs-string">"cheetah-grid"</span>)</code></pre>
+				<a href="#downloading-cheetah-grid-source-code" id="downloading-cheetah-grid-source-code" style="color: inherit; text-decoration: none;">
+					<h3>Downloading Cheetah Grid source code</h3>
+				</a>
+				<p><a href="https://www.npmjs.com/package/cheetah-grid"><img src="https://img.shields.io/npm/v/cheetah-grid.svg" alt="npm"></a></p>
+				<p><a href="https://unpkg.com/cheetah-grid@0.23/dist/cheetahGrid.es5.min.js">cheetahGrid.es5.min.js</a>  </p>
+				<p>SourceMap<br><a href="https://unpkg.com/cheetah-grid@0.23/dist/cheetahGrid.es5.min.js.map">cheetahGrid.es5.min.js.map</a>  </p>
+				<a href="#downloading-cheetah-grid-using-github" id="downloading-cheetah-grid-using-github" style="color: inherit; text-decoration: none;">
+					<h3>Downloading Cheetah Grid using GitHub</h3>
+				</a>
+				<p><a href="https://github.com/future-architect/cheetah-grid"><img src="https://img.shields.io/github/package-json/v/future-architect/cheetah-grid.svg" alt="GitHub package version"></a></p>
+				<a href="#git-clone" id="git-clone" style="color: inherit; text-decoration: none;">
+					<h4>git clone</h4>
+				</a>
+				<pre><code class="language-bash">git <span class="hljs-built_in">clone</span> https://github.com/future-architect/cheetah-grid.git</code></pre>
+				<a href="#npm-install-amp-build" id="npm-install-amp-build" style="color: inherit; text-decoration: none;">
+					<h4>npm install &amp; build</h4>
+				</a>
+				<pre><code class="language-bash">npm install
+npm run build</code></pre>
+				<p>built file is created in the <code>./packages/cheetah-grid/dist</code> directory</p>
+				<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
+					<h2>Usage</h2>
+				</a>
+				<a href="#example-for-basic-usage" id="example-for-basic-usage" style="color: inherit; text-decoration: none;">
+					<h3>Example for basic usage</h3>
+				</a>
+				<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"sample"</span> <span class="hljs-attr">style</span>=<span class="hljs-string">"height: 300px; border: solid 1px #ddd;"</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  <span class="hljs-comment">// initialize</span>
+  <span class="hljs-keyword">const</span> grid = <span class="hljs-keyword">new</span> cheetahGrid.ListGrid({
+    <span class="hljs-comment">// Parent element on which to place the grid</span>
+    <span class="hljs-attr">parentElement</span>: <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#sample'</span>),
+    <span class="hljs-comment">// Header definition</span>
+    <span class="hljs-attr">header</span>: [
+      {<span class="hljs-attr">field</span>: <span class="hljs-string">'check'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">''</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">50</span>, <span class="hljs-attr">columnType</span>: <span class="hljs-string">'check'</span>, <span class="hljs-attr">action</span>: <span class="hljs-string">'check'</span>},
+      {<span class="hljs-attr">field</span>: <span class="hljs-string">'personid'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'ID'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">100</span>},
+      {<span class="hljs-attr">field</span>: <span class="hljs-string">'fname'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'First Name'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">200</span>},
+      {<span class="hljs-attr">field</span>: <span class="hljs-string">'lname'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'Last Name'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">200</span>},
+      {<span class="hljs-attr">field</span>: <span class="hljs-string">'email'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'Email'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">250</span>},
+    ],
+    <span class="hljs-comment">// Array data to be displayed on the grid</span>
+    records,
+    <span class="hljs-comment">// Column fixed position</span>
+    <span class="hljs-attr">frozenColCount</span>: <span class="hljs-number">2</span>,
+  });
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+				<p>Please refer to the <a href="https://future-architect.github.io/cheetah-grid/">documents</a> for details</p>
+				<blockquote>
+					<p><strong>Using the Vue Component of Cheetah Grid</strong><br>Please refer to the <a href="https://www.npmjs.com/package/vue-cheetah-grid"><code>vue-cheetah-grid</code></a>  </p>
+				</blockquote>
+				<a href="#definition-of-columns-and-headers" id="definition-of-columns-and-headers" style="color: inherit; text-decoration: none;">
+					<h3>Definition of columns and headers</h3>
+				</a>
+				<p>The <code>header</code> property, the property of <code>cheetahGrid.ListGrid</code>, decides the behave and appearance of columns and header cells.
+				We can set this property by constructor arguments or instance property.</p>
+				<p>The <code>header</code> property must be set by objects array (<code>Array&lt;object&gt;</code>).
+				In the standard definition, each object consists of following properties.</p>
+				<table>
+					<thead>
+						<tr>
+							<th>property</th>
+							<th>description</th>
+						</tr>
+					</thead>
+					<tbody><tr>
+							<td>caption</td>
+							<td>define the header caption</td>
+						</tr>
+						<tr>
+							<td>field</td>
+							<td>define the field name or function of the record to display in the cell</td>
+						</tr>
+						<tr>
+							<td>width (optional)</td>
+							<td>define the width of column</td>
+						</tr>
+						<tr>
+							<td>columnType (optional)</td>
+							<td>define the type of column</td>
+						</tr>
+						<tr>
+							<td>style (optional)</td>
+							<td>define the style of column</td>
+						</tr>
+						<tr>
+							<td>action (optional)</td>
+							<td>define the action of column</td>
+						</tr>
+				</tbody></table>
+				<p>To use multiple header, set the hierarchical structured Object to the <code>header</code> property.  </p>
+				<pre><code class="language-js"><span class="hljs-keyword">const</span> grid = <span class="hljs-keyword">new</span> cheetahGrid.ListGrid({
+  <span class="hljs-comment">//...</span>
+  <span class="hljs-attr">header</span>: [
+    <span class="hljs-comment">//...</span>
+    { <span class="hljs-comment">/* multiple header */</span>
+      <span class="hljs-attr">caption</span>: <span class="hljs-string">'Name'</span>,
+      <span class="hljs-attr">columns</span>: [
+        {<span class="hljs-attr">field</span>: <span class="hljs-string">'fname'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'First Name'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">200</span>},
+        {<span class="hljs-attr">field</span>: <span class="hljs-string">'lname'</span>, <span class="hljs-attr">caption</span>: <span class="hljs-string">'Last Name'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">200</span>},
+      ],
+    },
+    <span class="hljs-comment">//...</span>
+  ],
+  <span class="hljs-comment">//...</span>
+});</code></pre>
+				<a href="#definition-of-column-type" id="definition-of-column-type" style="color: inherit; text-decoration: none;">
+					<h3>Definition of column type</h3>
+				</a>
+				<p>Set the column type by using <code>columnType</code>.</p>
+				<p>For example, you can set the following strings:</p>
+				<table>
+					<thead>
+						<tr>
+							<th>property</th>
+							<th>description</th>
+						</tr>
+					</thead>
+					<tbody><tr>
+							<td>none</td>
+							<td>draw text in the cell</td>
+						</tr>
+						<tr>
+							<td><code>&#39;number&#39;</code></td>
+							<td>draw number in the cell with comma-separated</td>
+						</tr>
+						<tr>
+							<td><code>&#39;check&#39;</code></td>
+							<td>draw checkbox in the cell</td>
+						</tr>
+						<tr>
+							<td><code>&#39;button&#39;</code></td>
+							<td>draw button in the cell</td>
+						</tr>
+						<tr>
+							<td><code>&#39;image&#39;</code></td>
+							<td>draw image in the cell</td>
+						</tr>
+						<tr>
+							<td><code>&#39;multilinetext&#39;</code></td>
+							<td>draw multiline text in the cell</td>
+						</tr>
+				</tbody></table>
+				<p>If you define a class instance you can define an advanced column types.</p>
+				<p>Please refer to the <a href="https://future-architect.github.io/cheetah-grid/documents/api/js/column_types/Classes.html">column types documents</a> for details  </p>
+				<a href="#definition-of-column-action" id="definition-of-column-action" style="color: inherit; text-decoration: none;">
+					<h3>Definition of column action</h3>
+				</a>
+				<p>Define column action by using <code>action</code> property.  </p>
+				<table>
+					<thead>
+						<tr>
+							<th><code>action</code></th>
+							<th>description</th>
+						</tr>
+					</thead>
+					<tbody><tr>
+							<td><code>&#39;check&#39;</code></td>
+							<td>make the check box clickable.</td>
+						</tr>
+						<tr>
+							<td><code>&#39;input&#39;</code></td>
+							<td>make the cell enterable.</td>
+						</tr>
+				</tbody></table>
+				<p>If you define a class instance you can define an advanced column actions.</p>
+				<p>Please refer to the <a href="https://future-architect.github.io/cheetah-grid/documents/api/js/column_types/Classes.html">column actions documents</a> for details  </p>
+				<a href="#definition-of-column-style" id="definition-of-column-style" style="color: inherit; text-decoration: none;">
+					<h3>Definition of column style</h3>
+				</a>
+				<p>Define column style by using <code>style</code> property.  </p>
+				<p>Properties below are prepared in standard.  </p>
+				<table>
+					<thead>
+						<tr>
+							<th>property</th>
+							<th>description</th>
+						</tr>
+					</thead>
+					<tbody><tr>
+							<td>color</td>
+							<td>define the color of cell.</td>
+						</tr>
+						<tr>
+							<td>textAlign</td>
+							<td>define the horizontal position of text in cell.</td>
+						</tr>
+						<tr>
+							<td>textBaseline</td>
+							<td>define the vertical position of text in cell.</td>
+						</tr>
+						<tr>
+							<td>bgColor</td>
+							<td>define the background color of cell.</td>
+						</tr>
+						<tr>
+							<td>font</td>
+							<td>define the font of cell.</td>
+						</tr>
+						<tr>
+							<td>padding</td>
+							<td>define the padding of cell. if you set 4 values separately, please set the <code>Array</code>.</td>
+						</tr>
+						<tr>
+							<td>textOverflow</td>
+							<td>define how to display when text overflows the area of a cell. <code>clip</code> or <code>ellipsis</code> is available.</td>
+						</tr>
+				</tbody></table>
+				<p>In addition, there is an extended style property for each column type.</p>
+				<hr>
+				<p>Please refer to the <a href="https://future-architect.github.io/cheetah-grid/">documents</a> for details</p>
+				<a href="#license" id="license" style="color: inherit; text-decoration: none;">
+					<h2>License</h2>
+				</a>
+				<p>See the <a href="LICENSE">LICENSE</a> file for license rights and limitations (MIT).</p>
+				<a href="#supporting-cheetah-grid" id="supporting-cheetah-grid" style="color: inherit; text-decoration: none;">
+					<h2>Supporting Cheetah Grid</h2>
+				</a>
+				<p><a href="https://issuehunt.io/repos/109199313"><img src="https://issuehunt.io/static/embed/issuehunt-button-v1.svg" alt="Let&#39;s fund issues in this repository"></a>　 </p>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="globals.html"><em>Globals</em></a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/cacheddatasource.html" class="tsd-kind-icon">Cached<wbr>Data<wbr>Source</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/datasource.html" class="tsd-kind-icon">Data<wbr>Source</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/drawgrid.html" class="tsd-kind-icon">Draw<wbr>Grid</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/eventtarget.html" class="tsd-kind-icon">Event<wbr>Target</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/filterdatasource.html" class="tsd-kind-icon">Filter<wbr>Data<wbr>Source</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/listgrid.html" class="tsd-kind-icon">List<wbr>Grid</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/selection.html" class="tsd-kind-icon">Selection</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/actionoption.html" class="tsd-kind-icon">Action<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/baseactionoption.html" class="tsd-kind-icon">Base<wbr>Action<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/basecolumnoption.html" class="tsd-kind-icon">Base<wbr>Column<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/baseheaderdefine.html" class="tsd-kind-icon">Base<wbr>Header<wbr>Define</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/basestyleoption.html" class="tsd-kind-icon">Base<wbr>Style<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/branchgraphcolumnoption.html" class="tsd-kind-icon">Branch<wbr>Graph<wbr>Column<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/branchgraphstyleoption.html" class="tsd-kind-icon">Branch<wbr>Graph<wbr>Style<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/buttoncolumnoption.html" class="tsd-kind-icon">Button<wbr>Column<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/buttonstyleoption.html" class="tsd-kind-icon">Button<wbr>Style<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/celladdress.html" class="tsd-kind-icon">Cell<wbr>Address</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/cellcontext.html" class="tsd-kind-icon">Cell<wbr>Context</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/celldefine.html" class="tsd-kind-icon">Cell<wbr>Define</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/cellrange.html" class="tsd-kind-icon">Cell<wbr>Range</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/checkheaderstyleoption.html" class="tsd-kind-icon">Check<wbr>Header<wbr>Style<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/checkstyleoption.html" class="tsd-kind-icon">Check<wbr>Style<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/columndata.html" class="tsd-kind-icon">Column<wbr>Data</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/columndefine.html" class="tsd-kind-icon">Column<wbr>Define</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/columnmenuitemobjectoptions.html" class="tsd-kind-icon">Column<wbr>Menu<wbr>Item<wbr>Object<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/columnmenuitemoption.html" class="tsd-kind-icon">Column<wbr>Menu<wbr>Item<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/columnstyle.html" class="tsd-kind-icon">Column<wbr>Style</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/columntypeapi.html" class="tsd-kind-icon">Column<wbr>TypeAPI</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/datasourceapi.html" class="tsd-kind-icon">Data<wbr>SourceAPI</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/datasourceparam.html" class="tsd-kind-icon">Data<wbr>Source<wbr>Param</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/drawgridapi.html" class="tsd-kind-icon">Draw<wbr>GridAPI</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/drawgridconstructoroptions.html" class="tsd-kind-icon">Draw<wbr>Grid<wbr>Constructor<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/drawgrideventhandlerseventmap.html" class="tsd-kind-icon">Draw<wbr>Grid<wbr>Event<wbr>Handlers<wbr>Event<wbr>Map</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/drawgrideventhandlersreturnmap.html" class="tsd-kind-icon">Draw<wbr>Grid<wbr>Event<wbr>Handlers<wbr>Return<wbr>Map</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/drawgridevents.html" class="tsd-kind-icon">Draw<wbr>Grid<wbr>Events</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/drawgridkeyboardoptions.html" class="tsd-kind-icon">Draw<wbr>Grid<wbr>Keyboard<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/editoroption.html" class="tsd-kind-icon">Editor<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/fieldassessor.html" class="tsd-kind-icon">Field<wbr>Assessor</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/fonticon.html" class="tsd-kind-icon">Font<wbr>Icon</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/gridcanvashelperapi.html" class="tsd-kind-icon">Grid<wbr>Canvas<wbr>HelperAPI</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/groupheaderdefine.html" class="tsd-kind-icon">Group<wbr>Header<wbr>Define</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/headercelldefine.html" class="tsd-kind-icon">Header<wbr>Cell<wbr>Define</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/headerdata.html" class="tsd-kind-icon">Header<wbr>Data</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/headerdefine.html" class="tsd-kind-icon">Header<wbr>Define</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/headerstdstyleoption.html" class="tsd-kind-icon">Header<wbr>Std<wbr>Style<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/iconcolumnoption.html" class="tsd-kind-icon">Icon<wbr>Column<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/icondefine.html" class="tsd-kind-icon">Icon<wbr>Define</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/imageicon.html" class="tsd-kind-icon">Image<wbr>Icon</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/imagestyleoption.html" class="tsd-kind-icon">Image<wbr>Style<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/inlineapi.html" class="tsd-kind-icon">InlineAPI</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/inlineinputeditoroption.html" class="tsd-kind-icon">Inline<wbr>Input<wbr>Editor<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/inlinemenueditoroption.html" class="tsd-kind-icon">Inline<wbr>Menu<wbr>Editor<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/listgridapi.html" class="tsd-kind-icon">List<wbr>GridAPI</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/listgridconstructoroptions.html" class="tsd-kind-icon">List<wbr>Grid<wbr>Constructor<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/listgrideventhandlerseventmap.html" class="tsd-kind-icon">List<wbr>Grid<wbr>Event<wbr>Handlers<wbr>Event<wbr>Map</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/listgrideventhandlersreturnmap.html" class="tsd-kind-icon">List<wbr>Grid<wbr>Event<wbr>Handlers<wbr>Return<wbr>Map</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/listgridevents.html" class="tsd-kind-icon">List<wbr>Grid<wbr>Events</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/menucolumnoption.html" class="tsd-kind-icon">Menu<wbr>Column<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/menustyleoption.html" class="tsd-kind-icon">Menu<wbr>Style<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/messageobject.html" class="tsd-kind-icon">Message<wbr>Object</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/multilinetextheaderstyleoption.html" class="tsd-kind-icon">Multiline<wbr>Text<wbr>Header<wbr>Style<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/multilinetextstyleoption.html" class="tsd-kind-icon">Multiline<wbr>Text<wbr>Style<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/namedicon.html" class="tsd-kind-icon">Named<wbr>Icon</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/numbercolumnoption.html" class="tsd-kind-icon">Number<wbr>Column<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/pasterangeboxvalues.html" class="tsd-kind-icon">Paste<wbr>Range<wbr>Box<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/pathicon.html" class="tsd-kind-icon">Path<wbr>Icon</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/percentcompletebarcolumnoption.html" class="tsd-kind-icon">Percent<wbr>Complete<wbr>Bar<wbr>Column<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/percentcompletebarstyleoption.html" class="tsd-kind-icon">Percent<wbr>Complete<wbr>Bar<wbr>Style<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/radioeditoroption.html" class="tsd-kind-icon">Radio<wbr>Editor<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/radiostyleoption.html" class="tsd-kind-icon">Radio<wbr>Style<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/rectprops.html" class="tsd-kind-icon">Rect<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/simplecolumnmenuitemoption.html" class="tsd-kind-icon">Simple<wbr>Column<wbr>Menu<wbr>Item<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/smalldialoginputeditoroption.html" class="tsd-kind-icon">Small<wbr>Dialog<wbr>Input<wbr>Editor<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/sortheaderactionoption.html" class="tsd-kind-icon">Sort<wbr>Header<wbr>Action<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/sortheaderstyleoption.html" class="tsd-kind-icon">Sort<wbr>Header<wbr>Style<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/sortstate.html" class="tsd-kind-icon">Sort<wbr>State</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/stdbasestyleoption.html" class="tsd-kind-icon">Std<wbr>Base<wbr>Style<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/styleoption.html" class="tsd-kind-icon">Style<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/stylepropertyfunctionarg.html" class="tsd-kind-icon">Style<wbr>Property<wbr>Function<wbr>Arg</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/svgicon.html" class="tsd-kind-icon">Svg<wbr>Icon</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/themedefine.html" class="tsd-kind-icon">Theme<wbr>Define</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/widthdata.html" class="tsd-kind-icon">Width<wbr>Data</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#actionlistener" class="tsd-kind-icon">Action<wbr>Listener</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#afterselectedcellevent" class="tsd-kind-icon">After<wbr>Selected<wbr>Cell<wbr>Event</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#anyfunction" class="tsd-kind-icon">Any<wbr>Function</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#anylistener" class="tsd-kind-icon">Any<wbr>Listener</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#arraylayoutdefine" class="tsd-kind-icon">Array<wbr>Layout<wbr>Define</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#beforeselectedcellevent" class="tsd-kind-icon">Before<wbr>Selected<wbr>Cell<wbr>Event</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#branchgraphcommand" class="tsd-kind-icon">Branch<wbr>Graph<wbr>Command</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#buttonactionoption" class="tsd-kind-icon">Button<wbr>Action<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#changedheadervaluecellevent" class="tsd-kind-icon">Changed<wbr>Header<wbr>Value<wbr>Cell<wbr>Event</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#changedvaluecellevent" class="tsd-kind-icon">Changed<wbr>Value<wbr>Cell<wbr>Event</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#colordef" class="tsd-kind-icon">Color<wbr>Def</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#colorpropertydefine" class="tsd-kind-icon">Color<wbr>Property<wbr>Define</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#colorsdef" class="tsd-kind-icon">Colors<wbr>Def</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#colorspropertydefine" class="tsd-kind-icon">Colors<wbr>Property<wbr>Define</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#columnactionoption" class="tsd-kind-icon">Column<wbr>Action<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#columniconoption" class="tsd-kind-icon">Column<wbr>Icon<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#columnmenuitemoptions" class="tsd-kind-icon">Column<wbr>Menu<wbr>Item<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#columnstyleoption" class="tsd-kind-icon">Column<wbr>Style<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#columntypeoption" class="tsd-kind-icon">Column<wbr>Type<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#deletecellevent" class="tsd-kind-icon">Delete<wbr>Cell<wbr>Event</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#eventlistenerid" class="tsd-kind-icon">Event<wbr>Listener<wbr>Id</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#fielddata" class="tsd-kind-icon">Field<wbr>Data</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#fielddef" class="tsd-kind-icon">Field<wbr>Def</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#fieldgetter" class="tsd-kind-icon">Field<wbr>Getter</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#fieldsetter" class="tsd-kind-icon">Field<wbr>Setter</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#fontpropertydefine" class="tsd-kind-icon">Font<wbr>Property<wbr>Define</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#getradioeditorgroup" class="tsd-kind-icon">Get<wbr>Radio<wbr>Editor<wbr>Group</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#getvalueresult" class="tsd-kind-icon">Get<wbr>Value<wbr>Result</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#headeractionoption" class="tsd-kind-icon">Header<wbr>Action<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#headerbodylayoutdefine" class="tsd-kind-icon">Header<wbr>Body<wbr>Layout<wbr>Define</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#headerstyleoption" class="tsd-kind-icon">Header<wbr>Style<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#headertypeoption" class="tsd-kind-icon">Header<wbr>Type<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#headervalues" class="tsd-kind-icon">Header<wbr>Values</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#headersdefine" class="tsd-kind-icon">Headers<wbr>Define</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#iconstyleoption" class="tsd-kind-icon">Icon<wbr>Style<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#inputcellevent" class="tsd-kind-icon">Input<wbr>Cell<wbr>Event</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#keyboardeventlistener" class="tsd-kind-icon">Keyboard<wbr>Event<wbr>Listener</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#keydownevent" class="tsd-kind-icon">Keydown<wbr>Event</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#layoutdefine" class="tsd-kind-icon">Layout<wbr>Define</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#layoutobjectid" class="tsd-kind-icon">Layout<wbr>Object<wbr>Id</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#lineclamp" class="tsd-kind-icon">Line<wbr>Clamp</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#maybecall" class="tsd-kind-icon">Maybe<wbr>Call</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#maybecallorundef" class="tsd-kind-icon">Maybe<wbr>Call<wbr>OrUndef</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#maybepromise" class="tsd-kind-icon">Maybe<wbr>Promise</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#maybepromiseorcall" class="tsd-kind-icon">Maybe<wbr>Promise<wbr>OrCall</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#maybepromiseorcallorundef" class="tsd-kind-icon">Maybe<wbr>Promise<wbr>OrCall<wbr>OrUndef</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#maybepromiseorundef" class="tsd-kind-icon">Maybe<wbr>Promise<wbr>OrUndef</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#maybeundef" class="tsd-kind-icon">Maybe<wbr>Undef</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#message" class="tsd-kind-icon">Message</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#modifystatuseditableinputcellevent" class="tsd-kind-icon">Modify<wbr>Status<wbr>Editableinput<wbr>Cell<wbr>Event</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#mousecellevent" class="tsd-kind-icon">Mouse<wbr>Cell<wbr>Event</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#mousepointercellevent" class="tsd-kind-icon">Mouse<wbr>Pointer<wbr>Cell<wbr>Event</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#numberstyleoption" class="tsd-kind-icon">Number<wbr>Style<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#oldsortoption" class="tsd-kind-icon">Old<wbr>Sort<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#partialthemedefine" class="tsd-kind-icon">Partial<wbr>Theme<wbr>Define</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#pastecellevent" class="tsd-kind-icon">Paste<wbr>Cell<wbr>Event</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#promisemaybecallorundef" class="tsd-kind-icon">Promise<wbr>Maybe<wbr>Call<wbr>OrUndef</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#promisemaybeundef" class="tsd-kind-icon">Promise<wbr>Maybe<wbr>Undef</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#promisemaybeundeforcall" class="tsd-kind-icon">Promise<wbr>Maybe<wbr>Undef<wbr>OrCall</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#promiseorundef" class="tsd-kind-icon">Promise<wbr>OrUndef</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#recordboolean" class="tsd-kind-icon">Record<wbr>Boolean</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#requiredthemedefine" class="tsd-kind-icon">Required<wbr>Theme<wbr>Define</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#scrollevent" class="tsd-kind-icon">Scroll<wbr>Event</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#selectedcellevent" class="tsd-kind-icon">Selected<wbr>Cell<wbr>Event</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#setpastevaluetestdata" class="tsd-kind-icon">Set<wbr>Paste<wbr>Value<wbr>Test<wbr>Data</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#simplebranchgraphcommand" class="tsd-kind-icon">Simple<wbr>Branch<wbr>Graph<wbr>Command</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#sortoption" class="tsd-kind-icon">Sort<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#textoverflow" class="tsd-kind-icon">Text<wbr>Overflow</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#touchcellevent" class="tsd-kind-icon">Touch<wbr>Cell<wbr>Event</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="globals.html#dg_event_type" class="tsd-kind-icon">DG_<wbr>EVENT_<wbr>TYPE</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="globals.html#lg_event_type" class="tsd-kind-icon">LG_<wbr>EVENT_<wbr>TYPE</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="assets/js/search.js"><' + '/script>');</script>
+</body>
+</html>
