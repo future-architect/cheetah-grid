@@ -393,6 +393,9 @@ export default {
     }
   },
   computed: {
+    dataLengthForWatch () {
+      return (this.data && this.data.length) || 0
+    }
   },
   watch: {
     data (data) {
@@ -400,7 +403,7 @@ export default {
         _setGridData(this, this.rawGrid, data, this.filter)
       }
     },
-    'data.length' (data) {
+    dataLengthForWatch () {
       if (this.rawGrid) {
         _setGridData(this, this.rawGrid, this.data, this.filter)
       }
