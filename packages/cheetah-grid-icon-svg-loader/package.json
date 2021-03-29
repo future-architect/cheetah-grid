@@ -49,6 +49,6 @@
   },
   "dependencies": {
     "loader-utils": "^1.1.0",
-    "xmldom": "^0.1.27"
+    "xmldom": "^0.5.0"
   }
 }
