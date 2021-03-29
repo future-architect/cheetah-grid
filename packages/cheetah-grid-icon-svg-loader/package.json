@@ -1,6 +1,6 @@
 {
   "name": "cheetah-grid-icon-svg-loader",
-  "version": "0.23.0-alpha.0",
+  "version": "0.23.0",
   "description": "Webpack loader that loads the icon module for Cheetah Grid from SVG.",
   "main": "lib/index.js",
   "files": [
