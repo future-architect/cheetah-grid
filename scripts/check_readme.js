@@ -85,25 +85,6 @@ const gettingStartedVue = require.resolve('../packages/docs/introduction/getting
 	}
 
 
-	const reGHDocumentLink = /https:\/\/github.com\/future-architect\/cheetah-grid\/tree\/master\/docs\/([a-zA-Z0-9.]*)\//g;
-
-	while ((result = reGHDocumentLink.exec(readme)) !== null) {
-		const rmVersion = result[1];
-		if (version !== rmVersion) {
-			const msg = `Invalid docs link version. act:${rmVersion} @ "${readmePath}`;
-
-			console.log(result);
-			errors.push({
-				msg,
-				actual: rmVersion,
-				expect: version,
-				start: result.index,
-				end: result.index + result[0].length,
-				fixed: `https://github.com/future-architect/cheetah-grid/tree/master/docs/${version}`
-			});
-		}
-	}
-
 	if (errors.length) {
 		const newReadme = [];
 		let start = 0;

@@ -32,6 +32,25 @@ const devtoolModuleFilenameTemplate = ({ resourcePath }) => {
 }
 module.exports = (env, argv) => {
   const production = argv.mode === 'production'
+  if (production) {
+    const from = path.resolve(__dirname, './animals-icons')
+    const to = path.resolve(__dirname, '../../docs/animals-icons')
+    if (fs.existsSync(to)) {
+      for (const fileName of fs.readdirSync(to)) {
+        fs.unlinkSync(
+          path.resolve(path.join(to, fileName))
+        )
+      }
+    } else {
+      fs.mkdirSync(to)
+    }
+    for (const fileName of fs.readdirSync(from)) {
+      fs.copyFileSync(
+        path.resolve(path.join(from, fileName)),
+        path.resolve(path.join(to, fileName))
+      )
+    }
+  }
   return {
   // context: path.join(__dirname, 'src'),
   // context: '/',
