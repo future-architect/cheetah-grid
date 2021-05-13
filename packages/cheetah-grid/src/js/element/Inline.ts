@@ -110,9 +110,7 @@ export class Inline implements InlineAPI {
   canBreak(): boolean {
     return !!this._content;
   }
-  splitIndex(
-    index: number
-  ): {
+  splitIndex(index: number): {
     before: Inline | null;
     after: Inline | null;
   } {

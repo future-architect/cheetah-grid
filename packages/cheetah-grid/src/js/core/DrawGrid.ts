@@ -3690,9 +3690,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
       parentElement.removeChild(protectedSpace.element);
     }
   }
-  getAttachCellsArea(
-    range: CellRange
-  ): {
+  getAttachCellsArea(range: CellRange): {
     element: HTMLElement;
     rect: Rect;
   } {

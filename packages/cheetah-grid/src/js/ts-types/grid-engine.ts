@@ -116,9 +116,7 @@ export interface DrawGridAPI {
     overflowText: false | string
   ): void;
 
-  getAttachCellsArea(
-    range: CellRange
-  ): {
+  getAttachCellsArea(range: CellRange): {
     element: HTMLElement;
     rect: RectProps;
   };

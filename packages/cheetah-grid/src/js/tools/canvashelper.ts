@@ -244,9 +244,9 @@ export function drawInlineImageRect(
  * @return {Object} Object containing the width of the checkbox
  * @memberof cheetahGrid.tools.canvashelper
  */
-export function measureCheckbox(
-  ctx: CanvasRenderingContext2D
-): { width: number } {
+export function measureCheckbox(ctx: CanvasRenderingContext2D): {
+  width: number;
+} {
   return {
     width: getFontSize(ctx, null).width,
   };
@@ -258,9 +258,9 @@ export function measureCheckbox(
  * @return {Object} Object containing the width of the radio button
  * @memberof cheetahGrid.tools.canvashelper
  */
-export function measureRadioButton(
-  ctx: CanvasRenderingContext2D
-): { width: number } {
+export function measureRadioButton(ctx: CanvasRenderingContext2D): {
+  width: number;
+} {
   return {
     width: getFontSize(ctx, null).width,
   };

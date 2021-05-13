@@ -28,9 +28,10 @@ function getAllColumnData<T>(
   const allData: BranchGraphCommand[] = [];
   let promise;
   for (let index = 0; index < dataSource.length; index++) {
-    const data = dataSource.getField(index, field) as MaybePromiseOrUndef<
-      BranchGraphCommand
-    >;
+    const data = dataSource.getField(
+      index,
+      field
+    ) as MaybePromiseOrUndef<BranchGraphCommand>;
     if (isPromise(data)) {
       const dataIndex = allData.length;
       allData.push(undefined);

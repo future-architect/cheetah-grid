@@ -547,9 +547,8 @@ function _tryWithUpdateDataSource<T>(
 function _setRecords<T>(grid: ListGrid<T>, records: T[] = []): void {
   _tryWithUpdateDataSource(grid, () => {
     grid[_].records = records;
-    const newDataSource = (grid[_].dataSource = CachedDataSource.ofArray(
-      records
-    ));
+    const newDataSource = (grid[_].dataSource =
+      CachedDataSource.ofArray(records));
     grid.addDisposable(newDataSource);
   });
 }
