@@ -68,9 +68,10 @@ function colorToRGB0(color: string): RGBA | null {
       return rgb;
     }
   }
-  ret = /^rgba\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d(\.\d)?)\s*\)$/i.exec(
-    color
-  );
+  ret =
+    /^rgba\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d(\.\d)?)\s*\)$/i.exec(
+      color
+    );
   if (ret) {
     const rgb = createRGB(
       Number(ret[1]),
@@ -82,9 +83,10 @@ function colorToRGB0(color: string): RGBA | null {
       return rgb;
     }
   }
-  ret = /^rgb\(\s*(\d{1,3}(\.\d)?)%\s*,\s*(\d{1,3}(\.\d)?)%\s*,\s*(\d{1,3}(\.\d)?)%\s*\)$/i.exec(
-    color
-  );
+  ret =
+    /^rgb\(\s*(\d{1,3}(\.\d)?)%\s*,\s*(\d{1,3}(\.\d)?)%\s*,\s*(\d{1,3}(\.\d)?)%\s*\)$/i.exec(
+      color
+    );
   if (ret) {
     const rgb = createRGB(
       rateToByte(Number(ret[1])),
@@ -95,9 +97,10 @@ function colorToRGB0(color: string): RGBA | null {
       return rgb;
     }
   }
-  ret = /^rgba\(\s*(\d{1,3}(\.\d)?)%\s*,\s*(\d{1,3}(\.\d)?)%\s*,\s*(\d{1,3}(\.\d)?)%\s*,\s*(\d(\.\d)?)\s*\)$/i.exec(
-    color
-  );
+  ret =
+    /^rgba\(\s*(\d{1,3}(\.\d)?)%\s*,\s*(\d{1,3}(\.\d)?)%\s*,\s*(\d{1,3}(\.\d)?)%\s*,\s*(\d(\.\d)?)\s*\)$/i.exec(
+      color
+    );
   if (ret) {
     const rgb = createRGB(
       rateToByte(Number(ret[1])),

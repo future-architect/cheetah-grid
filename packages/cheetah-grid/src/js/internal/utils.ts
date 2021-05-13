@@ -272,7 +272,8 @@ function genChars(s: string): { next(): string | null } {
   // FVS [\u180B-\u180D]
   // VS1～VS16 [\uFE00-\uFE0F]
   // VS17～VS256 \uDB40[\uDD00-\uDDEF]
-  const re = /([\uD800-\uDBFF][\uDC00-\uDFFF]|\r\n|[^\uD800-\uDFFF])([\u180B-\u180D]|[\uFE00-\uFE0F]|\uDB40[\uDD00-\uDDEF])?/g;
+  const re =
+    /([\uD800-\uDBFF][\uDC00-\uDFFF]|\r\n|[^\uD800-\uDFFF])([\u180B-\u180D]|[\uFE00-\uFE0F]|\uDB40[\uDD00-\uDDEF])?/g;
   return {
     next(): string | null {
       const res = re.exec(s);

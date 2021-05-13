@@ -47,12 +47,13 @@ const EASINGS = {
   easeInOut: cubicBezier(0.42, 0.0, 0.58, 1.0),
 };
 
-const raf: typeof requestAnimationFrame = (isNode
-  ? (): void => {}
-  : window.requestAnimationFrame ||
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ((fn: () => void): any =>
-      setTimeout(fn, 1))) as typeof requestAnimationFrame;
+const raf: typeof requestAnimationFrame = (
+  isNode
+    ? (): void => {}
+    : window.requestAnimationFrame ||
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ((fn: () => void): any => setTimeout(fn, 1))
+) as typeof requestAnimationFrame;
 
 function now(): number {
   return Date.now();
@@ -118,7 +119,7 @@ export function animate(
   };
   if (typeof Promise !== "undefined") {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const result: any = new Promise<unknown>((resolve, reject) => {
+    const result: any = new Promise<void>((resolve, reject) => {
       const anim = createAnim(resolve, reject);
       step(0);
       anim();

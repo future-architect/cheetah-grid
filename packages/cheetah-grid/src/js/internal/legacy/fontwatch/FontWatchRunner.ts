@@ -62,9 +62,8 @@ class FontWatchRunner {
 
     //start
     this.lastResortWidths_[LastResortFonts.SERIF] = lastResortRulerA.getWidth();
-    this.lastResortWidths_[
-      LastResortFonts.SANS_SERIF
-    ] = lastResortRulerB.getWidth();
+    this.lastResortWidths_[LastResortFonts.SANS_SERIF] =
+      lastResortRulerB.getWidth();
 
     lastResortRulerA.remove();
     lastResortRulerB.remove();

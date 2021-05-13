@@ -125,13 +125,15 @@ export class PathCommandsParser implements CanvasOperations {
   private _ops: { op: CanvasOperation; args: any[] }[] = [];
   constructor() {
     this._commands = new PathCommands(this as CanvasOperations);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const buildPush = (op: CanvasOperation) => (...args: any[]): void => {
-      this._ops.push({
-        op,
-        args,
-      });
-    };
+    const buildPush =
+      (op: CanvasOperation) =>
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (...args: any[]): void => {
+        this._ops.push({
+          op,
+          args,
+        });
+      };
     this.moveTo = buildPush("moveTo");
     this.lineTo = buildPush("lineTo");
     this.closePath = buildPush("closePath");
