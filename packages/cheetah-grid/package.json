@@ -1,6 +1,6 @@
 {
   "name": "cheetah-grid",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Cheetah Grid is a high performance grid engine that works on canvas",
   "keywords": [
     "spreadsheet",
@@ -97,7 +97,7 @@
     "karma-babel-preprocessor": "^8.0.0-beta.0",
     "karma-chrome-launcher": "^2.2.0",
     "karma-cli": "^1.0.1",
-    "karma-coverage": "^1.1.2",
+    "karma-coverage": "^2.0.3",
     "karma-firefox-launcher": "^1.1.0",
     "karma-htmlfile-reporter": "^0.3.6",
     "karma-ie-launcher": "^1.0.0",
