@@ -70,7 +70,7 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 			moveCellOnEnter: true
 		},
 		header: [
-			{field: 'check', caption: 'check', width: 50, columnType: 'check', action: 'check'},
+			{field: 'check', caption: 'check', width: 50, columnType: 'check', action: 'check', headerType: 'check', headerAction: 'check'},
 			{
 				field: 'personid',
 				caption: 'ID',

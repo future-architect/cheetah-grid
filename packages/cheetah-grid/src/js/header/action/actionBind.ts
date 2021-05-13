@@ -7,6 +7,7 @@ import type {
 import { DG_EVENT_TYPE } from "../../core/DG_EVENT_TYPE";
 import { event } from "../../internal/utils";
 const KEY_ENTER = 13;
+const KEY_SPACE = 32;
 export function bindCellClickAction<T>(
   grid: ListGridAPI<T>,
   cellId: LayoutObjectId,
@@ -88,11 +89,10 @@ export function bindCellKeyAction<T>(
     acceptKeys?: number[];
   }
 ): EventListenerId[] {
-  acceptKeys = [...acceptKeys, KEY_ENTER];
-
   function isTarget(col: number, row: number): boolean {
     return grid.getLayoutCellId(col, row) === cellId;
   }
+  acceptKeys = [...acceptKeys, KEY_ENTER, KEY_SPACE];
   return [
     // enter key down
     grid.listen(DG_EVENT_TYPE.KEYDOWN, (e) => {
