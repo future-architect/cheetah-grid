@@ -123,7 +123,8 @@ module.exports = (env, argv) => {
       new webpack.DefinePlugin(production ? {
         'process.env': {
           NODE_ENV: '"production"'
-        }
+        },
+        __VUE_PROD_DEVTOOLS__: '"false"'
       } : {})
     ],
     devtool: production ? undefined : '#source-map'
