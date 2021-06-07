@@ -759,6 +759,7 @@ class ThemeResolver<T> implements RequiredThemeDefine {
   private _radioButton: RequiredThemeDefine["radioButton"] | null = null;
   private _button: RequiredThemeDefine["button"] | null = null;
   private _header: RequiredThemeDefine["header"] | null = null;
+  private _messages: RequiredThemeDefine["messages"] | null = null;
   constructor(grid: ListGridAPI<T>) {
     this._grid = grid;
   }
@@ -864,6 +865,23 @@ class ThemeResolver<T> implements RequiredThemeDefine {
       (this._header = {
         get sortArrowColor(): ColorPropertyDefine {
           return getThemeColor(grid, "header", "sortArrowColor");
+        },
+      })
+    );
+  }
+  get messages(): RequiredThemeDefine["messages"] {
+    const grid = this._grid;
+    return (
+      this._messages ||
+      (this._messages = {
+        get infoBgColor(): ColorPropertyDefine {
+          return getThemeColor(grid, "messages", "infoBgColor");
+        },
+        get errorBgColor(): ColorPropertyDefine {
+          return getThemeColor(grid, "messages", "errorBgColor");
+        },
+        get warnBgColor(): ColorPropertyDefine {
+          return getThemeColor(grid, "messages", "warnBgColor");
         },
       })
     );

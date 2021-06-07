@@ -37,11 +37,17 @@ export class WarningMessage<T> extends BaseMessage<T> {
     ) {
       helper.drawBorderWithClip(
         context,
-        (_ctx: CanvasRenderingContext2D): void => {
+        (ctx: CanvasRenderingContext2D): void => {
           messageUtils.drawExclamationMarkBox(
             context,
             {
-              bgColor: DEEP_ORANGE_A100,
+              bgColor:
+                helper.getColor(
+                  helper.theme.messages.warnBgColor,
+                  context.col,
+                  context.row,
+                  ctx
+                ) || DEEP_ORANGE_A100,
               color: bgColor,
             },
             helper

@@ -277,6 +277,9 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 			color: '#FDD',
 			bgColor: '#F55',
 		},
+		messages: {
+			errorBgColor: 'red'
+		},
 		font: '8px sans-serif'
 	}));
 

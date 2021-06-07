@@ -34,6 +34,7 @@ export class Theme implements RequiredThemeDefine {
   private _radioButton: RequiredThemeDefine["radioButton"] | null = null;
   private _button: RequiredThemeDefine["button"] | null = null;
   private _header: RequiredThemeDefine["header"] | null = null;
+  private _messages: RequiredThemeDefine["messages"] | null = null;
   constructor(obj: ThemeDefine);
   constructor(obj: PartialThemeDefine, superTheme: ThemeDefine);
   constructor(obj: PartialThemeDefine | ThemeDefine, superTheme?: ThemeDefine) {
@@ -213,6 +214,23 @@ export class Theme implements RequiredThemeDefine {
             ["header", "sortArrowColor"],
             ["color"]
           );
+        },
+      })
+    );
+  }
+  get messages(): RequiredThemeDefine["messages"] {
+    const { obj, superTheme } = this[_];
+    return (
+      this._messages ||
+      (this._messages = {
+        get infoBgColor(): ColorPropertyDefine {
+          return getProp(obj, superTheme, ["messages", "infoBgColor"]);
+        },
+        get errorBgColor(): ColorPropertyDefine {
+          return getProp(obj, superTheme, ["messages", "errorBgColor"]);
+        },
+        get warnBgColor(): ColorPropertyDefine {
+          return getProp(obj, superTheme, ["messages", "warnBgColor"]);
         },
       })
     );
