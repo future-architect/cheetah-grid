@@ -39,7 +39,9 @@ export class TooltipElement<T> {
     }
 
     this._handler.dispose();
+    // @ts-expect-error -- ignore
     delete this._rootElement;
+    // @ts-expect-error -- ignore
     delete this._messageElement;
   }
   attach(

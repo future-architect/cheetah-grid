@@ -100,6 +100,7 @@ export class EventTarget {
       .filter((r) => r != null);
   }
   dispose(): void {
+    // @ts-expect-error -- ignore
     delete this[_];
   }
 }

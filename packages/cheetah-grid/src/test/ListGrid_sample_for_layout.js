@@ -239,8 +239,12 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 	// filter
 	const filterButton = document.querySelector('#filter');
 	filterButton.onclick = function() {
-		const _records = records.filter(function(record) { return !!record.check; });
-		grid.records = _records;
+		grid.dataSource = new cheetahGrid.data.FilterDataSource(
+				cheetahGrid.data.CachedDataSource.ofArray(records),
+				function(record) { return !record.check; }
+		);
+		// const _records = records.filter(function(record) { return !record.check; });
+		// grid.records = _records;
 	};
 	const unfilterButton = document.querySelector('#unfilter');
 	unfilterButton.onclick = function() {

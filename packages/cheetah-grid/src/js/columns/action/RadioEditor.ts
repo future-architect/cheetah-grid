@@ -1,4 +1,5 @@
 import type {
+  ActionListener,
   CellAddress,
   EventListenerId,
   GetRadioEditorGroup,
@@ -6,7 +7,14 @@ import type {
   RadioEditorOption,
 } from "../../ts-types";
 import { bindCellClickAction, bindCellKeyAction } from "./actionBind";
-import { cellEquals, event, isPromise, obj } from "../../internal/utils";
+import {
+  cellEquals,
+  event,
+  extend,
+  isPromise,
+  obj,
+  then,
+} from "../../internal/utils";
 import {
   isDisabledRecord,
   isReadOnlyRecord,
@@ -21,42 +29,30 @@ import { toBoolean } from "../utils";
 
 const RADIO_COLUMN_STATE_ID = getRadioColumnStateId();
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const defaultGroupResolver: GetRadioEditorGroup<any> = ({ grid, col, row }) => {
-  const cellId = grid.getLayoutCellId(col, row);
-  const recordStartRow = grid.getRecordStartRowByRecordIndex(
-    grid.getRecordIndexByRow(row)
-  );
-  const offsetRow = row - recordStartRow;
-
-  const result = [];
-  const { rowCount, recordRowCount } = grid;
-  for (
-    let targetRow = grid.frozenRowCount + offsetRow;
-    targetRow < rowCount;
-    targetRow += recordRowCount
-  ) {
-    if (grid.getLayoutCellId(col, targetRow) === cellId) {
-      result.push({ col, row: targetRow });
-    }
-  }
-  return result;
-};
-
 export class RadioEditor<T> extends Editor<T> {
-  protected _group: GetRadioEditorGroup<T>;
+  protected _group: GetRadioEditorGroup<T> | undefined;
+  private _checkAction: ActionListener | undefined;
   constructor(option: RadioEditorOption<T> = {}) {
     super(option);
-    this._group = option.group || defaultGroupResolver;
+    this._group = option.group;
+    this._checkAction = option.checkAction;
   }
   clone(): RadioEditor<T> {
     return new RadioEditor(this);
   }
-  get group(): GetRadioEditorGroup<T> {
+  /** @deprecated Use checkAction instead. */
+  get group(): GetRadioEditorGroup<T> | undefined {
     return this._group;
   }
-  set group(group: GetRadioEditorGroup<T>) {
+  /** @deprecated Use checkAction instead. */
+  set group(group: GetRadioEditorGroup<T> | undefined) {
     this._group = group;
+  }
+  get checkAction(): ActionListener | undefined {
+    return this._checkAction;
+  }
+  set checkAction(checkAction: ActionListener | undefined) {
+    this._checkAction = checkAction;
   }
   bindGridEvent(
     grid: GridInternal<T>,
@@ -169,24 +165,81 @@ export class RadioEditor<T> extends Editor<T> {
       if (toBoolean(value)) {
         return;
       }
+      if (this._checkAction) {
+        // User behavior
+        const record = grid.getRowRecord(cell.row);
+        this._checkAction(record, extend(cell, { grid }));
+        return;
+      }
+      if (this._group) {
+        // Backward compatibility
+        const state = grid[RADIO_COLUMN_STATE_ID]!;
 
-      const targets = this._group({ grid, col: cell.col, row: cell.row });
-      targets.forEach(({ col, row }) => {
-        const range = grid.getCellRange(col, row);
-        const cellKey = `${range.start.col}:${range.start.row}`;
+        const targets = this._group({ grid, col: cell.col, row: cell.row });
+        targets.forEach(({ col, row }) => {
+          const range = grid.getCellRange(col, row);
+          const cellKey = `${range.start.col}:${range.start.row}`;
 
-        if (
-          isReadOnlyRecord(this.readOnly, grid, cell.row) ||
-          isDisabledRecord(this.disabled, grid, cell.row) ||
-          state.block[cellKey]
-        ) {
-          return;
+          if (
+            isReadOnlyRecord(this.readOnly, grid, cell.row) ||
+            isDisabledRecord(this.disabled, grid, cell.row) ||
+            state.block[cellKey]
+          ) {
+            return;
+          }
+
+          actionCell(grid, col, row, col === cell.col && row === cell.row);
+        });
+        return;
+      }
+
+      // default behavior
+      const field = grid.getField(cell.col, cell.row)!;
+      const recordStartRow = grid.getRecordStartRowByRecordIndex(
+        grid.getRecordIndexByRow(cell.row)
+      );
+
+      /** Original DataSource */
+      const { dataSource } = grid.dataSource;
+
+      const girdRecords = getAllRecordsFromGrid(grid);
+
+      for (let index = 0; index < dataSource.length; index++) {
+        const record = dataSource.get(index);
+        const showData = girdRecords.find((d) => d.record === record);
+        if (showData) {
+          actionCell(
+            grid,
+            cell.col,
+            showData.row,
+            showData.row === recordStartRow
+          );
+        } else {
+          // Hidden record
+          then(dataSource.getField(index, field), (value) => {
+            if (!toBoolean(value)) {
+              return;
+            }
+            dataSource.setField(index, field, toggleValue(value));
+          });
         }
-
-        actionCell(grid, col, row, col === cell.col && row === cell.row);
-      });
+      }
     });
   }
+}
+
+function getAllRecordsFromGrid<T>(grid: GridInternal<T>) {
+  const result = [];
+  const { rowCount, recordRowCount } = grid;
+  for (
+    let targetRow = grid.frozenRowCount;
+    targetRow < rowCount;
+    targetRow += recordRowCount
+  ) {
+    const record = grid.getRowRecord(targetRow);
+    result.push({ row: targetRow, record });
+  }
+  return result;
 }
 
 function actionCell<T>(

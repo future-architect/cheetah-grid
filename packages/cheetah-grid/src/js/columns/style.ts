@@ -60,7 +60,7 @@ export function of(
       return columnStyle;
     } else if (typeof columnStyle === "function") {
       return of(columnStyle(record), record, StyleClassDef);
-    } else if (record && columnStyle in record) {
+    } else if (record && (columnStyle as symbol) in record) {
       return of(record[columnStyle as string], record, StyleClassDef);
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

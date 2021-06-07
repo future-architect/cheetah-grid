@@ -137,7 +137,7 @@ class FilterData<T> {
         }
       }
       if (testTimeout()) {
-        const promise = new Promise((resolve) => {
+        const promise = new Promise<void>((resolve) => {
           setTimeout(() => {
             resolve();
           }, 300);

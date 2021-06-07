@@ -86,7 +86,9 @@ export class MessageHandler<T> implements Base<T> {
     for (const k in messageInstances) {
       messageInstances[k as MessageObject["type"]]?.dispose();
     }
+    // @ts-expect-error -- ignore
     delete this._messageInstances;
+    // @ts-expect-error -- ignore
     delete this._attachInfo;
   }
   drawCellMessage(

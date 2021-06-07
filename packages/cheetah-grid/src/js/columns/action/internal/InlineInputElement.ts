@@ -56,6 +56,7 @@ export class InlineInputElement<T> {
     const input = this._input;
     this.detach();
     this._handler.dispose();
+    // @ts-expect-error -- ignore
     delete this._input;
     this._beforePropEditor = null;
     input.parentElement?.removeChild(input);

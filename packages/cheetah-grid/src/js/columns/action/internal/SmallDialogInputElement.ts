@@ -139,7 +139,9 @@ export class SmallDialogInputElement<T> {
     const dialog = this._dialog;
     this.detach();
     this._handler.dispose();
+    // @ts-expect-error -- ignore
     delete this._dialog;
+    // @ts-expect-error -- ignore
     delete this._input;
     this._beforePropEditor = null;
     if (dialog.parentElement) {

@@ -137,6 +137,7 @@ export interface DataSourceAPI<T> {
     value: any
   ): MaybePromise<boolean>;
   sort(field: FieldDef<T>, order: "desc" | "asc"): MaybePromise<void>;
+  dataSource: DataSourceAPI<T>;
 }
 
 export interface SortState {

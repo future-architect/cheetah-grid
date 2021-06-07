@@ -10,8 +10,14 @@ export interface BaseActionOption {
   disabled?: RecordBoolean;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type ActionListener = (record: any, cell: CellAddress) => void;
+export type ActionListener = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  record: any,
+  cell: CellAddress & {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    grid: ListGridAPI<any>;
+  }
+) => void;
 export interface ActionOption extends BaseActionOption {
   action?: ActionListener;
 }
@@ -51,7 +57,9 @@ export type GetRadioEditorGroup<T> = (target: {
 }) => CellAddress[];
 
 export interface RadioEditorOption<T> extends EditorOption {
+  /** @deprecated Use checkAction instead. */
   group?: GetRadioEditorGroup<T>;
+  checkAction?: ActionListener;
 }
 
 export type SortOption<T> =

@@ -35,7 +35,15 @@ export default {
       default: false
     },
     /**
+     * Change the check action from the default.
+     */
+    checkAction: {
+      type: Function,
+      default: undefined
+    },
+    /**
      * Define a function that returns a radio group.
+     * @deprecated Use `checkAction` instead.
      */
     group: {
       type: Function,
@@ -51,6 +59,11 @@ export default {
     readonly (readonly) {
       if (this._action) {
         this._action.readOnly = readonly
+      }
+    },
+    checkAction (checkAction) {
+      if (this._action) {
+        this._action.checkAction = checkAction
       }
     },
     group (group) {
@@ -79,6 +92,7 @@ export default {
       const action = this._action = new cheetahGrid.columns.action.RadioEditor({
         disabled: this.disabled,
         readOnly: this.readonly,
+        checkAction: this.checkAction,
         group: this.group
       })
       const baseCol = LayoutColumnMixin.methods.createColumn.apply(this)
