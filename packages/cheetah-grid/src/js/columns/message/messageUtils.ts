@@ -38,11 +38,11 @@ export function drawExclamationMarkBox(
     { fillColor }
   );
 }
-export function drawInfomationMarkBox(
+export function drawInformationMarkBox(
   context: CellContext,
   style: {
     bgColor: ColorDef;
-    color: ColorDef;
+    color?: ColorDef;
   },
   helper: GridCanvasHelperAPI
 ): void {

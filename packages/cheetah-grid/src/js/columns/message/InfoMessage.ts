@@ -37,7 +37,7 @@ export class InfoMessage<T> extends BaseMessage<T> {
       helper.drawBorderWithClip(
         context,
         (ctx: CanvasRenderingContext2D): void => {
-          messageUtils.drawExclamationMarkBox(
+          messageUtils.drawInformationMarkBox(
             context,
             {
               bgColor:
