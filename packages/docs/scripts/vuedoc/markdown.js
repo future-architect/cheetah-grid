@@ -42,6 +42,11 @@ function createProps (comp) {
       .replace('`Boolean`', '`boolean`')
       .replace('`Function`', '`function`')
       .replace('`Object`', '`object`')
+    const deprecatedKeyword = prop.keywords.find(({ name }) => name === 'deprecated')
+    if(deprecatedKeyword) {
+      list.push(`| ${prop.name} | ${typeMd}  | DEPRECATED! ${deprecatedKeyword.description} ${prop.description.replace(/\r?\n/g, '<br>')} | \`${defaultValue}\` |`)
+      continue
+    } 
 
     list.push(`| ${prop.name} | ${typeMd}  | ${prop.description.replace(/\r?\n/g, '<br>')} | \`${defaultValue}\` |`)
   }

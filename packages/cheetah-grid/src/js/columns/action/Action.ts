@@ -9,6 +9,7 @@ import type {
 import { bindCellClickAction, bindCellKeyAction } from "./actionBind";
 import { BaseAction } from "./BaseAction";
 import type { GridInternal } from "../../ts-types-internal";
+import { extend } from "../../internal/utils";
 import { isDisabledRecord } from "./action-utils";
 
 export class Action<T> extends BaseAction<T> {
@@ -42,7 +43,7 @@ export class Action<T> extends BaseAction<T> {
         return;
       }
       const record = grid.getRowRecord(cell.row);
-      this._action(record, cell);
+      this._action(record, extend(cell, { grid }));
     };
 
     return [

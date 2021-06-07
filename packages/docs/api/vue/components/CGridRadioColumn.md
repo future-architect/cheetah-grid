@@ -80,9 +80,10 @@ Use this slot to set the header caption
 | caption | `string`&#124;`function`  | Defines a header caption | `''` |
 | disabled | `boolean`&#124;`function`  | Defines disabled | `false` |
 | readonly | `boolean`&#124;`function`  | Defines readonly | `false` |
+| check-action | `function`  | Change the check action from the default. | `undefined` |
 | colspan | `number`&#124;`string`  | Defines the layout colspan.<br>This property can be used when defining in the `layout-header` and `layout-body` slots. | `undefined` |
 | filter | `string`&#124;`function`  | Defines a vue filter name | `undefined` |
-| group | `function`  | Define a function that returns a radio group. | `undefined` |
+| group | `function`  | DEPRECATED! Use `checkAction` instead. Define a function that returns a radio group. | `undefined` |
 | header-action | `object`&#124;`string`&#124;`function`  | Defines a column header action | `undefined` |
 | header-field | `string`  | Defines a column header data field | `undefined` |
 | header-style | `object`&#124;`string`&#124;`function`  | Defines a column header style | `undefined` |

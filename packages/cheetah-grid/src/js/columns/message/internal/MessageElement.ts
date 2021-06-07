@@ -33,7 +33,9 @@ export class MessageElement {
   dispose(): void {
     this.detach();
     this._handler.dispose();
+    // @ts-expect-error -- ignore
     delete this._rootElement;
+    // @ts-expect-error -- ignore
     delete this._messageElement;
   }
   attach<T>(

@@ -50,6 +50,7 @@ export class TooltipHandler<T> {
     for (const k in tooltipInstances) {
       tooltipInstances[k].dispose();
     }
+    // @ts-expect-error -- ignore
     delete this._tooltipInstances;
     this._attachInfo = null;
   }

@@ -23,8 +23,7 @@ import type { PromiseCacheValue } from "./internal/types";
 /** @private */
 function isFieldAssessor<T>(field: FieldDef<T>): field is FieldAssessor<T> {
   if (obj.isObject(field)) {
-    const a = field as FieldAssessor<T>;
-    if (a.get && a.set) {
+    if ((field as FieldAssessor<T>).get && (field as FieldAssessor<T>).set) {
       return true;
     }
   }
@@ -76,7 +75,7 @@ function getField<T, F extends FieldDef<T>>(
     );
   }
   const fieldGet = isFieldAssessor<T>(field) ? field.get : field;
-  if (fieldGet in record) {
+  if ((fieldGet as never) in record) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const fieldResult = (record as any)[fieldGet];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -116,7 +115,7 @@ function setField<T, F extends FieldDef<T>>(
   }
 
   const fieldSet = isFieldAssessor<T>(field) ? field.set : field;
-  if (fieldSet in record) {
+  if ((fieldSet as never) in record) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (record as any)[fieldSet] = value;
   } else if (typeof fieldSet === "function") {
@@ -284,7 +283,7 @@ export class DataSource<T> extends EventTarget implements DataSourceAPI<T> {
       return true;
     }
     const record = this.getOriginal(index);
-    return Boolean(record && field in record);
+    return Boolean(record && (field as never) in record);
   }
   protected setOriginalField<F extends FieldDef<T>>(
     index: number,
