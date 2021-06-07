@@ -128,6 +128,11 @@ const userTheme = {
   font: '16px sans-serif',
   header: {
     sortArrowColor: '#D00'
+  },
+  messages: {
+    infoBgColor: 'gray',
+    errorBgColor: 'red',
+    warnBgColor: 'yellow',
   }
 };
 grid.theme = userTheme;
@@ -160,7 +165,28 @@ function createGrid(parentElement) {
           return `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`;
         },
         caption: 'birthday',
-        width: 100
+        width: 100,
+        message(rec) {
+          const index = records.indexOf(rec)
+          switch (index % 3) {
+            case 0: {
+              return {
+                type: 'info',
+                message: 'Info Message.'
+              };
+            }
+            case 1: {
+              return {
+                type: 'warning',
+                message: 'Warn Message.'
+              };
+            }
+          }
+          return {
+            type: 'error',
+            message: 'Error Message.'
+          };
+        },
       },
       {
         caption: 'button',

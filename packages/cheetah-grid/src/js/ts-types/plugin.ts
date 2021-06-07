@@ -44,6 +44,11 @@ export interface ThemeDefine {
   header: {
     sortArrowColor?: ColorPropertyDefine;
   };
+  messages: {
+    infoBgColor?: ColorPropertyDefine;
+    errorBgColor?: ColorPropertyDefine;
+    warnBgColor?: ColorPropertyDefine;
+  };
 }
 
 export type RequiredThemeDefine = Required<ThemeDefine> & {
@@ -51,4 +56,5 @@ export type RequiredThemeDefine = Required<ThemeDefine> & {
   radioButton: Required<ThemeDefine["radioButton"]>;
   button: Required<ThemeDefine["button"]>;
   header: Required<ThemeDefine["header"]>;
+  messages: Required<ThemeDefine["messages"]>;
 };
