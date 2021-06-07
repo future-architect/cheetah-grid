@@ -5,7 +5,7 @@ function resolve (arg) {
 
 module.exports = {
   name: 'cheetah-grid',
-  inputFiles: [
+  entryPoints: [
     resolve('../cheetah-grid/src/js')
   ],
   // theme: 'minimal',
@@ -14,14 +14,14 @@ module.exports = {
   readme: resolve('../../README.md'),
   excludePrivate: true,
   excludeProtected: true,
-  excludeNotExported: true,
-  includeDeclarations: true,
+  // excludeNotExported: true,
+  // includeDeclarations: true,
   excludeExternals:true,
-  stripInternal:true,
+  // stripInternal:true,
   // entryPoint: 'cheetah-grid',
   // target: 'ES6',
   // mode: 'modules',
-  mode: 'file',
+  // mode: 'file',
   // exclude: 'internal/**',
   externalPattern: [
     '**/columns/**',

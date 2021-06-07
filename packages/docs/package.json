@@ -1,7 +1,7 @@
 {
   "name": "cheetah-grid-docs",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "scripts": {
     "watch": "vuepress dev . --debug",
     "build": "npm-run-all build:*",
@@ -25,8 +25,8 @@
     "fs-readdir-recursive": "^1.1.0",
     "jsdoc": "^3.6.3",
     "npm-run-all": "^4.1.5",
-    "typedoc": "^0.17.6",
-    "typescript": "^4.3.2",
+    "typedoc": "^0.20.36",
+    "typescript": "~4.2.0",
     "vuepress": "^1.2.0",
     "webpack-dev-middleware": "3.6.0"
   }
