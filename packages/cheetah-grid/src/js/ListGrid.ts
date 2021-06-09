@@ -1299,6 +1299,10 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
       _updateRect(this, col, row, context);
     }
     const cellValue = _getCellValue(this, col, row);
+    if (this.rowCount <= row) {
+      // Depending on the FilterDataSource, the rowCount may be reduced.
+      return undefined;
+    }
     return _onDrawValue(this, cellValue, context, { col, row }, style, draw);
   }
   doGetCellValue(
