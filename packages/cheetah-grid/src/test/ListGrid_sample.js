@@ -10,7 +10,7 @@ function generate(num) {
 		const lname = lnames[Math.floor(Math.random() * lnames.length)];
 		const pVal = i + 0.987;
 		const data = {
-			check: i % 2 === 0,
+			check: i % 3 !== 0,
 			check2: 'false',
 			check3: 'off',
 			check4: 0,
@@ -110,7 +110,7 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 						width: 80,
 						columnType: 'number',
 						style: function(r) {
-							if (r.num > 100) {
+							if (r && r.num > 100) {
 								return {
 									color: 'red'
 								};
@@ -185,8 +185,12 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 	// filter
 	const filterButton = document.querySelector('#filter');
 	filterButton.onclick = function() {
-		const _records = records.filter(function(record) { return !!record.check; });
-		grid.records = _records;
+		grid.dataSource = new cheetahGrid.data.FilterDataSource(
+				cheetahGrid.data.CachedDataSource.ofArray(records),
+				function(record) { return !!record.check; }
+		);
+		// const _records = records.filter(function(record) { return !!record.check; });
+		// grid.records = _records;
 	};
 	const unfilterButton = document.querySelector('#unfilter');
 	unfilterButton.onclick = function() {
