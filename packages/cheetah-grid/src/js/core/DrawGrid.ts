@@ -1984,7 +1984,7 @@ class FocusControl extends EventTarget {
       grid.focus();
     });
     let lastInputValue: string | undefined;
-    const inputClear = (): void => {
+    const inputClear = (storeLastInputValue: boolean): void => {
       lastInputValue = input.value;
       if (this._isComposition) {
         return;
@@ -1992,6 +1992,9 @@ class FocusControl extends EventTarget {
 
       if (lastInputValue !== "") {
         setSafeInputValue(input, "");
+      }
+      if (!storeLastInputValue) {
+        lastInputValue = "";
       }
     };
 
@@ -2001,7 +2004,7 @@ class FocusControl extends EventTarget {
       input.style.font = "";
       const { value } = input;
 
-      inputClear();
+      inputClear(false);
 
       if (!input.readOnly) {
         this.fireListeners("input", value);
@@ -2035,7 +2038,7 @@ class FocusControl extends EventTarget {
           cancelEvent(e);
         }
       }
-      inputClear();
+      inputClear(true);
     });
     handler.on(input, "keydown", (e) => {
       if (this._isComposition) {
@@ -2068,7 +2071,7 @@ class FocusControl extends EventTarget {
         this.fireListeners("delete", e);
       }
 
-      inputClear();
+      inputClear(true);
     });
     handler.on(input, "keyup", (_e) => {
       if (this._isComposition) {
@@ -2076,7 +2079,7 @@ class FocusControl extends EventTarget {
           handleCompositionEnd();
         }
       }
-      inputClear();
+      inputClear(true);
     });
 
     handler.on(input, "input", (e: InputEvent) => {
@@ -2084,7 +2087,7 @@ class FocusControl extends EventTarget {
         // Since the full-width space cannot be determined on "keypress", it is processed by "input".
         this.fireListeners("input", e.data);
       }
-      inputClear();
+      inputClear(true);
     });
     if (browser.IE) {
       handler.on(document, "keydown", (e) => {
