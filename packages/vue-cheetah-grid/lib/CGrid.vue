@@ -48,6 +48,18 @@ import { slotElementsToHeaderOptions, slotElementsToHeaderProps } from './c-grid
 const primitives = {
   function: true, string: true, number: true, boolean: true, undefined: true, bigint: true, symbol: true
 }
+function getKeys (o) {
+  const keys = Object.keys(o)
+  if (!Array.isArray(o) && Object.getOwnPropertySymbols) {
+    const symbols = Object.getOwnPropertySymbols(o)
+    symbols.forEach((symbol) => {
+      if (Object.prototype.propertyIsEnumerable.call(o, symbol)) {
+        keys.push(symbol)
+      }
+    })
+  }
+  return keys
+}
 function deepObjectEquals (a, b) {
   if (a === b) {
     return true
@@ -59,15 +71,15 @@ function deepObjectEquals (a, b) {
   if (primitives[typeof a]) {
     return false
   }
-  const aKeys = Object.keys(a).sort()
-  const bKeys = Object.keys(b).sort()
+  const aKeys = getKeys(a)
+  const bKeys = getKeys(b)
   if (aKeys.length !== bKeys.length) {
     return false
   }
   for (let i = 0; i < aKeys.length; i++) {
     const aKey = aKeys[i]
     const bKey = bKeys[i]
-    if (aKey !== bKey) {
+    if (aKey !== bKey && (bKeys.indexOf(aKey) === -1 || aKeys.indexOf(bKey) === -1)) {
       return false
     }
     if (!deepObjectEquals(a[aKey], b[aKey])) {
