@@ -75,7 +75,9 @@ export type ColumnTypeOption =
   | "IMAGE"
   | "image"
   | "MULTILINETEXT"
-  | "multilinetext";
+  | "multilinetext"
+  | "RADIO"
+  | "radio";
 
 export type HeaderTypeOption =
   | "DEFAULT"
