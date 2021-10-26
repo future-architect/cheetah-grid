@@ -40,9 +40,9 @@ export interface ColumnDefine<T> extends BaseHeaderDefine<T> {
   icon?: ColumnIconOption<T> | ColumnIconOption<T>[];
   message?:
     | Message
-    | ((record: T) => Message)
+    | ((record: T) => Message | null)
     | keyof T
-    | (Message | ((record: T) => Message) | keyof T)[];
+    | (Message | ((record: T) => Message | null) | keyof T)[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   columnType?: ColumnTypeOption | BaseColumn<T, any> | null;
   action?: ColumnActionOption | BaseAction<T> | null;
