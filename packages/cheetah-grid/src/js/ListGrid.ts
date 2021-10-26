@@ -1044,7 +1044,7 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
    * Sets the sort state.
    * If `null` to set, the sort state is initialized.
    */
-  set sortState(sortState: SortState) {
+  set sortState(sortState: SortState | null) {
     const oldState = this.sortState;
     let oldField;
     if (oldState.col >= 0 && oldState.row >= 0) {
