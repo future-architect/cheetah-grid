@@ -71,9 +71,9 @@ export interface ColumnData<T> extends WidthData {
   icon?: ColumnIconOption<T> | ColumnIconOption<T>[];
   message?:
     | Message
-    | ((record: T) => Message)
+    | ((record: T) => Message | null)
     | keyof T
-    | (Message | ((record: T) => Message) | keyof T)[];
+    | (Message | ((record: T) => Message | null) | keyof T)[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   columnType: BaseColumn<T, any>;
   action?: BaseAction<T>;
