@@ -6,7 +6,7 @@ function resolve (arg) {
 module.exports = {
   name: 'cheetah-grid',
   entryPoints: [
-    resolve('../cheetah-grid/src/js')
+    resolve('../cheetah-grid/src/js/main.ts')
   ],
   // theme: 'minimal',
   out: resolve('../../docs/documents/tsdoc'),
