@@ -10,7 +10,7 @@ const LastResortFonts: { [key: string]: string } = {
 };
 
 const watchRunners: {
-  [font: string]: { [testStr: string]: FontWatchRunner };
+  [font: string]: { [testStr: string]: FontWatchRunner | undefined };
 } = {};
 
 class FontWatchRunner {
@@ -29,9 +29,9 @@ class FontWatchRunner {
   ): void {
     const c = watchRunners[font] || (watchRunners[font] = {});
     testStr += "";
-    let runner;
+    let runner: FontWatchRunner;
     if (c[testStr]) {
-      runner = c[testStr];
+      runner = c[testStr]!;
     } else {
       runner = c[testStr] = new FontWatchRunner(font, testStr);
     }
