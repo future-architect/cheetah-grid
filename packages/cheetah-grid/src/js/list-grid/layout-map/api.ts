@@ -24,6 +24,9 @@ export type OldSortOption<T> =
 
 export interface BaseHeaderDefine<T> {
   caption?: string | (() => string);
+  width?: number | string;
+  minWidth?: number | string;
+  maxWidth?: number | string;
   headerField?: string;
   headerStyle?: HeaderStyleOption | HeaderBaseStyle | null;
   headerType?: HeaderTypeOption | headerType.BaseHeader<T> | null;
@@ -34,9 +37,6 @@ export interface BaseHeaderDefine<T> {
 export interface HeaderDefine<T> extends BaseHeaderDefine<T> {}
 export interface ColumnDefine<T> extends BaseHeaderDefine<T> {
   field?: FieldDef<T>;
-  width?: number | string;
-  minWidth?: number | string;
-  maxWidth?: number | string;
   icon?: ColumnIconOption<T> | ColumnIconOption<T>[];
   message?:
     | Message
