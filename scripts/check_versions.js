@@ -34,6 +34,9 @@ async function checkPackageJsons(opts, cb) {
 
 
 async function checkPackageJson(pkg, pkgs) {
+	if (pkg.name === 'react-cheetah-grid') {
+		return;
+	}
 	// check root version
 	if (minorVersion(pkg.version) !== minorVersion(version)) {
 		const message = `Invalid version. ${pkg.name}@${pkg.version}  root:${version} @ "${pkg.rootDir}/package.json"`;
