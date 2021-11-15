@@ -1095,19 +1095,23 @@ function _onKeyDownMove(this: DrawGrid, e: KeyboardEvent): void {
     vDir: "N" | "S",
     shiftKeyFlg: boolean = shiftKey
   ): boolean {
+    const { col } = focusCell;
     let row: number;
     if (vDir === "S") {
       row = this.getMoveDownRowByKeyDownInternal(focusCell);
       if (this.rowCount <= row) {
+        // Avoids the problem of the scroll position breaking due to a delayed scrolling event if user hold down the arrow keys.
+        this.makeVisibleCell(col, row);
         return false;
       }
     } else {
       row = this.getMoveUpRowByKeyDownInternal(focusCell);
       if (row < 0) {
+        // Avoids the problem of the scroll position breaking due to a delayed scrolling event if user hold down the arrow keys.
+        this.makeVisibleCell(col, row);
         return false;
       }
     }
-    const { col } = focusCell;
     _moveFocusCell.call(this, col, row, shiftKeyFlg);
     return true;
   }
@@ -1116,19 +1120,23 @@ function _onKeyDownMove(this: DrawGrid, e: KeyboardEvent): void {
     hDir: "W" | "E",
     shiftKeyFlg: boolean = shiftKey
   ): boolean {
+    const { row } = focusCell;
     let col: number;
     if (hDir === "E") {
       col = this.getMoveRightColByKeyDownInternal(focusCell);
       if (this.colCount <= col) {
+        // Avoids the problem of the scroll position breaking due to a delayed scrolling event if user hold down the arrow keys.
+        this.makeVisibleCell(col, row);
         return false;
       }
     } else {
       col = this.getMoveLeftColByKeyDownInternal(focusCell);
       if (col < 0) {
+        // Avoids the problem of the scroll position breaking due to a delayed scrolling event if user hold down the arrow keys.
+        this.makeVisibleCell(col, row);
         return false;
       }
     }
-    const { row } = focusCell;
     _moveFocusCell.call(this, col, row, shiftKeyFlg);
     return true;
   }
