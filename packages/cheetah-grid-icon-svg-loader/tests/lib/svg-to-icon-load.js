@@ -8,7 +8,7 @@ const loader = require('../..');
 const {saveExpect, loadExpect} = require('../test-utils');
 
 
-const MDI_ROOT = path.resolve(__dirname, '../../../cheetah-grid/node_modules/material-design-icons');
+const MDI_ROOT = path.join(__dirname, '../../test-fixtures/inputs/node_modules/material-design-icons');
 const TEST_TARGETS = [
 	'./action/svg/production',
 	'./av/svg/design/ic_playlist_play_48px.svg',
@@ -72,12 +72,15 @@ function getAllModule(svgs) {
 
 describe('svg load', () => {
 	describe('should succeed loading modules for material-design-icons', () => {
-		for (const terget of TEST_TARGETS) {
-			it(`@${terget}`, () => {
-				const dirRoot = path.join(MDI_ROOT, terget);
+		if (!fs.existsSync(MDI_ROOT)) {
+			return;
+		}
+		for (const target of TEST_TARGETS) {
+			it(`@${target}`, () => {
+				const dirRoot = path.join(MDI_ROOT, target);
 				return getAllSvgPaths(dirRoot).then((svgs) => {
 					const result = getAllModule(svgs);
-					const name = `material-design-icons${terget.replace(/\\|\/|\./g, '_')}`;
+					const name = `material-design-icons${target.replace(/\\|\/|\./g, '_')}`;
 					// saveExpect(name, result);
 					const expect = loadExpect(name);
 					assert.deepStrictEqual(result, expect);
