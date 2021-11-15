@@ -1101,14 +1101,14 @@ function _onKeyDownMove(this: DrawGrid, e: KeyboardEvent): void {
       row = this.getMoveDownRowByKeyDownInternal(focusCell);
       if (this.rowCount <= row) {
         // Avoids the problem of the scroll position breaking due to a delayed scrolling event if user hold down the arrow keys.
-        this.makeVisibleCell(col, row);
+        this.makeVisibleCell(col, this.rowCount - 1);
         return false;
       }
     } else {
       row = this.getMoveUpRowByKeyDownInternal(focusCell);
       if (row < 0) {
         // Avoids the problem of the scroll position breaking due to a delayed scrolling event if user hold down the arrow keys.
-        this.makeVisibleCell(col, row);
+        this.makeVisibleCell(col, 0);
         return false;
       }
     }
@@ -1126,14 +1126,14 @@ function _onKeyDownMove(this: DrawGrid, e: KeyboardEvent): void {
       col = this.getMoveRightColByKeyDownInternal(focusCell);
       if (this.colCount <= col) {
         // Avoids the problem of the scroll position breaking due to a delayed scrolling event if user hold down the arrow keys.
-        this.makeVisibleCell(col, row);
+        this.makeVisibleCell(this.colCount - 1, row);
         return false;
       }
     } else {
       col = this.getMoveLeftColByKeyDownInternal(focusCell);
       if (col < 0) {
         // Avoids the problem of the scroll position breaking due to a delayed scrolling event if user hold down the arrow keys.
-        this.makeVisibleCell(col, row);
+        this.makeVisibleCell(0, row);
         return false;
       }
     }

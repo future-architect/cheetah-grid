@@ -7,11 +7,11 @@ on:
     branches: [master]
 
 jobs:
-  lintAndTest:
-    runs-on: macos-latest
+  lint:
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/setup-node@v2
+    - uses: actions/setup-node@v1
       with:
         node-version: 14
     - name: Install Packages
@@ -22,6 +22,15 @@ jobs:
       run: |+
         npm run lint
         npm run check
+  test:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+    - name: Install Packages
+      run: |+
+        npm ci
+        npm run ci:all
     - name: Build
       run: npm run build:ci
     - name: Test
