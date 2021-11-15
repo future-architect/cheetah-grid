@@ -104,7 +104,6 @@
     "karma-jasmine": "^1.1.2",
     "karma-junit-reporter": "^1.2.0",
     "karma-mocha-reporter": "^2.2.5",
-    "material-design-icons": "^3.0.1",
     "postcss-loader": "^3.0.0",
     "prettier": "^2.1.1",
     "promise-polyfills": "^7.0.4",

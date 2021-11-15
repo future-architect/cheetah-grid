@@ -1,0 +1,7 @@
+{
+  "name": "cheetah-grid-icon-svg-loader-test-inputs",
+  "private": true,
+  "devDependencies": {
+    "material-design-icons": "^3.0.1"
+  }
+}
