@@ -518,6 +518,18 @@ export default {
     /**
      * @private
      */
+    $_CGrid_nextTickInvalidate () {
+      const id = ++seq
+      this._nextTickInvalidateId = id
+      this.$nextTick(() => {
+        if (this._nextTickInvalidateId === id) {
+          this.invalidate()
+        }
+      })
+    },
+    /**
+     * @private
+     */
     $_CGrid_nextTickUpdate () {
       const id = ++seq
       this._nextTickUpdateId = id

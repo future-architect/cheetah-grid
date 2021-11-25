@@ -74,14 +74,14 @@ export default {
       if (this._action) {
         this._action.disabled = disabled
         // apply style
-        this.$nextTick(this.invalidate)
+        this.$nextTick(this.nextTickInvalidate)
       }
     },
     readonly (readonly) {
       if (this._action) {
         this._action.readOnly = readonly
         // apply style
-        this.$nextTick(this.invalidate)
+        this.$nextTick(this.nextTickInvalidate)
       }
     }
   },
