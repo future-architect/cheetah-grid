@@ -103,6 +103,14 @@ export default {
       }
     },
     /**
+     * @protected
+     */
+    nextTickInvalidate () {
+      if (this.$_CGridInstance && this.$_CGridInstance.invalidate) {
+        this.$_CGridInstance.$_CGrid_nextTickInvalidate()
+      }
+    },
+    /**
      * Returns the property Object to judge the change.
      * @protected
      * @returns {object}
