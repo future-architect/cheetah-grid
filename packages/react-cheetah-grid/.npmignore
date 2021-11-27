@@ -9,8 +9,11 @@ src
 index.html
 tailwind.config.js
 sample
-react-cheetah-grid-*.tgz 
+react-cheetah-grid-*.tgz
 react-cheetah-grid-*.zip
 postcss.config.js
 vite.config.ts
 tsconfig.json
+jest.config.js
+__test__
+doc/*.png

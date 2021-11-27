@@ -1,5 +1,7 @@
 # CheetahGrid for React
 
+[![npm version](https://badge.fury.io/js/react-cheetah-grid.svg)](https://badge.fury.io/js/react-cheetah-grid)
+
 React wrapper of ultra speed table component - [CheetahGrid](https://future-architect.github.io/cheetah-grid/#/)
 
 ![screenshot](https://raw.githubusercontent.com/future-architect/cheetah-grid/master/packages/react-cheetah-grid/doc/basic.png)
