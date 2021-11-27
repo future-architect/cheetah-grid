@@ -1,3 +1,8 @@
+# 0.2.1
+
+- New: Add npm badge to README
+- Fix: Remove unused file from npm package
+
 # 0.2.0
 
 - New: `<CheetahGrid>`'s `data` props accepts array and DataSource classes (`records` and `dataSource` also available)
