@@ -1,11 +1,11 @@
 {
   "name": "react-cheetah-grid",
   "license": "MIT",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "postbuild": "tsc src/* --declaration --emitDeclarationOnly --jsx react-jsx --esModuleInterop --target es2020 --out dist/index.d.ts --moduleResolution node",
+    "postbuild": "tsc src/* --declaration --emitDeclarationOnly --jsx react-jsx --esModuleInterop --target es2020 --outDir dist --moduleResolution node",
     "serve": "vite preview",
     "test": "jest"
   },

@@ -1,3 +1,7 @@
+# 0.2.2
+
+- Fix: package import error
+
 # 0.2.1
 
 - New: Add npm badge to README
