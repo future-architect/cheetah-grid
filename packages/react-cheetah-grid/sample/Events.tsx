@@ -85,7 +85,7 @@ export function Events() {
     <div className="h-full w-full flex flex-row items-stretch">
       <CheetahGrid
         style={{ flexGrow: 1 }}
-        records={records}
+        data={records}
         onCellClick={(e) => {
           console.log("onCellClick", e);
           appendLog("onCellClick", e);

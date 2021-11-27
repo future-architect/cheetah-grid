@@ -1,5 +1,8 @@
 export { CheetahGrid } from "./CheetahGrid";
-export { useCheetahGridInstance } from "./useCheetahGridInstance";
+export {
+  useCheetahGridInstance,
+  CheetahGridInstance,
+} from "./useCheetahGridInstance";
 
 export type { Message } from "cheetah-grid/ts-types/data";
 export type { ColumnIconOption } from "cheetah-grid/ts-types";
@@ -53,10 +56,9 @@ export type { BranchGraphCommand } from "cheetah-grid/ts-types/column/type";
 // Layout
 export { HeaderLayout, BodyLayout, Line, Header } from "./Layout";
 
-// Data Source
-
 import * as cheetahGrid from "cheetah-grid";
 
+// Data Source
 export const { DataSource, CachedDataSource, FilterDataSource } =
   cheetahGrid.data;
 

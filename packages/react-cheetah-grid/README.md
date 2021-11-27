@@ -2,7 +2,7 @@
 
 React wrapper of ultra speed table component - [CheetahGrid](https://future-architect.github.io/cheetah-grid/#/)
 
-![screenshot](./doc/basic.png)
+![screenshot](https://raw.githubusercontent.com/future-architect/cheetah-grid/master/packages/react-cheetah-grid/doc/basic.png)
 
 ```tsx
 type Record = {
@@ -30,7 +30,7 @@ const records: Record[] = [
 
       <CheetahGrid
         style={{ flexGrow: 1 }}
-        records={records}
+        data={records}
         theme={"BASIC"}
       >
         <Column field="personid" width={50}>
@@ -74,18 +74,16 @@ Theme is described at [here](https://future-architect.github.io/cheetah-grid/doc
 
 ### Data Sources
 
+`data` props is required to accept data source.
 One of the following props are required.
 
-- `records`: Array data of table.
-- `dataSource`: Data source instance to supply table data to CheetahGrid. This is described at [here](https://future-architect.github.io/cheetah-grid/documents/api/js/grid_data/#using-cheetahgrid-data-datasource-object).
-
-Important notice of `<CheetahGrid>` is its editing feature modifies `records` directly. It is not match with React's manner.
+- `data`: Array data of table or `DataSource` instance to supply table data to CheetahGrid. This is described at [here](https://future-architect.github.io/cheetah-grid/documents/api/js/grid_data/#using-cheetahgrid-data-datasource-object).
 
 If you modify records data directly out side of `<CheetahGrid>` (for example, modify data from event handlers), call its instance's `revalidate()` method.
 
 ## Column Types
 
-![Columns](./doc/columns.png)
+![Columns](https://raw.githubusercontent.com/future-architect/cheetah-grid/master/packages/react-cheetah-grid/doc/columns.png)
 
 Supported column types:
 
@@ -211,7 +209,7 @@ function App() {
   return (
     <>
       <button>
-      <CheetahGrid records={props.records} instance={instanceRef}>
+      <CheetahGrid data={props.records} instance={instanceRef}>
         <Column field="id">ID</Column>
         <Column field="name">Name</Column>
       </CheetahGrid>
@@ -222,7 +220,7 @@ function App() {
 
 ### Cell Message
 
-![Message sample](./doc/message.png)
+![Message sample](https://raw.githubusercontent.com/future-architect/cheetah-grid/master/packages/react-cheetah-grid/doc/message.png)
 
 `message` props adds message to cells.
 
@@ -262,7 +260,7 @@ The function can return object instead of string. `"error"`, `"warning"`, `"info
 
 ### Sort
 
-![Sort sample](./doc/sort.png)
+![Sort sample](https://raw.githubusercontent.com/future-architect/cheetah-grid/master/packages/react-cheetah-grid/doc/sort.png)
 
 `sort` props add sorting feature. Just add `sort` props enables sorting feature that uses JavaScript standard comparison. Also you can specify sort function as well.
 
@@ -278,7 +276,7 @@ The function can return object instead of string. `"error"`, `"warning"`, `"info
             v1 === v2 ? 0 : v1 < v2 ? 1 : -1;
     records.sort((r1, r2) => compare(r1.personid, r2.personid));
     console.log("sorted:", records);
-    grid.records = records;
+    grid.data = records;
   }}
   field="personid"
 >
@@ -291,7 +289,7 @@ More detail information is [here](https://future-architect.github.io/cheetah-gri
 
 ### Header Type and Action
 
-![screenshot](./doc/headeraction.png)
+![screenshot](https://raw.githubusercontent.com/future-architect/cheetah-grid/master/packages/react-cheetah-grid/doc/headeraction.png)
 
 You can customize header types and actions in addition to body cells types and actions.
 
@@ -322,7 +320,7 @@ const onChangeHeaderValue = useCallback(
 <CheetahGrid
   instance={instanceRef}
   style={{ flexGrow: 1 }}
-  records={records}
+  data={records}
   frozenColCount={2}
   onHeaderValueChange={onChangeHeaderValue}
 >
@@ -335,7 +333,7 @@ const onChangeHeaderValue = useCallback(
 
 ### Complex Layout
 
-![screenshot](./doc/layout.png)
+![screenshot](https://raw.githubusercontent.com/future-architect/cheetah-grid/master/packages/react-cheetah-grid/doc/layout.png)
 
 It supports complex layout like multi row headers and bodies.
 
@@ -353,7 +351,7 @@ The `<Line>` component enables to support multi row header and body. `rowSpan` a
 ```tsx
 <CheetahGrid
   style={{ flexGrow: 1 }}
-  records={records}
+  data={records}
   frozenColCount={2}
   theme={"BASIC"}
 >

@@ -63,7 +63,7 @@ export function Selection() {
     <div className="h-full w-full flex flex-col items-stretch">
       <CheetahGrid
         style={{ flexGrow: 1 }}
-        dataSource={dataSource}
+        data={dataSource}
         instance={instanceRef}
         onCellSelect={cellSelectCallback}
       >
