@@ -44,6 +44,7 @@ import {
   CheetahGridProps,
   isDataSourceProps,
   isStaticRecordProps,
+  isDataProps,
 } from "./gridProps";
 
 // Columns
@@ -267,6 +268,7 @@ export function parseLayout<T>(children: CheetahGridChildren<T>): {
 export class CheetahGrid<T> extends Component<CheetahGridProps<T>> {
   cgRef: RefObject<HTMLDivElement>;
   grid?: ListGrid<T>;
+  records?: T[];
 
   constructor(props: CheetahGridProps<T>) {
     super(props);
@@ -274,13 +276,7 @@ export class CheetahGrid<T> extends Component<CheetahGridProps<T>> {
   }
 
   shouldComponentUpdate(nextProps: CheetahGridProps<T>, _nextState: {}) {
-    const {
-      children,
-      frozenColCount,
-      defaultRowHeight,
-      headerRowHeight,
-      theme,
-    } = nextProps;
+    const { children, frozenColCount, defaultRowHeight, theme } = nextProps;
     if (this.grid) {
       const { layout, header } = parseLayout(children);
       if (layout) {
@@ -294,11 +290,25 @@ export class CheetahGrid<T> extends Component<CheetahGridProps<T>> {
       if (frozenColCount && this.grid.frozenColCount !== frozenColCount) {
         this.grid.frozenColCount = frozenColCount;
       }
-      if (frozenColCount && this.grid.frozenColCount !== frozenColCount) {
-        this.grid.frozenColCount = frozenColCount;
+      if (defaultRowHeight && this.grid.defaultRowHeight !== defaultRowHeight) {
+        this.grid.defaultRowHeight = defaultRowHeight;
       }
       if (theme && this.grid.theme !== theme) {
         this.grid.theme = cheetahGrid.themes.of(theme);
+      }
+      if (isStaticRecordProps<T>(this.props)) {
+        if (!Object.is(this.props.records, this.records)) {
+          this.grid.records = this.props.records;
+          this.records = this.props.records;
+        }
+      } else if (isDataProps<T>(this.props)) {
+        if (
+          Array.isArray(this.props.data) &&
+          !Object.is(this.props.data, this.records)
+        ) {
+          this.grid.records = this.props.data;
+          this.records = this.props.data;
+        }
       }
     }
     return false;
@@ -323,8 +333,18 @@ export class CheetahGrid<T> extends Component<CheetahGridProps<T>> {
 
     if (isStaticRecordProps<T>(this.props)) {
       opt.records = this.props.records;
+      this.records = this.props.records;
     } else if (isDataSourceProps<T>(this.props)) {
       opt.dataSource = this.props.dataSource;
+      this.records = undefined;
+    } else if (isDataProps<T>(this.props)) {
+      if (Array.isArray(this.props.data)) {
+        opt.records = this.props.data;
+        this.records = this.props.data;
+      } else {
+        opt.dataSource = this.props.data;
+        this.records = undefined;
+      }
     }
     const { layout, header } = parseLayout(children);
     if (layout) {

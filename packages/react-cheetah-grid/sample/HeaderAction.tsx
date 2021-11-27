@@ -109,7 +109,7 @@ export function HeaderAction() {
       <CheetahGrid
         instance={instanceRef}
         style={{ flexGrow: 1 }}
-        records={records}
+        data={records}
         frozenColCount={2}
         onHeaderValueChange={onChangeHeaderValue}
       >

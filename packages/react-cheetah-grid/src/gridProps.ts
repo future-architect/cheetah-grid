@@ -91,7 +91,15 @@ export function isDataSourceProps<T>(value: {}): value is DataSourceProps<T> {
   return "dataSource" in value;
 }
 
-type SourceProps<T> = StaticRecordProps<T> | DataSourceProps<T>;
+type DataProps<T> = {
+  data: T[] | DataSource<T>;
+};
+
+export function isDataProps<T>(value: {}): value is DataProps<T> {
+  return "data" in value;
+}
+
+type SourceProps<T> = DataProps<T> | StaticRecordProps<T> | DataSourceProps<T>;
 
 export type CheetahGridProps<T> = CheetahGridStdProps<T> &
   CheetahGridEventProps<T> &

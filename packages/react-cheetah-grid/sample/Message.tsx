@@ -132,7 +132,7 @@ const options = [
 export function Message() {
   return (
     <div className="h-full w-full flex flex-row items-stretch">
-      <CheetahGrid style={{ flexGrow: 1 }} records={records}>
+      <CheetahGrid style={{ flexGrow: 1 }} data={records}>
         <Column field={"text1"} width={150} message="msg">
           Msg from data
         </Column>

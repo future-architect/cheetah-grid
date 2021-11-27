@@ -155,7 +155,7 @@ export function Columns() {
     <div className="h-full w-full flex flex-col items-stretch">
       <CheetahGrid
         style={{ flexGrow: 1 }}
-        records={records}
+        data={records}
         defaultRowHeight={100}
         headerRowHeight={24}
       >
