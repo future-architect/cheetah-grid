@@ -172,6 +172,48 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 				rowSpan: 2,
 				colSpan: 2
 			},
+			{
+				field: 'checkTest',
+				caption: 'check-align-left',
+				width: 150,
+				columnType: 'check',
+				action: 'check',
+				style: {textAlign: 'left'},
+				headerType: 'check',
+				headerAction: 'check',
+				headerStyle: {textAlign: 'left', textBaseline: 'bottom'}
+			},
+			{
+				field: 'checkTest',
+				width: 50,
+				columnType: 'check',
+				action: 'check',
+				style: {textAlign: 'right'},
+				headerType: 'check',
+				headerAction: 'check',
+				headerStyle: {textAlign: 'right', textBaseline: 'bottom'}
+			},
+			{
+				field: 'checkTest',
+				caption: 'check-align-left',
+				width: 150,
+				columnType: 'radio',
+				action: 'check',
+				style: {textAlign: 'left'},
+				headerType: 'check',
+				headerAction: 'check',
+				headerStyle: {textAlign: 'left', textBaseline: 'bottom'}
+			},
+			{
+				field: 'checkTest',
+				width: 50,
+				columnType: 'radio',
+				action: 'check',
+				style: {textAlign: 'right'},
+				headerType: 'check',
+				headerAction: 'check',
+				headerStyle: {textAlign: 'right', textBaseline: 'bottom'}
+			},
 		],
 		frozenColCount: 2,
 	});

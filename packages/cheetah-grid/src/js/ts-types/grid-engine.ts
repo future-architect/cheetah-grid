@@ -265,6 +265,7 @@ export interface GridCanvasHelperAPI {
     context: CellContext,
     option: {
       animElapsedTime?: number;
+      offset?: number;
       uncheckBgColor?: ColorPropertyDefine;
       checkBgColor?: ColorPropertyDefine;
       borderColor?: ColorPropertyDefine;
@@ -277,7 +278,7 @@ export interface GridCanvasHelperAPI {
     context: CellContext,
     option: {
       animElapsedTime?: number;
-      bgColor?: ColorPropertyDefine;
+      offset?: number;
       checkColor?: ColorPropertyDefine;
       uncheckBorderColor?: ColorPropertyDefine;
       checkBorderColor?: ColorPropertyDefine;
