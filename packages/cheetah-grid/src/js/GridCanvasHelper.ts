@@ -27,6 +27,7 @@ import {
   style,
 } from "./internal/utils";
 import { InlineDrawer } from "./element/InlineDrawer";
+import type { PaddingOption } from "./internal/canvases";
 import type { RGBA } from "./internal/color";
 import { Rect } from "./internal/Rect";
 import type { SimpleColumnIconOption } from "./ts-types-internal";
@@ -35,6 +36,9 @@ import { colorToRGB } from "./internal/color";
 const { toBoxArray } = style;
 
 const INLINE_ELLIPSIS = inlineUtils.of("\u2026");
+
+const TEXT_OFFSET = 2;
+const CHECKBOX_OFFSET = TEXT_OFFSET + 1;
 
 type ColorsDef = ColorDef | (ColorDef | null)[];
 
@@ -626,7 +630,10 @@ function drawCheckbox<T>(
     textAlign?: CanvasTextAlign;
     textBaseline?: CanvasTextBaseline;
   },
-  positionOpt = {}
+  positionOpt: {
+    offset?: number;
+    padding?: PaddingOption;
+  } = {}
 ): void {
   const boxWidth = canvashelper.measureCheckbox(ctx).width;
   ctx.textAlign = textAlign;
@@ -1052,23 +1059,14 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
     context: CellContext,
     {
       padding,
-      offset = 2,
+      offset = TEXT_OFFSET,
       color,
       textAlign = "left",
       textBaseline = "middle",
       font,
       textOverflow = "clip",
       icons,
-    }: {
-      padding?: number | string | (number | string)[];
-      offset?: number;
-      color?: ColorPropertyDefine;
-      textAlign?: CanvasTextAlign;
-      textBaseline?: CanvasTextBaseline;
-      font?: FontPropertyDefine;
-      textOverflow?: TextOverflow;
-      icons?: SimpleColumnIconOption[];
-    } = {}
+    }: Parameters<GridCanvasHelperAPI["text"]>[2] = {}
   ): void {
     let rect = context.getRect();
 
@@ -1109,7 +1107,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
     context: CellContext,
     {
       padding,
-      offset = 2,
+      offset = TEXT_OFFSET,
       color,
       textAlign = "left",
       textBaseline = "middle",
@@ -1119,19 +1117,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
       lineClamp = 0,
       textOverflow = "clip",
       icons,
-    }: {
-      padding?: number | string | (number | string)[];
-      offset?: number;
-      color?: ColorPropertyDefine;
-      textAlign?: CanvasTextAlign;
-      textBaseline?: CanvasTextBaseline;
-      font?: FontPropertyDefine;
-      lineHeight?: string | number;
-      autoWrapText?: boolean;
-      lineClamp?: LineClamp;
-      textOverflow?: TextOverflow;
-      icons?: SimpleColumnIconOption[];
-    } = {}
+    }: Parameters<GridCanvasHelperAPI["multilineText"]>[2] = {}
   ): void {
     let rect = context.getRect();
 
@@ -1403,14 +1389,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
   buildCheckBoxInline(
     check: boolean,
     context: CellContext,
-    option: {
-      animElapsedTime?: number;
-      uncheckBgColor?: ColorPropertyDefine;
-      checkBgColor?: ColorPropertyDefine;
-      borderColor?: ColorPropertyDefine;
-      textAlign?: CanvasTextAlign;
-      textBaseline?: CanvasTextBaseline;
-    } = {}
+    option: Parameters<GridCanvasHelperAPI["buildCheckBoxInline"]>[2] = {}
   ): InlineDrawer {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
@@ -1434,9 +1413,9 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
     }: InlineDrawOption): void {
       const { col, row } = context;
       drawCheckbox(ctx, rect, col, row, check, self, option, {
-        offset: offset + 1,
+        offset: offset + (CHECKBOX_OFFSET - TEXT_OFFSET),
         padding: {
-          left: offsetLeft + 1,
+          left: offsetLeft + (CHECKBOX_OFFSET - TEXT_OFFSET),
           right: offsetRight,
           top: offsetTop,
           bottom: offsetBottom,
@@ -1447,36 +1426,73 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
   checkbox(
     check: boolean,
     context: CellContext,
-    option: {
-      animElapsedTime?: number;
-      uncheckBgColor?: ColorPropertyDefine;
-      checkBgColor?: ColorPropertyDefine;
-      borderColor?: ColorPropertyDefine;
-      textAlign?: CanvasTextAlign;
-      textBaseline?: CanvasTextBaseline;
-    } = {}
+    {
+      animElapsedTime,
+      offset = CHECKBOX_OFFSET,
+      uncheckBgColor,
+      checkBgColor,
+      borderColor,
+      textAlign,
+      textBaseline,
+    }: Parameters<GridCanvasHelperAPI["checkbox"]>[2] = {}
   ): void {
     this.drawWithClip(context, (ctx) => {
       const { col, row } = context;
-      drawCheckbox(ctx, context.getRect(), col, row, check, this, option);
+      drawCheckbox(
+        ctx,
+        context.getRect(),
+        col,
+        row,
+        check,
+        this,
+        {
+          animElapsedTime,
+          uncheckBgColor,
+          checkBgColor,
+          borderColor,
+          textAlign,
+          textBaseline,
+        },
+        { offset, padding: { left: CHECKBOX_OFFSET - TEXT_OFFSET } }
+      );
     });
   }
   radioButton(
     check: boolean,
     context: CellContext,
-    option: {
-      animElapsedTime?: number;
-      checkColor?: ColorPropertyDefine;
-      uncheckBorderColor?: ColorPropertyDefine;
-      checkBorderColor?: ColorPropertyDefine;
-      bgColor?: ColorPropertyDefine;
-      textAlign?: CanvasTextAlign;
-      textBaseline?: CanvasTextBaseline;
-    } = {}
+    {
+      animElapsedTime,
+      offset = CHECKBOX_OFFSET,
+      checkColor,
+      uncheckBorderColor,
+      checkBorderColor,
+      uncheckBgColor,
+      checkBgColor,
+      textAlign,
+      textBaseline,
+    }: Parameters<GridCanvasHelperAPI["radioButton"]>[2] = {}
   ): void {
     this.drawWithClip(context, (ctx) => {
       const { col, row } = context;
-      drawRadioButton(ctx, context.getRect(), col, row, check, this, option);
+      drawRadioButton(
+        ctx,
+        context.getRect(),
+        col,
+        row,
+        check,
+        this,
+        {
+          animElapsedTime,
+          checkColor,
+          uncheckBorderColor,
+          checkBorderColor,
+          uncheckBgColor,
+          checkBgColor,
+          textAlign,
+          textBaseline,
+        },
+        { offset, padding: { left: CHECKBOX_OFFSET - TEXT_OFFSET } }
+      );
     });
   }
   button(
@@ -1485,7 +1501,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
     {
       bgColor = this.theme.button.bgColor,
       padding,
-      offset = 2,
+      offset = TEXT_OFFSET,
       color = this.theme.button.color,
       textAlign = "center",
       textBaseline = "middle",
@@ -1493,18 +1509,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
       font,
       textOverflow = "clip",
       icons,
-    }: {
-      bgColor?: ColorPropertyDefine;
-      padding?: number | string | (number | string)[];
-      offset?: number;
-      color?: ColorPropertyDefine;
-      textAlign?: CanvasTextAlign;
-      textBaseline?: CanvasTextBaseline;
-      shadow?: canvashelper.DrawButtonOption["shadow"];
-      font?: FontPropertyDefine;
-      textOverflow?: TextOverflow;
-      icons?: SimpleColumnIconOption[];
-    } = {}
+    }: Parameters<GridCanvasHelperAPI["button"]>[2] = {}
   ): void {
     const rect = context.getRect();
 
