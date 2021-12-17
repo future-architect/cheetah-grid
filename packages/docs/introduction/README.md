@@ -15,12 +15,16 @@ You can display data of 1 million records in a **moment**.
 <code-preview init-mode="preview">
 
 ```html
-  <div>
-    <label>Grid initial processing time : </label><strong class="time"></strong><br>
-    <br>
-    <label>theme</label><select class="theme"><option value="default" selected="true">default</option></select>
-  </div>
-  <div class="grid-sample" style="height: 500px; border: solid 1px #ddd;"></div>
+<div>
+  <label>Grid initial processing time : </label><strong class="time"></strong
+  ><br />
+  <br />
+  <label>theme</label
+  ><select class="theme">
+    <option value="default" selected="true">default</option>
+  </select>
+</div>
+<div class="grid-sample" style="height: 500px; border: solid 1px #ddd;"></div>
 ```
 
 ```js
@@ -29,40 +33,48 @@ const personsDataSource = generatePersonsDataSource(1000000);
 const startTime = new Date();
 
 const grid = new cheetahGrid.ListGrid({
-  parentElement: document.querySelector('.grid-sample'),
+  parentElement: document.querySelector(".grid-sample"),
   header: [
-    {field: 'check', caption: '', width: 50, columnType: 'check', action: 'check'},
-    {field: 'personid', caption: 'ID', width: 100},
-    { /* multiple header */
-      caption: 'Name',
+    {
+      field: "check",
+      caption: "",
+      width: 50,
+      columnType: "check",
+      action: "check",
+    },
+    { field: "personid", caption: "ID", width: 100 },
+    {
+      /* multiple header */ caption: "Name",
       columns: [
-        {field: 'fname', caption: 'First Name', width: 200},
-        {field: 'lname', caption: 'Last Name', width: 200},
+        { field: "fname", caption: "First Name", width: 200 },
+        { field: "lname", caption: "Last Name", width: 200 },
       ],
     },
-    {field: 'email', caption: 'Email', width: 250},
+    { field: "email", caption: "Email", width: 250 },
     {
       /* callback field */
       field: function (rec) {
         const d = rec.birthday;
-        return '' + d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate();
+        return (
+          "" + d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + d.getDate()
+        );
       },
-      caption: 'Birthday',
-      width: 100
+      caption: "Birthday",
+      width: 100,
     },
     {
-      caption: 'Button',
+      caption: "Button",
       width: 120,
       /* button column */
       columnType: new cheetahGrid.columns.type.ButtonColumn({
-        caption: 'SHOW REC',
+        caption: "SHOW REC",
       }),
       action: new cheetahGrid.columns.action.ButtonAction({
         action: function (rec) {
           alert(JSON.stringify(rec));
         },
       }),
-    }
+    },
   ],
   frozenColCount: 2,
 });
@@ -70,12 +82,12 @@ grid.dataSource = personsDataSource;
 
 const endTime = new Date();
 
-document.querySelector('.time').textContent = (endTime - startTime) + 'ms';
+document.querySelector(".time").textContent = endTime - startTime + "ms";
 
 // THEME
-const themeSelect = document.querySelector('.theme');
-themeSelect.onchange = function() {
-  if (themeSelect.value === 'default') {
+const themeSelect = document.querySelector(".theme");
+themeSelect.onchange = function () {
+  if (themeSelect.value === "default") {
     grid.theme = null;
   } else {
     grid.theme = themeSelect.value;
@@ -83,7 +95,7 @@ themeSelect.onchange = function() {
   console.log(themeSelect.value);
 };
 for (let name in cheetahGrid.themes.choices) {
-  const opt = document.createElement('option');
+  const opt = document.createElement("option");
   opt.value = name;
   opt.textContent = name;
   themeSelect.appendChild(opt);
@@ -106,14 +118,20 @@ for (let name in cheetahGrid.themes.choices) {
 // initialize
 grid = new cheetahGrid.ListGrid({
   // Parent element on which to place the grid
-  parentElement: document.querySelector('.grid-sample'),
+  parentElement: document.querySelector(".grid-sample"),
   // Header definition
   header: [
-    {field: 'check', caption: '', width: 50, columnType: 'check', action: 'check'},
-    {field: 'personid', caption: 'ID', width: 100},
-    {field: 'fname', caption: 'First Name', width: 200},
-    {field: 'lname', caption: 'Last Name', width: 200},
-    {field: 'email', caption: 'Email', width: 250},
+    {
+      field: "check",
+      caption: "",
+      width: 50,
+      columnType: "check",
+      action: "check",
+    },
+    { field: "personid", caption: "ID", width: 100 },
+    { field: "fname", caption: "First Name", width: 200 },
+    { field: "lname", caption: "Last Name", width: 200 },
+    { field: "email", caption: "Email", width: 250 },
   ],
   // Array data to be displayed on the grid
   records: generatePersons(1000),
@@ -169,19 +187,21 @@ grid = new cheetahGrid.ListGrid({
     />
   </c-grid>
 </div>
-<div class="grid-sample" ></div>
+<div class="grid-sample"></div>
 ```
 
 ```js
 export default {
   data: function () {
     return {
-      records: generatePersons(1000)
-    }
+      records: generatePersons(1000),
+    };
   },
   methods: {
-    onClickRecord: function (rec) { alert(JSON.stringify(rec)); }
-  }
+    onClickRecord: function (rec) {
+      alert(JSON.stringify(rec));
+    },
+  },
 };
 ```
 

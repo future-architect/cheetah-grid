@@ -6,7 +6,7 @@ order: 100
 
 Define sort settings of each column by using `sort` property.  
 When you set truthy value, records are sorted by internal logic pre-defined in Cheetah Grid.  
-Please define function if you want to sort by your own logic.  
+Please define function if you want to sort by your own logic.
 
 <code-preview>
 
@@ -18,49 +18,50 @@ Please define function if you want to sort by your own logic.
 const records = [
   {
     no: 1,
-    name: 'Asiatic',
+    name: "Asiatic",
   },
   {
     no: 2,
-    name: 'South African',
+    name: "South African",
   },
   {
     no: 3,
-    name: 'Tanzanian',
+    name: "Tanzanian",
   },
   {
     no: 4,
-    name: 'Sudan',
+    name: "Sudan",
   },
   {
     no: 5,
-    name: 'King',
+    name: "King",
   },
 ];
 const grid = new cheetahGrid.ListGrid({
-  parentElement: document.querySelector('.sample1'),
+  parentElement: document.querySelector(".sample1"),
   header: [
     {
-      field: 'no',
-      caption: 'no',
+      field: "no",
+      caption: "no",
       width: 50,
       // define custom sort logic
       sort(order, col, grid) {
-        const compare = order === 'desc'
-          ? (v1, v2) => v1 === v2 ? 0 : v1 > v2 ? 1 : -1
-          : (v1, v2) => v1 === v2 ? 0 : v1 < v2 ? 1 : -1;
+        const compare =
+          order === "desc"
+            ? (v1, v2) => (v1 === v2 ? 0 : v1 > v2 ? 1 : -1)
+            : (v1, v2) => (v1 === v2 ? 0 : v1 < v2 ? 1 : -1);
         records.sort((r1, r2) => compare(r1.no, r2.no));
-        console.log('sorted:',records)
+        console.log("sorted:", records);
         grid.records = records;
-      }
+      },
     },
     {
-      field: 'name',
-      caption: 'name',
+      field: "name",
+      caption: "name",
       width: 200,
       // use default sort logic
-      sort: true
-    }
+      sort: true,
+    },
   ],
 });
 grid.records = records;
@@ -68,9 +69,9 @@ grid.records = records;
 
 </code-preview>
 
-## Color of sort arrow 
+## Color of sort arrow
 
-In order to change the color of the sort arrow you implement as follows. 
+In order to change the color of the sort arrow you implement as follows.
 
 <code-preview>
 
@@ -82,52 +83,53 @@ In order to change the color of the sort arrow you implement as follows.
 const records = [
   {
     no: 1,
-    name: 'Asiatic',
+    name: "Asiatic",
   },
   {
     no: 2,
-    name: 'South African',
+    name: "South African",
   },
   {
     no: 3,
-    name: 'Tanzanian',
+    name: "Tanzanian",
   },
   {
     no: 4,
-    name: 'Sudan',
+    name: "Sudan",
   },
   {
     no: 5,
-    name: 'King',
+    name: "King",
   },
 ];
 const grid = new cheetahGrid.ListGrid({
-  parentElement: document.querySelector('.sample2'),
+  parentElement: document.querySelector(".sample2"),
   header: [
     {
-      field: 'no',
-      caption: 'no',
+      field: "no",
+      caption: "no",
       width: 50,
       sort(order, col, grid) {
-        const compare = order === 'desc'
-          ? (v1, v2) => v1 === v2 ? 0 : v1 > v2 ? 1 : -1
-          : (v1, v2) => v1 === v2 ? 0 : v1 < v2 ? 1 : -1;
+        const compare =
+          order === "desc"
+            ? (v1, v2) => (v1 === v2 ? 0 : v1 > v2 ? 1 : -1)
+            : (v1, v2) => (v1 === v2 ? 0 : v1 < v2 ? 1 : -1);
         records.sort((r1, r2) => compare(r1.no, r2.no));
         grid.records = records;
       },
       // define color of sort arrow
-      headerStyle: {sortArrowColor: 'red'}
+      headerStyle: { sortArrowColor: "red" },
     },
     {
-      field: 'name',
-      caption: 'name',
+      field: "name",
+      caption: "name",
       width: 200,
       sort: true,
       // define color of sort arrow
       headerStyle() {
-        return {sortArrowColor: 'blue'};
-      }
-    }
+        return { sortArrowColor: "blue" };
+      },
+    },
   ],
 });
 grid.records = records;
@@ -151,51 +153,52 @@ If you set `sortState` property to `null`, the sort state is initialized.
 const records = [
   {
     no: 1,
-    name: 'Asiatic',
+    name: "Asiatic",
   },
   {
     no: 2,
-    name: 'South African',
+    name: "South African",
   },
   {
     no: 3,
-    name: 'Tanzanian',
+    name: "Tanzanian",
   },
   {
     no: 4,
-    name: 'Sudan',
+    name: "Sudan",
   },
   {
     no: 5,
-    name: 'King',
+    name: "King",
   },
 ];
 const grid = new cheetahGrid.ListGrid({
-  parentElement: document.querySelector('.sample3'),
+  parentElement: document.querySelector(".sample3"),
   header: [
     {
-      field: 'no',
-      caption: 'no',
+      field: "no",
+      caption: "no",
       width: 50,
       sort(order, col, grid) {
-        const compare = order === 'desc'
-          ? (v1, v2) => v1 === v2 ? 0 : v1 > v2 ? 1 : -1
-          : (v1, v2) => v1 === v2 ? 0 : v1 < v2 ? 1 : -1;
+        const compare =
+          order === "desc"
+            ? (v1, v2) => (v1 === v2 ? 0 : v1 > v2 ? 1 : -1)
+            : (v1, v2) => (v1 === v2 ? 0 : v1 < v2 ? 1 : -1);
         records.sort((r1, r2) => compare(r1.no, r2.no));
         grid.records = records;
-      }
+      },
     },
     {
-      field: 'name',
-      caption: 'name',
+      field: "name",
+      caption: "name",
       width: 200,
-      sort: true
-    }
+      sort: true,
+    },
   ],
 });
 grid.records = records;
 
-const button = document.querySelector('.sample3-reset');
+const button = document.querySelector(".sample3-reset");
 button.onclick = () => {
   grid.sortState = null;
   // does not redraw automatically, please call `invalidate`.

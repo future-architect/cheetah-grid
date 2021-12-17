@@ -18,39 +18,39 @@ You can also control `disabled` for each record by specifying a function.
 const alwaysDisabledButtonAction = new cheetahGrid.columns.action.ButtonAction({
   disabled: true,
   action(rec) {
-    alert('Clicked Button!');
+    alert("Clicked Button!");
   },
 });
 const DisabledForEachRecordButtonAction =
   new cheetahGrid.columns.action.ButtonAction({
     disabled: (rec) => rec.disabled,
     action(rec) {
-      alert('Clicked Button!');
+      alert("Clicked Button!");
     },
   });
 
 const grid = new cheetahGrid.ListGrid({
-  parentElement: document.querySelector('.sample1'),
+  parentElement: document.querySelector(".sample1"),
   header: [
     {
-      caption: 'Always Disabled',
+      caption: "Always Disabled",
       width: 180,
       columnType: new cheetahGrid.columns.type.ButtonColumn({
-        caption: 'BUTTON',
+        caption: "BUTTON",
       }),
       action: alwaysDisabledButtonAction,
     },
     {
-      caption: 'Disabled',
-      field: 'disabled',
-      columnType: 'check',
-      action: 'check',
+      caption: "Disabled",
+      field: "disabled",
+      columnType: "check",
+      action: "check",
     },
     {
-      caption: 'Disabled for Each Record',
+      caption: "Disabled for Each Record",
       width: 180,
       columnType: new cheetahGrid.columns.type.ButtonColumn({
-        caption: 'BUTTON',
+        caption: "BUTTON",
       }),
       action: DisabledForEachRecordButtonAction,
     },

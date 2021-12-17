@@ -51,18 +51,22 @@ You can define the behavior and appearance of columns and headers cells by defin
 const records = generatePersons(100);
 
 export default {
-  data () {
+  data() {
     return {
-      records
-    }
+      records,
+    };
   },
   methods: {
-    getBirthday (rec) {
-      const dateTimeFormat = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'numeric', day: 'numeric'})
-      return dateTimeFormat.format(rec.birthday)
-    }
-  }
-}
+    getBirthday(rec) {
+      const dateTimeFormat = new Intl.DateTimeFormat("en-US", {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+      });
+      return dateTimeFormat.format(rec.birthday);
+    },
+  },
+};
 ```
 
 </code-preview>
@@ -107,18 +111,22 @@ To use multiple header, define `<c-grid-column-group>`.
 const records = generatePersons(100);
 
 export default {
-  data () {
+  data() {
     return {
-      records
-    }
+      records,
+    };
   },
   methods: {
-    getBirthday (rec) {
-      const dateTimeFormat = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'numeric', day: 'numeric'})
-      return dateTimeFormat.format(rec.birthday)
-    }
-  }
-}
+    getBirthday(rec) {
+      const dateTimeFormat = new Intl.DateTimeFormat("en-US", {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+      });
+      return dateTimeFormat.format(rec.birthday);
+    },
+  },
+};
 ```
 
 </code-preview>

@@ -22,42 +22,42 @@ For example:
 
 ```js
 const grid = new cheetahGrid.ListGrid({
-  parentElement: document.querySelector('.sample-layout'),
+  parentElement: document.querySelector(".sample-layout"),
   layout: {
     header: [
       // header line1
       [
-        { caption: 'ID', width: 100, rowSpan:2 },
-        { caption: 'First Name', width: 200 },
-        { caption: 'Email', width: 250, rowSpan:2 },
-        { caption: 'Birthday', width: 200, rowSpan:2 },
+        { caption: "ID", width: 100, rowSpan: 2 },
+        { caption: "First Name", width: 200 },
+        { caption: "Email", width: 250, rowSpan: 2 },
+        { caption: "Birthday", width: 200, rowSpan: 2 },
       ],
       // header line2
-      [
-        { caption: 'Last Name' },
-      ]
+      [{ caption: "Last Name" }],
     ],
     body: [
       // line1
       [
-        { field: 'personid', rowSpan:2 },
-        { field: 'fname' },
-        { field: 'email', rowSpan:2 },
-        { field: getBirthday, rowSpan:2 },
+        { field: "personid", rowSpan: 2 },
+        { field: "fname" },
+        { field: "email", rowSpan: 2 },
+        { field: getBirthday, rowSpan: 2 },
       ],
       // line2
-      [
-        { field: 'lname' },
-      ]
-    ]
+      [{ field: "lname" }],
+    ],
   },
   frozenColCount: 1,
 });
 grid.records = records;
 
-function getBirthday (rec) {
-  const dateTimeFormat = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'numeric', day: 'numeric'})
-  return dateTimeFormat.format(rec.birthday)
+function getBirthday(rec) {
+  const dateTimeFormat = new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+  });
+  return dateTimeFormat.format(rec.birthday);
 }
 ```
 

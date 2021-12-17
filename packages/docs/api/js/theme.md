@@ -17,18 +17,18 @@ Built-in themes are `MATERIAL_DESIGN` and `BASIC`.
 ```html
 <label>theme</label>
 <select class="theme-select1">
-    <option value="" selected="true">unset</option>
-    <option value="MATERIAL_DESIGN">MATERIAL_DESIGN</option>
-    <option value="BASIC">BASIC</option>
+  <option value="" selected="true">unset</option>
+  <option value="MATERIAL_DESIGN">MATERIAL_DESIGN</option>
+  <option value="BASIC">BASIC</option>
 </select>
 <div class="sample1 demo-grid small"></div>
 ```
 
 ```js
-const grid = vm.createGrid(document.querySelector('.sample1'));
+const grid = vm.createGrid(document.querySelector(".sample1"));
 
-const themeSelect = document.querySelector('.theme-select1');
-themeSelect.onchange = function() {
+const themeSelect = document.querySelector(".theme-select1");
+themeSelect.onchange = function () {
   grid.theme = cheetahGrid.themes.choices[themeSelect.value];
 
   /* The `theme` property of the grid instance can also be set as a string. */
@@ -49,17 +49,17 @@ Set a theme to the `cheetahGrid.themes.default` property.
 ```html
 <label>theme</label>
 <select class="theme-select2">
-    <option value="MATERIAL_DESIGN" selected="true">MATERIAL_DESIGN</option>
-    <option value="BASIC">BASIC</option>
+  <option value="MATERIAL_DESIGN" selected="true">MATERIAL_DESIGN</option>
+  <option value="BASIC">BASIC</option>
 </select>
 <div class="sample2 demo-grid small"></div>
 ```
 
 ```js
-vm.createGrid(document.querySelector('.sample2'));
+vm.createGrid(document.querySelector(".sample2"));
 
-const themeSelect = document.querySelector('.theme-select2');
-themeSelect.onchange = function() {
+const themeSelect = document.querySelector(".theme-select2");
+themeSelect.onchange = function () {
   cheetahGrid.themes.default = cheetahGrid.themes.choices[themeSelect.value];
 
   // redraw all the grids
@@ -82,58 +82,58 @@ To extend the theme, do as follows.
 ```
 
 ```js
-const grid = vm.createGrid(document.querySelector('.sample3'));
+const grid = vm.createGrid(document.querySelector(".sample3"));
 
 const userTheme = {
-  color: 'red',
-  frozenRowsColor: 'red',
-  defaultBgColor: '#FDD',
-  frozenRowsBgColor: '#EAA',
-  selectionBgColor: '#FDA',
-  highlightBgColor: '#FDC',
-  underlayBackgroundColor: '#FEE',
+  color: "red",
+  frozenRowsColor: "red",
+  defaultBgColor: "#FDD",
+  frozenRowsBgColor: "#EAA",
+  selectionBgColor: "#FDA",
+  highlightBgColor: "#FDC",
+  underlayBackgroundColor: "#FEE",
   // You can also change the theme apply in the state by using callback.
   frozenRowsBorderColor(args) {
     const {
       row,
-      grid: {frozenRowCount}
+      grid: { frozenRowCount },
     } = args;
     if (frozenRowCount - 1 === row) {
-      return ['#F88'/*top*/, '#F88'/*right and left*/, 'red'/*bottom*/];
+      return ["#F88" /*top*/, "#F88" /*right and left*/, "red" /*bottom*/];
     } else {
-      return '#F88';
+      return "#F88";
     }
   },
   borderColor(args) {
     const {
       col,
-      grid: {colCount}
+      grid: { colCount },
     } = args;
     if (colCount - 1 === col) {
-      return ['red'/*top*/, '#F88'/*right*/, 'red'/*bottom*/, null/*left*/];
+      return ["red" /*top*/, "#F88" /*right*/, "red" /*bottom*/, null /*left*/];
     } else {
-      return ['red'/*top and bottom*/, null/*right and left*/];
+      return ["red" /*top and bottom*/, null /*right and left*/];
     }
   },
-  highlightBorderColor: '#FD5',
+  highlightBorderColor: "#FD5",
   checkbox: {
-    uncheckBgColor: '#FDD',
-    checkBgColor: 'rgb(255, 73, 72)',
-    borderColor: 'red',
+    uncheckBgColor: "#FDD",
+    checkBgColor: "rgb(255, 73, 72)",
+    borderColor: "red",
   },
   button: {
-    color: '#FDD',
-    bgColor: '#F55',
+    color: "#FDD",
+    bgColor: "#F55",
   },
-  font: '16px sans-serif',
+  font: "16px sans-serif",
   header: {
-    sortArrowColor: '#D00'
+    sortArrowColor: "#D00",
   },
   messages: {
-    infoBgColor: 'gray',
-    errorBgColor: 'red',
-    warnBgColor: 'yellow',
-  }
+    infoBgColor: "gray",
+    errorBgColor: "red",
+    warnBgColor: "yellow",
+  },
 };
 grid.theme = userTheme;
 ```

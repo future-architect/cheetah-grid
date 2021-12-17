@@ -13,96 +13,105 @@ Enables data editing by menu selection.
 
 <label>change action properties : </label>
 <select class="sample1mode">
-    <option value="" selected="true">both false</option>
-    <option value="readOnly">readOnly = true</option>
-    <option value="disabled">disabled = true</option>
-</select> <span class="sample1modememo"></span>
+  <option value="" selected="true">both false</option>
+  <option value="readOnly">readOnly = true</option>
+  <option value="disabled">disabled = true</option>
+</select>
+<span class="sample1modememo"></span>
 ```
 
 ```js
 const menuOptions = [
-  {value: '', label: 'Empty'},
-  {value: '1', label: 'Option 1'},
-  {value: '2', label: 'Option 2'},
-  {value: '3', label: 'Option 3'},
-  {value: '4', label: 'Option 4'},
-  {value: '5', label: 'Option 5'},
-  {value: '6', label: 'Option 6'},
-  {value: '7', label: 'Option 7'},
+  { value: "", label: "Empty" },
+  { value: "1", label: "Option 1" },
+  { value: "2", label: "Option 2" },
+  { value: "3", label: "Option 3" },
+  { value: "4", label: "Option 4" },
+  { value: "5", label: "Option 5" },
+  { value: "6", label: "Option 6" },
+  { value: "7", label: "Option 7" },
 ];
 const displayOptions = [
-  {value: '', label: 'Choose your option'},
-  {value: '1', label: 'Option 1'},
-  {value: '2', label: 'Option 2'},
-  {value: '3', label: 'Option 3'},
-  {value: '4', label: 'Option 4'},
-  {value: '5', label: 'Option 5'},
-  {value: '6', label: 'Option 6'},
-  {value: '7', label: 'Option 7'},
+  { value: "", label: "Choose your option" },
+  { value: "1", label: "Option 1" },
+  { value: "2", label: "Option 2" },
+  { value: "3", label: "Option 3" },
+  { value: "4", label: "Option 4" },
+  { value: "5", label: "Option 5" },
+  { value: "6", label: "Option 6" },
+  { value: "7", label: "Option 7" },
 ];
-const menuEditor = new cheetahGrid.columns.action.InlineMenuEditor({options: menuOptions});
+const menuEditor = new cheetahGrid.columns.action.InlineMenuEditor({
+  options: menuOptions,
+});
 const grid = new cheetahGrid.ListGrid({
-  parentElement: document.querySelector('.sample1'),
+  parentElement: document.querySelector(".sample1"),
   header: [
     {
-      field: 'sel',
-      caption: 'InlineMenuEditor',
+      field: "sel",
+      caption: "InlineMenuEditor",
       width: 260,
-      columnType: new cheetahGrid.columns.type.MenuColumn({options: displayOptions}),
-      action: new cheetahGrid.columns.action.InlineMenuEditor({options: menuOptions}),
+      columnType: new cheetahGrid.columns.type.MenuColumn({
+        options: displayOptions,
+      }),
+      action: new cheetahGrid.columns.action.InlineMenuEditor({
+        options: menuOptions,
+      }),
     },
     {
-      field: 'sel2',
-      caption: 'controlable properties',
+      field: "sel2",
+      caption: "controlable properties",
       width: 260,
-      columnType: new cheetahGrid.columns.type.MenuColumn({options: displayOptions}),
+      columnType: new cheetahGrid.columns.type.MenuColumn({
+        options: displayOptions,
+      }),
       action: menuEditor,
     },
 
     {
-      caption: 'show',
+      caption: "show",
       width: 100,
       columnType: new cheetahGrid.columns.type.ButtonColumn({
-        caption: 'SHOW',
+        caption: "SHOW",
       }),
       action: new cheetahGrid.columns.action.ButtonAction({
         action(rec) {
-          alert(JSON.stringify(rec, null, '  '));
+          alert(JSON.stringify(rec, null, "  "));
         },
       }),
-    }
-
-
+    },
   ],
 });
 grid.records = [
-  {sel: '', sel2: ''},
-  {sel: '1', sel2: '1'},
-  {sel: '2', sel2: '2'},
-  {sel: '3', sel2: '3'},
-  {sel: '', sel2: ''},
-  {sel: '1', sel2: '1'},
-  {sel: '2', sel2: '2'},
-  {sel: '3', sel2: '3'},
-  {sel: '', sel2: ''},
-  {sel: '1', sel2: '1'},
-  {sel: '2', sel2: '2'},
-  {sel: '3', sel2: '3'},
+  { sel: "", sel2: "" },
+  { sel: "1", sel2: "1" },
+  { sel: "2", sel2: "2" },
+  { sel: "3", sel2: "3" },
+  { sel: "", sel2: "" },
+  { sel: "1", sel2: "1" },
+  { sel: "2", sel2: "2" },
+  { sel: "3", sel2: "3" },
+  { sel: "", sel2: "" },
+  { sel: "1", sel2: "1" },
+  { sel: "2", sel2: "2" },
+  { sel: "3", sel2: "3" },
 ];
-document.querySelector('.sample1mode').onchange = function() {
+document.querySelector(".sample1mode").onchange = function () {
   //change action properties
-  if (this.value === 'readOnly') {
+  if (this.value === "readOnly") {
     menuEditor.readOnly = true;
     menuEditor.disabled = false;
-    document.querySelector('.sample1modememo').textContent = 'It will not toggle';
-  } else if (this.value === 'disabled') {
+    document.querySelector(".sample1modememo").textContent =
+      "It will not toggle";
+  } else if (this.value === "disabled") {
     menuEditor.readOnly = false;
     menuEditor.disabled = true;
-    document.querySelector('.sample1modememo').textContent = 'It will not toggle and does not respond when hovering the mouse';
+    document.querySelector(".sample1modememo").textContent =
+      "It will not toggle and does not respond when hovering the mouse";
   } else {
     menuEditor.readOnly = false;
     menuEditor.disabled = false;
-    document.querySelector('.sample1modememo').textContent = 'both false';
+    document.querySelector(".sample1modememo").textContent = "both false";
   }
 };
 ```

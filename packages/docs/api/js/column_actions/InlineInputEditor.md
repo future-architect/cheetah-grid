@@ -13,62 +13,68 @@ Enables data editing by input.
 
 <label>change action properties : </label>
 <select class="sample1mode">
-    <option value="" selected="true">both false</option>
-    <option value="readOnly">readOnly = true</option>
-    <option value="disabled">disabled = true</option>
-</select> <span class="sample1modememo"></span>
+  <option value="" selected="true">both false</option>
+  <option value="readOnly">readOnly = true</option>
+  <option value="disabled">disabled = true</option>
+</select>
+<span class="sample1modememo"></span>
 ```
 
 ```js
 const inputEditor = new cheetahGrid.columns.action.InlineInputEditor();
 const grid = new cheetahGrid.ListGrid({
-  parentElement: document.querySelector('.sample1'),
+  parentElement: document.querySelector(".sample1"),
   header: [
-    {field: 'text', caption: 'defined by InlineInputEditor', width: 260, action: inputEditor},
+    {
+      field: "text",
+      caption: "defined by InlineInputEditor",
+      width: 260,
+      action: inputEditor,
+    },
 
     {
-      caption: 'show',
+      caption: "show",
       width: 100,
       columnType: new cheetahGrid.columns.type.ButtonColumn({
-        caption: 'SHOW',
+        caption: "SHOW",
       }),
       action: new cheetahGrid.columns.action.ButtonAction({
         action(rec) {
-          alert(JSON.stringify(rec, null, '  '));
+          alert(JSON.stringify(rec, null, "  "));
         },
       }),
-    }
-
-
+    },
   ],
 });
 grid.records = [
-  {text: 'text'},
-  {text: 'text'},
-  {text: 'text'},
-  {text: 'text'},
-  {text: 'text'},
-  {text: 'text'},
-  {text: 'text'},
-  {text: 'text'},
-  {text: 'text'},
-  {text: 'text'},
+  { text: "text" },
+  { text: "text" },
+  { text: "text" },
+  { text: "text" },
+  { text: "text" },
+  { text: "text" },
+  { text: "text" },
+  { text: "text" },
+  { text: "text" },
+  { text: "text" },
 ];
 
-document.querySelector('.sample1mode').onchange = function() {
+document.querySelector(".sample1mode").onchange = function () {
   //change action properties
-  if (this.value === 'readOnly') {
+  if (this.value === "readOnly") {
     inputEditor.readOnly = true;
     inputEditor.disabled = false;
-    document.querySelector('.sample1modememo').textContent = 'It will not toggle';
-  } else if (this.value === 'disabled') {
+    document.querySelector(".sample1modememo").textContent =
+      "It will not toggle";
+  } else if (this.value === "disabled") {
     inputEditor.readOnly = false;
     inputEditor.disabled = true;
-    document.querySelector('.sample1modememo').textContent = 'It will not toggle and does not respond when hovering the mouse';
+    document.querySelector(".sample1modememo").textContent =
+      "It will not toggle and does not respond when hovering the mouse";
   } else {
     inputEditor.readOnly = false;
     inputEditor.disabled = false;
-    document.querySelector('.sample1modememo').textContent = 'both false';
+    document.querySelector(".sample1modememo").textContent = "both false";
   }
 };
 ```
@@ -90,39 +96,33 @@ document.querySelector('.sample1mode').onchange = function() {
 
 ```js
 const grid = new cheetahGrid.ListGrid({
-  parentElement: document.querySelector('.sample2'),
+  parentElement: document.querySelector(".sample2"),
   header: [
     {
-      field: 'number',
-      caption: 'type & classList',
+      field: "number",
+      caption: "type & classList",
       width: 220,
-      columnType: 'number',
+      columnType: "number",
       action: new cheetahGrid.columns.action.InlineInputEditor({
-        type: 'number',
-        classList: ['al-right']
-      })
+        type: "number",
+        classList: ["al-right"],
+      }),
     },
     {
-      caption: 'show',
+      caption: "show",
       width: 100,
       columnType: new cheetahGrid.columns.type.ButtonColumn({
-        caption: 'SHOW',
+        caption: "SHOW",
       }),
       action: new cheetahGrid.columns.action.ButtonAction({
         action(rec) {
-          alert(JSON.stringify(rec, null, '  '));
+          alert(JSON.stringify(rec, null, "  "));
         },
       }),
-    }
-
-
+    },
   ],
 });
-grid.records = [
-  {number: 1234},
-  {number: 1234.123},
-  {number: -1234.123},
-];
+grid.records = [{ number: 1234 }, { number: 1234.123 }, { number: -1234.123 }];
 ```
 
 ```css

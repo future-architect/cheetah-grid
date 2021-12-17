@@ -29,8 +29,8 @@ order: 9000
 | keyboardOptions.deleteCellValueOnDel | boolean              | Specify `true` to enable enable deletion of cell values with the Del and BS keys.                                            |
 | keyboardOptions.selectAllOnCtrlA     | boolean              | Specify `true` to enable selectt all cells by Ctrl + A key.                                                                  |
 
-[Define Headers and Columns]: ../headers_columns.md
-[Advanced Layout]: ../advanced_layout/README.md
-[Grid Data]: ../grid_data/README.md
-[Theme]: ../theme.md
-[Examples of allowRangePaste]: ./allowRangePaste.md
+[define headers and columns]: ../headers_columns.md
+[advanced layout]: ../advanced_layout/README.md
+[grid data]: ../grid_data/README.md
+[theme]: ../theme.md
+[examples of allowrangepaste]: ./allowRangePaste.md

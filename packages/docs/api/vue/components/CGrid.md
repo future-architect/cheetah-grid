@@ -57,12 +57,14 @@ Defines the Grid.
 export default {
   data() {
     return {
-      records
-    }
+      records,
+    };
   },
   methods: {
-    onClickRecord(rec) { alert(JSON.stringify(rec)); }
-  }
+    onClickRecord(rec) {
+      alert(JSON.stringify(rec));
+    },
+  },
 };
 ```
 
@@ -105,26 +107,26 @@ The definition is set to `layout.body` property described in [Advanced Layout].
 
 ### Optional Properties
 
-| Name        | Type    | Description         | Default  |
-|:------------|:-------:|:--------------------|:---------|
-| data | `Array`&#124;`object`  | Defines a records or data source. | `undefined` |
-| frozen-col-count | `number`&#124;`string`  | Defines a frozen col Count | `0` |
-| header-row-height | `number`&#124;`Array`  | Defines the header row height(s) | `undefined` |
-| allow-range-paste | `boolean`  | Allow pasting of range. | `undefined` |
-| default-row-height | `number`  | Default grid row height. | `undefined` |
-| default-col-width | `number`  | Default grid col width. | `undefined` |
-| filter | `function`  | Defines a records filter | `undefined` |
-| font | `string`  | Default font. | `undefined` |
-| underlay-background-color | `string`  | Underlay background color. | `undefined` |
-| theme | `object`&#124;`string`  | Defines the grid theme | `undefined` |
-| move-cell-on-tab-key | `boolean`  | Specify `true` to enable cell movement by Tab key. | `undefined` |
-| move-cell-on-enter-key | `boolean`  | Specify `true` to enable cell movement by Enter key. | `undefined` |
-| delete-cell-value-on-del-key | `boolean`  | Specify `true` to enable enable deletion of cell values with the Del and BS keys. | `undefined` |
-| select-all-on-ctrl-a-key | `boolean`  | Specify `true` to enable selectt all cells by Ctrl + A key. | `undefined` |
-| disable-column-resize | `boolean`  | Specify `true` to disable column resizing | `undefined` |
-| disabled | `boolean`  | Defines disabled | `undefined` |
-| readonly | `boolean`  | Defines readonly | `undefined` |
-| options | `object`  | Defines a raw options for Cheetah Grid | `undefined` |
+| Name                         |          Type          | Description                                                                       | Default     |
+| :--------------------------- | :--------------------: | :-------------------------------------------------------------------------------- | :---------- |
+| data                         | `Array`&#124;`object`  | Defines a records or data source.                                                 | `undefined` |
+| frozen-col-count             | `number`&#124;`string` | Defines a frozen col Count                                                        | `0`         |
+| header-row-height            | `number`&#124;`Array`  | Defines the header row height(s)                                                  | `undefined` |
+| allow-range-paste            |       `boolean`        | Allow pasting of range.                                                           | `undefined` |
+| default-row-height           |        `number`        | Default grid row height.                                                          | `undefined` |
+| default-col-width            |        `number`        | Default grid col width.                                                           | `undefined` |
+| filter                       |       `function`       | Defines a records filter                                                          | `undefined` |
+| font                         |        `string`        | Default font.                                                                     | `undefined` |
+| underlay-background-color    |        `string`        | Underlay background color.                                                        | `undefined` |
+| theme                        | `object`&#124;`string` | Defines the grid theme                                                            | `undefined` |
+| move-cell-on-tab-key         |       `boolean`        | Specify `true` to enable cell movement by Tab key.                                | `undefined` |
+| move-cell-on-enter-key       |       `boolean`        | Specify `true` to enable cell movement by Enter key.                              | `undefined` |
+| delete-cell-value-on-del-key |       `boolean`        | Specify `true` to enable enable deletion of cell values with the Del and BS keys. | `undefined` |
+| select-all-on-ctrl-a-key     |       `boolean`        | Specify `true` to enable selectt all cells by Ctrl + A key.                       | `undefined` |
+| disable-column-resize        |       `boolean`        | Specify `true` to disable column resizing                                         | `undefined` |
+| disabled                     |       `boolean`        | Defines disabled                                                                  | `undefined` |
+| readonly                     |       `boolean`        | Defines readonly                                                                  | `undefined` |
+| options                      |        `object`        | Defines a raw options for Cheetah Grid                                            | `undefined` |
 
 <!-- PROPS_TABLE_END -->
 
@@ -152,32 +154,34 @@ The definition is set to `layout.body` property described in [Advanced Layout].
 
 ```js
 export default {
-  name: 'App',
+  name: "App",
   data() {
     return {
       records,
       // you can set the theme name or object.
       // userTheme: 'BASIC',
       userTheme: {
-        color: '#2c3e50',
-        frozenRowsColor: '#2c3e50',
-        frozenRowsBgColor: '#40b883',
-        borderColor: '#35495e',
-        frozenRowsBorderColor: '#35495e',
+        color: "#2c3e50",
+        frozenRowsColor: "#2c3e50",
+        frozenRowsBgColor: "#40b883",
+        borderColor: "#35495e",
+        frozenRowsBorderColor: "#35495e",
         checkbox: {
-          checkBgColor: '#35495e',
-          borderColor: '#35495e',
+          checkBgColor: "#35495e",
+          borderColor: "#35495e",
         },
         button: {
-          color: '#FFF',
-          bgColor: '#2c3e50',
+          color: "#FFF",
+          bgColor: "#2c3e50",
         },
-      }
+      },
     };
   },
   methods: {
-    onClickRecord(rec) { alert(JSON.stringify(rec)); }
-  }
+    onClickRecord(rec) {
+      alert(JSON.stringify(rec));
+    },
+  },
 };
 ```
 
@@ -187,9 +191,9 @@ export default {
 
 <!-- DATA_TABLE_START -->
 
-| Name        | Type | Initial Value | Description         |
-|:------------|:-----|:--------------|:--------------------|
-| headerValues | Map<any, any> | `new Map()` | Header values. |
+| Name         | Type          | Initial Value | Description    |
+| :----------- | :------------ | :------------ | :------------- |
+| headerValues | Map<any, any> | `new Map()`   | Header values. |
 
 <!-- DATA_TABLE_END -->
 
@@ -197,13 +201,13 @@ export default {
 
 <!-- EVENTS_TABLE_START -->
 
-| Name        | Description         |
-|:------------|:--------------------|
-| click-cell | Click on cell. |
-| dblclick-cell | Doubleclick on cell. |
-| selected-cell | Selected cell. |
-| paste-cell | Paste on cell. |
-| changed-value | Changed value. |
+| Name                 | Description           |
+| :------------------- | :-------------------- |
+| click-cell           | Click on cell.        |
+| dblclick-cell        | Doubleclick on cell.  |
+| selected-cell        | Selected cell.        |
+| paste-cell           | Paste on cell.        |
+| changed-value        | Changed value.        |
 | changed-header-value | Changed header value. |
 
 <!-- EVENTS_TABLE_END -->
@@ -245,14 +249,14 @@ e.g. `<c-grid-column>`
 export default {
   data() {
     return {
-      records
-    }
+      records,
+    };
   },
   methods: {
     onClickCell(event, colName) {
-      alert('Click at '+colName+': $event='+JSON.stringify(event))
-    }
-  }
+      alert("Click at " + colName + ": $event=" + JSON.stringify(event));
+    },
+  },
 };
 ```
 
@@ -262,13 +266,13 @@ export default {
 
 <!-- METHODS_TABLE_START -->
 
-| Name        | Return Type | Description         |
-|:------------|:------------|:--------------------|
-| invalidate | --- | Redraws the whole grid. |
-| updateSize | --- | Apply the changed size. |
-| updateScroll | --- | Apply the changed scroll size. |
+| Name         | Return Type | Description                    |
+| :----------- | :---------- | :----------------------------- |
+| invalidate   | ---         | Redraws the whole grid.        |
+| updateSize   | ---         | Apply the changed size.        |
+| updateScroll | ---         | Apply the changed scroll size. |
 
 <!-- METHODS_TABLE_END -->
 
-[Advanced Layout]: ../../js/advanced_layout/README.md
-[Define Headers and Columns]: ../../js/headers_columns.md
+[advanced layout]: ../../js/advanced_layout/README.md
+[define headers and columns]: ../../js/headers_columns.md

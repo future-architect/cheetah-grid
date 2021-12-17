@@ -7,7 +7,7 @@ order: 140
 ## Standard Column Action
 
 Define column action by using `action` property.  
-Please select suitable Action class for `columnType` of same column.  
+Please select suitable Action class for `columnType` of same column.
 
 | `columnType` | Specified `action` by string | Description                                       | LINK                     |
 | ------------ | ---------------------------- | ------------------------------------------------- | ------------------------ |
@@ -25,18 +25,24 @@ Please select suitable Action class for `columnType` of same column.
 
 ```js
 const grid = new cheetahGrid.ListGrid({
-  parentElement: document.querySelector('.sample1'),
+  parentElement: document.querySelector(".sample1"),
   header: [
-    {field: 'no', caption: 'no', width: 50},
+    { field: "no", caption: "no", width: 50 },
     // action: 'check'
-    {field: 'check', caption: 'check', width: 60, columnType: 'check', action: 'check'},
-    // action: 'input'
-    {field: 'text', caption: 'input', width: 120, action: 'input'},
     {
-      caption: 'button',
+      field: "check",
+      caption: "check",
+      width: 60,
+      columnType: "check",
+      action: "check",
+    },
+    // action: 'input'
+    { field: "text", caption: "input", width: 120, action: "input" },
+    {
+      caption: "button",
       width: 100,
       columnType: new cheetahGrid.columns.type.ButtonColumn({
-        caption: 'show rec',
+        caption: "show rec",
       }),
       // ButtonAction
       action: new cheetahGrid.columns.action.ButtonAction({
@@ -44,15 +50,13 @@ const grid = new cheetahGrid.ListGrid({
           alert(JSON.stringify(rec));
         },
       }),
-    }
-
-
+    },
   ],
 });
 grid.records = [
-  {no: 1, check: true, text: 'abc'},
-  {no: 2, check: false, text: 'def'},
-  {no: 3, check: true, text: 'ghi'},
+  { no: 1, check: true, text: "abc" },
+  { no: 2, check: false, text: "def" },
+  { no: 3, check: true, text: "ghi" },
 ];
 ```
 
@@ -61,13 +65,13 @@ grid.records = [
 ## Advanced Column Action
 
 By setting the property `action` as an Action instance,
-You can change the properties of the action (disable, readonly, etc.) in the when you want.  
+You can change the properties of the action (disable, readonly, etc.) in the when you want.
 
 Please refer to [here](./Classes.md)
 
-[MenuColumn]: ../column_types/MenuColumn.md
-[CheckEditor]: ./CheckEditor.md
-[ButtonAction]: ./ButtonAction.md
-[SmallDialogInputEditor]: ./SmallDialogInputEditor.md
-[InlineMenuEditor]: ./InlineMenuEditor.md
-[RadioEditor]: ./RadioEditor.md
+[menucolumn]: ../column_types/MenuColumn.md
+[checkeditor]: ./CheckEditor.md
+[buttonaction]: ./ButtonAction.md
+[smalldialoginputeditor]: ./SmallDialogInputEditor.md
+[inlinemenueditor]: ./InlineMenuEditor.md
+[radioeditor]: ./RadioEditor.md

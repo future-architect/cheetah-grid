@@ -29,54 +29,52 @@ To make it editable, please use [RadioEditor](../column_actions/RadioEditor.md).
 
 ```js
 const grid = new cheetahGrid.ListGrid({
-  parentElement: document.querySelector('.sample1'),
+  parentElement: document.querySelector(".sample1"),
   header: [
     {
-      field: 'c1',
-      caption: 'radio',
+      field: "c1",
+      caption: "radio",
       width: 100,
-      columnType: 'radio', // or `new cheetahGrid.columns.type.RadioColumn()`
+      columnType: "radio", // or `new cheetahGrid.columns.type.RadioColumn()`
     },
     {
-      field: 'c2',
-      caption: 'style',
+      field: "c2",
+      caption: "style",
       width: 100,
-      columnType: 'radio',
+      columnType: "radio",
       style: {
-        checkColor: 'rgb(255, 73, 72)',
-        checkBgColor: '#FDD',
-        checkBorderColor: 'red',
-        uncheckBgColor: '#DDF',
-        uncheckBorderColor: 'rgb(72, 73, 255)',
+        checkColor: "rgb(255, 73, 72)",
+        checkBgColor: "#FDD",
+        checkBorderColor: "red",
+        uncheckBgColor: "#DDF",
+        uncheckBorderColor: "rgb(72, 73, 255)",
       },
     },
     {
-      caption: 'show',
+      caption: "show",
       width: 100,
       columnType: new cheetahGrid.columns.type.ButtonColumn({
-        caption: 'SHOW',
+        caption: "SHOW",
       }),
       action: new cheetahGrid.columns.action.ButtonAction({
         action(rec) {
-          alert(JSON.stringify(rec, null, '  '));
+          alert(JSON.stringify(rec, null, "  "));
         },
       }),
-    }
-
-
+    },
   ],
 });
 grid.records = [
-  {c1: true, c2: false},
-  {c1: false, c2: true},
-  {c1: true, c2: false},
-  {c1: false, c2: true},
-  {c1: true, c2: false},
-  {c1: false, c2: true},
-  {c1: true, c2: false},
-  {c1: false, c2: true},
-  {c1: true, c2: false},
-  {c1: false, c2: true},
+  { c1: true, c2: false },
+  { c1: false, c2: true },
+  { c1: true, c2: false },
+  { c1: false, c2: true },
+  { c1: true, c2: false },
+  { c1: false, c2: true },
+  { c1: true, c2: false },
+  { c1: false, c2: true },
+  { c1: true, c2: false },
+  { c1: false, c2: true },
 ];
 ```
 

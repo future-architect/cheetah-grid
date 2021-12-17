@@ -32,61 +32,59 @@ In addition to this, Standard styles is available.
 
 ```js
 const options = [
-  {value: '', label: 'Empty'},
-  {value: '1', label: 'Option 1'},
-  {value: '2', label: 'Option 2'},
-  {value: '3', label: 'Option 3'},
-  {value: '4', label: 'Option 4'},
-  {value: '5', label: 'Option 5'},
-  {value: '6', label: 'Option 6'},
-  {value: '7', label: 'Option 7'},
+  { value: "", label: "Empty" },
+  { value: "1", label: "Option 1" },
+  { value: "2", label: "Option 2" },
+  { value: "3", label: "Option 3" },
+  { value: "4", label: "Option 4" },
+  { value: "5", label: "Option 5" },
+  { value: "6", label: "Option 6" },
+  { value: "7", label: "Option 7" },
 ];
 const grid = new cheetahGrid.ListGrid({
-  parentElement: document.querySelector('.sample1'),
+  parentElement: document.querySelector(".sample1"),
   header: [
     {
-      field: 'sel',
-      caption: 'MenuColumn',
+      field: "sel",
+      caption: "MenuColumn",
       width: 260,
-      columnType: new cheetahGrid.columns.type.MenuColumn({options}),
+      columnType: new cheetahGrid.columns.type.MenuColumn({ options }),
     },
     {
-      field: 'sel2',
-      caption: 'style',
+      field: "sel2",
+      caption: "style",
       width: 260,
-      columnType: new cheetahGrid.columns.type.MenuColumn({options}),
-      style: {appearance: 'none'},
+      columnType: new cheetahGrid.columns.type.MenuColumn({ options }),
+      style: { appearance: "none" },
     },
 
     {
-      caption: 'show',
+      caption: "show",
       width: 100,
       columnType: new cheetahGrid.columns.type.ButtonColumn({
-        caption: 'SHOW',
+        caption: "SHOW",
       }),
       action: new cheetahGrid.columns.action.ButtonAction({
         action(rec) {
-          alert(JSON.stringify(rec, null, '  '));
+          alert(JSON.stringify(rec, null, "  "));
         },
       }),
-    }
-
-
+    },
   ],
 });
 grid.records = [
-  {sel: '', sel2: ''},
-  {sel: '1', sel2: '1'},
-  {sel: '2', sel2: '2'},
-  {sel: '3', sel2: '3'},
-  {sel: '', sel2: ''},
-  {sel: '1', sel2: '1'},
-  {sel: '2', sel2: '2'},
-  {sel: '3', sel2: '3'},
-  {sel: '', sel2: ''},
-  {sel: '1', sel2: '1'},
-  {sel: '2', sel2: '2'},
-  {sel: '3', sel2: '3'},
+  { sel: "", sel2: "" },
+  { sel: "1", sel2: "1" },
+  { sel: "2", sel2: "2" },
+  { sel: "3", sel2: "3" },
+  { sel: "", sel2: "" },
+  { sel: "1", sel2: "1" },
+  { sel: "2", sel2: "2" },
+  { sel: "3", sel2: "3" },
+  { sel: "", sel2: "" },
+  { sel: "1", sel2: "1" },
+  { sel: "2", sel2: "2" },
+  { sel: "3", sel2: "3" },
 ];
 ```
 

@@ -60,9 +60,9 @@ Can be used in the `layout-header` slot and the `layout-body` slot of `CGrid`.
 export default {
   data() {
     return {
-      records
-    }
-  }
+      records,
+    };
+  },
 };
 ```
 

@@ -16,15 +16,16 @@ Real time loading by scroll action.
 ```js
 // create DataSource
 const GET_RECORDS_SIZE = 100;
-const BUFFER_RECORDS_SIZE = (Math.floor(GET_RECORDS_SIZE / 2) || 1);
+const BUFFER_RECORDS_SIZE = Math.floor(GET_RECORDS_SIZE / 2) || 1;
 const loadedData = {};
 let isAllLoaded = false;
 const dataSource = new cheetahGrid.data.CachedDataSource({
   get(index) {
-    const loadStartIndex = Math.floor(index / GET_RECORDS_SIZE) * GET_RECORDS_SIZE;
+    const loadStartIndex =
+      Math.floor(index / GET_RECORDS_SIZE) * GET_RECORDS_SIZE;
     if (!loadedData[loadStartIndex]) {
-      const promiseObject = getRecordsWithAjax(loadStartIndex, GET_RECORDS_SIZE).// return Promise Object
-        then((data) => {
+      const promiseObject = getRecordsWithAjax(loadStartIndex, GET_RECORDS_SIZE) // return Promise Object
+        .then((data) => {
           if (isAllLoaded) {
             return data;
           }
@@ -42,29 +43,30 @@ const dataSource = new cheetahGrid.data.CachedDataSource({
         });
       loadedData[loadStartIndex] = promiseObject;
     }
-    return loadedData[loadStartIndex].
-      then((data) => data[index - loadStartIndex]);
+    return loadedData[loadStartIndex].then(
+      (data) => data[index - loadStartIndex]
+    );
   },
   length: BUFFER_RECORDS_SIZE, //init records count
 });
 
 // create cheetahGrid
 const grid = new cheetahGrid.ListGrid({
-  parentElement: document.querySelector('.sample'),
+  parentElement: document.querySelector(".sample"),
   header: [
-    {field: 'personid', caption: 'ID', width: 100},
-    {field: 'fname', caption: 'First Name', width: 200},
-    {field: 'lname', caption: 'Last Name', width: 200},
-    {field: 'email', caption: 'Email', width: 250},
+    { field: "personid", caption: "ID", width: 100 },
+    { field: "fname", caption: "First Name", width: 200 },
+    { field: "lname", caption: "Last Name", width: 200 },
+    { field: "email", caption: "Email", width: 250 },
   ],
   frozenColCount: 1,
 });
-grid.configure('fadeinWhenCallbackInPromise', true);
+grid.configure("fadeinWhenCallbackInPromise", true);
 
 // set dataSource
 grid.dataSource = dataSource;
 
-function getRecordsWithAjax (startIndex, num) {
+function getRecordsWithAjax(startIndex, num) {
   return new Promise((resolve) => {
     const loadedCount = startIndex + num;
     let last = false;
@@ -77,16 +79,16 @@ function getRecordsWithAjax (startIndex, num) {
       for (let i = 0; i < num; i++) {
         records.push(generatePerson(startIndex + i));
       }
-      const log = document.querySelector('.sample_log');
+      const log = document.querySelector(".sample_log");
       log.value += `\nAcquire ${num} data from index ${startIndex}.`;
       log.value = log.value.trim();
       log.scrollTop = log.scrollHeight;
 
       if (last && records.length) {
         const lastData = records[records.length - 1];
-        lastData.fname = 'Cheetah';
-        lastData.lname = 'Grid!!';
-        lastData.email = 'hello_cheetah_grid@gmail.com';
+        lastData.fname = "Cheetah";
+        lastData.lname = "Grid!!";
+        lastData.email = "hello_cheetah_grid@gmail.com";
       }
       resolve(records);
     }, 500);

@@ -7,7 +7,7 @@ order: 200
 ## Advanced Header Action
 
 Define header action by using `headerAction` property.  
-Please select suitable Action class for `headerType` of same header.  
+Please select suitable Action class for `headerType` of same header.
 
 | `headerType` | Specified `headerAction` by string | Description                                                               |
 | ------------ | ---------------------------------- | ------------------------------------------------------------------------- |
@@ -22,22 +22,36 @@ Please select suitable Action class for `headerType` of same header.
 
 ```js
 const grid = new cheetahGrid.ListGrid({
-  parentElement: document.querySelector('.sample1'),
+  parentElement: document.querySelector(".sample1"),
   header: [
-    {field: 'no', caption: 'no', width: 50},
-    {field: 'check', width: 100, columnType: 'check', action: 'check', headerType: 'check', headerAction: 'check'},
-    {field: 'text', caption: 'sort', width: 120, action: 'input', headerType: 'sort', headerAction: 'sort'},
+    { field: "no", caption: "no", width: 50 },
+    {
+      field: "check",
+      width: 100,
+      columnType: "check",
+      action: "check",
+      headerType: "check",
+      headerAction: "check",
+    },
+    {
+      field: "text",
+      caption: "sort",
+      width: 120,
+      action: "input",
+      headerType: "sort",
+      headerAction: "sort",
+    },
   ],
 });
 grid.records = [
-  {no: 1, check: true, text: 'abc'},
-  {no: 2, check: false, text: 'def'},
-  {no: 3, check: true, text: 'ghi'},
+  { no: 1, check: true, text: "abc" },
+  { no: 2, check: false, text: "def" },
+  { no: 3, check: true, text: "ghi" },
 ];
 
-const {CHANGED_HEADER_VALUE, CHANGED_VALUE} = cheetahGrid.ListGrid.EVENT_TYPE;
-grid.listen(CHANGED_HEADER_VALUE, ({value, field}) => {
-  if (field !== 'check') {
+const { CHANGED_HEADER_VALUE, CHANGED_VALUE } = cheetahGrid.ListGrid.EVENT_TYPE;
+grid.listen(CHANGED_HEADER_VALUE, ({ value, field }) => {
+  if (field !== "check") {
     return;
   }
   // header check value on change
@@ -47,8 +61,8 @@ grid.listen(CHANGED_HEADER_VALUE, ({value, field}) => {
   }
   grid.invalidate();
 });
-grid.listen(CHANGED_VALUE, ({value, field}) => {
-  if (field !== 'check') {
+grid.listen(CHANGED_VALUE, ({ value, field }) => {
+  if (field !== "check") {
     return;
   }
   // check value on change
@@ -102,16 +116,16 @@ export default {
   data() {
     return {
       records: [
-        {no: 1, check: true, text: 'abc'},
-        {no: 2, check: false, text: 'def'},
-        {no: 3, check: true, text: 'ghi'},
-      ]
-    }
+        { no: 1, check: true, text: "abc" },
+        { no: 2, check: false, text: "def" },
+        { no: 3, check: true, text: "ghi" },
+      ],
+    };
   },
   methods: {
-    onChangeHeaderValue({value}) {
+    onChangeHeaderValue({ value }) {
       // header check value on change
-      const {grid} = this.$refs;
+      const { grid } = this.$refs;
 
       for (const rec of this.records) {
         rec.check = value;
@@ -120,13 +134,13 @@ export default {
     },
     onChangeValue() {
       // check value on change
-      const {grid} = this.$refs;
+      const { grid } = this.$refs;
 
-      grid.headerValues.set('check', false);
+      grid.headerValues.set("check", false);
 
       grid.invalidate();
-    }
-  }
+    },
+  },
 };
 ```
 
@@ -135,6 +149,6 @@ export default {
 ## Using Header Action Class
 
 By setting the property `headerAction` as an Action instance,
-You can change the properties of the action (disable, etc.) in the when you want.  
+You can change the properties of the action (disable, etc.) in the when you want.
 
 <!-- Please refer to [here](./Classes.md) -->

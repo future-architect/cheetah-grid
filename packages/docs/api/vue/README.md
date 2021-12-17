@@ -55,12 +55,14 @@ Please refer [Available Vue Components](./components/README.md)
 export default {
   data() {
     return {
-      records
-    }
+      records,
+    };
   },
   methods: {
-    onClickRecord(rec) { alert(JSON.stringify(rec)); }
-  }
+    onClickRecord(rec) {
+      alert(JSON.stringify(rec));
+    },
+  },
 };
 ```
 

@@ -15,9 +15,9 @@ npm install -S vue-cheetah-grid
 ```
 
 ```js
-import vueCheetahGrid from 'vue-cheetah-grid'
+import vueCheetahGrid from "vue-cheetah-grid";
 
-Vue.use(vueCheetahGrid)
+Vue.use(vueCheetahGrid);
 ```
 
 ### Via CDN
@@ -30,7 +30,7 @@ Vue.use(vueCheetahGrid)
 ```
 
 ```js
-Vue.use(vueCheetahGrid)
+Vue.use(vueCheetahGrid);
 ```
 
 :::warning
@@ -84,19 +84,21 @@ Please refer to the [more documents](../api/vue/README.md) for details
     />
   </c-grid>
 </div>
-<div class="grid-sample" ></div>
+<div class="grid-sample"></div>
 ```
 
 ```js
 export default {
   data() {
     return {
-      records: generatePersons(1000)
-    }
+      records: generatePersons(1000),
+    };
   },
   methods: {
-    onClickRecord(rec) { alert(JSON.stringify(rec)); }
-  }
+    onClickRecord(rec) {
+      alert(JSON.stringify(rec));
+    },
+  },
 };
 ```
 

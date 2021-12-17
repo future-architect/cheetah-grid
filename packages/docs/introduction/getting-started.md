@@ -15,7 +15,7 @@ npm install -S cheetah-grid
 ```
 
 ```js
-const cheetahGrid = require("cheetah-grid")
+const cheetahGrid = require("cheetah-grid");
 ```
 
 ### Via CDN
@@ -30,11 +30,11 @@ const cheetahGrid = require("cheetah-grid")
 
 [![npm](https://img.shields.io/npm/v/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
 
-[cheetahGrid.es5.min.js](https://unpkg.com/cheetah-grid@1.1/dist/cheetahGrid.es5.min.js)  
+[cheetahGrid.es5.min.js](https://unpkg.com/cheetah-grid@1.1/dist/cheetahGrid.es5.min.js)
 
-#### SourceMap  
+#### SourceMap
 
-[cheetahGrid.es5.min.js.map](https://unpkg.com/cheetah-grid@1.1/dist/cheetahGrid.es5.min.js.map)  
+[cheetahGrid.es5.min.js.map](https://unpkg.com/cheetah-grid@1.1/dist/cheetahGrid.es5.min.js.map)
 
 ### Via GitHub
 
@@ -69,14 +69,20 @@ Please refer to the [more documents](../api/js/README.md) for details
 // initialize
 grid = new cheetahGrid.ListGrid({
   // Parent element on which to place the grid
-  parentElement: document.querySelector('.grid-sample'),
+  parentElement: document.querySelector(".grid-sample"),
   // Header definition
   header: [
-    {field: 'check', caption: '', width: 50, columnType: 'check', action: 'check'},
-    {field: 'personid', caption: 'ID', width: 100},
-    {field: 'fname', caption: 'First Name', width: 200},
-    {field: 'lname', caption: 'Last Name', width: 200},
-    {field: 'email', caption: 'Email', width: 250},
+    {
+      field: "check",
+      caption: "",
+      width: 50,
+      columnType: "check",
+      action: "check",
+    },
+    { field: "personid", caption: "ID", width: 100 },
+    { field: "fname", caption: "First Name", width: 200 },
+    { field: "lname", caption: "Last Name", width: 200 },
+    { field: "email", caption: "Email", width: 250 },
   ],
   // Array data to be displayed on the grid
   records: generatePersons(1000),
