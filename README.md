@@ -35,11 +35,11 @@ npm install -S cheetah-grid
 ```
 
 ```js
-import * as cheetahGrid from 'cheetah-grid'
+import * as cheetahGrid from 'cheetah-grid';
 
 // or
 
-const cheetahGrid = require('cheetah-grid')
+const cheetahGrid = require('cheetah-grid');
 ```
 
 ### Downloading Cheetah Grid source code
@@ -99,7 +99,7 @@ built file is created in the `./packages/cheetah-grid/dist` directory
     records,
     // Column fixed position
     frozenColCount: 2,
-  })
+  });
 </script>
 ```
 
@@ -146,7 +146,7 @@ const grid = new cheetahGrid.ListGrid({
     //...
   ],
   //...
-})
+});
 ```
 
 ### Definition of column type

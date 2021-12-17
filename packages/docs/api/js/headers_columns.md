@@ -41,7 +41,7 @@ In the standard definition, each object consists of following properties.
     birthday: 'birthday',
   }
  */
-const records = generatePersons(100)
+const records = generatePersons(100);
 
 const grid = new cheetahGrid.ListGrid({
   parentElement: document.querySelector('.sample1'),
@@ -53,16 +53,16 @@ const grid = new cheetahGrid.ListGrid({
     { field: getBirthday, caption: 'Birthday', width: 200 },
   ],
   frozenColCount: 1,
-})
-grid.records = records
+});
+grid.records = records;
 
 function getBirthday(rec) {
   const dateTimeFormat = new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
     month: 'numeric',
     day: 'numeric',
-  })
-  return dateTimeFormat.format(rec.birthday)
+  });
+  return dateTimeFormat.format(rec.birthday);
 }
 ```
 
@@ -91,7 +91,7 @@ const grid = new cheetahGrid.ListGrid({
     // ...
   ],
   // ...
-})
+});
 ```
 
 #### function format
@@ -112,7 +112,7 @@ const grid = new cheetahGrid.ListGrid({
     // ...
   ],
   // ...
-})
+});
 ```
 
 #### object format
@@ -136,7 +136,7 @@ const grid = new cheetahGrid.ListGrid({
     // ...
   ],
   // ...
-})
+});
 ```
 
 ## Multiple Header
@@ -166,16 +166,16 @@ const grid = new cheetahGrid.ListGrid({
     { field: getBirthday, caption: 'Birthday', width: 200 },
   ],
   frozenColCount: 1,
-})
-grid.records = records
+});
+grid.records = records;
 
 function getBirthday(rec) {
   const dateTimeFormat = new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
     month: 'numeric',
     day: 'numeric',
-  })
-  return dateTimeFormat.format(rec.birthday)
+  });
+  return dateTimeFormat.format(rec.birthday);
 }
 ```
 
