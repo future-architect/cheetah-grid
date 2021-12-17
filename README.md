@@ -136,7 +136,8 @@ const grid = new cheetahGrid.ListGrid({
   header: [
     //...
     {
-      /* multiple header */ caption: 'Name',
+      /* multiple header */
+      caption: 'Name',
       columns: [
         { field: 'fname', caption: 'First Name', width: 200 },
         { field: 'lname', caption: 'Last Name', width: 200 },
