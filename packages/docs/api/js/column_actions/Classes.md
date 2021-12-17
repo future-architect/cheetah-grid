@@ -15,9 +15,11 @@ order: 100
 | [`InlineMenuEditor`]       | The behavior when select menu the cell                               | ---                                      |
 | [`RadioEditor`]            | The behavior when clicking the radio button                          | same as `action: 'radio'`                |
 
-[`CheckEditor`]: ./CheckEditor.md
-[`ButtonAction`]: ./ButtonAction.md
-[`SmallDialogInputEditor`]: ./SmallDialogInputEditor.md
-[`InlineInputEditor`]: ./InlineInputEditor.md
-[`InlineMenuEditor`]: ./InlineMenuEditor.md
-[`RadioEditor`]: ./RadioEditor.md
+[`checkeditor`]: ./CheckEditor.md
+[`buttonaction`]: ./ButtonAction.md
+[`smalldialoginputeditor`]: ./SmallDialogInputEditor.md
+[`inlineinputeditor`]: ./InlineInputEditor.md
+[`inlinemenueditor`]: ./InlineMenuEditor.md
+[`radioeditor`]: ./RadioEditor.md
+
+## Standard Properties
