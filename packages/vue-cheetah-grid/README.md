@@ -7,7 +7,7 @@
 [![npm](https://img.shields.io/npm/dy/vue-cheetah-grid.svg)](http://www.npmtrends.com/vue-cheetah-grid)
 [![npm](https://img.shields.io/npm/dt/vue-cheetah-grid.svg)](http://www.npmtrends.com/vue-cheetah-grid)
 [![Build Status](https://github.com/future-architect/cheetah-grid/workflows/CI/badge.svg?branch=master)](https://github.com/future-architect/cheetah-grid/actions?query=workflow%3ACI)
-[![NPM](https://nodei.co/npm/vue-cheetah-grid.png?downloads=true&stars=true)](https://www.npmjs.com/package/vue-cheetah-grid)  
+[![NPM](https://nodei.co/npm/vue-cheetah-grid.png?downloads=true&stars=true)](https://www.npmjs.com/package/vue-cheetah-grid)
 
 ## Install using npm
 
@@ -21,43 +21,21 @@ npm install -S vue-cheetah-grid
 
 ```html
 <template>
-  <c-grid
-    :data="records"
-    :frozen-col-count="1">
+  <c-grid :data="records" :frozen-col-count="1">
     <!-- define checkbox -->
-    <c-grid-check-column
-      field="check"
-      width="50">
-    </c-grid-check-column>
-    <c-grid-column
-      field="personid"
-      width="85"
-    >
-      ID
-    </c-grid-column>
+    <c-grid-check-column field="check" width="50"> </c-grid-check-column>
+    <c-grid-column field="personid" width="85"> ID </c-grid-column>
     <!-- multiple headers -->
-    <c-grid-column-group
-      caption="Name">
-      <c-grid-input-column
-        field="fname"
-        width="20%"
-        min-width="150"
-      >
+    <c-grid-column-group caption="Name">
+      <c-grid-input-column field="fname" width="20%" min-width="150">
         First Name
       </c-grid-input-column>
-      <c-grid-input-column
-        field="lname"
-        width="20%"
-        min-width="150"
-      >
+      <c-grid-input-column field="lname" width="20%" min-width="150">
         Last Name
       </c-grid-input-column>
     </c-grid-column-group>
     <!-- define button -->
-    <c-grid-button-column
-      caption="SHOW REC"
-      width="120"
-      @click="onClickRecord">
+    <c-grid-button-column caption="SHOW REC" width="120" @click="onClickRecord">
     </c-grid-button-column>
   </c-grid>
 </template>
@@ -66,24 +44,24 @@ npm install -S vue-cheetah-grid
 ### `<script>` use global
 
 ```js
-import CGrid from 'vue-cheetah-grid'
+import CGrid from "vue-cheetah-grid";
 
-Vue.use(CGrid)
+Vue.use(CGrid);
 ```
 
 ### `<script>` use local
 
 ```vue
 <script>
-import * as cGridAll from 'vue-cheetah-grid'
+import * as cGridAll from "vue-cheetah-grid";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    ...cGridAll
+    ...cGridAll,
   },
   // ...
-}
+};
 </script>
 ```
 

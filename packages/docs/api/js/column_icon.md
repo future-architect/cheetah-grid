@@ -25,34 +25,38 @@ For standard Web font, you should set `font` and `content`.
 >
 > ```html
 > <!-- Font Awesome:  http://fontawesome.io -->
-> <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+> <link
+>   rel="stylesheet"
+>   type="text/css"
+>   href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+> />
 > ```
 
 ```js
 const grid = new cheetahGrid.ListGrid({
-  parentElement: document.querySelector('.sample1'),
+  parentElement: document.querySelector(".sample1"),
   header: [
     {
-      caption: 'text',
+      caption: "text",
       width: 180,
       icon: {
-        font: 'normal normal normal 14px/1 FontAwesome',
-        content: 'iconContent',
+        font: "normal normal normal 14px/1 FontAwesome",
+        content: "iconContent",
         width: 16, // Optional
       },
-      field: 'text',
+      field: "text",
     },
 
     {
-      caption: 'button',
+      caption: "button",
       width: 180,
       icon: {
-        font: 'normal normal normal 14px/1 FontAwesome',
-        content: 'iconContent',
+        font: "normal normal normal 14px/1 FontAwesome",
+        content: "iconContent",
         width: 16, // Optional
       },
       columnType: new cheetahGrid.columns.type.ButtonColumn({
-        caption: 'BUTTON',
+        caption: "BUTTON",
       }),
       action: new cheetahGrid.columns.action.ButtonAction({
         action(rec) {
@@ -63,10 +67,10 @@ const grid = new cheetahGrid.ListGrid({
   ],
 });
 grid.records = [
-  {text: 'file', iconContent: '\uf15b'},
-  {text: 'audio', iconContent: '\uf1c7'},
-  {text: 'code', iconContent: '\uf1c9'},
-  {text: 'image', iconContent: '\uf1c5'},
+  { text: "file", iconContent: "\uf15b" },
+  { text: "audio", iconContent: "\uf1c7" },
+  { text: "code", iconContent: "\uf1c9" },
+  { text: "image", iconContent: "\uf1c5" },
 ];
 ```
 
@@ -84,28 +88,28 @@ You can use web font by setting `className`.
 
 ```js
 const grid = new cheetahGrid.ListGrid({
-  parentElement: document.querySelector('.sample2'),
+  parentElement: document.querySelector(".sample2"),
   header: [
     {
-      caption: 'text',
+      caption: "text",
       width: 180,
       icon: {
-        className: 'iconClassName',
+        className: "iconClassName",
         width: 16, // Optional
       },
-      field: 'text',
+      field: "text",
     },
 
     {
-      caption: 'button',
+      caption: "button",
       width: 180,
       icon: {
-        className: 'iconClassName',
+        className: "iconClassName",
         width: 16, // Optional
-        color: '#fff', // Optional
+        color: "#fff", // Optional
       },
       columnType: new cheetahGrid.columns.type.ButtonColumn({
-        caption: 'BUTTON',
+        caption: "BUTTON",
       }),
       action: new cheetahGrid.columns.action.ButtonAction({
         action(rec) {
@@ -116,10 +120,10 @@ const grid = new cheetahGrid.ListGrid({
   ],
 });
 grid.records = [
-  {text: 'file', iconClassName: 'fa fa-file'},
-  {text: 'audio', iconClassName: 'fa fa-file-audio-o'},
-  {text: 'code', iconClassName: 'fa fa-file-code-o'},
-  {text: 'image', iconClassName: 'fa fa-file-image-o'},
+  { text: "file", iconClassName: "fa fa-file" },
+  { text: "audio", iconClassName: "fa fa-file-audio-o" },
+  { text: "code", iconClassName: "fa fa-file-code-o" },
+  { text: "image", iconClassName: "fa fa-file-image-o" },
 ];
 ```
 
@@ -137,30 +141,30 @@ Set `src` to show pictures.
 
 ```js
 const grid = new cheetahGrid.ListGrid({
-  parentElement: document.querySelector('.sample3'),
+  parentElement: document.querySelector(".sample3"),
   header: [
     {
-      caption: 'OSS',
+      caption: "OSS",
       width: 300,
       icon: {
-        src: 'iconSrc',
+        src: "iconSrc",
         width: 16,
       },
-      field: 'label',
+      field: "label",
     },
     {
-      caption: 'link',
+      caption: "link",
       width: 150,
       icon: {
-        src: 'iconSrc',
+        src: "iconSrc",
         width: 16,
       },
       columnType: new cheetahGrid.columns.type.ButtonColumn({
-        caption: 'LINK',
+        caption: "LINK",
       }),
       action: new cheetahGrid.columns.action.ButtonAction({
         action(rec) {
-          window.open(rec.url, '_blank');
+          window.open(rec.url, "_blank");
         },
       }),
     },
@@ -168,19 +172,21 @@ const grid = new cheetahGrid.ListGrid({
 });
 grid.records = [
   {
-    label: 'Vuls: VULnerability Scanner',
-    iconSrc: 'https://github.com/future-architect/vuls/raw/master/img/vuls_icon.png',
-    url: 'https://github.com/future-architect/vuls',
+    label: "Vuls: VULnerability Scanner",
+    iconSrc:
+      "https://github.com/future-architect/vuls/raw/master/img/vuls_icon.png",
+    url: "https://github.com/future-architect/vuls",
   },
   {
-    label: 'uroboroSQL',
-    iconSrc: 'https://future-architect.github.io/uroborosql-doc/favicon.ico',
-    url: 'https://future-architect.github.io/uroborosql-doc/',
+    label: "uroboroSQL",
+    iconSrc: "https://future-architect.github.io/uroborosql-doc/favicon.ico",
+    url: "https://future-architect.github.io/uroborosql-doc/",
   },
   {
-    label: 'Urushi',
-    iconSrc: 'http://future-architect.github.io/urushi/gh-pages-resoucres/favicon.ico',
-    url: 'http://future-architect.github.io/urushi/',
+    label: "Urushi",
+    iconSrc:
+      "http://future-architect.github.io/urushi/gh-pages-resoucres/favicon.ico",
+    url: "http://future-architect.github.io/urushi/",
   },
 ];
 ```
@@ -199,29 +205,29 @@ Give array in order to show multiple icons.
 
 ```js
 const grid = new cheetahGrid.ListGrid({
-  parentElement: document.querySelector('.sample4'),
+  parentElement: document.querySelector(".sample4"),
   header: [
     {
-      caption: 'text',
+      caption: "text",
       width: 180,
       icon: {
-        font: 'normal normal normal 14px/1 FontAwesome',
-        content: 'iconContent',
+        font: "normal normal normal 14px/1 FontAwesome",
+        content: "iconContent",
         width: 16, // Optional
       },
-      field: 'text',
+      field: "text",
     },
 
     {
-      caption: 'button',
+      caption: "button",
       width: 180,
       icon: {
-        font: 'normal normal normal 14px/1 FontAwesome',
-        content: 'iconContent',
+        font: "normal normal normal 14px/1 FontAwesome",
+        content: "iconContent",
         width: 16, // Optional
       },
       columnType: new cheetahGrid.columns.type.ButtonColumn({
-        caption: 'BUTTON',
+        caption: "BUTTON",
       }),
       action: new cheetahGrid.columns.action.ButtonAction({
         action(rec) {
@@ -232,9 +238,9 @@ const grid = new cheetahGrid.ListGrid({
   ],
 });
 grid.records = [
-  {text: 'files', iconContent: ['\uf15b', '\uf1c7', '\uf1c9', '\uf1c5']},
-  {text: 'forms', iconContent: ['\uf046', '\uf192', '\uf0fe', '\uf147']},
-  {text: 'charts', iconContent: ['\uf1fe', '\uf080', '\uf200']},
+  { text: "files", iconContent: ["\uf15b", "\uf1c7", "\uf1c9", "\uf1c5"] },
+  { text: "forms", iconContent: ["\uf046", "\uf192", "\uf0fe", "\uf147"] },
+  { text: "charts", iconContent: ["\uf1fe", "\uf080", "\uf200"] },
 ];
 ```
 
@@ -248,58 +254,61 @@ grid.records = [
 
 ```js
 const grid = new cheetahGrid.ListGrid({
-  parentElement: document.querySelector('.sample5'),
+  parentElement: document.querySelector(".sample5"),
   header: [
     {
-      caption: 'OSS',
+      caption: "OSS",
       width: 300,
       icon: {
-        src: 'iconSrc',
+        src: "iconSrc",
         width: 16,
       },
-      field: 'label',
+      field: "label",
     },
     {
-      caption: 'link',
+      caption: "link",
       width: 150,
       icon: {
-        src: 'iconSrc',
+        src: "iconSrc",
         width: 16,
       },
       columnType: new cheetahGrid.columns.type.ButtonColumn({
-        caption: 'LINK',
+        caption: "LINK",
       }),
       action: new cheetahGrid.columns.action.ButtonAction({
         action(rec) {
-          window.open(rec.url, '_blank');
+          window.open(rec.url, "_blank");
         },
       }),
     },
   ],
 });
-const vulsIconUrl = 'https://github.com/future-architect/vuls/raw/master/img/vuls_icon.png';
-const uroboroSQLIconUrl = 'https://future-architect.github.io/uroborosql-doc/favicon.ico';
-const urushiIconUrl = 'http://future-architect.github.io/urushi/gh-pages-resoucres/favicon.ico';
+const vulsIconUrl =
+  "https://github.com/future-architect/vuls/raw/master/img/vuls_icon.png";
+const uroboroSQLIconUrl =
+  "https://future-architect.github.io/uroborosql-doc/favicon.ico";
+const urushiIconUrl =
+  "http://future-architect.github.io/urushi/gh-pages-resoucres/favicon.ico";
 grid.records = [
   {
-    label: 'Vuls: VULnerability Scanner',
+    label: "Vuls: VULnerability Scanner",
     iconSrc: [vulsIconUrl, vulsIconUrl, vulsIconUrl, vulsIconUrl],
-    url: 'https://github.com/future-architect/vuls',
+    url: "https://github.com/future-architect/vuls",
   },
   {
-    label: 'uroboroSQL',
+    label: "uroboroSQL",
     iconSrc: [uroboroSQLIconUrl, uroboroSQLIconUrl, uroboroSQLIconUrl],
-    url: 'https://future-architect.github.io/uroborosql-doc/',
+    url: "https://future-architect.github.io/uroborosql-doc/",
   },
   {
-    label: 'Urushi',
+    label: "Urushi",
     iconSrc: [urushiIconUrl, urushiIconUrl],
-    url: 'http://future-architect.github.io/urushi/',
+    url: "http://future-architect.github.io/urushi/",
   },
   {
-    label: 'Awesome OSS',
+    label: "Awesome OSS",
     iconSrc: [vulsIconUrl, uroboroSQLIconUrl, urushiIconUrl],
-    url: 'https://future-architect.github.io/',
+    url: "https://future-architect.github.io/",
   },
 ];
 ```

@@ -20,28 +20,27 @@ order: 50
 | [`BranchGraphColumn`]        | show branch graph                | ---                                          | [BranchGraphColumn]                    |
 | [`RadioColumn`]              | show radio button                | same as `columnType: 'radio'`                | - [RadioColumn]<br>- [RadioEditor]     |
 
-[`NumberColumn`]: ./NumberColumn.md
-[`CheckColumn`]: ./CheckColumn.md
-[`MenuColumn`]: ./MenuColumn.md
-[`ButtonColumn`]: ./ButtonColumn.md
-[`ImageColumn`]: ./ImageColumn.md
-[`PercentCompleteBarColumn`]: ./PercentCompleteBarColumn.md
-[`IconColumn`]: ./IconColumn.md
-[`MultilineTextColumn`]: ./MultilineTextColumn.md
-[`BranchGraphColumn`]: ./BranchGraphColumn.md
-[`RadioColumn`]: ./RadioColumn.md
-
-[NumberColumn]: ./NumberColumn.md
-[CheckColumn]: ./CheckColumn.md
-[CheckEditor]: ../column_actions/CheckEditor.md
-[MenuColumn]: ./MenuColumn.md
-[InlineMenuEditor]: ../column_actions/InlineMenuEditor.md
-[ButtonColumn]: ./ButtonColumn.md
-[ButtonAction]: ../column_actions/ButtonAction.md
-[ImageColumn]: ./ImageColumn.md
-[PercentCompleteBarColumn]: ./PercentCompleteBarColumn.md
-[IconColumn]: ./IconColumn.md
-[MultilineTextColumn]: ./MultilineTextColumn.md
-[BranchGraphColumn]: ./BranchGraphColumn.md
-[RadioColumn]: ./RadioColumn.md
-[RadioEditor]: ../column_actions/RadioEditor.md
+[`numbercolumn`]: ./NumberColumn.md
+[`checkcolumn`]: ./CheckColumn.md
+[`menucolumn`]: ./MenuColumn.md
+[`buttoncolumn`]: ./ButtonColumn.md
+[`imagecolumn`]: ./ImageColumn.md
+[`percentcompletebarcolumn`]: ./PercentCompleteBarColumn.md
+[`iconcolumn`]: ./IconColumn.md
+[`multilinetextcolumn`]: ./MultilineTextColumn.md
+[`branchgraphcolumn`]: ./BranchGraphColumn.md
+[`radiocolumn`]: ./RadioColumn.md
+[numbercolumn]: ./NumberColumn.md
+[checkcolumn]: ./CheckColumn.md
+[checkeditor]: ../column_actions/CheckEditor.md
+[menucolumn]: ./MenuColumn.md
+[inlinemenueditor]: ../column_actions/InlineMenuEditor.md
+[buttoncolumn]: ./ButtonColumn.md
+[buttonaction]: ../column_actions/ButtonAction.md
+[imagecolumn]: ./ImageColumn.md
+[percentcompletebarcolumn]: ./PercentCompleteBarColumn.md
+[iconcolumn]: ./IconColumn.md
+[multilinetextcolumn]: ./MultilineTextColumn.md
+[branchgraphcolumn]: ./BranchGraphColumn.md
+[radiocolumn]: ./RadioColumn.md
+[radioeditor]: ../column_actions/RadioEditor.md

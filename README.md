@@ -35,11 +35,11 @@ npm install -S cheetah-grid
 ```
 
 ```js
-import * as cheetahGrid from 'cheetah-grid';
+import * as cheetahGrid from "cheetah-grid";
 
 // or
 
-const cheetahGrid = require('cheetah-grid');
+const cheetahGrid = require("cheetah-grid");
 ```
 
 ### Downloading Cheetah Grid source code
@@ -80,20 +80,20 @@ built file is created in the `./packages/cheetah-grid/dist` directory
   // initialize
   const grid = new cheetahGrid.ListGrid({
     // Parent element on which to place the grid
-    parentElement: document.querySelector('#sample'),
+    parentElement: document.querySelector("#sample"),
     // Header definition
     header: [
       {
-        field: 'check',
-        caption: '',
+        field: "check",
+        caption: "",
         width: 50,
-        columnType: 'check',
-        action: 'check',
+        columnType: "check",
+        action: "check",
       },
-      { field: 'personid', caption: 'ID', width: 100 },
-      { field: 'fname', caption: 'First Name', width: 200 },
-      { field: 'lname', caption: 'Last Name', width: 200 },
-      { field: 'email', caption: 'Email', width: 250 },
+      { field: "personid", caption: "ID", width: 100 },
+      { field: "fname", caption: "First Name", width: 200 },
+      { field: "lname", caption: "Last Name", width: 200 },
+      { field: "email", caption: "Email", width: 250 },
     ],
     // Array data to be displayed on the grid
     records,
@@ -137,10 +137,10 @@ const grid = new cheetahGrid.ListGrid({
     //...
     {
       /* multiple header */
-      caption: 'Name',
+      caption: "Name",
       columns: [
-        { field: 'fname', caption: 'First Name', width: 200 },
-        { field: 'lname', caption: 'Last Name', width: 200 },
+        { field: "fname", caption: "First Name", width: 200 },
+        { field: "lname", caption: "Last Name", width: 200 },
       ],
     },
     //...

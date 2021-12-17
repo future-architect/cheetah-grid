@@ -12,8 +12,8 @@ npm install --save-dev cheetah-grid-icon-svg-loader
 
 ```js
 const icons = {
-  gridOn: require('cheetah-grid-icon-svg-loader!material-design-icons/image/svg/production/ic_grid_on_24px.svg')
-}
+  gridOn: require("cheetah-grid-icon-svg-loader!material-design-icons/image/svg/production/ic_grid_on_24px.svg"),
+};
 
 cheetahGrid.register.icons(icons);
 
@@ -23,13 +23,13 @@ const grid = new cheetahGrid.ListGrid({
   header: [
     // …
     {
-      field: '…',
-      caption: '…',
+      field: "…",
+      caption: "…",
       icon: {
-        name: 'gridOn',
+        name: "gridOn",
         width: 24,
       },
-    }
+    },
   ],
   // …
 });

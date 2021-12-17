@@ -21,13 +21,31 @@ You can also set the minimum and maximum widths by setting the `minWidth` and `m
 const records = generatePersons(100);
 
 const grid = new cheetahGrid.ListGrid({
-  parentElement: document.querySelector('.sample1'),
+  parentElement: document.querySelector(".sample1"),
   header: [
-    {field: 'check', caption: '', columnType: 'check', action: 'check', minWidth: 50, maxWidth: 50},
-    {field: 'personid', caption: 'ID', width: '10%', minWidth: '50px', maxWidth: '50%'},
-    {field: 'fname', caption: 'First Name', width: 'auto', minWidth: '120px'},
-    {field: 'lname', caption: 'Last Name', width: 'auto', minWidth: '120px'},
-    {field: 'email', caption: 'Email', width: 'calc(60% - 110px)', minWidth: '120px'},
+    {
+      field: "check",
+      caption: "",
+      columnType: "check",
+      action: "check",
+      minWidth: 50,
+      maxWidth: 50,
+    },
+    {
+      field: "personid",
+      caption: "ID",
+      width: "10%",
+      minWidth: "50px",
+      maxWidth: "50%",
+    },
+    { field: "fname", caption: "First Name", width: "auto", minWidth: "120px" },
+    { field: "lname", caption: "Last Name", width: "auto", minWidth: "120px" },
+    {
+      field: "email",
+      caption: "Email",
+      width: "calc(60% - 110px)",
+      minWidth: "120px",
+    },
   ],
   defaultColWidth: 50,
 });

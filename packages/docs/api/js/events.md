@@ -4,35 +4,48 @@ order: 200
 
 # Events
 
-You can set an event listener using the `listen(type, listener)` method.  
+You can set an event listener using the `listen(type, listener)` method.
 
-Please get the event type from [`cheetahGrid.ListGrid.EVENT_TYPE`](https://future-architect.github.io/cheetah-grid/documents/tsdoc/interfaces/listgidevents.html).  
+Please get the event type from [`cheetahGrid.ListGrid.EVENT_TYPE`](https://future-architect.github.io/cheetah-grid/documents/tsdoc/interfaces/listgidevents.html).
 
 <code-preview>
 
 ```html
 <textarea class="log" style="width: 100%; height: 100px;">Event logs</textarea>
-<input class="include-mouse" type="checkbox"><label>Include mousemove,mouseenter,mouseleave in the log</label>
+<input class="include-mouse" type="checkbox" /><label
+  >Include mousemove,mouseenter,mouseleave in the log</label
+>
 <div class="sample1 demo-grid middle"></div>
 ```
 
 ```js
-const lang = navigator.language || navigator.userLanguage || navigator.browserLanguage;
+const lang =
+  navigator.language || navigator.userLanguage || navigator.browserLanguage;
 const records = generatePersons(100);
 const grid = new cheetahGrid.ListGrid({
-  parentElement: document.querySelector('.sample1'),
+  parentElement: document.querySelector(".sample1"),
   header: [
-    {field: 'check', caption: '', width: 60, columnType: 'check', action: 'check'},
-    {field: 'personid', caption: 'ID', width: 100},
-    {field: 'fname', caption: 'First Name', width: 200, action: 'input'},
-    {field: 'lname', caption: 'Last Name', width: 200, action: 'input'},
-    {field: 'email', caption: 'Email', width: 250, action: 'input'},
+    {
+      field: "check",
+      caption: "",
+      width: 60,
+      columnType: "check",
+      action: "check",
+    },
+    { field: "personid", caption: "ID", width: 100 },
+    { field: "fname", caption: "First Name", width: 200, action: "input" },
+    { field: "lname", caption: "Last Name", width: 200, action: "input" },
+    { field: "email", caption: "Email", width: 250, action: "input" },
     {
       field(rec) {
-        return rec.birthday.toLocaleString(lang, {year: 'numeric', month: 'long', day: 'numeric'});
+        return rec.birthday.toLocaleString(lang, {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
       },
-      caption: 'birthday',
-      width: 500
+      caption: "birthday",
+      width: 500,
     },
   ],
   frozenColCount: 1,
@@ -40,11 +53,12 @@ const grid = new cheetahGrid.ListGrid({
 });
 
 const log = (typeName, args) => {
-  const el = document.querySelector('.log');
-  el.value += `\nEvent: ${typeName} , args (${args.map(JSON.stringify).join(', ')})`;
+  const el = document.querySelector(".log");
+  el.value += `\nEvent: ${typeName} , args (${args
+    .map(JSON.stringify)
+    .join(", ")})`;
   el.value = el.value.trim();
   el.scrollTop = el.scrollHeight;
-
 };
 
 const {
@@ -82,19 +96,19 @@ grid.listen(SCROLL, (...args) => log(SCROLL, args));
 grid.listen(CHANGED_VALUE, (...args) => log(CHANGED_VALUE, args));
 
 grid.listen(MOUSEMOVE_CELL, (...args) => {
-  if (!document.querySelector('.include-mouse').checked) {
+  if (!document.querySelector(".include-mouse").checked) {
     return;
   }
   log(MOUSEMOVE_CELL, args);
 });
 grid.listen(MOUSEENTER_CELL, (...args) => {
-  if (!document.querySelector('.include-mouse').checked) {
+  if (!document.querySelector(".include-mouse").checked) {
     return;
   }
   log(MOUSEENTER_CELL, args);
 });
 grid.listen(MOUSELEAVE_CELL, (...args) => {
-  if (!document.querySelector('.include-mouse').checked) {
+  if (!document.querySelector(".include-mouse").checked) {
     return;
   }
   log(MOUSELEAVE_CELL, args);

@@ -4,7 +4,7 @@ order: 200
 
 # Advanced Layout
 
-You can use the `layout-header` slot and the `layout-body` slot to define advanced header and record layouts.  
+You can use the `layout-header` slot and the `layout-body` slot to define advanced header and record layouts.
 
 For example:
 
@@ -73,15 +73,19 @@ const records = generatePersons(100);
 export default {
   data() {
     return {
-      records
-    }
+      records,
+    };
   },
   methods: {
-    getBirthday (rec) {
-      const dateTimeFormat = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'numeric', day: 'numeric'})
-      return dateTimeFormat.format(rec.birthday)
-    }
-  }
+    getBirthday(rec) {
+      const dateTimeFormat = new Intl.DateTimeFormat("en-US", {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+      });
+      return dateTimeFormat.format(rec.birthday);
+    },
+  },
 };
 ```
 
