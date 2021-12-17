@@ -41,28 +41,28 @@ In the standard definition, each object consists of following properties.
     birthday: 'birthday',
   }
  */
-const records = generatePersons(100);
+const records = generatePersons(100)
 
 const grid = new cheetahGrid.ListGrid({
-  parentElement: document.querySelector(".sample1"),
+  parentElement: document.querySelector('.sample1'),
   header: [
-    { field: "personid", caption: "ID", width: 100 },
-    { field: "fname", caption: "First Name", width: 200 },
-    { field: "lname", caption: "Last Name", width: 200 },
-    { field: "email", caption: "Email", width: 250 },
-    { field: getBirthday, caption: "Birthday", width: 200 },
+    { field: 'personid', caption: 'ID', width: 100 },
+    { field: 'fname', caption: 'First Name', width: 200 },
+    { field: 'lname', caption: 'Last Name', width: 200 },
+    { field: 'email', caption: 'Email', width: 250 },
+    { field: getBirthday, caption: 'Birthday', width: 200 },
   ],
   frozenColCount: 1,
-});
-grid.records = records;
+})
+grid.records = records
 
 function getBirthday(rec) {
-  const dateTimeFormat = new Intl.DateTimeFormat("en-US", {
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
-  });
-  return dateTimeFormat.format(rec.birthday);
+  const dateTimeFormat = new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+  })
+  return dateTimeFormat.format(rec.birthday)
 }
 ```
 
@@ -85,13 +85,13 @@ const grid = new cheetahGrid.ListGrid({
   header: [
     // ...
     {
-      field: "email",
+      field: 'email',
       // ...
     },
     // ...
   ],
   // ...
-});
+})
 ```
 
 #### function format
@@ -112,7 +112,7 @@ const grid = new cheetahGrid.ListGrid({
     // ...
   ],
   // ...
-});
+})
 ```
 
 #### object format
@@ -136,7 +136,7 @@ const grid = new cheetahGrid.ListGrid({
     // ...
   ],
   // ...
-});
+})
 ```
 
 ## Multiple Header
@@ -151,30 +151,30 @@ To use multiple header, set the hierarchical structured Object to the `header` p
 
 ```js
 const grid = new cheetahGrid.ListGrid({
-  parentElement: document.querySelector(".sample2"),
+  parentElement: document.querySelector('.sample2'),
   header: [
-    { field: "personid", caption: "ID", width: 100 },
+    { field: 'personid', caption: 'ID', width: 100 },
     {
-      /* multiple header */ caption: "name",
+      /* multiple header */ caption: 'name',
       columns: [
-        { field: "fname", caption: "First Name", width: 200 },
-        { field: "lname", caption: "Last Name", width: 200 },
+        { field: 'fname', caption: 'First Name', width: 200 },
+        { field: 'lname', caption: 'Last Name', width: 200 },
       ],
     },
-    { field: "email", caption: "Email", width: 250 },
-    { field: getBirthday, caption: "Birthday", width: 200 },
+    { field: 'email', caption: 'Email', width: 250 },
+    { field: getBirthday, caption: 'Birthday', width: 200 },
   ],
   frozenColCount: 1,
-});
-grid.records = records;
+})
+grid.records = records
 
 function getBirthday(rec) {
-  const dateTimeFormat = new Intl.DateTimeFormat("en-US", {
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
-  });
-  return dateTimeFormat.format(rec.birthday);
+  const dateTimeFormat = new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+  })
+  return dateTimeFormat.format(rec.birthday)
 }
 ```
 
