@@ -6,5 +6,6 @@ export function getInternal(): unknown {
     calc: require("./internal/calc"),
     symbolManager: require("./internal/symbolManager"),
     path2DManager: require("./internal/path2DManager"),
+    pasteUtils: require("./internal/paste-utils"),
   };
 }

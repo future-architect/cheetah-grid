@@ -207,7 +207,12 @@ export abstract class BaseInputEditor<T> extends Editor<T> {
     ) {
       return;
     }
-    grid.doChangeValue(cell.col, cell.row, () => value);
+    grid.doChangeValue(cell.col, cell.row, () => {
+      if (this.isSupportMultilineValue()) {
+        return value;
+      }
+      return value.replace(/\r?\n/g, " ");
+    });
   }
   onDeleteCellRangeBox(grid: ListGridAPI<T>, cell: CellAddress): void {
     if (
@@ -217,5 +222,8 @@ export abstract class BaseInputEditor<T> extends Editor<T> {
       return;
     }
     grid.doChangeValue(cell.col, cell.row, () => "");
+  }
+  isSupportMultilineValue(): boolean {
+    return false;
   }
 }

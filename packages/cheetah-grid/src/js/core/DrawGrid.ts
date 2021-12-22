@@ -26,6 +26,10 @@ import {
   isPromise,
 } from "../internal/utils";
 
+import {
+  normalizePasteValue,
+  parsePasteRangeBoxValues,
+} from "../internal/paste-utils";
 import { DG_EVENT_TYPE } from "./DG_EVENT_TYPE";
 import { EventHandler } from "../internal/EventHandler";
 import { EventTarget } from "./EventTarget";
@@ -35,7 +39,6 @@ import { Scrollable } from "../internal/Scrollable";
 import { getFontSize } from "../internal/canvases";
 //protected symbol
 import { getProtectedSymbol } from "../internal/symbolManager";
-import { parsePasteRangeBoxValues } from "../internal/paste-utils";
 
 const {
   /** @private */
@@ -1553,7 +1556,10 @@ function _bindEvents(this: DrawGrid): void {
           if (/^\[object .*\]$/.exec(strCellValue)) {
             //object は無視
           } else {
-            copyValue += strCellValue;
+            copyValue += /[\t\n]/.test(strCellValue)
+              ? // Need quote
+                `"${strCellValue.replace(/"/g, '""')}"`
+              : strCellValue;
           }
         }
 
@@ -1574,20 +1580,20 @@ function _bindEvents(this: DrawGrid): void {
   grid[_].focusControl.onPaste(
     ({ value, event }: { value: string; event: ClipboardEvent }) => {
       const { trimOnPaste } = grid;
-      const normalizeValue = value.replace(/\r?\n$/, "");
+      const normalizedValue = normalizePasteValue(value);
       const { col, row } = grid[_].selection.select;
-      const multi = /[\r\n\u2028\u2029\t]/.test(normalizeValue); // is multi cell values
+      const multi = /[\r\n\u2028\u2029\t]/.test(normalizedValue); // is multi cell values
       let rangeBoxValues: PasteRangeBoxValues | null = null;
       const pasteCellEvent: PasteCellEvent = {
         col,
         row,
         value,
-        normalizeValue: trimOnPaste ? normalizeValue.trim() : normalizeValue,
+        normalizeValue: trimOnPaste ? normalizedValue.trim() : normalizedValue,
         multi,
         get rangeBoxValues(): PasteRangeBoxValues {
           return (
             rangeBoxValues ??
-            (rangeBoxValues = parsePasteRangeBoxValues(normalizeValue, {
+            (rangeBoxValues = parsePasteRangeBoxValues(normalizedValue, {
               trimOnPaste,
             }))
           );
