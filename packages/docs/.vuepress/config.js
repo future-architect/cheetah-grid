@@ -189,6 +189,10 @@ module.exports = {
           {
             text: 'for Vue.js',
             link: '/api/vue/'
+          },
+          {
+            text: 'for React',
+            link: 'https://github.com/future-architect/cheetah-grid/tree/master/packages/react-cheetah-grid#readme'
           }
         ]
       },
