@@ -225,6 +225,7 @@ function _buildGridOption (vm) {
       theme: vm.theme || null,
       headerRowHeight: vm.headerRowHeight,
       allowRangePaste: vm.allowRangePaste,
+      trimOnPaste: vm.trimOnPaste,
       defaultRowHeight: vm.defaultRowHeight,
       defaultColWidth: vm.defaultColWidth,
       font: vm.font,
@@ -293,6 +294,12 @@ export default {
      * Allow pasting of range.
      */
     allowRangePaste: {
+      type: Boolean
+    },
+    /**
+     * Trim the pasted text on pasting.
+     */
+    trimOnPaste: {
       type: Boolean
     },
     /**
@@ -577,6 +584,8 @@ export default {
         delete newProps.theme
         delete beforeGridProps.allowRangePaste
         delete newProps.allowRangePaste
+        delete beforeGridProps.trimOnPaste
+        delete newProps.trimOnPaste
         delete beforeGridProps.defaultRowHeight
         delete newProps.defaultRowHeight
         delete beforeGridProps.defaultColWidth
@@ -595,6 +604,7 @@ export default {
             frozenColCount,
             theme,
             allowRangePaste,
+            trimOnPaste,
             defaultRowHeight,
             defaultColWidth,
             font,
@@ -609,6 +619,7 @@ export default {
           this.rawGrid.frozenColCount = frozenColCount
           this.rawGrid.theme = theme
           this.rawGrid.allowRangePaste = !!allowRangePaste
+          this.rawGrid.trimOnPaste = !!trimOnPaste
           if (defaultRowHeight != null) {
             this.rawGrid.defaultRowHeight = defaultRowHeight
           }

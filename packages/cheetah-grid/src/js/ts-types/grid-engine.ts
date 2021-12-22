@@ -42,6 +42,7 @@ export interface DrawGridAPI {
   defaultRowHeight: number;
   defaultColWidth: string | number;
   underlayBackgroundColor?: string;
+  trimOnPaste: boolean;
   keyboardOptions: DrawGridKeyboardOptions | null;
   readonly selection: Selection;
   readonly canvas: HTMLCanvasElement;
@@ -151,6 +152,7 @@ export interface ListGridAPI<T> extends DrawGridAPI {
   records: T[] | null;
   dataSource: DataSourceAPI<T>;
   theme: RequiredThemeDefine | null;
+  allowRangePaste: boolean;
   sortState: SortState | null;
   headerValues: HeaderValues;
   recordRowCount: number;

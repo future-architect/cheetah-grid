@@ -63,6 +63,7 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 	const grid = new cheetahGrid.ListGrid({
 		parentElement: document.querySelector('#parent'),
 		allowRangePaste: true,
+		// trimOnPaste: true,
 		keyboardOptions: {
 			moveCellOnTab: true,
 			selectAllOnCtrlA: true,
@@ -90,7 +91,7 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 			{
 				caption: 'name',
 				columns: [
-					{field: 'fname', caption: 'First Name', width: 'auto', maxWidth: '200px', action: 'input'},
+					{field: 'fname', caption: 'First Name', width: 'auto', maxWidth: '200px', minWidth: '30px', action: 'input'},
 					{field: 'lname', caption: 'Last Name', width: 'auto', minWidth: '150px', action: 'input'},
 				],
 			},

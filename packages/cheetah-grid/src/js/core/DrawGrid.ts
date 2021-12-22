@@ -1573,6 +1573,7 @@ function _bindEvents(this: DrawGrid): void {
   );
   grid[_].focusControl.onPaste(
     ({ value, event }: { value: string; event: ClipboardEvent }) => {
+      const { trimOnPaste } = grid;
       const normalizeValue = value.replace(/\r?\n$/, "");
       const { col, row } = grid[_].selection.select;
       const multi = /[\r\n\u2028\u2029\t]/.test(normalizeValue); // is multi cell values
@@ -1581,12 +1582,14 @@ function _bindEvents(this: DrawGrid): void {
         col,
         row,
         value,
-        normalizeValue,
+        normalizeValue: trimOnPaste ? normalizeValue.trim() : normalizeValue,
         multi,
         get rangeBoxValues(): PasteRangeBoxValues {
           return (
             rangeBoxValues ??
-            (rangeBoxValues = parsePasteRangeBoxValues(normalizeValue))
+            (rangeBoxValues = parsePasteRangeBoxValues(normalizeValue, {
+              trimOnPaste,
+            }))
           );
         },
         event,
@@ -2776,6 +2779,7 @@ interface DrawGridProtected {
   underlayBackgroundColor?: string;
   keyboardOptions?: DrawGridKeyboardOptions;
   disableColumnResize?: boolean;
+  trimOnPaste: boolean;
 
   rowHeightsMap: NumberMap<number>;
   colWidthsMap: NumberMap<string | number>;
@@ -2837,6 +2841,10 @@ export interface DrawGridConstructorOptions {
    * Disable column resizing
    */
   disableColumnResize?: boolean;
+  /**
+   * If set to true, trim the pasted text on pasting.
+   */
+  trimOnPaste?: boolean;
 }
 /** @private */
 const protectedKey = _;
@@ -2864,6 +2872,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
       keyboardOptions,
       parentElement,
       disableColumnResize,
+      trimOnPaste,
     } = options;
     const protectedSpace = (this[_] = {} as DrawGridProtected);
     style.initDocument();
@@ -2895,6 +2904,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
 
     protectedSpace.keyboardOptions = keyboardOptions;
     protectedSpace.disableColumnResize = disableColumnResize;
+    protectedSpace.trimOnPaste = trimOnPaste ?? false;
 
     /////
     protectedSpace.rowHeightsMap = new NumberMap();
@@ -3071,6 +3081,15 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
    */
   set underlayBackgroundColor(underlayBackgroundColor: string | undefined) {
     this[_].underlayBackgroundColor = underlayBackgroundColor;
+  }
+  /**
+   * If set to true, trim the pasted text on pasting.
+   */
+  get trimOnPaste(): boolean {
+    return this[_].trimOnPaste;
+  }
+  set trimOnPaste(trimOnPaste: boolean) {
+    this[_].trimOnPaste = trimOnPaste;
   }
   get keyboardOptions(): DrawGridKeyboardOptions | null {
     return this[_].keyboardOptions ?? null;

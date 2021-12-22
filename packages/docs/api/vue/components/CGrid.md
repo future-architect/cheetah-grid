@@ -113,6 +113,7 @@ The definition is set to `layout.body` property described in [Advanced Layout].
 | frozen-col-count             | `number`&#124;`string` | Defines a frozen col Count                                                        | `0`         |
 | header-row-height            | `number`&#124;`Array`  | Defines the header row height(s)                                                  | `undefined` |
 | allow-range-paste            |       `boolean`        | Allow pasting of range.                                                           | `undefined` |
+| trim-on-paste                |       `boolean`        | Trim the pasted text on pasting.                                                  | `undefined` |
 | default-row-height           |        `number`        | Default grid row height.                                                          | `undefined` |
 | default-col-width            |        `number`        | Default grid col width.                                                           | `undefined` |
 | filter                       |       `function`       | Defines a records filter                                                          | `undefined` |

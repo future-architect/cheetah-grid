@@ -593,7 +593,9 @@ function _onRangePaste<T>(
     selectionRange.end.col,
     selectionRange.end.row
   );
-  const values = parsePasteRangeBoxValues(text);
+  const values = parsePasteRangeBoxValues(text, {
+    trimOnPaste: this.trimOnPaste,
+  });
 
   const pasteRowCount = Math.min(
     Math.max(end.row - start.row + 1, values.rowCount),
