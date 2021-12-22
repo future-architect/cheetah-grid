@@ -1,6 +1,9 @@
 import type { PasteRangeBoxValues } from "../ts-types";
 
-export function parsePasteRangeBoxValues(value: string): PasteRangeBoxValues {
+export function parsePasteRangeBoxValues(
+  value: string,
+  { trimOnPaste }: { trimOnPaste: boolean }
+): PasteRangeBoxValues {
   const normalizeValue = value.replace(/\r?\n$/, "");
   const lines = normalizeValue.split(/(?:\r?\n)|[\u2028\u2029]/g);
   const values = lines.map((line) => line.split(/\t/g));
@@ -9,7 +12,14 @@ export function parsePasteRangeBoxValues(value: string): PasteRangeBoxValues {
     colCount,
     rowCount: values.length,
     getCellValue(offsetCol: number, offsetRow: number): string {
-      return values[offsetRow]?.[offsetCol] || "";
+      const line = values[offsetRow];
+      if (line) {
+        const cell = line[offsetCol];
+        if (cell) {
+          return trimOnPaste ? cell.trim() : cell;
+        }
+      }
+      return "";
     },
   };
 }
