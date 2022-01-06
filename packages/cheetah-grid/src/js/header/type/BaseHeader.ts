@@ -1,5 +1,6 @@
 import * as styleContents from "../style";
 import type {
+  CellAddress,
   CellContext,
   EventListenerId,
   GridCanvasHelperAPI,
@@ -56,5 +57,15 @@ export abstract class BaseHeader<T> {
     _cellId: LayoutObjectId
   ): EventListenerId[] {
     return [];
+  }
+  getCopyCellValue(
+    value: unknown,
+    _grid: ListGridAPI<T>,
+    _cell: CellAddress
+  ): unknown {
+    if (typeof value === "function") {
+      value = value();
+    }
+    return value != null ? value : "";
   }
 }

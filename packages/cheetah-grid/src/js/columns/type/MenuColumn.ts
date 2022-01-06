@@ -55,7 +55,7 @@ export class MenuColumn<T> extends BaseColumn<T, unknown> {
         bgColor,
       });
     }
-    const text = this._convertInternal(value);
+    const text = this._convertInternal(value) as string;
     helper.testFontLoad(font, text, context);
     utils.loadIcons(getIcon(), context, helper, (icons, context) => {
       const basePadding = helper.toBoxPixelArray(padding || 0, context, font);
@@ -101,7 +101,7 @@ export class MenuColumn<T> extends BaseColumn<T, unknown> {
   convertInternal(value: unknown): unknown {
     return value;
   }
-  _convertInternal(value: unknown): string {
+  _convertInternal(value: unknown): unknown {
     const options = this._options;
     for (let i = 0; i < options.length; i++) {
       const option = options[i];
@@ -110,9 +110,9 @@ export class MenuColumn<T> extends BaseColumn<T, unknown> {
         break;
       }
     }
-    return super.convertInternal(value) as string;
+    return super.convertInternal(value);
   }
-  getCopyCellValue(value: unknown): string {
+  getCopyCellValue(value: unknown): unknown {
     return this._convertInternal(value);
   }
 }

@@ -1545,23 +1545,29 @@ function _bindEvents(this: DrawGrid): void {
     for (let { row } = copyRange.start; row <= copyRange.end.row; row++) {
       for (let { col } = copyRange.start; col <= copyRange.end.col; col++) {
         const copyCellValue = grid.getCopyCellValue(col, row, copyRange);
-        if (
-          typeof Promise !== "undefined" &&
-          copyCellValue instanceof Promise
+
+        let strCellValue: string;
+        if (typeof copyCellValue === "string") {
+          strCellValue = copyCellValue;
+        } else if (
+          copyCellValue == null ||
+          // Asynchronous data is treated as empty.
+          (typeof Promise !== "undefined" && copyCellValue instanceof Promise)
         ) {
-          //非同期データは取得できない
+          strCellValue = "";
         } else {
           // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-          const strCellValue = `${copyCellValue}`;
+          strCellValue = `${copyCellValue}`;
           if (/^\[object .*\]$/.exec(strCellValue)) {
-            //object は無視
-          } else {
-            copyValue += /[\t\n]/.test(strCellValue)
-              ? // Need quote
-                `"${strCellValue.replace(/"/g, '""')}"`
-              : strCellValue;
+            // Ignore maybe object
+            strCellValue = "";
           }
         }
+
+        copyValue += /[\t\n]/.test(strCellValue)
+          ? // Need quote
+            `"${strCellValue.replace(/"/g, '""')}"`
+          : strCellValue;
 
         if (col < copyRange.end.col) {
           copyValue += "\t";
@@ -3643,8 +3649,9 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
     _col: number,
     _row: number,
     _range: CellRange
-  ): string | Promise<string> | void {
+  ): unknown {
     //Please implement get cell value!!
+    return undefined;
   }
   /**
    * Draw a cell
