@@ -1257,7 +1257,7 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
     col: number,
     row: number,
     range?: CellRange
-  ): string {
+  ): unknown {
     const cellRange = _getCellRange(this, col, row);
     const startCol = range
       ? Math.max(range.start.col, cellRange.start.col)
@@ -1272,13 +1272,12 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
     const value = _getCellValue(this, col, row);
 
     if (row < this[_].layoutMap.headerRowCount) {
-      return value;
+      const headerData = this[_].layoutMap.getHeader(col, row);
+      return headerData.headerType.getCopyCellValue(value, this, { col, row });
     }
 
     const columnData = this[_].layoutMap.getBody(col, row);
-    return (
-      columnData.columnType.getCopyCellValue(value, this, { col, row }) ?? value
-    );
+    return columnData.columnType.getCopyCellValue(value, this, { col, row });
   }
   protected onDrawCell(
     col: number,

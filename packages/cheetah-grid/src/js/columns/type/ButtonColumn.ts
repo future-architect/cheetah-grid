@@ -3,6 +3,7 @@ import type {
   ButtonColumnOption,
   CellContext,
   GridCanvasHelperAPI,
+  MaybePromise,
 } from "../../ts-types";
 import type { DrawCellInfo, GridInternal } from "../../ts-types-internal";
 import { ButtonStyle } from "../style/ButtonStyle";
@@ -34,6 +35,9 @@ export class ButtonColumn<T> extends Column<T> {
   }
   convertInternal(value: unknown): string {
     return this._caption || super.convertInternal(value);
+  }
+  getCopyCellValue(value: MaybePromise<unknown>): unknown {
+    return this._caption || value;
   }
   drawInternal(
     value: string,
