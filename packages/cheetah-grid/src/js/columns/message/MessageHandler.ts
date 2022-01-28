@@ -179,6 +179,9 @@ export class MessageHandler<T> implements Base<T> {
       this._move(sel.col, sel.row);
     });
     grid.listen(LG_EVENT_TYPE.CHANGED_VALUE, (e) => {
+      if (!grid.hasFocusGrid()) {
+        return;
+      }
       const sel = grid.selection.select;
       if (sel.col !== e.col || sel.row !== e.row) {
         return;
