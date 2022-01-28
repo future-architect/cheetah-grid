@@ -84,6 +84,7 @@ Use this slot to set the header caption
 | filter        |        `string`&#124;`function`         | Defines a vue filter name                                                                                              | `undefined` |
 | header-action | `object`&#124;`string`&#124;`function`  | Defines a column header action                                                                                         | `undefined` |
 | header-field  |                `string`                 | Defines a column header data field                                                                                     | `undefined` |
+| header-icon   |         `object`&#124;`string`          | Defines a header icon                                                                                                  | `undefined` |
 | header-style  | `object`&#124;`string`&#124;`function`  | Defines a column header style                                                                                          | `undefined` |
 | header-type   | `object`&#124;`string`&#124;`function`  | Defines a column header type                                                                                           | `undefined` |
 | icon          | `object`&#124;`string`&#124;`function`  | Defines an icon                                                                                                        | `undefined` |
