@@ -85,7 +85,8 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 					grid.records = records;
 				},
 				// sort
-				style: {padding: [0, 0, 0, '1.2em']}
+				style: {padding: [0, 0, 0, '1.2em']},
+				// headerStyle: {textAlign: 'right'}
 			},
 			{field: 'checkReadOnly', caption: 'read', width: 50, columnType: 'check'},
 			{

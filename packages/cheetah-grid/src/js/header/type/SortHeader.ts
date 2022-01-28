@@ -1,3 +1,4 @@
+import * as inlineUtils from "../../element/inlines";
 import type {
   CellContext,
   GridCanvasHelperAPI,
@@ -49,30 +50,52 @@ export class SortHeader<T> extends BaseHeader<T> {
     const ctx = context.getContext();
     const arrowSize = getFontSize(ctx, font).width * 1.2;
 
-    helper.text(value, context, {
-      textAlign,
-      textBaseline,
-      color,
-      font,
-      textOverflow,
-      icons: [
-        {
-          name:
-            order != null
-              ? order === "asc"
-                ? "arrow_downward"
-                : "arrow_upward"
-              : undefined,
-          width: arrowSize,
-          color:
-            helper.getColor(
-              sortArrowColor || helper.theme.header.sortArrowColor,
-              col,
-              row,
-              ctx
-            ) || "rgba(0, 0, 0, 0.38)",
-        },
-      ],
+    const textInline = inlineUtils.buildInlines(null, value);
+    const inlineIcon = inlineUtils.iconOf({
+      name:
+        order != null
+          ? order === "asc"
+            ? "arrow_downward"
+            : "arrow_upward"
+          : undefined,
+      width: arrowSize,
+      color:
+        helper.getColor(
+          sortArrowColor || helper.theme.header.sortArrowColor,
+          col,
+          row,
+          ctx
+        ) || "rgba(0, 0, 0, 0.38)",
     });
+    const inlines = textInline.concat([inlineIcon]);
+    const inlinesWidth = helper.measureText(inlines, context, {
+      font,
+    });
+    const rect = context.getRect();
+    if (inlinesWidth <= rect.width - 4 /* system padding */) {
+      helper.text(inlines, context, {
+        textAlign,
+        textBaseline,
+        color,
+        font,
+        textOverflow,
+      });
+    } else {
+      // !! Draw the icon first to leave the result of `setCellOverflowText`.
+      helper.text([inlineIcon], context, {
+        textAlign: "right",
+        textBaseline,
+        color,
+        font,
+      });
+      helper.text(textInline, context, {
+        padding: [0, arrowSize, 0, 0],
+        textAlign,
+        textBaseline,
+        color,
+        font,
+        textOverflow,
+      });
+    }
   }
 }

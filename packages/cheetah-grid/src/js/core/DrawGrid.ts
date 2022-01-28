@@ -1969,6 +1969,8 @@ function setSafeInputValue(input: HTMLInputElement, value: string): void {
   }
 }
 
+const IGNORE_STORE_ATTRS = ["style", "readonly"];
+
 /**
  * Manage focus
  * @private
@@ -2294,6 +2296,7 @@ class FocusControl extends EventTarget {
     const removeNames = [];
     for (let i = 0, n = atts.length; i < n; i++) {
       const att = atts[i];
+      if (IGNORE_STORE_ATTRS.indexOf(att.name) >= 0) continue;
       if (!this._inputStatus?.hasOwnProperty(att.nodeName)) {
         removeNames.push(att.name);
       }
@@ -2321,6 +2324,7 @@ class FocusControl extends EventTarget {
     const atts = el.attributes;
     for (let i = 0, n = atts.length; i < n; i++) {
       const att = atts[i];
+      if (IGNORE_STORE_ATTRS.indexOf(att.name) >= 0) continue;
       inputStatus[att.name] = att.value;
     }
     el.classList.add("grid-focus-control--stored-status");

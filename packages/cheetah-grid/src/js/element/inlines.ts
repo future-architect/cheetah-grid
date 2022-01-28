@@ -80,6 +80,8 @@ function isInlineSvgConstructorOption(
   return false;
 }
 
+export function iconOf(icon: SimpleColumnIconOption): Inline;
+export function iconOf(icon: null): null;
 export function iconOf(icon: SimpleColumnIconOption | null): Inline | null {
   if (icon instanceof Inline) {
     return icon;

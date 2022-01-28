@@ -207,12 +207,12 @@ function drawInlines<T>(
 
 function buildInlines(
   icons: SimpleColumnIconOption[] | undefined,
-  inline: string
+  inline: string | (Inline | string)[]
 ): Inline[] {
   return inlineUtils.buildInlines(icons, inline || "");
 }
 
-function inlineToString(inline: Inline | string): string {
+function inlineToString(inline: Inline | string | (Inline | string)[]): string {
   return inlineUtils.string(inline);
 }
 
@@ -257,6 +257,19 @@ function getOverflowInlinesIndex(
     lineWidth += inlineWidth;
   }
   return null;
+}
+
+function _measureInlines(
+  ctx: CanvasRenderingContext2D,
+  inlines: Inline[]
+): number {
+  let lineWidth = 0;
+  for (let i = 0; i < inlines.length; i++) {
+    const inline = inlines[i];
+    const inlineWidth = (inline.width({ ctx }) || 0) - 0;
+    lineWidth += inlineWidth;
+  }
+  return lineWidth;
 }
 
 function isOverflowInlines(
@@ -356,7 +369,7 @@ function truncateInlines(
 function _inlineRect<T>(
   grid: ListGridAPI<T>,
   ctx: CanvasRenderingContext2D,
-  inline: string,
+  inline: string | (Inline | string)[],
   rect: RectProps,
   col: number,
   row: number,
@@ -402,6 +415,23 @@ function _inlineRect<T>(
   }
 
   drawInlines(ctx, inlines, rect, offset, 0, 0, col, row, grid);
+}
+
+function measureText(
+  ctx: CanvasRenderingContext2D,
+  inline: string | (Inline | string)[],
+  {
+    font,
+    icons,
+  }: {
+    font?: string;
+    icons?: SimpleColumnIconOption[];
+  }
+): number {
+  ctx.font = font || ctx.font;
+
+  const inlines = buildInlines(icons, inline);
+  return _measureInlines(ctx, inlines);
 }
 
 // eslint-disable-next-line complexity
@@ -1061,7 +1091,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
     }
   }
   text(
-    text: string,
+    text: string | (Inline | string)[],
     context: CellContext,
     {
       padding,
@@ -1107,6 +1137,21 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
         icons,
       });
     });
+  }
+  measureText(
+    text: string | (Inline | string)[],
+    context: CellContext,
+    { font, icons }: Parameters<GridCanvasHelperAPI["measureText"]>[2] = {}
+  ): number {
+    let result = 0;
+    this.drawWithClip(context, (ctx) => {
+      font = getFont(font, context.col, context.row, this._grid, ctx);
+      result = measureText(ctx, text, {
+        font,
+        icons,
+      });
+    });
+    return result;
   }
   multilineText(
     multilines: string[],
