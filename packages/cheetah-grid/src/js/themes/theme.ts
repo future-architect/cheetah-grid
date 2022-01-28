@@ -11,7 +11,9 @@ import { get as getSymbol } from "../internal/symbolManager";
 //private symbol
 const _ = getSymbol();
 
-function getProp<T extends ColorPropertyDefine | ColorsPropertyDefine>(
+function getProp<
+  T extends ColorPropertyDefine | ColorsPropertyDefine | string | number
+>(
   obj: PartialThemeDefine,
   superObj: ThemeDefine,
   names: string[],
@@ -231,6 +233,12 @@ export class Theme implements RequiredThemeDefine {
         },
         get warnBgColor(): ColorPropertyDefine {
           return getProp(obj, superTheme, ["messages", "warnBgColor"]);
+        },
+        get boxWidth(): number {
+          return getProp(obj, superTheme, ["messages", "boxWidth"]);
+        },
+        get markHeight(): number {
+          return getProp(obj, superTheme, ["messages", "markHeight"]);
         },
       })
     );

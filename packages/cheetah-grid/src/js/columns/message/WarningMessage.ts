@@ -49,6 +49,8 @@ export class WarningMessage<T> extends BaseMessage<T> {
                   ctx
                 ) || DEEP_ORANGE_A100,
               color: bgColor,
+              boxWidth: helper.theme.messages.boxWidth,
+              markHeight: helper.theme.messages.markHeight,
             },
             helper
           );

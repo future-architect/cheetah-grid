@@ -9,21 +9,23 @@ export function drawExclamationMarkBox(
   style: {
     bgColor: ColorDef;
     color?: ColorDef;
+    boxWidth?: number | string;
+    markHeight?: number | string;
   },
   helper: GridCanvasHelperAPI
 ): void {
-  const { bgColor, color } = style;
+  const { bgColor, color, boxWidth, markHeight } = style;
   const ctx = context.getContext();
   const rect = context.getRect();
   // draw box
   ctx.fillStyle = bgColor;
   const boxRect = (rect as Rect).copy();
-  boxRect.left = boxRect.right - 24;
+  boxRect.left = boxRect.right - (Number(boxWidth) || 24);
   ctx.fillRect(boxRect.left, boxRect.top, boxRect.width, boxRect.height - 1);
 
   // draw exclamation mark
   const fillColor = color;
-  const height = 20;
+  const height = Number(markHeight) || 20;
   const width = height / 5;
   const left = boxRect.left + (boxRect.width - width) / 2;
   const top = boxRect.top + (boxRect.height - height) / 2;
@@ -43,21 +45,23 @@ export function drawInformationMarkBox(
   style: {
     bgColor: ColorDef;
     color?: ColorDef;
+    boxWidth?: number | string;
+    markHeight?: number | string;
   },
   helper: GridCanvasHelperAPI
 ): void {
-  const { bgColor, color } = style;
+  const { bgColor, color, boxWidth, markHeight } = style;
   const ctx = context.getContext();
   const rect = context.getRect();
   // draw box
   ctx.fillStyle = bgColor;
   const boxRect = (rect as Rect).copy();
-  boxRect.left = boxRect.right - 24;
+  boxRect.left = boxRect.right - (Number(boxWidth) || 24);
   ctx.fillRect(boxRect.left, boxRect.top, boxRect.width, boxRect.height - 1);
 
   // draw i mark
   const fillColor = color;
-  const height = 20;
+  const height = Number(markHeight) || 20;
   const width = height / 5;
   const left = boxRect.left + (boxRect.width - width) / 2;
   const top = boxRect.top + (boxRect.height - height) / 2;

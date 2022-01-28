@@ -48,6 +48,8 @@ export class InfoMessage<T> extends BaseMessage<T> {
                   ctx
                 ) || GREY_L2,
               color: bgColor,
+              boxWidth: helper.theme.messages.boxWidth,
+              markHeight: helper.theme.messages.markHeight,
             },
             helper
           );

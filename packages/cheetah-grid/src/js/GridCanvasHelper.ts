@@ -100,7 +100,7 @@ function getFont<T>(
 }
 function getThemeColor<
   R,
-  T extends ColorPropertyDefine | ColorsPropertyDefine | string
+  T extends ColorPropertyDefine | ColorsPropertyDefine | string | number
 >(grid: ListGridAPI<R>, ...names: string[]): T {
   const gridThemeColor = getChainSafe(grid.theme, ...names);
   if (gridThemeColor == null) {
@@ -889,6 +889,12 @@ class ThemeResolver<T> implements RequiredThemeDefine {
         },
         get warnBgColor(): ColorPropertyDefine {
           return getThemeColor(grid, "messages", "warnBgColor");
+        },
+        get boxWidth(): number {
+          return getThemeColor(grid, "messages", "boxWidth");
+        },
+        get markHeight(): number {
+          return getThemeColor(grid, "messages", "markHeight");
         },
       })
     );
