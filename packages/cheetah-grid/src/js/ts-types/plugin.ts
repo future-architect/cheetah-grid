@@ -48,6 +48,8 @@ export interface ThemeDefine {
     infoBgColor?: ColorPropertyDefine;
     errorBgColor?: ColorPropertyDefine;
     warnBgColor?: ColorPropertyDefine;
+    boxWidth?: number; // Default 24
+    markHeight?: number; // Default 20
   };
 }
 

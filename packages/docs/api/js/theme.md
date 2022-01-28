@@ -133,6 +133,8 @@ const userTheme = {
     infoBgColor: "gray",
     errorBgColor: "red",
     warnBgColor: "yellow",
+    boxWidth: 12,
+    markHeight: 15,
   },
 };
 grid.theme = userTheme;
