@@ -183,22 +183,17 @@ function _getCellIcon0<T>(
   grid: ListGrid<T>,
   icon: ColumnIconOption<T>,
   row: number
-): ColumnIconOption<T>;
-function _getCellIcon0<T>(
-  grid: ListGrid<T>,
-  icon: ColumnIconOption<T>[],
-  row: number
-): ColumnIconOption<T>[];
+): ColumnIconOption<never>;
 function _getCellIcon0<T>(
   grid: ListGrid<T>,
   icon: ColumnIconOption<T> | ColumnIconOption<T>[],
   row: number
-): ColumnIconOption<T> | ColumnIconOption<T>[];
+): ColumnIconOption<never> | ColumnIconOption<never>[];
 function _getCellIcon0<T>(
   grid: ListGrid<T>,
   icon: ColumnIconOption<T> | ColumnIconOption<T>[],
   row: number
-): ColumnIconOption<T> | ColumnIconOption<T>[] {
+): ColumnIconOption<never> | ColumnIconOption<never>[] {
   if (Array.isArray(icon)) {
     return icon.map((i) => _getCellIcon0(grid, i, row));
   }
@@ -228,12 +223,20 @@ function _getCellIcon<T>(
   grid: ListGrid<T>,
   col: number,
   row: number
-): ColumnIconOption<T> | ColumnIconOption<T>[] | null {
-  const { icon } = grid[_].layoutMap.getBody(col, row);
-  if (icon == null) {
-    return null;
+): ColumnIconOption<never> | ColumnIconOption<never>[] | null {
+  if (row < grid[_].layoutMap.headerRowCount) {
+    const { headerIcon } = grid[_].layoutMap.getHeader(col, row);
+    if (headerIcon == null) {
+      return null;
+    }
+    return headerIcon;
+  } else {
+    const { icon } = grid[_].layoutMap.getBody(col, row);
+    if (icon == null) {
+      return null;
+    }
+    return _getCellIcon0(grid, icon, row);
   }
-  return _getCellIcon0(grid, icon, row);
 }
 /** @private */
 function _getField<T>(
@@ -910,7 +913,7 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
    * width: column width
    * minWidth: column min width
    * maxWidth: column max width
-   * icon: icon name
+   * icon: icon definition
    * message: message key name
    * columnType: column type
    * action: column action
@@ -919,6 +922,7 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
    * headerStyle: header style
    * headerAction: header action
    * headerField: header field name
+   * headerIcon: header icon definition
    * sort: define sort setting
    * -----
    *

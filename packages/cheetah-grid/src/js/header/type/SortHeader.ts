@@ -1,4 +1,5 @@
 import * as inlineUtils from "../../element/inlines";
+import * as utils from "../../columns/type/columnUtils";
 import type {
   CellContext,
   GridCanvasHelperAPI,
@@ -21,7 +22,7 @@ export class SortHeader<T> extends BaseHeader<T> {
     style: SortHeaderStyle,
     helper: GridCanvasHelperAPI,
     grid: ListGridAPI<T>,
-    { drawCellBase }: DrawCellInfo<T>
+    { drawCellBase, getIcon }: DrawCellInfo<T>
   ): void {
     const {
       textAlign,
@@ -39,63 +40,69 @@ export class SortHeader<T> extends BaseHeader<T> {
       });
     }
 
-    const state = grid.sortState as SortState;
-    let order = undefined;
-    const { col, row } = context;
-    const range = grid.getCellRange(col, row);
-    if (cellInRange(range, state.col, state.row)) {
-      ({ order } = state);
-    }
+    utils.loadIcons(getIcon(), context, helper, (icons, context) => {
+      const state = grid.sortState as SortState;
+      let order = undefined;
+      const { col, row } = context;
+      const range = grid.getCellRange(col, row);
+      if (cellInRange(range, state.col, state.row)) {
+        ({ order } = state);
+      }
 
-    const ctx = context.getContext();
-    const arrowSize = getFontSize(ctx, font).width * 1.2;
+      const ctx = context.getContext();
+      const arrowSize = getFontSize(ctx, font).width * 1.2;
 
-    const textInline = inlineUtils.buildInlines(null, value);
-    const inlineIcon = inlineUtils.iconOf({
-      name:
-        order != null
-          ? order === "asc"
-            ? "arrow_downward"
-            : "arrow_upward"
-          : undefined,
-      width: arrowSize,
-      color:
-        helper.getColor(
-          sortArrowColor || helper.theme.header.sortArrowColor,
-          col,
-          row,
-          ctx
-        ) || "rgba(0, 0, 0, 0.38)",
+      const textInline = inlineUtils.buildInlines(null, value);
+      const inlineIcon = inlineUtils.iconOf({
+        name:
+          order != null
+            ? order === "asc"
+              ? "arrow_downward"
+              : "arrow_upward"
+            : undefined,
+        width: arrowSize,
+        color:
+          helper.getColor(
+            sortArrowColor || helper.theme.header.sortArrowColor,
+            col,
+            row,
+            ctx
+          ) || "rgba(0, 0, 0, 0.38)",
+      });
+
+      const inlines = textInline.concat([inlineIcon]);
+      const inlinesWidth = helper.measureText(inlines, context, {
+        font,
+        icons,
+      });
+      const rect = context.getRect();
+      if (inlinesWidth <= rect.width - 4 /* system padding */) {
+        helper.text(inlines, context, {
+          textAlign,
+          textBaseline,
+          color,
+          font,
+          textOverflow,
+          icons,
+        });
+      } else {
+        // !! Draw the icon first to leave the result of `setCellOverflowText`.
+        helper.text([inlineIcon], context, {
+          textAlign: "right",
+          textBaseline,
+          color,
+          font,
+        });
+        helper.text(textInline, context, {
+          padding: [0, arrowSize, 0, 0],
+          textAlign,
+          textBaseline,
+          color,
+          font,
+          textOverflow,
+          icons,
+        });
+      }
     });
-    const inlines = textInline.concat([inlineIcon]);
-    const inlinesWidth = helper.measureText(inlines, context, {
-      font,
-    });
-    const rect = context.getRect();
-    if (inlinesWidth <= rect.width - 4 /* system padding */) {
-      helper.text(inlines, context, {
-        textAlign,
-        textBaseline,
-        color,
-        font,
-        textOverflow,
-      });
-    } else {
-      // !! Draw the icon first to leave the result of `setCellOverflowText`.
-      helper.text([inlineIcon], context, {
-        textAlign: "right",
-        textBaseline,
-        color,
-        font,
-      });
-      helper.text(textInline, context, {
-        padding: [0, arrowSize, 0, 0],
-        textAlign,
-        textBaseline,
-        color,
-        font,
-        textOverflow,
-      });
-    }
   }
 }

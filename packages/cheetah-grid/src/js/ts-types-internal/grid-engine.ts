@@ -25,7 +25,7 @@ export interface MessageHandler<T> {
 
 export interface DrawCellInfo<T> {
   getRecord(): unknown;
-  getIcon(): ColumnIconOption<T> | ColumnIconOption<T>[] | null;
+  getIcon(): ColumnIconOption<never> | ColumnIconOption<never>[] | null;
   getMessage(): Message;
   messageHandler: MessageHandler<T>;
   style: ColumnStyleOption | HeaderStyleOption | null | undefined;

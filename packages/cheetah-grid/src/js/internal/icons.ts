@@ -208,7 +208,7 @@ function normarize(iconProps: SimpleColumnIconOption): SimpleColumnIconOption {
   return data;
 }
 
-export function toNormarizeArray(
+export function toNormalizeArray(
   iconProps: ColumnIconOption<unknown> | ColumnIconOption<unknown>[]
 ): SimpleColumnIconOption[] {
   const icons = toSimpleArray(iconProps);

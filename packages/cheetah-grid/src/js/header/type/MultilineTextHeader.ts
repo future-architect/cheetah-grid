@@ -1,3 +1,4 @@
+import * as utils from "../../columns/type/columnUtils";
 import type { CellContext, GridCanvasHelperAPI } from "../../ts-types";
 import type { DrawCellInfo, GridInternal } from "../../ts-types-internal";
 import { BaseHeader } from "./BaseHeader";
@@ -16,7 +17,7 @@ export class MultilineTextHeader<T> extends BaseHeader<T> {
     style: MultilineTextHeaderStyle,
     helper: GridCanvasHelperAPI,
     _grid: GridInternal<T>,
-    { drawCellBase }: DrawCellInfo<T>
+    { drawCellBase, getIcon }: DrawCellInfo<T>
   ): void {
     const {
       textAlign,
@@ -40,15 +41,18 @@ export class MultilineTextHeader<T> extends BaseHeader<T> {
       .replace(/\r/g, "\n")
       .split("\n");
     helper.testFontLoad(font, value, context);
-    helper.multilineText(multilines, context, {
-      textAlign,
-      textBaseline,
-      color,
-      font,
-      lineHeight,
-      autoWrapText,
-      lineClamp,
-      textOverflow,
+    utils.loadIcons(getIcon(), context, helper, (icons, context) => {
+      helper.multilineText(multilines, context, {
+        textAlign,
+        textBaseline,
+        color,
+        font,
+        lineHeight,
+        autoWrapText,
+        lineClamp,
+        textOverflow,
+        icons,
+      });
     });
   }
 }

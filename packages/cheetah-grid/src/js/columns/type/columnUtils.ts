@@ -9,8 +9,9 @@ import type { SimpleColumnIconOption } from "../../ts-types-internal";
 import { isPromise } from "../../internal/utils";
 
 export function loadIcons(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  icon: MaybePromise<ColumnIconOption<any> | ColumnIconOption<any>[]> | null,
+  icon: MaybePromise<
+    ColumnIconOption<never> | ColumnIconOption<never>[]
+  > | null,
   context: CellContext,
   helper: GridCanvasHelperAPI,
   callback: (
@@ -25,7 +26,7 @@ export function loadIcons(
         loadIcons(i, context.toCurrentContext(), helper, callback);
       });
     } else {
-      const iconList = icons.toNormarizeArray(icon);
+      const iconList = icons.toNormalizeArray(icon);
       iconList.forEach((i) => {
         if (i.font && i.content) {
           helper.testFontLoad(i.font, i.content, context);
