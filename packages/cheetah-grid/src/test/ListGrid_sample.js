@@ -339,7 +339,7 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 	};
 
 	// event
-	grid.listen('paste_rejected_values', function(arg) {
+	grid.listen('rejected_paste_values', function(arg) {
 		console.log(arg);
 	});
 })();

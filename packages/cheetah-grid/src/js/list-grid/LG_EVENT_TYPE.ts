@@ -14,11 +14,11 @@ export interface ListGridEvents extends DrawGridEvents {
   /**
    * Indicates that the pasted value has been rejected.
    */
-  PASTE_REJECTED_VALUES: "paste_rejected_values";
+  REJECTED_PASTE_VALUES: "rejected_paste_values";
 }
 
 export const LG_EVENT_TYPE: ListGridEvents = extend(DG_EVENT_TYPE, {
   CHANGED_VALUE: "changed_value" as const,
   CHANGED_HEADER_VALUE: "changed_header_value" as const,
-  PASTE_REJECTED_VALUES: "paste_rejected_values" as const,
+  REJECTED_PASTE_VALUES: "rejected_paste_values" as const,
 });

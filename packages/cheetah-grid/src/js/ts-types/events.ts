@@ -140,11 +140,11 @@ export interface ListGridEventHandlersEventMap<T>
   extends DrawGridEventHandlersEventMap {
   changed_value: [ChangedValueCellEvent<T>];
   changed_header_value: [ChangedHeaderValueCellEvent];
-  paste_rejected_values: [PasteRejectedValuesEvent<T>];
+  rejected_paste_values: [PasteRejectedValuesEvent<T>];
 }
 export interface ListGridEventHandlersReturnMap
   extends DrawGridEventHandlersReturnMap {
   changed_value: void;
   changed_header_value: void;
-  paste_rejected_values: void;
+  rejected_paste_values: void;
 }

@@ -164,8 +164,8 @@ function _bindEvents (vm, grid) {
           })
         }
       }
-      if (type === EVENT_TYPE.PASTE_REJECTED_VALUES) {
-        // Convert PASTE_REJECTED_VALUES event to cell event
+      if (type === EVENT_TYPE.REJECTED_PASTE_VALUES) {
+        // Convert REJECTED_PASTE_VALUES event to cell event
         for (const data of first.detail || []) {
           const define = grid.getColumnDefine(data.col, data.row)
           if (define && define.vm) {

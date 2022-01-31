@@ -143,4 +143,4 @@ grid.listen(MOUSELEAVE_CELL, (...args) => {
 | EVENT_TYPE.BLUR_GRID                        | Fires when grid focus is inactivated.                            |
 | EVENT_TYPE.CHANGED_VALUE                    | Fires when the cell value was changed.                           |
 | EVENT_TYPE.CHANGED_HEADER_VALUE             | Fires when the header cell value was changed.                    |
-| EVENT_TYPE.PASTE_REJECTED_VALUES            | Notifies that the pasted value has been rejected.                |
+| EVENT_TYPE.REJECTED_PASTE_VALUES            | Notifies that the pasted value has been rejected.                |

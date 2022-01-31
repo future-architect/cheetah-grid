@@ -711,7 +711,7 @@ function _onRangePaste<T>(
   this.invalidateCellRange(this.selection.range);
 
   if (rejectedDetail.length > 0) {
-    this.fireListeners(LG_EVENT_TYPE.PASTE_REJECTED_VALUES, {
+    this.fireListeners(LG_EVENT_TYPE.REJECTED_PASTE_VALUES, {
       detail: rejectedDetail,
     });
     rejectedDetail = [];
@@ -722,7 +722,7 @@ function _onRangePaste<T>(
     if (timeout) clearTimeout(timeout);
     timeout = setTimeout(() => {
       if (rejectedDetail.length > 0) {
-        this.fireListeners(LG_EVENT_TYPE.PASTE_REJECTED_VALUES, {
+        this.fireListeners(LG_EVENT_TYPE.REJECTED_PASTE_VALUES, {
           detail: rejectedDetail,
         });
         rejectedDetail = [];
