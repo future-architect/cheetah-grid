@@ -725,6 +725,7 @@ function _onRangePaste<T>(
   processRejected();
   reject = (cell, define, pasteValue) => {
     addRejectedDetail(cell, define, pasteValue);
+    processRejected();
   };
 }
 

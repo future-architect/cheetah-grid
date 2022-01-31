@@ -113,7 +113,7 @@ export class InlineMenuEditor<T> extends Editor<T> {
     detachMenu(true);
   }
   bindGridEvent(
-    grid: ListGridAPI<T>,
+    grid: GridInternal<T>,
     cellId: LayoutObjectId
   ): EventListenerId[] {
     const open = (cell: CellAddress): boolean => {
@@ -244,6 +244,17 @@ export class InlineMenuEditor<T> extends Editor<T> {
               grid.invalidateCellRange(range);
             }
           );
+        } else {
+          grid.fireListeners("rejected_paste_values", {
+            detail: [
+              {
+                col: e.col,
+                row: e.row,
+                define: grid.getColumnDefine(e.col, e.row),
+                pasteValue: e.normalizeValue,
+              },
+            ],
+          });
         }
       }),
     ];

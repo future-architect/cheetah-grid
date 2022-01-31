@@ -112,12 +112,26 @@ export class RadioEditor<T> extends Editor<T> {
         if (!isTarget(e.col, e.row)) {
           return;
         }
+        event.cancel(e.event);
 
         const pasteValue = e.normalizeValue.trim();
+        if (isRejectValue(pasteValue)) {
+          // Not a boolean
+          grid.fireListeners("rejected_paste_values", {
+            detail: [
+              {
+                col: e.col,
+                row: e.row,
+                define: grid.getColumnDefine(e.col, e.row),
+                pasteValue,
+              },
+            ],
+          });
+          return;
+        }
         if (!toBoolean(pasteValue)) {
           return;
         }
-        event.cancel(e.event);
 
         action({
           col: e.col,
@@ -139,7 +153,7 @@ export class RadioEditor<T> extends Editor<T> {
       return;
     }
     const pasteValue = value.trim();
-    if (toggleValue(toggleValue(pasteValue)) !== pasteValue) {
+    if (isRejectValue(pasteValue)) {
       // Not a boolean
       context.reject();
       return;
@@ -287,4 +301,8 @@ function actionCell<T>(
       }
     }
   });
+}
+
+function isRejectValue(pasteValue: string) {
+  return toggleValue(toggleValue(pasteValue)) !== pasteValue;
 }
