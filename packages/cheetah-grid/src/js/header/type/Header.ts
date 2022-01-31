@@ -1,3 +1,4 @@
+import * as utils from "../../columns/type/columnUtils";
 import type {
   CellContext,
   GridCanvasHelperAPI,
@@ -17,7 +18,7 @@ export class Header<T> extends BaseHeader<T> {
     style: Style,
     helper: GridCanvasHelperAPI,
     _grid: ListGridAPI<T>,
-    { drawCellBase }: DrawCellInfo<T>
+    { drawCellBase, getIcon }: DrawCellInfo<T>
   ): void {
     const { textAlign, textBaseline, color, font, bgColor, textOverflow } =
       style;
@@ -27,13 +28,15 @@ export class Header<T> extends BaseHeader<T> {
         bgColor,
       });
     }
-
-    helper.text(value, context, {
-      textAlign,
-      textBaseline,
-      color,
-      font,
-      textOverflow,
+    utils.loadIcons(getIcon(), context, helper, (icons, context) => {
+      helper.text(value, context, {
+        textAlign,
+        textBaseline,
+        color,
+        font,
+        textOverflow,
+        icons,
+      });
     });
   }
 }

@@ -130,6 +130,7 @@ export class SimpleHeaderLayoutMap<T> implements LayoutMapAPI<T> {
         id,
         caption: hd.caption,
         field: hd.headerField || (hd as ColumnDefine<T>).field,
+        headerIcon: hd.headerIcon,
         style: hd.headerStyle,
         headerType: headerType.ofCell(hd),
         action: headerAction.ofCell(hd),

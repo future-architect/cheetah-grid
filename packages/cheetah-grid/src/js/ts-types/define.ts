@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import type { ColorDef } from "./base";
 import type { ListGridAPI } from "./grid-engine";
 
 // ****** Column Icon Options *******
 export interface FontIcon<T> {
   font?: string;
-  content?: keyof T;
+  content?: (T extends object ? keyof T : never) | string;
   className?: string;
   tagName?: string;
   isLiga?: boolean;
@@ -14,26 +15,26 @@ export interface FontIcon<T> {
 }
 
 export interface ImageIcon<T> {
-  src: keyof T | string;
+  src: (T extends object ? keyof T : never) | string;
   width?: number;
   height?: number;
 }
 
 export interface PathIcon<T> {
-  path: keyof T | string;
+  path: (T extends object ? keyof T : never) | string;
   width: number;
   height: number;
   color?: string;
 }
 
 export interface SvgIcon<T> {
-  svg: keyof T | string;
+  svg: (T extends object ? keyof T : never) | string;
   width?: number;
   height?: number;
 }
 
 export interface NamedIcon<T> {
-  name: keyof T | string;
+  name: (T extends object ? keyof T : never) | string;
   width?: number;
   height?: number;
 }

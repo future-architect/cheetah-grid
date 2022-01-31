@@ -41,6 +41,13 @@ export default {
       default: undefined
     },
     /**
+     * Defines a header icon
+     */
+    headerIcon: {
+      type: [Object, String],
+      default: undefined
+    },
+    /**
      * Defines a column header type
      */
     headerType: {
@@ -120,6 +127,7 @@ export default {
         caption: this.resolvedCaption,
         headerStyle: this.resolvedHeaderStyle,
         headerField: this.headerField,
+        headerIcon: this.headerIcon,
         headerType: this.resolvedHeaderType,
         headerAction: this.resolvedHeaderAction,
         sort: this.resolvedSort
@@ -134,6 +142,7 @@ export default {
         caption: this.resolvedCaption,
         headerStyle: this.resolvedHeaderStyle,
         headerField: this.headerField,
+        headerIcon: this.headerIcon,
         headerType: this.resolvedHeaderType,
         headerAction: this.resolvedHeaderAction,
         sort: this.resolvedSort

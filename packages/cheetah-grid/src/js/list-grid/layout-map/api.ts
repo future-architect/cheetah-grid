@@ -28,6 +28,7 @@ export interface BaseHeaderDefine<T> {
   minWidth?: number | string;
   maxWidth?: number | string;
   headerField?: string;
+  headerIcon?: ColumnIconOption<never> | ColumnIconOption<never>[];
   headerStyle?: HeaderStyleOption | HeaderBaseStyle | null;
   headerType?: HeaderTypeOption | headerType.BaseHeader<T> | null;
   headerAction?: HeaderActionOption | headerAction.BaseAction<T> | null;
@@ -54,6 +55,7 @@ export interface HeaderData<T> {
   caption?: string | (() => string);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   field?: any;
+  headerIcon?: ColumnIconOption<never> | ColumnIconOption<never>[];
   style?: HeaderStyleOption | HeaderBaseStyle | null;
   headerType: headerType.BaseHeader<T>;
   action?: headerAction.BaseAction<T>;
