@@ -124,15 +124,26 @@ export class CheckEditor<T> extends Editor<T> {
         if (!isTarget(e.col, e.row)) {
           return;
         }
+        event.cancel(e.event);
+
         const pasteValue = e.normalizeValue.trim();
         grid.doGetCellValue(e.col, e.row, (value) => {
           const newValue = toggleValue(value);
           if (`${newValue}`.trim() === pasteValue) {
-            event.cancel(e.event);
-
             action({
               col: e.col,
               row: e.row,
+            });
+          } else if (isRejectValue(value, pasteValue)) {
+            grid.fireListeners("rejected_paste_values", {
+              detail: [
+                {
+                  col: e.col,
+                  row: e.row,
+                  define: grid.getColumnDefine(e.col, e.row),
+                  pasteValue,
+                },
+              ],
             });
           }
         });
@@ -156,10 +167,7 @@ export class CheckEditor<T> extends Editor<T> {
       const newValue = toggleValue(value);
       if (`${newValue}`.trim() === pasteValue) {
         grid.doChangeValue(cell.col, cell.row, toggleValue);
-      } else if (
-        (value != null ? `${value}`.trim() : "") !== pasteValue &&
-        `${toggleValue(newValue)}`.trim() !== pasteValue
-      ) {
+      } else if (isRejectValue(value, pasteValue)) {
         context.reject();
       }
     });
@@ -167,4 +175,15 @@ export class CheckEditor<T> extends Editor<T> {
   onDeleteCellRangeBox(): void {
     // noop
   }
+}
+
+function isRejectValue(oldValue: string, pasteValue: string) {
+  if ((oldValue != null ? `${oldValue}`.trim() : "") === pasteValue) {
+    return false;
+  }
+  const newValue = toggleValue(oldValue);
+  return (
+    `${newValue}`.trim() !== pasteValue &&
+    `${toggleValue(newValue)}`.trim() !== pasteValue
+  );
 }

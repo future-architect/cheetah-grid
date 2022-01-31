@@ -21,6 +21,7 @@ import type {
   LineClamp,
   TextOverflow,
 } from "./define";
+import type { ColumnDefine } from "../ListGrid";
 import type { RequiredThemeDefine } from "./plugin";
 import type { SimpleColumnIconOption } from "../ts-types-internal/data";
 
@@ -198,6 +199,12 @@ export interface ListGridAPI<T> extends DrawGridAPI {
   ): void;
   getLayoutCellId(col: number, row: number): LayoutObjectId;
   getColumnType(col: number, row: number): ColumnTypeAPI;
+  getColumnDefine(col: number, row: number): ColumnDefine<T>;
+
+  fireListeners<TYPE extends keyof ListGridEventHandlersEventMap<T>>(
+    type: TYPE,
+    ...event: ListGridEventHandlersEventMap<T>[TYPE]
+  ): ListGridEventHandlersReturnMap[TYPE][];
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
