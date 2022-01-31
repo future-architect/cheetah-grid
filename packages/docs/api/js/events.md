@@ -116,3 +116,31 @@ grid.listen(MOUSELEAVE_CELL, (...args) => {
 ```
 
 </code-preview>
+
+| Event Name                                  | Description                                                      |
+| :------------------------------------------ | :--------------------------------------------------------------- |
+| EVENT_TYPE.CLICK_CELL                       | Fires when the cell was clicked.                                 |
+| EVENT_TYPE.DBLCLICK_CELL                    | Fires when the cell was double-clicked.                          |
+| EVENT_TYPE.DBLTAP_CELL                      | Fires when the cell was double-taped.                            |
+| EVENT_TYPE.MOUSEDOWN_CELL                   | Fires when pointing device button is pressed in a cell.          |
+| EVENT_TYPE.MOUSEUP_CELL                     | Fires when pointing device button is released in a cell.         |
+| EVENT_TYPE.SELECTED_CELL                    | Fires when the cell selection state has changed.                 |
+| EVENT_TYPE.KEYDOWN                          | Fires key-downed.                                                |
+| EVENT_TYPE.MOUSEMOVE_CELL                   | TBA                                                              |
+| EVENT_TYPE.MOUSEENTER_CELL                  | TBA                                                              |
+| EVENT_TYPE.MOUSELEAVE_CELL                  | TBA                                                              |
+| EVENT_TYPE.MOUSEOVER_CELL                   | TBA                                                              |
+| EVENT_TYPE.MOUSEOUT_CELL                    | TBA                                                              |
+| EVENT_TYPE.CONTEXTMENU_CELL                 | Fires when the user attempts to open a context menu in the cell. |
+| EVENT_TYPE.INPUT_CELL                       | TBA                                                              |
+| EVENT_TYPE.PASTE_CELL                       | TBA                                                              |
+| EVENT_TYPE.DELETE_CELL                      | TBA                                                              |
+| EVENT_TYPE.EDITABLEINPUT_CELL               | TBA                                                              |
+| EVENT_TYPE.MODIFY_STATUS_EDITABLEINPUT_CELL | TBA                                                              |
+| EVENT_TYPE.RESIZE_COLUMN                    | Fires when the column width has changed.                         |
+| EVENT_TYPE.SCROLL                           | Fires when scrolled.                                             |
+| EVENT_TYPE.FOCUS_GRID                       | Fires when grid focus is activated.                              |
+| EVENT_TYPE.BLUR_GRID                        | Fires when grid focus is inactivated.                            |
+| EVENT_TYPE.CHANGED_VALUE                    | Fires when the cell value was changed.                           |
+| EVENT_TYPE.CHANGED_HEADER_VALUE             | Fires when the header cell value was changed.                    |
+| EVENT_TYPE.PASTE_REJECTED_VALUES            | Notifies that the pasted value has been rejected.                |

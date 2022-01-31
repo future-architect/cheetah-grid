@@ -154,18 +154,22 @@ function _bindEvents (vm, grid) {
       const col = first && first.col != null && typeof first.col === 'number' ? first.col : null
       const row = first && first.row != null && typeof first.row === 'number' ? first.row : null
 
-      if (col != null && grid.colCount > col) {
-        if (row != null && grid.frozenRowCount > row) {
-          const define = grid.getHeaderDefine(col, row)
+      if (col != null && row != null && grid.colCount > col) {
+        const define = grid.frozenRowCount > row
+          ? grid.getHeaderDefine(col, row)
+          : grid.getColumnDefine(col, row)
+        if (define && define.vm) {
+          define.vm.$emit(emitType, ...args, (r) => {
+            results.push(r)
+          })
+        }
+      }
+      if (type === EVENT_TYPE.PASTE_REJECTED_VALUES) {
+        // Convert PASTE_REJECTED_VALUES event to cell event
+        for (const data of first.detail || []) {
+          const define = grid.getColumnDefine(data.col, data.row)
           if (define && define.vm) {
-            define.vm.$emit(emitType, ...args, (r) => {
-              results.push(r)
-            })
-          }
-        } else {
-          const define = grid.getColumnDefine(col, row)
-          if (define && define.vm) {
-            define.vm.$emit(emitType, ...args, (r) => {
+            define.vm.$emit(emitType, { ...first, detail: [data] }, (r) => {
               results.push(r)
             })
           }

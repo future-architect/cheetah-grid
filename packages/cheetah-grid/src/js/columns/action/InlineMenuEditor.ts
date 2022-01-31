@@ -22,6 +22,7 @@ import { DG_EVENT_TYPE } from "../../core/DG_EVENT_TYPE";
 import { Editor } from "./Editor";
 import { InlineMenuElement } from "./internal/InlineMenuElement";
 import { MenuColumn } from "../type";
+import type { RangePasteContext } from "./BaseAction";
 import { getInlineMenuEditorStateId } from "../../internal/symbolManager";
 import { normalizeToFn } from "../../internal/menu-items";
 const _ = getInlineMenuEditorStateId();
@@ -250,7 +251,8 @@ export class InlineMenuEditor<T> extends Editor<T> {
   onPasteCellRangeBox(
     grid: ListGridAPI<T>,
     cell: CellAddress,
-    value: string
+    value: string,
+    context: RangePasteContext
   ): void {
     if (
       isReadOnlyRecord(this.readOnly, grid, cell.row) ||
@@ -265,6 +267,9 @@ export class InlineMenuEditor<T> extends Editor<T> {
     const pasteOpt = this._pasteDataToOptionValue(value, grid, cell, record);
     if (pasteOpt) {
       grid.doChangeValue(cell.col, cell.row, () => pasteOpt.value);
+    } else {
+      // unknown
+      context.reject();
     }
   }
   onDeleteCellRangeBox(grid: ListGridAPI<T>, cell: CellAddress): void {

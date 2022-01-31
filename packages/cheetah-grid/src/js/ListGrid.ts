@@ -23,6 +23,7 @@ import type {
   MaybePromiseOrUndef,
   Message,
   PasteCellEvent,
+  PasteRejectedValuesEvent,
   SelectedCellEvent,
   SetPasteValueTestData,
   SortState,
@@ -634,13 +635,28 @@ function _onRangePaste<T>(
   );
   const startRowOffset = start.row - startRow;
 
+  let rejectedDetail: PasteRejectedValuesEvent<T>["detail"] = [];
+  const addRejectedDetail = (
+    cell: CellAddress,
+    define: ColumnDefine<T>,
+    pasteValue: string
+  ) => {
+    rejectedDetail.push({
+      col: cell.col,
+      row: cell.row,
+      define,
+      pasteValue,
+    });
+  };
+  let reject = addRejectedDetail;
+
   let duplicate: { [key: number]: boolean } = {};
   let actionRow = startRowOffset;
   let valuesRow = 0;
   for (let offsetRow = 0; offsetRow < pasteRowCount; offsetRow++) {
     let valuesCol = 0;
     for (let offsetCol = 0; offsetCol < pasteColCount; offsetCol++) {
-      const { action, id } = actionColumnsBox[actionRow][offsetCol];
+      const { action, id, define } = actionColumnsBox[actionRow][offsetCol];
       if (!duplicate[id as number] && action?.editable) {
         duplicate[id as number] = true;
         const col = start.col + offsetCol;
@@ -659,7 +675,11 @@ function _onRangePaste<T>(
                 oldValue,
               })
             ) {
-              action.onPasteCellRangeBox(this, { col, row }, cellValue);
+              action.onPasteCellRangeBox(this, { col, row }, cellValue, {
+                reject() {
+                  reject({ col, row }, define, cellValue);
+                },
+              });
             }
           });
         });
@@ -689,6 +709,26 @@ function _onRangePaste<T>(
     end: newEnd,
   };
   this.invalidateCellRange(this.selection.range);
+
+  if (rejectedDetail.length > 0) {
+    this.fireListeners(LG_EVENT_TYPE.PASTE_REJECTED_VALUES, {
+      detail: rejectedDetail,
+    });
+    rejectedDetail = [];
+  }
+  let timeout: NodeJS.Timeout | null = null;
+  reject = (cell, define, pasteValue) => {
+    addRejectedDetail(cell, define, pasteValue);
+    if (timeout) clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      if (rejectedDetail.length > 0) {
+        this.fireListeners(LG_EVENT_TYPE.PASTE_REJECTED_VALUES, {
+          detail: rejectedDetail,
+        });
+        rejectedDetail = [];
+      }
+    }, 100);
+  };
 }
 
 /** @private */

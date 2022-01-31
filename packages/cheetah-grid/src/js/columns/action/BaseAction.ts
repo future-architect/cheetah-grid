@@ -7,6 +7,10 @@ import type {
   RecordBoolean,
 } from "../../ts-types";
 
+export type RangePasteContext = {
+  reject(): void;
+};
+
 export abstract class BaseAction<T> {
   protected _disabled: RecordBoolean;
   constructor(option: BaseActionOption = {}) {
@@ -31,7 +35,8 @@ export abstract class BaseAction<T> {
   abstract onPasteCellRangeBox(
     grid: ListGridAPI<T>,
     cell: CellAddress,
-    value: string
+    value: string,
+    context: RangePasteContext
   ): void;
   abstract onDeleteCellRangeBox(grid: ListGridAPI<T>, cell: CellAddress): void;
 }
