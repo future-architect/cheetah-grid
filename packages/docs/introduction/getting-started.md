@@ -23,18 +23,18 @@ const cheetahGrid = require("cheetah-grid");
 [![npm](https://img.shields.io/npm/v/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
 
 ```html
-<script src="https://unpkg.com/cheetah-grid@1.3"></script>
+<script src="https://unpkg.com/cheetah-grid@1.4"></script>
 ```
 
 ### Via Source Code
 
 [![npm](https://img.shields.io/npm/v/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
 
-[cheetahGrid.es5.min.js](https://unpkg.com/cheetah-grid@1.3/dist/cheetahGrid.es5.min.js)
+[cheetahGrid.es5.min.js](https://unpkg.com/cheetah-grid@1.4/dist/cheetahGrid.es5.min.js)
 
 #### SourceMap
 
-[cheetahGrid.es5.min.js.map](https://unpkg.com/cheetah-grid@1.3/dist/cheetahGrid.es5.min.js.map)
+[cheetahGrid.es5.min.js.map](https://unpkg.com/cheetah-grid@1.4/dist/cheetahGrid.es5.min.js.map)
 
 ### Via GitHub
 
