@@ -13,6 +13,7 @@ import {
 import { DG_EVENT_TYPE } from "../../core/DG_EVENT_TYPE";
 import { Editor } from "./Editor";
 import type { GridInternal } from "../../ts-types-internal";
+import type { RangePasteContext } from "./BaseAction";
 import { animate } from "../../internal/animate";
 import { getCheckColumnStateId } from "../../internal/symbolManager";
 
@@ -141,7 +142,8 @@ export class CheckEditor<T> extends Editor<T> {
   onPasteCellRangeBox(
     grid: GridInternal<T>,
     cell: CellAddress,
-    value: string
+    value: string,
+    context: RangePasteContext
   ): void {
     if (
       isReadOnlyRecord(this.readOnly, grid, cell.row) ||
@@ -154,6 +156,11 @@ export class CheckEditor<T> extends Editor<T> {
       const newValue = toggleValue(value);
       if (`${newValue}`.trim() === pasteValue) {
         grid.doChangeValue(cell.col, cell.row, toggleValue);
+      } else if (
+        (value != null ? `${value}`.trim() : "") !== pasteValue &&
+        `${toggleValue(newValue)}`.trim() !== pasteValue
+      ) {
+        context.reject();
       }
     });
   }

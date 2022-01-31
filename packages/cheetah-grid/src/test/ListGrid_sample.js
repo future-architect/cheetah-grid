@@ -337,4 +337,9 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 		}
 		console.log(themeSelect.value);
 	};
+
+	// event
+	grid.listen('rejected_paste_values', function(arg) {
+		console.log(arg);
+	});
 })();

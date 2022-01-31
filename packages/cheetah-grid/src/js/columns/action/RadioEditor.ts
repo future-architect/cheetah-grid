@@ -23,6 +23,7 @@ import {
 import { DG_EVENT_TYPE } from "../../core/DG_EVENT_TYPE";
 import { Editor } from "./Editor";
 import type { GridInternal } from "../../ts-types-internal";
+import type { RangePasteContext } from "./BaseAction";
 import { animate } from "../../internal/animate";
 import { getRadioColumnStateId } from "../../internal/symbolManager";
 import { toBoolean } from "../utils";
@@ -128,7 +129,8 @@ export class RadioEditor<T> extends Editor<T> {
   onPasteCellRangeBox(
     grid: GridInternal<T>,
     cell: CellAddress,
-    value: string
+    value: string,
+    context: RangePasteContext
   ): void {
     if (
       isReadOnlyRecord(this.readOnly, grid, cell.row) ||
@@ -137,6 +139,11 @@ export class RadioEditor<T> extends Editor<T> {
       return;
     }
     const pasteValue = value.trim();
+    if (toggleValue(toggleValue(pasteValue)) !== pasteValue) {
+      // Not a boolean
+      context.reject();
+      return;
+    }
     if (!toBoolean(pasteValue)) {
       return;
     }

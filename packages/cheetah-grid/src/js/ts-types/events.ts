@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 import type { CellAddress, CellRange, FieldDef } from "./grid";
 import type { AnyFunction } from "./base";
+import type { ColumnDefine } from "../ListGrid";
 
 export type KeyboardEventListener = (e: KeyboardEvent) => void;
 export type AnyListener = AnyFunction;
@@ -129,13 +130,21 @@ export type ChangedHeaderValueCellEvent = CellAddress & {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   oldValue: any;
 };
+export type PasteRejectedValuesEvent<T> = {
+  detail: (CellAddress & {
+    define: ColumnDefine<T>;
+    pasteValue: string;
+  })[];
+};
 export interface ListGridEventHandlersEventMap<T>
   extends DrawGridEventHandlersEventMap {
   changed_value: [ChangedValueCellEvent<T>];
   changed_header_value: [ChangedHeaderValueCellEvent];
+  rejected_paste_values: [PasteRejectedValuesEvent<T>];
 }
 export interface ListGridEventHandlersReturnMap
   extends DrawGridEventHandlersReturnMap {
   changed_value: void;
   changed_header_value: void;
+  rejected_paste_values: void;
 }
