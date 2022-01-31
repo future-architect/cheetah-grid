@@ -648,6 +648,19 @@ function _onRangePaste<T>(
       pasteValue,
     });
   };
+  let timeout: NodeJS.Timeout | null = null;
+  const processRejected = () => {
+    if (timeout) clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      if (rejectedDetail.length > 0) {
+        this.fireListeners(LG_EVENT_TYPE.REJECTED_PASTE_VALUES, {
+          detail: rejectedDetail,
+        });
+        rejectedDetail = [];
+      }
+    }, 100);
+  };
+
   let reject = addRejectedDetail;
 
   let duplicate: { [key: number]: boolean } = {};
@@ -709,25 +722,9 @@ function _onRangePaste<T>(
     end: newEnd,
   };
   this.invalidateCellRange(this.selection.range);
-
-  if (rejectedDetail.length > 0) {
-    this.fireListeners(LG_EVENT_TYPE.REJECTED_PASTE_VALUES, {
-      detail: rejectedDetail,
-    });
-    rejectedDetail = [];
-  }
-  let timeout: NodeJS.Timeout | null = null;
+  processRejected();
   reject = (cell, define, pasteValue) => {
     addRejectedDetail(cell, define, pasteValue);
-    if (timeout) clearTimeout(timeout);
-    timeout = setTimeout(() => {
-      if (rejectedDetail.length > 0) {
-        this.fireListeners(LG_EVENT_TYPE.REJECTED_PASTE_VALUES, {
-          detail: rejectedDetail,
-        });
-        rejectedDetail = [];
-      }
-    }, 100);
   };
 }
 
