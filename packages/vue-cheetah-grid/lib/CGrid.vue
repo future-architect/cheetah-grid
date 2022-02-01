@@ -166,13 +166,22 @@ function _bindEvents (vm, grid) {
       }
       if (type === EVENT_TYPE.REJECTED_PASTE_VALUES) {
         // Convert REJECTED_PASTE_VALUES event to cell event
+        const detailByVm = new Map()
         for (const data of first.detail || []) {
           const define = grid.getColumnDefine(data.col, data.row)
           if (define && define.vm) {
-            define.vm.$emit(emitType, { ...first, detail: [data] }, (r) => {
-              results.push(r)
-            })
+            let detail = detailByVm.get(define.vm)
+            if (!detail) {
+              detail = []
+              detailByVm.set(define.vm, detail)
+            }
+            detail.push(data)
           }
+        }
+        for (const [vm, detail] of detailByVm) {
+          vm.$emit(emitType, { ...first, detail }, (r) => {
+            results.push(r)
+          })
         }
       }
       return results[0]
