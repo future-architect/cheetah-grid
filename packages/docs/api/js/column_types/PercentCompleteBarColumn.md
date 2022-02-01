@@ -18,9 +18,9 @@ Show the percent complete bar.
 
 | Property     | Description                                                                    | Default |
 | ------------ | ------------------------------------------------------------------------------ | ------- |
-| `barColor`   | define color of bar. you can set a function that returns color from the value. | --      |
-| `barBgColor` | define background color of bar.                                                | --      |
-| `barHeight`  | define height of bar.                                                          | --      |
+| `barColor`   | Define color of bar. you can set a function that returns color from the value. | --      |
+| `barBgColor` | Define background color of bar.                                                | --      |
+| `barHeight`  | Define height of bar.                                                          | --      |
 
 In addition to this, the Standard styles is available.
 

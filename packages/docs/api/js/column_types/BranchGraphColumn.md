@@ -10,18 +10,18 @@ Show branch graph.
 
 | Property | Description                                                                                                                           | Default    |
 | -------- | ------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
-| `start`  | set the moving direction by setting the beggining point. `'top'` or `'bottom'`                                                        | `'bottom'` |
-| `cache`  | set `true` when caching the calculation result of the branch structure. Please call `clearCache(grid)` when deleting the cahced data. | `false`    |
+| `start`  | Set the moving direction by setting the beggining point. `'top'` or `'bottom'`                                                        | `'bottom'` |
+| `cache`  | Set `true` when caching the calculation result of the branch structure. Please call `clearCache(grid)` when deleting the cahced data. | `false`    |
 
 ### Style Properties
 
 | Property          | Description                                                                                           | Default                                                                                  |
 | ----------------- | ----------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| `branchColors`    | set the function which returns the color of branch you want to use. arguments: (branch name, `index`) | the function which returns following colors in turn. `'#979797'`,`'#008fb5'`,`'#f1c109'` |
-| `margin`          | set the margin of side.                                                                               | `4`                                                                                      |
-| `circleSize`      | set the size of point which express `commit`.                                                         | `16`                                                                                     |
-| `branchLineWidth` | set the width of branch lines.                                                                        | `4`                                                                                      |
-| `mergeStyle`      | set the way to express the merge line. `'bezier'` or `'straight'`                                     | `'bezier'`                                                                               |
+| `branchColors`    | Set the function which returns the color of branch you want to use. arguments: (branch name, `index`) | the function which returns following colors in turn. `'#979797'`,`'#008fb5'`,`'#f1c109'` |
+| `margin`          | Set the margin of side.                                                                               | `4`                                                                                      |
+| `circleSize`      | Set the size of point which express `commit`.                                                         | `16`                                                                                     |
+| `branchLineWidth` | Set the width of branch lines.                                                                        | `4`                                                                                      |
+| `mergeStyle`      | Set the way to express the merge line. `'bezier'` or `'straight'`                                     | `'bezier'`                                                                               |
 
 <code-preview>
 

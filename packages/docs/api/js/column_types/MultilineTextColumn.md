@@ -14,9 +14,9 @@ You can display multiple lines of text in a cell.
 
 | Property       | Description                                          | Default |
 | -------------- | ---------------------------------------------------- | ------- |
-| `lineHeight`   | define the amount of space used for lines            | --      |
-| `autoWrapText` | define whether to wrap automatically.                | --      |
-| `lineClamp`    | define truncates text at a specific number of lines. | --      |
+| `lineHeight`   | Define the amount of space used for lines            | --      |
+| `autoWrapText` | Define whether to wrap automatically.                | --      |
+| `lineClamp`    | Define truncates text at a specific number of lines. | --      |
 
 In addition to this, the Standard styles is available.
 

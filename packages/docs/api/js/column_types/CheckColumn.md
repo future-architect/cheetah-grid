@@ -12,12 +12,12 @@ To make it editable, please use [CheckEditor](../column_actions/CheckEditor.md).
 
 | Property         | Description                                                | Default               |
 | ---------------- | ---------------------------------------------------------- | --------------------- |
-| `checkBgColor`   | define background color of checkbox, when it is checked.   | resolve by the theme. |
-| `uncheckBgColor` | define background color of checkbox, when it is unchecked. | resolve by the theme. |
-| `borderColor`    | define border color of checkbox.                           | resolve by the theme. |
-| `textAlign`      | define horizontal position of checkbox in cell.            | `'center'`            |
-| `textBaseline`   | define vertical position of checkbox in cell.              | --                    |
-| `bgColor`        | define background color of cell.                           | resolve by the theme. |
+| `checkBgColor`   | Define background color of checkbox, when it is checked.   | Resolve by the theme. |
+| `uncheckBgColor` | Define background color of checkbox, when it is unchecked. | Resolve by the theme. |
+| `borderColor`    | Define border color of checkbox.                           | Resolve by the theme. |
+| `textAlign`      | Define horizontal position of checkbox in cell.            | `'center'`            |
+| `textBaseline`   | Define vertical position of checkbox in cell.              | --                    |
+| `bgColor`        | Define background color of cell.                           | Resolve by the theme. |
 
 <code-preview>
 

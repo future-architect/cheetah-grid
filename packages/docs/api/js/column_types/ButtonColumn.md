@@ -16,7 +16,7 @@ Show the button.
 
 | Property        | Description                        | Default               |
 | --------------- | ---------------------------------- | --------------------- |
-| `buttonBgColor` | define background color of botton. | resolve by the theme. |
+| `buttonBgColor` | Define background color of button. | Resolve by the theme. |
 
 In addition to this, the Standard styles is available.
 

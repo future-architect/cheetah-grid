@@ -90,8 +90,9 @@ export interface PercentCompleteBarStyleOption extends StyleOption {
   barHeight?: number;
 }
 
-export interface SortHeaderStyleOption extends HeaderStdStyleOption {
+export interface SortHeaderStyleOption extends MultilineTextHeaderStyleOption {
   sortArrowColor?: ColorDef;
+  multiline?: boolean;
 }
 
 export type ColumnStyleOption =

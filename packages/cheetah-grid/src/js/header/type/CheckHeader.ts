@@ -1,10 +1,6 @@
 import * as inlineUtils from "../../element/inlines";
 import * as utils from "../../columns/type/columnUtils";
-import type {
-  CellContext,
-  ColorPropertyDefine,
-  GridCanvasHelperAPI,
-} from "../../ts-types";
+import type { CellContext, ColorPropertyDefine } from "../../ts-types";
 import type {
   CheckHeaderState,
   DrawCellInfo,
@@ -12,6 +8,8 @@ import type {
 } from "../../ts-types-internal";
 import { BaseHeader } from "./BaseHeader";
 import { CheckHeaderStyle } from "../style/CheckHeaderStyle";
+import type { GridCanvasHelper } from "../../GridCanvasHelper";
+import type { Inline } from "../../element/Inline";
 import { getCheckHeaderStateId } from "../../internal/symbolManager";
 import { obj } from "../../internal/utils";
 
@@ -37,7 +35,7 @@ export class CheckHeader<T> extends BaseHeader<T> {
     value: string,
     context: CellContext,
     style: CheckHeaderStyle,
-    helper: GridCanvasHelperAPI,
+    helper: GridCanvasHelper<T>,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     grid: GridInternal<T>,
     { drawCellBase, getIcon }: DrawCellInfo<T>
@@ -88,7 +86,7 @@ export class CheckHeader<T> extends BaseHeader<T> {
     const inlineCheck = helper.buildCheckBoxInline(!!checked, context, opt);
 
     utils.loadIcons(getIcon(), context, helper, (icons, context) => {
-      let contents = [inlineCheck];
+      let contents: Inline[] = [inlineCheck];
       contents = contents.concat(inlineUtils.buildInlines(icons, value));
       helper.text(contents, context, {
         textAlign,

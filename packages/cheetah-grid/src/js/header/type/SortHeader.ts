@@ -1,13 +1,8 @@
-import * as inlineUtils from "../../element/inlines";
 import * as utils from "../../columns/type/columnUtils";
-import type {
-  CellContext,
-  GridCanvasHelperAPI,
-  ListGridAPI,
-  SortState,
-} from "../../ts-types";
+import type { CellContext, ListGridAPI, SortState } from "../../ts-types";
 import { BaseHeader } from "./BaseHeader";
 import type { DrawCellInfo } from "../../ts-types-internal";
+import type { GridCanvasHelper } from "../../GridCanvasHelper";
 import { SortHeaderStyle } from "../style/SortHeaderStyle";
 import { cellInRange } from "../../internal/utils";
 import { getFontSize } from "../../internal/canvases";
@@ -20,7 +15,7 @@ export class SortHeader<T> extends BaseHeader<T> {
     value: string,
     context: CellContext,
     style: SortHeaderStyle,
-    helper: GridCanvasHelperAPI,
+    helper: GridCanvasHelper<T>,
     grid: ListGridAPI<T>,
     { drawCellBase, getIcon }: DrawCellInfo<T>
   ): void {
@@ -31,7 +26,11 @@ export class SortHeader<T> extends BaseHeader<T> {
       bgColor,
       font,
       textOverflow,
+      lineHeight,
+      autoWrapText,
+      lineClamp,
       sortArrowColor,
+      multiline,
     } = style;
 
     if (bgColor) {
@@ -40,6 +39,7 @@ export class SortHeader<T> extends BaseHeader<T> {
       });
     }
 
+    helper.testFontLoad(font, value, context);
     utils.loadIcons(getIcon(), context, helper, (icons, context) => {
       const state = grid.sortState as SortState;
       let order = undefined;
@@ -52,8 +52,7 @@ export class SortHeader<T> extends BaseHeader<T> {
       const ctx = context.getContext();
       const arrowSize = getFontSize(ctx, font).width * 1.2;
 
-      const textInline = inlineUtils.buildInlines(null, value);
-      const inlineIcon = inlineUtils.iconOf({
+      const trailingIcon = {
         name:
           order != null
             ? order === "asc"
@@ -68,39 +67,34 @@ export class SortHeader<T> extends BaseHeader<T> {
             row,
             ctx
           ) || "rgba(0, 0, 0, 0.38)",
-      });
+      };
 
-      const inlines = textInline.concat([inlineIcon]);
-      const inlinesWidth = helper.measureText(inlines, context, {
-        font,
-        icons,
-      });
-      const rect = context.getRect();
-      if (inlinesWidth <= rect.width - 4 /* system padding */) {
-        helper.text(inlines, context, {
+      if (multiline) {
+        const multilines = value
+          .replace(/\r?\n/g, "\n")
+          .replace(/\r/g, "\n")
+          .split("\n");
+        helper.multilineText(multilines, context, {
           textAlign,
           textBaseline,
           color,
           font,
+          lineHeight,
+          autoWrapText,
+          lineClamp,
           textOverflow,
           icons,
+          trailingIcon,
         });
       } else {
-        // !! Draw the icon first to leave the result of `setCellOverflowText`.
-        helper.text([inlineIcon], context, {
-          textAlign: "right",
-          textBaseline,
-          color,
-          font,
-        });
-        helper.text(textInline, context, {
-          padding: [0, arrowSize, 0, 0],
+        helper.text(value, context, {
           textAlign,
           textBaseline,
           color,
           font,
           textOverflow,
           icons,
+          trailingIcon,
         });
       }
     });
