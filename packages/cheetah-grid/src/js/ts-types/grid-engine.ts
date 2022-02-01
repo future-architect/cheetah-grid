@@ -247,14 +247,6 @@ export interface GridCanvasHelperAPI {
       icons?: SimpleColumnIconOption[];
     }
   ): void;
-  measureText(
-    text: string | (InlineAPI | string)[],
-    context: CellContext,
-    option: {
-      font?: FontPropertyDefine;
-      icons?: SimpleColumnIconOption[];
-    }
-  ): number;
   button(
     caption: string,
     context: CellContext,

@@ -12,14 +12,14 @@ To make it editable, please use [RadioEditor](../column_actions/RadioEditor.md).
 
 | Property             | Description                                                    | Default               |
 | -------------------- | -------------------------------------------------------------- | --------------------- |
-| `checkColor`         | define check mark color of radio button.                       | resolve by the theme. |
-| `checkBgColor`       | define background color of radio button, when it is checked.   | resolve by the theme. |
-| `uncheckBgColor`     | define background color of radio button, when it is unchecked. | resolve by the theme. |
-| `checkBorderColor`   | define border color of radio button, when it is checked.       | resolve by the theme. |
-| `uncheckBorderColor` | define border color of radio button, when it is unchecked.     | resolve by the theme. |
-| `textAlign`          | define horizontal position of radio button in cell.            | `'center'`            |
-| `textBaseline`       | define vertical position of radio button in cell.              | --                    |
-| `bgColor`            | define background color of cell.                               | resolve by the theme. |
+| `checkColor`         | Define check mark color of radio button.                       | resolve by the theme. |
+| `checkBgColor`       | Define background color of radio button, when it is checked.   | resolve by the theme. |
+| `uncheckBgColor`     | Define background color of radio button, when it is unchecked. | resolve by the theme. |
+| `checkBorderColor`   | Define border color of radio button, when it is checked.       | resolve by the theme. |
+| `uncheckBorderColor` | Define border color of radio button, when it is unchecked.     | resolve by the theme. |
+| `textAlign`          | Define horizontal position of radio button in cell.            | `'center'`            |
+| `textBaseline`       | Define vertical position of radio button in cell.              | --                    |
+| `bgColor`            | Define background color of cell.                               | resolve by the theme. |
 
 <code-preview>
 

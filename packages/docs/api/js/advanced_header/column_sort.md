@@ -69,7 +69,21 @@ grid.records = records;
 
 </code-preview>
 
-## Color of sort arrow
+## Style Properties
+
+| Property         | Description                                          | Default |
+| ---------------- | ---------------------------------------------------- | ------- |
+| `sortArrowColor` | Defines the color of the sort icon.                  | --      |
+| `multiline`      | If `true`, accept multiline text caption.            | false   |
+| `lineHeight`     | Define the amount of space used for lines.           | --      |
+| `autoWrapText`   | Define whether to wrap automatically.                | --      |
+| `lineClamp`      | Define truncates text at a specific number of lines. | --      |
+
+In addition to this, the Standard styles is available.
+
+- [Standard Header Style](./header_styles.md)
+
+### Color of sort arrow
 
 In order to change the color of the sort arrow you implement as follows.
 

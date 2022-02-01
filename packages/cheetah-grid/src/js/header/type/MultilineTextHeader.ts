@@ -1,7 +1,8 @@
 import * as utils from "../../columns/type/columnUtils";
-import type { CellContext, GridCanvasHelperAPI } from "../../ts-types";
 import type { DrawCellInfo, GridInternal } from "../../ts-types-internal";
 import { BaseHeader } from "./BaseHeader";
+import type { CellContext } from "../../ts-types";
+import type { GridCanvasHelper } from "../../GridCanvasHelper";
 import { MultilineTextHeaderStyle } from "../style/MultilineTextHeaderStyle";
 
 export class MultilineTextHeader<T> extends BaseHeader<T> {
@@ -15,7 +16,7 @@ export class MultilineTextHeader<T> extends BaseHeader<T> {
     value: string,
     context: CellContext,
     style: MultilineTextHeaderStyle,
-    helper: GridCanvasHelperAPI,
+    helper: GridCanvasHelper<T>,
     _grid: GridInternal<T>,
     { drawCellBase, getIcon }: DrawCellInfo<T>
   ): void {

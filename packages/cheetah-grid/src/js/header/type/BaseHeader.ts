@@ -3,13 +3,13 @@ import type {
   CellAddress,
   CellContext,
   EventListenerId,
-  GridCanvasHelperAPI,
   HeaderStyleOption,
   LayoutObjectId,
   ListGridAPI,
 } from "../../ts-types";
 import { BaseStyle } from "../style/BaseStyle";
 import type { DrawCellInfo } from "../../ts-types-internal";
+import type { GridCanvasHelper } from "../../GridCanvasHelper";
 
 export abstract class BaseHeader<T> {
   constructor(_options = {}) {
@@ -25,7 +25,7 @@ export abstract class BaseHeader<T> {
     grid: ListGridAPI<T>
   ): void {
     const { style, drawCellBase } = info;
-    const helper = grid.getGridCanvasHelper();
+    const helper = grid.getGridCanvasHelper() as GridCanvasHelper<T>;
     drawCellBase();
     //文字描画
     this.drawInternal(
@@ -48,7 +48,7 @@ export abstract class BaseHeader<T> {
     value: string,
     context: CellContext,
     style: BaseStyle,
-    helper: GridCanvasHelperAPI,
+    helper: GridCanvasHelper<T>,
     grid: ListGridAPI<T>,
     info: DrawCellInfo<T>
   ): void;

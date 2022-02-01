@@ -259,19 +259,6 @@ function getOverflowInlinesIndex(
   return null;
 }
 
-function _measureInlines(
-  ctx: CanvasRenderingContext2D,
-  inlines: Inline[]
-): number {
-  let lineWidth = 0;
-  for (let i = 0; i < inlines.length; i++) {
-    const inline = inlines[i];
-    const inlineWidth = (inline.width({ ctx }) || 0) - 0;
-    lineWidth += inlineWidth;
-  }
-  return lineWidth;
-}
-
 function isOverflowInlines(
   ctx: CanvasRenderingContext2D,
   inlines: Inline[],
@@ -370,7 +357,7 @@ function _inlineRect<T>(
   grid: ListGridAPI<T>,
   ctx: CanvasRenderingContext2D,
   inline: string | (Inline | string)[],
-  rect: RectProps,
+  drawRect: RectProps,
   col: number,
   row: number,
   {
@@ -381,6 +368,7 @@ function _inlineRect<T>(
     font,
     textOverflow,
     icons,
+    trailingIcon,
   }: {
     offset: number;
     color?: ColorPropertyDefine;
@@ -389,6 +377,7 @@ function _inlineRect<T>(
     font?: string;
     textOverflow?: TextOverflow;
     icons?: SimpleColumnIconOption[];
+    trailingIcon?: SimpleColumnIconOption;
   }
 ): void {
   //文字style
@@ -398,14 +387,22 @@ function _inlineRect<T>(
   ctx.font = font || ctx.font;
 
   let inlines = buildInlines(icons, inline);
-  if (
-    isAllowOverflow(textOverflow) &&
-    isOverflowInlines(ctx, inlines, rect.width)
-  ) {
+  const trailingIconInline = trailingIcon
+    ? inlineUtils.iconOf(trailingIcon)
+    : null;
+
+  let { width } = drawRect;
+  let trailingIconWidth = 0;
+  if (trailingIconInline) {
+    trailingIconWidth = trailingIconInline.width({ ctx });
+    width -= trailingIconWidth;
+  }
+
+  if (isAllowOverflow(textOverflow) && isOverflowInlines(ctx, inlines, width)) {
     const { inlines: truncInlines, overflow } = truncateInlines(
       ctx,
       inlines,
-      rect.width,
+      width,
       textOverflow
     );
     inlines = truncInlines;
@@ -413,25 +410,41 @@ function _inlineRect<T>(
   } else {
     grid.setCellOverflowText(col, row, false);
   }
+  drawInlines(ctx, inlines, drawRect, offset, 0, 0, col, row, grid);
 
-  drawInlines(ctx, inlines, rect, offset, 0, 0, col, row, grid);
-}
+  if (trailingIconInline) {
+    // Draw trailing icon
+    let sumWidth = 0;
+    inlines.forEach((inline) => {
+      sumWidth += inline.width({ ctx });
+    });
 
-function measureText(
-  ctx: CanvasRenderingContext2D,
-  inline: string | (Inline | string)[],
-  {
-    font,
-    icons,
-  }: {
-    font?: string;
-    icons?: SimpleColumnIconOption[];
+    const baseRect = new Rect(
+      drawRect.left,
+      drawRect.top,
+      drawRect.width,
+      drawRect.height
+    );
+    const trailingIconRect = baseRect.copy();
+    if (width < sumWidth) {
+      trailingIconRect.left =
+        trailingIconRect.right - trailingIconWidth - offset;
+    } else {
+      trailingIconRect.left += sumWidth;
+    }
+    trailingIconRect.right = baseRect.right;
+    drawInlines(
+      ctx,
+      [trailingIconInline],
+      trailingIconRect,
+      offset,
+      0,
+      0,
+      col,
+      row,
+      grid
+    );
   }
-): number {
-  ctx.font = font || ctx.font;
-
-  const inlines = buildInlines(icons, inline);
-  return _measureInlines(ctx, inlines);
 }
 
 // eslint-disable-next-line complexity
@@ -439,7 +452,7 @@ function _multiInlineRect<T>(
   grid: ListGridAPI<T>,
   ctx: CanvasRenderingContext2D,
   multiInlines: string[],
-  rect: RectProps,
+  drawRect: RectProps,
   col: number,
   row: number,
   {
@@ -453,6 +466,7 @@ function _multiInlineRect<T>(
     lineClamp,
     textOverflow,
     icons,
+    trailingIcon,
   }: {
     offset: number;
     color?: ColorPropertyDefine;
@@ -464,6 +478,7 @@ function _multiInlineRect<T>(
     lineClamp: LineClamp;
     textOverflow?: TextOverflow;
     icons?: SimpleColumnIconOption[];
+    trailingIcon?: SimpleColumnIconOption;
   }
 ): void {
   //文字style
@@ -474,13 +489,22 @@ function _multiInlineRect<T>(
 
   if (lineClamp === "auto") {
     const rectHeight =
-      rect.height - offset * 2 - 2; /*offset added by Inline#draw*/
+      drawRect.height - offset * 2 - 2; /*offset added by Inline#draw*/
     lineClamp = Math.max(Math.floor(rectHeight / lineHeight), 1);
+  }
+
+  const trailingIconInline = trailingIcon
+    ? inlineUtils.iconOf(trailingIcon)
+    : null;
+  let { width } = drawRect;
+  let trailingIconWidth = 0;
+  if (trailingIconInline) {
+    trailingIconWidth = trailingIconInline.width({ ctx });
+    width -= trailingIconWidth;
   }
 
   let buildedMultiInlines: Inline[][];
   if (autoWrapText || lineClamp > 0 || isAllowOverflow(textOverflow)) {
-    const { width } = rect;
     buildedMultiInlines = [];
     const procLineClamp =
       lineClamp > 0
@@ -605,7 +629,7 @@ function _multiInlineRect<T>(
     drawInlines(
       ctx,
       buildedInline,
-      rect,
+      drawRect,
       offset,
       paddingTop,
       paddingBottom,
@@ -616,6 +640,44 @@ function _multiInlineRect<T>(
     paddingTop += lineHeight;
     paddingBottom -= lineHeight;
   });
+
+  if (trailingIconInline) {
+    // Draw trailing icon
+    let maxWidth = 0;
+    buildedMultiInlines.forEach((buildedInline) => {
+      let sumWidth = 0;
+      buildedInline.forEach((inline) => {
+        sumWidth += inline.width({ ctx });
+      });
+      maxWidth = Math.max(maxWidth, sumWidth);
+    });
+
+    const baseRect = new Rect(
+      drawRect.left,
+      drawRect.top,
+      drawRect.width,
+      drawRect.height
+    );
+    const trailingIconRect = baseRect.copy();
+    if (width < maxWidth) {
+      trailingIconRect.left =
+        trailingIconRect.right - trailingIconWidth - offset;
+    } else {
+      trailingIconRect.left += maxWidth;
+    }
+    trailingIconRect.right = baseRect.right;
+    drawInlines(
+      ctx,
+      [trailingIconInline],
+      trailingIconRect,
+      offset,
+      0,
+      0,
+      col,
+      row,
+      grid
+    );
+  }
 }
 function calcElapsedColor(
   startColor: string,
@@ -1102,7 +1164,18 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
       font,
       textOverflow = "clip",
       icons,
-    }: Parameters<GridCanvasHelperAPI["text"]>[2] = {}
+      trailingIcon,
+    }: {
+      padding?: number | string | (number | string)[];
+      offset?: number;
+      color?: ColorPropertyDefine;
+      textAlign?: CanvasTextAlign;
+      textBaseline?: CanvasTextBaseline;
+      font?: FontPropertyDefine;
+      textOverflow?: TextOverflow;
+      icons?: SimpleColumnIconOption[];
+      trailingIcon?: SimpleColumnIconOption;
+    } = {}
   ): void {
     let rect = context.getRect();
 
@@ -1135,23 +1208,9 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
         font,
         textOverflow,
         icons,
+        trailingIcon,
       });
     });
-  }
-  measureText(
-    text: string | (Inline | string)[],
-    context: CellContext,
-    { font, icons }: Parameters<GridCanvasHelperAPI["measureText"]>[2] = {}
-  ): number {
-    let result = 0;
-    this.drawWithClip(context, (ctx) => {
-      font = getFont(font, context.col, context.row, this._grid, ctx);
-      result = measureText(ctx, text, {
-        font,
-        icons,
-      });
-    });
-    return result;
   }
   multilineText(
     multilines: string[],
@@ -1168,7 +1227,21 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
       lineClamp = 0,
       textOverflow = "clip",
       icons,
-    }: Parameters<GridCanvasHelperAPI["multilineText"]>[2] = {}
+      trailingIcon,
+    }: {
+      padding?: number | string | (number | string)[];
+      offset?: number;
+      color?: ColorPropertyDefine;
+      textAlign?: CanvasTextAlign;
+      textBaseline?: CanvasTextBaseline;
+      font?: FontPropertyDefine;
+      lineHeight?: string | number;
+      autoWrapText?: boolean;
+      lineClamp?: LineClamp;
+      textOverflow?: TextOverflow;
+      icons?: SimpleColumnIconOption[];
+      trailingIcon?: SimpleColumnIconOption;
+    } = {}
   ): void {
     let rect = context.getRect();
 
@@ -1206,6 +1279,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
         lineClamp,
         textOverflow,
         icons,
+        trailingIcon,
       });
     });
   }

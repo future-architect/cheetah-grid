@@ -86,7 +86,7 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 				},
 				// sort
 				style: {padding: [0, 0, 0, '1.2em']},
-				// headerStyle: {textAlign: 'right'}
+				// headerStyle: {textAlign: 'center'}
 			},
 			{field: 'checkReadOnly', caption: 'read', width: 50, columnType: 'check'},
 			{
@@ -100,8 +100,9 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 				field: 'email',
 				caption: 'Email',
 				width: '15%',
-				minWidth: '200px',
-				sort: true
+				// minWidth: '200px',
+				sort: true,
+				headerStyle: {multiline: true}
 			},
 			{
 				caption: 'nums',
