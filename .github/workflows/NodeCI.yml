@@ -36,4 +36,4 @@ jobs:
     - name: Build
       run: npm run build:ci
     - name: Test
-      run: npm test
+      run: npm test -- --mrpm-max-workers=1

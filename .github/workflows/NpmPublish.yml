@@ -22,7 +22,7 @@ jobs:
     - name: Build
       run: npm run build:ci
     - name: test
-      run: npm run test
+      run: npm run test -- --mrpm-max-workers=1
     - name: release
       run: |+
         npm run echo:v
