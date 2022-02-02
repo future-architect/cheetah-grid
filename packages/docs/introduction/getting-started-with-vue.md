@@ -25,8 +25,8 @@ Vue.use(vueCheetahGrid);
 [![npm](https://img.shields.io/npm/v/vue-cheetah-grid.svg)](https://www.npmjs.com/package/vue-cheetah-grid)
 
 ```html
-<script src="https://unpkg.com/cheetah-grid@1.5"></script>
-<script src="https://unpkg.com/vue-cheetah-grid@1.5"></script>
+<script src="https://unpkg.com/cheetah-grid@1.6"></script>
+<script src="https://unpkg.com/vue-cheetah-grid@1.6"></script>
 ```
 
 ```js
