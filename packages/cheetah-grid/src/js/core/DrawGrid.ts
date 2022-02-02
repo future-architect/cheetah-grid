@@ -1987,7 +1987,8 @@ class FocusControl extends EventTarget {
   constructor(
     grid: DrawGrid,
     parentElement: HTMLElement,
-    scrollable: Scrollable
+    scrollable: Scrollable,
+    selection: Selection
   ) {
     super();
     this._grid = grid;
@@ -2043,6 +2044,12 @@ class FocusControl extends EventTarget {
     handler.on(input, "compositionend", (_e: Event): void => {
       this._compositionEnd = setTimeout(handleCompositionEnd, 1);
     });
+    selection.listen("before_hook", () => {
+      if (this._compositionEnd) {
+        handleCompositionEnd();
+      }
+    });
+
     handler.on(input, "keypress", (e) => {
       if (this._isComposition) {
         return;
@@ -2381,6 +2388,7 @@ class Selection extends EventTarget {
     };
   }
   set range(range) {
+    this._callBeforeHooks();
     const startCol = Math.min(range.start.col, range.end.col);
     const startRow = Math.min(range.start.row, range.end.row);
     const endCol = Math.max(range.start.col, range.end.col);
@@ -2416,21 +2424,28 @@ class Selection extends EventTarget {
     return { col, row };
   }
   set select(cell: CellAddress) {
+    this._callBeforeHooks();
     this._wrapFireSelectedEvent(() => {
       const { col = 0, row = 0 } = cell;
       this._setSelectCell(col, row);
-      this._setFocusCell(col, row, true);
+      this._setFocusCell(col, row, true, true);
 
       _updatedSelection.call(this._grid);
     });
   }
-  _setSelectCell(col: number, row: number): void {
+  private _setSelectCell(col: number, row: number): void {
     this._wrapFireSelectedEvent(() => {
       this._sel = { col, row };
       this._start = { col, row };
     });
   }
-  _setFocusCell(col: number, row: number, keepSelect: boolean): void {
+  _setFocusCell(
+    col: number,
+    row: number,
+    keepSelect: boolean,
+    ignoreBeforeHook?: boolean
+  ): void {
+    if (!ignoreBeforeHook) this._callBeforeHooks();
     this._wrapFireSelectedEvent(() => {
       if (!keepSelect) {
         this._setSelectCell(col, row);
@@ -2439,7 +2454,7 @@ class Selection extends EventTarget {
       this._end = { col, row };
     });
   }
-  _wrapFireSelectedEvent(callback: AnyFunction): void {
+  private _wrapFireSelectedEvent(callback: AnyFunction): void {
     if (this._isWraped) {
       callback();
     } else {
@@ -2492,6 +2507,9 @@ class Selection extends EventTarget {
       });
     });
     return true;
+  }
+  private _callBeforeHooks() {
+    this.fireListeners("before_hook");
   }
 }
 
@@ -2899,7 +2917,8 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
     protectedSpace.focusControl = new FocusControl(
       this,
       protectedSpace.scrollable.getElement(),
-      protectedSpace.scrollable
+      protectedSpace.scrollable,
+      protectedSpace.selection
     );
 
     protectedSpace.canvas = hiDPI.transform(document.createElement("canvas"));
