@@ -17,8 +17,15 @@ export class Header<T> extends BaseHeader<T> {
     _grid: ListGridAPI<T>,
     { drawCellBase, getIcon }: DrawCellInfo<T>
   ): void {
-    const { textAlign, textBaseline, color, font, bgColor, textOverflow } =
-      style;
+    const {
+      textAlign,
+      textBaseline,
+      color,
+      font,
+      bgColor,
+      padding,
+      textOverflow,
+    } = style;
 
     if (bgColor) {
       drawCellBase({
@@ -31,6 +38,7 @@ export class Header<T> extends BaseHeader<T> {
         textBaseline,
         color,
         font,
+        padding,
         textOverflow,
         icons,
       });

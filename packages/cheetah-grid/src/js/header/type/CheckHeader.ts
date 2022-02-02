@@ -47,6 +47,7 @@ export class CheckHeader<T> extends BaseHeader<T> {
       checkBgColor,
       uncheckBgColor,
       bgColor,
+      padding,
       color,
       font,
       textOverflow,
@@ -93,6 +94,7 @@ export class CheckHeader<T> extends BaseHeader<T> {
         textBaseline,
         color,
         font,
+        padding,
         textOverflow,
       });
     });

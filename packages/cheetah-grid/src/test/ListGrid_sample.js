@@ -102,7 +102,7 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 				width: '15%',
 				// minWidth: '200px',
 				sort: true,
-				headerStyle: {multiline: true}
+				headerStyle: {multiline: true, padding: 18}
 			},
 			{
 				caption: 'nums',

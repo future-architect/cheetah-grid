@@ -12,13 +12,13 @@ Properties below are prepared in standard.
 
 | Property     | Description                                                                                      |
 | ------------ | ------------------------------------------------------------------------------------------------ |
-| color        | define the color of cell.                                                                        |
-| textAlign    | define the horizontal position of text in cell.                                                  |
-| textBaseline | define the vertical position of text in cell.                                                    |
-| bgColor      | define the background color of cell.                                                             |
-| font         | define the font of cell.                                                                         |
-| padding      | define the padding of cell. if you set 4 values separately, please set the `Array`.              |
-| textOverflow | define how to display when text overflows the area of a cell. `clip` or `ellipsis` is available. |
+| color        | Define the color of cell.                                                                        |
+| textAlign    | Define the horizontal position of text in cell.                                                  |
+| textBaseline | Define the vertical position of text in cell.                                                    |
+| bgColor      | Define the background color of cell.                                                             |
+| font         | Define the font of cell.                                                                         |
+| padding      | Define the padding of cell. If you set 4 values separately, please set the `Array`.              |
+| textOverflow | Define how to display when text overflows the area of a cell. `clip` or `ellipsis` is available. |
 
 <code-preview>
 
