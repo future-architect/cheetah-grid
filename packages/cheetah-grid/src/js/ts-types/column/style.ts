@@ -25,6 +25,7 @@ export interface StyleOption extends StdBaseStyleOption {
 export interface HeaderStdStyleOption extends StdBaseStyleOption {
   color?: ColorDef;
   font?: string;
+  padding?: number | string | (number | string)[];
   textOverflow?: TextOverflow;
 }
 
