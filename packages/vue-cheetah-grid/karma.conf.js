@@ -26,7 +26,7 @@ module.exports = function (config) {
         { type: 'text' }
       ]
     },
-
+    browserNoActivityTimeout: 90000,
     browsers: ['Chrome'
     // 'IE_no_addons'
     ],
