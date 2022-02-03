@@ -638,12 +638,14 @@ function _onRangePaste<T>(
   let rejectedDetail: PasteRejectedValuesEvent<T>["detail"] = [];
   const addRejectedDetail = (
     cell: CellAddress,
+    record: T | undefined,
     define: ColumnDefine<T>,
     pasteValue: string
   ) => {
     rejectedDetail.push({
       col: cell.col,
       row: cell.row,
+      record,
       define,
       pasteValue,
     });
@@ -690,7 +692,7 @@ function _onRangePaste<T>(
             ) {
               action.onPasteCellRangeBox(this, { col, row }, cellValue, {
                 reject() {
-                  reject({ col, row }, define, cellValue);
+                  reject({ col, row }, record, define, cellValue);
                 },
               });
             }
@@ -723,8 +725,8 @@ function _onRangePaste<T>(
   };
   this.invalidateCellRange(this.selection.range);
   processRejected();
-  reject = (cell, define, pasteValue) => {
-    addRejectedDetail(cell, define, pasteValue);
+  reject = (cell, record, define, pasteValue) => {
+    addRejectedDetail(cell, record, define, pasteValue);
     processRejected();
   };
 }
