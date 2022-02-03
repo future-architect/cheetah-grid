@@ -117,16 +117,20 @@ export class RadioEditor<T> extends Editor<T> {
         const pasteValue = e.normalizeValue.trim();
         if (isRejectValue(pasteValue)) {
           // Not a boolean
-          grid.fireListeners("rejected_paste_values", {
-            detail: [
-              {
-                col: e.col,
-                row: e.row,
-                define: grid.getColumnDefine(e.col, e.row),
-                pasteValue,
-              },
-            ],
-          });
+          const record = grid.getRowRecord(e.row);
+          if (!isPromise(record)) {
+            grid.fireListeners("rejected_paste_values", {
+              detail: [
+                {
+                  col: e.col,
+                  row: e.row,
+                  record,
+                  define: grid.getColumnDefine(e.col, e.row),
+                  pasteValue,
+                },
+              ],
+            });
+          }
           return;
         }
         if (!toBoolean(pasteValue)) {

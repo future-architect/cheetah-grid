@@ -132,6 +132,7 @@ export type ChangedHeaderValueCellEvent = CellAddress & {
 };
 export type PasteRejectedValuesEvent<T> = {
   detail: (CellAddress & {
+    record: T | undefined;
     define: ColumnDefine<T>;
     pasteValue: string;
   })[];

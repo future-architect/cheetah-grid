@@ -250,6 +250,7 @@ export class InlineMenuEditor<T> extends Editor<T> {
               {
                 col: e.col,
                 row: e.row,
+                record,
                 define: grid.getColumnDefine(e.col, e.row),
                 pasteValue: e.normalizeValue,
               },

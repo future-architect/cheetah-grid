@@ -135,16 +135,20 @@ export class CheckEditor<T> extends Editor<T> {
               row: e.row,
             });
           } else if (isRejectValue(value, pasteValue)) {
-            grid.fireListeners("rejected_paste_values", {
-              detail: [
-                {
-                  col: e.col,
-                  row: e.row,
-                  define: grid.getColumnDefine(e.col, e.row),
-                  pasteValue,
-                },
-              ],
-            });
+            const record = grid.getRowRecord(e.row);
+            if (!isPromise(record)) {
+              grid.fireListeners("rejected_paste_values", {
+                detail: [
+                  {
+                    col: e.col,
+                    row: e.row,
+                    record,
+                    define: grid.getColumnDefine(e.col, e.row),
+                    pasteValue,
+                  },
+                ],
+              });
+            }
           }
         });
       }),
