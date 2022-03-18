@@ -81,7 +81,7 @@ One of the following props are required.
 
 - `data`: Array data of table or `DataSource` instance to supply table data to CheetahGrid. This is described at [here](https://future-architect.github.io/cheetah-grid/documents/api/js/grid_data/#using-cheetahgrid-data-datasource-object).
 
-If you modify records data directly out side of `<CheetahGrid>` (for example, modify data from event handlers), call its instance's `revalidate()` method.
+If you modify records data directly out side of `<CheetahGrid>` (for example, modify data from event handlers), call its instance's `invalidate()` method.
 
 ## Column Types
 
@@ -190,7 +190,7 @@ To enable editing, add `editable` to column. `editable` and `onClick` event are 
 Now there are few features:
 
 - `selection` attribute: Get current selection information
-- `revalidate()` method: Trigger redraw after changing internal data
+- `invalidate()` method: Trigger redraw after changing internal data
 
 ```tsx
 import {
