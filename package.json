@@ -41,7 +41,7 @@
     "dist/"
   ],
   "scripts": {
-    "test": "mrpm run test",
+    "test": "mrpm run test --mrpm-max-workers=1",
     "build": "mrpm run build",
     "build:ci": "mrpm run build:ci",
     "prune:all": "mrpm prune",
