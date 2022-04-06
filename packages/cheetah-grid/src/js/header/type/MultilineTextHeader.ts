@@ -13,7 +13,7 @@ export class MultilineTextHeader<T> extends BaseHeader<T> {
     return new MultilineTextHeader(this);
   }
   drawInternal(
-    value: string,
+    value: unknown,
     context: CellContext,
     style: MultilineTextHeaderStyle,
     helper: GridCanvasHelper<T>,
@@ -38,11 +38,12 @@ export class MultilineTextHeader<T> extends BaseHeader<T> {
         bgColor,
       });
     }
-    const multilines = value
+    const textValue = String(value);
+    const multilines = textValue
       .replace(/\r?\n/g, "\n")
       .replace(/\r/g, "\n")
       .split("\n");
-    helper.testFontLoad(font, value, context);
+    helper.testFontLoad(font, textValue, context);
     utils.loadIcons(getIcon(), context, helper, (icons, context) => {
       helper.multilineText(multilines, context, {
         textAlign,

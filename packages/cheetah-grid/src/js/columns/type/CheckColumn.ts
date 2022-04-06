@@ -7,7 +7,7 @@ import { toBoolean } from "../utils";
 
 const CHECK_COLUMN_STATE_ID = getCheckColumnStateId();
 
-export class CheckColumn<T> extends BaseColumn<T, boolean> {
+export class CheckColumn<T> extends BaseColumn<T> {
   get StyleClass(): typeof CheckStyle {
     return CheckStyle;
   }

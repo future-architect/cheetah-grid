@@ -25,7 +25,7 @@ const { setReadonly } = obj;
 const COLUMN_FADEIN_STATE_ID = getColumnFadeinStateId();
 
 function isFadeinWhenCallbackInPromise<T>(
-  column: BaseColumn<T, unknown>,
+  column: BaseColumn<T>,
   grid: ListGridAPI<T>
 ): boolean {
   if (column.fadeinWhenCallbackInPromise != null) {
@@ -134,7 +134,7 @@ const fadeinMgr = {
   },
 };
 
-export abstract class BaseColumn<T, V> implements ColumnTypeAPI {
+export abstract class BaseColumn<T> implements ColumnTypeAPI {
   private _fadeinWhenCallbackInPromise?: boolean | null;
   constructor(option?: BaseColumnOption) {
     this.onDrawCell = this.onDrawCell.bind(this); //スコープを固定させる
@@ -273,12 +273,12 @@ export abstract class BaseColumn<T, V> implements ColumnTypeAPI {
       return undefined;
     }
   }
-  abstract clone(): BaseColumn<T, V>;
-  convertInternal(value: unknown): V {
-    return (value != null ? value : "") as V;
+  abstract clone(): BaseColumn<T>;
+  convertInternal(value: unknown): unknown {
+    return value != null ? value : "";
   }
   abstract drawInternal(
-    value: V,
+    value: unknown,
     context: CellContext,
     style: BaseStyle,
     helper: GridCanvasHelperAPI,

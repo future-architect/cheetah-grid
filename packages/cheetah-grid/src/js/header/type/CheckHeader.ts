@@ -32,7 +32,7 @@ export class CheckHeader<T> extends BaseHeader<T> {
     return new CheckHeader(this);
   }
   drawInternal(
-    value: string,
+    value: unknown,
     context: CellContext,
     style: CheckHeaderStyle,
     helper: GridCanvasHelper<T>,
@@ -88,7 +88,9 @@ export class CheckHeader<T> extends BaseHeader<T> {
 
     utils.loadIcons(getIcon(), context, helper, (icons, context) => {
       let contents: Inline[] = [inlineCheck];
-      contents = contents.concat(inlineUtils.buildInlines(icons, value));
+      contents = contents.concat(
+        inlineUtils.buildInlines(icons, String(value))
+      );
       helper.text(contents, context, {
         textAlign,
         textBaseline,

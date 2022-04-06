@@ -8,7 +8,7 @@ import { BaseColumn } from "./BaseColumn";
 import type { DrawCellInfo } from "../../ts-types-internal";
 import { Style } from "../style/Style";
 
-export class Column<T> extends BaseColumn<T, string> {
+export class Column<T> extends BaseColumn<T> {
   get StyleClass(): typeof Style {
     return Style;
   }
@@ -16,7 +16,7 @@ export class Column<T> extends BaseColumn<T, string> {
     return new Column(this);
   }
   drawInternal(
-    value: string,
+    value: unknown,
     context: CellContext,
     style: Style,
     helper: GridCanvasHelperAPI,
@@ -37,9 +37,10 @@ export class Column<T> extends BaseColumn<T, string> {
         bgColor,
       });
     }
-    helper.testFontLoad(font, value, context);
+    const textValue = String(value);
+    helper.testFontLoad(font, textValue, context);
     utils.loadIcons(getIcon(), context, helper, (icons, context) => {
-      helper.text(value, context, {
+      helper.text(textValue, context, {
         textAlign,
         textBaseline,
         color,

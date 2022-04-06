@@ -8,7 +8,7 @@ import { BaseColumn } from "./BaseColumn";
 import type { DrawCellInfo } from "../../ts-types-internal";
 import { MultilineTextStyle } from "../style/MultilineTextStyle";
 
-export class MultilineTextColumn<T> extends BaseColumn<T, string> {
+export class MultilineTextColumn<T> extends BaseColumn<T> {
   constructor(option = {}) {
     super(option);
   }
@@ -19,7 +19,7 @@ export class MultilineTextColumn<T> extends BaseColumn<T, string> {
     return new MultilineTextColumn(this);
   }
   drawInternal(
-    value: string,
+    value: unknown,
     context: CellContext,
     style: MultilineTextStyle,
     helper: GridCanvasHelperAPI,
@@ -43,11 +43,12 @@ export class MultilineTextColumn<T> extends BaseColumn<T, string> {
         bgColor,
       });
     }
-    const multilines = value
+    const textValue = String(value);
+    const multilines = textValue
       .replace(/\r?\n/g, "\n")
       .replace(/\r/g, "\n")
       .split("\n");
-    helper.testFontLoad(font, value, context);
+    helper.testFontLoad(font, textValue, context);
     utils.loadIcons(getIcon(), context, helper, (icons, context) => {
       helper.multilineText(multilines, context, {
         textAlign,

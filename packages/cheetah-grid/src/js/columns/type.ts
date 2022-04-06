@@ -65,10 +65,8 @@ export {
   PercentCompleteBarColumnOption,
 };
 export function of<T>(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  columnType: ColumnTypeOption | BaseColumn<T, any> | null | undefined
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-): BaseColumn<T, any> {
+  columnType: ColumnTypeOption | BaseColumn<T> | null | undefined
+): BaseColumn<T> {
   if (!columnType) {
     return TYPES.DEFAULT;
   } else if (typeof columnType === "string") {
