@@ -13,7 +13,7 @@ Show branch graph.
 | `start`  | Set the moving direction by setting the beggining point. `'top'` or `'bottom'`                                                        | `'bottom'` |
 | `cache`  | Set `true` when caching the calculation result of the branch structure. Please call `clearCache(grid)` when deleting the cahced data. | `false`    |
 
-### Style Properties
+## Style Properties
 
 | Property          | Description                                                                                           | Default                                                                                  |
 | ----------------- | ----------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
