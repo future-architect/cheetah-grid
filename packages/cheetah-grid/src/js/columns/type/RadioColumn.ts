@@ -7,7 +7,7 @@ import { toBoolean } from "../utils";
 
 const RADIO_COLUMN_STATE_ID = getRadioColumnStateId();
 
-export class RadioColumn<T> extends BaseColumn<T, boolean> {
+export class RadioColumn<T> extends BaseColumn<T> {
   get StyleClass(): typeof RadioStyle {
     return RadioStyle;
   }

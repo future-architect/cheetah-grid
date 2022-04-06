@@ -278,8 +278,7 @@ function _onDrawValue<T>(
   context: CellContext,
   { col, row }: CellAddress,
   style: ColumnStyleOption | null | undefined,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  draw: BaseColumn<T, any>["onDrawCell"]
+  draw: BaseColumn<T>["onDrawCell"]
 ): MaybePromise<void> {
   const helper = grid[_].gridCanvasHelper;
 

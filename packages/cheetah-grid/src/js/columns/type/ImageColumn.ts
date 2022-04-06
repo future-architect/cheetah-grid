@@ -40,7 +40,7 @@ function calcKeepAspectRatioSize(
   };
 }
 
-export class ImageColumn<T> extends BaseColumn<T, HTMLImageElement> {
+export class ImageColumn<T> extends BaseColumn<T> {
   get StyleClass(): typeof ImageStyle {
     return ImageStyle;
   }

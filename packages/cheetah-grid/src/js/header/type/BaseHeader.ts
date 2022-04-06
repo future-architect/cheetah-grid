@@ -37,7 +37,7 @@ export abstract class BaseHeader<T> {
       info
     );
   }
-  convertInternal(value: unknown): string {
+  convertInternal(value: unknown): unknown {
     if (typeof value === "function") {
       value = value();
     }
@@ -45,7 +45,7 @@ export abstract class BaseHeader<T> {
     return value != null ? `${value}` : "";
   }
   abstract drawInternal(
-    value: string,
+    value: unknown,
     context: CellContext,
     style: BaseStyle,
     helper: GridCanvasHelper<T>,

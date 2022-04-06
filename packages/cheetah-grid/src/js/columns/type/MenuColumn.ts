@@ -12,7 +12,7 @@ import type { DrawCellInfo } from "../../ts-types-internal";
 import { MenuStyle } from "../style/MenuStyle";
 import { normalize } from "../../internal/menu-items";
 
-export class MenuColumn<T> extends BaseColumn<T, unknown> {
+export class MenuColumn<T> extends BaseColumn<T> {
   private _options: SimpleColumnMenuItemOption[];
   constructor(option: MenuColumnOption = {}) {
     super(option);
@@ -33,7 +33,7 @@ export class MenuColumn<T> extends BaseColumn<T, unknown> {
     return c;
   }
   drawInternal(
-    value: string,
+    value: unknown,
     context: CellContext,
     style: MenuStyle,
     helper: GridCanvasHelperAPI,
@@ -55,7 +55,7 @@ export class MenuColumn<T> extends BaseColumn<T, unknown> {
         bgColor,
       });
     }
-    const text = this._convertInternal(value) as string;
+    const text = String(this._convertInternal(value));
     helper.testFontLoad(font, text, context);
     utils.loadIcons(getIcon(), context, helper, (icons, context) => {
       const basePadding = helper.toBoxPixelArray(padding || 0, context, font);

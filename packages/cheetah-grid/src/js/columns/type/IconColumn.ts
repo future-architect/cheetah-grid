@@ -45,7 +45,7 @@ export class IconColumn<T> extends Column<T> {
     return new IconColumn(this);
   }
   drawInternal(
-    value: string,
+    value: unknown,
     context: CellContext,
     style: IconStyle,
     helper: GridCanvasHelperAPI,

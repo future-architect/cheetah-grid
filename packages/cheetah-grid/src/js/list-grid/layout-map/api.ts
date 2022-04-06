@@ -44,8 +44,7 @@ export interface ColumnDefine<T> extends BaseHeaderDefine<T> {
     | ((record: T) => Message | null)
     | keyof T
     | (Message | ((record: T) => Message | null) | keyof T)[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  columnType?: ColumnTypeOption | BaseColumn<T, any> | null;
+  columnType?: ColumnTypeOption | BaseColumn<T> | null;
   action?: ColumnActionOption | BaseAction<T> | null;
   style?: ColumnStyleOption | null;
 }
@@ -76,8 +75,7 @@ export interface ColumnData<T> extends WidthData {
     | ((record: T) => Message | null)
     | keyof T
     | (Message | ((record: T) => Message | null) | keyof T)[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  columnType: BaseColumn<T, any>;
+  columnType: BaseColumn<T>;
   action?: BaseAction<T>;
   style: ColumnStyleOption | null | undefined;
   define: ColumnDefine<T>;

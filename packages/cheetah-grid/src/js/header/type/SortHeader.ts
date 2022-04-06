@@ -12,7 +12,7 @@ export class SortHeader<T> extends BaseHeader<T> {
     return SortHeaderStyle;
   }
   drawInternal(
-    value: string,
+    value: unknown,
     context: CellContext,
     style: SortHeaderStyle,
     helper: GridCanvasHelper<T>,
@@ -40,7 +40,8 @@ export class SortHeader<T> extends BaseHeader<T> {
       });
     }
 
-    helper.testFontLoad(font, value, context);
+    const textValue = String(value);
+    helper.testFontLoad(font, textValue, context);
     utils.loadIcons(getIcon(), context, helper, (icons, context) => {
       const state = grid.sortState as SortState;
       let order = undefined;
@@ -71,7 +72,7 @@ export class SortHeader<T> extends BaseHeader<T> {
       };
 
       if (multiline) {
-        const multilines = value
+        const multilines = textValue
           .replace(/\r?\n/g, "\n")
           .replace(/\r/g, "\n")
           .split("\n");
@@ -89,7 +90,7 @@ export class SortHeader<T> extends BaseHeader<T> {
           trailingIcon,
         });
       } else {
-        helper.text(value, context, {
+        helper.text(textValue, context, {
           textAlign,
           textBaseline,
           color,

@@ -28,15 +28,16 @@ export class PercentCompleteBarColumn<T> extends Column<T> {
     return new PercentCompleteBarColumn(this);
   }
   drawInternal(
-    value: string,
+    value: unknown,
     context: CellContext,
     style: PercentCompleteBarStyle,
     helper: GridCanvasHelperAPI,
     grid: ListGridAPI<T>,
     info: DrawCellInfo<T>
   ): void {
+    let textValue = String(value);
     super.drawInternal(
-      this._formatter(value),
+      this._formatter(textValue),
       context,
       style,
       helper,
@@ -45,11 +46,10 @@ export class PercentCompleteBarColumn<T> extends Column<T> {
     );
     const { barColor, barBgColor, barHeight } = style;
 
-    let svalue = `${value}`;
-    if (str.endsWith(svalue, "%")) {
-      svalue = svalue.substr(0, svalue.length - 1);
+    if (str.endsWith(textValue, "%")) {
+      textValue = textValue.slice(0, -1);
     }
-    const num = Number(svalue);
+    const num = Number(textValue);
     if (isNaN(num)) {
       return;
     }

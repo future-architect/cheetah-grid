@@ -565,7 +565,7 @@ function renderMerge<T>(
  *
  * @memberof cheetahGrid.columns.type
  */
-export class BranchGraphColumn<T> extends BaseColumn<T, unknown> {
+export class BranchGraphColumn<T> extends BaseColumn<T> {
   private _start: "top" | "bottom";
   private _cache: boolean;
   constructor(option: BranchGraphColumnOption = {}) {

@@ -33,14 +33,14 @@ export class ButtonColumn<T> extends Column<T> {
   clone(): ButtonColumn<T> {
     return new ButtonColumn(this);
   }
-  convertInternal(value: unknown): string {
+  convertInternal(value: unknown): unknown {
     return this._caption || super.convertInternal(value);
   }
   getCopyCellValue(value: MaybePromise<unknown>): unknown {
     return this._caption || value;
   }
   drawInternal(
-    value: string,
+    value: unknown,
     context: CellContext,
     style: ButtonStyle,
     helper: GridCanvasHelperAPI,
@@ -62,7 +62,8 @@ export class ButtonColumn<T> extends Column<T> {
         bgColor,
       });
     }
-    helper.testFontLoad(font, value, context);
+    const textValue = String(value);
+    helper.testFontLoad(font, textValue, context);
     const { col, row } = context;
     const range = grid.getCellRange(col, row);
     let active = false;
@@ -83,7 +84,7 @@ export class ButtonColumn<T> extends Column<T> {
     }
 
     utils.loadIcons(getIcon(), context, helper, (icons, context) => {
-      helper.button(value, context, {
+      helper.button(textValue, context, {
         textAlign,
         textBaseline,
         bgColor: buttonBgColor,

@@ -10,7 +10,7 @@ export class Header<T> extends BaseHeader<T> {
     return Style;
   }
   drawInternal(
-    value: string,
+    value: unknown,
     context: CellContext,
     style: Style,
     helper: GridCanvasHelper<T>,
@@ -32,8 +32,9 @@ export class Header<T> extends BaseHeader<T> {
         bgColor,
       });
     }
+    const textValue = String(value);
     utils.loadIcons(getIcon(), context, helper, (icons, context) => {
-      helper.text(value, context, {
+      helper.text(textValue, context, {
         textAlign,
         textBaseline,
         color,
