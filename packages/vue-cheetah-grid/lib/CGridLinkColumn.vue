@@ -42,7 +42,7 @@ export default {
       default: undefined
     },
     /**
-     * Defines disabled
+     * Defines disabled. You can also control each record by specifying a function.
      */
     disabled: {
       type: [Boolean, Function],

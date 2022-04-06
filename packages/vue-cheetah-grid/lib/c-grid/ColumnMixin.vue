@@ -20,14 +20,14 @@ export default {
       default: ''
     },
     /**
-     * Defines a sort
+     * Defines a sort. See "[Sort by Column](https://future-architect.github.io/cheetah-grid/documents/api/js/advanced_header/column_sort.html)" for detail.
      */
     sort: {
-      type: [String, Function, Boolean],
+      type: [Boolean, String, Function],
       default: undefined
     },
     /**
-     * Defines a column header style
+     * Defines a column header style. Same as [the `headerStyle` property of the JS API](https://future-architect.github.io/cheetah-grid/documents/api/js/advanced_header/header_styles.html)
      */
     headerStyle: {
       type: [Object, String, Function],
@@ -48,14 +48,14 @@ export default {
       default: undefined
     },
     /**
-     * Defines a column header type
+     * Defines a column header type. Same as [the `headerStyle` property of the JS API](https://future-architect.github.io/cheetah-grid/documents/api/js/advanced_header/header_styles.html)
      */
     headerType: {
       type: [Object, String, Function],
       default: undefined
     },
     /**
-     * Defines a column header action
+     * Defines a column header action.  Same as [the `headerAction` property of the JS API](https://future-architect.github.io/cheetah-grid/documents/api/js/advanced_header/header_actions.html).
      */
     headerAction: {
       type: [Object, String, Function],

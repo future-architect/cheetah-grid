@@ -20,6 +20,8 @@ Properties below are prepared in standard.
 | padding      | Define the padding of cell. If you set 4 values separately, please set the `Array`.              |
 | textOverflow | Define how to display when text overflows the area of a cell. `clip` or `ellipsis` is available. |
 
+Note that the column type may add style properties that you can use. The properties added are described in the documentation for each column type.
+
 <code-preview>
 
 ```html

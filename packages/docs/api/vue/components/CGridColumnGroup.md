@@ -67,15 +67,15 @@ Use this slot to set the children columns definition
 
 ### Optional Properties
 
-| Name          |                  Type                   | Description                        | Default     |
-| :------------ | :-------------------------------------: | :--------------------------------- | :---------- |
-| caption       |        `string`&#124;`function`         | Defines a header caption           | `''`        |
-| header-action | `object`&#124;`string`&#124;`function`  | Defines a column header action     | `undefined` |
-| header-field  |                `string`                 | Defines a column header data field | `undefined` |
-| header-icon   |         `object`&#124;`string`          | Defines a header icon              | `undefined` |
-| header-style  | `object`&#124;`string`&#124;`function`  | Defines a column header style      | `undefined` |
-| header-type   | `object`&#124;`string`&#124;`function`  | Defines a column header type       | `undefined` |
-| sort          | `string`&#124;`function`&#124;`boolean` | Defines a sort                     | `undefined` |
+| Name        | Type    | Description         | Default  |
+|:------------|:-------:|:--------------------|:---------|
+| caption | `string`&#124;`function`  | Defines a header caption | `''` |
+| header-action | `object`&#124;`string`&#124;`function`  | Defines a column header action.  Same as [the `headerAction` property of the JS API](https://future-architect.github.io/cheetah-grid/documents/api/js/advanced_header/header_actions.html). | `undefined` |
+| header-field | `string`  | Defines a column header data field | `undefined` |
+| header-icon | `object`&#124;`string`  | Defines a header icon | `undefined` |
+| header-style | `object`&#124;`string`&#124;`function`  | Defines a column header style. Same as [the `headerStyle` property of the JS API](https://future-architect.github.io/cheetah-grid/documents/api/js/advanced_header/header_styles.html) | `undefined` |
+| header-type | `object`&#124;`string`&#124;`function`  | Defines a column header type. Same as [the `headerStyle` property of the JS API](https://future-architect.github.io/cheetah-grid/documents/api/js/advanced_header/header_styles.html) | `undefined` |
+| sort | `boolean`&#124;`string`&#124;`function`  | Defines a sort. See "[Sort by Column](https://future-architect.github.io/cheetah-grid/documents/api/js/advanced_header/column_sort.html)" for detail. | `undefined` |
 
 <!-- PROPS_TABLE_END -->
 
@@ -83,8 +83,8 @@ Use this slot to set the children columns definition
 
 <!-- METHODS_TABLE_START -->
 
-| Name       | Return Type | Description             |
-| :--------- | :---------- | :---------------------- |
-| invalidate | ---         | Redraws the whole grid. |
+| Name        | Return Type | Description         |
+|:------------|:------------|:--------------------|
+| invalidate | --- | Redraws the whole grid. |
 
 <!-- METHODS_TABLE_END -->

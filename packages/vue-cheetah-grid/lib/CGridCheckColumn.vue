@@ -21,14 +21,14 @@ export default {
   mixins: [LayoutColumnMixin, StdColumnMixin],
   props: {
     /**
-     * Defines disabled
+     * Defines disabled. You can also control each record by specifying a function.
      */
     disabled: {
       type: [Boolean, Function],
       default: false
     },
     /**
-     * Defines readonly
+     * Defines readonly. You can also control each record by specifying a function.
      */
     readonly: {
       type: [Boolean, Function],

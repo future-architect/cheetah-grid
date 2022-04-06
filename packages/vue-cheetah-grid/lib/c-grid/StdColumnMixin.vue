@@ -48,21 +48,21 @@ export default {
       default: undefined
     },
     /**
-     * Defines a column style
+     * Defines a column style. Same as [the `style` property of the JS API](https://future-architect.github.io/cheetah-grid/documents/api/js/column_styles.html).
      */
     columnStyle: {
       type: [Object, String, Function],
       default: undefined
     },
     /**
-     * Defines an icon
+     * Defines an icon. Same as [the `icon` property of the JS API](https://future-architect.github.io/cheetah-grid/documents/api/js/column_icon.html).
      */
     icon: {
       type: [Object, String, Function],
       default: undefined
     },
     /**
-     * Defines a Message generation method
+     * Defines a message generation method. Same as [the `message` property of the JS API](https://future-architect.github.io/cheetah-grid/documents/api/js/cell_message.html).
      */
     message: {
       type: [Object, String, Function],
