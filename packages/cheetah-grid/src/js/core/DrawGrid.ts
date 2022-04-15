@@ -908,6 +908,17 @@ function _onScroll(grid: DrawGrid, _e: Event): void {
     left: grid[_].scrollable.scrollLeft,
     top: grid[_].scrollable.scrollTop,
   };
+
+  // If the focus is on the header, recalculate and move the focus position.
+  const { focus } = grid[_].selection;
+  const isFrozenCell = grid.isFrozenCell(focus.col, focus.row);
+  if (
+    isFrozenCell &&
+    ((isFrozenCell?.col && moveX) || (isFrozenCell?.row && moveY))
+  ) {
+    grid.setFocusCursor(focus.col, focus.row);
+  }
+
   const visibleRect = _getVisibleRect(grid);
   if (
     Math.abs(moveX) >= visibleRect.width ||
