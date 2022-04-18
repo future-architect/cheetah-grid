@@ -63,6 +63,9 @@ export function ofCell<T>(
         sortMethod.call(headerCell, order, col, grid);
       return new ImmutableSortHeaderAction({ sort });
     }
+    if (typeof headerCell.sort === "string") {
+      return new ImmutableSortHeaderAction({ sort: headerCell.sort });
+    }
     return ACTIONS.SORT;
   }
   return of(headerCell.headerAction);

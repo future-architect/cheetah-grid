@@ -64,6 +64,7 @@ export interface RadioEditorOption<T> extends EditorOption {
 
 export type SortOption<T> =
   | boolean
+  | (string & keyof T)
   | ((arg: {
       order: "asc" | "desc";
       col: number;
