@@ -5,7 +5,8 @@ order: 100
 # Sort by Column
 
 Define sort settings of each column by using `sort` property.  
-When you set truthy value, records are sorted by internal logic pre-defined in Cheetah Grid.  
+When you set `true` value, the records are sorted by builtin logic in Cheetah Grid.  
+When you set `string` value, the records are sorted by builtin logic in Cheetah Grid, using the specified field.  
 Please define function if you want to sort by your own logic.
 
 <code-preview>

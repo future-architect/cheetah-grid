@@ -34,6 +34,9 @@ export class SortHeaderAction<T> extends BaseAction<T> {
         row: newState.row,
         grid,
       });
+    } else if (typeof this._sort === "string") {
+      const field = this._sort;
+      grid.dataSource.sort(field, newState.order || "asc");
     } else {
       const fieldRow =
         Math.min(grid.recordRowCount - 1, newState.row) + grid.frozenRowCount;

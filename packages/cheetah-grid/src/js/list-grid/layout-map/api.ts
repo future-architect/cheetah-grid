@@ -20,6 +20,7 @@ import type { BaseStyle as HeaderBaseStyle } from "../../header/style";
 
 export type OldSortOption<T> =
   | boolean
+  | (string & keyof T)
   | ((order: "asc" | "desc", col: number, grid: ListGridAPI<T>) => void);
 
 export interface BaseHeaderDefine<T> {
