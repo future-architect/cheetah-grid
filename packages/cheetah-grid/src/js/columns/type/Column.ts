@@ -37,7 +37,7 @@ export class Column<T> extends BaseColumn<T> {
         bgColor,
       });
     }
-    const textValue = String(value);
+    const textValue = value != null ? String(value) : "";
     helper.testFontLoad(font, textValue, context);
     utils.loadIcons(getIcon(), context, helper, (icons, context) => {
       helper.text(textValue, context, {

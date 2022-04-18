@@ -40,7 +40,7 @@ export class SortHeader<T> extends BaseHeader<T> {
       });
     }
 
-    const textValue = String(value);
+    const textValue = value != null ? String(value) : "";
     helper.testFontLoad(font, textValue, context);
     utils.loadIcons(getIcon(), context, helper, (icons, context) => {
       const state = grid.sortState as SortState;

@@ -31,7 +31,8 @@ export class NumberColumn<T> extends Column<T> {
   convertInternal(value: undefined): string {
     const num = Number(value);
     if (isNaN(num)) {
-      return String(super.convertInternal(value));
+      const convertedValue = super.convertInternal(value);
+      return convertedValue != null ? String(convertedValue) : "";
     }
     const format = this._format || NumberColumn.defaultFotmat;
     return format.format(num);

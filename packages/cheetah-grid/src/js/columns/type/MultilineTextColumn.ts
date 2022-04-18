@@ -43,7 +43,7 @@ export class MultilineTextColumn<T> extends BaseColumn<T> {
         bgColor,
       });
     }
-    const textValue = String(value);
+    const textValue = value != null ? String(value) : "";
     const multilines = textValue
       .replace(/\r?\n/g, "\n")
       .replace(/\r/g, "\n")

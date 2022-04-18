@@ -62,7 +62,7 @@ export class ButtonColumn<T> extends Column<T> {
         bgColor,
       });
     }
-    const textValue = String(value);
+    const textValue = value != null ? String(value) : "";
     helper.testFontLoad(font, textValue, context);
     const { col, row } = context;
     const range = grid.getCellRange(col, row);
