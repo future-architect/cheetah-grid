@@ -32,7 +32,7 @@ export class Header<T> extends BaseHeader<T> {
         bgColor,
       });
     }
-    const textValue = String(value);
+    const textValue = value != null ? String(value) : "";
     utils.loadIcons(getIcon(), context, helper, (icons, context) => {
       helper.text(textValue, context, {
         textAlign,

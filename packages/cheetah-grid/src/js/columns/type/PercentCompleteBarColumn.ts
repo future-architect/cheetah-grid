@@ -35,7 +35,7 @@ export class PercentCompleteBarColumn<T> extends Column<T> {
     grid: ListGridAPI<T>,
     info: DrawCellInfo<T>
   ): void {
-    let textValue = String(value);
+    let textValue = value != null ? String(value) : "";
     super.drawInternal(
       this._formatter(textValue),
       context,

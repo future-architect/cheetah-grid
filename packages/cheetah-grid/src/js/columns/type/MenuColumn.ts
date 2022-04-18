@@ -55,7 +55,8 @@ export class MenuColumn<T> extends BaseColumn<T> {
         bgColor,
       });
     }
-    const text = String(this._convertInternal(value));
+    const convertedValue = this._convertInternal(value);
+    const text = convertedValue != null ? String(convertedValue) : "";
     helper.testFontLoad(font, text, context);
     utils.loadIcons(getIcon(), context, helper, (icons, context) => {
       const basePadding = helper.toBoxPixelArray(padding || 0, context, font);
