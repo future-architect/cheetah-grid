@@ -793,9 +793,13 @@ function _getColWidth(grid: DrawGrid, col: number): number {
 function _setColWidth(
   grid: DrawGrid,
   col: number,
-  width: string | number
+  width: string | number | null
 ): void {
-  grid[_].colWidthsMap.put(col, width);
+  if (width != null) {
+    grid[_].colWidthsMap.put(col, width);
+  } else {
+    grid[_].colWidthsMap.remove(col);
+  }
 }
 
 /**
@@ -859,8 +863,16 @@ function _getRowHeight(this: DrawGrid, row: number): number {
   return this[_].defaultRowHeight;
 }
 /** @private */
-function _setRowHeight(grid: DrawGrid, row: number, height: number): void {
-  grid[_].rowHeightsMap.put(row, height);
+function _setRowHeight(
+  grid: DrawGrid,
+  row: number,
+  height: number | null
+): void {
+  if (height != null) {
+    grid[_].rowHeightsMap.put(row, height);
+  } else {
+    grid[_].rowHeightsMap.remove(row);
+  }
 }
 /** @private */
 function _getRowsHeight(
@@ -3217,7 +3229,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
    * @param  {number} height The row height
    * @return {void}
    */
-  setRowHeight(row: number, height: number): void {
+  setRowHeight(row: number, height: number | null): void {
     _setRowHeight(this, row, height);
   }
   /**
@@ -3234,7 +3246,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
    * @param  {number} width The column width
    * @return {void}
    */
-  setColWidth(col: number, width: string | number): void {
+  setColWidth(col: number, width: string | number | null): void {
     _setColWidth(this, col, width);
   }
   /**
@@ -3252,10 +3264,14 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
    * @param  {number} maxwidth The column max width
    * @return {void}
    */
-  setMaxColWidth(col: number, maxwidth: string | number): void {
+  setMaxColWidth(col: number, maxwidth: string | number | null): void {
     const obj =
       this[_].colWidthsLimit[col] || (this[_].colWidthsLimit[col] = {});
-    obj.max = maxwidth;
+    if (maxwidth != null) {
+      obj.max = maxwidth;
+    } else {
+      delete obj.max;
+    }
   }
   /**
    * Get the column min width of the given the column index.
@@ -3272,10 +3288,14 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
    * @param  {number} minwidth The column min width
    * @return {void}
    */
-  setMinColWidth(col: number, minwidth: string | number): void {
+  setMinColWidth(col: number, minwidth: string | number | null): void {
     const obj =
       this[_].colWidthsLimit[col] || (this[_].colWidthsLimit[col] = {});
-    obj.min = minwidth;
+    if (minwidth != null) {
+      obj.min = minwidth;
+    } else {
+      delete obj.min;
+    }
   }
   /**
    * Get the rect of the cell.

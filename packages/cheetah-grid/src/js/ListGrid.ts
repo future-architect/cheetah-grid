@@ -486,12 +486,18 @@ function _refreshHeader<T>(grid: ListGrid<T>): void {
     const { width, minWidth, maxWidth } = column;
     if (width && (width > 0 || typeof width === "string")) {
       grid.setColWidth(col, width);
+    } else {
+      grid.setColWidth(col, null);
     }
     if (minWidth && (minWidth > 0 || typeof minWidth === "string")) {
       grid.setMinColWidth(col, minWidth);
+    } else {
+      grid.setMinColWidth(col, null);
     }
     if (maxWidth && (maxWidth > 0 || typeof maxWidth === "string")) {
       grid.setMaxColWidth(col, maxWidth);
+    } else {
+      grid.setMaxColWidth(col, null);
     }
   }
   const { headerRowHeight } = grid[_];
@@ -501,6 +507,8 @@ function _refreshHeader<T>(grid: ListGrid<T>): void {
       : headerRowHeight;
     if (height && height > 0) {
       grid.setRowHeight(row, height);
+    } else {
+      grid.setRowHeight(row, null);
     }
   }
   grid.colCount = layoutMap.colCount;
