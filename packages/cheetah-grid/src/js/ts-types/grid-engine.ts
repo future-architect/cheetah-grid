@@ -83,7 +83,7 @@ export interface DrawGridAPI {
   getRowHeight(row: number): number;
   setRowHeight(row: number, height: number): void;
   getColWidth(col: number): number;
-  setColWidth(col: number, width: number): void;
+  setColWidth(col: number, width: string | number | null): void;
   getMaxColWidth(col: number): string | number | undefined;
   setMaxColWidth(col: number, maxwidth: string | number): void;
   getMinColWidth(col: number): string | number | undefined;

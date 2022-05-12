@@ -25,6 +25,15 @@ export class NumberMap<T> {
     }
     this._vals[key] = value;
   }
+  remove(key: number): void {
+    delete this._vals[key];
+    const index = this._keys.indexOf(key);
+    if (index < 0) {
+      return;
+    }
+    this._keys.splice(index, 1);
+    this._sorted = false;
+  }
   get(key: number): T | undefined {
     return this._vals[key];
   }
