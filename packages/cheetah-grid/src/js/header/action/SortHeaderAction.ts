@@ -34,7 +34,11 @@ export class SortHeaderAction<T> extends BaseAction<T> {
         row: newState.row,
         grid,
       });
-    } else if (typeof this._sort === "string") {
+    } else if (
+      typeof this._sort === "string" &&
+      // v1.6.3 Backward compatibility
+      (this._sort !== "true" || hasTrueField(grid))
+    ) {
       const field = this._sort;
       grid.dataSource.sort(field, newState.order || "asc");
     } else {
@@ -91,4 +95,12 @@ export class SortHeaderAction<T> extends BaseAction<T> {
       }),
     ];
   }
+}
+
+function hasTrueField<T>(grid: ListGridAPI<T>) {
+  if (grid.dataSource.length > 0) {
+    const record = grid.dataSource.get(0);
+    return record != null && "true" in record;
+  }
+  return false;
 }
