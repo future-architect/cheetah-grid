@@ -14,12 +14,14 @@ const MARGIN = 2;
 export class PercentCompleteBarColumn<T> extends Column<T> {
   private _min: number;
   private _max: number;
-  private _formatter: (value: string) => string;
+  private _formatter: (value: unknown) => string;
   constructor(option: PercentCompleteBarColumnOption = {}) {
     super(option);
     this._min = option.min || 0;
     this._max = option.max || this._min + 100;
-    this._formatter = option.formatter || ((v: string): string => v);
+    this._formatter =
+      option.formatter ||
+      ((v: unknown): string => (v != null ? String(v) : ""));
   }
   get StyleClass(): typeof PercentCompleteBarStyle {
     return PercentCompleteBarStyle;
@@ -35,9 +37,8 @@ export class PercentCompleteBarColumn<T> extends Column<T> {
     grid: ListGridAPI<T>,
     info: DrawCellInfo<T>
   ): void {
-    let textValue = value != null ? String(value) : "";
     super.drawInternal(
-      this._formatter(textValue),
+      this._formatter(value),
       context,
       style,
       helper,
@@ -46,6 +47,7 @@ export class PercentCompleteBarColumn<T> extends Column<T> {
     );
     const { barColor, barBgColor, barHeight } = style;
 
+    let textValue = value != null ? String(value) : "";
     if (str.endsWith(textValue, "%")) {
       textValue = textValue.slice(0, -1);
     }
