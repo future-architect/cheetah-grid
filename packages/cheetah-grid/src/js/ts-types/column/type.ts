@@ -23,7 +23,7 @@ export interface IconColumnOption extends BaseColumnOption {
 export interface PercentCompleteBarColumnOption extends BaseColumnOption {
   min?: number;
   max?: number;
-  formatter?: (value: string) => string;
+  formatter?: (value: unknown) => unknown;
 }
 
 export interface BranchGraphColumnOption extends BaseColumnOption {
