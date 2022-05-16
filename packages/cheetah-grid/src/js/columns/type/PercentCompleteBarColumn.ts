@@ -14,14 +14,12 @@ const MARGIN = 2;
 export class PercentCompleteBarColumn<T> extends Column<T> {
   private _min: number;
   private _max: number;
-  private _formatter: (value: unknown) => string;
+  private _formatter: (value: unknown) => unknown;
   constructor(option: PercentCompleteBarColumnOption = {}) {
     super(option);
     this._min = option.min || 0;
     this._max = option.max || this._min + 100;
-    this._formatter =
-      option.formatter ||
-      ((v: unknown): string => (v != null ? String(v) : ""));
+    this._formatter = option.formatter || ((v: unknown): unknown => v);
   }
   get StyleClass(): typeof PercentCompleteBarStyle {
     return PercentCompleteBarStyle;
