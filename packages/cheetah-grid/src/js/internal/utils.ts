@@ -433,10 +433,10 @@ export const browser = {
   Chrome,
   Firefox,
   Safari,
-  // Chrome 33554431
+  // Chrome 16777216 (onl Chrome 33554431)
   // FireFox 17895588
   // IE 10737433
-  heightLimit: Chrome ? 33554431 : Firefox ? 17895588 : 10737433, // default IE limit
+  heightLimit: Chrome ? 16777216 : Firefox ? 17895588 : 10737433, // default IE limit
 };
 
 export const obj = {
