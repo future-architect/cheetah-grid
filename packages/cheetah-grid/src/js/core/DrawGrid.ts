@@ -1311,7 +1311,11 @@ function _bindEvents(this: DrawGrid): void {
         return;
       }
     }
-    if (getMouseButtons(e) !== 1) {
+    if (
+      getMouseButtons(e) !== 1 &&
+      // For mobile safari. If we do not post-process here, the keyboard will not start in Mobile Safari.
+      e.buttons !== 0
+    ) {
       return;
     }
     const resizeCol = _getResizeColAt(grid, abstractPos.x, abstractPos.y);
