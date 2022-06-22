@@ -6,21 +6,25 @@
   "unpkg": "dist/vueCheetahGrid.js",
   "files": [
     "dist",
-    "lib"
+    "lib",
+    "vetur",
+    "types"
   ],
   "scripts": {
     "test": "cross-env BABEL_ENV=test karma start --single-run --browsers Chrome_travis_ci",
     "test:once": "cross-env BABEL_ENV=test karma start --no-auto-watch --single-run",
     "test:watch": "cross-env BABEL_ENV=test karma start",
     "test:ie": "cross-env BABEL_ENV=test karma start --browsers IE_no_addons",
-    "build": "webpack --mode production",
+    "build": "npm run build:webpack && npm run build:gen",
     "watch": "webpack --watch --mode development",
     "lint": "npm run eslint && npm run stylelint",
     "eslint": "eslint . --ext .js,.vue",
     "eslint:fix": "eslint . --fix  --ext .js,.vue",
     "stylelint": "stylelint \"**/*.css\" \"**/*.vue\"",
     "stylelint:fix": "stylelint \"**/*.css\" \"**/*.vue\" --fix",
-    "build:ci": "npm run build"
+    "build:ci": "npm run build:webpack",
+    "build:webpack": "webpack --mode production",
+    "build:gen": "node ./scripts/gen.js"
   },
   "repository": {
     "type": "git",
@@ -62,6 +66,7 @@
     "@babel/preset-env": "^7.11.0",
     "@babel/runtime": "^7.11.2",
     "@vue/test-utils": "^1.0.4",
+    "@vuedoc/md": "^1.6.0",
     "babel-loader": "^8.0.4",
     "babel-plugin-istanbul": "^5.1.0",
     "chai": "^4.2.0",

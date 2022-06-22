@@ -376,7 +376,7 @@ export default {
       type: Boolean
     },
     /**
-     *  Specify `true` to enable selectt all cells by Ctrl + A key.
+     *  Specify `true` to enable select all cells by Ctrl + A key.
      */
     selectAllOnCtrlAKey: {
       type: Boolean

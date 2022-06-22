@@ -26,16 +26,14 @@ const PROPS = [
 ]
 
 function mergeProps (components) {
-  const propss = components.map(c => c.props)
+  const props = components.flatMap(c => c.props)
   const mergeProps = []
-  for (const props of propss) {
-    for (const prop of props) {
-      const idx = mergeProps.findIndex((t) => t.name === prop.name)
-      if (idx >= 0) {
-        mergeProps.splice(idx, 1)
-      }
-      mergeProps.push(prop)
+  for (const prop of props) {
+    const idx = mergeProps.findIndex((t) => t.name === prop.name)
+    if (idx >= 0) {
+      mergeProps.splice(idx, 1)
     }
+    mergeProps.push(prop)
   }
   mergeProps.sort((a, b) => {
     const ai = PROPS.indexOf(a.name)
