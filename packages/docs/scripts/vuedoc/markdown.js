@@ -1,3 +1,5 @@
+const { getPropType } = require("../../../vue-cheetah-grid/scripts/lib/metadata")
+
 function createHeader (componentName, comp) {
   return `---
 sidebarDepth: 3
@@ -24,9 +26,7 @@ function createProps (comp) {
   for (const prop of comp.props) {
     // const defaultValue = prop.value.default
 
-    const customTypeKeyword = prop.keywords.find(({ name, description }) => name === 'type' && description)
-    const customType = customTypeKeyword && customTypeKeyword.description.replace(/\{(.+?)\}/, '$1')
-    const type = customType || prop.value.type || prop.value || 'any'
+    const type = getPropType(prop)
     const list = prop.value.required ? reqProps : optProps
     const defaultKeyword = prop.keywords.find(({ name, description }) => name === 'default' && description)
     const defaultValue = defaultKeyword
@@ -214,9 +214,8 @@ function parseValue (value) {
   return value
 }
 function parseType (type) {
-  if (type && type.type === 'ArrayExpression') {
-    return [...(new Set(type.elements.map((typeIdentifier) => `\`${typeIdentifier.name}\``)))]
-      .join('|')
+  if(Array.isArray(type)) {
+    return type.map(t=>`\`${t}\``).join('|')
   }
   return `\`${type}\``
 }
