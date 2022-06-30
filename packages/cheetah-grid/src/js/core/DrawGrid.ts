@@ -1364,6 +1364,12 @@ function _bindEvents(this: DrawGrid): void {
       }
     }
 
+    if (e.targetTouches.length > 1) {
+      // If touchstart with multiple fingers,
+      // it is not considered as an operation event.
+      return;
+    }
+
     longTouchId = setTimeout(() => {
       //長押しした場合選択モード
       longTouchId = null;
