@@ -209,4 +209,4 @@ See the [LICENSE](LICENSE) file for license rights and limitations (MIT).
 
 ## Supporting Cheetah Grid
 
-[![Let's fund issues in this repository](https://issuehunt.io/static/embed/issuehunt-button-v1.svg)](https://issuehunt.io/repos/109199313)
+[![sponsors](https://img.shields.io/badge/-Sponsor-fafbfc?logo=GitHub%20Sponsors)](https://github.com/sponsors/ota-meshi)
