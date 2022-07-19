@@ -1,9 +1,10 @@
 {
   "name": "vue-cheetah-grid",
-  "version": "1.7.6",
+  "version": "1.7.7",
   "description": "Cheetah Grid for Vue.js",
   "main": "lib/index.js",
   "unpkg": "dist/vueCheetahGrid.js",
+  "typings": "types/vue3.d.ts",
   "files": [
     "dist",
     "lib",
@@ -22,7 +23,7 @@
     "eslint:fix": "eslint . --fix  --ext .js,.vue",
     "stylelint": "stylelint \"**/*.css\" \"**/*.vue\"",
     "stylelint:fix": "stylelint \"**/*.css\" \"**/*.vue\" --fix",
-    "build:ci": "npm run build:webpack",
+    "build:ci": "npm run build:webpack && npm run build:gen",
     "build:webpack": "webpack --mode production",
     "build:gen": "node ./scripts/gen.js"
   },
