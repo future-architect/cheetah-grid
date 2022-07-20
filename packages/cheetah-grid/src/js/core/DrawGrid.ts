@@ -1341,7 +1341,14 @@ function _bindEvents(this: DrawGrid): void {
     | null
     | undefined = null;
   let longTouchId: NodeJS.Timeout | null = null;
+  let touchStartIntervalId: NodeJS.Timeout | null = null;
   handler.on(element, "touchstart", (e) => {
+    // Since it is an environment where touch start can be used, it blocks mousemove that occurs after this.
+    if (touchStartIntervalId != null) clearTimeout(touchStartIntervalId);
+    touchStartIntervalId = setTimeout(() => {
+      touchStartIntervalId = null;
+    }, 350);
+
     if (!doubleTapBefore) {
       doubleTapBefore = getCellEventArgsSet(e).eventArgs;
       setTimeout(() => {
@@ -1462,6 +1469,11 @@ function _bindEvents(this: DrawGrid): void {
   });
 
   handler.on(element, "mousemove", (e) => {
+    if (touchStartIntervalId != null) {
+      // Probably a mousemove event triggered by a touchstart. Therefore, this event is blocked.
+      return;
+    }
+
     const eventArgsSet = getCellEventArgsSet(e);
     const { abstractPos, eventArgs } = eventArgsSet;
     if (eventArgs) {
