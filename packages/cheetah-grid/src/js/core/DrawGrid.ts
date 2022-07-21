@@ -1341,13 +1341,22 @@ function _bindEvents(this: DrawGrid): void {
     | null
     | undefined = null;
   let longTouchId: NodeJS.Timeout | null = null;
-  let touchStartIntervalId: NodeJS.Timeout | null = null;
+  let useTouch: { timeoutId?: NodeJS.Timeout } | null = null;
+  function useTouchStart() {
+    if (useTouch?.timeoutId != null) clearTimeout(useTouch.timeoutId);
+    useTouch = {};
+  }
+  function useTouchEnd() {
+    if (useTouch) {
+      if (useTouch.timeoutId != null) clearTimeout(useTouch.timeoutId);
+      useTouch.timeoutId = setTimeout(() => {
+        useTouch = null;
+      }, 350);
+    }
+  }
   handler.on(element, "touchstart", (e) => {
     // Since it is an environment where touch start can be used, it blocks mousemove that occurs after this.
-    if (touchStartIntervalId != null) clearTimeout(touchStartIntervalId);
-    touchStartIntervalId = setTimeout(() => {
-      touchStartIntervalId = null;
-    }, 350);
+    useTouchStart();
 
     if (!doubleTapBefore) {
       doubleTapBefore = getCellEventArgsSet(e).eventArgs;
@@ -1397,6 +1406,7 @@ function _bindEvents(this: DrawGrid): void {
   });
 
   function cancel(_e: Event): void {
+    useTouchEnd();
     if (longTouchId) {
       clearTimeout(longTouchId);
       longTouchId = null;
@@ -1405,6 +1415,7 @@ function _bindEvents(this: DrawGrid): void {
   handler.on(element, "touchcancel", cancel);
   handler.on(element, "touchmove", cancel);
   handler.on(element, "touchend", (e) => {
+    useTouchEnd();
     if (longTouchId) {
       clearTimeout(longTouchId);
       grid[_].cellSelector.select(e);
@@ -1469,7 +1480,7 @@ function _bindEvents(this: DrawGrid): void {
   });
 
   handler.on(element, "mousemove", (e) => {
-    if (touchStartIntervalId != null) {
+    if (useTouch) {
       // Probably a mousemove event triggered by a touchstart. Therefore, this event is blocked.
       return;
     }
