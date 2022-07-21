@@ -1406,13 +1406,15 @@ function _bindEvents(this: DrawGrid): void {
   });
 
   function cancel(_e: Event): void {
-    useTouchEnd();
     if (longTouchId) {
       clearTimeout(longTouchId);
       longTouchId = null;
     }
   }
-  handler.on(element, "touchcancel", cancel);
+  handler.on(element, "touchcancel", (e) => {
+    cancel(e);
+    useTouchEnd();
+  });
   handler.on(element, "touchmove", cancel);
   handler.on(element, "touchend", (e) => {
     useTouchEnd();
