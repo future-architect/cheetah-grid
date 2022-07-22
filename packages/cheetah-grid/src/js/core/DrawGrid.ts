@@ -1358,13 +1358,16 @@ function _bindEvents(this: DrawGrid): void {
     // Since it is an environment where touch start can be used, it blocks mousemove that occurs after this.
     useTouchStart();
 
+    const { eventArgs } = getCellEventArgsSet(e);
+    if (eventArgs) {
+      grid.fireListeners(DG_EVENT_TYPE.TOUCHSTART_CELL, eventArgs);
+    }
     if (!doubleTapBefore) {
-      doubleTapBefore = getCellEventArgsSet(e).eventArgs;
+      doubleTapBefore = eventArgs;
       setTimeout(() => {
         doubleTapBefore = null;
       }, 350);
     } else {
-      const { eventArgs } = getCellEventArgsSet(e);
       if (
         eventArgs &&
         eventArgs.col === doubleTapBefore.col &&
