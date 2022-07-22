@@ -32,6 +32,7 @@ export interface DrawGridEvents {
   MOUSELEAVE_CELL: "mouseleave_cell";
   MOUSEOVER_CELL: "mouseover_cell";
   MOUSEOUT_CELL: "mouseout_cell";
+  TOUCHSTART_CELL: "touchstart_cell";
   /**
    * Indicates when the user attempts to open a context menu in the cell.
    */
@@ -70,6 +71,7 @@ export const DG_EVENT_TYPE: DrawGridEvents = {
   MOUSELEAVE_CELL: "mouseleave_cell",
   MOUSEOVER_CELL: "mouseover_cell",
   MOUSEOUT_CELL: "mouseout_cell",
+  TOUCHSTART_CELL: "touchstart_cell",
   CONTEXTMENU_CELL: "contextmenu_cell",
   INPUT_CELL: "input_cell",
   PASTE_CELL: "paste_cell",
@@ -80,4 +82,4 @@ export const DG_EVENT_TYPE: DrawGridEvents = {
   SCROLL: "scroll",
   FOCUS_GRID: "focus_grid",
   BLUR_GRID: "blur_grid",
-} as DrawGridEvents;
+};
