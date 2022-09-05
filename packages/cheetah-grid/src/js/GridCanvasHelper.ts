@@ -391,11 +391,18 @@ function _inlineRect<T>(
     ? inlineUtils.iconOf(trailingIcon)
     : null;
 
+  let inlineDrawRect = drawRect;
   let { width } = drawRect;
   let trailingIconWidth = 0;
   if (trailingIconInline) {
     trailingIconWidth = trailingIconInline.width({ ctx });
     width -= trailingIconWidth;
+    inlineDrawRect = new Rect(
+      drawRect.left,
+      drawRect.top,
+      width,
+      drawRect.height
+    );
   }
 
   if (isAllowOverflow(textOverflow) && isOverflowInlines(ctx, inlines, width)) {
@@ -410,7 +417,8 @@ function _inlineRect<T>(
   } else {
     grid.setCellOverflowText(col, row, false);
   }
-  drawInlines(ctx, inlines, drawRect, offset, 0, 0, col, row, grid);
+
+  drawInlines(ctx, inlines, inlineDrawRect, offset, 0, 0, col, row, grid);
 
   if (trailingIconInline) {
     // Draw trailing icon
@@ -418,7 +426,6 @@ function _inlineRect<T>(
     inlines.forEach((inline) => {
       sumWidth += inline.width({ ctx });
     });
-
     const baseRect = new Rect(
       drawRect.left,
       drawRect.top,
