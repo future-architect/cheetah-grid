@@ -117,17 +117,31 @@ export class TooltipElement<T> {
         return false; //範囲外
       }
     }
-    const { offsetHeight, offsetWidth } = element;
+    const {
+      height: offsetHeight,
+      width: offsetWidth,
+      left: elementLeft,
+      right: elementRight,
+    } = element.getBoundingClientRect();
     if (offsetHeight < top) {
       return false; //範囲外
     }
     if (offsetWidth < left) {
       return false; //範囲外
     }
+    const cellCenter = left + width / 2;
 
     rootElement.style.top = `${top.toFixed()}px`;
-    rootElement.style.left = `${(left + width / 2).toFixed()}px`;
+    rootElement.style.left = `${cellCenter.toFixed()}px`;
     rootElement.style.minWidth = `${width.toFixed()}px`;
+
+    const maxWidthForLeft = (elementLeft + cellCenter) * 2;
+    const winWidth = window.innerWidth;
+    const maxWidthForRight =
+      (offsetWidth - cellCenter + (winWidth - elementRight)) * 2;
+    const maxWidth = Math.min(maxWidthForLeft, maxWidthForRight);
+    rootElement.style.maxWidth = `${maxWidth.toFixed()}px`;
+
     if (rootElement.parentElement !== element) {
       element.appendChild(rootElement);
     }
