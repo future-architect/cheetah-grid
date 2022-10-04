@@ -1,18 +1,24 @@
-function getScrollBarWidth(): number {
-  const dummy = document.createElement("div");
-  const { style } = dummy;
-  style.position = "absolute";
-  style.height = "9999px";
-  style.width = "calc(100vw - 100%)";
-  style.opacity = "0";
-  dummy.textContent = "x";
-  document.body.appendChild(dummy);
-  const { width } = (document.defaultView || window).getComputedStyle(
-    dummy,
-    ""
-  );
-  document.body.removeChild(dummy);
-  return parseInt(width, 10);
+function getScrollBarWidth() {
+  const wrapper = document.createElement("div");
+  const inner = document.createElement("div");
+  const { style: wrapperStyle } = wrapper;
+  wrapperStyle.position = "fixed";
+  wrapperStyle.height = "50px";
+  wrapperStyle.width = "50px";
+  wrapperStyle.overflow = "scroll";
+  wrapperStyle.opacity = "0";
+  wrapperStyle.pointerEvents = "none";
+
+  const { style } = inner;
+  style.height = "100%";
+  style.width = "100%";
+  inner.textContent = "x";
+  wrapper.appendChild(inner);
+  document.body.appendChild(wrapper);
+  const wrapperWidth = wrapper.getBoundingClientRect().width;
+  const innerWidth = inner.getBoundingClientRect().width;
+  document.body.removeChild(wrapper);
+  return Math.ceil(wrapperWidth - innerWidth);
 }
 
 let SCROLLBAR_SIZE: number;
