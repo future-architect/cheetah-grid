@@ -77,9 +77,9 @@ export class Scrollable {
   }
   private _update(): void {
     let domHeight;
+    const { offsetHeight, offsetWidth } = this._scrollable;
     if (this._height > MAX_SCROLL) {
       const sbSize = style.getScrollBarSize();
-      const { offsetHeight } = this._scrollable;
       const vScrollRange = MAX_SCROLL - offsetHeight + sbSize;
       const rScrollRange = this._height - offsetHeight + sbSize;
       this._p = vScrollRange / rScrollRange;
@@ -91,5 +91,14 @@ export class Scrollable {
 
     this._endPointElement.style.top = `${domHeight.toFixed()}px`;
     this._endPointElement.style.left = `${this._width.toFixed()}px`;
+
+    // Sets the maximum value to the scroll position
+    // if the current scroll position exceeds the maximum value.
+    if (this.scrollTop > this.scrollHeight - offsetHeight) {
+      this.scrollTop = this.scrollHeight - offsetHeight;
+    }
+    if (this.scrollLeft > this.scrollWidth - offsetWidth) {
+      this.scrollLeft = this.scrollWidth - offsetWidth;
+    }
   }
 }

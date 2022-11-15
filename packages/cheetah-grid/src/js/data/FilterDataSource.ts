@@ -59,7 +59,7 @@ class FilterData<T> {
   _owner: FilterDataSource<T>;
   _dataSourceItr: DataSourceIterator<T>;
   _filter: Filter<T>;
-  _filterdList: (T | undefined)[];
+  _filteredList: (T | undefined)[];
   _queues: (Promise<T | undefined> | null)[];
   _cancel = false;
   constructor(
@@ -70,16 +70,16 @@ class FilterData<T> {
     this._owner = dc;
     this._dataSourceItr = new DataSourceIterator(original);
     this._filter = filter;
-    this._filterdList = [];
+    this._filteredList = [];
     this._queues = [];
   }
   get(index: number): MaybePromiseOrUndef<T> {
     if (this._cancel) {
       return undefined;
     }
-    const filterdList = this._filterdList;
-    if (index < filterdList.length) {
-      return filterdList[index];
+    const filteredList = this._filteredList;
+    if (index < filteredList.length) {
+      return filteredList[index];
     }
     const queues = this._queues;
     const indexQueue = queues[index];
@@ -110,7 +110,7 @@ class FilterData<T> {
     index: number,
     testTimeout: () => boolean
   ): MaybePromiseOrUndef<T> {
-    const filterdList = this._filterdList;
+    const filteredList = this._filteredList;
     const filter = this._filter;
     const dataSourceItr = this._dataSourceItr;
 
@@ -131,9 +131,9 @@ class FilterData<T> {
         return queue;
       }
       if (filter(record)) {
-        filterdList.push(record);
-        if (index < filterdList.length) {
-          return filterdList[index];
+        filteredList.push(record);
+        if (index < filteredList.length) {
+          return filteredList[index];
         }
       }
       if (testTimeout()) {
@@ -151,7 +151,7 @@ class FilterData<T> {
       }
     }
     const dc = this._owner;
-    dc.length = filterdList.length;
+    dc.length = filteredList.length;
     return undefined;
   }
 }

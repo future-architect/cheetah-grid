@@ -3229,8 +3229,8 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
     canvas.style.width = `${width}px`;
     canvas.style.height = `${height}px`;
 
-    const sel = this[_].selection.select;
-    this[_].focusControl.setFocusRect(this.getCellRect(sel.col, sel.row));
+    const { focus } = this[_].selection;
+    this[_].focusControl.setFocusRect(this.getCellRect(focus.col, focus.row));
   }
   /**
    * Apply the changed scroll size.
@@ -3251,6 +3251,9 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
       left: scrollable.scrollLeft,
       top: scrollable.scrollTop,
     };
+
+    const { focus } = this[_].selection;
+    this[_].focusControl.setFocusRect(this.getCellRect(focus.col, focus.row));
     return true;
   }
   /**
