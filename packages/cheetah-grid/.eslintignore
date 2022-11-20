@@ -1,6 +1,6 @@
 node_modules
 dist
-dist-ts
+dist0
 coverage
 report
 webpack/test/font-svg-to-icons-js-loader/fa_icons.js

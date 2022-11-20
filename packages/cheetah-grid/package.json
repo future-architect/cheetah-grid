@@ -15,9 +15,9 @@
   "main": "dist/cheetahGrid.es5.js",
   "unpkg": "dist/cheetahGrid.es5.min.js",
   "typescript": {
-    "definition": "dist/index.d.ts"
+    "definition": "dist0/main.d.ts"
   },
-  "types": "dist/index.d.ts",
+  "types": "dist0/main.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/future-architect/cheetah-grid.git"
@@ -42,9 +42,7 @@
   "files": [
     "src/js/",
     "dist/",
-    "tools/src/",
-    "webpack-loader/",
-    "index.d.ts"
+    "dist0/main.d.ts"
   ],
   "scripts": {
     "test": "karma start --no-auto-watch --single-run --browsers Chrome_travis_ci",
@@ -54,10 +52,9 @@
     "test:ff": "karma start --browsers Firefox",
     "test:ie": "karma start --min --browsers IE_no_addons",
     "test:chrome": "karma start --browsers Chrome",
-    "build": "npm run build:ts && npm run build:webpack && npm run build:dts",
-    "build:ts": "rimraf dist-ts && tsc --project ./tsconfig.json",
+    "build": "npm run build:ts && npm run build:webpack",
+    "build:ts": "tsup",
     "build:webpack": "cross-env NO_UPDATE_NOTIFIER=1 webpack",
-    "build:dts": "dts-bundle --name cheetah-grid --main dist-ts/main.d.ts --out ../dist/index.d.ts",
     "watch": "cross-env NO_UPDATE_NOTIFIER=1 webpack --watch",
     "eslint": "eslint . --ext .js,.ts",
     "eslint:fix": "eslint . --fix --ext .js,.ts",
@@ -112,6 +109,7 @@
     "style-loader": "^1.2.1",
     "stylelint": "^13.6.1",
     "stylelint-config-standard": "^20.0.0",
+    "tsup": "^6.5.0",
     "typescript": "^4.4.4",
     "webpack": "^4.44.2",
     "webpack-cli": "^3.1.0",
@@ -119,7 +117,6 @@
     "webpack-sources": "^1.3.0",
     "wrapper-webpack-plugin": "^2.0.0"
   },
-  "dependencies": {},
   "browserslist": [
     "IE 11",
     "last 2 versions"

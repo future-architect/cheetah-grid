@@ -67,7 +67,7 @@ const newDefaultProps = (opt = {}) => {
 	};
 	return {
 		mode: opt.mode || 'production',
-		context: resolve('dist-ts/'),
+		context: resolve('dist0/'),
 		entry: entries,
 		output: {
 			path: resolve('dist/'),

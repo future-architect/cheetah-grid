@@ -6,6 +6,7 @@ packages/*/report
 docs/*
 patch/*
 packages/*/patch
+packages/cheetah-grid/dist0
 packages/cheetah-grid/webpack/test/font-svg-to-icons-js-loader/fa_icons.js
 packages/cheetah-grid/webpack/test/font-svg-to-icons-js-loader/mdi_icons.js
 packages/cheetah-grid/webpack/test/svg-to-icon-js-loader/all_mdi_icons.js

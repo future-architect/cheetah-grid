@@ -904,6 +904,10 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
    */
   constructor(options: ListGridConstructorOptions<T> = {}) {
     super(omit(options, ["colCount", "rowCount", "frozenRowCount"]));
+    /* eslint-disable no-self-assign */
+    // @ts-expect-error --ignore
+    this[_] = this[_];
+    /* eslint-enable no-self-assign */
     const protectedSpace = this[_];
     protectedSpace.header = options.header || [];
     protectedSpace.layout = options.layout || [];
