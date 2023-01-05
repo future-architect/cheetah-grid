@@ -1,6 +1,6 @@
 {
   "name": "cheetah-grid",
-  "version": "1.8.4",
+  "version": "1.8.5",
   "description": "Cheetah Grid is a high performance grid engine that works on canvas",
   "keywords": [
     "spreadsheet",
@@ -54,6 +54,7 @@
     "test:ff": "karma start --browsers Firefox",
     "test:ie": "karma start --min --browsers IE_no_addons",
     "test:chrome": "karma start --browsers Chrome",
+    "build-for-node-v18":  "cross-env NODE_OPTIONS=\"--openssl-legacy-provider\" npm run build",
     "build": "npm run build:ts && npm run build:webpack && npm run build:dts",
     "build:ts": "rimraf dist-ts && tsc --project ./tsconfig.json",
     "build:webpack": "cross-env NO_UPDATE_NOTIFIER=1 webpack",

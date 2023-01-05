@@ -197,10 +197,25 @@ export class InlineMenuElement<T> {
   private _menu: HTMLUListElement;
   private _beforePropEditor?: EditorProps<T> | null;
   private _activeData?: ActiveData<T> | null;
+  private _registerBodyClickListener: () => void;
+  private _deregisterBodyClickListener: () => void;
   constructor() {
-    this._handler = new EventHandler();
+    const handler = (this._handler = new EventHandler());
     this._menu = createMenuElement();
     this._bindMenuEvents();
+
+    let bodyClickListenerId: number | undefined;
+    const deregisterBodyClickListener = (this._deregisterBodyClickListener =
+      () => handler.off(bodyClickListenerId));
+    this._registerBodyClickListener = () => {
+      deregisterBodyClickListener();
+      bodyClickListenerId = handler.on(
+        document.body,
+        "click",
+        this._onBodyClick.bind(this),
+        { capture: true }
+      );
+    };
   }
   dispose(): void {
     const menu = this._menu;
@@ -210,6 +225,7 @@ export class InlineMenuElement<T> {
     delete this._menu;
     this._beforePropEditor = null;
     menu.parentElement?.removeChild(menu);
+    this._deregisterBodyClickListener();
   }
   attach(
     grid: ListGridAPI<T>,
@@ -233,6 +249,7 @@ export class InlineMenuElement<T> {
     openMenu(grid, editor, col, row, value, options, menu);
     this._activeData = { grid, col, row, editor, options };
     this._beforePropEditor = editor;
+    this._registerBodyClickListener();
   }
   detach(gridFocus?: boolean): void {
     if (this._isActive()) {
@@ -247,6 +264,7 @@ export class InlineMenuElement<T> {
       }
     }
     this._activeData = null;
+    this._deregisterBodyClickListener();
   }
   _doChangeValue(valueindex: number | string): void {
     if (!this._isActive()) {
@@ -316,6 +334,22 @@ export class InlineMenuElement<T> {
         this._onKeydownTab(menu, item, e);
       }
     });
+  }
+  _onBodyClick(e: MouseEvent): void {
+    const el = e.target as Element | null;
+    if (!el) {
+      return;
+    }
+    if (this._menu.contains(el)) {
+      return;
+    }
+    if (this._isActive()) {
+      const { grid } = this._activeData!;
+      if (grid.getElement().contains(el)) {
+        return;
+      }
+    }
+    this.detach();
   }
   _onKeydownEnter(
     _menu: HTMLUListElement,
