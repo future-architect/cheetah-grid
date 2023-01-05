@@ -60,6 +60,16 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 	const columnAction = cheetahGrid.columns.action;
 	const records = generate(1000);
 	const startTime = new Date();
+	const menuOptions = [
+		{value: '', label: 'Empty'},
+		{value: '1', label: 'Option 1'},
+		{value: '2', label: 'Option 2'},
+		{value: '3', label: 'Option 3'},
+		{value: '4', label: 'Option 4'},
+		{value: '5', label: 'Option 5'},
+		{value: '6', label: 'Option 6'},
+		{value: '7', label: 'Option 7'},
+	];
 	const grid = new cheetahGrid.ListGrid({
 		parentElement: document.querySelector('#parent'),
 		allowRangePaste: true,
@@ -95,6 +105,15 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 					{field: 'fname', caption: 'First Name', width: 'auto', maxWidth: '200px', minWidth: '30px', action: 'input'},
 					{field: 'lname', caption: 'Last Name', width: 'auto', minWidth: '150px', action: 'input'},
 				],
+			},
+			{
+				field: 'menuValue',
+				caption: 'Menu',
+				width: '120px',
+				columnType: new cheetahGrid.columns.type.MenuColumn({options: menuOptions}),
+				action: new cheetahGrid.columns.action.InlineMenuEditor({
+					options: menuOptions,
+				}),
 			},
 			{
 				field: 'email',
