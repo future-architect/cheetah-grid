@@ -262,7 +262,6 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 	};
 	// filter
 
-
 	/////// jump
 	const focusButton = document.querySelector('#focus');
 	focusButton.onclick = function() {
@@ -270,6 +269,11 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 		grid.focusGridCell('email', 45);
 	};
 	/////// jump
+
+	const disposeButton = document.querySelector('#dispose');
+	disposeButton.onclick = function() {
+		grid.dispose();
+	};
 
 	cheetahGrid.register.theme('RED', cheetahGrid.themes.default.extends({
 		color: 'red',

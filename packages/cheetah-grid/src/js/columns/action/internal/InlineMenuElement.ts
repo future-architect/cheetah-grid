@@ -225,7 +225,6 @@ export class InlineMenuElement<T> {
     delete this._menu;
     this._beforePropEditor = null;
     menu.parentElement?.removeChild(menu);
-    this._deregisterBodyClickListener();
   }
   attach(
     grid: ListGridAPI<T>,
