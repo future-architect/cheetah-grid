@@ -15,18 +15,22 @@ export interface StdBaseStyleOption extends BaseStyleOption {
   textAlign?: CanvasTextAlign;
   textBaseline?: CanvasTextBaseline;
 }
-
-export interface StyleOption extends StdBaseStyleOption {
+export interface StdTextBaseStyleOption extends StdBaseStyleOption {
   color?: ColorDef;
   font?: string;
   padding?: number | string | (number | string)[];
   textOverflow?: TextOverflow;
 }
-export interface HeaderStdStyleOption extends StdBaseStyleOption {
-  color?: ColorDef;
-  font?: string;
-  padding?: number | string | (number | string)[];
-  textOverflow?: TextOverflow;
+export interface StdMultilineTextBaseStyleOption
+  extends StdTextBaseStyleOption {
+  lineHeight?: string | number;
+  autoWrapText?: boolean;
+  lineClamp?: LineClamp;
+}
+
+export type StyleOption = StdTextBaseStyleOption;
+export interface HeaderStdStyleOption extends StdMultilineTextBaseStyleOption {
+  multiline?: boolean;
 }
 
 export interface ButtonStyleOption extends StyleOption {
@@ -47,7 +51,7 @@ export interface RadioStyleOption extends StdBaseStyleOption {
   checkBgColor?: ColorDef;
 }
 
-export interface CheckHeaderStyleOption extends HeaderStdStyleOption {
+export interface CheckHeaderStyleOption extends StdTextBaseStyleOption {
   uncheckBgColor?: ColorDef;
   checkBgColor?: ColorDef;
   borderColor?: ColorDef;
@@ -61,11 +65,7 @@ export interface MultilineTextStyleOption extends StyleOption {
   lineClamp?: LineClamp;
 }
 
-export interface MultilineTextHeaderStyleOption extends HeaderStdStyleOption {
-  lineHeight?: string | number;
-  autoWrapText?: boolean;
-  lineClamp?: LineClamp;
-}
+export type MultilineTextHeaderStyleOption = StdMultilineTextBaseStyleOption;
 
 export interface MenuStyleOption extends StyleOption {
   appearance?: "menulist-button" | "none";

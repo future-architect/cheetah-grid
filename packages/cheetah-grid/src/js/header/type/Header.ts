@@ -25,6 +25,10 @@ export class Header<T> extends BaseHeader<T> {
       bgColor,
       padding,
       textOverflow,
+      lineHeight,
+      autoWrapText,
+      lineClamp,
+      multiline,
     } = style;
 
     if (bgColor) {
@@ -34,15 +38,34 @@ export class Header<T> extends BaseHeader<T> {
     }
     const textValue = value != null ? String(value) : "";
     utils.loadIcons(getIcon(), context, helper, (icons, context) => {
-      helper.text(textValue, context, {
-        textAlign,
-        textBaseline,
-        color,
-        font,
-        padding,
-        textOverflow,
-        icons,
-      });
+      if (multiline) {
+        const multilines = textValue
+          .replace(/\r?\n/g, "\n")
+          .replace(/\r/g, "\n")
+          .split("\n");
+        helper.multilineText(multilines, context, {
+          textAlign,
+          textBaseline,
+          color,
+          font,
+          padding,
+          lineHeight,
+          autoWrapText,
+          lineClamp,
+          textOverflow,
+          icons,
+        });
+      } else {
+        helper.text(textValue, context, {
+          textAlign,
+          textBaseline,
+          color,
+          font,
+          padding,
+          textOverflow,
+          icons,
+        });
+      }
     });
   }
 }

@@ -15,12 +15,9 @@ export {
   Style,
   SortHeaderStyle,
   CheckHeaderStyle,
-  // types
-  BaseStyleOption,
-  CheckHeaderStyleOption,
   MultilineTextHeaderStyle,
-  SortHeaderStyleOption,
 };
+export type { BaseStyleOption, CheckHeaderStyleOption, SortHeaderStyleOption };
 
 export function of(
   headerStyle: HeaderStyleOption | null | undefined,

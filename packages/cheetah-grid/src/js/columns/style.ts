@@ -37,7 +37,8 @@ export {
   PercentCompleteBarStyle,
   MultilineTextStyle,
   MenuStyle,
-  // types
+};
+export type {
   BaseStyleOption,
   ButtonStyleOption,
   CheckStyleOption,

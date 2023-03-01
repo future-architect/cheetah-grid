@@ -39,6 +39,8 @@ grid.records = [
 
 </code-preview>
 
+Note that simple text headers and headers with sort can also display multiline text using the style property `multiline: true`.
+
 ## Style Properties
 
 | Property       | Description                                          | Default |
