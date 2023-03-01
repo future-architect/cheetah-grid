@@ -51,6 +51,10 @@ export interface ThemeDefine {
     boxWidth?: number; // Default 24
     markHeight?: number; // Default 20
   };
+  indicators: {
+    topLeftColor?: ColorPropertyDefine;
+    topLeftSize?: number; // Default (Cell Height / 6)
+  };
 }
 
 export type RequiredThemeDefine = Required<ThemeDefine> & {
@@ -59,4 +63,5 @@ export type RequiredThemeDefine = Required<ThemeDefine> & {
   button: Required<ThemeDefine["button"]>;
   header: Required<ThemeDefine["header"]>;
   messages: Required<ThemeDefine["messages"]>;
+  indicators: Required<ThemeDefine["indicators"]>;
 };

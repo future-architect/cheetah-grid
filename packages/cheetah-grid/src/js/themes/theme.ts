@@ -17,13 +17,30 @@ function getProp<
   obj: PartialThemeDefine,
   superObj: ThemeDefine,
   names: string[],
-  defNames?: string[]
+  defNames?: string[],
+  convertForSuper?: (value: never) => T | undefined,
+  defaultValue?: T
 ): T {
+  const value = getChainSafe(obj, ...names) || getChainSafe(superObj, ...names);
+  if (value) {
+    return value;
+  }
+  if (!defNames) {
+    return value || defaultValue;
+  }
+  const getChainSafeWithConvert = convertForSuper
+    ? (obj: PartialThemeDefine, ...names: string[]) => {
+        const value = getChainSafe(obj, ...names);
+        if (!value) {
+          return value;
+        }
+        return convertForSuper(value as never);
+      }
+    : getChainSafe;
   return (
-    getChainSafe(obj, ...names) ||
-    getChainSafe(superObj, ...names) ||
-    (defNames && getChainSafe(obj, ...defNames)) ||
-    (defNames && getChainSafe(superObj, ...defNames))
+    getChainSafeWithConvert(obj, ...defNames) ||
+    getChainSafeWithConvert(superObj, ...defNames) ||
+    defaultValue
   );
 }
 
@@ -37,6 +54,7 @@ export class Theme implements RequiredThemeDefine {
   private _button: RequiredThemeDefine["button"] | null = null;
   private _header: RequiredThemeDefine["header"] | null = null;
   private _messages: RequiredThemeDefine["messages"] | null = null;
+  private _indicators: RequiredThemeDefine["indicators"] | null = null;
   constructor(obj: ThemeDefine);
   constructor(obj: PartialThemeDefine, superTheme: ThemeDefine);
   constructor(obj: PartialThemeDefine | ThemeDefine, superTheme?: ThemeDefine) {
@@ -123,7 +141,9 @@ export class Theme implements RequiredThemeDefine {
             obj,
             superTheme,
             ["checkbox", "checkBgColor"],
-            ["borderColor"]
+            ["borderColor"],
+            colorsToColor,
+            "#000"
           );
         },
         get borderColor(): ColorPropertyDefine {
@@ -131,7 +151,9 @@ export class Theme implements RequiredThemeDefine {
             obj,
             superTheme,
             ["checkbox", "borderColor"],
-            ["borderColor"]
+            ["borderColor"],
+            colorsToColor,
+            "#000"
           );
         },
       })
@@ -155,7 +177,9 @@ export class Theme implements RequiredThemeDefine {
             obj,
             superTheme,
             ["radioButton", "uncheckBorderColor"],
-            ["borderColor"]
+            ["borderColor"],
+            colorsToColor,
+            "#000"
           );
         },
         get checkBorderColor(): ColorPropertyDefine {
@@ -163,7 +187,9 @@ export class Theme implements RequiredThemeDefine {
             obj,
             superTheme,
             ["radioButton", "checkBorderColor"],
-            ["borderColor"]
+            ["borderColor"],
+            colorsToColor,
+            "#000"
           );
         },
         get uncheckBgColor(): ColorPropertyDefine {
@@ -243,6 +269,27 @@ export class Theme implements RequiredThemeDefine {
       })
     );
   }
+  get indicators(): RequiredThemeDefine["indicators"] {
+    const { obj, superTheme } = this[_];
+    return (
+      this._indicators ||
+      (this._indicators = {
+        get topLeftColor(): ColorPropertyDefine {
+          return getProp(
+            obj,
+            superTheme,
+            ["indicators", "topLeftColor"],
+            ["borderColor"],
+            colorsToColor,
+            "#000"
+          );
+        },
+        get topLeftSize(): number {
+          return getProp(obj, superTheme, ["indicators", "topLeftSize"]);
+        },
+      })
+    );
+  }
   hasProperty(names: string[]): boolean {
     const { obj, superTheme } = this[_];
     return hasThemeProperty(obj, names) || hasThemeProperty(superTheme, names);
@@ -269,5 +316,27 @@ function hasThemeProperty(obj: PartialThemeDefine, names: string[]): boolean {
       }
     }
     return !!o;
+  }
+}
+
+function colorsToColor(
+  colors: ColorsPropertyDefine
+): ColorPropertyDefine | undefined {
+  if (typeof colors === "function") {
+    return (arg): string | CanvasGradient | CanvasPattern | undefined => {
+      const val = colors(arg);
+      return val ? colorsArrayToColor(val) : val;
+    };
+  }
+  return colorsArrayToColor(colors);
+
+  function colorsArrayToColor(
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    colors: Exclude<ColorsPropertyDefine, Function>
+  ) {
+    if (!Array.isArray(colors)) {
+      return colors;
+    }
+    return colors.find(Boolean) || undefined;
   }
 }

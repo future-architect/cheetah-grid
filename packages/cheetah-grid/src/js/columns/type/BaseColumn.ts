@@ -20,6 +20,7 @@ import { isPromise, obj } from "../../internal/utils";
 import { BaseStyle } from "../style/BaseStyle";
 import { animate } from "../../internal/animate";
 import { getColumnFadeinStateId } from "../../internal/symbolManager";
+import { getTopLeftIndicatorDraw } from "../indicator/handlers";
 
 const { setReadonly } = obj;
 const COLUMN_FADEIN_STATE_ID = getColumnFadeinStateId();
@@ -209,6 +210,13 @@ export abstract class BaseColumn<T> implements ColumnTypeAPI {
             grid,
             info
           );
+          this.drawIndicatorsInternal(
+            currentContext,
+            actStyle,
+            helper,
+            grid,
+            info
+          );
         };
 
         if (!isFadeinWhenCallbackInPromise(this, grid)) {
@@ -256,6 +264,7 @@ export abstract class BaseColumn<T> implements ColumnTypeAPI {
         grid,
         info
       );
+      this.drawIndicatorsInternal(context, actStyle, helper, grid, info);
       //フェードインの場合透過するため背景を透過で上書き
       const { col, row } = context;
       const stateKey = `${col}:${row}`;
@@ -301,6 +310,22 @@ export abstract class BaseColumn<T> implements ColumnTypeAPI {
       grid,
       info
     );
+  }
+  drawIndicatorsInternal(
+    context: CellContext,
+    style: BaseStyle,
+    helper: GridCanvasHelperAPI,
+    grid: ListGridAPI<T>,
+    info: DrawCellInfo<T>
+  ): void {
+    const { indicatorTopLeft } = style;
+    if (!indicatorTopLeft) {
+      return;
+    }
+    const drawTopLeft = getTopLeftIndicatorDraw(indicatorTopLeft);
+    if (drawTopLeft) {
+      drawTopLeft(context, indicatorTopLeft, helper, grid, info);
+    }
   }
   bindGridEvent(
     _grid: ListGridAPI<T>,

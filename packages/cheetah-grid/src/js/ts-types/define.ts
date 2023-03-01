@@ -92,7 +92,10 @@ export type ColorPropertyDefine =
   | ColorDef
   | ((args: StylePropertyFunctionArg) => string)
   | ((args: StylePropertyFunctionArg) => CanvasGradient)
-  | ((args: StylePropertyFunctionArg) => CanvasPattern);
+  | ((args: StylePropertyFunctionArg) => CanvasPattern)
+  | ((
+      args: StylePropertyFunctionArg
+    ) => string | CanvasGradient | CanvasPattern | undefined);
 
 export type ColorsPropertyDefine =
   | ColorPropertyDefine
@@ -102,3 +105,10 @@ export type ColorsPropertyDefine =
 export type FontPropertyDefine =
   | string
   | ((args: StylePropertyFunctionArg) => string);
+
+// ****** Indicator Options *******
+export type IndicatorStyle = {
+  style?: "triangle" | "none";
+  color?: ColorDef;
+  size?: number | string;
+};

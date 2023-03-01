@@ -866,6 +866,7 @@ class ThemeResolver<T> implements RequiredThemeDefine {
   private _button: RequiredThemeDefine["button"] | null = null;
   private _header: RequiredThemeDefine["header"] | null = null;
   private _messages: RequiredThemeDefine["messages"] | null = null;
+  private _indicators: RequiredThemeDefine["indicators"] | null = null;
   constructor(grid: ListGridAPI<T>) {
     this._grid = grid;
   }
@@ -994,6 +995,20 @@ class ThemeResolver<T> implements RequiredThemeDefine {
         },
         get markHeight(): number {
           return getThemeColor(grid, "messages", "markHeight");
+        },
+      })
+    );
+  }
+  get indicators(): RequiredThemeDefine["indicators"] {
+    const grid = this._grid;
+    return (
+      this._indicators ||
+      (this._indicators = {
+        get topLeftColor(): ColorPropertyDefine {
+          return getThemeColor(grid, "indicators", "topLeftColor");
+        },
+        get topLeftSize(): number {
+          return getThemeColor(grid, "indicators", "topLeftSize");
         },
       })
     );

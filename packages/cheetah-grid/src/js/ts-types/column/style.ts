@@ -1,4 +1,4 @@
-import type { LineClamp, TextOverflow } from "../define";
+import type { IndicatorStyle, LineClamp, TextOverflow } from "../define";
 import type { ColorDef } from "../base";
 
 export interface ColumnStyle {
@@ -9,6 +9,7 @@ export interface ColumnStyle {
 
 export interface BaseStyleOption {
   bgColor?: ColorDef;
+  indicatorTopLeft?: IndicatorStyle | IndicatorStyle["style"];
 }
 
 export interface StdBaseStyleOption extends BaseStyleOption {

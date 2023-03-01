@@ -300,3 +300,35 @@ grid.records = [
 ```
 
 </code-preview>
+
+## Indicators
+
+You can use the style property to display the indicator in the top-left.  
+The currently supported indicator is only the `"triangle"`.
+
+<code-preview>
+
+```html
+<div class="sample4 demo-grid small"></div>
+```
+
+```js
+const grid = new cheetahGrid.ListGrid({
+  parentElement: document.querySelector(".sample4"),
+  header: [
+    {
+      field: "no",
+      caption: "no",
+      width: 50,
+      style: { indicatorTopLeft: "triangle" },
+    },
+  ],
+});
+grid.records = [
+  { no: 1, text: "data" },
+  { no: 2, text: "data" },
+  { no: 3, text: "data" },
+];
+```
+
+</code-preview>
