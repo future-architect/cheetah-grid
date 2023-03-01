@@ -100,7 +100,7 @@ export class SortHeaderAction<T> extends BaseAction<T> {
 function hasTrueField<T>(grid: ListGridAPI<T>) {
   if (grid.dataSource.length > 0) {
     const record = grid.dataSource.get(0);
-    return record != null && "true" in record;
+    return record != null && "true" in (record as never);
   }
   return false;
 }

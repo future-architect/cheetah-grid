@@ -56,6 +56,29 @@ export class Path2DShim implements CanvasPath {
       throw new Error(`Error: ${typeof arg} is not a valid argument to Path`);
     }
   }
+  roundRect(
+    x: number,
+    y: number,
+    w: number,
+    h: number,
+    radii?: number | DOMPointInit | (number | DOMPointInit)[] | undefined
+  ): void;
+  roundRect(
+    x: number,
+    y: number,
+    w: number,
+    h: number,
+    radii?: number | DOMPointInit | Iterable<number | DOMPointInit> | undefined
+  ): void;
+  roundRect(
+    _x: unknown,
+    _y: unknown,
+    _w: unknown,
+    _h: unknown,
+    _radii?: unknown
+  ): void {
+    throw new Error("Method not implemented.");
+  }
 }
 
 const { CanvasRenderingContext2D } = window;

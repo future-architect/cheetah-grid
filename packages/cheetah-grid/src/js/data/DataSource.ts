@@ -75,7 +75,7 @@ function getField<T, F extends FieldDef<T>>(
     );
   }
   const fieldGet = isFieldAssessor<T>(field) ? field.get : field;
-  if ((fieldGet as never) in record) {
+  if ((fieldGet as never) in (record as never)) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const fieldResult = (record as any)[fieldGet];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -88,7 +88,7 @@ function getField<T, F extends FieldDef<T>>(
   }
 
   // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-  const ss = `${fieldGet}`.split(".");
+  const ss = String(fieldGet).split(".");
   if (ss.length <= 1) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const fieldResult = (record as any)[fieldGet];
@@ -115,7 +115,7 @@ function setField<T, F extends FieldDef<T>>(
   }
 
   const fieldSet = isFieldAssessor<T>(field) ? field.set : field;
-  if ((fieldSet as never) in record) {
+  if ((fieldSet as never) in (record as never)) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (record as any)[fieldSet] = value;
   } else if (typeof fieldSet === "function") {
@@ -283,7 +283,7 @@ export class DataSource<T> extends EventTarget implements DataSourceAPI<T> {
       return true;
     }
     const record = this.getOriginal(index);
-    return Boolean(record && (field as never) in record);
+    return Boolean(record && (field as never) in (record as never));
   }
   protected setOriginalField<F extends FieldDef<T>>(
     index: number,
