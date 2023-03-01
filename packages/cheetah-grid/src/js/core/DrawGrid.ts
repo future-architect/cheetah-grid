@@ -1602,8 +1602,9 @@ function _bindEvents(this: DrawGrid): void {
   });
   grid.listen("copydata", (range) => {
     const copyRange = grid.getCopyRangeInternal(range);
-    let copyValue = "";
+    const copyLines: string[] = [];
     for (let { row } = copyRange.start; row <= copyRange.end.row; row++) {
+      let copyLine = "";
       for (let { col } = copyRange.start; col <= copyRange.end.col; col++) {
         const copyCellValue = grid.getCopyCellValue(col, row, copyRange);
 
@@ -1625,18 +1626,18 @@ function _bindEvents(this: DrawGrid): void {
           }
         }
 
-        copyValue += /[\t\n]/.test(strCellValue)
+        copyLine += /[\t\n]/.test(strCellValue)
           ? // Need quote
             `"${strCellValue.replace(/"/g, '""')}"`
           : strCellValue;
 
         if (col < copyRange.end.col) {
-          copyValue += "\t";
+          copyLine += "\t";
         }
       }
-      copyValue += "\n";
+      copyLines.push(copyLine);
     }
-    return copyValue;
+    return copyLines.join("\n");
   });
   grid[_].focusControl.onCopy((_e: ClipboardEvent): string | void =>
     array.find(

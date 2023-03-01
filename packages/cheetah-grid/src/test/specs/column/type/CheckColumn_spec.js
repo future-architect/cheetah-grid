@@ -136,7 +136,7 @@
 			})).toEqual([
 				'bool	str	onoff	num	nstr\n' +
 				'true	true	on	1	01\n' +
-				'false	false	off	0	000\n'
+				'false	false	off	0	000'
 			]);
 
 
