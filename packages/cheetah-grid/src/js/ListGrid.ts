@@ -890,7 +890,7 @@ export { HeadersDefine, ColumnDefine, HeaderDefine, GroupHeaderDefine };
  * @memberof cheetahGrid
  */
 export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
-  protected [_]: ListGridProtected<T>;
+  protected [_]: ListGridProtected<T> = {} as never;
   public disabled = false;
   public readOnly = false;
   static get EVENT_TYPE(): typeof LG_EVENT_TYPE {
