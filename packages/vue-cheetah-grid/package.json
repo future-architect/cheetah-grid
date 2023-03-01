@@ -17,14 +17,14 @@
     "test:watch": "cross-env BABEL_ENV=test karma start",
     "test:ie": "cross-env BABEL_ENV=test karma start --browsers IE_no_addons",
     "build": "npm run build:webpack && npm run build:gen",
-    "watch": "webpack --watch --mode development",
+    "watch": "node --openssl-legacy-provider ./node_modules/webpack/bin/webpack.js --watch --mode development",
     "lint": "npm run eslint && npm run stylelint",
     "eslint": "eslint . --ext .js,.vue",
     "eslint:fix": "eslint . --fix  --ext .js,.vue",
     "stylelint": "stylelint \"**/*.css\" \"**/*.vue\"",
     "stylelint:fix": "stylelint \"**/*.css\" \"**/*.vue\" --fix",
     "build:ci": "npm run build:webpack && npm run build:gen",
-    "build:webpack": "webpack --mode production",
+    "build:webpack": "node --openssl-legacy-provider ./node_modules/webpack/bin/webpack.js --mode production",
     "build:gen": "node ./scripts/gen.js"
   },
   "repository": {

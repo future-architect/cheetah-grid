@@ -6,10 +6,10 @@
   "main": "index.js",
   "scripts": {
     "test": "exit 0",
-    "build": "webpack --mode production",
+    "build": "node --openssl-legacy-provider ./node_modules/webpack/bin/webpack.js --mode production",
     "lint": "npm run eslint",
-    "watch": "webpack --watch --mode development",
-    "build:dev": "webpack --mode development",
+    "watch": "node --openssl-legacy-provider ./node_modules/webpack/bin/webpack.js --watch --mode development",
+    "build:dev": "node --openssl-legacy-provider ./node_modules/webpack/bin/webpack.js --mode development",
     "eslint": "eslint . --ext .js,.vue",
     "eslint:fix": "eslint . --fix --ext .js,.vue"
   },
