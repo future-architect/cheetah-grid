@@ -103,7 +103,14 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 				caption: 'name',
 				columns: [
 					{field: 'fname', caption: 'First Name', width: 'auto', maxWidth: '200px', minWidth: '30px', action: 'input'},
-					{field: 'lname', caption: 'Last Name', width: 'auto', minWidth: '150px', action: 'input'},
+					{
+						field: 'lname',
+						caption: 'Last\nName',
+						width: 'auto',
+						minWidth: '150px',
+						action: 'input',
+						headerStyle: {multiline: true}
+					},
 				],
 			},
 			{

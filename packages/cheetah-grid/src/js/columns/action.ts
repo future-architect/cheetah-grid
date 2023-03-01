@@ -67,7 +67,8 @@ export {
   SmallDialogInputEditor,
   InlineInputEditor,
   InlineMenuEditor,
-  // types
+};
+export type {
   ActionOption,
   BaseActionOption,
   ButtonActionOption,

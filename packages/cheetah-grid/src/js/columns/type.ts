@@ -55,7 +55,8 @@ export {
   BranchGraphColumn,
   MenuColumn,
   MultilineTextColumn,
-  // types
+};
+export type {
   BaseColumnOption,
   BranchGraphColumnOption,
   ButtonColumnOption,

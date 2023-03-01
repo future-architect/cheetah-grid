@@ -1,9 +1,9 @@
 import type { CheckHeaderStyleOption, ColorDef } from "../../ts-types";
-import { Style } from "./Style";
+import { StdTextBaseStyle } from "./StdTextBaseStyle";
 import { defaults } from "../../internal/utils";
 
 let defaultStyle: CheckHeaderStyle;
-export class CheckHeaderStyle extends Style {
+export class CheckHeaderStyle extends StdTextBaseStyle {
   private _uncheckBgColor?: ColorDef;
   private _checkBgColor?: ColorDef;
   private _borderColor?: ColorDef;

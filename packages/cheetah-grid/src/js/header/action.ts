@@ -31,14 +31,8 @@ export const ACTIONS = {
  * @namespace cheetahGrid.columns.action
  * @memberof cheetahGrid.columns
  */
-export {
-  BaseAction,
-  SortHeaderAction,
-  CheckHeaderAction,
-  // types
-  BaseActionOption,
-  SortHeaderActionOption,
-};
+export { BaseAction, SortHeaderAction, CheckHeaderAction };
+export type { BaseActionOption, SortHeaderActionOption };
 
 export function of<T>(
   headerAction: HeaderActionOption | BaseAction<T> | null | undefined

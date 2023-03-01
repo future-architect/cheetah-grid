@@ -1,8 +1,8 @@
 import type { ColorDef, SortHeaderStyleOption } from "../../ts-types";
-import { MultilineTextHeaderStyle } from "./MultilineTextHeaderStyle";
+import { StdMultilineTextBaseStyle } from "./StdMultilineTextBaseStyle";
 
 let defaultStyle: SortHeaderStyle;
-export class SortHeaderStyle extends MultilineTextHeaderStyle {
+export class SortHeaderStyle extends StdMultilineTextBaseStyle {
   private _sortArrowColor?: ColorDef;
   private _multiline?: boolean;
   static get DEFAULT(): SortHeaderStyle {

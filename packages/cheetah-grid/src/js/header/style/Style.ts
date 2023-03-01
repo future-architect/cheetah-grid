@@ -1,51 +1,20 @@
-import type {
-  ColorDef,
-  HeaderStdStyleOption,
-  TextOverflow,
-} from "../../ts-types";
-import { StdBaseStyle } from "./StdBaseStyle";
+import type { HeaderStdStyleOption } from "../../ts-types";
+import { StdMultilineTextBaseStyle } from "./StdMultilineTextBaseStyle";
 let defaultStyle: Style;
-export class Style extends StdBaseStyle {
-  private _color?: ColorDef;
-  private _font?: string;
-  private _padding: number | string | (number | string)[] | undefined;
-  private _textOverflow: TextOverflow;
+export class Style extends StdMultilineTextBaseStyle {
+  private _multiline?: boolean;
   static get DEFAULT(): Style {
     return defaultStyle ? defaultStyle : (defaultStyle = new Style());
   }
   constructor(style: HeaderStdStyleOption = {}) {
     super(style);
-    this._color = style.color;
-    this._font = style.font;
-    this._padding = style.padding;
-    this._textOverflow = style.textOverflow || "ellipsis";
+    this._multiline = style.multiline;
   }
-  get color(): ColorDef | undefined {
-    return this._color;
+  get multiline(): boolean {
+    return !!this._multiline;
   }
-  set color(color: ColorDef | undefined) {
-    this._color = color;
-    this.doChangeStyle();
-  }
-  get font(): string | undefined {
-    return this._font;
-  }
-  set font(font: string | undefined) {
-    this._font = font;
-    this.doChangeStyle();
-  }
-  get padding(): number | string | (number | string)[] | undefined {
-    return this._padding;
-  }
-  set padding(padding: number | string | (number | string)[] | undefined) {
-    this._padding = padding;
-    this.doChangeStyle();
-  }
-  get textOverflow(): TextOverflow {
-    return this._textOverflow;
-  }
-  set textOverflow(textOverflow: TextOverflow) {
-    this._textOverflow = textOverflow;
+  set multiline(multiline: boolean) {
+    this._multiline = multiline;
     this.doChangeStyle();
   }
   clone(): Style {

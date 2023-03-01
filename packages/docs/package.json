@@ -3,12 +3,13 @@
   "private": true,
   "version": "1.8.0",
   "scripts": {
-    "watch": "vuepress dev . --debug",
+    "watch": " npm run vuepress -- dev . --debug",
     "build": "npm-run-all build:*",
     "build:vuedoc": "node ./scripts/vuedoc/build.js",
-    "build:vuepress": "cross-env NODE_ENV=\"production\" node --openssl-legacy-provider ./node_modules/vuepress/cli.js build .",
+    "build:vuepress": "cross-env NODE_ENV=\"production\" npm run vuepress -- build .",
     "_build:jsdoc": "jsdoc ./../cheetah-grid/src/js -c jsdoc-conf.js",
-    "build:tsdoc": "typedoc --options typedoc.js --tsconfig ../cheetah-grid/tsconfig.json"
+    "build:tsdoc": "typedoc --options typedoc.js --tsconfig ../cheetah-grid/tsconfig.json",
+    "vuepress": "node --openssl-legacy-provider ./node_modules/vuepress/cli.js"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.3",
