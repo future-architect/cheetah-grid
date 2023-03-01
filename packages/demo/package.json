@@ -6,12 +6,13 @@
   "main": "index.js",
   "scripts": {
     "test": "exit 0",
-    "build": "node --openssl-legacy-provider ./node_modules/webpack/bin/webpack.js --mode production",
+    "build": "npm run webpack -- --mode production",
     "lint": "npm run eslint",
-    "watch": "node --openssl-legacy-provider ./node_modules/webpack/bin/webpack.js --watch --mode development",
-    "build:dev": "node --openssl-legacy-provider ./node_modules/webpack/bin/webpack.js --mode development",
+    "watch": "npm run webpack -- --watch --mode development",
+    "build:dev": "npm run webpack -- --mode development",
     "eslint": "eslint . --ext .js,.vue",
-    "eslint:fix": "eslint . --fix --ext .js,.vue"
+    "eslint:fix": "eslint . --fix --ext .js,.vue",
+    "webpack": "node --openssl-legacy-provider ./node_modules/webpack/bin/webpack.js"
   },
   "author": "Yosuke Ota",
   "license": "MIT",
