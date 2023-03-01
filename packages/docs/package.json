@@ -6,7 +6,7 @@
     "watch": "vuepress dev . --debug",
     "build": "npm-run-all build:*",
     "build:vuedoc": "node ./scripts/vuedoc/build.js",
-    "build:vuepress": "cross-env NODE_ENV=\"production\" vuepress build .",
+    "build:vuepress": "cross-env NODE_ENV=\"production\" node --openssl-legacy-provider ./node_modules/vuepress/cli.js build .",
     "_build:jsdoc": "jsdoc ./../cheetah-grid/src/js -c jsdoc-conf.js",
     "build:tsdoc": "typedoc --options typedoc.js --tsconfig ../cheetah-grid/tsconfig.json"
   },

@@ -123,7 +123,7 @@ The definition is set to `layout.body` property described in [Advanced Layout].
 | move-cell-on-tab-key | `boolean`  | Specify `true` to enable cell movement by Tab key. | `undefined` |
 | move-cell-on-enter-key | `boolean`  | Specify `true` to enable cell movement by Enter key. | `undefined` |
 | delete-cell-value-on-del-key | `boolean`  | Specify `true` to enable enable deletion of cell values with the Del and BS keys. | `undefined` |
-| select-all-on-ctrl-a-key | `boolean`  | Specify `true` to enable selectt all cells by Ctrl + A key. | `undefined` |
+| select-all-on-ctrl-a-key | `boolean`  | Specify `true` to enable select all cells by Ctrl + A key. | `undefined` |
 | disable-column-resize | `boolean`  | Specify `true` to disable column resizing | `undefined` |
 | disabled | `boolean`  | Defines disabled | `undefined` |
 | readonly | `boolean`  | Defines readonly | `undefined` |
