@@ -917,16 +917,20 @@ class ThemeResolver<T> implements RequiredThemeDefine {
       this._checkbox ||
       (this._checkbox = {
         get uncheckBgColor(): ColorPropertyDefine {
-          return getThemeColor(grid, "checkbox", "uncheckBgColor");
+          return getCheckboxProp("uncheckBgColor");
         },
         get checkBgColor(): ColorPropertyDefine {
-          return getThemeColor(grid, "checkbox", "checkBgColor");
+          return getCheckboxProp("checkBgColor");
         },
         get borderColor(): ColorPropertyDefine {
-          return getThemeColor(grid, "checkbox", "borderColor");
+          return getCheckboxProp("borderColor");
         },
       })
     );
+
+    function getCheckboxProp(prop: string): ColorPropertyDefine {
+      return getThemeColor(grid, "checkbox", prop);
+    }
   }
   get radioButton(): RequiredThemeDefine["radioButton"] {
     const grid = this._grid;
@@ -934,22 +938,26 @@ class ThemeResolver<T> implements RequiredThemeDefine {
       this._radioButton ||
       (this._radioButton = {
         get checkColor(): ColorPropertyDefine {
-          return getThemeColor(grid, "radioButton", "checkColor");
+          return getRadioButtonProp("checkColor");
         },
         get uncheckBorderColor(): ColorPropertyDefine {
-          return getThemeColor(grid, "radioButton", "uncheckBorderColor");
+          return getRadioButtonProp("uncheckBorderColor");
         },
         get checkBorderColor(): ColorPropertyDefine {
-          return getThemeColor(grid, "radioButton", "checkBorderColor");
+          return getRadioButtonProp("checkBorderColor");
         },
         get uncheckBgColor(): ColorPropertyDefine {
-          return getThemeColor(grid, "radioButton", "uncheckBgColor");
+          return getRadioButtonProp("uncheckBgColor");
         },
         get checkBgColor(): ColorPropertyDefine {
-          return getThemeColor(grid, "radioButton", "checkBgColor");
+          return getRadioButtonProp("checkBgColor");
         },
       })
     );
+
+    function getRadioButtonProp(prop: string): ColorPropertyDefine {
+      return getThemeColor(grid, "radioButton", prop);
+    }
   }
   get button(): RequiredThemeDefine["button"] {
     const grid = this._grid;
@@ -957,13 +965,17 @@ class ThemeResolver<T> implements RequiredThemeDefine {
       this._button ||
       (this._button = {
         get color(): ColorPropertyDefine {
-          return getThemeColor(grid, "button", "color");
+          return getButtonProp("color");
         },
         get bgColor(): ColorPropertyDefine {
-          return getThemeColor(grid, "button", "bgColor");
+          return getButtonProp("bgColor");
         },
       })
     );
+
+    function getButtonProp(prop: string): ColorPropertyDefine {
+      return getThemeColor(grid, "button", prop);
+    }
   }
   get header(): RequiredThemeDefine["header"] {
     const grid = this._grid;
@@ -982,22 +994,28 @@ class ThemeResolver<T> implements RequiredThemeDefine {
       this._messages ||
       (this._messages = {
         get infoBgColor(): ColorPropertyDefine {
-          return getThemeColor(grid, "messages", "infoBgColor");
+          return getMessageProp("infoBgColor");
         },
         get errorBgColor(): ColorPropertyDefine {
-          return getThemeColor(grid, "messages", "errorBgColor");
+          return getMessageProp("errorBgColor");
         },
         get warnBgColor(): ColorPropertyDefine {
-          return getThemeColor(grid, "messages", "warnBgColor");
+          return getMessageProp("warnBgColor");
         },
         get boxWidth(): number {
-          return getThemeColor(grid, "messages", "boxWidth");
+          return getMessageProp("boxWidth");
         },
         get markHeight(): number {
-          return getThemeColor(grid, "messages", "markHeight");
+          return getMessageProp("markHeight");
         },
       })
     );
+
+    function getMessageProp<T extends ColorPropertyDefine | number>(
+      prop: string
+    ): T {
+      return getThemeColor(grid, "messages", prop);
+    }
   }
   get indicators(): RequiredThemeDefine["indicators"] {
     const grid = this._grid;
@@ -1005,13 +1023,37 @@ class ThemeResolver<T> implements RequiredThemeDefine {
       this._indicators ||
       (this._indicators = {
         get topLeftColor(): ColorPropertyDefine {
-          return getThemeColor(grid, "indicators", "topLeftColor");
+          return getIndicatorsProp("topLeftColor");
         },
         get topLeftSize(): number {
-          return getThemeColor(grid, "indicators", "topLeftSize");
+          return getIndicatorsProp("topLeftSize");
+        },
+        get topRightColor(): ColorPropertyDefine {
+          return getIndicatorsProp("topRightColor");
+        },
+        get topRightSize(): number {
+          return getIndicatorsProp("topRightSize");
+        },
+        get bottomRightColor(): ColorPropertyDefine {
+          return getIndicatorsProp("bottomRightColor");
+        },
+        get bottomRightSize(): number {
+          return getIndicatorsProp("bottomRightSize");
+        },
+        get bottomLeftColor(): ColorPropertyDefine {
+          return getIndicatorsProp("bottomLeftColor");
+        },
+        get bottomLeftSize(): number {
+          return getIndicatorsProp("bottomLeftSize");
         },
       })
     );
+
+    function getIndicatorsProp<T extends ColorPropertyDefine | number>(
+      prop: string
+    ): T {
+      return getThemeColor(grid, "indicators", prop);
+    }
   }
 }
 

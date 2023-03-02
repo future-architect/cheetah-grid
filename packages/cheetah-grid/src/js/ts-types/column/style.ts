@@ -1,15 +1,27 @@
-import type { IndicatorStyle, LineClamp, TextOverflow } from "../define";
+import type {
+  IndicatorDefine,
+  IndicatorObject,
+  LineClamp,
+  TextOverflow,
+} from "../define";
 import type { ColorDef } from "../base";
 
 export interface ColumnStyle {
   bgColor?: ColorDef;
+  indicatorTopLeft?: IndicatorObject;
+  indicatorTopRight?: IndicatorObject;
+  indicatorBottomRight?: IndicatorObject;
+  indicatorBottomLeft?: IndicatorObject;
   doChangeStyle(): void;
   clone(): ColumnStyle;
 }
 
 export interface BaseStyleOption {
   bgColor?: ColorDef;
-  indicatorTopLeft?: IndicatorStyle | IndicatorStyle["style"];
+  indicatorTopLeft?: IndicatorDefine;
+  indicatorTopRight?: IndicatorDefine;
+  indicatorBottomRight?: IndicatorDefine;
+  indicatorBottomLeft?: IndicatorDefine;
 }
 
 export interface StdBaseStyleOption extends BaseStyleOption {

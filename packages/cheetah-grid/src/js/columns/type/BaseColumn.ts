@@ -18,6 +18,7 @@ import type {
 } from "../../ts-types-internal";
 import { isPromise, obj } from "../../internal/utils";
 import { BaseStyle } from "../style/BaseStyle";
+import { DrawIndicatorKind } from "../indicator/type";
 import { animate } from "../../internal/animate";
 import { getColumnFadeinStateId } from "../../internal/symbolManager";
 import { getDrawIndicator } from "../indicator/handlers";
@@ -318,11 +319,27 @@ export abstract class BaseColumn<T> implements ColumnTypeAPI {
     grid: ListGridAPI<T>,
     info: DrawCellInfo<T>
   ): void {
-    const { indicatorTopLeft } = style;
-    if (indicatorTopLeft) {
-      const draw = getDrawIndicator(indicatorTopLeft);
-      if (draw) {
-        draw(context, indicatorTopLeft, helper, grid, info);
+    const {
+      indicatorTopLeft,
+      indicatorTopRight,
+      indicatorBottomRight,
+      indicatorBottomLeft,
+    } = style;
+    for (const [indicatorStyle, kind] of [
+      [indicatorTopLeft, DrawIndicatorKind.topLeft],
+      [indicatorTopRight, DrawIndicatorKind.topRight],
+      [indicatorBottomRight, DrawIndicatorKind.bottomRight],
+      [indicatorBottomLeft, DrawIndicatorKind.bottomLeft],
+    ] as const) {
+      if (indicatorStyle) {
+        getDrawIndicator(indicatorStyle)?.(
+          context,
+          indicatorStyle,
+          kind,
+          helper,
+          grid,
+          info
+        );
       }
     }
   }

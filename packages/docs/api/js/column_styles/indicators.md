@@ -1,7 +1,7 @@
 # Indicators
 
 You can use the style property to display the indicators.  
-Currently the only indicator style supported is `"triangle"` and it can only be placed in the top-left corner.
+Currently the only indicator style supported is `"triangle"`.
 
 ## Usage
 
@@ -26,16 +26,25 @@ const grid = new cheetahGrid.ListGrid({
       width: 150,
       style: { indicatorTopLeft: "triangle" },
     },
+    {
+      field: "text",
+      caption: "Text",
+      width: 150,
+      style: { indicatorTopRight: "triangle" },
+    },
   ],
 });
 grid.records = [
   { no: 1, text: "data" },
   { no: 2, text: "data" },
   { no: 3, text: "data" },
+  { no: 4, text: "data" },
 ];
 ```
 
 </code-preview>
+
+It supports `indicatorTopLeft`, `indicatorTopRight`, `indicatorBottomRight`, and `indicatorBottomLeft`
 
 You can also control the display of indicators per record using functions.
 
@@ -59,8 +68,17 @@ const grid = new cheetahGrid.ListGrid({
       caption: "Text",
       width: 150,
       style(record) {
-        if (record.no === 3) {
+        if (record.no === 1) {
           return { indicatorTopLeft: "triangle" };
+        }
+        if (record.no === 2) {
+          return { indicatorTopRight: "triangle" };
+        }
+        if (record.no === 3) {
+          return { indicatorBottomRight: "triangle" };
+        }
+        if (record.no === 4) {
+          return { indicatorBottomLeft: "triangle" };
         }
         return undefined;
       },
@@ -71,6 +89,7 @@ grid.records = [
   { no: 1, text: "data" },
   { no: 2, text: "data" },
   { no: 3, text: "data" },
+  { no: 4, text: "data" },
 ];
 ```
 
@@ -79,7 +98,7 @@ grid.records = [
 ## Indicator Styles
 
 We recommend using [themes](../theme.md) to control the style of the indicator.
-You can control the size and color of the indicators by setting the theme's `indicators.topLeftColor` and `indicators.topLeftSize` properties.
+You can control the size and color of the indicators by setting the theme's `indicators.topLeftColor`, `indicators.topLeftSize`, `indicators.topRightColor`, `indicators.topRightSize`, `indicators.bottomRightColor`, `indicators.bottomRightSize` , `indicators.bottomLeftColor`, and `indicators.bottomLeftSize` properties.
 
 <code-preview>
 
@@ -101,8 +120,17 @@ const grid = new cheetahGrid.ListGrid({
       caption: "Text",
       width: 150,
       style(record) {
-        if (record.no === 3) {
+        if (record.no === 1) {
           return { indicatorTopLeft: "triangle" };
+        }
+        if (record.no === 2) {
+          return { indicatorTopRight: "triangle" };
+        }
+        if (record.no === 3) {
+          return { indicatorBottomRight: "triangle" };
+        }
+        if (record.no === 4) {
+          return { indicatorBottomLeft: "triangle" };
         }
         return undefined;
       },
@@ -113,11 +141,18 @@ grid.records = [
   { no: 1, text: "data" },
   { no: 2, text: "data" },
   { no: 3, text: "data" },
+  { no: 4, text: "data" },
 ];
 grid.theme = {
   indicators: {
     topLeftColor: "blue",
     topLeftSize: 10,
+    topRightColor: "red",
+    topRightSize: 10,
+    bottomRightColor: "green",
+    bottomRightSize: 10,
+    bottomLeftColor: "black",
+    bottomLeftSize: 10,
   },
 };
 ```
@@ -164,6 +199,7 @@ grid.records = [
   { no: 1, text: "data" },
   { no: 2, text: "data" },
   { no: 3, text: "data" },
+  { no: 4, text: "data" },
 ];
 ```
 

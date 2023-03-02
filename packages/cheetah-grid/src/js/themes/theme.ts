@@ -129,28 +129,19 @@ export class Theme implements RequiredThemeDefine {
       this._checkbox ||
       (this._checkbox = {
         get uncheckBgColor(): ColorPropertyDefine {
-          return getProp(
-            obj,
-            superTheme,
-            ["checkbox", "uncheckBgColor"],
-            ["defaultBgColor"]
-          );
+          return getCheckboxProp("uncheckBgColor", ["defaultBgColor"]);
         },
         get checkBgColor(): ColorPropertyDefine {
-          return getProp(
-            obj,
-            superTheme,
-            ["checkbox", "checkBgColor"],
+          return getCheckboxProp(
+            "checkBgColor",
             ["borderColor"],
             colorsToColor,
             "#000"
           );
         },
         get borderColor(): ColorPropertyDefine {
-          return getProp(
-            obj,
-            superTheme,
-            ["checkbox", "borderColor"],
+          return getCheckboxProp(
+            "borderColor",
             ["borderColor"],
             colorsToColor,
             "#000"
@@ -158,6 +149,21 @@ export class Theme implements RequiredThemeDefine {
         },
       })
     );
+    function getCheckboxProp(
+      prop: string,
+      defNames: string[],
+      convertForSuper?: (value: never) => ColorPropertyDefine | undefined,
+      defaultValue?: ColorPropertyDefine
+    ): ColorPropertyDefine {
+      return getProp(
+        obj,
+        superTheme,
+        ["checkbox", prop],
+        defNames,
+        convertForSuper,
+        defaultValue
+      );
+    }
   }
   get radioButton(): RequiredThemeDefine["radioButton"] {
     const { obj, superTheme } = this[_];
@@ -165,51 +171,47 @@ export class Theme implements RequiredThemeDefine {
       this._radioButton ||
       (this._radioButton = {
         get checkColor(): ColorPropertyDefine {
-          return getProp(
-            obj,
-            superTheme,
-            ["radioButton", "checkColor"],
-            ["color"]
-          );
+          return getRadioButtonProp("checkColor", ["color"]);
         },
         get uncheckBorderColor(): ColorPropertyDefine {
-          return getProp(
-            obj,
-            superTheme,
-            ["radioButton", "uncheckBorderColor"],
+          return getRadioButtonProp(
+            "uncheckBorderColor",
             ["borderColor"],
             colorsToColor,
             "#000"
           );
         },
         get checkBorderColor(): ColorPropertyDefine {
-          return getProp(
-            obj,
-            superTheme,
-            ["radioButton", "checkBorderColor"],
+          return getRadioButtonProp(
+            "checkBorderColor",
             ["borderColor"],
             colorsToColor,
             "#000"
           );
         },
         get uncheckBgColor(): ColorPropertyDefine {
-          return getProp(
-            obj,
-            superTheme,
-            ["radioButton", "uncheckBgColor"],
-            ["defaultBgColor"]
-          );
+          return getRadioButtonProp("uncheckBgColor", ["defaultBgColor"]);
         },
         get checkBgColor(): ColorPropertyDefine {
-          return getProp(
-            obj,
-            superTheme,
-            ["radioButton", "checkBgColor"],
-            ["defaultBgColor"]
-          );
+          return getRadioButtonProp("checkBgColor", ["defaultBgColor"]);
         },
       })
     );
+    function getRadioButtonProp(
+      prop: string,
+      defNames: string[],
+      convertForSuper?: (value: never) => ColorPropertyDefine | undefined,
+      defaultValue?: ColorPropertyDefine
+    ): ColorPropertyDefine {
+      return getProp(
+        obj,
+        superTheme,
+        ["radioButton", prop],
+        defNames,
+        convertForSuper,
+        defaultValue
+      );
+    }
   }
   get button(): RequiredThemeDefine["button"] {
     const { obj, superTheme } = this[_];
@@ -217,18 +219,19 @@ export class Theme implements RequiredThemeDefine {
       this._button ||
       (this._button = {
         get color(): ColorPropertyDefine {
-          return getProp(obj, superTheme, ["button", "color"], ["color"]);
+          return getButtonProp("color", ["color"]);
         },
         get bgColor(): ColorPropertyDefine {
-          return getProp(
-            obj,
-            superTheme,
-            ["button", "bgColor"],
-            ["defaultBgColor"]
-          );
+          return getButtonProp("bgColor", ["defaultBgColor"]);
         },
       })
     );
+    function getButtonProp(
+      prop: string,
+      defNames: string[]
+    ): ColorPropertyDefine {
+      return getProp(obj, superTheme, ["button", prop], defNames);
+    }
   }
   get header(): RequiredThemeDefine["header"] {
     const { obj, superTheme } = this[_];
@@ -252,22 +255,27 @@ export class Theme implements RequiredThemeDefine {
       this._messages ||
       (this._messages = {
         get infoBgColor(): ColorPropertyDefine {
-          return getProp(obj, superTheme, ["messages", "infoBgColor"]);
+          return getMessageProp("infoBgColor");
         },
         get errorBgColor(): ColorPropertyDefine {
-          return getProp(obj, superTheme, ["messages", "errorBgColor"]);
+          return getMessageProp("errorBgColor");
         },
         get warnBgColor(): ColorPropertyDefine {
-          return getProp(obj, superTheme, ["messages", "warnBgColor"]);
+          return getMessageProp("warnBgColor");
         },
         get boxWidth(): number {
-          return getProp(obj, superTheme, ["messages", "boxWidth"]);
+          return getMessageProp("boxWidth");
         },
         get markHeight(): number {
-          return getProp(obj, superTheme, ["messages", "markHeight"]);
+          return getMessageProp("markHeight");
         },
       })
     );
+    function getMessageProp<T extends ColorPropertyDefine | number>(
+      prop: string
+    ): T {
+      return getProp(obj, superTheme, ["messages", prop]);
+    }
   }
   get indicators(): RequiredThemeDefine["indicators"] {
     const { obj, superTheme } = this[_];
@@ -275,20 +283,67 @@ export class Theme implements RequiredThemeDefine {
       this._indicators ||
       (this._indicators = {
         get topLeftColor(): ColorPropertyDefine {
-          return getProp(
-            obj,
-            superTheme,
-            ["indicators", "topLeftColor"],
+          return getIndicatorsProp(
+            "topLeftColor",
             ["borderColor"],
             colorsToColor,
             "#000"
           );
         },
         get topLeftSize(): number {
-          return getProp(obj, superTheme, ["indicators", "topLeftSize"]);
+          return getIndicatorsProp("topLeftSize");
+        },
+        get topRightColor(): ColorPropertyDefine {
+          return getIndicatorsProp(
+            "topRightColor",
+            ["borderColor"],
+            colorsToColor,
+            "#000"
+          );
+        },
+        get topRightSize(): number {
+          return getIndicatorsProp("topRightSize");
+        },
+        get bottomRightColor(): ColorPropertyDefine {
+          return getIndicatorsProp(
+            "bottomRightColor",
+            ["borderColor"],
+            colorsToColor,
+            "#000"
+          );
+        },
+        get bottomRightSize(): number {
+          return getIndicatorsProp("bottomRightSize");
+        },
+        get bottomLeftColor(): ColorPropertyDefine {
+          return getIndicatorsProp(
+            "bottomLeftColor",
+            ["borderColor"],
+            colorsToColor,
+            "#000"
+          );
+        },
+        get bottomLeftSize(): number {
+          return getIndicatorsProp("bottomLeftSize");
         },
       })
     );
+
+    function getIndicatorsProp<T extends ColorPropertyDefine | number>(
+      prop: string,
+      defNames?: string[],
+      convertForSuper?: (value: never) => T | undefined,
+      defaultValue?: T
+    ): T {
+      return getProp(
+        obj,
+        superTheme,
+        ["indicators", prop],
+        defNames,
+        convertForSuper,
+        defaultValue
+      );
+    }
   }
   hasProperty(names: string[]): boolean {
     const { obj, superTheme } = this[_];

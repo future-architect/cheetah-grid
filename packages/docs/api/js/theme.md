@@ -139,6 +139,12 @@ const userTheme = {
   indicators: {
     topLeftColor: "blue",
     topLeftSize: 10,
+    topRightColor: "blue",
+    topRightSize: 10,
+    bottomLeftColor: "blue",
+    bottomLeftSize: 10,
+    bottomRightColor: "blue",
+    bottomRightSize: 10,
   },
 };
 grid.theme = userTheme;

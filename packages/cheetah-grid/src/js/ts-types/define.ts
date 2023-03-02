@@ -107,8 +107,10 @@ export type FontPropertyDefine =
   | ((args: StylePropertyFunctionArg) => string);
 
 // ****** Indicator Options *******
-export type IndicatorStyle = {
-  style?: "triangle" | "none";
+export type IndicatorStyle = "triangle" | "none";
+export type IndicatorObject = {
+  style?: IndicatorStyle;
   color?: ColorDef;
   size?: number | string;
 };
+export type IndicatorDefine = IndicatorObject | IndicatorStyle;

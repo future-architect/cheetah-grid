@@ -53,7 +53,13 @@ export interface ThemeDefine {
   };
   indicators: {
     topLeftColor?: ColorPropertyDefine;
-    topLeftSize?: number; // Default (Cell Height / 6)
+    topLeftSize?: number;
+    topRightColor?: ColorPropertyDefine;
+    topRightSize?: number;
+    bottomRightColor?: ColorPropertyDefine;
+    bottomRightSize?: number;
+    bottomLeftColor?: ColorPropertyDefine;
+    bottomLeftSize?: number;
   };
 }
 

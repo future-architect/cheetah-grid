@@ -294,6 +294,9 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 			checkBgColor: 'rgb(255, 73, 72)',
 			borderColor: 'red',
 		},
+		radioButton: {
+			checkColor: 'red'
+		},
 		button: {
 			color: '#FDD',
 			bgColor: '#F55',
