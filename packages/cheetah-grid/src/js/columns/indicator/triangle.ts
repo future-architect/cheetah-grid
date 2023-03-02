@@ -4,7 +4,7 @@ import type {
   IndicatorStyle,
 } from "../../ts-types";
 
-export function drawTopLeftTriangleIndicator(
+export function drawTriangleIndicator(
   context: CellContext,
   style: IndicatorStyle,
   helper: GridCanvasHelperAPI
@@ -23,12 +23,15 @@ export function drawTopLeftTriangleIndicator(
       (style.size && Number(style.size)) ||
       helper.theme.indicators.topLeftSize ||
       rect.height / 6;
-    // draw box
+    const baseLeft = rect.left + 1;
+    const baseTop = rect.top + 1;
+
+    // draw triangle
     ctx.fillStyle = color;
     ctx.beginPath();
-    ctx.moveTo(rect.left, rect.top);
-    ctx.lineTo(rect.left + size, rect.top);
-    ctx.lineTo(rect.left, rect.top + size);
+    ctx.moveTo(baseLeft, baseTop);
+    ctx.lineTo(baseLeft + size, baseTop);
+    ctx.lineTo(baseLeft, baseTop + size);
     ctx.closePath();
     ctx.fill();
   });

@@ -51,7 +51,7 @@
 	});
 	window.gridElement = grid.getElement();
 	window.grid = grid;
-	const theme = {indicators: {topLeftColor: undefined}};
+	const theme = {indicators: {topLeftColor: undefined, topLeftSize: undefined}};
 	grid.theme = cheetahGrid.themes.choices.MATERIAL_DESIGN.extends(theme);
 
 	describe('indicatorTopLeft', function() {
@@ -149,7 +149,7 @@
 				done();
 			}, 200);
 		});
-		it('color', function() {
+		it('update color', function() {
 			const color = '#00F';
 			theme.indicators.topLeftColor = color;
 			grid.invalidate();
@@ -186,15 +186,124 @@
 				blurLevel: 1,
 			});
 		});
+		it('reset color', function() {
+			theme.indicators.topLeftColor = undefined;
+			grid.invalidate();
+
+			function createAnswerCanvas() {
+				const base = createAnswerCanvasBase();
+				const canvasHelper = base.canvasHelper;
+				const ctx = canvasHelper.context;
+				const canvas = canvasHelper.canvas;
+
+				const gridHelper = base.gridHelper;
+
+				for (const cell of [
+					[0, 1],
+					[1, 1],
+					[2, 1],
+					[0, 2],
+					[2, 2],
+				]) {
+					drawTopLeftTriangleIndicator({
+						ctx,
+						color: BORDER_COLOR,
+						rect: gridHelper.getRect(cell[0], cell[1]),
+						size: 4,
+					});
+				}
+
+				return canvas;
+			}
+			const canvas = createAnswerCanvas();
+			expect(grid.canvas).toMatchImage(canvas, {
+				tolerance: 100,
+				delta: '10%',
+				blurLevel: 1,
+			});
+		});
+		it('update size', function() {
+			const size = 6;
+			theme.indicators.topLeftSize = size;
+			grid.invalidate();
+
+			function createAnswerCanvas() {
+				const base = createAnswerCanvasBase();
+				const canvasHelper = base.canvasHelper;
+				const ctx = canvasHelper.context;
+				const canvas = canvasHelper.canvas;
+
+				const gridHelper = base.gridHelper;
+
+				for (const cell of [
+					[0, 1],
+					[1, 1],
+					[2, 1],
+					[0, 2],
+					[2, 2],
+				]) {
+					drawTopLeftTriangleIndicator({
+						ctx,
+						color: BORDER_COLOR,
+						rect: gridHelper.getRect(cell[0], cell[1]),
+						size,
+					});
+				}
+
+				return canvas;
+			}
+			const canvas = createAnswerCanvas();
+			expect(grid.canvas).toMatchImage(canvas, {
+				tolerance: 100,
+				delta: '10%',
+				blurLevel: 1,
+			});
+		});
+		it('reset size', function() {
+			theme.indicators.topLeftSize = undefined;
+			grid.invalidate();
+
+			function createAnswerCanvas() {
+				const base = createAnswerCanvasBase();
+				const canvasHelper = base.canvasHelper;
+				const ctx = canvasHelper.context;
+				const canvas = canvasHelper.canvas;
+
+				const gridHelper = base.gridHelper;
+
+				for (const cell of [
+					[0, 1],
+					[1, 1],
+					[2, 1],
+					[0, 2],
+					[2, 2],
+				]) {
+					drawTopLeftTriangleIndicator({
+						ctx,
+						color: BORDER_COLOR,
+						rect: gridHelper.getRect(cell[0], cell[1]),
+						size: 4,
+					});
+				}
+
+				return canvas;
+			}
+			const canvas = createAnswerCanvas();
+			expect(grid.canvas).toMatchImage(canvas, {
+				tolerance: 100,
+				delta: '10%',
+				blurLevel: 1,
+			});
+		});
 	});
 })();
 
 function drawTopLeftTriangleIndicator({ctx, rect, color, size}) {
 	ctx.fillStyle = color;
 	ctx.beginPath();
-	ctx.moveTo(rect.left, rect.top);
-	ctx.lineTo(rect.left + size, rect.top);
-	ctx.lineTo(rect.left, rect.top + size);
+	ctx.moveTo(rect.left + 1, rect.top + 1);
+	ctx.lineTo(rect.left + 1 + size, rect.top + 1);
+	ctx.lineTo(rect.left + 1, rect.top + 1 + size);
 	ctx.closePath();
 	ctx.fill();
 }

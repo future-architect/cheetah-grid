@@ -75,5 +75,8 @@ export default {
   header: {
     sortArrowColor: "rgba(0, 0, 0, 0.38)",
   },
+  indicators: {
+    topLeftColor: "#ccc7c7",
+  },
   underlayBackgroundColor: "#FFF",
 } as ThemeDefine;

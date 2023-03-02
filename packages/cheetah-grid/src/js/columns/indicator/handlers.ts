@@ -1,13 +1,13 @@
 import type { DrawIndicator } from "./type";
 import type { IndicatorStyle } from "../../ts-types";
-import { drawTopLeftTriangleIndicator } from "./triangle";
+import { drawTriangleIndicator } from "./triangle";
 
-export function getTopLeftIndicatorDraw(
+export function getDrawIndicator(
   indicatorStyle: IndicatorStyle
 ): DrawIndicator | null {
   const { style } = indicatorStyle;
   if (style === "triangle") {
-    return drawTopLeftTriangleIndicator;
+    return drawTriangleIndicator;
   }
   return null;
 }

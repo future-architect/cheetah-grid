@@ -20,7 +20,7 @@ import { isPromise, obj } from "../../internal/utils";
 import { BaseStyle } from "../style/BaseStyle";
 import { animate } from "../../internal/animate";
 import { getColumnFadeinStateId } from "../../internal/symbolManager";
-import { getTopLeftIndicatorDraw } from "../indicator/handlers";
+import { getDrawIndicator } from "../indicator/handlers";
 
 const { setReadonly } = obj;
 const COLUMN_FADEIN_STATE_ID = getColumnFadeinStateId();
@@ -319,12 +319,11 @@ export abstract class BaseColumn<T> implements ColumnTypeAPI {
     info: DrawCellInfo<T>
   ): void {
     const { indicatorTopLeft } = style;
-    if (!indicatorTopLeft) {
-      return;
-    }
-    const drawTopLeft = getTopLeftIndicatorDraw(indicatorTopLeft);
-    if (drawTopLeft) {
-      drawTopLeft(context, indicatorTopLeft, helper, grid, info);
+    if (indicatorTopLeft) {
+      const draw = getDrawIndicator(indicatorTopLeft);
+      if (draw) {
+        draw(context, indicatorTopLeft, helper, grid, info);
+      }
     }
   }
   bindGridEvent(

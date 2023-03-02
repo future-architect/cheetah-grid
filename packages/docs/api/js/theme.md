@@ -136,6 +136,10 @@ const userTheme = {
     boxWidth: 12,
     markHeight: 15,
   },
+  indicators: {
+    topLeftColor: "blue",
+    topLeftSize: 10,
+  },
 };
 grid.theme = userTheme;
 ```
@@ -159,7 +163,19 @@ function createGrid(parentElement) {
           {field: 'lname', caption: 'Last Name', width: 200, sort: true},
         ],
       },
-      {field: 'email', caption: 'Email', width: 250, sort: true},
+      {
+        field: 'email',
+        caption: 'Email',
+        width: 250,
+        sort: true,
+        style(rec) {
+          const index = records.indexOf(rec)
+          if (index % 3 === 2) {
+            return { indicatorTopLeft: 'triangle' }
+          }
+          return undefined
+        },
+      },
       {
       /* callback field */
         field(rec) {
@@ -188,7 +204,7 @@ function createGrid(parentElement) {
             type: 'error',
             message: 'Error Message.'
           };
-        },
+        }
       },
       {
         caption: 'button',
