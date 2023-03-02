@@ -33,6 +33,16 @@
             width: 26
           }"
           field="name"
+          :column-style="record => {
+            return record.no === 1
+              ? {
+                indicatorTopLeft: {
+                  style: 'triangle',
+                  color: '#ff9933'
+                }
+              }
+              : undefined
+          }"
         >
           Name
         </c-grid-column>
