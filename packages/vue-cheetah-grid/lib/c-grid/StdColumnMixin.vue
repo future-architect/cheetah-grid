@@ -48,7 +48,7 @@ export default {
       default: undefined
     },
     /**
-     * Defines a column style. Same as [the `style` property of the JS API](https://future-architect.github.io/cheetah-grid/documents/api/js/column_styles.html).
+     * Defines a column style. Same as [the `style` property of the JS API](https://future-architect.github.io/cheetah-grid/documents/api/js/column_styles/).
      */
     columnStyle: {
       type: [Object, String, Function],

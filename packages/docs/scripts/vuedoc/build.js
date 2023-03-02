@@ -40,7 +40,7 @@ function writeMarkdown (docFilename, comp, componentName) {
   }
 
   const baseMd = fs.existsSync(docFilename) ? fs.readFileSync(docFilename, 'utf8') : ''
-  const contents = renderMarkdown(comp, componentName, baseMd)
+  const contents = renderMarkdown(comp, { componentName, fileName: docFilename }, baseMd)
   fs.writeFile(docFilename, contents, (err) => {
     if (err) {
       handleError(err.message)
@@ -48,6 +48,6 @@ function writeMarkdown (docFilename, comp, componentName) {
   })
 }
 
-function renderMarkdown (comp, componentName, baseMd) {
-  return md.render(componentName, comp, baseMd)
+function renderMarkdown (comp, context, baseMd) {
+  return md.render(context, comp, baseMd)
 }
