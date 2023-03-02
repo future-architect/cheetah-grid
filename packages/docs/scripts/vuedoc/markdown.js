@@ -1,4 +1,5 @@
 const { getPropType } = require("../../../vue-cheetah-grid/scripts/lib/metadata")
+const path = require('path')
 
 function createHeader (componentName, comp) {
   return `---
@@ -134,9 +135,9 @@ ${methods.join('\n')}
 }
 
 module.exports = {
-  render (componentName, comp, contents) {
+  render (context, comp, contents) {
     // header
-    const header = createHeader(componentName, comp)
+    const header = createHeader(context.componentName, comp)
     contents = replaceOrAppend(contents, /^([\s\S]*?)\n##/, `${header}\n##`, s => header + s)
 
     // slots
@@ -171,7 +172,21 @@ module.exports = {
       contents = replaceBlock(contents, '<!-- METHODS_TABLE_START -->', '<!-- METHODS_TABLE_END -->', createMethods(comp))
     }
 
+
     return contents.replace(/\n{3,}/g, '\n\n').replace(/\n{2,}$/g, '\n')
+      .replace(/\((https:\/\/future-architect\.github\.io\/cheetah-grid\/documents\/.*?)\)/gu, (_, match) => {
+        const url = new URL(match)
+        let linkPathname = url.pathname.slice(23)
+        if (linkPathname.endsWith('/')) {
+          linkPathname += 'README.md'
+        } else if (linkPathname.endsWith('.html')){
+          linkPathname = linkPathname.slice(0, -5)+'.md'
+        }
+        const linkPath = path.join(__dirname, '../..', linkPathname)
+        
+        const replaced = path.relative(path.dirname(context.fileName), linkPath) + (url.hash || '')
+        return '('+replaced+')'
+      })
   }
 }
 

@@ -20,7 +20,7 @@ Show the button.
 
 In addition to this, the Standard styles is available.
 
-- [Standard Column Style](../column_styles.md)
+- [Standard Column Style](../column_styles/README.md)
 
 <code-preview>
 

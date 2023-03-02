@@ -91,5 +91,8 @@ export default {
   header: {
     sortArrowColor: "rgba(0, 0, 0, 0.38)",
   },
+  indicators: {
+    topLeftColor: "#000",
+  },
   underlayBackgroundColor: "#F6F6F6",
 } as ThemeDefine;

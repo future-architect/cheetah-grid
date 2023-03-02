@@ -21,7 +21,7 @@ In the standard definition, each object consists of following properties.
 | minWidth   | `string` &#124; `number`                                         | define the minimum width of column                                                              | [link](./column_width.md)          |
 | maxWidth   | `string` &#124; `number`                                         | define the maximum width of column                                                              | [link](./column_width.md)          |
 | columnType | `string` &#124; `object`                                         | define the type of column                                                                       | [link](./column_types/README.md)   |
-| style      | `string` &#124; `object` &#124; `function`                       | define the style of column                                                                      | [link](./column_styles.md)         |
+| style      | `string` &#124; `object` &#124; `function`                       | define the style of column                                                                      | [link](./column_styles/README.md)  |
 | action     | `string` &#124; `object`                                         | define the action of column                                                                     | [link](./column_actions/README.md) |
 
 <code-preview>
