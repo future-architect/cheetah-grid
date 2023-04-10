@@ -20,7 +20,8 @@ const merge = require('./merge')
 
 module.exports = {
   getAllVueComponentMetadata,
-  getPropType
+  getPropType,
+  isRequiredProp
 }
 
 /**
@@ -60,6 +61,13 @@ function getPropType (prop) {
   const customType = customTypeKeyword && customTypeKeyword.description.replace(/\{(.+?)\}/, '$1')
   const type = customType || prop.value.type || prop.value || 'any'
   return parseType(type)
+}
+/**
+ * @param {ComponentPropMetadata} prop
+ */
+
+function isRequiredProp (prop) {
+  return typeof prop.value !== 'string' && Boolean(prop.value.required)
 }
 
 function parseType (type) {

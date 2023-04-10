@@ -1,6 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const { getAllVueComponentMetadata, getPropType } = require('./lib/metadata')
+const { getAllVueComponentMetadata, getPropType, isRequiredProp } = require('./lib/metadata')
 const cheetahGrid = require('cheetah-grid')
 const { EVENT_TYPE } = cheetahGrid.ListGrid
 const vue3Emits = Object.keys(EVENT_TYPE)
@@ -22,12 +22,12 @@ async function main () {
     const props = component.props.map(prop => {
       return `
 /** ${prop.description} */
-${camelCase(prop.name)}: ${normalizePropType(prop)};
+${camelCase(prop.name)}${isRequiredProp(prop) ? '' : '?'}: ${normalizePropType(prop)};
 `.trim()
     })
     const emits = Object.keys(vue3Emits).map(emitName => {
       return `
-on${pascalCase(emitName)}: Function;
+on${pascalCase(emitName)}?: Function;
 `.trim()
     })
     componentTypes.push(`
