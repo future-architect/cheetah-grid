@@ -41,6 +41,31 @@ const EVENT_TYPE = {
 type PromiseBack<V> = (value: PromiseCacheValue<V>) => void;
 
 /** @private */
+type CompareResult = -1 | 0 | 1;
+
+/** @private */
+function ascOrderFn<T>(v1: T, v2: T): CompareResult {
+  if (v1 === v2) {
+    return 0;
+  }
+  if (v1 == null) {
+    return v2 == null
+      ? // If both are nullish, consider a match.
+        0
+      : // Nulls first
+        -1;
+  }
+  if (v2 == null) {
+    // Nulls first
+    return 1;
+  }
+  return v1 > v2 ? 1 : -1;
+}
+function descOrderFn<T>(v1: T, v2: T): CompareResult {
+  return (ascOrderFn(v1, v2) * -1) as CompareResult;
+}
+
+/** @private */
 function getValue<V>(
   value: MaybePromiseOrCallOrUndef<V, []>,
   setPromiseBack: PromiseBack<V>
@@ -214,10 +239,7 @@ export class DataSource<T> extends EventTarget implements DataSourceAPI<T> {
   sort(field: FieldDef<T>, order: "desc" | "asc"): MaybePromise<void> {
     const sortedIndexMap = new Array<number>(this._length);
 
-    const orderFn: (v1: T, v2: T) => -1 | 0 | 1 =
-      order !== "desc"
-        ? (v1: T, v2: T): -1 | 0 | 1 => (v1 === v2 ? 0 : v1 > v2 ? 1 : -1)
-        : (v1: T, v2: T): -1 | 0 | 1 => (v1 === v2 ? 0 : v1 < v2 ? 1 : -1);
+    const orderFn = order !== "desc" ? ascOrderFn : descOrderFn;
 
     return sort
       .sortPromise(
