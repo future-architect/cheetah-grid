@@ -1,7 +1,7 @@
 {
   "name": "cheetah-grid-docs",
   "private": true,
-  "version": "1.9.0",
+  "version": "1.10.0",
   "scripts": {
     "watch": " npm run vuepress -- dev . --debug",
     "build": "npm-run-all build:*",
