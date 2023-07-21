@@ -52,6 +52,33 @@ function testRGB({ r, g, b, a }: RGBA): boolean {
 function rateToByte(r: number): number {
   return Math.ceil((r * 255) / 100);
 }
+const numberPattern = /((?:\+|-)?(?:\d+(?:\.\d+)?|\.\d+))/.source;
+const percentPattern = `${numberPattern}%`;
+const maybePercentPattern = `${numberPattern}(%?)`;
+function buildRgbWithCommaRegExp(bytePattern: string) {
+  return new RegExp(
+    `^rgba?\\(\\s*${bytePattern}\\s*,\\s*${bytePattern}\\s*,\\s*${bytePattern}\\s*\\)$`,
+    "i"
+  );
+}
+function buildRgbLv4RegExp(bytePattern: string) {
+  return new RegExp(
+    `^rgba?\\(\\s*${bytePattern}\\s+${bytePattern}\\s+${bytePattern}\\s*\\)$`,
+    "i"
+  );
+}
+function buildRgbaWithCommaRegExp(bytePattern: string, alphaPattern: string) {
+  return new RegExp(
+    `^rgba?\\(\\s*${bytePattern}\\s*,\\s*${bytePattern}\\s*,\\s*${bytePattern}\\s*,\\s*${alphaPattern}\\s*\\)$`,
+    "i"
+  );
+}
+function buildRgbaLv4RegExp(bytePattern: string, alphaPattern: string) {
+  return new RegExp(
+    `^rgba?\\(\\s*${bytePattern}\\s+${bytePattern}\\s+${bytePattern}\\s*/\\s*${alphaPattern}\\s*\\)$`,
+    "i"
+  );
+}
 function colorToRGB0(color: string): RGBA | null {
   if (/^#[0-9a-f]{3}$/i.exec(color)) {
     return tripleHexToRGB(color);
@@ -59,9 +86,9 @@ function colorToRGB0(color: string): RGBA | null {
   if (/^#[0-9a-f]{6}$/i.exec(color)) {
     return sextupleHexToRGB(color);
   }
-  let ret = /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/i.exec(
-    color
-  );
+  let ret =
+    buildRgbWithCommaRegExp(numberPattern).exec(color) ||
+    buildRgbLv4RegExp(numberPattern).exec(color);
   if (ret) {
     const rgb = createRGB(Number(ret[1]), Number(ret[2]), Number(ret[3]));
     if (testRGB(rgb)) {
@@ -69,44 +96,41 @@ function colorToRGB0(color: string): RGBA | null {
     }
   }
   ret =
-    /^rgba\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d(\.\d)?)\s*\)$/i.exec(
-      color
+    buildRgbWithCommaRegExp(percentPattern).exec(color) ||
+    buildRgbLv4RegExp(percentPattern).exec(color);
+  if (ret) {
+    const rgb = createRGB(
+      rateToByte(Number(ret[1])),
+      rateToByte(Number(ret[2])),
+      rateToByte(Number(ret[3]))
     );
+    if (testRGB(rgb)) {
+      return rgb;
+    }
+  }
+  ret =
+    buildRgbaWithCommaRegExp(numberPattern, maybePercentPattern).exec(color) ||
+    buildRgbaLv4RegExp(numberPattern, maybePercentPattern).exec(color);
   if (ret) {
     const rgb = createRGB(
       Number(ret[1]),
       Number(ret[2]),
       Number(ret[3]),
-      Number(ret[4])
+      Number(ret[4]) / (ret[5] /* % */ ? 100 : 1)
     );
     if (testRGB(rgb)) {
       return rgb;
     }
   }
   ret =
-    /^rgb\(\s*(\d{1,3}(\.\d)?)%\s*,\s*(\d{1,3}(\.\d)?)%\s*,\s*(\d{1,3}(\.\d)?)%\s*\)$/i.exec(
-      color
-    );
+    buildRgbaWithCommaRegExp(percentPattern, maybePercentPattern).exec(color) ||
+    buildRgbaLv4RegExp(percentPattern, maybePercentPattern).exec(color);
   if (ret) {
     const rgb = createRGB(
       rateToByte(Number(ret[1])),
+      rateToByte(Number(ret[2])),
       rateToByte(Number(ret[3])),
-      rateToByte(Number(ret[5]))
-    );
-    if (testRGB(rgb)) {
-      return rgb;
-    }
-  }
-  ret =
-    /^rgba\(\s*(\d{1,3}(\.\d)?)%\s*,\s*(\d{1,3}(\.\d)?)%\s*,\s*(\d{1,3}(\.\d)?)%\s*,\s*(\d(\.\d)?)\s*\)$/i.exec(
-      color
-    );
-  if (ret) {
-    const rgb = createRGB(
-      rateToByte(Number(ret[1])),
-      rateToByte(Number(ret[3])),
-      rateToByte(Number(ret[5])),
-      Number(ret[7])
+      Number(ret[4]) / (ret[5] /* % */ ? 100 : 1)
     );
     if (testRGB(rgb)) {
       return rgb;
