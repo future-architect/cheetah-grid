@@ -4,6 +4,10 @@ import { extend } from "../internal/utils";
 
 export interface ListGridEvents extends DrawGridEvents {
   /**
+   * Notify before a cell value changes.
+   */
+  BEFORE_CHANGE_VALUE: "before_change_value";
+  /**
    * Indicates when the cell value was changed.
    */
   CHANGED_VALUE: "changed_value";
@@ -18,6 +22,7 @@ export interface ListGridEvents extends DrawGridEvents {
 }
 
 export const LG_EVENT_TYPE: ListGridEvents = extend(DG_EVENT_TYPE, {
+  BEFORE_CHANGE_VALUE: "before_change_value" as const,
   CHANGED_VALUE: "changed_value" as const,
   CHANGED_HEADER_VALUE: "changed_header_value" as const,
   REJECTED_PASTE_VALUES: "rejected_paste_values" as const,

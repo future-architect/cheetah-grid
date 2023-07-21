@@ -141,12 +141,14 @@ export type PasteRejectedValuesEvent<T> = {
 };
 export interface ListGridEventHandlersEventMap<T>
   extends DrawGridEventHandlersEventMap {
+  before_change_value: [ChangedValueCellEvent<T>];
   changed_value: [ChangedValueCellEvent<T>];
   changed_header_value: [ChangedHeaderValueCellEvent];
   rejected_paste_values: [PasteRejectedValuesEvent<T>];
 }
 export interface ListGridEventHandlersReturnMap
   extends DrawGridEventHandlersReturnMap {
+  before_change_value: void;
   changed_value: void;
   changed_header_value: void;
   rejected_paste_values: void;
