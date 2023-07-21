@@ -484,17 +484,17 @@ function _refreshHeader<T>(grid: ListGrid<T>): void {
   for (let col = 0; col < layoutMap.columnWidths.length; col++) {
     const column = layoutMap.columnWidths[col];
     const { width, minWidth, maxWidth } = column;
-    if (width && (width > 0 || typeof width === "string")) {
+    if (width && (typeof width === "string" || width > 0)) {
       grid.setColWidth(col, width);
     } else {
       grid.setColWidth(col, null);
     }
-    if (minWidth && (minWidth > 0 || typeof minWidth === "string")) {
+    if (minWidth && (typeof minWidth === "string" || minWidth > 0)) {
       grid.setMinColWidth(col, minWidth);
     } else {
       grid.setMinColWidth(col, null);
     }
-    if (maxWidth && (maxWidth > 0 || typeof maxWidth === "string")) {
+    if (maxWidth && (typeof maxWidth === "string" || maxWidth > 0)) {
       grid.setMaxColWidth(col, maxWidth);
     } else {
       grid.setMaxColWidth(col, null);
@@ -1400,6 +1400,15 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
       if (after === undefined) {
         return false;
       }
+      const { field } = this[_].layoutMap.getBody(col, row);
+      this.fireListeners(LG_EVENT_TYPE.BEFORE_CHANGE_VALUE, {
+        col,
+        row,
+        record: record as T,
+        field: field as FieldDef<T>,
+        value: after,
+        oldValue: before,
+      });
       return then(_setCellValue(this, col, row, after), (ret) => {
         if (ret) {
           const { field } = this[_].layoutMap.getBody(col, row);
