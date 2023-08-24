@@ -114,10 +114,11 @@ export function iconOf(icon: SimpleColumnIconOption | null): Inline | null {
       color: icon.color,
     });
   }
-  const regedIcons = icons.get();
-  if (icon.name && regedIcons[icon.name]) {
-    const regedIcon = regedIcons[icon.name];
-    const width = icon.width || Math.max(regedIcon.width, regedIcon.height);
+  const registeredIcons = icons.get();
+  if (icon.name && registeredIcons[icon.name]) {
+    const registeredIcon = registeredIcons[icon.name];
+    const width =
+      icon.width || Math.max(registeredIcon.width, registeredIcon.height);
     return new InlineDrawer({
       draw({
         ctx,
@@ -130,7 +131,7 @@ export function iconOf(icon: SimpleColumnIconOption | null): Inline | null {
       }: InlineDrawOption): void {
         drawRegisteredIcon(
           ctx,
-          regedIcon,
+          registeredIcon,
           width,
           width,
           rect.left,

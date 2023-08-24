@@ -23,7 +23,7 @@ export function loadImage(src: string): Promise<HTMLImageElement> {
     };
   });
   img.onerror = (): void => {
-    const url = src.length > 200 ? `${src.substr(0, 200)}...` : src;
+    const url = src.length > 200 ? `${src.slice(0, 200)}...` : src;
     console.warn(`cannot load: ${url}`);
     throw new Error(`IMAGE LOAD ERROR: ${url}`);
   };
