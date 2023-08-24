@@ -8,6 +8,8 @@ export type InlineIconConstructorOption = {
   font?: string;
   content?: string;
   color?: ColorDef;
+  offsetTop?: number;
+  offsetLeft?: number;
 };
 export class InlineIcon extends Inline {
   private _icon: InlineIconConstructorOption;
@@ -75,9 +77,9 @@ export class InlineIcon extends Inline {
           {
             offset: offset + 1,
             padding: {
-              left: offsetLeft,
+              left: offsetLeft + (this._icon.offsetLeft || 0),
               right: offsetRight,
-              top: offsetTop,
+              top: offsetTop + (this._icon.offsetTop || 0),
               bottom: offsetBottom,
             },
           }

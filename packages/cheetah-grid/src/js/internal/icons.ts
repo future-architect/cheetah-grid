@@ -42,6 +42,8 @@ const ICON_PROP_KEYS: IconPropKey[] = [
   "svg",
   "name",
   "path",
+  "offsetTop",
+  "offsetLeft",
 ];
 
 function quote(name: string): string {
