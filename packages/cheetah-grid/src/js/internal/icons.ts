@@ -77,7 +77,8 @@ export function getIconProps(
   }
   const dom =
     doms[tagName] || (doms[tagName] = document.createElement(tagName));
-  dom.className = className;
+  dom.classList.add(className);
+  dom.classList.add("cheetah-grid-icon");
   document.body.appendChild(dom);
   try {
     const beforeStyle = (document.defaultView || window).getComputedStyle(
@@ -87,7 +88,7 @@ export function getIconProps(
     let content = beforeStyle.getPropertyValue("content");
     if (content.length >= 3 && (content[0] === '"' || content[0] === "'")) {
       if (content[0] === content[content.length - 1]) {
-        content = content.substr(1, content.length - 2);
+        content = content.slice(1, -1);
       }
     }
     let font = beforeStyle.getPropertyValue("font");
@@ -183,7 +184,7 @@ function toSimpleArray(
   return result;
 }
 
-function normarize(iconProps: SimpleColumnIconOption): SimpleColumnIconOption {
+function normalize(iconProps: SimpleColumnIconOption): SimpleColumnIconOption {
   const data: SimpleColumnIconOption = {};
   for (const k in iconProps) {
     if (k === "className") {
@@ -215,7 +216,7 @@ export function toNormalizeArray(
   if (!icons) {
     return icons;
   }
-  return icons.map((icon) => normarize(icon));
+  return icons.map((icon) => normalize(icon));
 }
 export const iconPropKeys = ICON_PROP_KEYS;
 
