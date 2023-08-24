@@ -12,6 +12,8 @@ export interface FontIcon<T> {
   width?: number;
   height?: number;
   color?: string;
+  offsetTop?: number;
+  offsetLeft?: number;
 }
 
 export interface ImageIcon<T> {
