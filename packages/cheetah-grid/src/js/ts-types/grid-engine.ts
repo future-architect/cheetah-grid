@@ -22,6 +22,7 @@ import type {
   TextOverflow,
 } from "./define";
 import type { ColumnDefine } from "../ListGrid";
+import type { RecordBoolean } from "./column";
 import type { RequiredThemeDefine } from "./plugin";
 import type { SimpleColumnIconOption } from "../ts-types-internal/data";
 
@@ -200,6 +201,7 @@ export interface ListGridAPI<T> extends DrawGridAPI {
   getLayoutCellId(col: number, row: number): LayoutObjectId;
   getColumnType(col: number, row: number): ColumnTypeAPI;
   getColumnDefine(col: number, row: number): ColumnDefine<T>;
+  getColumnAction(col: number, row: number): ColumnActionAPI | undefined;
 
   fireListeners<TYPE extends keyof ListGridEventHandlersEventMap<T>>(
     type: TYPE,
@@ -209,6 +211,11 @@ export interface ListGridAPI<T> extends DrawGridAPI {
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface ColumnTypeAPI {}
+
+export interface ColumnActionAPI {
+  readonly editable: boolean;
+  disabled: RecordBoolean;
+}
 
 export type SetPasteValueTestData<T> = CellAddress & {
   grid: ListGridAPI<T>;
