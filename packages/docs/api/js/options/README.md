@@ -26,10 +26,10 @@ order: 9000
 | allowRangePaste                      | boolean              | Specify `true` to allow pasting of the range. See [Examples of allowRangePaste].                                             |
 | trimOnPaste                          | boolean              | Specify `true`, trim the pasted text on pasting.                                                                             |
 | disableColumnResize                  | boolean              | Specify `true` to disable column resize.                                                                                     |
-| keyboardOptions.moveCellOnTab        | boolean              | Specify `true` to enable cell movement by Tab key.                                                                           |
-| keyboardOptions.moveCellOnEnter      | boolean              | Specify `true` to enable cell movement by Enter key.                                                                         |
+| keyboardOptions.moveCellOnTab        | boolean / function   | Specify `true` to enable cell movement by Tab key. You can also specify a function that determines which cell to move to.    |
+| keyboardOptions.moveCellOnEnter      | boolean / function   | Specify `true` to enable cell movement by Enter key. You can also specify a function that determines which cell to move to.  |
 | keyboardOptions.deleteCellValueOnDel | boolean              | Specify `true` to enable enable deletion of cell values with the Del and BS keys.                                            |
-| keyboardOptions.selectAllOnCtrlA     | boolean              | Specify `true` to enable selectt all cells by Ctrl + A key.                                                                  |
+| keyboardOptions.selectAllOnCtrlA     | boolean              | Specify `true` to enable select all cells by Ctrl + A key.                                                                   |
 
 ### Properties
 

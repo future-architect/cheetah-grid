@@ -358,16 +358,18 @@ export default {
       default: undefined
     },
     /**
-     * Specify `true` to enable cell movement by Tab key.
+     * Specify `true` to enable cell movement by Tab key. You can also specify a function that determines which cell to move to.
      */
     moveCellOnTabKey: {
-      type: Boolean
+      type: [Boolean, Function],
+      default: false
     },
     /**
-     * Specify `true` to enable cell movement by Enter key.
+     * Specify `true` to enable cell movement by Enter key. You can also specify a function that determines which cell to move to.
      */
     moveCellOnEnterKey: {
-      type: Boolean
+      type: [Boolean, Function],
+      default: false
     },
     /**
      *  Specify `true` to enable enable deletion of cell values with the Del and BS keys.

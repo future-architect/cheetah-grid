@@ -120,8 +120,8 @@ The definition is set to `layout.body` property described in [Advanced Layout].
 | font | `string`  | Default font. | `undefined` |
 | underlay-background-color | `string`  | Underlay background color. | `undefined` |
 | theme | `object`&#124;`string`  | Defines the grid theme | `undefined` |
-| move-cell-on-tab-key | `boolean`  | Specify `true` to enable cell movement by Tab key. | `undefined` |
-| move-cell-on-enter-key | `boolean`  | Specify `true` to enable cell movement by Enter key. | `undefined` |
+| move-cell-on-tab-key | `boolean`&#124;`function`  | Specify `true` to enable cell movement by Tab key. You can also specify a function that determines which cell to move to. | `false` |
+| move-cell-on-enter-key | `boolean`&#124;`function`  | Specify `true` to enable cell movement by Enter key. You can also specify a function that determines which cell to move to. | `false` |
 | delete-cell-value-on-del-key | `boolean`  | Specify `true` to enable enable deletion of cell values with the Del and BS keys. | `undefined` |
 | select-all-on-ctrl-a-key | `boolean`  | Specify `true` to enable select all cells by Ctrl + A key. | `undefined` |
 | disable-column-resize | `boolean`  | Specify `true` to disable column resizing | `undefined` |
