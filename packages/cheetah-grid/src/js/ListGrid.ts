@@ -7,6 +7,7 @@ import type {
   CellRange,
   ColorPropertyDefine,
   ColorsPropertyDefine,
+  ColumnActionAPI,
   ColumnIconOption,
   ColumnStyleOption,
   ColumnTypeAPI,
@@ -1164,6 +1165,9 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
   }
   getColumnType(col: number, row: number): ColumnTypeAPI {
     return this[_].layoutMap.getBody(col, row).columnType;
+  }
+  getColumnAction(col: number, row: number): ColumnActionAPI | undefined {
+    return this[_].layoutMap.getBody(col, row).action;
   }
   /**
    * Get the header field of the given header cell.

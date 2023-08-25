@@ -1,6 +1,7 @@
 import type {
   BaseActionOption,
   CellAddress,
+  ColumnActionAPI,
   EventListenerId,
   LayoutObjectId,
   ListGridAPI,
@@ -11,7 +12,7 @@ export type RangePasteContext = {
   reject(): void;
 };
 
-export abstract class BaseAction<T> {
+export abstract class BaseAction<T> implements ColumnActionAPI {
   protected _disabled: RecordBoolean;
   constructor(option: BaseActionOption = {}) {
     this._disabled = option.disabled || false;
@@ -30,7 +31,7 @@ export abstract class BaseAction<T> {
     cellId: LayoutObjectId
   ): EventListenerId[];
   protected onChangeDisabledInternal(): void {
-    // abstruct
+    // abstract
   }
   abstract onPasteCellRangeBox(
     grid: ListGridAPI<T>,
