@@ -146,15 +146,15 @@ function _getTargetRowAt(
     }
     return null;
   };
-  const candRow = Math.min(
+  const candidateRow = Math.min(
     Math.ceil(absoluteY / this[_].defaultRowHeight),
     this.rowCount - 1
   );
-  const bottom = _getRowsHeight.call(this, 0, candRow);
+  const bottom = _getRowsHeight.call(this, 0, candidateRow);
   if (absoluteY >= bottom) {
-    return findAfter(candRow, bottom);
+    return findAfter(candidateRow, bottom);
   } else {
-    return findBefore(candRow, bottom);
+    return findBefore(candidateRow, bottom);
   }
 }
 /** @private */
@@ -1002,7 +1002,7 @@ function _onKeyDownMove(this: DrawGrid, e: KeyboardEvent): void {
     if (e.ctrlKey || e.metaKey) {
       move(this, null, "W");
     } else {
-      if (!hmove.call(this, "W")) {
+      if (!hMove.call(this, "W")) {
         return;
       }
     }
@@ -1011,7 +1011,7 @@ function _onKeyDownMove(this: DrawGrid, e: KeyboardEvent): void {
     if (e.ctrlKey || e.metaKey) {
       move(this, "N", null);
     } else {
-      if (!vmove.call(this, "N")) {
+      if (!vMove.call(this, "N")) {
         return;
       }
     }
@@ -1020,7 +1020,7 @@ function _onKeyDownMove(this: DrawGrid, e: KeyboardEvent): void {
     if (e.ctrlKey || e.metaKey) {
       move(this, null, "E");
     } else {
-      if (!hmove.call(this, "E")) {
+      if (!hMove.call(this, "E")) {
         return;
       }
     }
@@ -1029,7 +1029,7 @@ function _onKeyDownMove(this: DrawGrid, e: KeyboardEvent): void {
     if (e.ctrlKey || e.metaKey) {
       move(this, "S", null);
     } else {
-      if (!vmove.call(this, "S")) {
+      if (!vMove.call(this, "S")) {
         return;
       }
     }
@@ -1049,8 +1049,18 @@ function _onKeyDownMove(this: DrawGrid, e: KeyboardEvent): void {
     }
     cancelEvent(e);
   } else if (this.keyboardOptions?.moveCellOnTab && keyCode === KEY_TAB) {
-    if (shiftKey) {
-      if (!hmove.call(this, "W", false)) {
+    let newCell: CellAddress | null = null;
+    if (typeof this.keyboardOptions.moveCellOnTab === "function") {
+      newCell = this.keyboardOptions.moveCellOnTab({
+        cell: focusCell,
+        grid: this,
+        event: e,
+      });
+    }
+    if (newCell) {
+      _moveFocusCell.call(this, newCell.col, newCell.row, false);
+    } else if (shiftKey) {
+      if (!hMove.call(this, "W", false)) {
         const row = this.getMoveUpRowByKeyDownInternal(focusCell);
         if (0 > row) {
           return;
@@ -1058,7 +1068,7 @@ function _onKeyDownMove(this: DrawGrid, e: KeyboardEvent): void {
         _moveFocusCell.call(this, this.colCount - 1, row, false);
       }
     } else {
-      if (!hmove.call(this, "E", false)) {
+      if (!hMove.call(this, "E", false)) {
         const row = this.getMoveDownRowByKeyDownInternal(focusCell);
         if (this.rowCount <= row) {
           return;
@@ -1068,8 +1078,18 @@ function _onKeyDownMove(this: DrawGrid, e: KeyboardEvent): void {
     }
     cancelEvent(e);
   } else if (this.keyboardOptions?.moveCellOnEnter && keyCode === KEY_ENTER) {
-    if (shiftKey) {
-      if (!vmove.call(this, "N", false)) {
+    let newCell: CellAddress | null = null;
+    if (typeof this.keyboardOptions.moveCellOnEnter === "function") {
+      newCell = this.keyboardOptions.moveCellOnEnter({
+        cell: focusCell,
+        grid: this,
+        event: e,
+      });
+    }
+    if (newCell) {
+      _moveFocusCell.call(this, newCell.col, newCell.row, false);
+    } else if (shiftKey) {
+      if (!vMove.call(this, "N", false)) {
         const col = this.getMoveLeftColByKeyDownInternal(focusCell);
         if (0 > col) {
           return;
@@ -1077,7 +1097,7 @@ function _onKeyDownMove(this: DrawGrid, e: KeyboardEvent): void {
         _moveFocusCell.call(this, col, this.rowCount - 1, false);
       }
     } else {
-      if (!vmove.call(this, "S", false)) {
+      if (!vMove.call(this, "S", false)) {
         const col = this.getMoveRightColByKeyDownInternal(focusCell);
         if (this.colCount <= col) {
           return;
@@ -1116,7 +1136,7 @@ function _onKeyDownMove(this: DrawGrid, e: KeyboardEvent): void {
     _moveFocusCell.call(grid, col, row, shiftKey);
   }
 
-  function vmove(
+  function vMove(
     this: DrawGrid,
     vDir: "N" | "S",
     shiftKeyFlg: boolean = shiftKey
@@ -1141,7 +1161,7 @@ function _onKeyDownMove(this: DrawGrid, e: KeyboardEvent): void {
     _moveFocusCell.call(this, col, row, shiftKeyFlg);
     return true;
   }
-  function hmove(
+  function hMove(
     this: DrawGrid,
     hDir: "W" | "E",
     shiftKeyFlg: boolean = shiftKey
@@ -2222,7 +2242,7 @@ class FocusControl extends EventTarget {
       });
     }
     handler.on(document, "paste", (e) => {
-      if (!isDescendantElement(parentElement, e.target)) {
+      if (!isDescendantElement(parentElement, e.target as HTMLElement)) {
         return;
       }
       let pasteText: string | undefined = undefined;
@@ -2231,7 +2251,7 @@ class FocusControl extends EventTarget {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         pasteText = (window as any).clipboardData.getData("Text");
       } else {
-        const { clipboardData } = e;
+        const clipboardData = e.clipboardData!;
         if (clipboardData.items) {
           // Chrome & Firefox & Edge
           pasteText = clipboardData.getData("text/plain");
@@ -2253,7 +2273,7 @@ class FocusControl extends EventTarget {
       if (this._isComposition) {
         return;
       }
-      if (!isDescendantElement(parentElement, e.target)) {
+      if (!isDescendantElement(parentElement, e.target as HTMLElement)) {
         return;
       }
       setSafeInputValue(input, "");
@@ -2264,7 +2284,7 @@ class FocusControl extends EventTarget {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           (window as any).clipboardData.setData("Text", data); // IE
         } else {
-          e.clipboardData.setData("text/plain", data); // Chrome, Firefox
+          e.clipboardData!.setData("text/plain", data as string); // Chrome, Firefox
         }
       }
     });
@@ -2361,13 +2381,13 @@ class FocusControl extends EventTarget {
     }
     const composition = el.classList.contains("composition");
 
-    const atts = el.attributes;
+    const attrs = el.attributes;
     const removeNames = [];
-    for (let i = 0, n = atts.length; i < n; i++) {
-      const att = atts[i];
-      if (IGNORE_STORE_ATTRS.indexOf(att.name) >= 0) continue;
-      if (!this._inputStatus?.hasOwnProperty(att.nodeName)) {
-        removeNames.push(att.name);
+    for (let i = 0, n = attrs.length; i < n; i++) {
+      const attr = attrs[i];
+      if (IGNORE_STORE_ATTRS.indexOf(attr.name) >= 0) continue;
+      if (!this._inputStatus?.hasOwnProperty(attr.nodeName)) {
+        removeNames.push(attr.name);
       }
     }
     removeNames.forEach((removeName) => {
@@ -2390,11 +2410,11 @@ class FocusControl extends EventTarget {
       return;
     }
     const inputStatus: FocusControl["_inputStatus"] = (this._inputStatus = {});
-    const atts = el.attributes;
-    for (let i = 0, n = atts.length; i < n; i++) {
-      const att = atts[i];
-      if (IGNORE_STORE_ATTRS.indexOf(att.name) >= 0) continue;
-      inputStatus[att.name] = att.value;
+    const attrs = el.attributes;
+    for (let i = 0, n = attrs.length; i < n; i++) {
+      const attr = attrs[i];
+      if (IGNORE_STORE_ATTRS.indexOf(attr.name) >= 0) continue;
+      inputStatus[attr.name] = attr.value;
     }
     el.classList.add("grid-focus-control--stored-status");
   }
@@ -2420,7 +2440,7 @@ class Selection extends EventTarget {
   private _focus: CellAddress;
   private _start: CellAddress;
   private _end: CellAddress;
-  private _isWraped?: boolean;
+  private _isWrapped?: boolean;
   constructor(grid: DrawGrid) {
     super();
     this._grid = grid;
@@ -2517,10 +2537,10 @@ class Selection extends EventTarget {
     });
   }
   private _wrapFireSelectedEvent(callback: AnyFunction): void {
-    if (this._isWraped) {
+    if (this._isWrapped) {
       callback();
     } else {
-      this._isWraped = true;
+      this._isWrapped = true;
       try {
         const before: BeforeSelectedCellEvent = {
           col: this._sel.col,
@@ -2545,7 +2565,7 @@ class Selection extends EventTarget {
         this.fireListeners(DG_EVENT_TYPE.SELECTED_CELL, before);
         this.fireListeners(DG_EVENT_TYPE.SELECTED_CELL, after);
       } finally {
-        this._isWraped = false;
+        this._isWrapped = false;
       }
     }
   }
@@ -3283,7 +3303,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
     return _getColWidth(this, col);
   }
   /**
-   * Set the column widtht of the given the column index.
+   * Set the column width of the given the column index.
    * @param  {number} col The column index
    * @param  {number} width The column width
    * @return {void}
@@ -3301,7 +3321,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
     return (obj && obj.max) || undefined;
   }
   /**
-   * Set the column max widtht of the given the column index.
+   * Set the column max width of the given the column index.
    * @param  {number} col The column index
    * @param  {number} maxwidth The column max width
    * @return {void}
@@ -3325,7 +3345,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
     return (obj && obj.min) || undefined;
   }
   /**
-   * Set the column min widtht of the given the column index.
+   * Set the column min width of the given the column index.
    * @param  {number} col The column index
    * @param  {number} minwidth The column min width
    * @return {void}

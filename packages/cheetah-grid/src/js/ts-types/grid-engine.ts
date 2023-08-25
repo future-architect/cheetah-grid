@@ -27,9 +27,15 @@ import type { SimpleColumnIconOption } from "../ts-types-internal/data";
 
 export type LayoutObjectId = number | string | symbol;
 
+export type DrawGridKeyboardMoveCellFunction = (context: {
+  event: KeyboardEvent;
+  cell: CellAddress;
+  grid: DrawGridAPI;
+}) => CellAddress | null;
+
 export interface DrawGridKeyboardOptions {
-  moveCellOnTab?: boolean;
-  moveCellOnEnter?: boolean;
+  moveCellOnTab?: boolean | DrawGridKeyboardMoveCellFunction;
+  moveCellOnEnter?: boolean | DrawGridKeyboardMoveCellFunction;
   deleteCellValueOnDel?: boolean;
   selectAllOnCtrlA?: boolean;
 }
