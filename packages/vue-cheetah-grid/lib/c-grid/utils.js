@@ -6,7 +6,7 @@ function isDef (data) {
   return data !== null && typeof data !== 'undefined'
 }
 const isPromise = (data) => data && typeof data.then === 'function'
-function isObject (obj) {
+export function isObject (obj) {
   return obj === Object(obj)
 }
 function applyChainSafe (obj, fn, ...names) {

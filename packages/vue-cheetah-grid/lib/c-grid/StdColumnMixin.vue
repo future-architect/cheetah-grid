@@ -3,7 +3,8 @@ import {
   gridUpdateWatcher,
   filterToFn,
   resolveProxyComputedProps,
-  resolveProxyPropsMethod
+  resolveProxyPropsMethod,
+  isObject
 } from './utils'
 
 /**
@@ -75,7 +76,19 @@ export default {
     }
   },
   computed: {
-    resolvedField0: resolveProxyComputedProps('field'),
+    resolvedField0 () {
+      const { field } = this
+      if (typeof field === 'function') {
+        return this.$_CGridColumn_fieldProxy
+      }
+      if (isObject(field)) {
+        return {
+          get: field.get && this.$_CGridColumn_objectFieldGetProxy,
+          set: field.set && this.$_CGridColumn_objectFieldSetProxy
+        }
+      }
+      return field
+    },
     resolvedField () {
       return this.resolvedFilter ? filterToFn(this, this.resolvedField0, this.resolvedFilter) : this.resolvedField0
     },
@@ -84,7 +97,8 @@ export default {
     resolvedIcon: resolveProxyComputedProps('icon'),
     resolvedMessage: resolveProxyComputedProps('message'),
     compositedMessages () {
-      const { resolvedMessage, pluginMessageFunctions } = this
+      const { resolvedMessage } = this
+      const pluginMessageFunctions = this.$_CGridColumn_getPluginMessageFunctions()
       const results = []
       if (resolvedMessage) {
         results.push(resolvedMessage)
@@ -154,7 +168,36 @@ export default {
     /**
      * @private
      */
-    $_CGridColumn_messageProxy: resolveProxyPropsMethod('message')
+    $_CGridColumn_messageProxy: resolveProxyPropsMethod('message'),
+    /**
+     * @private
+     */
+    $_CGridColumn_objectFieldGetProxy (...args) {
+      return this.field.get(...args)
+    },
+    /**
+     * @private
+     */
+    $_CGridColumn_objectFieldSetProxy (...args) {
+      return this.field.set(...args)
+    },
+    /**
+     * @private
+     */
+    $_CGridColumn_getPluginMessageFunctions () {
+      if (!this.cachedPluginMessageFunctions) {
+        this.cachedPluginMessageFunctions = []
+      }
+      this.cachedPluginMessageFunctions.length = this.pluginMessageFunctions.length
+
+      for (let i = 0; i < this.pluginMessageFunctions.length; i++) {
+        if (!this.cachedPluginMessageFunctions[i]) {
+          const index = i
+          this.cachedPluginMessageFunctions[index] = (...args) => this.pluginMessageFunctions[index](...args)
+        }
+      }
+      return this.cachedPluginMessageFunctions
+    }
   }
 }
 </script>
