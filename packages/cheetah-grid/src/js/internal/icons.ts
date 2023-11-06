@@ -79,7 +79,8 @@ export function getIconProps(
   }
   const dom =
     doms[tagName] || (doms[tagName] = document.createElement(tagName));
-  dom.classList.add(className);
+  // `classList.add()` cannot be used because it may be separated by spaces.
+  dom.className = className;
   dom.classList.add("cheetah-grid-icon");
   document.body.appendChild(dom);
   try {
