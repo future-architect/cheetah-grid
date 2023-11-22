@@ -4,6 +4,7 @@ import type {
   ColumnStyle,
   IndicatorDefine,
   IndicatorObject,
+  Visibility,
 } from "../../ts-types";
 import { EventTarget } from "../../core/EventTarget";
 
@@ -14,6 +15,7 @@ const STYLE_EVENT_TYPE = {
 let defaultStyle: BaseStyle;
 export class BaseStyle extends EventTarget implements ColumnStyle {
   private _bgColor?: ColorDef;
+  private _visibility?: Visibility;
   private _indicatorTopLeft?: IndicatorObject;
   private _indicatorTopRight?: IndicatorObject;
   private _indicatorBottomRight?: IndicatorObject;
@@ -26,6 +28,7 @@ export class BaseStyle extends EventTarget implements ColumnStyle {
   }
   constructor({
     bgColor,
+    visibility,
     indicatorTopLeft,
     indicatorTopRight,
     indicatorBottomRight,
@@ -33,6 +36,7 @@ export class BaseStyle extends EventTarget implements ColumnStyle {
   }: BaseStyleOption = {}) {
     super();
     this._bgColor = bgColor;
+    this._visibility = normalizeVisibility(visibility, undefined);
     this._indicatorTopLeft = normalizeIndicator(indicatorTopLeft);
     this._indicatorTopRight = normalizeIndicator(indicatorTopRight);
     this._indicatorBottomRight = normalizeIndicator(indicatorBottomRight);
@@ -43,6 +47,17 @@ export class BaseStyle extends EventTarget implements ColumnStyle {
   }
   set bgColor(bgColor: ColorDef | undefined) {
     this._bgColor = bgColor;
+    this.doChangeStyle();
+  }
+  get visibility(): Visibility | undefined {
+    return this._visibility;
+  }
+  set visibility(visibility: Visibility | undefined) {
+    const normalized = normalizeVisibility(visibility, this._visibility);
+    if (this._visibility === normalized) {
+      return;
+    }
+    this._visibility = normalized;
     this.doChangeStyle();
   }
   get indicatorTopLeft(): IndicatorObject | undefined {
@@ -87,4 +102,13 @@ function normalizeIndicator(
     return { style: indicator };
   }
   return indicator;
+}
+function normalizeVisibility(
+  visibility: Visibility | undefined,
+  defaultValue: Visibility | undefined
+): Visibility | undefined {
+  if (visibility && visibility !== "visible" && visibility !== "hidden") {
+    return defaultValue;
+  }
+  return visibility;
 }

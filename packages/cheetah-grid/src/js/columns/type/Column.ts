@@ -31,11 +31,15 @@ export class Column<T> extends BaseColumn<T> {
       bgColor,
       padding,
       textOverflow,
+      visibility,
     } = style;
     if (bgColor) {
       drawCellBase({
         bgColor,
       });
+    }
+    if (visibility === "hidden") {
+      return;
     }
     const textValue = value != null ? String(value) : "";
     helper.testFontLoad(font, textValue, context);

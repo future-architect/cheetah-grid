@@ -32,11 +32,15 @@ export class CheckColumn<T> extends BaseColumn<T> {
       checkBgColor,
       uncheckBgColor,
       bgColor,
+      visibility,
     } = style;
     if (bgColor) {
       drawCellBase({
         bgColor,
       });
+    }
+    if (visibility === "hidden") {
+      return;
     }
 
     const { col, row } = context;

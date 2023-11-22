@@ -3,11 +3,13 @@ import type {
   IndicatorObject,
   LineClamp,
   TextOverflow,
+  Visibility,
 } from "../define";
 import type { ColorDef } from "../base";
 
 export interface ColumnStyle {
   bgColor?: ColorDef;
+  visibility?: Visibility;
   indicatorTopLeft?: IndicatorObject;
   indicatorTopRight?: IndicatorObject;
   indicatorBottomRight?: IndicatorObject;
@@ -18,6 +20,7 @@ export interface ColumnStyle {
 
 export interface BaseStyleOption {
   bgColor?: ColorDef;
+  visibility?: Visibility;
   indicatorTopLeft?: IndicatorDefine;
   indicatorTopRight?: IndicatorDefine;
   indicatorBottomRight?: IndicatorDefine;

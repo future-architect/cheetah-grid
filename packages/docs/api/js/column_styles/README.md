@@ -10,15 +10,16 @@ Define column style by using `style` property.
 
 Properties below are prepared in standard.
 
-| Property     | Description                                                                                      |
-| ------------ | ------------------------------------------------------------------------------------------------ |
-| color        | Define the color of cell.                                                                        |
-| textAlign    | Define the horizontal position of text in cell.                                                  |
-| textBaseline | Define the vertical position of text in cell.                                                    |
-| bgColor      | Define the background color of cell.                                                             |
-| font         | Define the font of cell.                                                                         |
-| padding      | Define the padding of cell. If you set 4 values separately, please set the `Array`.              |
-| textOverflow | Define how to display when text overflows the area of a cell. `clip` or `ellipsis` is available. |
+| Property     | Description                                                                                                     |
+| ------------ | --------------------------------------------------------------------------------------------------------------- |
+| color        | Define the color of cell.                                                                                       |
+| textAlign    | Define the horizontal position of text in cell.                                                                 |
+| textBaseline | Define the vertical position of text in cell.                                                                   |
+| bgColor      | Define the background color of cell.                                                                            |
+| font         | Define the font of cell.                                                                                        |
+| padding      | Define the padding of cell. If you set 4 values separately, please set the `Array`.                             |
+| textOverflow | Define how to display when text overflows the area of a cell. `clip` or `ellipsis` is available.                |
+| visibility   | Specifying `hidden` to it will stop drawing the cell's content. Note that this does not stop the cell's action. |
 
 Note that the column type may add style properties that you can use. The properties added are described in the documentation for each column type.
 

@@ -34,11 +34,15 @@ export class RadioColumn<T> extends BaseColumn<T> {
       uncheckBgColor,
       checkBgColor,
       bgColor,
+      visibility,
     } = style;
     if (bgColor) {
       drawCellBase({
         bgColor,
       });
+    }
+    if (visibility === "hidden") {
+      return;
     }
 
     const { col, row } = context;
