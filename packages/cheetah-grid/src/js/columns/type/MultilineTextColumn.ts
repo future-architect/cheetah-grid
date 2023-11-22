@@ -37,11 +37,15 @@ export class MultilineTextColumn<T> extends BaseColumn<T> {
       autoWrapText,
       lineClamp,
       textOverflow,
+      visibility,
     } = style;
     if (bgColor) {
       drawCellBase({
         bgColor,
       });
+    }
+    if (visibility === "hidden") {
+      return;
     }
     const textValue = value != null ? String(value) : "";
     const multilines = textValue

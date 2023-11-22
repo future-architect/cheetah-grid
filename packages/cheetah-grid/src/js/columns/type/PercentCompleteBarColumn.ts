@@ -43,7 +43,10 @@ export class PercentCompleteBarColumn<T> extends Column<T> {
       grid,
       info
     );
-    const { barColor, barBgColor, barHeight } = style;
+    const { barColor, barBgColor, barHeight, visibility } = style;
+    if (visibility === "hidden") {
+      return;
+    }
 
     let textValue = value != null ? String(value) : "";
     if (str.endsWith(textValue, "%")) {

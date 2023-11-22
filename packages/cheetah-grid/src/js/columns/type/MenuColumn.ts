@@ -48,12 +48,16 @@ export class MenuColumn<T> extends BaseColumn<T> {
       padding,
       textOverflow,
       appearance,
+      visibility,
     } = style;
     let { color } = style;
     if (bgColor) {
       drawCellBase({
         bgColor,
       });
+    }
+    if (visibility === "hidden") {
+      return;
     }
     const convertedValue = this._convertInternal(value);
     const text = convertedValue != null ? String(convertedValue) : "";

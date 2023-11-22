@@ -63,13 +63,16 @@ export class ImageColumn<T> extends BaseColumn<T> {
     _grid: ListGridAPI<T>,
     { drawCellBase }: DrawCellInfo<T>
   ): void {
+    const { textAlign, textBaseline, margin, bgColor, visibility } = style;
+    if (bgColor) {
+      drawCellBase({
+        bgColor,
+      });
+    }
+    if (visibility === "hidden") {
+      return;
+    }
     if (value) {
-      const { textAlign, textBaseline, margin, bgColor } = style;
-      if (bgColor) {
-        drawCellBase({
-          bgColor,
-        });
-      }
       helper.drawWithClip(context, (ctx) => {
         ctx.textAlign = textAlign;
         ctx.textBaseline = textBaseline;

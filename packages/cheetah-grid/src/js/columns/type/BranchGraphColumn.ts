@@ -634,11 +634,15 @@ export class BranchGraphColumn<T> extends BaseColumn<T> {
       mergeStyle,
       margin,
       bgColor,
+      visibility,
     } = style;
     if (bgColor) {
       drawCellBase({
         bgColor,
       });
+    }
+    if (visibility === "hidden") {
+      return;
     }
 
     const rect = context.getRect();

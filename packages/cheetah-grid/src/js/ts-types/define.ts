@@ -77,6 +77,9 @@ export interface ColumnMenuItemObjectOptions {
   [value: string]: string;
 }
 
+// ****** Style Options *******
+export type Visibility = "visible" | "hidden";
+
 // ****** TextStyle Options *******
 export type TextOverflow = "clip" | "ellipsis" | string /* a char */;
 export type LineClamp = number | "auto";

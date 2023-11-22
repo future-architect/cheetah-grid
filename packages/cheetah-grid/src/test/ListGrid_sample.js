@@ -183,7 +183,13 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 									action: function(rec) {
 										alert('ID:' + rec.personid + ' ' + JSON.stringify(rec));//eslint-disable-line
 									},
+									disabled: function(rec) {
+										return rec.personid === 1;
+									},
 								}),
+								style: function(rec) {
+									return rec.personid === 1 ? {visibility: 'hidden'} : null;
+								},
 							},
 						],
 					},

@@ -56,11 +56,15 @@ export class ButtonColumn<T> extends Column<T> {
       font,
       padding,
       textOverflow,
+      visibility,
     } = style;
     if (bgColor) {
       drawCellBase({
         bgColor,
       });
+    }
+    if (visibility === "hidden") {
+      return;
     }
     const textValue = value != null ? String(value) : "";
     helper.testFontLoad(font, textValue, context);
