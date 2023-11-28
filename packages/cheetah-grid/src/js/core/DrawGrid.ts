@@ -995,60 +995,67 @@ function _onScroll(grid: DrawGrid, _e: Event): void {
 /** @private */
 // eslint-disable-next-line complexity
 function _onKeyDownMove(this: DrawGrid, e: KeyboardEvent): void {
-  const { shiftKey } = e;
   const keyCode = getKeyCode(e);
-  const focusCell = shiftKey ? this.selection.focus : this.selection.select;
+  const focusCell = e.shiftKey ? this.selection.focus : this.selection.select;
+  const ctrlOrMeta = e.ctrlKey || e.metaKey;
   if (keyCode === KEY_LEFT) {
-    if (e.ctrlKey || e.metaKey) {
-      move(this, null, "W");
+    if (e.altKey) return; // unknown modifier key
+    if (ctrlOrMeta) {
+      move(this, null, "W", e.shiftKey);
     } else {
-      if (!hMove.call(this, "W")) {
+      if (!hMove.call(this, "W", e.shiftKey)) {
         return;
       }
     }
     cancelEvent(e);
   } else if (keyCode === KEY_UP) {
-    if (e.ctrlKey || e.metaKey) {
-      move(this, "N", null);
+    if (e.altKey) return; // unknown modifier key
+    if (ctrlOrMeta) {
+      move(this, "N", null, e.shiftKey);
     } else {
-      if (!vMove.call(this, "N")) {
+      if (!vMove.call(this, "N", e.shiftKey)) {
         return;
       }
     }
     cancelEvent(e);
   } else if (keyCode === KEY_RIGHT) {
-    if (e.ctrlKey || e.metaKey) {
-      move(this, null, "E");
+    if (e.altKey) return; // unknown modifier key
+    if (ctrlOrMeta) {
+      move(this, null, "E", e.shiftKey);
     } else {
-      if (!hMove.call(this, "E")) {
+      if (!hMove.call(this, "E", e.shiftKey)) {
         return;
       }
     }
     cancelEvent(e);
   } else if (keyCode === KEY_DOWN) {
-    if (e.ctrlKey || e.metaKey) {
-      move(this, "S", null);
+    if (e.altKey) return; // unknown modifier key
+    if (ctrlOrMeta) {
+      move(this, "S", null, e.shiftKey);
     } else {
-      if (!vMove.call(this, "S")) {
+      if (!vMove.call(this, "S", e.shiftKey)) {
         return;
       }
     }
     cancelEvent(e);
   } else if (keyCode === KEY_HOME) {
-    if (e.ctrlKey || e.metaKey) {
-      move(this, "N", "W");
+    if (e.altKey) return; // unknown modifier key
+    if (ctrlOrMeta) {
+      move(this, "N", "W", e.shiftKey);
     } else {
-      move(this, null, "W");
+      move(this, null, "W", e.shiftKey);
     }
     cancelEvent(e);
   } else if (keyCode === KEY_END) {
-    if (e.ctrlKey || e.metaKey) {
-      move(this, "S", "E");
+    if (e.altKey) return; // unknown modifier key
+    if (ctrlOrMeta) {
+      move(this, "S", "E", e.shiftKey);
     } else {
-      move(this, null, "E");
+      move(this, null, "E", e.shiftKey);
     }
     cancelEvent(e);
   } else if (this.keyboardOptions?.moveCellOnTab && keyCode === KEY_TAB) {
+    if (e.altKey || ctrlOrMeta) return; // unknown modifier key
     let newCell: CellAddress | null = null;
     if (typeof this.keyboardOptions.moveCellOnTab === "function") {
       newCell = this.keyboardOptions.moveCellOnTab({
@@ -1059,7 +1066,7 @@ function _onKeyDownMove(this: DrawGrid, e: KeyboardEvent): void {
     }
     if (newCell) {
       _moveFocusCell.call(this, newCell.col, newCell.row, false);
-    } else if (shiftKey) {
+    } else if (e.shiftKey) {
       if (!hMove.call(this, "W", false)) {
         const row = this.getMoveUpRowByKeyDownInternal(focusCell);
         if (0 > row) {
@@ -1078,6 +1085,7 @@ function _onKeyDownMove(this: DrawGrid, e: KeyboardEvent): void {
     }
     cancelEvent(e);
   } else if (this.keyboardOptions?.moveCellOnEnter && keyCode === KEY_ENTER) {
+    if (e.altKey || ctrlOrMeta) return; // unknown modifier key
     let newCell: CellAddress | null = null;
     if (typeof this.keyboardOptions.moveCellOnEnter === "function") {
       newCell = this.keyboardOptions.moveCellOnEnter({
@@ -1088,7 +1096,7 @@ function _onKeyDownMove(this: DrawGrid, e: KeyboardEvent): void {
     }
     if (newCell) {
       _moveFocusCell.call(this, newCell.col, newCell.row, false);
-    } else if (shiftKey) {
+    } else if (e.shiftKey) {
       if (!vMove.call(this, "N", false)) {
         const col = this.getMoveLeftColByKeyDownInternal(focusCell);
         if (0 > col) {
@@ -1113,9 +1121,10 @@ function _onKeyDownMove(this: DrawGrid, e: KeyboardEvent): void {
     cancelEvent(e);
   } else if (
     this.keyboardOptions?.selectAllOnCtrlA &&
-    keyCode === KEY_ALPHA_A &&
-    (e.ctrlKey || e.metaKey)
+    keyCode === KEY_ALPHA_A
   ) {
+    if (e.altKey || e.shiftKey) return; // unknown modifier key
+    if (!ctrlOrMeta) return;
     this.selection.range = {
       start: { col: 0, row: 0 },
       end: { col: this.colCount - 1, row: this.rowCount - 1 },
@@ -1127,19 +1136,20 @@ function _onKeyDownMove(this: DrawGrid, e: KeyboardEvent): void {
   function move(
     grid: DrawGrid,
     vDir: "N" | "S" | null,
-    hDir: "W" | "E" | null
+    hDir: "W" | "E" | null,
+    shiftKeyFlg: boolean
   ): void {
     const row =
       vDir === "S" ? grid.rowCount - 1 : vDir === "N" ? 0 : focusCell.row;
     const col =
       hDir === "E" ? grid.colCount - 1 : hDir === "W" ? 0 : focusCell.col;
-    _moveFocusCell.call(grid, col, row, shiftKey);
+    _moveFocusCell.call(grid, col, row, shiftKeyFlg);
   }
 
   function vMove(
     this: DrawGrid,
     vDir: "N" | "S",
-    shiftKeyFlg: boolean = shiftKey
+    shiftKeyFlg: boolean
   ): boolean {
     const { col } = focusCell;
     let row: number;
@@ -1164,7 +1174,7 @@ function _onKeyDownMove(this: DrawGrid, e: KeyboardEvent): void {
   function hMove(
     this: DrawGrid,
     hDir: "W" | "E",
-    shiftKeyFlg: boolean = shiftKey
+    shiftKeyFlg: boolean
   ): boolean {
     const { row } = focusCell;
     let col: number;
