@@ -150,7 +150,7 @@ module.exports = {
     lineNumbers: true
   },
   head: [
-    ['link', { rel: 'icon', href: '/icon_512x512.ico' }],
+    ['link', { rel: 'icon', href: '/icon_512x512.svg',  type: "image/svg+xml" }],
     ['link', { rel: 'stylesheet', href: 'https://fonts.googleapis.com/icon?family=Material+Icons' }],
     ['link', { rel: 'stylesheet', href: 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css' }],
     ['script', { src: 'https://cdnjs.cloudflare.com/ajax/libs/core-js/3.7.0/minified.js'}],
@@ -164,7 +164,7 @@ module.exports = {
     }
   },
   themeConfig: {
-    logo: '/logo.png',
+    logo: '/logo.svg',
     repo: 'https://github.com/future-architect/cheetah-grid',
     docsRepo: 'https://github.com/future-architect/cheetah-grid',
     docsDir: 'packages/docs',

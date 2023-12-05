@@ -1,6 +1,6 @@
 ---
 home: true
-heroImage: /logo.png
+heroImage: /logo.svg
 actionText: DEMO
 actionLink: https://future-architect.github.io/cheetah-grid/
 footer: © 2017 - 2019 Future Corporation. Author Yosuke Ota. Code licensed under the MIT License.

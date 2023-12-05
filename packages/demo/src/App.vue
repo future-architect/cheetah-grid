@@ -9,7 +9,7 @@
           >
             <img
               id="logo"
-              src="./assets/logo.png"
+              src="./assets/logo.svg"
             >
             <span class="site-title">Cheetah Grid</span>
           </router-link>
