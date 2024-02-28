@@ -6,6 +6,7 @@ const CLASSNAME = "cheetah-grid__message-element";
 const MESSAGE_CLASSNAME = `${CLASSNAME}__message`;
 const HIDDEN_CLASSNAME = `${CLASSNAME}--hidden`;
 const SHOWN_CLASSNAME = `${CLASSNAME}--shown`;
+const LEFT_DIFF_CSS_PROP_NAME = "--cheetah-grid-message-element-left-diff";
 
 function createMessageDomElement(): HTMLElement {
   require("@/columns/message/internal/MessageElement.css");
@@ -55,6 +56,8 @@ export class MessageElement {
       rootElement.classList.remove(HIDDEN_CLASSNAME);
 
       messageElement.textContent = message.message;
+
+      this._adjustStyle(grid, col, row);
     } else {
       this._detach();
     }
@@ -92,11 +95,11 @@ export class MessageElement {
         grid.getCellRange(col, frozenRowCount - 1)
       );
       if (top < frozenRect.bottom) {
-        return false; //範囲外
+        return false; // Outside the rectangle.
       }
     } else {
       if (top < 0) {
-        return false; //範囲外
+        return false; // Outside the rectangle.
       }
     }
     if (col >= frozenColCount && frozenColCount > 0) {
@@ -104,19 +107,19 @@ export class MessageElement {
         grid.getCellRange(frozenColCount - 1, row)
       );
       if (left < frozenRect.right) {
-        return false; //範囲外
+        return false; // Outside the rectangle.
       }
     } else {
       if (left < 0) {
-        return false; //範囲外
+        return false; // Outside the rectangle.
       }
     }
     const { offsetHeight, offsetWidth } = element;
     if (offsetHeight < top) {
-      return false; //範囲外
+      return false; // Outside the rectangle.
     }
     if (offsetWidth < left) {
-      return false; //範囲外
+      return false; // Outside the rectangle.
     }
 
     rootElement.style.top = `${top.toFixed()}px`;
@@ -126,5 +129,35 @@ export class MessageElement {
       element.appendChild(rootElement);
     }
     return true;
+  }
+  /**
+   * If the message is placed outside the Grid, adjust its position.
+   */
+  _adjustStyle<T>(grid: ListGridAPI<T>, col: number, row: number): void {
+    const rootElement = this._rootElement;
+    const element = grid.getElement();
+
+    const messageRect = rootElement.getBoundingClientRect();
+    const elementRect = element.getBoundingClientRect();
+
+    let messageLeft = messageRect.left;
+    if (elementRect.right < messageRect.right) {
+      const overflow = messageRect.right - elementRect.right;
+      messageLeft -= overflow;
+    }
+    if (messageLeft < elementRect.left) {
+      messageLeft = elementRect.left;
+    }
+
+    if (messageLeft !== messageRect.left) {
+      const diff = messageRect.left - messageLeft;
+      const { rect } = grid.getAttachCellsArea(grid.getCellRange(col, row));
+      rootElement.style.left = `${(rect.left - diff).toFixed()}px`;
+
+      const diffCss = `${diff.toFixed()}px`;
+      rootElement.style.setProperty(LEFT_DIFF_CSS_PROP_NAME, diffCss);
+    } else {
+      rootElement.style.removeProperty(LEFT_DIFF_CSS_PROP_NAME);
+    }
   }
 }
