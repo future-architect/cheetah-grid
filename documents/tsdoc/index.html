@@ -1,0 +1,237 @@
+<!DOCTYPE html><html class="default no-js"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>cheetah-grid</title><meta name="description" content="Documentation for cheetah-grid"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script async src="assets/search.js" id="search-script"></script></head><body><script>document.body.classList.add(localStorage.getItem("tsd-theme") || "os")</script><header><div class="tsd-page-toolbar"><div class="container"><div class="table-wrap"><div class="table-cell" id="tsd-search" data-base="."><div class="field"><label for="tsd-search-field" class="tsd-widget search no-caption">Search</label><input type="text" id="tsd-search-field"/></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">cheetah-grid</a></div><div class="table-cell" id="tsd-widgets"><div id="tsd-filter"><a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a><div class="tsd-filter-group"><div class="tsd-select" id="tsd-filter-visibility"><span class="tsd-select-label">All</span><ul class="tsd-select-list"><li data-value="public">Public</li><li data-value="protected">Public/Protected</li><li data-value="private" class="selected">All</li></ul></div> <input type="checkbox" id="tsd-filter-inherited" checked/><label class="tsd-widget" for="tsd-filter-inherited">Inherited</label></div></div><a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a></div></div></div></div><div class="tsd-page-title"><div class="container"><h1>cheetah-grid</h1></div></div></header><div class="container container-main"><div class="row"><div class="col-8 col-content"><div class="tsd-panel tsd-typography">
+<a href="#cheetah-grid" id="cheetah-grid" style="color: inherit; text-decoration: none;">
+  <h1>Cheetah Grid</h1>
+</a>
+<p><a href="https://github.com/future-architect/cheetah-grid"><img src="https://img.shields.io/github/license/future-architect/cheetah-grid.svg" alt="GitHub"></a>
+<a href="https://www.npmjs.com/package/cheetah-grid"><img src="https://img.shields.io/npm/v/cheetah-grid.svg" alt="npm"></a>
+<a href="http://www.npmtrends.com/cheetah-grid"><img src="https://img.shields.io/npm/dw/cheetah-grid.svg" alt="npm"></a>
+<a href="http://www.npmtrends.com/cheetah-grid"><img src="https://img.shields.io/npm/dm/cheetah-grid.svg" alt="npm"></a>
+<a href="http://www.npmtrends.com/cheetah-grid"><img src="https://img.shields.io/npm/dy/cheetah-grid.svg" alt="npm"></a>
+<a href="http://www.npmtrends.com/cheetah-grid"><img src="https://img.shields.io/npm/dt/cheetah-grid.svg" alt="npm"></a>
+<a href="https://github.com/future-architect/cheetah-grid/actions?query=workflow%3ACI"><img src="https://github.com/future-architect/cheetah-grid/workflows/CI/badge.svg?branch=master" alt="Build Status"></a></p>
+<p><a href="https://future-architect.github.io/cheetah-grid/"><img src="https://future-architect.github.io/cheetah-grid/logo.svg" alt="Cheetah Grid"></a></p>
+<p>The fastest open-source data table for web.</p>
+<p><a href="https://future-architect.github.io/cheetah-grid/"><img src="https://github.com/future-architect/cheetah-grid/raw/master/images/capture.png" alt="capture.png"></a></p>
+<p><a href="https://future-architect.github.io/cheetah-grid/">DEMO &amp; Documents</a></p>
+
+<a href="#downloading-cheetah-grid" id="downloading-cheetah-grid" style="color: inherit; text-decoration: none;">
+  <h2>Downloading Cheetah Grid</h2>
+</a>
+
+<a href="#using-cheetah-grid-with-a-cdn" id="using-cheetah-grid-with-a-cdn" style="color: inherit; text-decoration: none;">
+  <h3>Using Cheetah Grid with a CDN</h3>
+</a>
+<p><a href="https://www.npmjs.com/package/cheetah-grid"><img src="https://img.shields.io/npm/v/cheetah-grid.svg" alt="npm"></a></p>
+<pre><code class="language-html"><span class="hl-0">&lt;</span><span class="hl-1">script</span><span class="hl-2"> </span><span class="hl-3">src</span><span class="hl-2">=</span><span class="hl-4">&quot;https://unpkg.com/cheetah-grid@1.13&quot;</span><span class="hl-0">&gt;&lt;/</span><span class="hl-1">script</span><span class="hl-0">&gt;</span>
+</code></pre>
+
+<a href="#downloading-cheetah-grid-using-npm" id="downloading-cheetah-grid-using-npm" style="color: inherit; text-decoration: none;">
+  <h3>Downloading Cheetah Grid using npm</h3>
+</a>
+<p><a href="https://www.npmjs.com/package/cheetah-grid"><img src="https://img.shields.io/npm/v/cheetah-grid.svg" alt="npm"></a></p>
+<pre><code class="language-sh"><span class="hl-5">npm install -S cheetah-grid</span>
+</code></pre>
+<pre><code class="language-js"><span class="hl-6">import</span><span class="hl-5"> </span><span class="hl-7">*</span><span class="hl-5"> </span><span class="hl-6">as</span><span class="hl-5"> </span><span class="hl-8">cheetahGrid</span><span class="hl-5"> </span><span class="hl-6">from</span><span class="hl-5"> </span><span class="hl-9">&quot;cheetah-grid&quot;</span><span class="hl-5">;</span><br/><br/><span class="hl-10">// or</span><br/><br/><span class="hl-7">const</span><span class="hl-5"> </span><span class="hl-11">cheetahGrid</span><span class="hl-5"> = </span><span class="hl-12">require</span><span class="hl-5">(</span><span class="hl-9">&quot;cheetah-grid&quot;</span><span class="hl-5">);</span>
+</code></pre>
+
+<a href="#downloading-cheetah-grid-source-code" id="downloading-cheetah-grid-source-code" style="color: inherit; text-decoration: none;">
+  <h3>Downloading Cheetah Grid source code</h3>
+</a>
+<p><a href="https://www.npmjs.com/package/cheetah-grid"><img src="https://img.shields.io/npm/v/cheetah-grid.svg" alt="npm"></a></p>
+<p><a href="https://unpkg.com/cheetah-grid@1.13/dist/cheetahGrid.es5.min.js">cheetahGrid.es5.min.js</a></p>
+<p>SourceMap<br><a href="https://unpkg.com/cheetah-grid@1.13/dist/cheetahGrid.es5.min.js.map">cheetahGrid.es5.min.js.map</a></p>
+
+<a href="#downloading-cheetah-grid-using-github" id="downloading-cheetah-grid-using-github" style="color: inherit; text-decoration: none;">
+  <h3>Downloading Cheetah Grid using GitHub</h3>
+</a>
+<p><a href="https://github.com/future-architect/cheetah-grid"><img src="https://img.shields.io/github/package-json/v/future-architect/cheetah-grid.svg" alt="GitHub package version"></a></p>
+
+<a href="#git-clone" id="git-clone" style="color: inherit; text-decoration: none;">
+  <h4>git clone</h4>
+</a>
+<pre><code class="language-bash"><span class="hl-5">git clone https://github.com/future-architect/cheetah-grid.git</span>
+</code></pre>
+
+<a href="#npm-install-amp-build" id="npm-install-amp-build" style="color: inherit; text-decoration: none;">
+  <h4>npm install &amp; build</h4>
+</a>
+<pre><code class="language-bash"><span class="hl-5">npm install</span><br/><span class="hl-5">npm run build</span>
+</code></pre>
+<p>built file is created in the <code>./packages/cheetah-grid/dist</code> directory</p>
+
+<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
+  <h2>Usage</h2>
+</a>
+
+<a href="#example-for-basic-usage" id="example-for-basic-usage" style="color: inherit; text-decoration: none;">
+  <h3>Example for basic usage</h3>
+</a>
+<pre><code class="language-html"><span class="hl-0">&lt;</span><span class="hl-1">div</span><span class="hl-5"> </span><span class="hl-3">id</span><span class="hl-5">=</span><span class="hl-4">&quot;sample&quot;</span><span class="hl-5"> </span><span class="hl-3">style</span><span class="hl-5">=</span><span class="hl-4">&quot;height: 300px; border: solid 1px #ddd;&quot;</span><span class="hl-0">&gt;&lt;/</span><span class="hl-1">div</span><span class="hl-0">&gt;</span><br/><span class="hl-0">&lt;</span><span class="hl-1">script</span><span class="hl-0">&gt;</span><br/><span class="hl-2">  </span><span class="hl-10">// initialize</span><br/><span class="hl-2">  </span><span class="hl-7">const</span><span class="hl-2"> </span><span class="hl-11">grid</span><span class="hl-2"> </span><span class="hl-5">=</span><span class="hl-2"> </span><span class="hl-7">new</span><span class="hl-2"> </span><span class="hl-8">cheetahGrid</span><span class="hl-2">.</span><span class="hl-12">ListGrid</span><span class="hl-2">({</span><br/><span class="hl-2">    </span><span class="hl-10">// Parent element on which to place the grid</span><br/><span class="hl-2">    </span><span class="hl-8">parentElement:</span><span class="hl-2"> </span><span class="hl-8">document</span><span class="hl-2">.</span><span class="hl-12">querySelector</span><span class="hl-2">(</span><span class="hl-9">&quot;#sample&quot;</span><span class="hl-2">),</span><br/><span class="hl-2">    </span><span class="hl-10">// Header definition</span><br/><span class="hl-2">    </span><span class="hl-8">header:</span><span class="hl-2"> [</span><br/><span class="hl-2">      {</span><br/><span class="hl-2">        </span><span class="hl-8">field:</span><span class="hl-2"> </span><span class="hl-9">&quot;check&quot;</span><span class="hl-2">,</span><br/><span class="hl-2">        </span><span class="hl-8">caption:</span><span class="hl-2"> </span><span class="hl-9">&quot;&quot;</span><span class="hl-2">,</span><br/><span class="hl-2">        </span><span class="hl-8">width:</span><span class="hl-2"> </span><span class="hl-13">50</span><span class="hl-2">,</span><br/><span class="hl-2">        </span><span class="hl-8">columnType:</span><span class="hl-2"> </span><span class="hl-9">&quot;check&quot;</span><span class="hl-2">,</span><br/><span class="hl-2">        </span><span class="hl-8">action:</span><span class="hl-2"> </span><span class="hl-9">&quot;check&quot;</span><span class="hl-2">,</span><br/><span class="hl-2">      },</span><br/><span class="hl-2">      { </span><span class="hl-8">field:</span><span class="hl-2"> </span><span class="hl-9">&quot;personid&quot;</span><span class="hl-2">, </span><span class="hl-8">caption:</span><span class="hl-2"> </span><span class="hl-9">&quot;ID&quot;</span><span class="hl-2">, </span><span class="hl-8">width:</span><span class="hl-2"> </span><span class="hl-13">100</span><span class="hl-2"> },</span><br/><span class="hl-2">      { </span><span class="hl-8">field:</span><span class="hl-2"> </span><span class="hl-9">&quot;fname&quot;</span><span class="hl-2">, </span><span class="hl-8">caption:</span><span class="hl-2"> </span><span class="hl-9">&quot;First Name&quot;</span><span class="hl-2">, </span><span class="hl-8">width:</span><span class="hl-2"> </span><span class="hl-13">200</span><span class="hl-2"> },</span><br/><span class="hl-2">      { </span><span class="hl-8">field:</span><span class="hl-2"> </span><span class="hl-9">&quot;lname&quot;</span><span class="hl-2">, </span><span class="hl-8">caption:</span><span class="hl-2"> </span><span class="hl-9">&quot;Last Name&quot;</span><span class="hl-2">, </span><span class="hl-8">width:</span><span class="hl-2"> </span><span class="hl-13">200</span><span class="hl-2"> },</span><br/><span class="hl-2">      { </span><span class="hl-8">field:</span><span class="hl-2"> </span><span class="hl-9">&quot;email&quot;</span><span class="hl-2">, </span><span class="hl-8">caption:</span><span class="hl-2"> </span><span class="hl-9">&quot;Email&quot;</span><span class="hl-2">, </span><span class="hl-8">width:</span><span class="hl-2"> </span><span class="hl-13">250</span><span class="hl-2"> },</span><br/><span class="hl-2">    ],</span><br/><span class="hl-2">    </span><span class="hl-10">// Array data to be displayed on the grid</span><br/><span class="hl-2">    </span><span class="hl-8">records</span><span class="hl-2">,</span><br/><span class="hl-2">    </span><span class="hl-10">// Column fixed position</span><br/><span class="hl-2">    </span><span class="hl-8">frozenColCount:</span><span class="hl-2"> </span><span class="hl-13">2</span><span class="hl-2">,</span><br/><span class="hl-2">  });</span><br/><span class="hl-0">&lt;/</span><span class="hl-1">script</span><span class="hl-0">&gt;</span>
+</code></pre>
+<p>Please refer to the <a href="https://future-architect.github.io/cheetah-grid/">documents</a> for details</p>
+<blockquote>
+<p><strong>Using the Vue Component of Cheetah Grid</strong><br>Please refer to the <a href="https://www.npmjs.com/package/vue-cheetah-grid"><code>vue-cheetah-grid</code></a></p>
+<p><strong>Using the React Component of Cheetah Grid</strong><br>Please refer to the <a href="https://www.npmjs.com/package/react-cheetah-grid"><code>react-cheetah-grid</code></a></p>
+</blockquote>
+
+<a href="#definition-of-columns-and-headers" id="definition-of-columns-and-headers" style="color: inherit; text-decoration: none;">
+  <h3>Definition of columns and headers</h3>
+</a>
+<p>The <code>header</code> property, the property of <code>cheetahGrid.ListGrid</code>, decides the behave and appearance of columns and header cells.
+We can set this property by constructor arguments or instance property.</p>
+<p>The <code>header</code> property must be set by objects array (<code>Array&lt;object&gt;</code>).
+In the standard definition, each object consists of following properties.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>caption</td>
+<td>define the header caption</td>
+</tr>
+<tr>
+<td>field</td>
+<td>define the field name or function of the record to display in the cell</td>
+</tr>
+<tr>
+<td>width (optional)</td>
+<td>define the width of column</td>
+</tr>
+<tr>
+<td>columnType (optional)</td>
+<td>define the type of column</td>
+</tr>
+<tr>
+<td>style (optional)</td>
+<td>define the style of column</td>
+</tr>
+<tr>
+<td>action (optional)</td>
+<td>define the action of column</td>
+</tr>
+</tbody></table>
+<p>To use multiple header, set the hierarchical structured Object to the <code>header</code> property.</p>
+<pre><code class="language-js"><span class="hl-7">const</span><span class="hl-5"> </span><span class="hl-11">grid</span><span class="hl-5"> = </span><span class="hl-7">new</span><span class="hl-5"> </span><span class="hl-8">cheetahGrid</span><span class="hl-5">.</span><span class="hl-12">ListGrid</span><span class="hl-5">({</span><br/><span class="hl-5">  </span><span class="hl-10">//...</span><br/><span class="hl-5">  </span><span class="hl-8">header:</span><span class="hl-5"> [</span><br/><span class="hl-5">    </span><span class="hl-10">//...</span><br/><span class="hl-5">    {</span><br/><span class="hl-5">      </span><span class="hl-10">/* multiple header */</span><br/><span class="hl-5">      </span><span class="hl-8">caption:</span><span class="hl-5"> </span><span class="hl-9">&quot;Name&quot;</span><span class="hl-5">,</span><br/><span class="hl-5">      </span><span class="hl-8">columns:</span><span class="hl-5"> [</span><br/><span class="hl-5">        { </span><span class="hl-8">field:</span><span class="hl-5"> </span><span class="hl-9">&quot;fname&quot;</span><span class="hl-5">, </span><span class="hl-8">caption:</span><span class="hl-5"> </span><span class="hl-9">&quot;First Name&quot;</span><span class="hl-5">, </span><span class="hl-8">width:</span><span class="hl-5"> </span><span class="hl-13">200</span><span class="hl-5"> },</span><br/><span class="hl-5">        { </span><span class="hl-8">field:</span><span class="hl-5"> </span><span class="hl-9">&quot;lname&quot;</span><span class="hl-5">, </span><span class="hl-8">caption:</span><span class="hl-5"> </span><span class="hl-9">&quot;Last Name&quot;</span><span class="hl-5">, </span><span class="hl-8">width:</span><span class="hl-5"> </span><span class="hl-13">200</span><span class="hl-5"> },</span><br/><span class="hl-5">      ],</span><br/><span class="hl-5">    },</span><br/><span class="hl-5">    </span><span class="hl-10">//...</span><br/><span class="hl-5">  ],</span><br/><span class="hl-5">  </span><span class="hl-10">//...</span><br/><span class="hl-5">});</span>
+</code></pre>
+
+<a href="#definition-of-column-type" id="definition-of-column-type" style="color: inherit; text-decoration: none;">
+  <h3>Definition of column type</h3>
+</a>
+<p>Set the column type by using <code>columnType</code>.</p>
+<p>For example, you can set the following strings:</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>none</td>
+<td>draw text in the cell</td>
+</tr>
+<tr>
+<td><code>&#39;number&#39;</code></td>
+<td>draw number in the cell with comma-separated</td>
+</tr>
+<tr>
+<td><code>&#39;check&#39;</code></td>
+<td>draw checkbox in the cell</td>
+</tr>
+<tr>
+<td><code>&#39;button&#39;</code></td>
+<td>draw button in the cell</td>
+</tr>
+<tr>
+<td><code>&#39;image&#39;</code></td>
+<td>draw image in the cell</td>
+</tr>
+<tr>
+<td><code>&#39;multilinetext&#39;</code></td>
+<td>draw multiline text in the cell</td>
+</tr>
+</tbody></table>
+<p>If you define a class instance you can define an advanced column types.</p>
+<p>Please refer to the <a href="https://future-architect.github.io/cheetah-grid/documents/api/js/column_types/Classes.html">column types documents</a> for details</p>
+
+<a href="#definition-of-column-action" id="definition-of-column-action" style="color: inherit; text-decoration: none;">
+  <h3>Definition of column action</h3>
+</a>
+<p>Define column action by using <code>action</code> property.</p>
+<table>
+<thead>
+<tr>
+<th><code>action</code></th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>&#39;check&#39;</code></td>
+<td>make the check box clickable.</td>
+</tr>
+<tr>
+<td><code>&#39;input&#39;</code></td>
+<td>make the cell enterable.</td>
+</tr>
+</tbody></table>
+<p>If you define a class instance you can define an advanced column actions.</p>
+<p>Please refer to the <a href="https://future-architect.github.io/cheetah-grid/documents/api/js/column_types/Classes.html">column actions documents</a> for details</p>
+
+<a href="#definition-of-column-style" id="definition-of-column-style" style="color: inherit; text-decoration: none;">
+  <h3>Definition of column style</h3>
+</a>
+<p>Define column style by using <code>style</code> property.</p>
+<p>Properties below are prepared in standard.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>color</td>
+<td>define the color of cell.</td>
+</tr>
+<tr>
+<td>textAlign</td>
+<td>define the horizontal position of text in cell.</td>
+</tr>
+<tr>
+<td>textBaseline</td>
+<td>define the vertical position of text in cell.</td>
+</tr>
+<tr>
+<td>bgColor</td>
+<td>define the background color of cell.</td>
+</tr>
+<tr>
+<td>font</td>
+<td>define the font of cell.</td>
+</tr>
+<tr>
+<td>padding</td>
+<td>define the padding of cell. if you set 4 values separately, please set the <code>Array</code>.</td>
+</tr>
+<tr>
+<td>textOverflow</td>
+<td>define how to display when text overflows the area of a cell. <code>clip</code> or <code>ellipsis</code> is available.</td>
+</tr>
+</tbody></table>
+<p>In addition, there is an extended style property for each column type.</p>
+<hr>
+<p>Please refer to the <a href="https://future-architect.github.io/cheetah-grid/">documents</a> for details</p>
+
+<a href="#license" id="license" style="color: inherit; text-decoration: none;">
+  <h2>License</h2>
+</a>
+<p>See the <a href="LICENSE">LICENSE</a> file for license rights and limitations (MIT).</p>
+
+<a href="#supporting-cheetah-grid" id="supporting-cheetah-grid" style="color: inherit; text-decoration: none;">
+  <h2>Supporting Cheetah Grid</h2>
+</a>
+<p><a href="https://github.com/sponsors/ota-meshi"><img src="https://img.shields.io/badge/-Sponsor-fafbfc?logo=GitHub%20Sponsors" alt="sponsors"></a></p>
+</div></div><div class="col-4 col-menu menu-sticky-wrap menu-highlight"><nav class="tsd-navigation primary"><ul><li class="current"><a href="modules.html">Exports</a></li><li class=" tsd-kind-namespace"><a href="modules/TYPES.html">TYPES</a></li><li class=" tsd-kind-namespace"><a href="modules/columns.html">columns</a></li><li class=" tsd-kind-namespace"><a href="modules/core.html">core</a></li><li class=" tsd-kind-namespace"><a href="modules/data.html">data</a></li><li class=" tsd-kind-namespace"><a href="modules/headers.html">headers</a></li><li class=" tsd-kind-namespace"><a href="modules/tools.html">tools</a></li></ul></nav><nav class="tsd-navigation secondary menu-sticky"><ul><li class="tsd-kind-class tsd-has-type-parameter"><a href="classes/ListGrid.html" class="tsd-kind-icon">List<wbr/>Grid</a></li><li class="tsd-kind-interface tsd-has-type-parameter"><a href="interfaces/ColumnDefine.html" class="tsd-kind-icon">Column<wbr/>Define</a></li><li class="tsd-kind-interface tsd-has-type-parameter"><a href="interfaces/GroupHeaderDefine.html" class="tsd-kind-icon">Group<wbr/>Header<wbr/>Define</a></li><li class="tsd-kind-interface tsd-has-type-parameter"><a href="interfaces/HeaderDefine.html" class="tsd-kind-icon">Header<wbr/>Define</a></li><li class="tsd-kind-interface tsd-has-type-parameter"><a href="interfaces/ListGridConstructorOptions.html" class="tsd-kind-icon">List<wbr/>Grid<wbr/>Constructor<wbr/>Options</a></li><li class="tsd-kind-type-alias tsd-has-type-parameter"><a href="modules.html#HeadersDefine" class="tsd-kind-icon">Headers<wbr/>Define</a></li><li class="tsd-kind-property"><a href="modules.html#default" class="tsd-kind-icon">default</a></li></ul></nav></div></div></div><footer class="with-border-bottom"><div class="container"><h2>Legend</h2><div class="tsd-legend-group"><ul class="tsd-legend"><li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li><li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li><li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li></ul><ul class="tsd-legend"><li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li><li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li></ul><ul class="tsd-legend"><li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li></ul></div><h2>Settings</h2><p>Theme <select id="theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></p></div></footer><div class="container tsd-generator"><p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></div><div class="overlay"></div><script src="assets/main.js"></script></body></html>

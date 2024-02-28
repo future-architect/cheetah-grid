@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="Cheetah Grid - Demo">
+  <meta name="keywords" content="spreadsheet,grid,canvas,data table,web-component">
+  <title>Cheetah Grid - Demo</title>
+  <meta name="theme-color" content="#ff9933">
+  <link rel="shortcut icon" type="image/svg+xml" href="./icon_512x512.svg">
+  <meta property="og:title" content="Cheetah Grid" >
+  <meta property="og:type" content="website" >
+  <meta property="og:url" content="https://future-architect.github.io/cheetah-grid/" >
+  <meta property="og:image" content="https://future-architect.github.io/cheetah-grid/logo.png">
+  <meta property="og:site_name" content="Cheetah Grid" >
+  <meta property="og:description" content="Cheetah Grid - Demo" >
+  <meta name="twitter:card" content="summary" >
+  <meta name="twitter:image" content="https://future-architect.github.io/cheetah-grid/logo.png">
+  <meta name="twitter:title" content="Cheetah Grid" >
+  <meta name="twitter:description" content="Cheetah Grid - Demo" >
+  <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <style type="text/css">
+    html, body {
+      margin: 0;
+    }
+    body {
+      font-family: Roboto;
+    }
+    body * {
+      font-family: Roboto;
+    }
+    .al-right input {
+      text-align: right;
+    }
+  </style>
+  <script src="https://unpkg.com/vue@3"></script>
+  <script src="https://unpkg.com/cheetah-grid"></script>
+  <!-- <script src="https://unpkg.com/vue-cheetah-grid"></script> -->
+</head>
+<body>
+  <div id="app-root"></div>
+  <script type="text/javascript" src="./assets/app.js"></script>
+  <script>
+    if (!document.getElementById('app')) {  
+      var ua = window.navigator.userAgent;
+
+      if (ua.indexOf("MSIE ") > 0 || !!ua.match(/Trident.*rv\:11\./)) {
+        var aTag = '<a style="font-weight: 500; text-decoration: none; color: #ff9933;" href="https://future-architect.github.io/cheetah-grid/documents/introduction/">' 
+        document.getElementById('app-root').innerHTML = '<div style="max-width: 740px; margin: 0 auto; padding: 2rem 2.5rem;">'+
+          '<h1>Cheetah Grid - Demo</h1>'+
+          '<blockquote style="font-size: 1.2rem; color: #999; border-left: .25rem solid #ff9933; margin-left: 0; padding-left: 1rem;">'+
+          'Sorry... This demo site does not currently support IE.</blockquote>'+
+          'Please '+aTag+'Go to the introduction</a>.'+
+          '</div>'
+      }
+    }
+  </script>
+</body>
+</html>
