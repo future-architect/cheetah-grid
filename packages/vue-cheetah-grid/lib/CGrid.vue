@@ -208,7 +208,6 @@ function _buildGridProps (vm) {
   }
   return extend(
     {
-      frozenColCount: vm.frozenColCount - 0,
       theme: vm.theme || null
     },
     headerLayoutOptions,
@@ -453,6 +452,48 @@ export default {
         this.rawGrid.frozenColCount = frozenColCount
       }
     },
+    allowRangePaste (allowRangePaste) {
+      if (this.rawGrid) {
+        this.rawGrid.allowRangePaste = !!allowRangePaste
+      }
+    },
+    trimOnPaste (trimOnPaste) {
+      if (this.rawGrid) {
+        this.rawGrid.trimOnPaste = !!trimOnPaste
+      }
+    },
+    headerRowHeight (headerRowHeight) {
+      if (this.rawGrid) {
+        this.rawGrid.headerRowHeight = headerRowHeight
+      }
+    },
+    defaultRowHeight (defaultRowHeight) {
+      if (this.rawGrid && defaultRowHeight != null) {
+        this.rawGrid.defaultRowHeight = defaultRowHeight
+      }
+    },
+    defaultColWidth (defaultColWidth) {
+      if (this.rawGrid && defaultColWidth != null) {
+        this.rawGrid.defaultColWidth = defaultColWidth
+      }
+    },
+    font (font) {
+      if (this.rawGrid) {
+        this.rawGrid.font = font
+        this.$_CGrid_nextTickInvalidate()
+      }
+    },
+    underlayBackgroundColor (underlayBackgroundColor) {
+      if (this.rawGrid) {
+        this.rawGrid.underlayBackgroundColor = underlayBackgroundColor
+        this.$_CGrid_nextTickInvalidate()
+      }
+    },
+    disableColumnResize (disableColumnResize) {
+      if (this.rawGrid) {
+        this.rawGrid.disableColumnResize = disableColumnResize
+      }
+    },
     options: gridUpdateWatcher,
     headerValues: {
       handler (headerValues) {
@@ -593,22 +634,8 @@ export default {
         delete newProps.header
         delete beforeGridProps.layout
         delete newProps.layout
-        delete beforeGridProps.frozenColCount
-        delete newProps.frozenColCount
         delete beforeGridProps.theme
         delete newProps.theme
-        delete beforeGridProps.allowRangePaste
-        delete newProps.allowRangePaste
-        delete beforeGridProps.trimOnPaste
-        delete newProps.trimOnPaste
-        delete beforeGridProps.defaultRowHeight
-        delete newProps.defaultRowHeight
-        delete beforeGridProps.defaultColWidth
-        delete newProps.defaultColWidth
-        delete beforeGridProps.underlayBackgroundColor
-        delete newProps.underlayBackgroundColor
-        delete beforeGridProps.font
-        delete newProps.font
 
         if (deepObjectEquals(beforeGridProps, newProps)) {
           // 操作可能なoptionのみの変更。インスタンス再作成はしない
@@ -616,14 +643,7 @@ export default {
           const {
             header,
             layout,
-            frozenColCount,
-            theme,
-            allowRangePaste,
-            trimOnPaste,
-            defaultRowHeight,
-            defaultColWidth,
-            font,
-            underlayBackgroundColor
+            theme
           } = options
           if (!deepObjectEquals(this._beforeGridProps.header, gridProps.header)) {
             this.rawGrid.header = header
@@ -631,19 +651,8 @@ export default {
           if (!deepObjectEquals(this._beforeGridProps.layout, gridProps.layout)) {
             this.rawGrid.layout = layout
           }
-          this.rawGrid.frozenColCount = frozenColCount
           this.rawGrid.theme = theme
-          this.rawGrid.allowRangePaste = !!allowRangePaste
-          this.rawGrid.trimOnPaste = !!trimOnPaste
-          if (defaultRowHeight != null) {
-            this.rawGrid.defaultRowHeight = defaultRowHeight
-          }
-          if (defaultColWidth != null) {
-            this.rawGrid.defaultColWidth = defaultColWidth
-          }
-          this.rawGrid.font = font
-          this.rawGrid.underlayBackgroundColor = underlayBackgroundColor
-          this.rawGrid.invalidate()
+          this.rawGrid.$_CGrid_nextTickInvalidate()
           this._beforeGridProps = extend({}, gridProps)
           return
         }
