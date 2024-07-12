@@ -161,6 +161,7 @@ export interface ListGridAPI<T> extends DrawGridAPI {
   dataSource: DataSourceAPI<T>;
   theme: RequiredThemeDefine | null;
   allowRangePaste: boolean;
+  headerRowHeight: number[] | number;
   sortState: SortState | null;
   headerValues: HeaderValues;
   recordRowCount: number;

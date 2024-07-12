@@ -999,6 +999,19 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
     _refreshHeader(this);
   }
   /**
+   * Gets the define of the headerRowHeight.
+   */
+  get headerRowHeight(): number | number[] {
+    return this[_].headerRowHeight;
+  }
+  /**
+   * Sets the define of the headerRowHeight with the given data.
+   */
+  set headerRowHeight(headerRowHeight: number | number[]) {
+    this[_].headerRowHeight = headerRowHeight || [];
+    _refreshHeader(this);
+  }
+  /**
    * Get the row count per record
    */
   get recordRowCount(): number {
