@@ -450,6 +450,7 @@ export default {
     frozenColCount (frozenColCount) {
       if (this.rawGrid) {
         this.rawGrid.frozenColCount = frozenColCount
+        this.$_CGrid_nextTickInvalidate()
       }
     },
     allowRangePaste (allowRangePaste) {
@@ -652,7 +653,7 @@ export default {
             this.rawGrid.layout = layout
           }
           this.rawGrid.theme = theme
-          this.rawGrid.$_CGrid_nextTickInvalidate()
+          this.$_CGrid_nextTickInvalidate()
           this._beforeGridProps = extend({}, gridProps)
           return
         }
