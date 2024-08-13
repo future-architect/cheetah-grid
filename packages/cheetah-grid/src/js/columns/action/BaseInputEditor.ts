@@ -135,6 +135,9 @@ export abstract class BaseInputEditor<T> extends Editor<T> {
         }
       }),
       grid.listen(DG_EVENT_TYPE.SELECTED_CELL, (e) => {
+        if (!isTarget(e.col, e.row)) {
+          return;
+        }
         this.onChangeSelectCellInternal(
           grid,
           { col: e.col, row: e.row },
