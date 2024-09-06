@@ -1,14 +1,26 @@
 import { Column } from "./Column";
 import type { NumberColumnOption } from "../../ts-types";
 import { NumberStyle } from "../style/NumberStyle";
-let defaultFotmat: Intl.NumberFormat;
+let defaultFormat: Intl.NumberFormat;
 export class NumberColumn<T> extends Column<T> {
   private _format?: Intl.NumberFormat;
-  static get defaultFotmat(): Intl.NumberFormat {
-    return defaultFotmat || (defaultFotmat = new Intl.NumberFormat());
+  static get defaultFormat(): Intl.NumberFormat {
+    return defaultFormat || (defaultFormat = new Intl.NumberFormat());
   }
+  static set defaultFormat(fmt: Intl.NumberFormat) {
+    defaultFormat = fmt;
+  }
+  /**
+   * @deprecated Use defaultFormat instead
+   */
+  static get defaultFotmat(): Intl.NumberFormat {
+    return this.defaultFormat;
+  }
+  /**
+   * @deprecated Use defaultFormat instead
+   */
   static set defaultFotmat(fmt: Intl.NumberFormat) {
-    defaultFotmat = fmt;
+    this.defaultFormat = fmt;
   }
   constructor(option: NumberColumnOption = {}) {
     super(option);
@@ -34,7 +46,7 @@ export class NumberColumn<T> extends Column<T> {
       const convertedValue = super.convertInternal(value);
       return convertedValue != null ? String(convertedValue) : "";
     }
-    const format = this._format || NumberColumn.defaultFotmat;
+    const format = this._format || NumberColumn.defaultFormat;
     return format.format(num);
   }
 }

@@ -25,7 +25,7 @@ function repeatArray(
 }
 
 export class IconColumn<T> extends Column<T> {
-  private _tagName?: string;
+  private _tagName: string;
   private _className?: string;
   private _content?: string;
   private _name?: string;
@@ -43,6 +43,21 @@ export class IconColumn<T> extends Column<T> {
   }
   clone(): IconColumn<T> {
     return new IconColumn(this);
+  }
+  get tagName(): string {
+    return this._tagName;
+  }
+  get className(): string | undefined {
+    return this._className;
+  }
+  get content(): string | undefined {
+    return this._content;
+  }
+  get name(): string | undefined {
+    return this._name;
+  }
+  get iconWidth(): number | undefined {
+    return this._iconWidth;
   }
   drawInternal(
     value: unknown,

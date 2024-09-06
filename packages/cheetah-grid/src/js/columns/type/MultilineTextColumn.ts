@@ -48,13 +48,13 @@ export class MultilineTextColumn<T> extends BaseColumn<T> {
       return;
     }
     const textValue = value != null ? String(value) : "";
-    const multilines = textValue
+    const lines = textValue
       .replace(/\r?\n/g, "\n")
       .replace(/\r/g, "\n")
       .split("\n");
     helper.testFontLoad(font, textValue, context);
     utils.loadIcons(getIcon(), context, helper, (icons, context) => {
-      helper.multilineText(multilines, context, {
+      helper.multilineText(lines, context, {
         textAlign,
         textBaseline,
         color,

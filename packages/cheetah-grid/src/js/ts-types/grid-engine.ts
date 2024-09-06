@@ -19,6 +19,7 @@ import type {
   ColorsPropertyDefine,
   FontPropertyDefine,
   LineClamp,
+  StylePropertyFunctionArg,
   TextOverflow,
 } from "./define";
 import type { ColumnDefine } from "../ListGrid";
@@ -312,7 +313,7 @@ export interface GridCanvasHelperAPI {
     }
   ): void;
   multilineText(
-    multilines: string[],
+    lines: string[],
     context: CellContext,
     option: {
       padding?: number | string | (number | string)[];
@@ -341,6 +342,12 @@ export interface GridCanvasHelperAPI {
     row: number,
     ctx: CanvasRenderingContext2D
   ): ColorsDef;
+  getStyleProperty<T>(
+    style: T | ((args: StylePropertyFunctionArg) => T),
+    col: number,
+    row: number,
+    ctx: CanvasRenderingContext2D
+  ): T;
   toBoxPixelArray(
     value: number | string | (number | string)[],
     context: CellContext,

@@ -62,7 +62,10 @@ export type ModifyStatusEditableinputCellEvent = CellAddress & {
   input: HTMLInputElement;
 };
 
-export type MousePointerCellEvent = CellAddress & { related?: CellAddress };
+export type MousePointerCellEvent = CellAddress & {
+  related?: CellAddress;
+  event: Pick<MouseEvent, "clientX" | "clientY" | "pageX" | "pageY">;
+};
 
 export interface DrawGridEventHandlersEventMap {
   selected_cell: [SelectedCellEvent, boolean];

@@ -5,15 +5,16 @@ import type {
   RequiredThemeDefine,
   StylePropertyFunctionArg,
   ThemeDefine,
+  TreeBranchIconStyleDefine,
+  TreeLineStyle,
 } from "../ts-types";
 import { getChainSafe } from "../internal/utils";
 import { get as getSymbol } from "../internal/symbolManager";
+import { getTreeNodeInfoAt } from "../columns/type/TreeColumn";
 //private symbol
 const _ = getSymbol();
 
-function getProp<
-  T extends ColorPropertyDefine | ColorsPropertyDefine | string | number
->(
+function getProp<T>(
   obj: PartialThemeDefine,
   superObj: ThemeDefine,
   names: string[],
@@ -52,6 +53,7 @@ export class Theme implements RequiredThemeDefine {
   private _checkbox: RequiredThemeDefine["checkbox"] | null = null;
   private _radioButton: RequiredThemeDefine["radioButton"] | null = null;
   private _button: RequiredThemeDefine["button"] | null = null;
+  private _tree: RequiredThemeDefine["tree"] | null = null;
   private _header: RequiredThemeDefine["header"] | null = null;
   private _messages: RequiredThemeDefine["messages"] | null = null;
   private _indicators: RequiredThemeDefine["indicators"] | null = null;
@@ -231,6 +233,63 @@ export class Theme implements RequiredThemeDefine {
       defNames: string[]
     ): ColorPropertyDefine {
       return getProp(obj, superTheme, ["button", prop], defNames);
+    }
+  }
+  get tree(): RequiredThemeDefine["tree"] {
+    const { obj, superTheme } = this[_];
+    return (
+      this._tree ||
+      (this._tree = {
+        get lineStyle(): TreeLineStyle {
+          return getTreeProp("lineStyle", undefined, undefined, "solid");
+        },
+        get lineColor(): ColorPropertyDefine {
+          return getTreeProp(
+            "lineColor",
+            ["borderColor"],
+            colorsToColor,
+            "#0000"
+          );
+        },
+        get lineWidth(): number {
+          return getTreeProp("lineWidth", undefined, undefined, 1);
+        },
+        get treeIcon(): TreeBranchIconStyleDefine {
+          return getTreeProp<TreeBranchIconStyleDefine>(
+            "treeIcon",
+            undefined,
+            undefined,
+            (args) => {
+              const { hasChildren, nodeType } = getTreeNodeInfoAt(args);
+              if (hasChildren) {
+                return "expand_more";
+              }
+              return nodeType === "branch" ? "chevron_right" : "none";
+            }
+          );
+        },
+      })
+    );
+    function getTreeProp<
+      T extends
+        | ColorPropertyDefine
+        | number
+        | TreeLineStyle
+        | TreeBranchIconStyleDefine
+    >(
+      prop: string,
+      defNames: string[] | undefined,
+      convertForSuper?: (value: never) => T | undefined,
+      defaultValue?: T
+    ): T {
+      return getProp(
+        obj,
+        superTheme,
+        ["tree", prop],
+        defNames,
+        convertForSuper,
+        defaultValue
+      );
     }
   }
   get header(): RequiredThemeDefine["header"] {

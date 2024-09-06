@@ -16,6 +16,8 @@ import type {
   RequiredThemeDefine,
   StylePropertyFunctionArg,
   TextOverflow,
+  TreeBranchIconStyleDefine,
+  TreeLineStyle,
 } from "./ts-types";
 import type { Inline, InlineDrawOption } from "./element/Inline";
 import { calcStartPosition, getFontSize } from "./internal/canvases";
@@ -46,34 +48,46 @@ function invalidateCell<T>(context: CellContext, grid: ListGridAPI<T>): void {
   const { col, row } = context;
   grid.invalidateCell(col, row);
 }
-function getColor<T>(
+function getStyleProperty<T>(
   color: ColorPropertyDefine,
   col: number,
   row: number,
   grid: ListGridAPI<T>,
   context: CanvasRenderingContext2D
 ): ColorDef;
-function getColor<T>(
+function getStyleProperty<T>(
   color: ColorsPropertyDefine,
   col: number,
   row: number,
   grid: ListGridAPI<T>,
   context: CanvasRenderingContext2D
 ): ColorsDef;
-function getColor<T>(
+function getStyleProperty<T>(
   color: undefined,
   col: number,
   row: number,
   grid: ListGridAPI<T>,
   context: CanvasRenderingContext2D
 ): undefined;
-function getColor<T>(
-  color: ColorPropertyDefine | ColorsPropertyDefine | undefined,
+function getStyleProperty<T, P>(
+  style: P | ((args: StylePropertyFunctionArg) => P),
   col: number,
   row: number,
   grid: ListGridAPI<T>,
   context: CanvasRenderingContext2D
-): ColorDef | ColorsDef | undefined {
+): P;
+function getStyleProperty<T, P>(
+  color:
+    | ColorPropertyDefine
+    | ColorsPropertyDefine
+    | undefined
+    | P
+    | ((args: StylePropertyFunctionArg) => P),
+  col: number,
+  row: number,
+  grid: ListGridAPI<T>,
+  context: CanvasRenderingContext2D
+): ColorDef | ColorsDef | undefined | P {
   return getOrApply(color, {
     col,
     row,
@@ -98,30 +112,27 @@ function getFont<T>(
     context,
   });
 }
-function getThemeColor<
-  R,
-  T extends ColorPropertyDefine | ColorsPropertyDefine | string | number
->(grid: ListGridAPI<R>, ...names: string[]): T {
-  const gridThemeColor = getChainSafe(grid.theme, ...names);
-  if (gridThemeColor == null) {
+function getThemeValue<R, T>(grid: ListGridAPI<R>, ...names: string[]): T {
+  const gridThemeValue = getChainSafe(grid.theme, ...names);
+  if (gridThemeValue == null) {
     // use default theme
     return getChainSafe(themes.getDefault(), ...names);
   }
-  if (typeof gridThemeColor !== "function") {
-    return gridThemeColor;
+  if (typeof gridThemeValue !== "function") {
+    return gridThemeValue;
   }
-  let defaultThemeColor: ColorDef;
+  let defaultThemeValue: unknown;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return ((args: StylePropertyFunctionArg): any => {
-    const color = gridThemeColor(args);
-    if (color != null) {
+    const value = gridThemeValue(args);
+    if (value != null) {
       // use grid theme
-      return color;
+      return value;
     }
     // use default theme
-    defaultThemeColor =
-      defaultThemeColor || getChainSafe(themes.getDefault(), ...names);
-    return getOrApply(defaultThemeColor, args);
+    defaultThemeValue =
+      defaultThemeValue || getChainSafe(themes.getDefault(), ...names);
+    return getOrApply(defaultThemeValue, args);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   }) as any;
 }
@@ -159,7 +170,7 @@ function drawInlines<T>(
     if (inline.canDraw()) {
       ctx.save();
       try {
-        ctx.fillStyle = getColor(
+        ctx.fillStyle = getStyleProperty(
           inline.color() || ctx.fillStyle,
           col,
           row,
@@ -381,7 +392,7 @@ function _inlineRect<T>(
   }
 ): void {
   //文字style
-  ctx.fillStyle = getColor(color || ctx.fillStyle, col, row, grid, ctx);
+  ctx.fillStyle = getStyleProperty(color || ctx.fillStyle, col, row, grid, ctx);
   ctx.textAlign = textAlign;
   ctx.textBaseline = textBaseline;
   ctx.font = font || ctx.font;
@@ -489,7 +500,7 @@ function _multiInlineRect<T>(
   }
 ): void {
   //文字style
-  ctx.fillStyle = getColor(color || ctx.fillStyle, col, row, grid, ctx);
+  ctx.fillStyle = getStyleProperty(color || ctx.fillStyle, col, row, grid, ctx);
   ctx.textAlign = textAlign;
   ctx.textBaseline = textBaseline;
   ctx.font = font || ctx.font;
@@ -864,52 +875,53 @@ class ThemeResolver<T> implements RequiredThemeDefine {
   private _checkbox: RequiredThemeDefine["checkbox"] | null = null;
   private _radioButton: RequiredThemeDefine["radioButton"] | null = null;
   private _button: RequiredThemeDefine["button"] | null = null;
+  private _tree: RequiredThemeDefine["tree"] | null = null;
   private _header: RequiredThemeDefine["header"] | null = null;
   private _messages: RequiredThemeDefine["messages"] | null = null;
   private _indicators: RequiredThemeDefine["indicators"] | null = null;
   constructor(grid: ListGridAPI<T>) {
     this._grid = grid;
   }
-  getThemeColor<
+  getThemeValue<
     T extends ColorPropertyDefine | ColorsPropertyDefine | FontPropertyDefine
   >(...name: string[]): T {
-    return getThemeColor(this._grid, ...name);
+    return getThemeValue(this._grid, ...name);
   }
   get font(): string {
-    return getThemeColor(this._grid, "font");
+    return getThemeValue(this._grid, "font");
   }
   get underlayBackgroundColor(): string {
-    return getThemeColor(this._grid, "underlayBackgroundColor");
+    return getThemeValue(this._grid, "underlayBackgroundColor");
   }
   // color
   get color(): ColorPropertyDefine {
-    return getThemeColor(this._grid, "color");
+    return getThemeValue(this._grid, "color");
   }
   get frozenRowsColor(): ColorPropertyDefine {
-    return getThemeColor(this._grid, "frozenRowsColor");
+    return getThemeValue(this._grid, "frozenRowsColor");
   }
   // background
   get defaultBgColor(): ColorPropertyDefine {
-    return getThemeColor(this._grid, "defaultBgColor");
+    return getThemeValue(this._grid, "defaultBgColor");
   }
   get frozenRowsBgColor(): ColorPropertyDefine {
-    return getThemeColor(this._grid, "frozenRowsBgColor");
+    return getThemeValue(this._grid, "frozenRowsBgColor");
   }
   get selectionBgColor(): ColorPropertyDefine {
-    return getThemeColor(this._grid, "selectionBgColor");
+    return getThemeValue(this._grid, "selectionBgColor");
   }
   get highlightBgColor(): ColorPropertyDefine {
-    return getThemeColor(this._grid, "highlightBgColor");
+    return getThemeValue(this._grid, "highlightBgColor");
   }
   // border
   get borderColor(): ColorsPropertyDefine {
-    return getThemeColor(this._grid, "borderColor");
+    return getThemeValue(this._grid, "borderColor");
   }
   get frozenRowsBorderColor(): ColorsPropertyDefine {
-    return getThemeColor(this._grid, "frozenRowsBorderColor");
+    return getThemeValue(this._grid, "frozenRowsBorderColor");
   }
   get highlightBorderColor(): ColorsPropertyDefine {
-    return getThemeColor(this._grid, "highlightBorderColor");
+    return getThemeValue(this._grid, "highlightBorderColor");
   }
   get checkbox(): RequiredThemeDefine["checkbox"] {
     const grid = this._grid;
@@ -929,7 +941,7 @@ class ThemeResolver<T> implements RequiredThemeDefine {
     );
 
     function getCheckboxProp(prop: string): ColorPropertyDefine {
-      return getThemeColor(grid, "checkbox", prop);
+      return getThemeValue(grid, "checkbox", prop);
     }
   }
   get radioButton(): RequiredThemeDefine["radioButton"] {
@@ -956,7 +968,7 @@ class ThemeResolver<T> implements RequiredThemeDefine {
     );
 
     function getRadioButtonProp(prop: string): ColorPropertyDefine {
-      return getThemeColor(grid, "radioButton", prop);
+      return getThemeValue(grid, "radioButton", prop);
     }
   }
   get button(): RequiredThemeDefine["button"] {
@@ -974,7 +986,37 @@ class ThemeResolver<T> implements RequiredThemeDefine {
     );
 
     function getButtonProp(prop: string): ColorPropertyDefine {
-      return getThemeColor(grid, "button", prop);
+      return getThemeValue(grid, "button", prop);
+    }
+  }
+  get tree(): RequiredThemeDefine["tree"] {
+    const grid = this._grid;
+    return (
+      this._tree ||
+      (this._tree = {
+        get lineStyle(): TreeLineStyle {
+          return getTreeProp("lineStyle");
+        },
+        get lineColor(): ColorPropertyDefine {
+          return getTreeProp("lineColor");
+        },
+        get lineWidth(): number {
+          return getTreeProp("lineWidth");
+        },
+        get treeIcon(): TreeBranchIconStyleDefine {
+          return getTreeProp("treeIcon");
+        },
+      })
+    );
+
+    function getTreeProp<
+      T extends
+        | ColorPropertyDefine
+        | number
+        | TreeLineStyle
+        | TreeBranchIconStyleDefine
+    >(prop: string): T {
+      return getThemeValue(grid, "tree", prop);
     }
   }
   get header(): RequiredThemeDefine["header"] {
@@ -983,7 +1025,7 @@ class ThemeResolver<T> implements RequiredThemeDefine {
       this._header ||
       (this._header = {
         get sortArrowColor(): ColorPropertyDefine {
-          return getThemeColor(grid, "header", "sortArrowColor");
+          return getThemeValue(grid, "header", "sortArrowColor");
         },
       })
     );
@@ -1014,7 +1056,7 @@ class ThemeResolver<T> implements RequiredThemeDefine {
     function getMessageProp<T extends ColorPropertyDefine | number>(
       prop: string
     ): T {
-      return getThemeColor(grid, "messages", prop);
+      return getThemeValue(grid, "messages", prop);
     }
   }
   get indicators(): RequiredThemeDefine["indicators"] {
@@ -1052,7 +1094,7 @@ class ThemeResolver<T> implements RequiredThemeDefine {
     function getIndicatorsProp<T extends ColorPropertyDefine | number>(
       prop: string
     ): T {
-      return getThemeColor(grid, "indicators", prop);
+      return getThemeValue(grid, "indicators", prop);
     }
   }
 }
@@ -1133,7 +1175,15 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
     row: number,
     ctx: CanvasRenderingContext2D
   ): ColorsDef {
-    return getColor(color, col, row, this._grid, ctx);
+    return getStyleProperty(color, col, row, this._grid, ctx);
+  }
+  getStyleProperty<T>(
+    style: T | ((args: StylePropertyFunctionArg) => T),
+    col: number,
+    row: number,
+    ctx: CanvasRenderingContext2D
+  ): T {
+    return getStyleProperty(style, col, row, this._grid, ctx);
   }
   toBoxArray(
     obj: ColorsDef
@@ -1277,7 +1327,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
     });
   }
   multilineText(
-    multilines: string[],
+    lines: string[],
     context: CellContext,
     {
       padding,
@@ -1332,7 +1382,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
       }
       const calculator = this.createCalculator(context, font);
       lineHeight = calculator.calcHeight(lineHeight);
-      _multiInlineRect(this._grid, ctx, multilines, rect, col, row, {
+      _multiInlineRect(this._grid, ctx, lines, rect, col, row, {
         offset,
         color,
         textAlign,
@@ -1378,7 +1428,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
     ctx.save();
     try {
       font = getFont(font, context.col, context.row, this._grid, ctx);
-      ctx.fillStyle = getColor(color, col, row, this._grid, ctx);
+      ctx.fillStyle = getStyleProperty(color, col, row, this._grid, ctx);
       ctx.textAlign = textAlign;
       ctx.textBaseline = textBaseline;
       ctx.font = font || ctx.font;
@@ -1397,7 +1447,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
 
     this.drawWithClip(context, (ctx) => {
       const { col, row } = context;
-      ctx.fillStyle = getColor(fillColor, col, row, this._grid, ctx);
+      ctx.fillStyle = getStyleProperty(fillColor, col, row, this._grid, ctx);
 
       ctx.beginPath();
       ctx.rect(rect.left, rect.top, rect.width, rect.height);
@@ -1422,7 +1472,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
     ctx.save();
     try {
       const { col, row } = context;
-      ctx.fillStyle = getColor(fillColor, col, row, this._grid, ctx);
+      ctx.fillStyle = getStyleProperty(fillColor, col, row, this._grid, ctx);
 
       ctx.beginPath();
       ctx.rect(rect.left, rect.top, rect.width, rect.height);
@@ -1472,7 +1522,13 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
 
     this.drawBorderWithClip(context, (ctx) => {
       const { col, row } = context;
-      const borderColors = getColor(borderColor, col, row, this._grid, ctx);
+      const borderColors = getStyleProperty(
+        borderColor,
+        col,
+        row,
+        this._grid,
+        ctx
+      );
 
       if (lineWidth === 1) {
         ctx.lineWidth = 1;
@@ -1538,7 +1594,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
         //右が選択されている
         this.drawBorderWithClip(context, (ctx) => {
           const borderColors = toBoxArray(
-            getColor(
+            getStyleProperty(
               this.theme.highlightBorderColor,
               sel.col,
               sel.row,
@@ -1557,7 +1613,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
         //上が選択されている
         this.drawBorderWithClip(context, (ctx) => {
           const borderColors = toBoxArray(
-            getColor(
+            getStyleProperty(
               this.theme.highlightBorderColor,
               sel.col,
               sel.row,
@@ -1715,7 +1771,13 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
       const width = rect.width - paddingNums[1] - paddingNums[3];
       const height = rect.height - paddingNums[0] - paddingNums[2];
 
-      bgColor = getColor(bgColor, context.col, context.row, this._grid, ctx);
+      bgColor = getStyleProperty(
+        bgColor,
+        context.col,
+        context.row,
+        this._grid,
+        ctx
+      );
 
       canvashelper.drawButton(ctx, left, top, width, height, {
         bgColor,

@@ -54,6 +54,9 @@ export function getColumnFadeinStateId(): "$$$$col.fadein_stateID symbol$$$$" /*
 export function getBranchGraphColumnStateId(): "$$$$branch_graph_col.stateID symbol$$$$" /* It is treated as a string so that it can be handled easily with typescript. */ {
   return get("branch_graph_col.stateID") as any;
 }
+export function getTreeColumnStateId(): "$$$$tree_col.stateID symbol$$$$" /* It is treated as a string so that it can be handled easily with typescript. */ {
+  return get("tree_col.stateID") as any;
+}
 export function getSmallDialogInputEditorStateId(): "$$$$small_dialog_input_editor.stateID symbol$$$$" /* It is treated as a string so that it can be handled easily with typescript. */ {
   return get("small_dialog_input_editor.stateID") as any;
 }

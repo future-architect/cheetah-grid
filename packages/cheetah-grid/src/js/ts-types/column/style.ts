@@ -1,8 +1,11 @@
 import type {
+  ColumnIconOption,
   IndicatorDefine,
   IndicatorObject,
   LineClamp,
   TextOverflow,
+  TreeBranchIconStyle,
+  TreeLineStyle,
   Visibility,
 } from "../define";
 import type { ColorDef } from "../base";
@@ -105,6 +108,15 @@ export interface PercentCompleteBarStyleOption extends StyleOption {
   barColor?: ColorDef | ((num: number) => ColorDef);
   barBgColor?: ColorDef;
   barHeight?: number;
+}
+export interface TreeStyleOption extends StyleOption {
+  lineStyle?: TreeLineStyle;
+  lineColor?: ColorDef;
+  lineWidth?: number;
+  treeIcon?:
+    | TreeBranchIconStyle
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    | ColumnIconOption<any>;
 }
 
 export interface SortHeaderStyleOption extends MultilineTextHeaderStyleOption {

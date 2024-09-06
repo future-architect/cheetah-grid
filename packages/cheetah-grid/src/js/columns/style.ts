@@ -10,6 +10,7 @@ import type {
   NumberStyleOption,
   PercentCompleteBarStyleOption,
   StyleOption,
+  TreeStyleOption,
 } from "../ts-types";
 import { BaseStyle } from "./style/BaseStyle";
 import { ButtonStyle } from "./style/ButtonStyle";
@@ -22,6 +23,7 @@ import { NumberStyle } from "./style/NumberStyle";
 import { PercentCompleteBarStyle } from "./style/PercentCompleteBarStyle";
 import { RadioStyle } from "./style/RadioStyle";
 import { Style } from "./style/Style";
+import { TreeStyle } from "./style/TreeStyle";
 
 const { EVENT_TYPE } = BaseStyle;
 export {
@@ -37,6 +39,7 @@ export {
   PercentCompleteBarStyle,
   MultilineTextStyle,
   MenuStyle,
+  TreeStyle,
 };
 export type {
   BaseStyleOption,
@@ -49,6 +52,7 @@ export type {
   NumberStyleOption,
   PercentCompleteBarStyleOption,
   StyleOption,
+  TreeStyleOption,
 };
 export function of(
   columnStyle: ColumnStyleOption | null | undefined,

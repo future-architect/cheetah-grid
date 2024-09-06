@@ -31,37 +31,63 @@ export interface BranchGraphColumnOption extends BaseColumnOption {
   cache?: boolean;
 }
 
-export type SimpleBranchGraphCommand =
-  | {
-      command: "branch";
-      branch:
-        | string
-        | {
-            from: string;
-            to: string;
-          };
-    }
-  | {
-      command: "commit";
-      branch: string;
-    }
-  | {
-      command: "merge";
-      branch: {
+/** Branches from the branch specified by `branch.from` to the branch specified by `branch.to`. */
+export type BranchGraphCommandBranch = {
+  command: "branch";
+  branch:
+    | string
+    | {
         from: string;
         to: string;
       };
-    }
-  | {
-      command: "tag";
-      branch: string;
-      tag: string;
-    };
+};
+/** Commit the branch specified by `branch`. */
+export type BranchGraphCommandCommit = {
+  command: "commit";
+  branch: string;
+};
+/** Merge the branch specified by `branch.from` into the branch specified by `branch.to`. */
+export type BranchGraphCommandMerge = {
+  command: "merge";
+  branch: {
+    from: string;
+    to: string;
+  };
+};
+/** Creates a tag specified by `tag` from the branch specified by `branch`. */
+export type BranchGraphCommandTag = {
+  command: "tag";
+  branch: string;
+  tag: string;
+};
+/** The value to supply to the BranchGraphColumn. */
 export type BranchGraphCommand =
-  | SimpleBranchGraphCommand
+  | BranchGraphCommandBranch
+  | BranchGraphCommandCommit
+  | BranchGraphCommandMerge
+  | BranchGraphCommandTag;
+
+export type BranchGraphCommandValue =
+  | BranchGraphCommand
   | undefined
   | null
-  | SimpleBranchGraphCommand[];
+  | BranchGraphCommand[];
+
+/** The value to supply to the TreeColumn. */
+export type TreeData = {
+  /** The caption of the record */
+  caption?: string;
+  /** An array of path indicating the hierarchy */
+  path: unknown[] | (() => unknown[]);
+
+  nodeType?: "leaf" | "branch";
+};
+
+export type TreeDataValue = TreeData | unknown[] | undefined | null;
+
+export interface TreeColumnOption extends BaseColumnOption {
+  cache?: boolean;
+}
 
 export type ColumnTypeOption =
   | "DEFAULT"

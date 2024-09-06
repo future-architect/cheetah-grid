@@ -3,6 +3,8 @@ import type {
   EventListenerId,
   LayoutObjectId,
   ListGridAPI,
+  MouseCellEvent,
+  MousePointerCellEvent,
 } from "../../ts-types";
 import { event, isPromise } from "../../internal/utils";
 import { DG_EVENT_TYPE } from "../../core/DG_EVENT_TYPE";
@@ -16,16 +18,46 @@ export function bindCellClickAction<T>(
     action,
     mouseOver,
     mouseOut,
+    area,
   }: {
     action: (cell: CellAddress) => void;
-    mouseOver: (cell: CellAddress) => boolean;
-    mouseOut: (cell: CellAddress) => void;
+    mouseOver?: (cell: CellAddress) => boolean;
+    mouseOut?: (cell: CellAddress) => void;
+    area?: (event: MouseCellEvent | MousePointerCellEvent) => boolean;
   }
 ): EventListenerId[] {
   function isTarget(col: number, row: number): boolean {
     return grid.getLayoutCellId(col, row) === cellId;
   }
-  return [
+  let mouseIsInCell: CellAddress | null = null;
+  let mouseOvered: CellAddress | null = null;
+
+  function processMouseOver(e: MousePointerCellEvent) {
+    mouseOvered = e;
+    if (mouseOver) {
+      if (
+        !mouseOver({
+          col: e.col,
+          row: e.row,
+        })
+      ) {
+        return;
+      }
+    }
+    grid.getElement().style.cursor = "pointer";
+  }
+  function processMouseOut(e: MousePointerCellEvent) {
+    if (mouseOut) {
+      mouseOut({
+        col: e.col,
+        row: e.row,
+      });
+    }
+    mouseOvered = null;
+    grid.getElement().style.cursor = "";
+  }
+
+  const disposables = [
     // click
     grid.listen(DG_EVENT_TYPE.CLICK_CELL, (e) => {
       if (!isTarget(e.col, e.row)) {
@@ -33,6 +65,9 @@ export function bindCellClickAction<T>(
       }
       if (isPromise(grid.getRowRecord(e.row))) {
         return;
+      }
+      if (area) {
+        if (!area(e)) return;
       }
       action({
         col: e.col,
@@ -47,31 +82,50 @@ export function bindCellClickAction<T>(
       if (isPromise(grid.getRowRecord(e.row))) {
         return;
       }
-      if (mouseOver) {
+      mouseIsInCell = e;
+      if (area) {
+        if (!area(e)) return;
+      }
+      processMouseOver(e);
+    }),
+    grid.listen(DG_EVENT_TYPE.MOUSEOUT_CELL, (e) => {
+      if (
+        !mouseIsInCell ||
+        mouseIsInCell.col !== e.col ||
+        mouseIsInCell.row !== e.row
+      ) {
+        return;
+      }
+      if (!mouseOvered) {
+        processMouseOut(e);
+      }
+    }),
+  ];
+  if (area) {
+    disposables.push(
+      grid.listen(DG_EVENT_TYPE.MOUSEMOVE_CELL, (e) => {
         if (
-          !mouseOver({
-            col: e.col,
-            row: e.row,
-          })
+          !mouseIsInCell ||
+          mouseIsInCell.col !== e.col ||
+          mouseIsInCell.row !== e.row
         ) {
           return;
         }
-      }
-      grid.getElement().style.cursor = "pointer";
-    }),
-    grid.listen(DG_EVENT_TYPE.MOUSEOUT_CELL, (e) => {
-      if (!isTarget(e.col, e.row)) {
-        return;
-      }
-      if (mouseOut) {
-        mouseOut({
-          col: e.col,
-          row: e.row,
-        });
-      }
-      grid.getElement().style.cursor = "";
-    }),
-  ];
+        const isInArea = area(e);
+        if (!mouseOvered) {
+          if (!isInArea) return;
+          // mouse over
+          processMouseOver(e);
+        } else {
+          if (isInArea) return;
+          // mouse out
+          processMouseOut(e);
+        }
+      })
+    );
+  }
+
+  return disposables;
 }
 export function bindCellKeyAction<T>(
   grid: ListGridAPI<T>,

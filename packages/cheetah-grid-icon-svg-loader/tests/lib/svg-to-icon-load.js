@@ -12,6 +12,21 @@ const MDI_ROOT = path.join(__dirname, '../../test-fixtures/inputs/node_modules/m
 const TEST_TARGETS = [
 	'./action/svg/production',
 	'./av/svg/design/ic_playlist_play_48px.svg',
+	'./toggle/svg/production/ic_star_24px.svg',
+	'./toggle/svg/production/ic_star_border_24px.svg',
+	'./toggle/svg/production/ic_star_half_24px.svg',
+	'./content/svg/production/ic_add_48px.svg',
+	'./image/svg/production/ic_edit_48px.svg',
+	'./navigation/svg/production/ic_arrow_downward_48px.svg',
+	'./navigation/svg/production/ic_arrow_upward_48px.svg',
+	'./navigation/svg/production/ic_chevron_left_48px.svg',
+	'./navigation/svg/production/ic_chevron_right_48px.svg',
+	'./navigation/svg/production/ic_expand_less_48px.svg',
+	'./navigation/svg/production/ic_expand_more_48px.svg',
+	'./hardware/svg/production/ic_keyboard_arrow_up_48px.svg',
+	'./hardware/svg/production/ic_keyboard_arrow_down_48px.svg',
+	'./hardware/svg/production/ic_keyboard_arrow_left_48px.svg',
+	'./hardware/svg/production/ic_keyboard_arrow_right_48px.svg',
 ];
 
 const walkTree = (rootDir, callback) => new Promise((resolve) => {
@@ -81,11 +96,10 @@ describe('svg load', () => {
 				return getAllSvgPaths(dirRoot).then((svgs) => {
 					const result = getAllModule(svgs);
 					const name = `material-design-icons${target.replace(/\\|\/|\./g, '_')}`;
-					// saveExpect(name, result);
-					const expect = loadExpect(name);
-					assert.deepStrictEqual(result, expect);
 
+					const expect = loadExpect(name);
 					saveExpect(name, result);
+					assert.deepStrictEqual(result, expect);
 				});
 			});
 		}

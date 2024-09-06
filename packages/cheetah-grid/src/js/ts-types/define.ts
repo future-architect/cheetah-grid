@@ -5,7 +5,7 @@ import type { ListGridAPI } from "./grid-engine";
 // ****** Column Icon Options *******
 export interface FontIcon<T> {
   font?: string;
-  content?: (T extends object ? keyof T : never) | string;
+  content?: T extends object ? keyof T & string : string;
   className?: string;
   tagName?: string;
   isLiga?: boolean;
@@ -17,26 +17,26 @@ export interface FontIcon<T> {
 }
 
 export interface ImageIcon<T> {
-  src: (T extends object ? keyof T : never) | string;
+  src: T extends object ? keyof T & string : string;
   width?: number;
   height?: number;
 }
 
 export interface PathIcon<T> {
-  path: (T extends object ? keyof T : never) | string;
+  path: T extends object ? keyof T & string : string;
   width: number;
   height: number;
   color?: string;
 }
 
 export interface SvgIcon<T> {
-  svg: (T extends object ? keyof T : never) | string;
+  svg: T extends object ? keyof T & string : string;
   width?: number;
   height?: number;
 }
 
 export interface NamedIcon<T> {
-  name: (T extends object ? keyof T : never) | string;
+  name: T extends object ? keyof T & string : string;
   width?: number;
   height?: number;
 }
@@ -119,3 +119,15 @@ export type IndicatorObject = {
   size?: number | string;
 };
 export type IndicatorDefine = IndicatorObject | IndicatorStyle;
+
+// ****** TreeStyle Options *******
+
+export type TreeLineStyle = "none" | "solid";
+export type TreeBranchIconStyle = "chevron_right" | "expand_more" | "none";
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type TreeBranchIconStyleColumnIcon = ColumnIconOption<any>;
+export type TreeBranchIconStyleDefine =
+  | TreeBranchIconStyle
+  | TreeBranchIconStyleColumnIcon
+  | ((args: StylePropertyFunctionArg) => TreeBranchIconStyle)
+  | ((args: StylePropertyFunctionArg) => TreeBranchIconStyleColumnIcon);
