@@ -50,7 +50,7 @@
     "style-loader": "^2.0.0",
     "url-loader": "^1.1.1",
     "vue": "^3.0.1",
-    "vue-cheetah-grid": "^1.13.0",
+    "vue-cheetah-grid": "^1.15.0",
     "vue-loader": "^16.0.0-beta.8",
     "vue-router": "^4.0.0-beta.13",
     "webpack": "^4.19.1",
