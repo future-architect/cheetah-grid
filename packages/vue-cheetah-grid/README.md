@@ -7,7 +7,8 @@
 [![npm](https://img.shields.io/npm/dy/vue-cheetah-grid.svg)](http://www.npmtrends.com/vue-cheetah-grid)
 [![npm](https://img.shields.io/npm/dt/vue-cheetah-grid.svg)](http://www.npmtrends.com/vue-cheetah-grid)
 [![Build Status](https://github.com/future-architect/cheetah-grid/workflows/CI/badge.svg?branch=master)](https://github.com/future-architect/cheetah-grid/actions?query=workflow%3ACI)
-[![NPM](https://nodei.co/npm/vue-cheetah-grid.png?downloads=true&stars=true)](https://www.npmjs.com/package/vue-cheetah-grid)
+
+It supports Vue 2 and Vue 3.
 
 ## Install using npm
 
@@ -41,15 +42,29 @@ npm install -S vue-cheetah-grid
 </template>
 ```
 
-### `<script>` use global
+### Use Components Globally
+
+Vue3:
 
 ```js
+import { createApp } from "vue";
+import CGrid from "vue-cheetah-grid";
+
+const app = createApp(App);
+
+app.use(CGrid);
+```
+
+Vue2:
+
+```js
+import Vue from "vue";
 import CGrid from "vue-cheetah-grid";
 
 Vue.use(CGrid);
 ```
 
-### `<script>` use local
+### Use Components Locally
 
 ```vue
 <script>
@@ -81,6 +96,8 @@ Please refer to the [documents](https://future-architect.github.io/cheetah-grid/
 | `<c-grid-link-column>`                 | Link column definition                                       | component for linkable column definition             |
 | `<c-grid-icon-column>`                 | Icon column definition                                       | component for icon column definition                 |
 | `<c-grid-percent-complete-bar-column>` | Percent complete bar column definition                       | component for Percent complete bar column definition |
+
+There are other components available as well.
 
 Please refer also to the [Available Vue Components](https://future-architect.github.io/cheetah-grid/documents/api/vue/components/)
 
