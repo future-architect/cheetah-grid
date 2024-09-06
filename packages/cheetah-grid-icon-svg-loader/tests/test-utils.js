@@ -11,7 +11,7 @@ function resolve(...names) {
 
 module.exports = {
 	loadExpect(name) {
-		const file = path.join(FIXTURES_ROOT, `./expect/${name}`);
+		const file = resolve(FIXTURES_ROOT, `./expect/${name}.js`);
 		if (!fs.existsSync(file)) { return {}; }
 		return require(file);
 	},
@@ -23,15 +23,16 @@ module.exports = {
     module.exports=obj
   }
   `;
+		const file = resolve(FIXTURES_ROOT, `./expect/${name}.js`);
 		let old;
 		try {
-			old = fs.readFileSync(resolve(FIXTURES_ROOT, `./expect/${name}.js`), 'utf-8');
+			old = fs.readFileSync(file, 'utf-8');
 		} catch (e) {
 			// ignore
 		}
 		if (old !== text) {
 			console.log(`save:${name}`);
-			fs.writeFileSync(resolve(FIXTURES_ROOT, `./expect/${name}.js`), text, 'utf-8');
+			fs.writeFileSync(file, text, 'utf-8');
 		}
 	}
 };
