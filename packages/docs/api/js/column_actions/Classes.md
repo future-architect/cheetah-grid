@@ -14,6 +14,7 @@ order: 100
 | [`InlineInputEditor`]      | The behavior when input the cell                                     | InlineInputEditor is an experiment stage |
 | [`InlineMenuEditor`]       | The behavior when select menu the cell                               | ---                                      |
 | [`RadioEditor`]            | The behavior when clicking the radio button                          | same as `action: 'radio'`                |
+| [`Action`]                 | The behavior when clicking the cell                                  | ---                                      |
 
 [`checkeditor`]: ./CheckEditor.md
 [`buttonaction`]: ./ButtonAction.md
@@ -21,5 +22,8 @@ order: 100
 [`inlineinputeditor`]: ./InlineInputEditor.md
 [`inlinemenueditor`]: ./InlineMenuEditor.md
 [`radioeditor`]: ./RadioEditor.md
+[`action`]: ./Action.md
 
 ## Standard Properties
+
+Please see [here](./standard-properties.md).

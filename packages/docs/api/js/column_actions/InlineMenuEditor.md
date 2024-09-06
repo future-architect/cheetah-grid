@@ -6,6 +6,28 @@ order: 500
 
 Enables data editing by menu selection.
 
+## Constructor Properties
+
+| Property             | Description                                                                           |
+| -------------------- | ------------------------------------------------------------------------------------- |
+| `options` (Required) | Defines the options that can be selected.                                             |
+| `disabled`           | Define a boolean or predicate to control disable. See also [the standard properties]  |
+| `readOnly`           | Define a boolean or predicate to control readonly. See also [the standard properties] |
+| `classList`          | Defines the `class` to be set on the menu (`<ul>`).                                   |
+
+[the standard properties]: ./standard-properties.md
+
+## Properties
+
+| Property             | Description                                                                           |
+| -------------------- | ------------------------------------------------------------------------------------- |
+| `options` (Required) | Defines the options that can be selected.                                             |
+| `disabled`           | Define a boolean or predicate to control disable. See also [the standard properties]  |
+| `readOnly`           | Define a boolean or predicate to control readonly. See also [the standard properties] |
+| `classList`          | Defines the `class` to be set on the menu (`<ul>`).                                   |
+
+## Example
+
 <code-preview>
 
 ```html

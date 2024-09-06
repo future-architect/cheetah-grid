@@ -119,3 +119,8 @@ export type IndicatorObject = {
   size?: number | string;
 };
 export type IndicatorDefine = IndicatorObject | IndicatorStyle;
+
+// ****** TreeStyle Options *******
+
+export type TreeLineStyle = "none" | "solid";
+export type TreeBranchIconStyle = "chevron_right" | "expand_more" | "none";

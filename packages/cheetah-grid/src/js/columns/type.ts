@@ -7,6 +7,7 @@ import type {
   MenuColumnOption,
   NumberColumnOption,
   PercentCompleteBarColumnOption,
+  TreeColumnOption,
 } from "../ts-types";
 import type { BaseColumn } from "./type/BaseColumn";
 import { BranchGraphColumn } from "./type/BranchGraphColumn";
@@ -20,6 +21,7 @@ import { MultilineTextColumn } from "./type/MultilineTextColumn";
 import { NumberColumn } from "./type/NumberColumn";
 import { PercentCompleteBarColumn } from "./type/PercentCompleteBarColumn";
 import { RadioColumn } from "./type/RadioColumn";
+import { TreeColumn } from "./type/TreeColumn";
 
 const TYPES = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -55,6 +57,7 @@ export {
   BranchGraphColumn,
   MenuColumn,
   MultilineTextColumn,
+  TreeColumn,
 };
 export type {
   BaseColumnOption,
@@ -64,6 +67,7 @@ export type {
   MenuColumnOption,
   NumberColumnOption,
   PercentCompleteBarColumnOption,
+  TreeColumnOption,
 };
 export function of<T>(
   columnType: ColumnTypeOption | BaseColumn<T> | null | undefined

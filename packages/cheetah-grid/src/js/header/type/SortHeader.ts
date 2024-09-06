@@ -72,11 +72,11 @@ export class SortHeader<T> extends BaseHeader<T> {
       };
 
       if (multiline) {
-        const multilines = textValue
+        const lines = textValue
           .replace(/\r?\n/g, "\n")
           .replace(/\r/g, "\n")
           .split("\n");
-        helper.multilineText(multilines, context, {
+        helper.multilineText(lines, context, {
           textAlign,
           textBaseline,
           color,

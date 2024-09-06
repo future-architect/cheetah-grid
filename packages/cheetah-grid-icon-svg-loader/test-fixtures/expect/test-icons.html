@@ -80,7 +80,7 @@ function draw() {
 		headerRowHeight: 24,
 	});
 	const records = [];
-	const {icons} = cheetahGrid;
+	const icons = cheetahGrid.getIcons();
 	Object.keys(icons).forEach((k, i) => {
 		records.push({
 			no: i + 1,

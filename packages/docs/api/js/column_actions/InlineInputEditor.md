@@ -6,6 +6,19 @@ order: 450
 
 Enables data editing by input.
 
+## Constructor Properties
+
+| Property    | Description                                                                           |
+| ----------- | ------------------------------------------------------------------------------------- |
+| `disabled`  | Define a boolean or predicate to control disable. See also [the standard properties]  |
+| `readOnly`  | Define a boolean or predicate to control readonly. See also [the standard properties] |
+| `classList` | Defines the `class` to be set on the `<input>`.                                       |
+| `type`      | Defines the `type` to be set on the `<input>`.                                        |
+
+[the standard properties]: ./standard-properties.md
+
+## Example
+
 <code-preview>
 
 ```html
@@ -83,10 +96,12 @@ document.querySelector(".sample1mode").onchange = function () {
 
 ## Properties
 
-| Property    | Description                                            |
-| ----------- | ------------------------------------------------------ |
-| `type`      | Specify the `type` attribute of the `<input>` element. |
-| `classList` | Specify `class` of the `<input>` element.              |
+| Property    | Description                                                                           |
+| ----------- | ------------------------------------------------------------------------------------- |
+| `disabled`  | Define a boolean or predicate to control disable. See also [the standard properties]  |
+| `readOnly`  | Define a boolean or predicate to control readonly. See also [the standard properties] |
+| `type`      | Defines the `type` attribute of the `<input>` element.                                |
+| `classList` | Defines `class` of the `<input>` element.                                             |
 
 <code-preview>
 

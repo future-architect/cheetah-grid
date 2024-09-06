@@ -11,7 +11,9 @@ function resolve(...names) {
 
 module.exports = {
 	loadExpect(name) {
-		return require(path.join(FIXTURES_ROOT, `./expect/${name}`));
+		const file = path.join(FIXTURES_ROOT, `./expect/${name}`);
+		if (!fs.existsSync(file)) { return {}; }
+		return require(file);
 	},
 	saveExpect(name, obj) {
 		const text = `var obj=${JSON.stringify(sortProps(obj), null, ' ')}

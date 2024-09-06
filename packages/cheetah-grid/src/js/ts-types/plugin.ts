@@ -1,4 +1,9 @@
-import type { ColorPropertyDefine, ColorsPropertyDefine } from "./define";
+import type {
+  ColorPropertyDefine,
+  ColorsPropertyDefine,
+  TreeBranchIconStyle,
+  TreeLineStyle,
+} from "./define";
 
 // ****** Plugin Icons *******
 export interface IconDefine {
@@ -41,6 +46,13 @@ export interface ThemeDefine {
     color?: ColorPropertyDefine;
     bgColor?: ColorPropertyDefine;
   };
+  tree: {
+    lineStyle?: TreeLineStyle;
+    lineColor?: ColorPropertyDefine;
+    lineWidth?: number;
+    branchIcon?: TreeBranchIconStyle;
+    openedBranchIcon?: TreeBranchIconStyle;
+  };
   header: {
     sortArrowColor?: ColorPropertyDefine;
   };
@@ -67,6 +79,7 @@ export type RequiredThemeDefine = Required<ThemeDefine> & {
   checkbox: Required<ThemeDefine["checkbox"]>;
   radioButton: Required<ThemeDefine["radioButton"]>;
   button: Required<ThemeDefine["button"]>;
+  tree: Required<ThemeDefine["tree"]>;
   header: Required<ThemeDefine["header"]>;
   messages: Required<ThemeDefine["messages"]>;
   indicators: Required<ThemeDefine["indicators"]>;

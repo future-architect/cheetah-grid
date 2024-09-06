@@ -16,6 +16,8 @@ import type {
   RequiredThemeDefine,
   StylePropertyFunctionArg,
   TextOverflow,
+  TreeBranchIconStyle,
+  TreeLineStyle,
 } from "./ts-types";
 import type { Inline, InlineDrawOption } from "./element/Inline";
 import { calcStartPosition, getFontSize } from "./internal/canvases";
@@ -98,30 +100,30 @@ function getFont<T>(
     context,
   });
 }
-function getThemeColor<
+function getThemeValue<
   R,
   T extends ColorPropertyDefine | ColorsPropertyDefine | string | number
 >(grid: ListGridAPI<R>, ...names: string[]): T {
-  const gridThemeColor = getChainSafe(grid.theme, ...names);
-  if (gridThemeColor == null) {
+  const gridThemeValue = getChainSafe(grid.theme, ...names);
+  if (gridThemeValue == null) {
     // use default theme
     return getChainSafe(themes.getDefault(), ...names);
   }
-  if (typeof gridThemeColor !== "function") {
-    return gridThemeColor;
+  if (typeof gridThemeValue !== "function") {
+    return gridThemeValue;
   }
-  let defaultThemeColor: ColorDef;
+  let defaultThemeValuer: unknown;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return ((args: StylePropertyFunctionArg): any => {
-    const color = gridThemeColor(args);
-    if (color != null) {
+    const value = gridThemeValue(args);
+    if (value != null) {
       // use grid theme
-      return color;
+      return value;
     }
     // use default theme
-    defaultThemeColor =
-      defaultThemeColor || getChainSafe(themes.getDefault(), ...names);
-    return getOrApply(defaultThemeColor, args);
+    defaultThemeValuer =
+      defaultThemeValuer || getChainSafe(themes.getDefault(), ...names);
+    return getOrApply(defaultThemeValuer, args);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   }) as any;
 }
@@ -864,52 +866,53 @@ class ThemeResolver<T> implements RequiredThemeDefine {
   private _checkbox: RequiredThemeDefine["checkbox"] | null = null;
   private _radioButton: RequiredThemeDefine["radioButton"] | null = null;
   private _button: RequiredThemeDefine["button"] | null = null;
+  private _tree: RequiredThemeDefine["tree"] | null = null;
   private _header: RequiredThemeDefine["header"] | null = null;
   private _messages: RequiredThemeDefine["messages"] | null = null;
   private _indicators: RequiredThemeDefine["indicators"] | null = null;
   constructor(grid: ListGridAPI<T>) {
     this._grid = grid;
   }
-  getThemeColor<
+  getThemeValue<
     T extends ColorPropertyDefine | ColorsPropertyDefine | FontPropertyDefine
   >(...name: string[]): T {
-    return getThemeColor(this._grid, ...name);
+    return getThemeValue(this._grid, ...name);
   }
   get font(): string {
-    return getThemeColor(this._grid, "font");
+    return getThemeValue(this._grid, "font");
   }
   get underlayBackgroundColor(): string {
-    return getThemeColor(this._grid, "underlayBackgroundColor");
+    return getThemeValue(this._grid, "underlayBackgroundColor");
   }
   // color
   get color(): ColorPropertyDefine {
-    return getThemeColor(this._grid, "color");
+    return getThemeValue(this._grid, "color");
   }
   get frozenRowsColor(): ColorPropertyDefine {
-    return getThemeColor(this._grid, "frozenRowsColor");
+    return getThemeValue(this._grid, "frozenRowsColor");
   }
   // background
   get defaultBgColor(): ColorPropertyDefine {
-    return getThemeColor(this._grid, "defaultBgColor");
+    return getThemeValue(this._grid, "defaultBgColor");
   }
   get frozenRowsBgColor(): ColorPropertyDefine {
-    return getThemeColor(this._grid, "frozenRowsBgColor");
+    return getThemeValue(this._grid, "frozenRowsBgColor");
   }
   get selectionBgColor(): ColorPropertyDefine {
-    return getThemeColor(this._grid, "selectionBgColor");
+    return getThemeValue(this._grid, "selectionBgColor");
   }
   get highlightBgColor(): ColorPropertyDefine {
-    return getThemeColor(this._grid, "highlightBgColor");
+    return getThemeValue(this._grid, "highlightBgColor");
   }
   // border
   get borderColor(): ColorsPropertyDefine {
-    return getThemeColor(this._grid, "borderColor");
+    return getThemeValue(this._grid, "borderColor");
   }
   get frozenRowsBorderColor(): ColorsPropertyDefine {
-    return getThemeColor(this._grid, "frozenRowsBorderColor");
+    return getThemeValue(this._grid, "frozenRowsBorderColor");
   }
   get highlightBorderColor(): ColorsPropertyDefine {
-    return getThemeColor(this._grid, "highlightBorderColor");
+    return getThemeValue(this._grid, "highlightBorderColor");
   }
   get checkbox(): RequiredThemeDefine["checkbox"] {
     const grid = this._grid;
@@ -929,7 +932,7 @@ class ThemeResolver<T> implements RequiredThemeDefine {
     );
 
     function getCheckboxProp(prop: string): ColorPropertyDefine {
-      return getThemeColor(grid, "checkbox", prop);
+      return getThemeValue(grid, "checkbox", prop);
     }
   }
   get radioButton(): RequiredThemeDefine["radioButton"] {
@@ -956,7 +959,7 @@ class ThemeResolver<T> implements RequiredThemeDefine {
     );
 
     function getRadioButtonProp(prop: string): ColorPropertyDefine {
-      return getThemeColor(grid, "radioButton", prop);
+      return getThemeValue(grid, "radioButton", prop);
     }
   }
   get button(): RequiredThemeDefine["button"] {
@@ -974,7 +977,40 @@ class ThemeResolver<T> implements RequiredThemeDefine {
     );
 
     function getButtonProp(prop: string): ColorPropertyDefine {
-      return getThemeColor(grid, "button", prop);
+      return getThemeValue(grid, "button", prop);
+    }
+  }
+  get tree(): RequiredThemeDefine["tree"] {
+    const grid = this._grid;
+    return (
+      this._tree ||
+      (this._tree = {
+        get lineStyle(): TreeLineStyle {
+          return getTreeProp("lineStyle");
+        },
+        get lineColor(): ColorPropertyDefine {
+          return getTreeProp("lineColor");
+        },
+        get lineWidth(): number {
+          return getTreeProp("lineWidth");
+        },
+        get branchIcon(): TreeBranchIconStyle {
+          return getTreeProp("branchIcon");
+        },
+        get openedBranchIcon(): TreeBranchIconStyle {
+          return getTreeProp("openedBranchIcon");
+        },
+      })
+    );
+
+    function getTreeProp<
+      T extends
+        | ColorPropertyDefine
+        | number
+        | TreeLineStyle
+        | TreeBranchIconStyle
+    >(prop: string): T {
+      return getThemeValue(grid, "tree", prop);
     }
   }
   get header(): RequiredThemeDefine["header"] {
@@ -983,7 +1019,7 @@ class ThemeResolver<T> implements RequiredThemeDefine {
       this._header ||
       (this._header = {
         get sortArrowColor(): ColorPropertyDefine {
-          return getThemeColor(grid, "header", "sortArrowColor");
+          return getThemeValue(grid, "header", "sortArrowColor");
         },
       })
     );
@@ -1014,7 +1050,7 @@ class ThemeResolver<T> implements RequiredThemeDefine {
     function getMessageProp<T extends ColorPropertyDefine | number>(
       prop: string
     ): T {
-      return getThemeColor(grid, "messages", prop);
+      return getThemeValue(grid, "messages", prop);
     }
   }
   get indicators(): RequiredThemeDefine["indicators"] {
@@ -1052,7 +1088,7 @@ class ThemeResolver<T> implements RequiredThemeDefine {
     function getIndicatorsProp<T extends ColorPropertyDefine | number>(
       prop: string
     ): T {
-      return getThemeColor(grid, "indicators", prop);
+      return getThemeValue(grid, "indicators", prop);
     }
   }
 }
@@ -1277,7 +1313,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
     });
   }
   multilineText(
-    multilines: string[],
+    lines: string[],
     context: CellContext,
     {
       padding,
@@ -1332,7 +1368,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
       }
       const calculator = this.createCalculator(context, font);
       lineHeight = calculator.calcHeight(lineHeight);
-      _multiInlineRect(this._grid, ctx, multilines, rect, col, row, {
+      _multiInlineRect(this._grid, ctx, lines, rect, col, row, {
         offset,
         color,
         textAlign,

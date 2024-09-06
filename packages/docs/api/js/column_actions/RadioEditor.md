@@ -12,6 +12,8 @@ You can control the property of `readOnly` and `disabled` by setting the instanc
 But if you define `'radio'`, as string, to `action` of the column, you can't control these properties.  
 You can also disable or read-only each record by specifying a function for the `disabled` and `readOnly` properties.
 
+## Example
+
 <code-preview>
 
 ```html
@@ -90,7 +92,25 @@ document.querySelector(".sample1mode").onchange = function () {
 
 </code-preview>
 
-## disabled
+## Constructor Properties
+
+| Property      | Description                                                                           |
+| ------------- | ------------------------------------------------------------------------------------- |
+| `checkAction` | Defines the action to be taken when clicking or pressing the Enter or Space key.      |
+| `disabled`    | Define a boolean or predicate to control disable. See also [the standard properties]  |
+| `readOnly`    | Define a boolean or predicate to control readonly. See also [the standard properties] |
+
+[the standard properties]: ./standard-properties.md
+
+## Properties
+
+| Property      | Description                                                                           |
+| ------------- | ------------------------------------------------------------------------------------- |
+| `checkAction` | Defines the action to be taken when clicking or pressing the Enter or Space key.      |
+| `disabled`    | Define a boolean or predicate to control disable. See also [the standard properties]  |
+| `readOnly`    | Define a boolean or predicate to control readonly. See also [the standard properties] |
+
+### disabled
 
 You can control `disabled` depending on the state of the record by giving `disabled` a `function`.
 

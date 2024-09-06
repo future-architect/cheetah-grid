@@ -3,6 +3,8 @@ import type {
   IndicatorObject,
   LineClamp,
   TextOverflow,
+  TreeBranchIconStyle,
+  TreeLineStyle,
   Visibility,
 } from "../define";
 import type { ColorDef } from "../base";
@@ -105,6 +107,13 @@ export interface PercentCompleteBarStyleOption extends StyleOption {
   barColor?: ColorDef | ((num: number) => ColorDef);
   barBgColor?: ColorDef;
   barHeight?: number;
+}
+export interface TreeStyleOption extends StyleOption {
+  lineStyle?: TreeLineStyle;
+  lineColor?: ColorDef;
+  lineWidth?: number;
+  branchIcon?: TreeBranchIconStyle;
+  openedBranchIcon?: TreeBranchIconStyle;
 }
 
 export interface SortHeaderStyleOption extends MultilineTextHeaderStyleOption {

@@ -15,6 +15,7 @@ import type {
   EventListenerId,
   KeyboardEventListener,
   KeydownEvent,
+  MousePointerCellEvent,
   PasteCellEvent,
   PasteRangeBoxValues,
 } from "../ts-types";
@@ -1461,42 +1462,56 @@ function _bindEvents(this: DrawGrid): void {
   let isMouseover = false;
   let mouseEnterCell: CellAddress | null = null;
   let mouseOverCell: CellAddress | null = null;
-  function onMouseenterCell(cell: CellAddress, related?: CellAddress): void {
+  type MousePointerCellEventInfoProps = Pick<
+    MousePointerCellEvent,
+    "related" | "event"
+  >;
+  function onMouseenterCell(
+    cell: CellAddress,
+    props: MousePointerCellEventInfoProps
+  ): void {
     grid.fireListeners(DG_EVENT_TYPE.MOUSEENTER_CELL, {
+      ...props,
       col: cell.col,
       row: cell.row,
-      related,
     });
     mouseEnterCell = cell;
   }
-  function onMouseleaveCell(related?: CellAddress): CellAddress | undefined {
+  function onMouseleaveCell(
+    props: MousePointerCellEventInfoProps
+  ): CellAddress | undefined {
     const beforeMouseCell = mouseEnterCell;
     mouseEnterCell = null;
     if (beforeMouseCell) {
       grid.fireListeners(DG_EVENT_TYPE.MOUSELEAVE_CELL, {
+        ...props,
         col: beforeMouseCell.col,
         row: beforeMouseCell.row,
-        related,
       });
     }
     return beforeMouseCell || undefined;
   }
-  function onMouseoverCell(cell: CellAddress, related?: CellAddress): void {
+  function onMouseoverCell(
+    cell: CellAddress,
+    props: MousePointerCellEventInfoProps
+  ): void {
     grid.fireListeners(DG_EVENT_TYPE.MOUSEOVER_CELL, {
+      ...props,
       col: cell.col,
       row: cell.row,
-      related,
     });
     mouseOverCell = cell;
   }
-  function onMouseoutCell(related?: CellAddress): CellAddress | undefined {
+  function onMouseoutCell(
+    props: MousePointerCellEventInfoProps
+  ): CellAddress | undefined {
     const beforeMouseCell = mouseOverCell;
     mouseOverCell = null;
     if (beforeMouseCell) {
       grid.fireListeners(DG_EVENT_TYPE.MOUSEOUT_CELL, {
+        ...props,
         col: beforeMouseCell.col,
         row: beforeMouseCell.row,
-        related,
       });
     }
     return beforeMouseCell || undefined;
@@ -1505,13 +1520,13 @@ function _bindEvents(this: DrawGrid): void {
   handler.on(scrollElement, "mouseover", (_e: MouseEvent): void => {
     isMouseover = true;
   });
-  handler.on(scrollElement, "mouseout", (_e: MouseEvent): void => {
+  handler.on(scrollElement, "mouseout", (event: MouseEvent): void => {
     isMouseover = false;
-    onMouseoutCell();
+    onMouseoutCell({ event });
   });
 
-  handler.on(element, "mouseleave", (_e: MouseEvent): void => {
-    onMouseleaveCell();
+  handler.on(element, "mouseleave", (event: MouseEvent): void => {
+    onMouseleaveCell({ event });
   });
 
   handler.on(element, "mousemove", (e) => {
@@ -1534,32 +1549,45 @@ function _bindEvents(this: DrawGrid): void {
             col: eventArgs.col,
             row: eventArgs.row,
           };
-          const outCell = onMouseoutCell(enterCell);
-          const leaveCell = onMouseleaveCell(enterCell);
-          onMouseenterCell(enterCell, leaveCell);
+          const outCell = onMouseoutCell({ related: enterCell, event: e });
+          const leaveCell = onMouseleaveCell({ related: enterCell, event: e });
+          onMouseenterCell(enterCell, { related: leaveCell, event: e });
           if (isMouseover) {
-            onMouseoverCell(enterCell, outCell);
+            onMouseoverCell(enterCell, { related: outCell, event: e });
           }
         } else if (isMouseover && !mouseOverCell) {
-          onMouseoverCell({
-            col: eventArgs.col,
-            row: eventArgs.row,
-          });
+          onMouseoverCell(
+            {
+              col: eventArgs.col,
+              row: eventArgs.row,
+            },
+            {
+              event: e,
+            }
+          );
         }
       } else {
         const enterCell = {
           col: eventArgs.col,
           row: eventArgs.row,
         };
-        onMouseenterCell(enterCell);
+        onMouseenterCell(enterCell, {
+          event: e,
+        });
         if (isMouseover) {
-          onMouseoverCell(enterCell);
+          onMouseoverCell(enterCell, {
+            event: e,
+          });
         }
         grid.fireListeners(DG_EVENT_TYPE.MOUSEMOVE_CELL, eventArgs);
       }
     } else {
-      onMouseoutCell();
-      onMouseleaveCell();
+      onMouseoutCell({
+        event: e,
+      });
+      onMouseleaveCell({
+        event: e,
+      });
     }
     if (grid[_].columnResizer.moving(e) || grid[_].cellSelector.moving(e)) {
       return;

@@ -27,6 +27,15 @@ export class PercentCompleteBarColumn<T> extends Column<T> {
   clone(): PercentCompleteBarColumn<T> {
     return new PercentCompleteBarColumn(this);
   }
+  get min(): number {
+    return this.min;
+  }
+  get max(): number {
+    return this.max;
+  }
+  get formatter(): (value: unknown) => unknown {
+    return this.formatter;
+  }
   drawInternal(
     value: unknown,
     context: CellContext,

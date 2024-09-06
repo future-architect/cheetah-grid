@@ -1,6 +1,6 @@
 import type {
   BranchGraphColumnOption,
-  BranchGraphCommand,
+  BranchGraphCommandValue,
   CellContext,
   ColorDef,
   FieldDef,
@@ -22,16 +22,16 @@ type Timelines = { timeline: BranchPoint[][]; branches: string[] };
 function getAllColumnData<T>(
   grid: ListGridAPI<T>,
   field: FieldDef<T>,
-  callback: (allData: BranchGraphCommand[]) => void
+  callback: (allData: BranchGraphCommandValue[]) => void
 ): void {
   const { dataSource } = grid;
-  const allData: BranchGraphCommand[] = [];
+  const allData: BranchGraphCommandValue[] = [];
   let promise;
   for (let index = 0; index < dataSource.length; index++) {
     const data = dataSource.getField(
       index,
       field
-    ) as MaybePromiseOrUndef<BranchGraphCommand>;
+    ) as MaybePromiseOrUndef<BranchGraphCommandValue>;
     if (isPromise(data)) {
       const dataIndex = allData.length;
       allData.push(undefined);
@@ -106,18 +106,22 @@ class BranchPoint {
       (l) => l.fromIndex != null && l.toIndex != null
     );
 
-    const froms = lines.filter((l) => l.fromIndex != null && l.toIndex == null);
-    const tos = lines.filter((l) => l.fromIndex == null && l.toIndex != null);
+    const fromList = lines.filter(
+      (l) => l.fromIndex != null && l.toIndex == null
+    );
+    const toList = lines.filter(
+      (l) => l.fromIndex == null && l.toIndex != null
+    );
 
-    froms.forEach((f) => {
-      for (let i = 0; i < tos.length; i++) {
-        const t = tos[i];
+    fromList.forEach((f) => {
+      for (let i = 0; i < toList.length; i++) {
+        const t = toList[i];
         if (t.point) {
           continue;
         }
         if (f.colorIndex === t.colorIndex) {
           f.toIndex = t.toIndex;
-          tos.splice(i, 1);
+          toList.splice(i, 1);
           break;
         }
       }
@@ -125,7 +129,7 @@ class BranchPoint {
       result.push(f);
     });
 
-    return result.concat(tos);
+    return result.concat(toList);
   }
   static merge(a: BranchPoint, b: BranchPoint): BranchPoint {
     if (!a) {
@@ -310,8 +314,8 @@ function commitMerge(
       }),
     ],
   });
-  const froms = [...timeline];
-  const fromTargetLine = froms.pop();
+  const fromList = [...timeline];
+  const fromTargetLine = fromList.pop();
   if (fromTargetLine) {
     fromTargetLine[fromIndex] = BranchPoint.merge(
       fromTargetLine[fromIndex],
@@ -327,7 +331,7 @@ function commitMerge(
     );
   }
 
-  if (joinLine(froms, fromIndex) && fromTargetLine) {
+  if (joinLine(fromList, fromIndex) && fromTargetLine) {
     fromTargetLine[fromIndex].lines = BranchPoint.mergeLines(
       fromTargetLine[fromIndex].lines.concat([
         new BranchLine({
@@ -342,7 +346,7 @@ function commitMerge(
   return result;
 }
 
-function calcCommand(info: Timelines, command: BranchGraphCommand): void {
+function calcCommand(info: Timelines, command: BranchGraphCommandValue): void {
   const { timeline } = info;
   const timelineData: BranchPoint[] = [];
   // const last = timeline.length > 0 ? timeline[timeline.length - 1] : null;
@@ -511,7 +515,7 @@ function renderMerge<T>(
  * BranchGraphColumn
  *
  * Data commands
- * - mastar branch or orphan branch
+ * - master branch or orphan branch
  *
  * ```js
  * {
@@ -576,8 +580,9 @@ export class BranchGraphColumn<T> extends BaseColumn<T> {
   get StyleClass(): typeof BranchGraphStyle {
     return BranchGraphStyle;
   }
-  clearCache(grid: GridInternal<T>): void {
-    delete grid[_];
+  clearCache(grid: ListGridAPI<T>): void {
+    const internal = grid as GridInternal<T>;
+    delete internal[_];
   }
   onDrawCell(
     cellValue: MaybePromise<unknown>,
@@ -597,6 +602,12 @@ export class BranchGraphColumn<T> extends BaseColumn<T> {
   }
   clone(): BranchGraphColumn<T> {
     return new BranchGraphColumn(this);
+  }
+  get start(): "top" | "bottom" {
+    return this._start;
+  }
+  get cache(): boolean {
+    return this._cache;
   }
   drawInternal(
     _value: unknown,

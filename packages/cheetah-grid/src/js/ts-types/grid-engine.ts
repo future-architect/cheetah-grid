@@ -312,7 +312,7 @@ export interface GridCanvasHelperAPI {
     }
   ): void;
   multilineText(
-    multilines: string[],
+    lines: string[],
     context: CellContext,
     option: {
       padding?: number | string | (number | string)[];

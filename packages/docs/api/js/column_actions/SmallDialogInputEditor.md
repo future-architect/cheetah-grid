@@ -93,12 +93,26 @@ document.querySelector(".sample1mode").onchange = function () {
 
 </code-preview>
 
-## Properties
-
-The following properties can be set with the constructor argument of `SmallDialogInputEditor`.
+## Constructor Properties
 
 | Property         | Description                                                                                                                                        |
 | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `disabled`       | Define a boolean or predicate to control disable. See also [the standard properties]                                                               |
+| `readOnly`       | Define a boolean or predicate to control readonly. See also [the standard properties]                                                              |
+| `type`           | Specify the `type` attribute of the `<input>` element.                                                                                             |
+| `classList`      | Specify `class` of the dialog element.                                                                                                             |
+| `helperText`     | Specify helper text. You can also specify a function.                                                                                              |
+| `validator`      | Specify the validation function to be call before confirming the input value. If there is an error, please use the function to return the message. |
+| `inputValidator` | Specify the validation function of the value of `<input>`. If there is an error, please use the function to return the message.                    |
+
+[the standard properties]: ./standard-properties.md
+
+## Properties
+
+| Property         | Description                                                                                                                                        |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `disabled`       | Define a boolean or predicate to control disable. See also [the standard properties]                                                               |
+| `readOnly`       | Define a boolean or predicate to control readonly. See also [the standard properties]                                                              |
 | `type`           | Specify the `type` attribute of the `<input>` element.                                                                                             |
 | `classList`      | Specify `class` of the dialog element.                                                                                                             |
 | `helperText`     | Specify helper text. You can also specify a function.                                                                                              |

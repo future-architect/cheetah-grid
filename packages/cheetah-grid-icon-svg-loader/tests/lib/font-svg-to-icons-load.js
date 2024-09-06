@@ -23,9 +23,8 @@ describe('font svg load', () => {
 
 		const result = eval(resultModule);//eslint-disable-line no-eval
 		const expect = loadExpect(name);
-		assert.deepStrictEqual(result, expect);
-
 		saveExpect(name, result);
+		assert.deepStrictEqual(result, expect);
 	});
 
 	it('should succeed loading module for fontawesome-webfont.svg', () => {
@@ -34,8 +33,7 @@ describe('font svg load', () => {
 
 		const result = eval(resultModule);//eslint-disable-line no-eval
 		const expect = loadExpect(name);
-		assert.deepStrictEqual(result, expect);
-
 		saveExpect(name, result);
+		assert.deepStrictEqual(result, expect);
 	});
 });

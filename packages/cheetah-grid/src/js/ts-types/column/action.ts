@@ -13,18 +13,35 @@ export interface BaseActionOption {
 export type ActionListener = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   record: any,
-  cell: CellAddress & {
+  meta: CellAddress & {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     grid: ListGridAPI<any>;
   }
 ) => void;
-export interface ActionOption extends BaseActionOption {
+export type ActionAreaPredicate = (
+  meta: CellAddress & {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    grid: ListGridAPI<any>;
+    /** The mouse position relative to the cell position. */
+    pointInCell: { x: number; y: number };
+    /** The mouse position relative to the drawing canvas. */
+    pointInDrawingCanvas: { x: number; y: number };
+  }
+) => boolean;
+export interface AbstractActionOption extends BaseActionOption {
   action?: ActionListener;
+}
+export interface ActionOption extends AbstractActionOption {
+  action?: ActionListener;
+  /** A function that checks whether the area can be operated with mouse actions. */
+  area?: ActionAreaPredicate;
 }
 export interface EditorOption extends BaseActionOption {
   readOnly?: RecordBoolean;
 }
-export type ButtonActionOption = ActionOption;
+export interface ButtonActionOption extends AbstractActionOption {
+  action?: ActionListener;
+}
 
 export interface InlineMenuEditorOption<T> extends EditorOption {
   classList?: string | string[];

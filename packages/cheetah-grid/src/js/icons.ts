@@ -60,6 +60,70 @@ const builtins = {
       height: 24,
     };
   },
+  get keyboard_arrow_down(): IconDefine {
+    // return require("cheetah-grid-icon-svg-loader!material-design-icons/hardware/svg/production/ic_keyboard_arrow_down_48px.svg");
+    return {
+      d: "M14.83 16.42L24 25.59l9.17-9.17L36 19.25l-12 12-12-12z",
+      width: 48,
+      height: 48,
+    };
+  },
+  get keyboard_arrow_left(): IconDefine {
+    // return require("cheetah-grid-icon-svg-loader!material-design-icons/hardware/svg/production/ic_keyboard_arrow_left_48px.svg");
+    return {
+      d: "M30.83 32.67l-9.17-9.17 9.17-9.17L28 11.5l-12 12 12 12z",
+      width: 48,
+      height: 48,
+    };
+  },
+  get keyboard_arrow_right(): IconDefine {
+    // return require("cheetah-grid-icon-svg-loader!material-design-icons/hardware/svg/production/ic_keyboard_arrow_right_48px.svg");
+    return {
+      d: "M17.17 32.92l9.17-9.17-9.17-9.17L20 11.75l12 12-12 12z",
+      width: 48,
+      height: 48,
+    };
+  },
+  get keyboard_arrow_up(): IconDefine {
+    // return require("cheetah-grid-icon-svg-loader!material-design-icons/hardware/svg/production/ic_keyboard_arrow_up_48px.svg");
+    return {
+      d: "M14.83 30.83L24 21.66l9.17 9.17L36 28 24 16 12 28z",
+      width: 48,
+      height: 48,
+    };
+  },
+  get chevron_left(): IconDefine {
+    // return require("cheetah-grid-icon-svg-loader!material-design-icons/navigation/svg/production/ic_chevron_left_48px.svg");
+    return {
+      d: "M14.83 30.83L24 21.66l9.17 9.17L36 28 24 16 12 28z",
+      width: 48,
+      height: 48,
+    };
+  },
+  get chevron_right(): IconDefine {
+    // return require("cheetah-grid-icon-svg-loader!material-design-icons/navigation/svg/production/ic_chevron_right_48px.svg");
+    return {
+      d: "M20 12l-2.83 2.83L26.34 24l-9.17 9.17L20 36l12-12z",
+      width: 48,
+      height: 48,
+    };
+  },
+  get expand_less(): IconDefine {
+    // return require("cheetah-grid-icon-svg-loader!material-design-icons/navigation/svg/production/ic_expand_less_48px.svg");
+    return {
+      d: "M24 16L12 28l2.83 2.83L24 21.66l9.17 9.17L36 28z",
+      width: 48,
+      height: 48,
+    };
+  },
+  get expand_more(): IconDefine {
+    // return require("cheetah-grid-icon-svg-loader!material-design-icons/navigation/svg/production/ic_expand_more_48px.svg");
+    return {
+      d: "M33.17 17.17L24 26.34l-9.17-9.17L12 20l12 12 12-12z",
+      width: 48,
+      height: 48,
+    };
+  },
 };
 
 export function get(): { [key: string]: IconDefine } {

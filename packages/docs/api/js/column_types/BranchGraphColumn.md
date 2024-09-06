@@ -10,8 +10,8 @@ Show branch graph.
 
 | Property | Description                                                                                                                           | Default    |
 | -------- | ------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
-| `start`  | Set the moving direction by setting the beggining point. `'top'` or `'bottom'`                                                        | `'bottom'` |
-| `cache`  | Set `true` when caching the calculation result of the branch structure. Please call `clearCache(grid)` when deleting the cahced data. | `false`    |
+| `start`  | Set the moving direction by setting the beginning point. `'top'` or `'bottom'`                                                        | `'bottom'` |
+| `cache`  | Set `true` when caching the calculation result of the branch structure. Please call `clearCache(grid)` when deleting the cached data. | `false`    |
 
 ## Style Properties
 
@@ -22,6 +22,67 @@ Show branch graph.
 | `circleSize`      | Set the size of point which express `commit`.                                                         | `16`                                                                                     |
 | `branchLineWidth` | Set the width of branch lines.                                                                        | `4`                                                                                      |
 | `mergeStyle`      | Set the way to express the merge line. `'bezier'` or `'straight'`                                     | `'bezier'`                                                                               |
+
+## Data Format
+
+The value provided from each record through the field must be an object or an array of it in the following format.
+
+### Branch Command
+
+This is the command to create a new branch.\
+It is an object with the following properties:
+
+| Property               | Description                                                                                 |
+| :--------------------- | :------------------------------------------------------------------------------------------ |
+| `command` (Required)   | Sets `"branch"`, which indicates what command the object is directing.                      |
+| `branch`               | Set the value of the branch name to operate on.                                             |
+| `branch.to` (Required) | Set the name of the new branch to be created. Set `branch` to a string has the same effect. |
+| `branch.from`          | Set the branch name to be branched from.                                                    |
+
+### Commit Command
+
+This is the command to commit a branch.\
+It is an object with the following properties:
+
+| Property             | Description                                                            |
+| :------------------- | :--------------------------------------------------------------------- |
+| `command` (Required) | Sets `"commit"`, which indicates what command the object is directing. |
+| `branch` (Required)  | Set the value of the branch name to operate on.                        |
+
+### Merge Command
+
+This is the command to merge a branch into a branch.\
+It is an object with the following properties:
+
+| Property                 | Description                                                           |
+| :----------------------- | :-------------------------------------------------------------------- |
+| `command` (Required)     | Sets `"merge"`, which indicates what command the object is directing. |
+| `branch` (Required)      | Set the value of the branch name to operate on.                       |
+| `branch.to` (Required)   | Sets the name of the branch that will be merged.                      |
+| `branch.from` (Required) | Sets the name of the branch you want to merge from.                   |
+
+### Tag Command
+
+This is the command to create a tag.\
+It is an object with the following properties:
+
+| Property             | Description                                                         |
+| :------------------- | :------------------------------------------------------------------ |
+| `command` (Required) | Sets `"tag"`, which indicates what command the object is directing. |
+| `branch` (Required)  | Set the value of the branch name to operate on.                     |
+| `tag` (Required)     | Set the name of the new tag to be created.                          |
+
+## Instance Methods
+
+### `clearCache(grid)`
+
+Clear the cache.
+
+| Parameter | Description                               |
+| :-------- | :---------------------------------------- |
+| `grid`    | It should be given an instance of a grid. |
+
+## Example
 
 <code-preview>
 

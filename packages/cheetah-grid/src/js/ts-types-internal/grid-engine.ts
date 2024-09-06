@@ -97,12 +97,35 @@ export type CheckHeaderState = {
   mouseActiveCell?: CellAddress;
 };
 
+export const enum TreeLineKind {
+  none,
+  // │
+  vertical,
+  // └
+  last,
+  // ┌
+  start,
+  // ├
+  verticalBranch,
+  // ─
+  horizontal,
+  // ┬
+  horizontalBranch,
+  // half ─
+  lone,
+}
+export type TreeColumnState<T> = {
+  drawnIcons?: unknown;
+  cache?: Map<FieldDef<T>, unknown>;
+};
+
 export interface GridInternal<T> extends ListGridAPI<T> {
   "$$$$col.fadein_stateID symbol$$$$"?: ColumnFadeinState;
   "$$$$btncol.stateID symbol$$$$"?: ButtonColumnState;
   "$$$$chkcol.stateID symbol$$$$"?: CheckColumnState;
   "$$$$rdcol.stateID symbol$$$$"?: RadioColumnState;
   "$$$$branch_graph_col.stateID symbol$$$$"?: BranchGraphColumnState<T>;
+  "$$$$tree_col.stateID symbol$$$$"?: TreeColumnState<T>;
   "$$$$inline_menu_editor.stateID symbol$$$$"?: InputEditorState;
   "$$$$inline_input_editor.stateID symbol$$$$"?: InputEditorState;
   "$$$$small_dialog_input_editor.stateID symbol$$$$"?: InputEditorState;
