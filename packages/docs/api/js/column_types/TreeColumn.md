@@ -42,12 +42,12 @@ This is an array of path indicating the hierarchy. The path must contain an elem
 
 Example:
 
-| Node        | `code` | `path` Value       |
-| :---------- | :----- | :----------------- |
-| Grandparent | `'g'`  | `['g']`            |
-| ├ Parent    | `'p'`  | `['g', 'p']`       |
-| │└ Child1   | `'c1'` | `['g', 'p', 'c1']` |
-| └ Child2    | `'c2'` | `['g', 'c2']`      |
+| Node          | `code` | `path` Value       |
+| :------------ | :----- | :----------------- |
+| `Grandparent` | `'g'`  | `['g']`            |
+| `├ Parent`    | `'p'`  | `['g', 'p']`       |
+| `│└ Child1`   | `'c1'` | `['g', 'p', 'c1']` |
+| `└ Child2`    | `'c2'` | `['g', 'c2']`      |
 
 ### `nodeType`
 
