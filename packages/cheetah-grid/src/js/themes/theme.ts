@@ -5,17 +5,16 @@ import type {
   RequiredThemeDefine,
   StylePropertyFunctionArg,
   ThemeDefine,
-  TreeBranchIconStyle,
+  TreeBranchIconStyleDefine,
   TreeLineStyle,
 } from "../ts-types";
 import { getChainSafe } from "../internal/utils";
 import { get as getSymbol } from "../internal/symbolManager";
+import { getTreeNodeInfoAt } from "../columns/type/TreeColumn";
 //private symbol
 const _ = getSymbol();
 
-function getProp<
-  T extends ColorPropertyDefine | ColorsPropertyDefine | string | number
->(
+function getProp<T>(
   obj: PartialThemeDefine,
   superObj: ThemeDefine,
   names: string[],
@@ -255,26 +254,28 @@ export class Theme implements RequiredThemeDefine {
         get lineWidth(): number {
           return getTreeProp("lineWidth", undefined, undefined, 1);
         },
-        get branchIcon(): TreeBranchIconStyle {
-          return getTreeProp(
-            "branchIcon",
+        get treeIcon(): TreeBranchIconStyleDefine {
+          return getTreeProp<TreeBranchIconStyleDefine>(
+            "treeIcon",
             undefined,
             undefined,
-            "chevron_right"
-          );
-        },
-        get openedBranchIcon(): TreeBranchIconStyle {
-          return getTreeProp(
-            "openedBranchIcon",
-            undefined,
-            undefined,
-            "expand_more"
+            (args) => {
+              const { hasChildren, nodeType } = getTreeNodeInfoAt(args);
+              if (hasChildren) {
+                return "expand_more";
+              }
+              return nodeType === "branch" ? "chevron_right" : "none";
+            }
           );
         },
       })
     );
     function getTreeProp<
-      T extends ColorPropertyDefine | number | TreeLineStyle
+      T extends
+        | ColorPropertyDefine
+        | number
+        | TreeLineStyle
+        | TreeBranchIconStyleDefine
     >(
       prop: string,
       defNames: string[] | undefined,

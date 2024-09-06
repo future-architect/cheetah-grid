@@ -4,13 +4,12 @@ import type {
   ActionAreaPredicate,
   CellAddress,
   CellContext,
-  ColumnIconOption,
+  DataSourceAPI,
   FieldDef,
   GridCanvasHelperAPI,
   ListGridAPI,
   MaybePromise,
   RectProps,
-  TreeBranchIconStyle,
   TreeColumnOption,
   TreeDataValue,
 } from "../../ts-types";
@@ -28,8 +27,6 @@ type NormalizedTreeData = {
   caption: string;
   /** An array of path indicating the hierarchy */
   path: unknown[];
-  /** icon */
-  icon?: ColumnIconOption<never>;
   nodeType?: "leaf" | "branch";
 };
 
@@ -37,11 +34,6 @@ type TreeInfo = {
   getLines: () => TreeLineKind[];
   caption: string;
   path: unknown[];
-  getIcon: (data: {
-    branchIcon: TreeBranchIconStyle;
-    openedBranchIcon: TreeBranchIconStyle;
-    fontSize: number;
-  }) => ColumnIconOption<never> | null;
 };
 
 const _ = getTreeColumnStateId();
@@ -163,14 +155,17 @@ export class TreeColumn<T> extends Column<T> {
           // top
           hLineY = top + fontSize.height / 2;
         }
-
-        // Get icon
-        const treeIcon = info.getIcon({
-          branchIcon: style.branchIcon || helper.theme.tree.branchIcon,
-          openedBranchIcon:
-            style.openedBranchIcon || helper.theme.tree.openedBranchIcon,
-          fontSize: fontSize.width,
-        });
+        // Get the tree icon
+        const definedTreeIcon =
+          style.treeIcon ||
+          helper.getStyleProperty(helper.theme.tree.treeIcon, col, row, ctx);
+        const treeIcon =
+          definedTreeIcon === "none"
+            ? null
+            : definedTreeIcon === "chevron_right" ||
+              definedTreeIcon === "expand_more"
+            ? { name: definedTreeIcon, width: fontSize.width }
+            : definedTreeIcon;
 
         // Calculate icon rect
         let iconRect: Rect | null = null;
@@ -212,70 +207,64 @@ export class TreeColumn<T> extends Column<T> {
             ctx.lineWidth = lineWidth;
             ctx.lineCap = "round";
 
-            // Draw tree lines
-            let needRestoreClip = false;
-            try {
-              if (iconRect) {
-                ctx.save();
-                needRestoreClip = true;
-                ctx.beginPath();
-                ctx.moveTo(0, 0);
-                ctx.lineTo(0, ctx.canvas.height);
-                ctx.lineTo(ctx.canvas.width, ctx.canvas.height);
-                ctx.lineTo(ctx.canvas.width, 0);
-                ctx.lineTo(0, 0);
-                ctx.lineTo(iconRect.left, iconRect.top);
-                ctx.lineTo(iconRect.right, iconRect.top);
-                ctx.lineTo(iconRect.right, iconRect.bottom);
-                ctx.lineTo(iconRect.left, iconRect.bottom);
-                ctx.lineTo(iconRect.left, iconRect.top);
+            if (iconRect) {
+              // Clip icon area
+              ctx.beginPath();
+              ctx.rect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
-                ctx.closePath();
+              // Draw a square in the opposite direction to hollow out the inside.
+              ctx.rect(
+                iconRect.right,
+                iconRect.top,
+                -iconRect.width,
+                iconRect.height
+              );
 
-                ctx.clip();
-              }
-              info.getLines().forEach((line: TreeLineKind, index: number) => {
-                const treeLineLeft = left + indentSize * index;
-                const vLineX = treeLineLeft + indentSize / 2;
-                const treeLineRight = treeLineLeft + indentSize;
-                if (line !== TreeLineKind.none) {
-                  ctx.beginPath();
-                  if (line === TreeLineKind.vertical) {
-                    ctx.moveTo(vLineX, rect.top);
-                    ctx.lineTo(vLineX, rect.bottom);
-                  } else if (line === TreeLineKind.last) {
-                    ctx.moveTo(vLineX, rect.top);
-                    ctx.lineTo(vLineX, hLineY);
-                    ctx.lineTo(treeLineRight, hLineY);
-                  } else if (line === TreeLineKind.start) {
-                    ctx.moveTo(treeLineRight, hLineY);
-                    ctx.lineTo(vLineX, hLineY);
-                    ctx.lineTo(vLineX, rect.bottom);
-                  } else if (line === TreeLineKind.verticalBranch) {
-                    ctx.moveTo(vLineX, rect.top);
-                    ctx.lineTo(vLineX, rect.bottom);
-                    ctx.moveTo(vLineX, hLineY);
-                    ctx.lineTo(treeLineRight, hLineY);
-                  } else if (line === TreeLineKind.horizontal) {
-                    ctx.moveTo(treeLineLeft, hLineY);
-                    ctx.lineTo(treeLineRight, hLineY);
-                  } else if (line === TreeLineKind.horizontalBranch) {
-                    ctx.moveTo(treeLineLeft, hLineY);
-                    ctx.lineTo(treeLineRight, hLineY);
-                    ctx.moveTo(vLineX, hLineY);
-                    ctx.lineTo(vLineX, rect.bottom);
-                  } else if (line === TreeLineKind.lone) {
-                    ctx.moveTo(vLineX, hLineY);
-                    ctx.lineTo(treeLineRight, hLineY);
-                  }
-                  ctx.stroke();
-                }
-              });
-            } finally {
-              if (needRestoreClip) {
-                ctx.restore();
-              }
+              // // For debug
+              // ctx.fillStyle = "#0002";
+              // ctx.fill();
+
+              ctx.clip();
             }
+
+            // Draw tree lines
+            info.getLines().forEach((line: TreeLineKind, index: number) => {
+              const treeLineLeft = left + indentSize * index;
+              const vLineX = treeLineLeft + indentSize / 2;
+              const treeLineRight = treeLineLeft + indentSize;
+              if (line !== TreeLineKind.none) {
+                ctx.beginPath();
+                if (line === TreeLineKind.vertical) {
+                  ctx.moveTo(vLineX, rect.top);
+                  ctx.lineTo(vLineX, rect.bottom);
+                } else if (line === TreeLineKind.last) {
+                  ctx.moveTo(vLineX, rect.top);
+                  ctx.lineTo(vLineX, hLineY);
+                  ctx.lineTo(treeLineRight, hLineY);
+                } else if (line === TreeLineKind.start) {
+                  ctx.moveTo(treeLineRight, hLineY);
+                  ctx.lineTo(vLineX, hLineY);
+                  ctx.lineTo(vLineX, rect.bottom);
+                } else if (line === TreeLineKind.verticalBranch) {
+                  ctx.moveTo(vLineX, rect.top);
+                  ctx.lineTo(vLineX, rect.bottom);
+                  ctx.moveTo(vLineX, hLineY);
+                  ctx.lineTo(treeLineRight, hLineY);
+                } else if (line === TreeLineKind.horizontal) {
+                  ctx.moveTo(treeLineLeft, hLineY);
+                  ctx.lineTo(treeLineRight, hLineY);
+                } else if (line === TreeLineKind.horizontalBranch) {
+                  ctx.moveTo(treeLineLeft, hLineY);
+                  ctx.lineTo(treeLineRight, hLineY);
+                  ctx.moveTo(vLineX, hLineY);
+                  ctx.lineTo(vLineX, rect.bottom);
+                } else if (line === TreeLineKind.lone) {
+                  ctx.moveTo(vLineX, hLineY);
+                  ctx.lineTo(treeLineRight, hLineY);
+                }
+                ctx.stroke();
+              }
+            });
           } finally {
             ctx.restore();
           }
@@ -316,6 +305,49 @@ export class TreeColumn<T> extends Column<T> {
   }
 }
 
+/**
+ * If the cell is a TreeColumn, gets the tree node information from the given cell.
+ */
+export function getTreeNodeInfoAt<T>({
+  grid,
+  col,
+  row,
+}: CellAddress & {
+  grid: ListGridAPI<T>;
+}): { hasChildren: boolean; nodeType: "leaf" | "branch" } {
+  const field = grid.getField(col, row);
+  if (!field) return { hasChildren: false, nodeType: "leaf" };
+  const { dataSource } = grid;
+  const currIndex = grid.getRecordIndexByRow(row);
+  const value = dataSource.getField(currIndex, field);
+  const treeData = getTreeDataFromValue(value);
+  const hasChildren = hasChildrenByRecord(
+    treeData,
+    dataSource,
+    field,
+    currIndex
+  );
+  return {
+    nodeType: hasChildren ? "branch" : treeData.nodeType || "leaf",
+    hasChildren,
+  };
+}
+
+function hasChildrenByRecord<T>(
+  treeData: NormalizedTreeData,
+  dataSource: DataSourceAPI<T>,
+  field: FieldDef<T>,
+  recordIndex: number
+): boolean {
+  const next = dataSource.getField(recordIndex + 1, field);
+  if (!next || isPromise(next)) return false;
+  const nextParentPath = getParentPath(next);
+  return (
+    treeData.path.length === nextParentPath.length &&
+    nextParentPath.every((p, i) => p === treeData.path[i])
+  );
+}
+
 class TreeColumnInfo<T> {
   private _cache: Record<
     number,
@@ -330,12 +362,17 @@ class TreeColumnInfo<T> {
     this._field = field;
   }
   getInfo(value: TreeDataValue, row: number): TreeInfo {
-    const { _field: field, _grid: grig, _cache: cache } = this;
-    const currIndex = grig.getRecordIndexByRow(row);
-    const { dataSource } = grig;
+    const { _field: field, _grid: grid, _cache: cache } = this;
+    const currIndex = grid.getRecordIndexByRow(row);
+    const { dataSource } = grid;
     const treeData = getTreeDataFromValue(value);
 
-    const hasChildren = hasNextSiblingWithCache(treeData.path);
+    const hasChildren = hasChildrenByRecord(
+      treeData,
+      dataSource,
+      field,
+      currIndex
+    );
 
     return {
       caption: treeData.caption,
@@ -365,35 +402,16 @@ class TreeColumnInfo<T> {
         }
         return parentLines.concat(selfLine);
       },
-      getIcon(data) {
-        if (treeData.icon) return treeData.icon;
-        if (data.branchIcon === "none" && data.openedBranchIcon === "none") {
-          return null;
-        }
-        // const nodeType = hasChildren ? "branch" : treeData.nodeType ?? "leaf";
-        const branchIcon = hasChildren
-          ? data.openedBranchIcon
-          : treeData.nodeType === "branch"
-          ? data.branchIcon
-          : "none";
-        if (branchIcon === "chevron_right") {
-          return { name: "chevron_right", width: data.fontSize };
-        }
-        if (branchIcon === "expand_more") {
-          return { name: "expand_more", width: data.fontSize };
-        }
-        return null;
-      },
     };
 
-    function hasNextSiblingWithCache(targetPath: unknown[]): boolean {
-      const has = hasNextSiblingFromCache(currIndex, targetPath.length);
+    function hasNextSiblingWithCache(parentPath: unknown[]): boolean {
+      const has = hasNextSiblingFromCache(currIndex, parentPath.length);
       if (has != null) {
         return has;
       }
-      const result = hasNextSibling(targetPath);
+      const result = hasNextSibling(parentPath);
       for (let index = currIndex; index < result.end; index++) {
-        setNextSiblingToCache(index, targetPath.length, result.has);
+        setNextSiblingToCache(index, parentPath.length, result.has);
       }
       return result.has;
     }
@@ -417,7 +435,7 @@ class TreeColumnInfo<T> {
       hasNextSiblings[level] = value;
     }
 
-    function hasNextSibling(targetPath: unknown[]): {
+    function hasNextSibling(parentPath: unknown[]): {
       end: number;
       has: boolean;
     } {
@@ -427,14 +445,14 @@ class TreeColumnInfo<T> {
         if (isPromise(data)) return { end: index, has: false };
         const nextPath = getParentPath(data);
         if (!nextPath.length) return { end: index, has: false };
-        if (targetPath.every((p, i) => p === nextPath[i])) {
+        if (parentPath.every((p, i) => p === nextPath[i])) {
           // All matches!
-          if (targetPath.length < nextPath.length) {
+          if (parentPath.length < nextPath.length) {
             // It's a child.
             // e.g.
             // ├ target
             // │ ├ next
-            const has = hasNextSiblingFromCache(index, targetPath.length);
+            const has = hasNextSiblingFromCache(index, parentPath.length);
             if (has != null) return { end: index, has };
             continue;
           }
@@ -472,7 +490,6 @@ function getTreeDataFromValue(value: TreeDataValue): NormalizedTreeData {
             value.caption ?? value.path[value.path.length - 1] ?? ""
           ),
           path: value.path,
-          icon: value.icon as never,
           nodeType: value.nodeType as never,
         };
       if (typeof value.path === "function")

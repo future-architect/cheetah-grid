@@ -8,7 +8,7 @@
 	const columnAction = cheetahGrid.columns.action;
 	const columnStyle = cheetahGrid.columns.style;
 
-	const expands = {'p1': true};
+	const expands = {'p1': true, 'c1_1': true};
 
 	const tree = [
 		{
@@ -152,13 +152,12 @@
 	const label = document.createElement('label');
 	const showIconCheck = document.createElement('input');
 	showIconCheck.type = 'checkbox';
-	showIconCheck.checked = treeStyle.branchIcon !== 'none';
+	showIconCheck.checked = treeStyle.treeIcon !== 'none';
 	label.appendChild(showIconCheck);
 	label.appendChild(document.createTextNode('Show Icons'));
 	toolsRoot.appendChild(label);
 	showIconCheck.addEventListener('change', () => {
-		treeStyle.branchIcon = showIconCheck.checked ? 'chevron_right' : 'none';
-		treeStyle.openedBranchIcon = showIconCheck.checked ? 'expand_more' : 'none';
+		treeStyle.treeIcon = showIconCheck.checked ? undefined : 'none';
 		grid.invalidate();
 	});
 

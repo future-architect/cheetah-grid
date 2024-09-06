@@ -1,6 +1,7 @@
 import type {
   ColorDef,
   TreeBranchIconStyle,
+  TreeBranchIconStyleColumnIcon,
   TreeLineStyle,
   TreeStyleOption,
 } from "../../ts-types";
@@ -11,8 +12,7 @@ export class TreeStyle extends Style {
   private _lineStyle?: TreeLineStyle;
   private _lineColor?: ColorDef;
   private _lineWidth?: number;
-  private _branchIcon?: TreeBranchIconStyle;
-  private _openedBranchIcon?: TreeBranchIconStyle;
+  private _treeIcon?: TreeBranchIconStyle | TreeBranchIconStyleColumnIcon;
   static get DEFAULT(): TreeStyle {
     return defaultStyle ? defaultStyle : (defaultStyle = new TreeStyle());
   }
@@ -21,8 +21,7 @@ export class TreeStyle extends Style {
     this._lineStyle = style.lineStyle;
     this._lineColor = style.lineColor;
     this._lineWidth = style.lineWidth;
-    this._branchIcon = style.branchIcon;
-    this._openedBranchIcon = style.openedBranchIcon;
+    this._treeIcon = style.treeIcon;
   }
   clone(): TreeStyle {
     return new TreeStyle(this);
@@ -48,18 +47,16 @@ export class TreeStyle extends Style {
     this._lineWidth = lineWidth;
     this.doChangeStyle();
   }
-  get branchIcon(): TreeBranchIconStyle | undefined {
-    return this._branchIcon;
+  get treeIcon():
+    | TreeBranchIconStyle
+    | TreeBranchIconStyleColumnIcon
+    | undefined {
+    return this._treeIcon;
   }
-  set branchIcon(branchIcon: TreeBranchIconStyle | undefined) {
-    this._branchIcon = branchIcon;
-    this.doChangeStyle();
-  }
-  get openedBranchIcon(): TreeBranchIconStyle | undefined {
-    return this._openedBranchIcon;
-  }
-  set openedBranchIcon(openedBranchIcon: TreeBranchIconStyle | undefined) {
-    this._openedBranchIcon = openedBranchIcon;
+  set treeIcon(
+    treeIcon: TreeBranchIconStyle | TreeBranchIconStyleColumnIcon | undefined
+  ) {
+    this._treeIcon = treeIcon;
     this.doChangeStyle();
   }
 }

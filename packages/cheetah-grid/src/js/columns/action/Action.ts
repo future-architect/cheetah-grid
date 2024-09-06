@@ -70,24 +70,26 @@ export abstract class AbstractAction<T> extends BaseAction<T> {
           if (!this.area) {
             return true;
           }
+
           const { event } = e;
           const clientX = event.clientX || event.pageX + window.scrollX;
           const clientY = event.clientY || event.pageY + window.scrollY;
           const canvasRect = grid.canvas.getBoundingClientRect();
-          const abstractX = clientX - canvasRect.left;
-          const abstractY = clientY - canvasRect.top;
+          const xInCanvas = clientX - canvasRect.left;
+          const yInCanvas = clientY - canvasRect.top;
+
           const rect = grid.getCellRect(e.col, e.row);
           return this.area({
             col: e.col,
             row: e.row,
             grid,
             pointInCell: {
-              x: abstractX - rect.left,
-              y: abstractY - rect.top,
+              x: xInCanvas - rect.left + grid.scrollLeft,
+              y: yInCanvas - rect.top + grid.scrollTop,
             },
             pointInDrawingCanvas: {
-              x: abstractX - grid.scrollLeft,
-              y: abstractY - grid.scrollTop,
+              x: xInCanvas,
+              y: yInCanvas,
             },
           });
         },

@@ -1,4 +1,5 @@
 import type {
+  ColumnIconOption,
   IndicatorDefine,
   IndicatorObject,
   LineClamp,
@@ -112,8 +113,10 @@ export interface TreeStyleOption extends StyleOption {
   lineStyle?: TreeLineStyle;
   lineColor?: ColorDef;
   lineWidth?: number;
-  branchIcon?: TreeBranchIconStyle;
-  openedBranchIcon?: TreeBranchIconStyle;
+  treeIcon?:
+    | TreeBranchIconStyle
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    | ColumnIconOption<any>;
 }
 
 export interface SortHeaderStyleOption extends MultilineTextHeaderStyleOption {

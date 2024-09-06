@@ -6,6 +6,8 @@ order: 1010
 
 Show a hierarchical tree.
 
+TreeColumn class does not have the feature to open and close branch nodes, you must implement it yourself if you need it.
+
 ## Constructor Properties
 
 | Property | Description                                                                                                                           | Default |
@@ -14,13 +16,12 @@ Show a hierarchical tree.
 
 ## Style Properties
 
-| Property           | Description                                                                                                        |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------ |
-| `lineColor`        | Sets the tree lines color.                                                                                         |
-| `lineStyle`        | Sets the tree lines style. Allowed values ​​are `'none'` or `'solid'`                                              |
-| `lineWidth`        | Sets the with of of the tree lines.                                                                                |
-| `branchIcon`       | Sets the icon to display for the branch node. Allowed values ​​are `"chevron_right"`, `"expand_more"` or `"none"`. |
-| `openedBranchIcon` | Sets the icon to display for the opened branch node.                                                               |
+| Property    | Description                                                                                                     |
+| ----------- | --------------------------------------------------------------------------------------------------------------- |
+| `lineColor` | Sets the tree lines color.                                                                                      |
+| `lineStyle` | Sets the tree lines style. Allowed values ​​are `'none'` or `'solid'`                                           |
+| `lineWidth` | Sets the with of of the tree lines.                                                                             |
+| `treeIcon`  | Sets the icon to display on the node tree. Allowed values ​​are `"chevron_right"`, `"expand_more"` or `"none"`. |
 
 ## Data Format
 
@@ -33,7 +34,6 @@ The object has the following properties:
 | `path` (Required) | An array of path indicating the hierarchy. See [the `path` description section](#path) for more information.                                                   |
 | `caption`         | The caption of the record. If not specified, the last value of the path will be used as the caption.                                                           |
 | `nodeType`        | Set to `"leaf"` or `"branch"`. Set whether the node is a leaf node or a branch node. See [the `nodeType` description section](#nodetype) for more information. |
-| `icon`            | Set this if you want a custom icon to be displayed in the tree.                                                                                                |
 
 ### `path`
 

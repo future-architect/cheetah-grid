@@ -1,7 +1,7 @@
 import type {
   ColorPropertyDefine,
   ColorsPropertyDefine,
-  TreeBranchIconStyle,
+  TreeBranchIconStyleDefine,
   TreeLineStyle,
 } from "./define";
 
@@ -50,8 +50,7 @@ export interface ThemeDefine {
     lineStyle?: TreeLineStyle;
     lineColor?: ColorPropertyDefine;
     lineWidth?: number;
-    branchIcon?: TreeBranchIconStyle;
-    openedBranchIcon?: TreeBranchIconStyle;
+    treeIcon?: TreeBranchIconStyleDefine;
   };
   header: {
     sortArrowColor?: ColorPropertyDefine;

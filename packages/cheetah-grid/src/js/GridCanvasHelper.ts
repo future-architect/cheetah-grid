@@ -16,7 +16,7 @@ import type {
   RequiredThemeDefine,
   StylePropertyFunctionArg,
   TextOverflow,
-  TreeBranchIconStyle,
+  TreeBranchIconStyleDefine,
   TreeLineStyle,
 } from "./ts-types";
 import type { Inline, InlineDrawOption } from "./element/Inline";
@@ -48,34 +48,46 @@ function invalidateCell<T>(context: CellContext, grid: ListGridAPI<T>): void {
   const { col, row } = context;
   grid.invalidateCell(col, row);
 }
-function getColor<T>(
+function getStyleProperty<T>(
   color: ColorPropertyDefine,
   col: number,
   row: number,
   grid: ListGridAPI<T>,
   context: CanvasRenderingContext2D
 ): ColorDef;
-function getColor<T>(
+function getStyleProperty<T>(
   color: ColorsPropertyDefine,
   col: number,
   row: number,
   grid: ListGridAPI<T>,
   context: CanvasRenderingContext2D
 ): ColorsDef;
-function getColor<T>(
+function getStyleProperty<T>(
   color: undefined,
   col: number,
   row: number,
   grid: ListGridAPI<T>,
   context: CanvasRenderingContext2D
 ): undefined;
-function getColor<T>(
-  color: ColorPropertyDefine | ColorsPropertyDefine | undefined,
+function getStyleProperty<T, P>(
+  style: P | ((args: StylePropertyFunctionArg) => P),
   col: number,
   row: number,
   grid: ListGridAPI<T>,
   context: CanvasRenderingContext2D
-): ColorDef | ColorsDef | undefined {
+): P;
+function getStyleProperty<T, P>(
+  color:
+    | ColorPropertyDefine
+    | ColorsPropertyDefine
+    | undefined
+    | P
+    | ((args: StylePropertyFunctionArg) => P),
+  col: number,
+  row: number,
+  grid: ListGridAPI<T>,
+  context: CanvasRenderingContext2D
+): ColorDef | ColorsDef | undefined | P {
   return getOrApply(color, {
     col,
     row,
@@ -100,10 +112,7 @@ function getFont<T>(
     context,
   });
 }
-function getThemeValue<
-  R,
-  T extends ColorPropertyDefine | ColorsPropertyDefine | string | number
->(grid: ListGridAPI<R>, ...names: string[]): T {
+function getThemeValue<R, T>(grid: ListGridAPI<R>, ...names: string[]): T {
   const gridThemeValue = getChainSafe(grid.theme, ...names);
   if (gridThemeValue == null) {
     // use default theme
@@ -112,7 +121,7 @@ function getThemeValue<
   if (typeof gridThemeValue !== "function") {
     return gridThemeValue;
   }
-  let defaultThemeValuer: unknown;
+  let defaultThemeValue: unknown;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return ((args: StylePropertyFunctionArg): any => {
     const value = gridThemeValue(args);
@@ -121,9 +130,9 @@ function getThemeValue<
       return value;
     }
     // use default theme
-    defaultThemeValuer =
-      defaultThemeValuer || getChainSafe(themes.getDefault(), ...names);
-    return getOrApply(defaultThemeValuer, args);
+    defaultThemeValue =
+      defaultThemeValue || getChainSafe(themes.getDefault(), ...names);
+    return getOrApply(defaultThemeValue, args);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   }) as any;
 }
@@ -161,7 +170,7 @@ function drawInlines<T>(
     if (inline.canDraw()) {
       ctx.save();
       try {
-        ctx.fillStyle = getColor(
+        ctx.fillStyle = getStyleProperty(
           inline.color() || ctx.fillStyle,
           col,
           row,
@@ -383,7 +392,7 @@ function _inlineRect<T>(
   }
 ): void {
   //文字style
-  ctx.fillStyle = getColor(color || ctx.fillStyle, col, row, grid, ctx);
+  ctx.fillStyle = getStyleProperty(color || ctx.fillStyle, col, row, grid, ctx);
   ctx.textAlign = textAlign;
   ctx.textBaseline = textBaseline;
   ctx.font = font || ctx.font;
@@ -491,7 +500,7 @@ function _multiInlineRect<T>(
   }
 ): void {
   //文字style
-  ctx.fillStyle = getColor(color || ctx.fillStyle, col, row, grid, ctx);
+  ctx.fillStyle = getStyleProperty(color || ctx.fillStyle, col, row, grid, ctx);
   ctx.textAlign = textAlign;
   ctx.textBaseline = textBaseline;
   ctx.font = font || ctx.font;
@@ -994,11 +1003,8 @@ class ThemeResolver<T> implements RequiredThemeDefine {
         get lineWidth(): number {
           return getTreeProp("lineWidth");
         },
-        get branchIcon(): TreeBranchIconStyle {
-          return getTreeProp("branchIcon");
-        },
-        get openedBranchIcon(): TreeBranchIconStyle {
-          return getTreeProp("openedBranchIcon");
+        get treeIcon(): TreeBranchIconStyleDefine {
+          return getTreeProp("treeIcon");
         },
       })
     );
@@ -1008,7 +1014,7 @@ class ThemeResolver<T> implements RequiredThemeDefine {
         | ColorPropertyDefine
         | number
         | TreeLineStyle
-        | TreeBranchIconStyle
+        | TreeBranchIconStyleDefine
     >(prop: string): T {
       return getThemeValue(grid, "tree", prop);
     }
@@ -1169,7 +1175,15 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
     row: number,
     ctx: CanvasRenderingContext2D
   ): ColorsDef {
-    return getColor(color, col, row, this._grid, ctx);
+    return getStyleProperty(color, col, row, this._grid, ctx);
+  }
+  getStyleProperty<T>(
+    style: T | ((args: StylePropertyFunctionArg) => T),
+    col: number,
+    row: number,
+    ctx: CanvasRenderingContext2D
+  ): T {
+    return getStyleProperty(style, col, row, this._grid, ctx);
   }
   toBoxArray(
     obj: ColorsDef
@@ -1414,7 +1428,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
     ctx.save();
     try {
       font = getFont(font, context.col, context.row, this._grid, ctx);
-      ctx.fillStyle = getColor(color, col, row, this._grid, ctx);
+      ctx.fillStyle = getStyleProperty(color, col, row, this._grid, ctx);
       ctx.textAlign = textAlign;
       ctx.textBaseline = textBaseline;
       ctx.font = font || ctx.font;
@@ -1433,7 +1447,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
 
     this.drawWithClip(context, (ctx) => {
       const { col, row } = context;
-      ctx.fillStyle = getColor(fillColor, col, row, this._grid, ctx);
+      ctx.fillStyle = getStyleProperty(fillColor, col, row, this._grid, ctx);
 
       ctx.beginPath();
       ctx.rect(rect.left, rect.top, rect.width, rect.height);
@@ -1458,7 +1472,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
     ctx.save();
     try {
       const { col, row } = context;
-      ctx.fillStyle = getColor(fillColor, col, row, this._grid, ctx);
+      ctx.fillStyle = getStyleProperty(fillColor, col, row, this._grid, ctx);
 
       ctx.beginPath();
       ctx.rect(rect.left, rect.top, rect.width, rect.height);
@@ -1508,7 +1522,13 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
 
     this.drawBorderWithClip(context, (ctx) => {
       const { col, row } = context;
-      const borderColors = getColor(borderColor, col, row, this._grid, ctx);
+      const borderColors = getStyleProperty(
+        borderColor,
+        col,
+        row,
+        this._grid,
+        ctx
+      );
 
       if (lineWidth === 1) {
         ctx.lineWidth = 1;
@@ -1574,7 +1594,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
         //右が選択されている
         this.drawBorderWithClip(context, (ctx) => {
           const borderColors = toBoxArray(
-            getColor(
+            getStyleProperty(
               this.theme.highlightBorderColor,
               sel.col,
               sel.row,
@@ -1593,7 +1613,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
         //上が選択されている
         this.drawBorderWithClip(context, (ctx) => {
           const borderColors = toBoxArray(
-            getColor(
+            getStyleProperty(
               this.theme.highlightBorderColor,
               sel.col,
               sel.row,
@@ -1751,7 +1771,13 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
       const width = rect.width - paddingNums[1] - paddingNums[3];
       const height = rect.height - paddingNums[0] - paddingNums[2];
 
-      bgColor = getColor(bgColor, context.col, context.row, this._grid, ctx);
+      bgColor = getStyleProperty(
+        bgColor,
+        context.col,
+        context.row,
+        this._grid,
+        ctx
+      );
 
       canvashelper.drawButton(ctx, left, top, width, height, {
         bgColor,

@@ -1,4 +1,4 @@
-import type { ColumnIconOption, ColumnMenuItemOptions } from "../define";
+import type { ColumnMenuItemOptions } from "../define";
 
 export interface BaseColumnOption {
   fadeinWhenCallbackInPromise?: boolean | null;
@@ -81,8 +81,6 @@ export type TreeData = {
   path: unknown[] | (() => unknown[]);
 
   nodeType?: "leaf" | "branch";
-  /** The icon you want to display on the tree. */
-  icon?: ColumnIconOption<never>;
 };
 
 export type TreeDataValue = TreeData | unknown[] | undefined | null;
