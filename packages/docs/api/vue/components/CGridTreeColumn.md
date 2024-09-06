@@ -6,7 +6,9 @@ sidebarDepth: 3
 
 Defines tree column.
 
-CGridTreeColumn component does not have the feature to open and close branch nodes, you must implement it yourself if you need it.
+## Note
+
+`CGridTreeColumn` component does not have the feature to open and close branch nodes, you must implement it yourself if you need it.
 
 See also [the `TreeColumn` document](../../js/column_types/TreeColumn.md).
 
