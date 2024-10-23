@@ -69,6 +69,7 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 		{value: '5', label: 'Option 5'},
 		{value: '6', label: 'Option 6'},
 		{value: '7', label: 'Option 7'},
+		// ...Array(100).fill(0).map((_, i) => ({value: i + 1, label: 'Option ' + (i + 1)})),
 	];
 	const grid = new cheetahGrid.ListGrid({
 		parentElement: document.querySelector('#parent'),
