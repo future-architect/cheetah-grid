@@ -127,13 +127,9 @@ function openMenu<T>(
 
   // Make the selection item at the middle
   let offset = 0;
-  let allHeight = 0;
-  for (let i = 0; i < children.length; i++) {
+  for (let i = 0; i < focusIndex; i++) {
     const { offsetHeight } = children[i];
-    if (i < focusIndex) {
-      offset += offsetHeight;
-    }
-    allHeight += offsetHeight;
+    offset += offsetHeight;
   }
   (rect as Rect).offsetTop(-offset);
   menu.style.transformOrigin = `center ${
@@ -142,15 +138,21 @@ function openMenu<T>(
   attachElement(element, rect, menu);
 
   // Control not to overflow the screen range
-  const menuClientRect = menu.getBoundingClientRect();
-  const scaleDiff = (allHeight - menuClientRect.height) / 2;
-  const orgMenuTop = menuClientRect.top - scaleDiff;
+  const bkTransform = menu.style.transform;
+  let menuClientRect;
+  try {
+    // To calculate the original position, set `transform` to `none`.
+    menu.style.transform = "none";
+    menuClientRect = menu.getBoundingClientRect();
+  } finally {
+    menu.style.transform = bkTransform;
+  }
+  const orgMenuTop = menuClientRect.top;
   let menuTop = orgMenuTop;
-  const menuBottom = menuTop + allHeight;
   const winBottom = window.innerHeight;
   const winMargin = 20;
-  if (menuBottom > winBottom - winMargin) {
-    const diff = menuBottom - winBottom + winMargin;
+  if (menuClientRect.bottom > winBottom - winMargin) {
+    const diff = menuClientRect.bottom - winBottom + winMargin;
     menuTop -= diff;
   }
   if (menuTop < 0 /*winTop*/ + winMargin) {
@@ -158,6 +160,8 @@ function openMenu<T>(
   }
   if (menuTop !== orgMenuTop) {
     (rect as Rect).offsetTop(-(orgMenuTop - menuTop));
+    // Sets the center of the menu since it is not possible to determine the exact center of the selected element.
+    menu.style.transformOrigin = "center";
     // re update
     attachElement(element, rect, menu);
   }
