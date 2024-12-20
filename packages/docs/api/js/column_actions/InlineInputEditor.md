@@ -147,5 +147,3 @@ grid.records = [{ number: 1234 }, { number: 1234.123 }, { number: -1234.123 }];
 ```
 
 </code-preview>
-
-<style scoped>.code-preview >>> .al-right { text-align: right; }</style>

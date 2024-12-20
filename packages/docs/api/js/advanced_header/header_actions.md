@@ -82,36 +82,30 @@ In `vue-cheetah-grid`, define the `header-action`, `header-type` property.
 <code-preview>
 
 ```vue
-<div class="demo-grid small">
-  <c-grid
-    ref="grid"
-    :data="records">
-    <c-grid-column
-      field="no"
-      width= "50"
-    >
-      no
-    </c-grid-column>
-    <c-grid-check-column
-      field="check"
-      width="100"
-      header-type="check"
-      header-action="check"
-      @changed-header-value="onChangeHeaderValue"
-      @changed-value="onChangeValue" />
-    <c-grid-column
-      field="text"
-      width= "120"
-      header-type="sort"
-      header-action="sort" 
-    >
-      sort
-    </c-grid-column>
-  </c-grid>
-</div>
-```
-
-```js
+<template>
+  <div class="demo-grid small">
+    <c-grid ref="grid" :data="records">
+      <c-grid-column field="no" width="50"> no </c-grid-column>
+      <c-grid-check-column
+        field="check"
+        width="100"
+        header-type="check"
+        header-action="check"
+        @changed-header-value="onChangeHeaderValue"
+        @changed-value="onChangeValue"
+      />
+      <c-grid-column
+        field="text"
+        width="120"
+        header-type="sort"
+        header-action="sort"
+      >
+        sort
+      </c-grid-column>
+    </c-grid>
+  </div>
+</template>
+<script>
 export default {
   data() {
     return {
@@ -142,6 +136,7 @@ export default {
     },
   },
 };
+</script>
 ```
 
 </code-preview>

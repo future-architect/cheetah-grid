@@ -11,33 +11,17 @@ You can define the behavior and appearance of columns and headers cells by defin
 <code-preview>
 
 ```vue
-<div class="demo-grid middle">
-  <c-grid :data="records" frozen-col-count="1">
-    <c-grid-column
-      field="personid"
-      width="100">
-      ID
-    </c-grid-column>
-    <c-grid-column
-      field="fname"
-      width="200">
-      First Name
-    </c-grid-column>
-    <c-grid-column
-      field="lname"
-      width="200">
-      Last Name
-    </c-grid-column>
-    <c-grid-column
-      :field="getBirthday"
-      width="200">
-      Birthday
-    </c-grid-column>
-  </c-grid>
-</div>
-```
-
-```js
+<template>
+  <div class="demo-grid middle">
+    <c-grid :data="records" frozen-col-count="1">
+      <c-grid-column field="personid" width="100"> ID </c-grid-column>
+      <c-grid-column field="fname" width="200"> First Name </c-grid-column>
+      <c-grid-column field="lname" width="200"> Last Name </c-grid-column>
+      <c-grid-column :field="getBirthday" width="200"> Birthday </c-grid-column>
+    </c-grid>
+  </div>
+</template>
+<script>
 /*
   record object properties
   {
@@ -67,6 +51,7 @@ export default {
     },
   },
 };
+</script>
 ```
 
 </code-preview>
@@ -78,36 +63,20 @@ To use multiple header, define `<c-grid-column-group>`.
 <code-preview>
 
 ```vue
-<div class="demo-grid middle">
-  <c-grid :data="records" frozen-col-count="1">
-    <c-grid-column
-      field="personid"
-      width="100">
-      ID
-    </c-grid-column>
-    <!-- multiple header -->
-    <c-grid-column-group caption="Name">
-      <c-grid-column
-        field="fname"
-        width="200">
-        First Name
-      </c-grid-column>
-      <c-grid-column
-        field="lname"
-        width="200">
-        Last Name
-      </c-grid-column>
-    </c-grid-column-group>
-    <c-grid-column
-      :field="getBirthday"
-      width="200">
-      Birthday
-    </c-grid-column>
-  </c-grid>
-</div>
-```
-
-```js
+<template>
+  <div class="demo-grid middle">
+    <c-grid :data="records" frozen-col-count="1">
+      <c-grid-column field="personid" width="100"> ID </c-grid-column>
+      <!-- multiple header -->
+      <c-grid-column-group caption="Name">
+        <c-grid-column field="fname" width="200"> First Name </c-grid-column>
+        <c-grid-column field="lname" width="200"> Last Name </c-grid-column>
+      </c-grid-column-group>
+      <c-grid-column :field="getBirthday" width="200"> Birthday </c-grid-column>
+    </c-grid>
+  </div>
+</template>
+<script>
 const records = generatePersons(100);
 
 export default {
@@ -127,6 +96,7 @@ export default {
     },
   },
 };
+</script>
 ```
 
 </code-preview>

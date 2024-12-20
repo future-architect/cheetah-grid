@@ -12,8 +12,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v2
-      with:
-        node-version: 18
     - name: Install Packages
       run: |+
         npm ci
@@ -27,8 +25,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v2
-      with:
-        node-version: 18
     - name: Install Packages
       run: |+
         npm ci

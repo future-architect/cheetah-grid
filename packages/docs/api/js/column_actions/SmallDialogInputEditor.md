@@ -201,5 +201,3 @@ grid.records = [
 ```
 
 </code-preview>
-
-<style scoped>.code-preview >>> .al-right input { text-align: right; }</style>

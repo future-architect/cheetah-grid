@@ -11,49 +11,31 @@ Defines the Grid.
 <code-preview>
 
 ```vue
-<div class="demo-grid middle">
-  <c-grid
-    :data="records"
-    :frozen-col-count="1">
-    <!-- define checkbox -->
-    <c-grid-check-column
-      field="check"
-      width="50" />
-    <c-grid-column
-      field="personid"
-      width= "85"
-    >
-      ID
-    </c-grid-column>
-    <!-- multiple header -->
-    <c-grid-column-group
-      caption="Name">
-      <c-grid-input-column
-        field="fname"
-        width="20%"
-        min-width="150"
-      >
-        First Name
-      </c-grid-input-column>
-      <c-grid-input-column
-        field="lname"
-        width= "20%"
-        min-width="150"
-      >
-        Last Name
-      </c-grid-input-column>
-    </c-grid-column-group>
-    <!-- button -->
-    <c-grid-button-column
-      caption="SHOW REC"
-      width="120"
-      @click="onClickRecord"
-    />
-  </c-grid>
-</div>
-```
-
-```js
+<template>
+  <div class="demo-grid middle">
+    <c-grid :data="records" :frozen-col-count="1">
+      <!-- define checkbox -->
+      <c-grid-check-column field="check" width="50" />
+      <c-grid-column field="personid" width="85"> ID </c-grid-column>
+      <!-- multiple header -->
+      <c-grid-column-group caption="Name">
+        <c-grid-input-column field="fname" width="20%" min-width="150">
+          First Name
+        </c-grid-input-column>
+        <c-grid-input-column field="lname" width="20%" min-width="150">
+          Last Name
+        </c-grid-input-column>
+      </c-grid-column-group>
+      <!-- button -->
+      <c-grid-button-column
+        caption="SHOW REC"
+        width="120"
+        @click="onClickRecord"
+      />
+    </c-grid>
+  </div>
+</template>
+<script>
 export default {
   data() {
     return {
@@ -66,6 +48,7 @@ export default {
     },
   },
 };
+</script>
 ```
 
 </code-preview>
@@ -138,22 +121,37 @@ The definition is set to `layout.body` property described in [Advanced Layout].
 <code-preview>
 
 ```vue
-<div class="demo-grid middle">
-  <c-grid
-    :data="records"
-    :theme="userTheme"> <!-- set theme -->
-    <c-grid-check-column field="check" :width="50"/>
-    <c-grid-column field="personid" width= "85">ID</c-grid-column>
-    <c-grid-column-group caption="Name">
-      <c-grid-input-column field="fname" width="20%" min-width="150" :sort="true">First Name</c-grid-input-column>
-      <c-grid-input-column field="lname" width="20%" min-width="150" :sort="true">Last Name</c-grid-input-column>
-    </c-grid-column-group>
-    <c-grid-button-column caption="SHOW REC" width="120" @click="onClickRecord" />
-  </c-grid>
-</div>
-```
-
-```js
+<template>
+  <div class="demo-grid middle">
+    <c-grid :data="records" :theme="userTheme">
+      <!-- set theme -->
+      <c-grid-check-column field="check" :width="50" />
+      <c-grid-column field="personid" width="85">ID</c-grid-column>
+      <c-grid-column-group caption="Name">
+        <c-grid-input-column
+          field="fname"
+          width="20%"
+          min-width="150"
+          :sort="true"
+          >First Name</c-grid-input-column
+        >
+        <c-grid-input-column
+          field="lname"
+          width="20%"
+          min-width="150"
+          :sort="true"
+          >Last Name</c-grid-input-column
+        >
+      </c-grid-column-group>
+      <c-grid-button-column
+        caption="SHOW REC"
+        width="120"
+        @click="onClickRecord"
+      />
+    </c-grid>
+  </div>
+</template>
+<script>
 export default {
   name: "App",
   data() {
@@ -184,6 +182,7 @@ export default {
     },
   },
 };
+</script>
 ```
 
 </code-preview>
@@ -223,30 +222,34 @@ e.g. `<c-grid-column>`
 <code-preview>
 
 ```vue
-<div class="demo-grid middle">
-  <c-grid
-    :data="records"
-    :frozen-col-count="1">
-    <c-grid-column field="personid" width= "85"
-      @click-cell="onClickCell($event, 'ID')"
-    >
-      ID
-  </c-grid-column>
-    <c-grid-input-column field="fname" width="20%"
-      @click-cell="onClickCell($event, 'First Name')"
-    >
-      First Name
-    </c-grid-input-column>
-    <c-grid-input-column field="lname" width= "20%"
-      @click-cell="onClickCell($event, 'Last Name')"
-    >
-      Last Name
-    </c-grid-input-column>
-  </c-grid>
-</div>
-```
-
-```js
+<template>
+  <div class="demo-grid middle">
+    <c-grid :data="records" :frozen-col-count="1">
+      <c-grid-column
+        field="personid"
+        width="85"
+        @click-cell="onClickCell($event, 'ID')"
+      >
+        ID
+      </c-grid-column>
+      <c-grid-input-column
+        field="fname"
+        width="20%"
+        @click-cell="onClickCell($event, 'First Name')"
+      >
+        First Name
+      </c-grid-input-column>
+      <c-grid-input-column
+        field="lname"
+        width="20%"
+        @click-cell="onClickCell($event, 'Last Name')"
+      >
+        Last Name
+      </c-grid-input-column>
+    </c-grid>
+  </div>
+</template>
+<script>
 export default {
   data() {
     return {
@@ -259,6 +262,7 @@ export default {
     },
   },
 };
+</script>
 ```
 
 </code-preview>
@@ -275,5 +279,5 @@ export default {
 
 <!-- METHODS_TABLE_END -->
 
-[advanced layout]: ../../js/advanced_layout/README.md
+[advanced layout]: ../../js/advanced_layout/index.md
 [define headers and columns]: ../../js/headers_columns.md

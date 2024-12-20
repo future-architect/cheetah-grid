@@ -29,7 +29,7 @@ Use this slot to set the header caption
 | min-width | `number`&#124;`string`  | Defines a column min width | `undefined` |
 | max-width | `number`&#124;`string`  | Defines a column max width | `undefined` |
 | column-type | `object`&#124;`string`&#124;`function`  | Defines a column type | `undefined` |
-| column-style | `object`&#124;`string`&#124;`function`  | Defines a column style. Same as [the `style` property of the JS API](../../js/column_styles/README.md). | `undefined` |
+| column-style | `object`&#124;`string`&#124;`function`  | Defines a column style. Same as [the `style` property of the JS API](../../js/column_styles/index.md). | `undefined` |
 | caption | `string`&#124;`function`  | Defines a header caption | `''` |
 | disabled | `boolean`&#124;`function`  | Defines disabled. You can also control each record by specifying a function. | `false` |
 | readonly | `boolean`&#124;`function`  | Defines readonly. You can also control each record by specifying a function. | `false` |

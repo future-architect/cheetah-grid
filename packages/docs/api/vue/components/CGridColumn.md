@@ -11,39 +11,21 @@ Defines column.
 <code-preview>
 
 ```vue
-<div class="demo-grid middle">
-  <c-grid
-    :data="records"
-    :frozen-col-count="1">
-    <c-grid-column
-      field="check"
-      column-type="check"
-      width="50" />
-    <c-grid-column
-      field="personid"
-      width= "85"
-    >
-      ID
-    </c-grid-column>
-    <c-grid-column
-      field="fname"
-      width="20%"
-      min-width="150"
-    >
-      First Name
-    </c-grid-column>
-    <c-grid-column
-      field="lname"
-      width= "20%"
-      min-width="150"
-    >
-      Last Name
-    </c-grid-column>
-  </c-grid>
-</div>
-```
-
-```js
+<template>
+  <div class="demo-grid middle">
+    <c-grid :data="records" :frozen-col-count="1">
+      <c-grid-column field="check" column-type="check" width="50" />
+      <c-grid-column field="personid" width="85"> ID </c-grid-column>
+      <c-grid-column field="fname" width="20%" min-width="150">
+        First Name
+      </c-grid-column>
+      <c-grid-column field="lname" width="20%" min-width="150">
+        Last Name
+      </c-grid-column>
+    </c-grid>
+  </div>
+</template>
+<script>
 export default {
   data() {
     return {
@@ -51,6 +33,7 @@ export default {
     };
   },
 };
+</script>
 ```
 
 </code-preview>
@@ -78,7 +61,7 @@ Use this slot to set the header caption
 | min-width | `number`&#124;`string`  | Defines a column min width | `undefined` |
 | max-width | `number`&#124;`string`  | Defines a column max width | `undefined` |
 | column-type | `object`&#124;`string`&#124;`function`  | Defines a column type | `undefined` |
-| column-style | `object`&#124;`string`&#124;`function`  | Defines a column style. Same as [the `style` property of the JS API](../../js/column_styles/README.md). | `undefined` |
+| column-style | `object`&#124;`string`&#124;`function`  | Defines a column style. Same as [the `style` property of the JS API](../../js/column_styles/index.md). | `undefined` |
 | action | `object`&#124;`string`&#124;`function`  | Defines an action | `undefined` |
 | caption | `string`&#124;`function`  | Defines a header caption | `''` |
 | colspan | `number`&#124;`string`  | Defines the layout colspan.<br>This property can be used when defining in the `layout-header` and `layout-body` slots. | `undefined` |

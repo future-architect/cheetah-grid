@@ -11,20 +11,16 @@ Defines branch graph column.
 <code-preview>
 
 ```vue
-<div class="demo-grid large">
-  <c-grid
-    :data="records">
-    <c-grid-branch-graph-column
-      :width="200"
-      cache
-      field="command">
-      Graph
-    </c-grid-branch-graph-column>
-  </c-grid>
-</div>
-```
-
-```js
+<template>
+  <div class="demo-grid large">
+    <c-grid :data="records">
+      <c-grid-branch-graph-column :width="200" cache field="command">
+        Graph
+      </c-grid-branch-graph-column>
+    </c-grid>
+  </div>
+</template>
+<script>
 const records = [
   {
     command: [
@@ -80,6 +76,7 @@ export default {
     };
   },
 };
+</script>
 ```
 
 </code-preview>
@@ -106,7 +103,7 @@ Use this slot to set the header caption
 | width | `number`&#124;`string`  | Defines a default column width | `undefined` |
 | min-width | `number`&#124;`string`  | Defines a column min width | `undefined` |
 | max-width | `number`&#124;`string`  | Defines a column max width | `undefined` |
-| column-style | `object`&#124;`string`&#124;`function`  | Defines a column style. Same as [the `style` property of the JS API](../../js/column_styles/README.md). | `undefined` |
+| column-style | `object`&#124;`string`&#124;`function`  | Defines a column style. Same as [the `style` property of the JS API](../../js/column_styles/index.md). | `undefined` |
 | action | `object`&#124;`string`&#124;`function`  | Defines an action | `undefined` |
 | caption | `string`&#124;`function`  | Defines a header caption | `''` |
 | cache | `boolean`  | Enable cache | `undefined` |

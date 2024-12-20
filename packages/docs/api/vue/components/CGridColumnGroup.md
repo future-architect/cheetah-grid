@@ -12,34 +12,23 @@ Can be used in the `default` slot of `CGrid`.
 <code-preview>
 
 ```vue
-<div class="demo-grid middle">
-  <c-grid
-    :data="records"
-    :frozen-col-count="1">
-    <c-grid-column field="personid" width= "85">ID</c-grid-column>
-    <!-- multiple header -->
-    <c-grid-column-group
-      caption="Name">
-      <c-grid-input-column
-        field="fname"
-        width="20%"
-        min-width="150"
-      >
-        First Name
-      </c-grid-input-column>
-      <c-grid-input-column
-        field="lname"
-        width= "20%"
-        min-width="150"
-      >
-        Last Name
-      </c-grid-input-column>
-    </c-grid-column-group>
-  </c-grid>
-</div>
-```
-
-```js
+<template>
+  <div class="demo-grid middle">
+    <c-grid :data="records" :frozen-col-count="1">
+      <c-grid-column field="personid" width="85">ID</c-grid-column>
+      <!-- multiple header -->
+      <c-grid-column-group caption="Name">
+        <c-grid-input-column field="fname" width="20%" min-width="150">
+          First Name
+        </c-grid-input-column>
+        <c-grid-input-column field="lname" width="20%" min-width="150">
+          Last Name
+        </c-grid-input-column>
+      </c-grid-column-group>
+    </c-grid>
+  </div>
+</template>
+<script>
 export default {
   data() {
     return {
@@ -47,6 +36,7 @@ export default {
     };
   },
 };
+</script>
 ```
 
 </code-preview>

@@ -12,20 +12,13 @@ Can settings for grid instance or global.
 Set a theme to the `theme` property of the grid instance.  
 Built-in themes are `MATERIAL_DESIGN` and `BASIC`.
 
-<code-preview :data="{createGrid}">
+<code-preview>
 
-```html
-<label>theme</label>
-<select class="theme-select1">
-  <option value="" selected="true">unset</option>
-  <option value="MATERIAL_DESIGN">MATERIAL_DESIGN</option>
-  <option value="BASIC">BASIC</option>
-</select>
-<div class="sample1 demo-grid small"></div>
-```
+::: code-group
 
-```js
-const grid = vm.createGrid(document.querySelector(".sample1"));
+```js [main.js]
+import { createGrid } from "./grid-builder.js";
+const grid = createGrid(document.querySelector(".sample1"));
 
 const themeSelect = document.querySelector(".theme-select1");
 themeSelect.onchange = function () {
@@ -37,16 +30,47 @@ themeSelect.onchange = function () {
 themeSelect.onchange();
 ```
 
+```html [HTML]
+<label>theme</label>
+<select class="theme-select1">
+  <option value="" selected="true">unset</option>
+  <option value="MATERIAL_DESIGN">MATERIAL_DESIGN</option>
+  <option value="BASIC">BASIC</option>
+</select>
+<div class="sample1 demo-grid small"></div>
+```
+
+<<< ./snippets/theme/grid-builder.js
+
+:::
+
 </code-preview>
 
-## Global
+## Global theme
 
 Set a theme to the `cheetahGrid.themes.default` property.
 (default MATERIAL_DESIGN.)
 
-<code-preview :data="{createGrid,girdInstances}">
+<code-preview>
 
-```html
+::: code-group
+
+```js [main.js]
+import { createGrid, girdInstances } from "./grid-builder.js";
+createGrid(document.querySelector(".sample2"));
+
+const themeSelect = document.querySelector(".theme-select2");
+themeSelect.onchange = function () {
+  cheetahGrid.themes.default = cheetahGrid.themes.choices[themeSelect.value];
+
+  // redraw all the grids
+  girdInstances.forEach((grid) => grid.invalidate());
+};
+
+themeSelect.onchange();
+```
+
+```html [HTML]
 <label>theme</label>
 <select class="theme-select2">
   <option value="MATERIAL_DESIGN" selected="true">MATERIAL_DESIGN</option>
@@ -55,19 +79,9 @@ Set a theme to the `cheetahGrid.themes.default` property.
 <div class="sample2 demo-grid small"></div>
 ```
 
-```js
-vm.createGrid(document.querySelector(".sample2"));
+<<< ./snippets/theme/grid-builder.js
 
-const themeSelect = document.querySelector(".theme-select2");
-themeSelect.onchange = function () {
-  cheetahGrid.themes.default = cheetahGrid.themes.choices[themeSelect.value];
-
-  // redraw all the grids
-  vm.girdInstances.forEach((grid) => grid.invalidate());
-};
-
-themeSelect.onchange();
-```
+:::
 
 </code-preview>
 
@@ -75,14 +89,13 @@ themeSelect.onchange();
 
 To extend the theme, do as follows.
 
-<code-preview :data="{createGrid}">
+<code-preview>
 
-```html
-<div class="sample3 demo-grid small"></div>
-```
+::: code-group
 
-```js
-const grid = vm.createGrid(document.querySelector(".sample3"));
+```js [main.js]
+import { createGrid } from "./grid-builder.js";
+const grid = createGrid(document.querySelector(".sample3"));
 
 const userTheme = {
   color: "red",
@@ -150,97 +163,19 @@ const userTheme = {
 grid.theme = userTheme;
 ```
 
+```html [HTML]
+<div class="sample3 demo-grid small"></div>
+```
+
+<<< ./snippets/theme/grid-builder.js
+
+:::
+
 </code-preview>
 
-<script>
-const girdInstances = [];
-function createGrid(parentElement) {
-  const records = generatePersons(100);
-
-  const grid = new cheetahGrid.ListGrid({
-    parentElement,
-    header: [
-      {field: 'check', caption: '', width: 50, columnType: 'check', action: 'check'},
-      {field: 'personid', caption: 'ID', width: 100},
-      { /* multiple header */
-        caption: 'name',
-        columns: [
-          {field: 'fname', caption: 'First Name', width: 200, sort: true},
-          {field: 'lname', caption: 'Last Name', width: 200, sort: true},
-        ],
-      },
-      {
-        field: 'email',
-        caption: 'Email',
-        width: 250,
-        sort: true,
-        style(rec) {
-          const index = records.indexOf(rec)
-          if (index % 3 === 2) {
-            return { indicatorTopLeft: 'triangle' }
-          }
-          return undefined
-        },
-      },
-      {
-      /* callback field */
-        field(rec) {
-          const d = rec.birthday;
-          return `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`;
-        },
-        caption: 'birthday',
-        width: 100,
-        message(rec) {
-          const index = records.indexOf(rec)
-          switch (index % 3) {
-            case 0: {
-              return {
-                type: 'info',
-                message: 'Info Message.'
-              };
-            }
-            case 1: {
-              return {
-                type: 'warning',
-                message: 'Warn Message.'
-              };
-            }
-          }
-          return {
-            type: 'error',
-            message: 'Error Message.'
-          };
-        }
-      },
-      {
-        caption: 'button',
-        width: 120,
-        /* button column */
-        columnType: new cheetahGrid.columns.type.ButtonColumn({
-          caption: 'SHOW REC',
-        }),
-        action: new cheetahGrid.columns.action.ButtonAction({
-          action(rec) {
-            alert(JSON.stringify(rec));
-          },
-        }),
-      }
-    ],
-    frozenColCount: 2,
-    records
-  });
-  girdInstances.push(grid);
-  return grid;
-}
-export default {
-  data () {
-    return {
-      createGrid,
-      girdInstances
-    }
-  },
-  beforeDestroy() {
-    cheetahGrid.themes.default = 'MATERIAL_DESIGN';
-  },
-}
+<script setup>
+import {onBeforeUnmount} from 'vue'
+onBeforeUnmount(() => {
+  window.cheetahGrid.themes.default = 'MATERIAL_DESIGN'
+})
 </script>

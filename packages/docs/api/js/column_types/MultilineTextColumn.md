@@ -20,7 +20,7 @@ You can display multiple lines of text in a cell.
 
 In addition to this, the Standard styles is available.
 
-- [Standard Column Style](../column_styles/README.md)
+- [Standard Column Style](../column_styles/index.md)
 
 <code-preview>
 
@@ -73,13 +73,12 @@ You can display multiple lines of text in a cell.`,
 
 ### Aligns
 
-<code-preview :data="{records}">
+<code-preview>
 
-```html
-<div class="sample2 demo-grid large"></div>
-```
+::: code-group
 
-```js
+```js [main.js]
+import records from "./records.js";
 const grid = new cheetahGrid.ListGrid({
   parentElement: document.querySelector(".sample2"),
   header: [
@@ -137,20 +136,27 @@ const grid = new cheetahGrid.ListGrid({
   defaultRowHeight: 200,
   headerRowHeight: 40,
 });
-grid.records = vm.records;
+grid.records = records;
 ```
+
+```html [HTML]
+<div class="sample2 demo-grid large"></div>
+```
+
+<<< ./snippets/MultilineTextColumn/records.js
+
+:::
 
 </code-preview>
 
 ### lineHeight
 
-<code-preview :data="{records}">
+<code-preview>
 
-```html
-<div class="sample3 demo-grid large"></div>
-```
+::: code-group
 
-```js
+```js [main.js]
+import records from "./records.js";
 const grid = new cheetahGrid.ListGrid({
   parentElement: document.querySelector(".sample3"),
   header: [
@@ -194,20 +200,27 @@ const grid = new cheetahGrid.ListGrid({
   defaultRowHeight: 300,
   headerRowHeight: 40,
 });
-grid.records = vm.records;
+grid.records = records;
 ```
+
+```html [HTML]
+<div class="sample3 demo-grid large"></div>
+```
+
+<<< ./snippets/MultilineTextColumn/records.js
+
+:::
 
 </code-preview>
 
 ### autoWrapText
 
-<code-preview :data="{records}">
+<code-preview>
 
-```html
-<div class="sample4 demo-grid large"></div>
-```
+::: code-group
 
-```js
+```js [main.js]
+import records from "./records.js";
 const grid = new cheetahGrid.ListGrid({
   parentElement: document.querySelector(".sample4"),
   header: [
@@ -230,20 +243,27 @@ const grid = new cheetahGrid.ListGrid({
   defaultRowHeight: 100,
   headerRowHeight: 40,
 });
-grid.records = vm.records;
+grid.records = records;
 ```
+
+```html [HTML]
+<div class="sample4 demo-grid large"></div>
+```
+
+<<< ./snippets/MultilineTextColumn/records.js
+
+:::
 
 </code-preview>
 
 ### lineClamp
 
-<code-preview :data="{records}">
+<code-preview>
 
-```html
-<div class="sample5 demo-grid middle"></div>
-```
+::: code-group
 
-```js
+```js [main.js]
+import records from "./records.js";
 const grid = new cheetahGrid.ListGrid({
   parentElement: document.querySelector(".sample5"),
   header: [
@@ -287,43 +307,15 @@ const grid = new cheetahGrid.ListGrid({
   defaultRowHeight: 60,
   headerRowHeight: 40,
 });
-grid.records = vm.records;
+grid.records = records;
 ```
 
-</code-preview>
+```html [HTML]
+<div class="sample5 demo-grid middle"></div>
+```
 
-<script>
-export default {
-  data () {
-    return {
-      records: [
-        {
-          title: 'Lorem ipsum',
-          description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`
-        },
-        // {{#if_v '0.6.0'}}
-        {
-          title: 'Section 1.10.32',
-          description: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?'
-        },
-        // {{/if_v}}
-        {
-          title: 'multilinetext',
-          description:
-      `By specifying 'multilinetext' for the 'columnType' property,
-You can display multiple lines of text in a cell.`
-        },
-        {
-          title: 'multilinetext',
-          description:
-      `プロパティ'columnType'に'multilinetext'を指定することで、  
-セルに複数行テキストを表示することができます。  `
-        },
-      ]
-    }
-  }
-}
-</script>
+<<< ./snippets/MultilineTextColumn/records.js
+
+:::
+
+</code-preview>

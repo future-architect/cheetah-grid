@@ -1,4 +1,4 @@
-const { getPropType } = require("../../../vue-cheetah-grid/scripts/lib/metadata")
+const { getPropType } = require('../../../vue-cheetah-grid/scripts/lib/metadata')
 const path = require('path')
 
 function createHeader (componentName, comp) {
@@ -44,10 +44,10 @@ function createProps (comp) {
       .replace('`Function`', '`function`')
       .replace('`Object`', '`object`')
     const deprecatedKeyword = prop.keywords.find(({ name }) => name === 'deprecated')
-    if(deprecatedKeyword) {
+    if (deprecatedKeyword) {
       list.push(`| ${prop.name} | ${typeMd}  | DEPRECATED! ${deprecatedKeyword.description} ${prop.description.replace(/\r?\n/g, '<br>')} | \`${defaultValue}\` |`)
       continue
-    } 
+    }
 
     list.push(`| ${prop.name} | ${typeMd}  | ${prop.description.replace(/\r?\n/g, '<br>')} | \`${defaultValue}\` |`)
   }
@@ -155,7 +155,7 @@ module.exports = {
     }
 
     // data
-    if (comp.data.some(d=>d.description)) {
+    if (comp.data.some(d => d.description)) {
       contents = replaceOrAppend(contents, /\n##\s*Data\s*/i, '\n## Data\n\n')
       contents = replaceBlock(contents, '<!-- DATA_TABLE_START -->', '<!-- DATA_TABLE_END -->', createData(comp))
     }
@@ -172,20 +172,19 @@ module.exports = {
       contents = replaceBlock(contents, '<!-- METHODS_TABLE_START -->', '<!-- METHODS_TABLE_END -->', createMethods(comp))
     }
 
-
     return contents.replace(/\n{3,}/g, '\n\n').replace(/\n{2,}$/g, '\n')
       .replace(/\((https:\/\/future-architect\.github\.io\/cheetah-grid\/documents\/.*?)\)/gu, (_, match) => {
         const url = new URL(match)
         let linkPathname = url.pathname.slice(23)
         if (linkPathname.endsWith('/')) {
-          linkPathname += 'README.md'
-        } else if (linkPathname.endsWith('.html')){
-          linkPathname = linkPathname.slice(0, -5)+'.md'
+          linkPathname += 'index.md'
+        } else if (linkPathname.endsWith('.html')) {
+          linkPathname = `${linkPathname.slice(0, -5)}.md`
         }
         const linkPath = path.join(__dirname, '../..', linkPathname)
-        
+
         const replaced = path.relative(path.dirname(context.fileName), linkPath) + (url.hash || '')
-        return '('+replaced+')'
+        return `(${replaced})`
       })
   }
 }
@@ -229,8 +228,8 @@ function parseValue (value) {
   return value
 }
 function parseType (type) {
-  if(Array.isArray(type)) {
-    return type.map(t=>`\`${t}\``).join('|')
+  if (Array.isArray(type)) {
+    return type.map(t => `\`${t}\``).join('|')
   }
   return `\`${type}\``
 }

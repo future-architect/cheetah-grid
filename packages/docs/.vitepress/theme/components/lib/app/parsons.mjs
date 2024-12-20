@@ -1,6 +1,5 @@
 
 /* global cheetahGrid */
-'use strict'
 const generatePerson = (function () {
   const fnames = [
     'Sophia',
