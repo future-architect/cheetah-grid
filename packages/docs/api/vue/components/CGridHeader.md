@@ -12,51 +12,37 @@ Can be used in the `layout-header` slot of `CGrid`.
 <code-preview>
 
 ```vue
-<div class="demo-grid middle">
-  <c-grid
-    :data="records"
-    :frozen-col-count="1">
-    <template slot="layout-header">
-      <!-- header line1 -->
-      <c-grid-layout-row>
-        <c-grid-header width="85" rowspan="2">ID</c-grid-header>
-        <c-grid-header
-          width="20%"
-          min-width="150"
-        >
-          First Name
-        </c-grid-header>
-      </c-grid-layout-row>
-      <!-- header line2 -->
-      <c-grid-layout-row>
-        <c-grid-header
-          width= "20%"
-          min-width="150"
-        >
-          Last Name
-        </c-grid-header>
-      </c-grid-layout-row>
-    </template>
-    <template slot="layout-body">
-      <!-- line1 -->
-      <c-grid-layout-row>
-        <c-grid-column field="personid" width="85" rowspan="2"/>
-        <c-grid-input-column
-          field="fname"
-        />
-      </c-grid-layout-row>
-      <!-- line2 -->
-      <c-grid-layout-row>
-        <c-grid-input-column
-          field="lname"
-        />
-      </c-grid-layout-row>
-    </template>
-  </c-grid>
-</div>
-```
-
-```js
+<template>
+  <div class="demo-grid middle">
+    <c-grid :data="records" :frozen-col-count="1">
+      <template v-slot:layout-header>
+        <!-- header line1 -->
+        <c-grid-layout-row>
+          <c-grid-header width="85" rowspan="2">ID</c-grid-header>
+          <c-grid-header width="20%" min-width="150">
+            First Name
+          </c-grid-header>
+        </c-grid-layout-row>
+        <!-- header line2 -->
+        <c-grid-layout-row>
+          <c-grid-header width="20%" min-width="150"> Last Name </c-grid-header>
+        </c-grid-layout-row>
+      </template>
+      <template v-slot:layout-body>
+        <!-- line1 -->
+        <c-grid-layout-row>
+          <c-grid-column field="personid" width="85" rowspan="2" />
+          <c-grid-input-column field="fname" />
+        </c-grid-layout-row>
+        <!-- line2 -->
+        <c-grid-layout-row>
+          <c-grid-input-column field="lname" />
+        </c-grid-layout-row>
+      </template>
+    </c-grid>
+  </div>
+</template>
+<script>
 export default {
   data() {
     return {
@@ -64,6 +50,7 @@ export default {
     };
   },
 };
+</script>
 ```
 
 </code-preview>

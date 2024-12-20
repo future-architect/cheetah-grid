@@ -11,29 +11,27 @@ Defines button column.
 <code-preview>
 
 ```vue
-<div class="demo-grid small">
-  <c-grid
-    :data="records"
-    :frozen-col-count="1">
-    <c-grid-button-column
-      caption="FIXED LABEL"
-      width="120"
-      @click="onClickRecord"
-    >
-      Button1
-    </c-grid-button-column>
-    <c-grid-button-column
-      field="buttonCaption"
-      width="120"
-      @click="onClickRecord"
-    >
-      Button2
-    </c-grid-button-column>
-  </c-grid>
-</div>
-```
-
-```js
+<template>
+  <div class="demo-grid small">
+    <c-grid :data="records" :frozen-col-count="1">
+      <c-grid-button-column
+        caption="FIXED LABEL"
+        width="120"
+        @click="onClickRecord"
+      >
+        Button1
+      </c-grid-button-column>
+      <c-grid-button-column
+        field="buttonCaption"
+        width="120"
+        @click="onClickRecord"
+      >
+        Button2
+      </c-grid-button-column>
+    </c-grid>
+  </div>
+</template>
+<script>
 export default {
   data() {
     return {
@@ -52,6 +50,7 @@ export default {
     },
   },
 };
+</script>
 ```
 
 </code-preview>
@@ -78,7 +77,7 @@ Use this slot to set the header caption
 | width | `number`&#124;`string`  | Defines a default column width | `undefined` |
 | min-width | `number`&#124;`string`  | Defines a column min width | `undefined` |
 | max-width | `number`&#124;`string`  | Defines a column max width | `undefined` |
-| column-style | `object`&#124;`string`&#124;`function`  | Defines a column style. Same as [the `style` property of the JS API](../../js/column_styles/README.md). | `undefined` |
+| column-style | `object`&#124;`string`&#124;`function`  | Defines a column style. Same as [the `style` property of the JS API](../../js/column_styles/index.md). | `undefined` |
 | caption | `string`  | Defines a button caption | `''` |
 | disabled | `boolean`&#124;`function`  | Defines disabled. You can also control each record by specifying a function. | `false` |
 | colspan | `number`&#124;`string`  | Defines the layout colspan.<br>This property can be used when defining in the `layout-header` and `layout-body` slots. | `undefined` |

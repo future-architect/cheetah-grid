@@ -10,7 +10,7 @@ function handleError (message) {
   process.exit(1);//eslint-disable-line
 }
 
-const { getAllVueComponentMetadata } = require( '../../../vue-cheetah-grid/scripts/lib/metadata')
+const { getAllVueComponentMetadata } = require('../../../vue-cheetah-grid/scripts/lib/metadata')
 
 const docRoot = path.join(__dirname, '../../api/vue/components')
 
@@ -20,16 +20,15 @@ if (!fs.existsSync(docRoot)) { // eslint-disable-line no-sync
 
 main()
 
-async function main() {
+async function main () {
   const allMetadata = await getAllVueComponentMetadata()
 
   for (const { component, relativeFilename, componentName } of Object.values(allMetadata)) {
     const fileInfo = path.parse(relativeFilename)
-    const docFilename = path.join(docRoot, fileInfo.dir, fileInfo.name + '.md')
+    const docFilename = path.join(docRoot, fileInfo.dir, `${fileInfo.name}.md`)
     writeMarkdown(docFilename, component, componentName)
   }
 }
-
 
 function writeMarkdown (docFilename, comp, componentName) {
   const dir = path.dirname(docFilename)

@@ -17,17 +17,6 @@ When showing ICON to ordinal column, please refer to [here](../column_icon.md)
 <div class="sample1 demo-grid small"></div>
 ```
 
-> ICON in sample uses [Material icons](https://material.io/icons/)
->
-> ```html
-> <!-- Material Icons:  https://material.io/icons/ -->
-> <link
->   rel="stylesheet"
->   type="text/css"
->   href="https://fonts.googleapis.com/icon?family=Material+Icons"
-> />
-> ```
-
 ```js
 const grid = new cheetahGrid.ListGrid({
   parentElement: document.querySelector(".sample1"),
@@ -59,5 +48,20 @@ grid.records = [
   { value: 5 },
 ];
 ```
+
+<template v-slot:code-block>
+
+> ICON in sample uses [Material icons](https://material.io/icons/)
+>
+> ```html
+> <!-- Material Icons:  https://material.io/icons/ -->
+> <link
+>   rel="stylesheet"
+>   type="text/css"
+>   href="https://fonts.googleapis.com/icon?family=Material+Icons"
+> />
+> ```
+
+</template>
 
 </code-preview>

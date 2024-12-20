@@ -79,25 +79,38 @@ For the Vue component, do the following:
 <code-preview>
 
 ```vue
-<div class="demo-grid middle">
-  <c-grid
-    ref="grid"
-    :data="records"
-    @changed-value="$refs.grid.invalidate()"
-    :theme="userTheme"
-  >
-    <c-grid-check-column field="check" :width="50"/>
-    <c-grid-column field="personid" width= "100">ID</c-grid-column>
-    <c-grid-input-column field="fname" width="200" min-width="150">First Name</c-grid-input-column>
-    <c-grid-input-column field="lname" width="200" min-width="150">Last Name</c-grid-input-column>
-    <c-grid-column field="email" width= "250">Email</c-grid-column>
-    <c-grid-column :field="(rec) => new Intl.DateTimeFormat().format(rec.birthday)" width= "250">birthday</c-grid-column>
-    <c-grid-button-column caption="SHOW REC" width="120" @click="onClickRecord" />
-  </c-grid>
-</div>
-```
-
-```js
+<template>
+  <div class="demo-grid middle">
+    <c-grid
+      ref="grid"
+      :data="records"
+      @changed-value="$refs.grid.invalidate()"
+      :theme="userTheme"
+    >
+      <c-grid-check-column field="check" :width="50" />
+      <c-grid-column field="personid" width="100">ID</c-grid-column>
+      <c-grid-input-column field="fname" width="200" min-width="150"
+        >First Name</c-grid-input-column
+      >
+      <c-grid-input-column field="lname" width="200" min-width="150"
+        >Last Name</c-grid-input-column
+      >
+      <c-grid-column field="email" width="250">Email</c-grid-column>
+      <c-grid-column
+        :field="(rec) => new Intl.DateTimeFormat().format(rec.birthday)"
+        width="250"
+        >birthday</c-grid-column
+      >
+      <c-grid-button-column
+        caption="SHOW REC"
+        width="120"
+        @click="onClickRecord"
+      />
+    </c-grid>
+  </div>
+</template>
+<script>
+import * as vueCheetahGrid from "vue-cheetah-grid";
 const records = generatePersons(1000);
 
 const materialDesignTheme = vueCheetahGrid.cheetahGrid.themes.MATERIAL_DESIGN;
@@ -127,6 +140,7 @@ export default {
     },
   },
 };
+</script>
 ```
 
 </code-preview>
@@ -136,30 +150,45 @@ In addition, it can be expanded as follows:
 <code-preview>
 
 ```vue
-<div class="demo-grid middle">
-  <c-grid
-    ref="grid"
-    :data="records"
-    @changed-value="$refs.grid.invalidate()"
-    @selected-cell="(e)=>{
-      if (e.selected) {
-        $refs.grid.invalidate()
-      }
-    }"
-    :theme="userTheme"
-  >
-    <c-grid-check-column field="check" :width="50"/>
-    <c-grid-column field="personid" width= "100">ID</c-grid-column>
-    <c-grid-input-column field="fname" width="200" min-width="150">First Name</c-grid-input-column>
-    <c-grid-input-column field="lname" width="200" min-width="150">Last Name</c-grid-input-column>
-    <c-grid-column field="email" width= "250">Email</c-grid-column>
-    <c-grid-column :field="(rec) => new Intl.DateTimeFormat().format(rec.birthday)" width= "250">birthday</c-grid-column>
-    <c-grid-button-column caption="SHOW REC" width="120" @click="onClickRecord" />
-  </c-grid>
-</div>
-```
-
-```js
+<template>
+  <div class="demo-grid middle">
+    <c-grid
+      ref="grid"
+      :data="records"
+      @changed-value="$refs.grid.invalidate()"
+      @selected-cell="
+        (e) => {
+          if (e.selected) {
+            $refs.grid.invalidate();
+          }
+        }
+      "
+      :theme="userTheme"
+    >
+      <c-grid-check-column field="check" :width="50" />
+      <c-grid-column field="personid" width="100">ID</c-grid-column>
+      <c-grid-input-column field="fname" width="200" min-width="150"
+        >First Name</c-grid-input-column
+      >
+      <c-grid-input-column field="lname" width="200" min-width="150"
+        >Last Name</c-grid-input-column
+      >
+      <c-grid-column field="email" width="250">Email</c-grid-column>
+      <c-grid-column
+        :field="(rec) => new Intl.DateTimeFormat().format(rec.birthday)"
+        width="250"
+        >birthday</c-grid-column
+      >
+      <c-grid-button-column
+        caption="SHOW REC"
+        width="120"
+        @click="onClickRecord"
+      />
+    </c-grid>
+  </div>
+</template>
+<script>
+import * as vueCheetahGrid from "vue-cheetah-grid";
 const records = generatePersons(1000);
 
 const materialDesignTheme = vueCheetahGrid.cheetahGrid.themes.MATERIAL_DESIGN;
@@ -211,6 +240,7 @@ export default {
     },
   },
 };
+</script>
 ```
 
 </code-preview>

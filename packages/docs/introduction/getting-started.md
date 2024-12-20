@@ -57,7 +57,7 @@ built file is created in the `./packages/cheetah-grid/dist` directory
 
 ## JavaScript & HTML
 
-Please refer to the [more documents](../api/js/README.md) for details
+Please refer to the [more documents](../api/js/index.md) for details
 
 <code-preview>
 

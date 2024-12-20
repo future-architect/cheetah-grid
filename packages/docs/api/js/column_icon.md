@@ -21,17 +21,6 @@ For standard Web font, you should set `font` and `content`.
 <div class="sample1 demo-grid small"></div>
 ```
 
-> ICON in sample uses [Font Awesome Icons](http://fontawesome.io/icons/)
->
-> ```html
-> <!-- Font Awesome:  http://fontawesome.io -->
-> <link
->   rel="stylesheet"
->   type="text/css"
->   href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-> />
-> ```
-
 ```js
 const grid = new cheetahGrid.ListGrid({
   parentElement: document.querySelector(".sample1"),
@@ -73,6 +62,21 @@ grid.records = [
   { text: "image", iconContent: "\uf1c5" },
 ];
 ```
+
+<template v-slot:code-block>
+
+> ICON in sample uses [Font Awesome Icons](http://fontawesome.io/icons/)
+>
+> ```html
+> <!-- Font Awesome:  http://fontawesome.io -->
+> <link
+>   rel="stylesheet"
+>   type="text/css"
+>   href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+> />
+> ```
+
+</template>
 
 </code-preview>
 
@@ -314,5 +318,3 @@ grid.records = [
 ```
 
 </code-preview>
-
-<style scoped>.code-preview >>> .fa { width: 16px; }</style>

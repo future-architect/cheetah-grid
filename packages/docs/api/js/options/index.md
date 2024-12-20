@@ -52,7 +52,7 @@ order: 9000
 | headerValues            | Map                  | A map of the values entered in the header. |
 
 [define headers and columns]: ../headers_columns.md
-[advanced layout]: ../advanced_layout/README.md
-[grid data]: ../grid_data/README.md
+[advanced layout]: ../advanced_layout/index.md
+[grid data]: ../grid_data/index.md
 [theme]: ../theme.md
 [examples of allowrangepaste]: ./allowRangePaste.md

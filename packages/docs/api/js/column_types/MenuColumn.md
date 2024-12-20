@@ -22,7 +22,7 @@ To make it editable, please use [InlineMenuEditor](../column_actions/InlineMenuE
 
 In addition to this, Standard styles is available.
 
-- [Standard Column Style](../column_styles/README.md)
+- [Standard Column Style](../column_styles/index.md)
 
 <code-preview>
 

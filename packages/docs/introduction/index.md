@@ -1,5 +1,6 @@
 ---
 sidebarDepth: 3
+order: 1
 ---
 
 # Introduction
@@ -147,50 +148,32 @@ grid = new cheetahGrid.ListGrid({
 <code-preview>
 
 ```vue
-<div style="height: 500px; border: solid 1px #ddd;">
-  <c-grid
-    :data="records"
-    :frozen-col-count="1">
-    <!-- define checkbox -->
-    <c-grid-check-column
-      field="check"
-      width="50" />
-    <c-grid-column
-      field="personid"
-      width= "85"
-    >
-      ID
-    </c-grid-column>
-    <!-- multiple header -->
-    <c-grid-column-group
-      caption="Name">
-      <c-grid-input-column
-        field="fname"
-        width="20%"
-        min-width="150"
-      >
-        First Name
-      </c-grid-input-column>
-      <c-grid-input-column
-        field="lname"
-        width= "20%"
-        min-width="150"
-      >
-        Last Name
-      </c-grid-input-column>
-    </c-grid-column-group>
-    <!-- button -->
-    <c-grid-button-column
-      caption="SHOW REC"
-      width="120"
-      @click="onClickRecord"
-    />
-  </c-grid>
-</div>
-<div class="grid-sample"></div>
-```
-
-```js
+<template>
+  <div style="height: 500px; border: solid 1px #ddd;">
+    <c-grid :data="records" :frozen-col-count="1">
+      <!-- define checkbox -->
+      <c-grid-check-column field="check" width="50" />
+      <c-grid-column field="personid" width="85"> ID </c-grid-column>
+      <!-- multiple header -->
+      <c-grid-column-group caption="Name">
+        <c-grid-input-column field="fname" width="20%" min-width="150">
+          First Name
+        </c-grid-input-column>
+        <c-grid-input-column field="lname" width="20%" min-width="150">
+          Last Name
+        </c-grid-input-column>
+      </c-grid-column-group>
+      <!-- button -->
+      <c-grid-button-column
+        caption="SHOW REC"
+        width="120"
+        @click="onClickRecord"
+      />
+    </c-grid>
+  </div>
+  <div class="grid-sample"></div>
+</template>
+<script>
 export default {
   data: function () {
     return {
@@ -203,6 +186,7 @@ export default {
     },
   },
 };
+</script>
 ```
 
 </code-preview>

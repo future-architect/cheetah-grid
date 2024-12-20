@@ -23,7 +23,7 @@ module.exports = {
   },
   opts: {
     encoding: 'utf8',
-    destination: `../../docs/documents/jsdoc/`,
+    destination: '../../docs/documents/jsdoc/',
     recurse: true,
     readme: '../../README.md'
   }

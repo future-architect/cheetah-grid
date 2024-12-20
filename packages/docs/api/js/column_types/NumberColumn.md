@@ -24,7 +24,7 @@ In addition, this column type behave same as `columnType: 'number'`.
 
 Standard styles is available.
 
-- [Standard Column Style](../column_styles/README.md)
+- [Standard Column Style](../column_styles/index.md)
 
 <code-preview>
 
