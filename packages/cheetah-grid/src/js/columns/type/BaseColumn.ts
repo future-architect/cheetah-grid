@@ -325,7 +325,7 @@ export abstract class BaseColumn<T> implements ColumnTypeAPI {
       indicatorBottomRight,
       indicatorBottomLeft,
     } = style;
-    for (const [indicatorStyle, kind] of [
+    for (const { 0: indicatorStyle, 1: kind } of [
       [indicatorTopLeft, DrawIndicatorKind.topLeft],
       [indicatorTopRight, DrawIndicatorKind.topRight],
       [indicatorBottomRight, DrawIndicatorKind.bottomRight],

@@ -7,6 +7,7 @@ import type {
 import { BaseColumn } from "./BaseColumn";
 import type { DrawCellInfo } from "../../ts-types-internal";
 import { ImageStyle } from "../style/ImageStyle";
+import { Rect } from "../../internal/Rect";
 import { calcStartPosition } from "../../internal/canvases";
 import { getCacheOrLoad } from "../../internal/imgs";
 
@@ -63,7 +64,8 @@ export class ImageColumn<T> extends BaseColumn<T> {
     _grid: ListGridAPI<T>,
     { drawCellBase }: DrawCellInfo<T>
   ): void {
-    const { textAlign, textBaseline, margin, bgColor, visibility } = style;
+    const { textAlign, textBaseline, padding, margin, bgColor, visibility } =
+      style;
     if (bgColor) {
       drawCellBase({
         bgColor,
@@ -76,7 +78,19 @@ export class ImageColumn<T> extends BaseColumn<T> {
       helper.drawWithClip(context, (ctx) => {
         ctx.textAlign = textAlign;
         ctx.textBaseline = textBaseline;
-        const rect = context.getRect();
+        let rect = context.getRect();
+        if (padding) {
+          const paddingNums = helper.toBoxPixelArray(
+            padding,
+            context,
+            undefined /* font */
+          );
+          const left = rect.left + paddingNums[3];
+          const top = rect.top + paddingNums[0];
+          const width = rect.width - paddingNums[1] - paddingNums[3];
+          const height = rect.height - paddingNums[0] - paddingNums[2];
+          rect = new Rect(left, top, width, height);
+        }
         if (style.imageSizing === "keep-aspect-ratio") {
           const { width, height } = calcKeepAspectRatioSize(
             value.width,

@@ -33,11 +33,11 @@ export interface BaseStyleOption {
 export interface StdBaseStyleOption extends BaseStyleOption {
   textAlign?: CanvasTextAlign;
   textBaseline?: CanvasTextBaseline;
+  padding?: number | string | (number | string)[];
 }
 export interface StdTextBaseStyleOption extends StdBaseStyleOption {
   color?: ColorDef;
   font?: string;
-  padding?: number | string | (number | string)[];
   textOverflow?: TextOverflow;
 }
 export interface StdMultilineTextBaseStyleOption

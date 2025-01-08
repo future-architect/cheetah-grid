@@ -14,9 +14,15 @@ Show the button.
 
 ## Style Properties
 
-| Property        | Description                        | Default               |
-| --------------- | ---------------------------------- | --------------------- |
-| `buttonBgColor` | Define background color of button. | Resolve by the theme. |
+| Property        | Description                                                                                      | Default               |
+| --------------- | ------------------------------------------------------------------------------------------------ | --------------------- |
+| `buttonBgColor` | Define background color of button.                                                               | Resolve by the theme. |
+| `textAlign`     | Define the horizontal position of text in cell.                                                  | `'center'`            |
+| `textBaseline`  | Define the vertical position of text in cell.                                                    | `'middle'`            |
+| `color`         | Define the color of cell.                                                                        | Resolve by the theme. |
+| `font`          | Define the font of cell.                                                                         | --                    |
+| `padding`       | Define the padding of cell. If you set 4 values separately, please set the `Array`.              | --                    |
+| `textOverflow`  | Define how to display when text overflows the area of a cell. `clip` or `ellipsis` is available. | `'clip'`              |
 
 In addition to this, the Standard styles is available.
 

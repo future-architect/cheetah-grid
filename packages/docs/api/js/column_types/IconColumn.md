@@ -65,3 +65,19 @@ grid.records = [
 </template>
 
 </code-preview>
+
+## Style Properties
+
+| Property       | Description                                                                                      | Default               |
+| -------------- | ------------------------------------------------------------------------------------------------ | --------------------- |
+| `textAlign`    | Define horizontal position of icon in cell.                                                      | `'center'`            |
+| `textBaseline` | Define vertical position of icon in cell.                                                        | `'middle'`            |
+| `padding`      | Define the padding of cell. If you set 4 values separately, please set the `Array`.              | --                    |
+| `color`        | Define the color of cell.                                                                        | Resolve by the theme. |
+| `font`         | Define the font of cell.                                                                         | --                    |
+| `padding`      | Define the padding of cell. If you set 4 values separately, please set the `Array`.              | --                    |
+| `textOverflow` | Define how to display when text overflows the area of a cell. `clip` or `ellipsis` is available. | `'clip'`              |
+
+In addition to this, the Standard styles is available.
+
+- [Standard Column Style](../column_styles/index.md)

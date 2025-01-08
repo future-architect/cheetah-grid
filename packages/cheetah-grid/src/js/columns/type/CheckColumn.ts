@@ -28,6 +28,7 @@ export class CheckColumn<T> extends BaseColumn<T> {
     const {
       textAlign,
       textBaseline,
+      padding,
       borderColor,
       checkBgColor,
       uncheckBgColor,
@@ -54,6 +55,7 @@ export class CheckColumn<T> extends BaseColumn<T> {
       borderColor,
       checkBgColor,
       uncheckBgColor,
+      padding,
     };
     if (elapsed != null) {
       opt.animElapsedTime = elapsed;

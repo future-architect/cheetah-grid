@@ -16,12 +16,22 @@ TreeColumn class does not have the feature to open and close branch nodes, you m
 
 ## Style Properties
 
-| Property    | Description                                                                                                     |
-| ----------- | --------------------------------------------------------------------------------------------------------------- |
-| `lineColor` | Sets the tree lines color.                                                                                      |
-| `lineStyle` | Sets the tree lines style. Allowed values ​​are `'none'` or `'solid'`                                           |
-| `lineWidth` | Sets the with of of the tree lines.                                                                             |
-| `treeIcon`  | Sets the icon to display on the node tree. Allowed values ​​are `"chevron_right"`, `"expand_more"` or `"none"`. |
+| Property       | Description                                                                                                     | Default               |
+| -------------- | --------------------------------------------------------------------------------------------------------------- | --------------------- |
+| `lineColor`    | Sets the tree lines color.                                                                                      | Resolve by the theme. |
+| `lineStyle`    | Sets the tree lines style. Allowed values ​​are `'none'` or `'solid'`                                           | Resolve by the theme. |
+| `lineWidth`    | Sets the with of of the tree lines.                                                                             | Resolve by the theme. |
+| `treeIcon`     | Sets the icon to display on the node tree. Allowed values ​​are `"chevron_right"`, `"expand_more"` or `"none"`. | Resolve by the theme. |
+| `textAlign`    | Define the horizontal position of text in cell.                                                                 | `'left'`              |
+| `textBaseline` | Define the vertical position of text in cell.                                                                   | `'middle'`            |
+| `color`        | Define the color of cell.                                                                                       | Resolve by the theme. |
+| `font`         | Define the font of cell.                                                                                        | --                    |
+| `padding`      | Define the padding of cell. If you set 4 values separately, please set the `Array`.                             | --                    |
+| `textOverflow` | Define how to display when text overflows the area of a cell. `clip` or `ellipsis` is available.                | `'clip'`              |
+
+In addition to this, the Standard styles is available.
+
+- [Standard Column Style](../column_styles/index.md)
 
 ## Data Format
 

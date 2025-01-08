@@ -120,7 +120,6 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 						records.sort(function(r1, r2) { return compare(r1.personid, r2.personid); });
 						grid.records = records;
 					},
-					// sort
 					style: {padding: [0, 0, 0, '1.2em']},
 					rowSpan: 3
 				},
@@ -129,7 +128,29 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 					caption: 'read',
 					width: 50,
 					columnType: 'check',
-					rowSpan: 3
+					rowSpan: 3,
+				},
+				{
+					field: 'checkReadOnly',
+					caption: 'check on top',
+					width: 50,
+					columnType: 'check',
+					rowSpan: 3,
+					style: {
+						padding: [11, 0, 0, 0],
+						textBaseline: 'top'
+					},
+				},
+				{
+					field: 'checkReadOnly',
+					caption: 'radio on top',
+					width: 50,
+					columnType: 'radio',
+					rowSpan: 3,
+					style: {
+						padding: [11, 0, 0, 0],
+						textBaseline: 'top'
+					},
 				},
 				{
 					caption: 'name',

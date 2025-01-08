@@ -870,6 +870,7 @@ function drawRadioButton<T>(
     }
   );
 }
+
 class ThemeResolver<T> implements RequiredThemeDefine {
   private _grid: ListGridAPI<T>;
   private _checkbox: RequiredThemeDefine["checkbox"] | null = null;
@@ -1118,6 +1119,30 @@ function strokeRect(
   }
 }
 
+function getPaddedRect(
+  rect: RectProps,
+  padding: number | string | (number | string)[] | undefined,
+  font: string | undefined,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  helper: GridCanvasHelper<any>,
+  context: CellContext
+) {
+  if (!padding) {
+    return rect;
+  }
+  const {
+    0: pTop,
+    1: pRight,
+    2: pBottom,
+    3: pLeft,
+  } = helper.toBoxPixelArray(padding, context, font);
+  const left = rect.left + pLeft;
+  const top = rect.top + pTop;
+  const width = rect.width - pRight - pLeft;
+  const height = rect.height - pTop - pBottom;
+  return new Rect(left, top, width, height);
+}
+
 export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
   private _grid: ListGridAPI<T>;
   private _theme: RequiredThemeDefine;
@@ -1291,8 +1316,6 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
       trailingIcon?: SimpleColumnIconOption;
     } = {}
   ): void {
-    let rect = context.getRect();
-
     const { col, row } = context;
 
     if (!color) {
@@ -1306,14 +1329,13 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
 
     this.drawWithClip(context, (ctx) => {
       font = getFont(font, context.col, context.row, this._grid, ctx);
-      if (padding) {
-        const paddingNums = this.toBoxPixelArray(padding, context, font);
-        const left = rect.left + paddingNums[3];
-        const top = rect.top + paddingNums[0];
-        const width = rect.width - paddingNums[1] - paddingNums[3];
-        const height = rect.height - paddingNums[0] - paddingNums[2];
-        rect = new Rect(left, top, width, height);
-      }
+      const rect = getPaddedRect(
+        context.getRect(),
+        padding,
+        font,
+        this,
+        context
+      );
       _inlineRect(this._grid, ctx, text, rect, col, row, {
         offset,
         color,
@@ -1357,8 +1379,6 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
       trailingIcon?: SimpleColumnIconOption;
     } = {}
   ): void {
-    let rect = context.getRect();
-
     const { col, row } = context;
 
     if (!color) {
@@ -1372,14 +1392,13 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
 
     this.drawWithClip(context, (ctx) => {
       font = getFont(font, context.col, context.row, this._grid, ctx);
-      if (padding) {
-        const paddingNums = this.toBoxPixelArray(padding, context, font);
-        const left = rect.left + paddingNums[3];
-        const top = rect.top + paddingNums[0];
-        const width = rect.width - paddingNums[1] - paddingNums[3];
-        const height = rect.height - paddingNums[0] - paddingNums[2];
-        rect = new Rect(left, top, width, height);
-      }
+      const rect = getPaddedRect(
+        context.getRect(),
+        padding,
+        font,
+        this,
+        context
+      );
       const calculator = this.createCalculator(context, font);
       lineHeight = calculator.calcHeight(lineHeight);
       _multiInlineRect(this._grid, ctx, lines, rect, col, row, {
@@ -1672,6 +1691,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
     check: boolean,
     context: CellContext,
     {
+      padding,
       animElapsedTime,
       offset = CHECKBOX_OFFSET,
       uncheckBgColor,
@@ -1685,7 +1705,13 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
       const { col, row } = context;
       drawCheckbox(
         ctx,
-        context.getRect(),
+        getPaddedRect(
+          context.getRect(),
+          padding,
+          undefined /* font */,
+          this,
+          context
+        ),
         col,
         row,
         check,
@@ -1706,6 +1732,7 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
     check: boolean,
     context: CellContext,
     {
+      padding,
       animElapsedTime,
       offset = CHECKBOX_OFFSET,
       checkColor,
@@ -1721,7 +1748,13 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
       const { col, row } = context;
       drawRadioButton(
         ctx,
-        context.getRect(),
+        getPaddedRect(
+          context.getRect(),
+          padding,
+          undefined /* font */,
+          this,
+          context
+        ),
         col,
         row,
         check,
@@ -1761,15 +1794,13 @@ export class GridCanvasHelper<T> implements GridCanvasHelperAPI {
     this.drawWithClip(context, (ctx) => {
       font = getFont(font, context.col, context.row, this._grid, ctx);
       const { col, row } = context;
-      const paddingNums = this.toBoxPixelArray(
+      const { left, top, width, height } = getPaddedRect(
+        rect,
         padding || rect.height / 8,
-        context,
-        font
+        font,
+        this,
+        context
       );
-      const left = rect.left + paddingNums[3];
-      const top = rect.top + paddingNums[0];
-      const width = rect.width - paddingNums[1] - paddingNums[3];
-      const height = rect.height - paddingNums[0] - paddingNums[2];
 
       bgColor = getStyleProperty(
         bgColor,
