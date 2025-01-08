@@ -288,6 +288,7 @@ export interface GridCanvasHelperAPI {
     check: boolean,
     context: CellContext,
     option: {
+      padding?: number | string | (number | string)[];
       animElapsedTime?: number;
       offset?: number;
       uncheckBgColor?: ColorPropertyDefine;
@@ -301,6 +302,7 @@ export interface GridCanvasHelperAPI {
     check: boolean,
     context: CellContext,
     option: {
+      padding?: number | string | (number | string)[];
       animElapsedTime?: number;
       offset?: number;
       checkColor?: ColorPropertyDefine;

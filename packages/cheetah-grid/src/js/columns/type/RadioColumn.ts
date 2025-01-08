@@ -28,6 +28,7 @@ export class RadioColumn<T> extends BaseColumn<T> {
     const {
       textAlign,
       textBaseline,
+      padding,
       checkColor,
       uncheckBorderColor,
       checkBorderColor,
@@ -58,6 +59,7 @@ export class RadioColumn<T> extends BaseColumn<T> {
       checkBorderColor,
       uncheckBgColor,
       checkBgColor,
+      padding,
     };
     if (elapsed != null) {
       opt.animElapsedTime = elapsed;

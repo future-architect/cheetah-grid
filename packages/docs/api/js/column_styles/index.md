@@ -4,24 +4,37 @@ order: 130
 
 # Define Column Styles
 
-## Standard Column Style
-
 Define column style by using `style` property.
+
+## Standard Column Style
 
 Properties below are prepared in standard.
 
-| Property     | Description                                                                                                     |
-| ------------ | --------------------------------------------------------------------------------------------------------------- |
-| color        | Define the color of cell.                                                                                       |
-| textAlign    | Define the horizontal position of text in cell.                                                                 |
-| textBaseline | Define the vertical position of text in cell.                                                                   |
-| bgColor      | Define the background color of cell.                                                                            |
-| font         | Define the font of cell.                                                                                        |
-| padding      | Define the padding of cell. If you set 4 values separately, please set the `Array`.                             |
-| textOverflow | Define how to display when text overflows the area of a cell. `clip` or `ellipsis` is available.                |
-| visibility   | Specifying `hidden` to it will stop drawing the cell's content. Note that this does not stop the cell's action. |
+| Property               | Description                                                                                                       |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `bgColor`              | Define the background color of cell.                                                                              |
+| `visibility`           | Specifying `"hidden"` to it will stop drawing the cell's content. Note that this does not stop the cell's action. |
+| `indicatorTopLeft`     | Define the indicator of cell in the top left. See [Indicators](./indicators.md) for more information.             |
+| `indicatorTopRight`    | Define the indicator of cell in the top right. See [Indicators](./indicators.md) for more information.            |
+| `indicatorBottomRight` | Define the indicator of cell in the bottom right. See [Indicators](./indicators.md) for more information.         |
+| `indicatorBottomLeft`  | Define the indicator of cell in the bottom left. See [Indicators](./indicators.md) for more information.          |
 
 Note that the column type may add style properties that you can use. The properties added are described in the documentation for each column type.
+
+### Standard Text Column Style
+
+Most column types also have the style properties listed below, but not all do.
+
+| Property       | Description                                                                                      |
+| -------------- | ------------------------------------------------------------------------------------------------ |
+| `textAlign`    | Define the horizontal position of text in cell.                                                  |
+| `textBaseline` | Define the vertical position of text in cell.                                                    |
+| `color`        | Define the color of cell.                                                                        |
+| `font`         | Define the font of cell.                                                                         |
+| `padding`      | Define the padding of cell. If you set 4 values separately, please set the `Array`.              |
+| `textOverflow` | Define how to display when text overflows the area of a cell. `clip` or `ellipsis` is available. |
+
+### Examples
 
 <code-preview>
 

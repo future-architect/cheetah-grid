@@ -22,6 +22,15 @@ In addition, this column type behave same as `columnType: 'number'`.
 
 ## Style Properties
 
+| Property       | Description                                                                                      | Default               |
+| -------------- | ------------------------------------------------------------------------------------------------ | --------------------- |
+| `textAlign`    | Define the horizontal position of text in cell.                                                  | `'right'`             |
+| `textBaseline` | Define the vertical position of text in cell.                                                    | `'middle'`            |
+| `color`        | Define the color of cell.                                                                        | Resolve by the theme. |
+| `font`         | Define the font of cell.                                                                         | --                    |
+| `padding`      | Define the padding of cell. If you set 4 values separately, please set the `Array`.              | --                    |
+| `textOverflow` | Define how to display when text overflows the area of a cell. `clip` or `ellipsis` is available. | `'clip'`              |
+
 Standard styles is available.
 
 - [Standard Column Style](../column_styles/index.md)

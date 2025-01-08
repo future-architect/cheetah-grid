@@ -16,9 +16,15 @@ To make it editable, please use [InlineMenuEditor](../column_actions/InlineMenuE
 
 ## Style Properties
 
-| Property     | Description                                                                                | Default             |
-| ------------ | ------------------------------------------------------------------------------------------ | ------------------- |
-| `appearance` | Defines whether to display a dropdown arrow. (you can set `'menulist-button'` or `'none'`) | `'menulist-button'` |
+| Property       | Description                                                                                      | Default               |
+| -------------- | ------------------------------------------------------------------------------------------------ | --------------------- |
+| `appearance`   | Defines whether to display a dropdown arrow. (you can set `'menulist-button'` or `'none'`)       | `'menulist-button'`   |
+| `textAlign`    | Define the horizontal position of text in cell.                                                  | `'left'`              |
+| `textBaseline` | Define the vertical position of text in cell.                                                    | `'middle'`            |
+| `color`        | Define the color of cell.                                                                        | Resolve by the theme. |
+| `font`         | Define the font of cell.                                                                         | --                    |
+| `padding`      | Define the padding of cell. If you set 4 values separately, please set the `Array`.              | --                    |
+| `textOverflow` | Define how to display when text overflows the area of a cell. `clip` or `ellipsis` is available. | `'clip'`              |
 
 In addition to this, Standard styles is available.
 

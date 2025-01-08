@@ -12,14 +12,18 @@ To make it editable, please use [RadioEditor](../column_actions/RadioEditor.md).
 
 | Property             | Description                                                    | Default               |
 | -------------------- | -------------------------------------------------------------- | --------------------- |
-| `checkColor`         | Define check mark color of radio button.                       | resolve by the theme. |
-| `checkBgColor`       | Define background color of radio button, when it is checked.   | resolve by the theme. |
-| `uncheckBgColor`     | Define background color of radio button, when it is unchecked. | resolve by the theme. |
-| `checkBorderColor`   | Define border color of radio button, when it is checked.       | resolve by the theme. |
-| `uncheckBorderColor` | Define border color of radio button, when it is unchecked.     | resolve by the theme. |
+| `checkColor`         | Define check mark color of radio button.                       | Resolve by the theme. |
+| `checkBgColor`       | Define background color of radio button, when it is checked.   | Resolve by the theme. |
+| `uncheckBgColor`     | Define background color of radio button, when it is unchecked. | Resolve by the theme. |
+| `checkBorderColor`   | Define border color of radio button, when it is checked.       | Resolve by the theme. |
+| `uncheckBorderColor` | Define border color of radio button, when it is unchecked.     | Resolve by the theme. |
 | `textAlign`          | Define horizontal position of radio button in cell.            | `'center'`            |
-| `textBaseline`       | Define vertical position of radio button in cell.              | --                    |
-| `bgColor`            | Define background color of cell.                               | resolve by the theme. |
+| `textBaseline`       | Define vertical position of radio button in cell.              | `'middle'`            |
+| `bgColor`            | Define background color of cell.                               | Resolve by the theme. |
+
+In addition to this, the Standard styles is available.
+
+- [Standard Column Style](../column_styles/index.md)
 
 <code-preview>
 

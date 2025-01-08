@@ -16,11 +16,17 @@ Show the percent complete bar.
 
 ## Style Properties
 
-| Property     | Description                                                                    | Default |
-| ------------ | ------------------------------------------------------------------------------ | ------- |
-| `barColor`   | Define color of bar. you can set a function that returns color from the value. | --      |
-| `barBgColor` | Define background color of bar.                                                | --      |
-| `barHeight`  | Define height of bar.                                                          | --      |
+| Property       | Description                                                                                      | Default               |
+| -------------- | ------------------------------------------------------------------------------------------------ | --------------------- |
+| `barColor`     | Define color of bar. you can set a function that returns color from the value.                   | --                    |
+| `barBgColor`   | Define background color of bar.                                                                  | --                    |
+| `barHeight`    | Define height of bar.                                                                            | --                    |
+| `textAlign`    | Define the horizontal position of text in cell.                                                  | `'left'`              |
+| `textBaseline` | Define the vertical position of text in cell.                                                    | `'middle'`            |
+| `color`        | Define the color of cell.                                                                        | Resolve by the theme. |
+| `font`         | Define the font of cell.                                                                         | --                    |
+| `padding`      | Define the padding of cell. If you set 4 values separately, please set the `Array`.              | --                    |
+| `textOverflow` | Define how to display when text overflows the area of a cell. `clip` or `ellipsis` is available. | `'clip'`              |
 
 In addition to this, the Standard styles is available.
 

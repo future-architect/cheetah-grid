@@ -10,14 +10,19 @@ To make it editable, please use [CheckEditor](../column_actions/CheckEditor.md).
 
 ## Style Properties
 
-| Property         | Description                                                | Default               |
-| ---------------- | ---------------------------------------------------------- | --------------------- |
-| `checkBgColor`   | Define background color of checkbox, when it is checked.   | Resolve by the theme. |
-| `uncheckBgColor` | Define background color of checkbox, when it is unchecked. | Resolve by the theme. |
-| `borderColor`    | Define border color of checkbox.                           | Resolve by the theme. |
-| `textAlign`      | Define horizontal position of checkbox in cell.            | `'center'`            |
-| `textBaseline`   | Define vertical position of checkbox in cell.              | --                    |
-| `bgColor`        | Define background color of cell.                           | Resolve by the theme. |
+| Property         | Description                                                                         | Default               |
+| ---------------- | ----------------------------------------------------------------------------------- | --------------------- |
+| `checkBgColor`   | Define background color of checkbox, when it is checked.                            | Resolve by the theme. |
+| `uncheckBgColor` | Define background color of checkbox, when it is unchecked.                          | Resolve by the theme. |
+| `borderColor`    | Define border color of checkbox.                                                    | Resolve by the theme. |
+| `textAlign`      | Define horizontal position of checkbox in cell.                                     | `'center'`            |
+| `textBaseline`   | Define vertical position of checkbox in cell.                                       | `'middle'`            |
+| `padding`        | Define the padding of cell. If you set 4 values separately, please set the `Array`. | --                    |
+| `bgColor`        | Define background color of cell.                                                    | Resolve by the theme. |
+
+In addition to this, the Standard styles is available.
+
+- [Standard Column Style](../column_styles/index.md)
 
 <code-preview>
 

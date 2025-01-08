@@ -5,6 +5,7 @@ let defaultStyle: StdBaseStyle;
 export class StdBaseStyle extends BaseStyle {
   private _textAlign: CanvasTextAlign;
   private _textBaseline: CanvasTextBaseline;
+  private _padding: number | string | (number | string)[] | undefined;
   static get DEFAULT(): StdBaseStyle {
     return defaultStyle ? defaultStyle : (defaultStyle = new StdBaseStyle());
   }
@@ -12,6 +13,7 @@ export class StdBaseStyle extends BaseStyle {
     super(style);
     this._textAlign = style.textAlign || "left";
     this._textBaseline = style.textBaseline || "middle";
+    this._padding = style.padding;
   }
   get textAlign(): CanvasTextAlign {
     return this._textAlign;
@@ -25,6 +27,13 @@ export class StdBaseStyle extends BaseStyle {
   }
   set textBaseline(textBaseline: CanvasTextBaseline) {
     this._textBaseline = textBaseline;
+    this.doChangeStyle();
+  }
+  get padding(): number | string | (number | string)[] | undefined {
+    return this._padding;
+  }
+  set padding(padding: number | string | (number | string)[] | undefined) {
+    this._padding = padding;
     this.doChangeStyle();
   }
   clone(): StdBaseStyle {

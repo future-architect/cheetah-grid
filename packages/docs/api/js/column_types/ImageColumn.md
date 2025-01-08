@@ -84,3 +84,17 @@ grid.configure("fadeinWhenCallbackInPromise", true);
 ```
 
 </code-preview>
+
+## Style Properties
+
+| Property       | Description                                                                         | Default    |
+| -------------- | ----------------------------------------------------------------------------------- | ---------- |
+| `imageSizing`  | Defining "keep-aspect-ratio" will keep the aspect ratio.                            | --         |
+| `margin`       | Define margin of image.                                                             | `4`        |
+| `textAlign`    | Define horizontal position of image in cell.                                        | `'center'` |
+| `textBaseline` | Define vertical position of image in cell.                                          | `'middle'` |
+| `padding`      | Define the padding of cell. If you set 4 values separately, please set the `Array`. | --         |
+
+In addition to this, the Standard styles is available.
+
+- [Standard Column Style](../column_styles/index.md)
