@@ -50,6 +50,7 @@ ${componentName}: ${componentName};
   }
   fs.writeFileSync(typePath, `${`
 import { VNodeProps, AllowedComponentProps, ComponentCustomProps } from "@vue/runtime-core";
+export * as cheetahGrid from 'cheetah-grid'
 // type VueInstance = ComponentPublicInstance
 
 /* @see https://unpkg.com/browse/quasar@2.7.3/dist/types/ts-helpers.d.ts */
