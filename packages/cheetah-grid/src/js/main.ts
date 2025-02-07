@@ -25,11 +25,6 @@ export { getInternal as _getInternal } from "./get-internal";
  * @namespace cheetahGrid
  */
 export {
-  /**
-   * Types
-   * @namespace cheetahGrid.TYPES
-   */
-  TYPES,
   core,
   tools,
   // impl Grids
@@ -50,6 +45,14 @@ export {
   getIcons,
   //plugin registers
   register,
+};
+
+export type {
+  /**
+   * Types
+   * @namespace cheetahGrid.TYPES
+   */
+  TYPES,
 };
 
 /** @private */

@@ -8,6 +8,7 @@ module.exports = {
     const merge = require('deepmerge')
     const c = merge.all(components)
     c.props = mergeProps(components)
+    c.methods = mergeMethods(components)
     return c
   }
 }
@@ -27,15 +28,15 @@ const PROPS = [
 
 function mergeProps (components) {
   const props = components.flatMap(c => c.props)
-  const mergeProps = []
+  const mergedProps = []
   for (const prop of props) {
-    const idx = mergeProps.findIndex((t) => t.name === prop.name)
+    const idx = mergedProps.findIndex((t) => t.name === prop.name)
     if (idx >= 0) {
-      mergeProps.splice(idx, 1)
+      mergedProps.splice(idx, 1)
     }
-    mergeProps.push(prop)
+    mergedProps.push(prop)
   }
-  mergeProps.sort((a, b) => {
+  mergedProps.sort((a, b) => {
     const ai = PROPS.indexOf(a.name)
     const bi = PROPS.indexOf(b.name)
     if (ai >= 0 && bi >= 0) {
@@ -50,7 +51,24 @@ function mergeProps (components) {
     return compare(a.name, b.name)
   })
 
-  return mergeProps
+  return mergedProps
+}
+
+function mergeMethods (components) {
+  const methods = components.flatMap(c => c.methods)
+  const mergedMethods = []
+  for (const method of methods) {
+    const idx = mergedMethods.findIndex((t) => t.name === method.name)
+    if (idx >= 0) {
+      mergedMethods.splice(idx, 1)
+    }
+    mergedMethods.push(method)
+  }
+  mergedMethods.sort((a, b) => {
+    return compare(a.name, b.name)
+  })
+
+  return mergedMethods
 }
 
 function compare (a, b) {
