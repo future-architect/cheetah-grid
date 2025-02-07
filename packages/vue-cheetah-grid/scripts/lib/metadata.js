@@ -4,24 +4,41 @@ const vuedoc = require('@vuedoc/md')
 const merge = require('./merge')
 
 /**
+ * @typedef {object} Keyword
+ * @property {string} name
+ * @property {string} description
+ */
+/**
  * @typedef {object} ComponentPropMetadata
  * @property {string} name
  * @property {string} description
- * @property {{ name: string, description: string }[]} keywords
+ * @property {Keyword[]} keywords
  * @property {string | { type: string, required: boolean, default: any }} value
+ */
+/**
+ * @typedef {object} ComponentMethodMetadata
+ * @property {string} name
+ * @property {string} description
+ * @property {Keyword[]} keywords
+ * @property {{ type: 'FunctionExpression' }} value
+ * @property {'public'|undefined} visibility
+ * @property {string[]} args
+ * @property {unknown} return
  */
 /**
  * @typedef {object} ComponentMetadata
  * @property {string} name
  * @property {string} description
- * @property {{ name: string, description: string }[]} keywords
+ * @property {Keyword[]} keywords
  * @property {ComponentPropMetadata[]} props
+ * @property {ComponentMethodMetadata[]} methods
  */
 
 module.exports = {
   getAllVueComponentMetadata,
   getPropType,
-  isRequiredProp
+  isRequiredProp,
+  getMethodSignature
 }
 
 /**
@@ -55,17 +72,48 @@ async function getAllVueComponentMetadata () {
 /**
  * @param {ComponentPropMetadata} prop
  */
-
 function getPropType (prop) {
   const customTypeKeyword = prop.keywords.find(({ name, description }) => name === 'type' && description)
-  const customType = customTypeKeyword && customTypeKeyword.description.replace(/\{(.+?)\}/, '$1')
+  const customType = customTypeKeyword && getKeywordType(customTypeKeyword)
   const type = customType || prop.value.type || prop.value || 'any'
   return parseType(type)
 }
+
+/**
+ * @param {ComponentMethodMetadata} method
+ */
+function getMethodSignature (method) {
+  const paramKeywords = {}
+  for (const keyword of method.keywords.filter(({ name, description }) => name === 'param')) {
+    const typeClosing = keyword.description.indexOf('}')
+    if (typeClosing < 0) continue
+    const paramNameAndDesc = keyword.description.slice(typeClosing + 1).trim()
+    const props = /^\[?(\p{ID_Start}\p{ID_Continue}*(?:\.\p{ID_Start}\p{ID_Continue}*)*)/u.exec(paramNameAndDesc)[1].split('.')
+    if (props.length === 1) {
+      paramKeywords[props[0]] = getKeywordType(keyword)
+    }
+  }
+
+  const argsSignature = method.args
+    .map(arg => {
+      const keyword = paramKeywords[arg]
+      return (keyword && getKeywordType(keyword)) || 'any'
+    })
+    .join(', ')
+  const returnKeyword = method.keywords.find(({ name, description }) => name === 'return' && description)
+  const returnType = (returnKeyword && getKeywordType(returnKeyword)) || 'any'
+  return `(${argsSignature}) => ${returnType}`
+}
+/**
+ * @param {Keyword} keyword
+ */
+function getKeywordType (keyword) {
+  return /^\s*\{(.+)\}/u.exec(keyword.description)?.[1]
+}
+
 /**
  * @param {ComponentPropMetadata} prop
  */
-
 function isRequiredProp (prop) {
   return typeof prop.value !== 'string' && Boolean(prop.value.required)
 }

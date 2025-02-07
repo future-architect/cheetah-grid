@@ -22,7 +22,7 @@ import type {
   StylePropertyFunctionArg,
   TextOverflow,
 } from "./define";
-import type { ColumnDefine } from "../ListGrid";
+import type { ColumnDefine, HeadersDefine } from "../list-grid/layout-map/api";
 import type { RecordBoolean } from "./column";
 import type { RequiredThemeDefine } from "./plugin";
 import type { SimpleColumnIconOption } from "../ts-types-internal/data";
@@ -162,6 +162,7 @@ export interface ListGridAPI<T> extends DrawGridAPI {
   dataSource: DataSourceAPI<T>;
   theme: RequiredThemeDefine | null;
   allowRangePaste: boolean;
+  header: HeadersDefine<T>;
   headerRowHeight: number[] | number;
   sortState: SortState | null;
   headerValues: HeaderValues;
