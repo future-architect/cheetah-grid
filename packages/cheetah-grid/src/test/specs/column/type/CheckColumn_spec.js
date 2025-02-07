@@ -116,11 +116,17 @@
 		});
 
 		it('toggle', function(done) {
+			grid.selection.select = {col: 0, row: 1};
 			grid.fireListeners(cheetahGrid.ListGrid.EVENT_TYPE.CLICK_CELL, {col: 0, row: 1});
+			grid.selection.select = {col: 1, row: 1};
 			grid.fireListeners(cheetahGrid.ListGrid.EVENT_TYPE.CLICK_CELL, {col: 1, row: 1});
+			grid.selection.select = {col: 2, row: 1};
 			grid.fireListeners(cheetahGrid.ListGrid.EVENT_TYPE.CLICK_CELL, {col: 2, row: 1});
+			grid.selection.select = {col: 3, row: 1};
 			grid.fireListeners(cheetahGrid.ListGrid.EVENT_TYPE.CLICK_CELL, {col: 3, row: 1});
+			grid.selection.select = {col: 4, row: 1};
 			grid.fireListeners(cheetahGrid.ListGrid.EVENT_TYPE.CLICK_CELL, {col: 4, row: 1});
+			grid.selection.select = {col: 0, row: 0};
 
 			expect(records[0]).toEqual({bool: true, str: 'true', onoff: 'on', num: 1, numstr: '01'});
 
