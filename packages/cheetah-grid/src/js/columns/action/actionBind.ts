@@ -63,6 +63,13 @@ export function bindCellClickAction<T>(
       if (!isTarget(e.col, e.row)) {
         return;
       }
+      const sel = grid.selection.select;
+      if (sel.col !== e.col || sel.row !== e.row) {
+        // If the user drags from another element in the grid and then clicks,
+        // this can lead to unexpected behavior because there is no selection event.
+        // A guard avoids this issue.
+        return;
+      }
       if (isPromise(grid.getRowRecord(e.row))) {
         return;
       }
