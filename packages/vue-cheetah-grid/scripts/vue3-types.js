@@ -62,8 +62,11 @@ ${componentName}: typeof ${componentName};
     fs.mkdirSync(typeDir)
   }
   fs.writeFileSync(typePath, `${`
-import { PublicProps } from "vue";
+import type { PublicProps, ComponentPublicInstance } from "vue";
 export * as cheetahGrid from 'cheetah-grid'
+export function storeElement (vm: ComponentPublicInstance): void;
+export function removeElement (vm: ComponentPublicInstance): void;
+export function getComponentFromElement (element: HTMLElement): ComponentPublicInstance | undefined;
 
 type ComponentConstructor<Props = {}, Methods = {}, Slots = {}> = {
   new (): {
