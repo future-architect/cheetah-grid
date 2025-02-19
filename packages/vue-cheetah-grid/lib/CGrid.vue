@@ -6,7 +6,7 @@
       >
         <!--
           Use this slot to set the simple header definition.
-          The definition is set to `header` property described in [Define Headers and Columns]
+          The definition is set to `header` property described in [Define Headers and Columns](https://future-architect.github.io/cheetah-grid/documents/api/js/headers_columns.html)
         -->
         <slot />
       </div>
@@ -16,7 +16,7 @@
         <!--
           Use this slot to set the layout header definition.
           Use this slot in combination with the `layout-body` slot.
-          The definition is set to `layout.header` property described in [Advanced Layout].
+          The definition is set to `layout.header` property described in [Advanced Layout](https://future-architect.github.io/cheetah-grid/documents/api/vue/advanced_layout/).
         -->
         <slot name="layout-header" />
       </div>
@@ -26,7 +26,7 @@
         <!--
           Use this slot to set the layout body definition.
           Use this slot in combination with the `layout-header` slot.
-          The definition is set to `layout.body` property described in [Advanced Layout].
+          The definition is set to `layout.body` property described in [Advanced Layout](https://future-architect.github.io/cheetah-grid/documents/api/vue/advanced_layout/).
         -->
         <slot name="layout-body" />
       </div>
