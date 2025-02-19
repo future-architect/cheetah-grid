@@ -10,6 +10,11 @@ const vue3Emits = Object.keys(EVENT_TYPE)
     return r
   }, {})
 
+const additionalProperties = {
+  CGrid:
+      'rawGrid: cheetahGrid.ListGrid<unknown>;'
+}
+
 async function main () {
   const allMetadata = await getAllVueComponentMetadata()
 
@@ -25,17 +30,27 @@ async function main () {
 ${camelCase(prop.name)}${isRequiredProp(prop) ? '' : '?'}: ${normalizePropType(prop)};
 `.trim()
     })
-    const methods = component.methods
-      .filter(method => method.visibility === 'public')
-      .map(method => {
-        return `
+    const propertyTypes =
+    [
+      ...component.methods
+        .filter(method => method.visibility === 'public')
+        .map(method => {
+          return `
 /** ${method.description} */
 ${method.name}: ${getMethodSignature(method)};
 `.trim()
-      })
+        }),
+      ...additionalProperties[componentName] ? [additionalProperties[componentName]] : []
+    ]
     const emits = Object.keys(vue3Emits).map(emitName => {
       return `
 on${pascalCase(emitName)}?: Function;
+`.trim()
+    })
+    const slots = component.slots.map(prop => {
+      return `
+/** ${prop.description} */
+"${prop.name}"?: Slot<{} | undefined>;
 `.trim()
     })
     componentTypes.push(`
@@ -45,7 +60,10 @@ export const ${componentName}: ComponentConstructor<
     ${indent([...props, ...emits].join('\n'), 4)}
   },
   {
-    ${indent(methods.join('\n'), 4)}
+    ${indent(propertyTypes.join('\n'), 4)}
+  },
+  {
+    ${indent(slots.join('\n'), 4)}
   }
 >;
 `.trim())
@@ -62,17 +80,18 @@ ${componentName}: typeof ${componentName};
     fs.mkdirSync(typeDir)
   }
   fs.writeFileSync(typePath, `${`
-import type { PublicProps, ComponentPublicInstance } from "vue";
-export * as cheetahGrid from 'cheetah-grid'
+import type { PublicProps, ComponentPublicInstance, Slot } from "vue";
+import * as cheetahGrid from 'cheetah-grid'
+export { cheetahGrid }
 export function storeElement (vm: ComponentPublicInstance): void;
 export function removeElement (vm: ComponentPublicInstance): void;
 export function getComponentFromElement (element: HTMLElement): ComponentPublicInstance | undefined;
 
-type ComponentConstructor<Props = {}, Methods = {}, Slots = {}> = {
+type ComponentConstructor<Props = {}, Properties = {}, Slots = {}> = {
   new (): {
     $props: PublicProps & Props
     $slots: Slots
-  } & Methods
+  } & Properties
 }
 
 ${componentTypes.join('\n')}
@@ -82,6 +101,8 @@ declare module '@vue/runtime-core' {
 ${indent(components.join('\n'), 4)}
   }
 }
+
+export default CGrid;
 
 export declare function install (Vue: any /* Vue 2 Vue object or Vue 3 App instance */): void;
 `.trim()}\n`)

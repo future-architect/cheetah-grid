@@ -14,6 +14,8 @@ const builtin: { [key: string]: Theme } = {
 };
 let defTheme = MATERIAL_DESIGN;
 
+export type { Theme };
+
 export const theme = { Theme };
 export function of(
   value: ThemeDefine | string | undefined | null

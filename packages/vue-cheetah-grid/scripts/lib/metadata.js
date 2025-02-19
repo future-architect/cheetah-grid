@@ -26,12 +26,18 @@ const merge = require('./merge')
  * @property {unknown} return
  */
 /**
+ * @typedef {object} ComponentSlotMetadata
+ * @property {string} name
+ * @property {string} description
+ */
+/**
  * @typedef {object} ComponentMetadata
  * @property {string} name
  * @property {string} description
  * @property {Keyword[]} keywords
  * @property {ComponentPropMetadata[]} props
  * @property {ComponentMethodMetadata[]} methods
+ * @property {ComponentSlotMetadata[]} slots
  */
 
 module.exports = {

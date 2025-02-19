@@ -12,7 +12,7 @@ export interface CellRange {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type FieldGetter<T> = (record: T) => any;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type FieldSetter<T> = (record: T, value: any) => void;
+export type FieldSetter<T> = (record: T, value: any) => boolean;
 export interface FieldAssessor<T> {
   get: FieldGetter<T>;
   set: FieldSetter<T>;
