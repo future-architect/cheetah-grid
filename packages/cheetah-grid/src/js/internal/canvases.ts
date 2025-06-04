@@ -25,6 +25,10 @@ export function getFontSize(
     return fontSizeCache[fontName];
   }
   const bk = ctx.font;
+
+  // To calculate the size of the letters correctly, letterSpacing must be 'normal'.
+  // `ctx.letterSpacing` is not used yet because it is Baseline 2024.
+  ctx.canvas.style.letterSpacing = "normal";
   try {
     ctx.font = fontName;
     const em = ctx.measureText("あ").width;
@@ -33,6 +37,7 @@ export function getFontSize(
       height: em,
     });
   } finally {
+    ctx.canvas.style.letterSpacing = "";
     ctx.font = bk;
   }
 }
