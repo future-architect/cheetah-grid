@@ -24,16 +24,17 @@ export function getFontSize(
   if (fontSizeCache[fontName]) {
     return fontSizeCache[fontName];
   }
-  const bk = ctx.font;
+  const bk = [ctx.font, ctx.letterSpacing] as const;
   try {
     ctx.font = fontName;
+    ctx.letterSpacing = "0px"; // To calculate the size of the letters correctly, letterSpacing must be 0px.
     const em = ctx.measureText("あ").width;
     return (fontSizeCache[fontName] = {
       width: em,
       height: em,
     });
   } finally {
-    ctx.font = bk;
+    [ctx.font, ctx.letterSpacing] = bk;
   }
 }
 
