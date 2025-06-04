@@ -24,11 +24,12 @@ export class InlineIcon extends Inline {
     }
     if (icon.font && fonts.check(icon.font, icon.content || "")) {
       ctx.save();
+      ctx.canvas.style.letterSpacing = "normal";
       try {
-        ctx.letterSpacing = "normal";
         ctx.font = icon.font || ctx.font;
         return ctx.measureText(icon.content || "").width;
       } finally {
+        ctx.canvas.style.letterSpacing = "";
         ctx.restore();
       }
     }

@@ -24,17 +24,21 @@ export function getFontSize(
   if (fontSizeCache[fontName]) {
     return fontSizeCache[fontName];
   }
-  const bk = [ctx.font, ctx.letterSpacing] as const;
+  const bk = ctx.font;
+
+  // To calculate the size of the letters correctly, letterSpacing must be 'normal'.
+  // `ctx.letterSpacing` is not used yet because it is Baseline 2024.
+  ctx.canvas.style.letterSpacing = "normal";
   try {
     ctx.font = fontName;
-    ctx.letterSpacing = "0px"; // To calculate the size of the letters correctly, letterSpacing must be 0px.
     const em = ctx.measureText("あ").width;
     return (fontSizeCache[fontName] = {
       width: em,
       height: em,
     });
   } finally {
-    [ctx.font, ctx.letterSpacing] = bk;
+    ctx.canvas.style.letterSpacing = "";
+    ctx.font = bk;
   }
 }
 
