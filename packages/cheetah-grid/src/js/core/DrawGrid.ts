@@ -1382,7 +1382,7 @@ function _bindEvents(this: DrawGrid): void {
       if (useTouch.timeoutId != null) clearTimeout(useTouch.timeoutId);
       useTouch.timeoutId = setTimeout(() => {
         useTouch = null;
-      }, 350);
+      }, 400);
     }
   }
   handler.on(element, "touchstart", (e) => {
