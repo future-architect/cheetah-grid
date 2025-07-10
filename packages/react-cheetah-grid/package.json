@@ -22,7 +22,7 @@
   "module": "dist/react-cheetah-grid.es.js",
   "types": "dist/index.d.ts",
   "dependencies": {
-    "cheetah-grid": "^1.1.7"
+    "cheetah-grid": "^1.16.7"
   },
   "peerDependencies": {
     "react": ">=17.0.0",
