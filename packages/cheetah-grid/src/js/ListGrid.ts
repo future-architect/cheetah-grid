@@ -915,7 +915,6 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
       _setRecords(this, options.records);
     }
     protectedSpace.allowRangePaste = options.allowRangePaste ?? false;
-    _refreshHeader(this);
     protectedSpace.sortState = {
       col: -1,
       row: -1,
@@ -928,6 +927,7 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
       (col: number, row: number): Message => _getCellMessage(this, col, row)
     );
     protectedSpace.tooltipHandler = new TooltipHandler(this);
+    _refreshHeader(this);
     this.invalidate();
     protectedSpace.handler.on(window, "resize", () => {
       this.updateSize();

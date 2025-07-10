@@ -2944,7 +2944,6 @@ interface DrawGridProtected {
     };
   };
   calcWidthContext: {
-    _: DrawGridProtected;
     full: number;
     em: number;
   };
@@ -3065,13 +3064,14 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
     protectedSpace.rowHeightsMap = new NumberMap();
     protectedSpace.colWidthsMap = new NumberMap();
     protectedSpace.colWidthsLimit = {};
+
+    const getEm = () => getFontSize(protectedSpace.context, this.font).width;
     protectedSpace.calcWidthContext = {
-      _: protectedSpace,
       get full(): number {
-        return this._.canvas.width;
+        return protectedSpace.canvas.width;
       },
       get em(): number {
-        return getFontSize(this._.context, this._.font).width;
+        return getEm();
       },
     };
 
