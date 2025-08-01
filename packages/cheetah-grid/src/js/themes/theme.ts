@@ -9,10 +9,9 @@ import type {
   TreeLineStyle,
 } from "../ts-types";
 import { getChainSafe } from "../internal/utils";
-import { get as getSymbol } from "../internal/symbolManager";
 import { getTreeNodeInfoAt } from "../columns/type/TreeColumn";
 //private symbol
-const _ = getSymbol();
+const _ = Symbol("private");
 
 function getProp<T>(
   obj: PartialThemeDefine,

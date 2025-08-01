@@ -16,7 +16,7 @@ function getVueCheetahGridPath () {
   }
 }
 function getCheetahGridPath () {
-  const cgPath = path.resolve(__dirname, '../cheetah-grid/dist/cheetahGrid.es5.js')
+  const cgPath = path.resolve(__dirname, '../cheetah-grid/dist/cheetahGrid.js')
   try {
     fs.statSync(cgPath)
     return cgPath

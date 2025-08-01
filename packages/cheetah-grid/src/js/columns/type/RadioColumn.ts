@@ -2,10 +2,8 @@ import type { CellContext, GridCanvasHelperAPI } from "../../ts-types";
 import type { DrawCellInfo, GridInternal } from "../../ts-types-internal";
 import { BaseColumn } from "./BaseColumn";
 import { RadioStyle } from "../style/RadioStyle";
-import { getRadioColumnStateId } from "../../internal/symbolManager";
+import { RADIO_COLUMN_STATE_ID } from "../../internal/symbolManager";
 import { toBoolean } from "../utils";
-
-const RADIO_COLUMN_STATE_ID = getRadioColumnStateId();
 
 export class RadioColumn<T> extends BaseColumn<T> {
   get StyleClass(): typeof RadioStyle {

@@ -1,4 +1,3 @@
-import * as path2DManager from "../internal/path2DManager";
 import type { AnyFunction, ColorDef } from "../ts-types";
 import { Inline } from "./Inline";
 import type { InlineDrawOption } from "./Inline";
@@ -18,8 +17,6 @@ export class InlinePath2D extends Inline {
   private _color?: ColorDef;
   constructor({ path, width, height, color }: InlinePath2DConstructorOption) {
     super();
-    // このタイミングでないとIEでPath2Dのpolyfillが反映されない
-    const Path2D = path2DManager.getPath2D();
     this._path = new Path2D(path);
     this._width = width;
     this._height = height;

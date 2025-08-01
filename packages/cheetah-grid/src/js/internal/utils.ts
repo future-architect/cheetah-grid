@@ -79,7 +79,6 @@ const array = {
 };
 
 function analyzeUserAgent(): {
-  IE: boolean;
   Edge: boolean;
   Chrome: boolean;
   Firefox: boolean;
@@ -87,7 +86,6 @@ function analyzeUserAgent(): {
 } {
   if (isNode) {
     return {
-      IE: false,
       Edge: false,
       Chrome: false,
       Firefox: false,
@@ -96,7 +94,6 @@ function analyzeUserAgent(): {
   } else {
     const ua = window.navigator.userAgent.toLowerCase();
     return {
-      IE: !!/(msie|trident)/.exec(ua),
       Edge: ua.indexOf("edge") > -1,
       Chrome: ua.indexOf("chrome") > -1 && ua.indexOf("edge") === -1,
       Firefox: ua.indexOf("firefox") > -1,
@@ -104,7 +101,7 @@ function analyzeUserAgent(): {
     };
   }
 }
-const { IE, Chrome, Firefox, Edge, Safari } = analyzeUserAgent();
+const { Chrome, Firefox, Edge, Safari } = analyzeUserAgent();
 
 function setReadonly<T, K extends keyof T>(obj: T, name: K, value: T[K]): void {
   Object.defineProperty(obj, name, {
@@ -313,31 +310,6 @@ function then<T, R>(
 ): MaybePromise<R> {
   return isPromise(result) ? result.then((r) => callback(r)) : callback(result);
 }
-function getMouseButtons(e: MouseEvent): number {
-  if (e.buttons != null) {
-    return e.buttons;
-  }
-  /*for legacy*/
-  if (e.which != null) {
-    if (e.which === 3) {
-      //right?
-      return 4;
-    }
-    if (e.which === 2) {
-      //middle?
-      return 4;
-    }
-    return e.which; //left or no
-  }
-
-  if (e.button === 0 || e.button === 1) {
-    return 1; //candidate left
-  }
-  if (e.button === 2) {
-    return 2; // right
-  }
-  return 0; //no or middle?
-}
 function getKeyCode(e: KeyboardEvent): number {
   return e.keyCode || e.which;
 }
@@ -428,7 +400,6 @@ export function cellInRange(
 }
 
 export const browser = {
-  IE,
   Edge,
   Chrome,
   Firefox,
@@ -449,7 +420,6 @@ export const str = {
   genWords,
 };
 export const event = {
-  getMouseButtons,
   getKeyCode,
   isTouchEvent,
   cancel,

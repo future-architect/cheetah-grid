@@ -15,9 +15,7 @@ import { Editor } from "./Editor";
 import type { GridInternal } from "../../ts-types-internal";
 import type { RangePasteContext } from "./BaseAction";
 import { animate } from "../../internal/animate";
-import { getCheckColumnStateId } from "../../internal/symbolManager";
-
-const CHECK_COLUMN_STATE_ID = getCheckColumnStateId();
+import { CHECK_COLUMN_STATE_ID } from "../../internal/symbolManager";
 
 export class CheckEditor<T> extends Editor<T> {
   clone(): CheckEditor<T> {
