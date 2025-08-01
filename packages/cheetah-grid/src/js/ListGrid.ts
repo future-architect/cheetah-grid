@@ -64,11 +64,11 @@ import { Rect } from "./internal/Rect";
 import type { Theme } from "./themes/theme";
 import { TooltipHandler } from "./tooltip/TooltipHandler";
 //protected symbol
-import { getProtectedSymbol } from "./internal/symbolManager";
+import { PROTECTED_SYMBOL } from "./internal/symbolManager";
 import { parsePasteRangeBoxValues } from "./internal/paste-utils";
 
 /** @private */
-const _ = getProtectedSymbol();
+const _: typeof PROTECTED_SYMBOL = PROTECTED_SYMBOL;
 
 //private methods
 /** @private */

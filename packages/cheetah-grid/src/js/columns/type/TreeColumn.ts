@@ -19,7 +19,7 @@ import { Rect } from "../../internal/Rect";
 import { TreeLineKind } from "../../ts-types-internal";
 import { TreeStyle } from "../style/TreeStyle";
 import { getFontSize } from "../../internal/canvases";
-import { getTreeColumnStateId } from "../../internal/symbolManager";
+import { TREE_COLUMN_STATE_ID } from "../../internal/symbolManager";
 import { isPromise } from "../../internal/utils";
 
 type NormalizedTreeData = {
@@ -36,7 +36,7 @@ type TreeInfo = {
   path: unknown[];
 };
 
-const _ = getTreeColumnStateId();
+const _: typeof TREE_COLUMN_STATE_ID = TREE_COLUMN_STATE_ID;
 
 export class TreeColumn<T> extends Column<T> {
   private _cache: boolean;

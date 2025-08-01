@@ -7,9 +7,10 @@ import type {
 import type { GridInternal, InputEditorState } from "../../ts-types-internal";
 import { BaseInputEditor } from "./BaseInputEditor";
 import { SmallDialogInputElement } from "./internal/SmallDialogInputElement";
-import { getSmallDialogInputEditorStateId } from "../../internal/symbolManager";
+import { SMALL_DIALOG_INPUT_EDITOR_STATE_ID } from "../../internal/symbolManager";
 import { obj } from "../../internal/utils";
-const _ = getSmallDialogInputEditorStateId();
+const _: typeof SMALL_DIALOG_INPUT_EDITOR_STATE_ID =
+  SMALL_DIALOG_INPUT_EDITOR_STATE_ID;
 
 function getState<T>(grid: GridInternal<T>): InputEditorState {
   let state = grid[_];

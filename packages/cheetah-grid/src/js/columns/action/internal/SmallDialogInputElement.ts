@@ -1,5 +1,5 @@
 import type { ListGridAPI, MaybePromise } from "../../../ts-types";
-import { browser, event, then } from "../../../internal/utils";
+import { event, then } from "../../../internal/utils";
 import { EventHandler } from "../../../internal/EventHandler";
 import { createElement } from "../../../internal/dom";
 import { setInputValue } from "./input-value-handler";
@@ -182,12 +182,9 @@ export class SmallDialogInputElement<T> {
     input.style.font = grid.font || "16px sans-serif";
     const activeData = { grid, col, row, editor };
     this._onInputValue(input, activeData);
-    if (!browser.IE) {
-      _focus(input, handler);
-    } else {
-      // On the paste-event on IE, since it may not be focused, it will be delayed and focused.
-      setTimeout(() => _focus(input, handler));
-    }
+
+    _focus(input, handler);
+
     dialog.classList.add(SHOWN_CLASSNAME);
     dialog.classList.remove(HIDDEN_CLASSNAME);
     input.readOnly = false;

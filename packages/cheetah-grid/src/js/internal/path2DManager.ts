@@ -1,13 +1,3 @@
-import { browser } from "./utils";
-
-export function getPath2D(): typeof Path2D {
-  if (typeof Path2D !== "undefined" && !browser.Edge) {
-    return Path2D;
-  }
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  return require("./legacy/canvas/Path2DShim").Path2DShim;
-}
-
 export function fill(
   pathModule: {
     width: number;
@@ -40,7 +30,6 @@ export function fill(
     if (offsetX !== 0 || offsetY !== 0) {
       ctx.translate(offsetX, offsetY);
     }
-    const Path2D = getPath2D();
     const path2d = (pathModule.path2d =
       pathModule.path2d || new Path2D(pathModule.d));
     ctx.fill(path2d);

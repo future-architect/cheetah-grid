@@ -9,9 +9,7 @@ import type { DrawCellInfo, GridInternal } from "../../ts-types-internal";
 import { ButtonStyle } from "../style/ButtonStyle";
 import { Column } from "./Column";
 import { cellInRange } from "../../internal/utils";
-import { getButtonColumnStateId } from "../../internal/symbolManager";
-
-const BUTTON_COLUMN_STATE_ID = getButtonColumnStateId();
+import { BUTTON_COLUMN_STATE_ID } from "../../internal/symbolManager";
 
 export class ButtonColumn<T> extends Column<T> {
   private _caption?: string;

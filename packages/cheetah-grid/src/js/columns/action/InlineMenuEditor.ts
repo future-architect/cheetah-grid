@@ -23,9 +23,9 @@ import { Editor } from "./Editor";
 import { InlineMenuElement } from "./internal/InlineMenuElement";
 import { MenuColumn } from "../type";
 import type { RangePasteContext } from "./BaseAction";
-import { getInlineMenuEditorStateId } from "../../internal/symbolManager";
+import { INLINE_MENU_EDITOR_STATE_ID } from "../../internal/symbolManager";
 import { normalizeToFn } from "../../internal/menu-items";
-const _ = getInlineMenuEditorStateId();
+const _: typeof INLINE_MENU_EDITOR_STATE_ID = INLINE_MENU_EDITOR_STATE_ID;
 
 function getState<T>(grid: GridInternal<T>): InputEditorState {
   let state = grid[_];

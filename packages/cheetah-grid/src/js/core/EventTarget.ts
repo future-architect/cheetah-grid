@@ -1,10 +1,9 @@
 import type { AnyListener, EventListenerId } from "../ts-types";
 import { each } from "../internal/utils";
-import { get as getSymbol } from "../internal/symbolManager";
 
 //private symbol
 /** @private */
-const _ = getSymbol();
+const _ = Symbol("private");
 
 /** @private */
 let nextId = 1;
