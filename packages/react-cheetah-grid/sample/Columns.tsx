@@ -14,7 +14,7 @@ import {
   PercentCompleteBarColumn,
   BranchGraphColumn,
 } from "../src/index";
-import type { BranchGraphCommand } from "../src/index";
+import type { BranchGraphCommandValue } from "../src/index";
 
 type Record = {
   name: string;
@@ -26,7 +26,7 @@ type Record = {
   imageUrl: string;
   link: string;
   longText: string;
-  familyTree: BranchGraphCommand;
+  familyTree: BranchGraphCommandValue;
 };
 
 const options = [

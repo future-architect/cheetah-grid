@@ -34,7 +34,7 @@ export function processPercentCompleteBarColumnProps<T>(
     style,
     message,
     columnType: new cheetahGrid.columns.type.PercentCompleteBarColumn<T>({
-      formatter,
+      formatter: formatter as (value: unknown) => unknown,
       min,
       max,
     }),
