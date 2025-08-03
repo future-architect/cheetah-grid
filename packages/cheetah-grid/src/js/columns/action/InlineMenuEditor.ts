@@ -9,14 +9,7 @@ import type {
   SimpleColumnMenuItemOption,
 } from "../../ts-types";
 import type { GridInternal, InputEditorState } from "../../ts-types-internal";
-import {
-  array,
-  cellEquals,
-  event,
-  isPromise,
-  obj,
-  then,
-} from "../../internal/utils";
+import { cellEquals, event, isPromise, obj, then } from "../../internal/utils";
 import { isDisabledRecord, isReadOnlyRecord } from "./action-utils";
 import { DG_EVENT_TYPE } from "../../core/DG_EVENT_TYPE";
 import { Editor } from "./Editor";
@@ -315,8 +308,7 @@ export class InlineMenuEditor<T> extends Editor<T> {
     if (hasOptions(columnType)) {
       // Find with caption.
       const pasteValue = normalizePasteValueStr(value);
-      const captionOpt = array.find(
-        columnType.options,
+      const captionOpt = columnType.options.find(
         (opt) => normalizePasteValueStr(opt.label) === pasteValue
       );
       if (captionOpt) {
@@ -331,8 +323,7 @@ function _textToOptionValue(
   options: SimpleColumnMenuItemOption[]
 ): SimpleColumnMenuItemOption | undefined {
   const pasteValue = normalizePasteValueStr(value);
-  const pasteOpt = array.find(
-    options,
+  const pasteOpt = options.find(
     (opt) => normalizePasteValueStr(opt.value) === pasteValue
   );
   if (pasteOpt) {

@@ -11,7 +11,6 @@ import type {
 } from "../ts-types";
 import {
   applyChainSafe,
-  array,
   emptyFn,
   getOrApply,
   isPromise,
@@ -268,7 +267,7 @@ export class DataSource<T> extends EventTarget implements DataSourceAPI<T> {
     }
 
     const results = this.fireListeners(EVENT_TYPE.UPDATE_LENGTH, length);
-    if (array.findIndex(results, (v) => !v) >= 0) {
+    if (results.findIndex((v: unknown) => !v) >= 0) {
       return;
     }
     this._length = length;
