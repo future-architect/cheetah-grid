@@ -49,7 +49,7 @@ function setReadonly<T, K extends keyof T>(obj: T, name: K, value: T[K]): void {
 
 export function each<T>(obj: T, fn: ObjectElementFunction<T>): void {
   for (const key in obj) {
-    fn(obj[key], key, obj);
+    fn(obj[key], key as `${Extract<keyof T, string | number>}`, obj);
   }
 }
 
