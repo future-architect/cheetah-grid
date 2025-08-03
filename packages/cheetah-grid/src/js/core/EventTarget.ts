@@ -54,7 +54,7 @@ export class EventTarget {
    * @param  {number} id the id returned by listen().
    * @return {void}
    */
-  unlisten(id: EventListenerId): void {
+  unlisten(id: EventListenerId | `${EventListenerId}`): void {
     if (!this[_]) {
       return;
     }

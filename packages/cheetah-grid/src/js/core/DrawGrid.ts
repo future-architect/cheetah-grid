@@ -20,7 +20,6 @@ import type {
   PasteRangeBoxValues,
 } from "../ts-types";
 import {
-  array,
   browser,
   event,
   isDescendantElement,
@@ -1238,7 +1237,7 @@ function _updatedSelection(this: DrawGrid): void {
     row: selRow,
   });
 
-  const editMode = array.findIndex(results, (v) => !!v) >= 0;
+  const editMode = results.findIndex((v) => !!v) >= 0;
   focusControl.editMode = editMode;
 
   if (editMode) {
@@ -1332,7 +1331,7 @@ function _bindEvents(this: DrawGrid): void {
         DG_EVENT_TYPE.MOUSEDOWN_CELL,
         eventArgs
       );
-      if (array.findIndex(results, (v) => !v) >= 0) {
+      if (results.findIndex((v) => !v) >= 0) {
         return;
       }
     }
@@ -1692,10 +1691,9 @@ function _bindEvents(this: DrawGrid): void {
     return copyLines.join("\n");
   });
   grid[_].focusControl.onCopy((_e: ClipboardEvent): string | void =>
-    array.find(
-      grid.fireListeners("copydata", grid[_].selection.range),
-      (r) => r != null
-    )
+    grid
+      .fireListeners("copydata", grid[_].selection.range)
+      .find((r) => r != null)
   );
   grid[_].focusControl.onPaste(
     ({ value, event }: { value: string; event: ClipboardEvent }) => {
@@ -2279,7 +2277,7 @@ class FocusControl extends EventTarget {
         return;
       }
       setSafeInputValue(input, "");
-      const data = array.find(this.fireListeners("copy"), (r) => r != null);
+      const data = this.fireListeners("copy").find((r: unknown) => r != null);
       if (data != null) {
         cancelEvent(e);
 

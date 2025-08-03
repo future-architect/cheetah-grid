@@ -8,75 +8,11 @@ import type {
 const isNode =
   typeof window === "undefined" || typeof window.window === "undefined";
 
-type ArrayElementPredicate<E> = (t: E, i: number, arr: E[]) => boolean;
-// type ObjectElementPredicate<T, K extends keyof T> = (
-//   t: T[K],
-//   key?: K,
-//   obj?: T
-// ) => boolean;
-
-type ArrayElementFunction<E> = (t: E, i: number, arr: E[]) => void;
-type ObjectElementFunction<T, K extends keyof T> = (
-  t: T[K],
-  key: K,
+type ObjectElementFunction<T> = (
+  t: T[keyof T],
+  key: `${Extract<keyof T, string | number>}`,
   obj: T
 ) => void;
-let arrayFind: <T>(
-  arr: T[],
-  predicate: ArrayElementPredicate<T>
-) => T | undefined;
-let arrayFindIndex: <T>(
-  arr: T[],
-  predicate: ArrayElementPredicate<T>
-) => number;
-const array = {
-  get find(): typeof arrayFind {
-    if (arrayFind) {
-      return arrayFind;
-    }
-    if (Array.prototype.find) {
-      arrayFind = <T>(
-        arr: T[],
-        predicate: ArrayElementPredicate<T>
-      ): T | undefined => Array.prototype.find.call(arr, predicate);
-    } else {
-      arrayFind = <T>(
-        arr: T[],
-        predicate: ArrayElementPredicate<T>
-      ): T | undefined => {
-        const index = array.findIndex(arr, predicate);
-        return index >= 0 ? arr[index] : undefined;
-      };
-    }
-    return arrayFind;
-  },
-  get findIndex(): typeof arrayFindIndex {
-    if (arrayFindIndex) {
-      return arrayFindIndex;
-    }
-    if (Array.prototype.findIndex) {
-      arrayFindIndex = <T>(
-        arr: T[],
-        predicate: ArrayElementPredicate<T>
-      ): number => Array.prototype.findIndex.call(arr, predicate);
-    } else {
-      arrayFindIndex = <T>(
-        arr: T[],
-        predicate: ArrayElementPredicate<T>
-      ): number => {
-        const { length } = arr;
-        for (let i = 0; i < length; i++) {
-          const value = arr[i];
-          if (predicate(value, i, arr)) {
-            return i;
-          }
-        }
-        return -1;
-      };
-    }
-    return arrayFindIndex;
-  },
-};
 
 function analyzeUserAgent(): {
   Edge: boolean;
@@ -111,20 +47,14 @@ function setReadonly<T, K extends keyof T>(obj: T, name: K, value: T[K]): void {
   });
 }
 
-export function each<E>(obj: E[], fn: ArrayElementFunction<E>): void;
-export function each<T, K extends keyof T>(
-  obj: T,
-  fn: ObjectElementFunction<T, K>
-): void;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function each(obj: any, fn: any): void {
+export function each<T>(obj: T, fn: ObjectElementFunction<T>): void {
   for (const key in obj) {
     fn(obj[key], key, obj);
   }
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function isObject(obj: any): obj is Record<string, any> {
+function isObject(obj: unknown): obj is Record<string, any> {
   return obj === Object(obj);
 }
 
@@ -380,7 +310,6 @@ export {
   getOrApply,
   getIgnoreCase,
   then,
-  array,
 };
 
 export function cellEquals(a: CellAddress, b: CellAddress): boolean {
