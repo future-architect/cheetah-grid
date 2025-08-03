@@ -10,10 +10,8 @@ import { BaseHeader } from "./BaseHeader";
 import { CheckHeaderStyle } from "../style/CheckHeaderStyle";
 import type { GridCanvasHelper } from "../../GridCanvasHelper";
 import type { Inline } from "../../element/Inline";
-import { getCheckHeaderStateId } from "../../internal/symbolManager";
+import { CHECK_HEADER_STATE_ID } from "../../internal/symbolManager";
 import { obj } from "../../internal/utils";
-
-const CHECK_HEADER_STATE_ID = getCheckHeaderStateId();
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getState<T>(grid: GridInternal<T>): CheckHeaderState {

@@ -5,7 +5,6 @@ const rm = require('rimraf');
 const PACKAGEJSON = require('./package.json');
 const LiveReloadPlugin = require('webpack-livereload-plugin');
 const WrapperPlugin = require('wrapper-webpack-plugin');
-const BabelPlugin = require('./webpack/fork/babel-webpack-plugin/index');
 const BANNER = `/*! Cheetah Grid v${PACKAGEJSON.version} | license ${PACKAGEJSON.license} */`;
 const ModuleFilenameHelpers = require('webpack/lib/ModuleFilenameHelpers');
 ModuleFilenameHelpers.createFooter = function createFooter(module, requestShortener) {
@@ -78,7 +77,7 @@ const newDefaultProps = (opt = {}) => {
 			devtoolFallbackModuleFilenameTemplate: devtoolModuleFilenameTemplate,
 		},
 		resolve: {
-			extensions: ['.js'],
+			extensions: ['.js', '.ts'],
 			alias: {
 				'@': resolve('src/js')
 			}
@@ -134,7 +133,7 @@ const newDefaultProps = (opt = {}) => {
 	};
 };
 
-function newEs6Config(opt) {
+function newConfig(opt) {
 	opt = Object.assign({}, opt);
 	opt.mode = opt.mode || 'development';
 	opt.plugins = [
@@ -148,38 +147,7 @@ function newEs6Config(opt) {
 	return newDefaultProps(opt);
 }
 
-function newEs5Config(opt) {
-	opt = opt || {};
-	opt = Object.assign({}, opt);
-	opt.suffix = opt.suffix || '';
-	opt.plugins = [
-		new WrapperPlugin({
-			test: /\.js$/,
-			header: '(function(window){\n',
-			footer: '\n}).call(typeof global !== "undefined" ? global : window, typeof global !== "undefined" ? global : window);'
-		}),
-		new BabelPlugin({
-			test: /\.js$/,
-			presets: ['@babel/env'],
-			sourceMaps: true
-		}),
-		new WrapperPlugin({
-			test: /\.js$/,
-			header: '(function(){\n',
-			footer: '\n})();'
-		}), ...(opt.plugins || [])
-	];
-	opt.mode = opt.mode || 'development';
-
-
-	const es5 = newDefaultProps(opt);
-	// es5.module.loaders[0].query = {
-	// 	presets: ['es2015']
-	// };
-	return es5;
-}
-
-function newEs6MinConfig(opt) {
+function newMinConfig(opt) {
 	opt = opt || {};
 	opt = Object.assign({}, opt);
 	opt.plugins = [
@@ -187,17 +155,7 @@ function newEs6MinConfig(opt) {
 		...(opt.plugins || [])
 	];
 	opt.mode = 'production';
-	return newEs6Config(opt);
-}
-function newEs5MinConfig(opt) {
-	opt = opt || {};
-	opt = Object.assign({}, opt);
-	opt.plugins = [
-		new webpack.optimize.AggressiveMergingPlugin(),
-		...(opt.plugins || [])
-	];
-	opt.mode = 'production';
-	return newEs5Config(opt);
+	return newConfig(opt);
 }
 
 const liveReloadOpt = Object.assign({}, gridOpt);
@@ -208,10 +166,8 @@ liveReloadOpt.plugins = [
 
 
 module.exports = [
-	newEs6Config(gridOpt),
-	newEs5Config(Object.assign({suffix: '.es5'}, liveReloadOpt)),
-	newEs6MinConfig(Object.assign({suffix: '.min'}, gridOpt)),
-	newEs5MinConfig(Object.assign({suffix: '.es5.min'}, gridOpt)),
+	newConfig(gridOpt),
+	newMinConfig(Object.assign({suffix: '.min'}, gridOpt)),
 	// newEs5Config(Object.assign({suffix: ''}, extToolsEntriesOpt)),
 	// newEs5MinConfig(Object.assign({suffix: '.min'}, extToolsEntriesOpt)),
 ];

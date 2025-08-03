@@ -11,6 +11,18 @@ import type {
   HeaderStyleOption,
 } from "../ts-types/column";
 import type { Message } from "../ts-types/data";
+import type {
+  BRANCH_GRAPH_COLUMN_STATE_ID,
+  BUTTON_COLUMN_STATE_ID,
+  CHECK_COLUMN_STATE_ID,
+  CHECK_HEADER_STATE_ID,
+  COLUMN_FADEIN_STATE_ID,
+  INLINE_INPUT_EDITOR_STATE_ID,
+  INLINE_MENU_EDITOR_STATE_ID,
+  RADIO_COLUMN_STATE_ID,
+  SMALL_DIALOG_INPUT_EDITOR_STATE_ID,
+  TREE_COLUMN_STATE_ID,
+} from "../internal/symbolManager";
 
 export interface MessageHandler<T> {
   drawCellMessage(
@@ -120,14 +132,14 @@ export type TreeColumnState<T> = {
 };
 
 export interface GridInternal<T> extends ListGridAPI<T> {
-  "$$$$col.fadein_stateID symbol$$$$"?: ColumnFadeinState;
-  "$$$$btncol.stateID symbol$$$$"?: ButtonColumnState;
-  "$$$$chkcol.stateID symbol$$$$"?: CheckColumnState;
-  "$$$$rdcol.stateID symbol$$$$"?: RadioColumnState;
-  "$$$$branch_graph_col.stateID symbol$$$$"?: BranchGraphColumnState<T>;
-  "$$$$tree_col.stateID symbol$$$$"?: TreeColumnState<T>;
-  "$$$$inline_menu_editor.stateID symbol$$$$"?: InputEditorState;
-  "$$$$inline_input_editor.stateID symbol$$$$"?: InputEditorState;
-  "$$$$small_dialog_input_editor.stateID symbol$$$$"?: InputEditorState;
-  "$$$$check_header.stateID symbol$$$$"?: CheckHeaderState;
+  [COLUMN_FADEIN_STATE_ID]?: ColumnFadeinState;
+  [BUTTON_COLUMN_STATE_ID]?: ButtonColumnState;
+  [CHECK_COLUMN_STATE_ID]?: CheckColumnState;
+  [RADIO_COLUMN_STATE_ID]?: RadioColumnState;
+  [BRANCH_GRAPH_COLUMN_STATE_ID]?: BranchGraphColumnState<T>;
+  [TREE_COLUMN_STATE_ID]?: TreeColumnState<T>;
+  [INLINE_MENU_EDITOR_STATE_ID]?: InputEditorState;
+  [INLINE_INPUT_EDITOR_STATE_ID]?: InputEditorState;
+  [SMALL_DIALOG_INPUT_EDITOR_STATE_ID]?: InputEditorState;
+  [CHECK_HEADER_STATE_ID]?: CheckHeaderState;
 }

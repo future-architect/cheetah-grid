@@ -1,5 +1,3 @@
-import { array } from "./utils";
-
 const TYPE_PAREN = 0;
 const TYPE_UNIT = 1;
 const TYPE_OPERATOR = 2;
@@ -208,7 +206,7 @@ function lex(tokens: Token[], calc: string): Node {
     const token = tokens.shift() as Token;
     if (token.type === TYPE_PAREN && token.value === "(") {
       let deep = 0;
-      const closeIndex = array.findIndex(tokens, (t) => {
+      const closeIndex = tokens.findIndex((t) => {
         if (t.type === TYPE_PAREN && t.value === "(") {
           deep++;
         } else if (t.type === TYPE_PAREN && t.value === ")") {

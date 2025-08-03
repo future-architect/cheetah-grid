@@ -30,11 +30,11 @@ const cheetahGrid = require("cheetah-grid");
 
 [![npm](https://img.shields.io/npm/v/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
 
-[cheetahGrid.es5.min.js](https://unpkg.com/cheetah-grid@1.16/dist/cheetahGrid.es5.min.js)
+[cheetahGrid.min.js](https://unpkg.com/cheetah-grid@1.16/dist/cheetahGrid.min.js)
 
 #### SourceMap
 
-[cheetahGrid.es5.min.js.map](https://unpkg.com/cheetah-grid@1.16/dist/cheetahGrid.es5.min.js.map)
+[cheetahGrid.min.js.map](https://unpkg.com/cheetah-grid@1.16/dist/cheetahGrid.min.js.map)
 
 ### Via GitHub
 

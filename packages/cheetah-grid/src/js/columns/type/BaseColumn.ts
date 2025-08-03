@@ -20,11 +20,10 @@ import { isPromise, obj } from "../../internal/utils";
 import { BaseStyle } from "../style/BaseStyle";
 import { DrawIndicatorKind } from "../indicator/type";
 import { animate } from "../../internal/animate";
-import { getColumnFadeinStateId } from "../../internal/symbolManager";
+import { COLUMN_FADEIN_STATE_ID } from "../../internal/symbolManager";
 import { getDrawIndicator } from "../indicator/handlers";
 
 const { setReadonly } = obj;
-const COLUMN_FADEIN_STATE_ID = getColumnFadeinStateId();
 
 function isFadeinWhenCallbackInPromise<T>(
   column: BaseColumn<T>,

@@ -187,6 +187,7 @@ module.exports = {
 		'require-unicode-regexp': 'off',
 		'prefer-object-spread': 'off',
 		'prefer-named-capture-group': 'off',
+		'sort-imports': 'off'
 
 	}
 

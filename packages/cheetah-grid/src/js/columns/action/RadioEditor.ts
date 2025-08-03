@@ -25,10 +25,8 @@ import { Editor } from "./Editor";
 import type { GridInternal } from "../../ts-types-internal";
 import type { RangePasteContext } from "./BaseAction";
 import { animate } from "../../internal/animate";
-import { getRadioColumnStateId } from "../../internal/symbolManager";
+import { RADIO_COLUMN_STATE_ID } from "../../internal/symbolManager";
 import { toBoolean } from "../utils";
-
-const RADIO_COLUMN_STATE_ID = getRadioColumnStateId();
 
 export class RadioEditor<T> extends Editor<T> {
   protected _group: GetRadioEditorGroup<T> | undefined;
