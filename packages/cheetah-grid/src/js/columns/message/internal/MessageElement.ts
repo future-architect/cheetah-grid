@@ -6,6 +6,15 @@ const CLASSNAME = "cheetah-grid__message-element";
 const MESSAGE_CLASSNAME = `${CLASSNAME}__message`;
 const HIDDEN_CLASSNAME = `${CLASSNAME}--hidden`;
 const SHOWN_CLASSNAME = `${CLASSNAME}--shown`;
+
+const CSS_PROP_NAME_PREFIX = "--cheetah-grid-message-element-";
+const CELL_TOP_CSS_PROP_NAME = `${CSS_PROP_NAME_PREFIX}cell-top`;
+const CELL_BOTTOM_CSS_PROP_NAME = `${CSS_PROP_NAME_PREFIX}cell-bottom`;
+const CELL_LEFT_CSS_PROP_NAME = `${CSS_PROP_NAME_PREFIX}cell-left`;
+const CELL_RIGHT_CSS_PROP_NAME = `${CSS_PROP_NAME_PREFIX}cell-right`;
+const ELEMENT_WIDTH_CSS_PROP_NAME = `${CSS_PROP_NAME_PREFIX}width`;
+const ELEMENT_HEIGHT_CSS_PROP_NAME = `${CSS_PROP_NAME_PREFIX}height`;
+
 const LEFT_DIFF_CSS_PROP_NAME = "--cheetah-grid-message-element-left-diff";
 
 function createMessageDomElement(): HTMLElement {
@@ -30,6 +39,7 @@ export class MessageElement {
     this._messageElement = rootElement.querySelector(
       `.${MESSAGE_CLASSNAME}`
     ) as HTMLElement;
+    rootElement.popover = "manual";
   }
   dispose(): void {
     this.detach();
@@ -50,24 +60,17 @@ export class MessageElement {
 
     rootElement.classList.remove(SHOWN_CLASSNAME);
     rootElement.classList.add(HIDDEN_CLASSNAME);
+    rootElement.hidePopover();
 
+    messageElement.textContent = message.message;
     if (this._attachCell(grid, col, row)) {
-      rootElement.classList.add(SHOWN_CLASSNAME);
-      rootElement.classList.remove(HIDDEN_CLASSNAME);
-
-      messageElement.textContent = message.message;
-
       this._adjustStyle(grid, col, row);
     } else {
       this._detach();
     }
   }
   move<T>(grid: ListGridAPI<T>, col: number, row: number): void {
-    const rootElement = this._rootElement;
-    if (this._attachCell(grid, col, row)) {
-      rootElement.classList.add(SHOWN_CLASSNAME);
-      rootElement.classList.remove(HIDDEN_CLASSNAME);
-    } else {
+    if (!this._attachCell(grid, col, row)) {
       this._detach();
     }
   }
@@ -81,6 +84,7 @@ export class MessageElement {
       rootElement.classList.remove(SHOWN_CLASSNAME);
       rootElement.classList.add(HIDDEN_CLASSNAME);
     }
+    rootElement.hidePopover();
   }
   _attachCell<T>(grid: ListGridAPI<T>, col: number, row: number): boolean {
     const rootElement = this._rootElement;
@@ -88,17 +92,16 @@ export class MessageElement {
       grid.getCellRange(col, row)
     );
 
-    const { bottom: top, left, width } = rect;
     const { frozenRowCount, frozenColCount } = grid;
     if (row >= frozenRowCount && frozenRowCount > 0) {
       const { rect: frozenRect } = grid.getAttachCellsArea(
         grid.getCellRange(col, frozenRowCount - 1)
       );
-      if (top < frozenRect.bottom) {
+      if (rect.bottom < frozenRect.bottom) {
         return false; // Outside the rectangle.
       }
     } else {
-      if (top < 0) {
+      if (rect.bottom < 0) {
         return false; // Outside the rectangle.
       }
     }
@@ -106,28 +109,61 @@ export class MessageElement {
       const { rect: frozenRect } = grid.getAttachCellsArea(
         grid.getCellRange(frozenColCount - 1, row)
       );
-      if (left < frozenRect.right) {
+      if (rect.left < frozenRect.right) {
         return false; // Outside the rectangle.
       }
     } else {
-      if (left < 0) {
+      if (rect.left < 0) {
         return false; // Outside the rectangle.
       }
     }
-    const { offsetHeight, offsetWidth } = element;
-    if (offsetHeight < top) {
+    const {
+      height: offsetHeight,
+      width: offsetWidth,
+      left: elementLeft,
+      top: elementTop,
+    } = element.getBoundingClientRect();
+    if (offsetHeight < rect.bottom) {
       return false; // Outside the rectangle.
     }
-    if (offsetWidth < left) {
+    if (offsetWidth < rect.left) {
       return false; // Outside the rectangle.
     }
 
-    rootElement.style.top = `${top.toFixed()}px`;
-    rootElement.style.left = `${left.toFixed()}px`;
-    rootElement.style.width = `${width.toFixed()}px`;
+    rootElement.style.setProperty(
+      CELL_TOP_CSS_PROP_NAME,
+      `${(elementTop + rect.top).toFixed()}px`
+    );
+    rootElement.style.setProperty(
+      CELL_BOTTOM_CSS_PROP_NAME,
+      `${(elementTop + rect.bottom).toFixed()}px`
+    );
+    rootElement.style.setProperty(
+      CELL_LEFT_CSS_PROP_NAME,
+      `${(elementLeft + rect.left).toFixed()}px`
+    );
+    rootElement.style.setProperty(
+      CELL_RIGHT_CSS_PROP_NAME,
+      `${(elementLeft + rect.right).toFixed()}px`
+    );
+
     if (rootElement.parentElement !== element) {
       element.appendChild(rootElement);
     }
+
+    const rootElementRect = rootElement.getBoundingClientRect();
+    rootElement.style.setProperty(
+      ELEMENT_WIDTH_CSS_PROP_NAME,
+      `${rootElementRect.width.toFixed()}px`
+    );
+    rootElement.style.setProperty(
+      ELEMENT_HEIGHT_CSS_PROP_NAME,
+      `${rootElementRect.height.toFixed()}px`
+    );
+
+    rootElement.classList.add(SHOWN_CLASSNAME);
+    rootElement.classList.remove(HIDDEN_CLASSNAME);
+
     return true;
   }
   /**

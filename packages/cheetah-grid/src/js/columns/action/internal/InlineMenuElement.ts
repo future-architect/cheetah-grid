@@ -1,8 +1,4 @@
-import type {
-  ColumnMenuItemOption,
-  ListGridAPI,
-  RectProps,
-} from "../../../ts-types";
+import type { ColumnMenuItemOption, ListGridAPI } from "../../../ts-types";
 import {
   appendHtml,
   createElement,
@@ -13,7 +9,6 @@ import {
   isFocusable,
 } from "../../../internal/dom";
 import { EventHandler } from "../../../internal/EventHandler";
-import type { Rect } from "../../../internal/Rect";
 import { event } from "../../../internal/utils";
 
 const KEY_TAB = 9;
@@ -28,6 +23,16 @@ const HIDDEN_CLASSNAME = `${CLASSNAME}--hidden`;
 const SHOWN_CLASSNAME = `${CLASSNAME}--shown`;
 const EMPTY_ITEM_CLASSNAME = `${ITEM_CLASSNAME}--empty`;
 
+const CSS_PROP_NAME_PREFIX = "--cheetah-grid-inline-menu-";
+const CELL_TOP_CSS_PROP_NAME = `${CSS_PROP_NAME_PREFIX}cell-top`;
+const CELL_BOTTOM_CSS_PROP_NAME = `${CSS_PROP_NAME_PREFIX}cell-bottom`;
+const CELL_LEFT_CSS_PROP_NAME = `${CSS_PROP_NAME_PREFIX}cell-left`;
+const CELL_RIGHT_CSS_PROP_NAME = `${CSS_PROP_NAME_PREFIX}cell-right`;
+const ELEMENT_WIDTH_CSS_PROP_NAME = `${CSS_PROP_NAME_PREFIX}width`;
+const ELEMENT_HEIGHT_CSS_PROP_NAME = `${CSS_PROP_NAME_PREFIX}height`;
+const TARGET_ITEM_OFFSET_TOP_CSS_PROP_NAME = `${CSS_PROP_NAME_PREFIX}target-item-offset-top`;
+const TARGET_ITEM_HEIGHT_CSS_PROP_NAME = `${CSS_PROP_NAME_PREFIX}target-item-height`;
+
 function findItemParents(target: HTMLElement | null): HTMLElement | null {
   let el: HTMLElement | null = target;
   while (el && !el.classList.contains(ITEM_CLASSNAME)) {
@@ -41,18 +46,9 @@ function findItemParents(target: HTMLElement | null): HTMLElement | null {
 
 function createMenuElement(): HTMLUListElement {
   require("@/columns/action/internal/InlineMenuElement.css");
-  return createElement("ul", { classList: CLASSNAME });
-}
-function attachElement(
-  element: HTMLElement,
-  rect: RectProps,
-  menu: HTMLUListElement
-): void {
-  menu.style.top = `${rect.top.toFixed()}px`;
-  menu.style.left = `${rect.left.toFixed()}px`;
-  menu.style.width = `${rect.width.toFixed()}px`;
-  menu.style.lineHeight = `${rect.height.toFixed()}px`;
-  element.appendChild(menu);
+  const el = createElement("ul", { classList: CLASSNAME });
+  el.popover = "manual";
+  return el;
 }
 
 function optionToLi(
@@ -119,52 +115,56 @@ function openMenu<T>(
     grid.getCellRange(col, row)
   );
 
-  // Cover the right line
-  rect.width++;
-
   // append for calculation
-  attachElement(element, rect, menu);
+  element.appendChild(menu);
+  menu.showPopover();
+
+  focusEl.scrollIntoView({
+    behavior: "instant",
+    block: "center",
+  });
+
+  const { left: elementLeft, top: elementTop } =
+    element.getBoundingClientRect();
+  menu.style.setProperty(
+    CELL_TOP_CSS_PROP_NAME,
+    `${(elementTop + rect.top).toFixed()}px`
+  );
+  menu.style.setProperty(
+    CELL_BOTTOM_CSS_PROP_NAME,
+    `${(elementTop + rect.bottom).toFixed()}px`
+  );
+  menu.style.setProperty(
+    CELL_LEFT_CSS_PROP_NAME,
+    `${(elementLeft + rect.left).toFixed()}px`
+  );
+  menu.style.setProperty(
+    CELL_RIGHT_CSS_PROP_NAME,
+    `${(elementLeft + rect.right).toFixed()}px`
+  );
 
   // Make the selection item at the middle
-  let offset = 0;
+  let offset = -menu.scrollTop;
   for (let i = 0; i < focusIndex; i++) {
     const { offsetHeight } = children[i];
     offset += offsetHeight;
   }
-  (rect as Rect).offsetTop(-offset);
-  menu.style.transformOrigin = `center ${
-    offset + Math.ceil(children[focusIndex].offsetHeight / 2)
-  }px 0px`;
-  attachElement(element, rect, menu);
 
-  // Control not to overflow the screen range
-  const bkTransform = menu.style.transform;
-  let menuClientRect;
-  try {
-    // To calculate the original position, set `transform` to `none`.
-    menu.style.transform = "none";
-    menuClientRect = menu.getBoundingClientRect();
-  } finally {
-    menu.style.transform = bkTransform;
-  }
-  const orgMenuTop = menuClientRect.top;
-  let menuTop = orgMenuTop;
-  const winBottom = window.innerHeight;
-  const winMargin = 20;
-  if (menuClientRect.bottom > winBottom - winMargin) {
-    const diff = menuClientRect.bottom - winBottom + winMargin;
-    menuTop -= diff;
-  }
-  if (menuTop < 0 /*winTop*/ + winMargin) {
-    menuTop = winMargin;
-  }
-  if (menuTop !== orgMenuTop) {
-    (rect as Rect).offsetTop(-(orgMenuTop - menuTop));
-    // Sets the center of the menu since it is not possible to determine the exact center of the selected element.
-    menu.style.transformOrigin = "center";
-    // re update
-    attachElement(element, rect, menu);
-  }
+  menu.style.setProperty(TARGET_ITEM_OFFSET_TOP_CSS_PROP_NAME, `${offset}px`);
+  menu.style.setProperty(
+    TARGET_ITEM_HEIGHT_CSS_PROP_NAME,
+    `${focusEl.offsetHeight}px`
+  );
+
+  const rootElementRect = menu.getBoundingClientRect();
+  menu.style.setProperty(
+    ELEMENT_WIDTH_CSS_PROP_NAME,
+    `${rootElementRect.width.toFixed()}px`
+  );
+  menu.style.setProperty(
+    ELEMENT_HEIGHT_CSS_PROP_NAME,
+    `${rootElementRect.height.toFixed()}px`
+  );
 
   if (focusEl) {
     focusEl.focus();
@@ -182,6 +182,7 @@ function closeMenu<T>(
   menu.classList.remove(SHOWN_CLASSNAME);
   menu.classList.add(HIDDEN_CLASSNAME);
   disableFocus(menu);
+  menu.hidePopover();
 }
 
 type EditorProps<T> = {

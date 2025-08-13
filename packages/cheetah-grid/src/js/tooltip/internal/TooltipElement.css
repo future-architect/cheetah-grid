@@ -1,31 +1,44 @@
 @keyframes cheetah-grid__tooltip-element--shown-animation {
 	0% {
 		opacity: 0;
-		transform: scale(.8) translateX(-60%);
+		transform: scale(.8);
 	}
 	100% {
 		opacity: 1;
-		transform: scale(1) translateX(-50%);
+		transform: scale(1);
 	}
 }
 .cheetah-grid__tooltip-element {
-	position: absolute;
+	position: fixed;
 	box-sizing: border-box;
 	border-radius: 3px;
+	border-width: 0;
 	background-color: #232f34;
 	padding: 8px;
 	pointer-events: none;
 	user-select: none;
 	color: #fff;
+	margin: 0;
+
+	--cheetah-grid-tooltip-element-cell-width: calc(var(--cheetah-grid-tooltip-element-cell-right) - var(--cheetah-grid-tooltip-element-cell-left));
+
+	top: var(--cheetah-grid-tooltip-element-cell-bottom);
+	left:
+		clamp(
+			1px,
+			calc(var(--cheetah-grid-tooltip-element-cell-left) + (var(--cheetah-grid-tooltip-element-cell-width) / 2) - var(--cheetah-grid-tooltip-element-width) / 2),
+			calc(100vw - var(--cheetah-grid-tooltip-element-width) - 1px)
+		);
+	min-width: var(--cheetah-grid-tooltip-element-cell-width);
+	max-width: calc(100vw - 16px);
 }
 .cheetah-grid__tooltip-element--hidden {
 	opacity: 0;
-	transform: translateX(-50%);
 	transition: opacity 75ms linear;
+	transform-origin: center;
 }
 .cheetah-grid__tooltip-element--shown {
 	opacity: 1;
-	transform: translateX(-50%);
 	animation: cheetah-grid__tooltip-element--shown-animation 150ms ease-out;
 }
 .cheetah-grid__tooltip-element__content {
