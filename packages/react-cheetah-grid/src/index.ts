@@ -52,6 +52,7 @@ export { BranchGraphColumn } from "./BranchGraphColumn";
 export type { BranchGraphColumnProps } from "./BranchGraphColumn";
 export type { BranchGraphStyleOption } from "cheetah-grid/ts-types/column/style";
 export type { BranchGraphCommand } from "cheetah-grid/ts-types/column/type";
+export type { BranchGraphCommandValue } from "cheetah-grid/ts-types/column/type";
 
 // Layout
 export { HeaderLayout, BodyLayout, Line, Header } from "./Layout";
