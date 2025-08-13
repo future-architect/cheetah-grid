@@ -50,29 +50,8 @@ export function filterToFn (instance, field, filter) {
       set: field.set
     }
   }
-  if (typeof filter === 'function') {
-    return (rec) => applyFilter(getField(rec, field), filter)
-  }
-  const Vue = instance.constructor
-  const maybeV2 = Vue && Vue.filter
-  if (!maybeV2) {
-    return (rec) => applyFilter(getField(rec, field), filter)
-  }
-  // maybe Vue v2
-  filter = filter.trim()
-  const i = filter.indexOf('(')
-  if (i < 0) {
-    return (rec) => {
-      return applyFilter(getField(rec, field), Vue.filter(filter))
-    }
-  } else {
-    const name = filter.slice(0, i)
-    const args = filter.slice(i + 1, filter.length - 1)
-    const props = Function(`with(this){return [${args}]}`).call(instance.$vnode.context) // eslint-disable-line no-new-func
-    return (rec) => {
-      return applyFilter(getField(rec, field), (v) => Vue.filter(name)(v, ...props))
-    }
-  }
+
+  return (rec) => applyFilter(getField(rec, field), filter)
 }
 
 export function normalizeColumnType (columnType) {
@@ -147,19 +126,10 @@ export function getSlotChildren (vm, name = 'defaultSlotContainer') {
 
 // for compatibility
 const { EVENT_TYPE } = cheetahGrid.ListGrid
-export const vue3Emits = Object.keys(EVENT_TYPE)
+/** @type {Record<keyof typeof EVENT_TYPE, null>} */
+export const emits = Object.keys(EVENT_TYPE)
   .map(k => EVENT_TYPE[k].replace(/_/g, '-').toLowerCase())
   .reduce((r, v) => {
     r[v] = null
     return r
   }, {})
-
-export function hackVue3 (options) {
-  // eslint-disable-next-line no-undef
-  if ((typeof __VUE_OPTIONS_API__ !== 'undefined' && __VUE_OPTIONS_API__) ||
-    // eslint-disable-next-line no-undef
-    (typeof Vue !== 'undefined' && `${Vue.version}`.startsWith('3'))) {
-    delete options.beforeDestroy
-    delete options.destroyed
-  }
-}

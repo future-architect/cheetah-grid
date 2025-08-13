@@ -1,5 +1,5 @@
 'use strict'
-const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const { VueLoaderPlugin } = require('vue-loader')
 const path = require('path')
 const rm = require('rimraf')
 const webpack = require('webpack')

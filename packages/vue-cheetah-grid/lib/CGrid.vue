@@ -39,9 +39,8 @@ import {
   cheetahGrid,
   gridUpdateWatcher,
   extend,
-  vue3Emits,
-  getSlotChildren,
-  hackVue3
+  emits,
+  getSlotChildren
 } from './c-grid/utils'
 import { slotElementsToHeaderOptions, slotElementsToHeaderProps } from './c-grid/header-utils'
 
@@ -271,10 +270,6 @@ let seq = 0
  */
 export default {
   name: 'CGrid',
-  get mixins () {
-    hackVue3(this)
-    return undefined
-  },
   provide () {
     return {
       $_CGridInstance: this
@@ -415,7 +410,7 @@ export default {
     'paste-cell': null,
     'changed-value': null,
     'changed-header-value': null,
-    ...vue3Emits
+    ...emits
   },
   data () {
     return {
@@ -536,14 +531,17 @@ export default {
     }
     _initGrid(this)
   },
-  // for Vue 3
   unmounted () {
-    destroyed(this)
-  },
-  // for Vue 2
-  // eslint-disable-next-line vue/no-deprecated-destroyed-lifecycle
-  destroyed () {
-    destroyed(this)
+    const vm = this
+    vm.$_CGrid_cancelNextTickUpdate()
+    if (vm.rawGrid) {
+      vm.rawGrid.dispose()
+      vm.rawGrid = null
+    }
+    if (vm._dataSources) {
+      vm._dataSources.forEach(dc => dc.dispose())
+    }
+    vm.$_CGrid_defineColumns = []
   },
   updated () {
     this.$_CGrid_nextTickUpdate()
@@ -742,17 +740,6 @@ export default {
       }
     }
   }
-}
-function destroyed (vm) {
-  vm.$_CGrid_cancelNextTickUpdate()
-  if (vm.rawGrid) {
-    vm.rawGrid.dispose()
-    vm.rawGrid = null
-  }
-  if (vm._dataSources) {
-    vm._dataSources.forEach(dc => dc.dispose())
-  }
-  vm.$_CGrid_defineColumns = []
 }
 </script>
 

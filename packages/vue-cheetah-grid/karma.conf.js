@@ -27,14 +27,10 @@ module.exports = function (config) {
       ]
     },
     browserNoActivityTimeout: 90000,
-    browsers: ['Chrome'
-    // 'IE_no_addons'
+    browsers: [
+      'Chrome'
     ],
     customLaunchers: {
-      IE_no_addons: {
-        base: 'IE',
-        flags: ['-extoff']
-      },
       Chrome_travis_ci: {
         base: 'ChromeHeadless',
         flags: ['--no-sandbox']

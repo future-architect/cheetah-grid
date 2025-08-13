@@ -3,7 +3,7 @@ const path = require('path')
 const { getAllVueComponentMetadata, getPropType, isRequiredProp, getMethodSignature } = require('./lib/metadata')
 const cheetahGrid = require('cheetah-grid')
 const { EVENT_TYPE } = cheetahGrid.ListGrid
-const vue3Emits = Object.keys(EVENT_TYPE)
+const allEmits = Object.keys(EVENT_TYPE)
   .map(k => EVENT_TYPE[k].replace(/_/g, '-').toLowerCase())
   .reduce((r, v) => {
     r[v] = null
@@ -42,7 +42,7 @@ ${method.name}: ${getMethodSignature(method)};
         }),
       ...additionalProperties[componentName] ? [additionalProperties[componentName]] : []
     ]
-    const emits = Object.keys(vue3Emits).map(emitName => {
+    const emits = Object.keys(allEmits).map(emitName => {
       return `
 on${pascalCase(emitName)}?: Function;
 `.trim()
@@ -96,7 +96,7 @@ type ComponentConstructor<Props = {}, Properties = {}, Slots = {}> = {
 
 ${componentTypes.join('\n')}
 
-declare module '@vue/runtime-core' {
+declare module 'vue' {
   export interface GlobalComponents {
 ${indent(components.join('\n'), 4)}
   }
