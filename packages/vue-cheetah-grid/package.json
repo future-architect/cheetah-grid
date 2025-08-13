@@ -26,7 +26,7 @@
     "build:webpack": "npm run webpack -- --mode production",
     "build:gen": "node ./scripts/gen.js",
     "webpack": "node --openssl-legacy-provider ./node_modules/webpack/bin/webpack.js",
-    "karma": "node --openssl-legacy-provider ./node_modules/karma/lib/cli.js"
+    "karma": "node --openssl-legacy-provider ./node_modules/karma/bin/karma"
   },
   "repository": {
     "type": "git",
