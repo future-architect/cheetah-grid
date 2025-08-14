@@ -1,8 +1,14 @@
 name: publish
+
 on:
   push:
     tags:
       - "*"
+
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   release:
     name: check version, and release
