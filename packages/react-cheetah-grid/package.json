@@ -1,7 +1,7 @@
 {
   "name": "react-cheetah-grid",
   "license": "MIT",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -22,14 +22,14 @@
   "module": "dist/react-cheetah-grid.es.js",
   "types": "dist/index.d.ts",
   "dependencies": {
-    "cheetah-grid": "^1"
+    "cheetah-grid": "^2.0.2"
   },
   "peerDependencies": {
     "react": ">=17.0.0",
     "react-dom": ">=17.0.0"
   },
   "devDependencies": {
-    "@rollup/plugin-typescript": "^8.3.0",
+    "@rollup/plugin-typescript": "^12.1.4",
     "@testing-library/react": "^12.1.2",
     "@types/jest": "^27.0.2",
     "@types/react": "^17.0.0",
@@ -41,17 +41,17 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-jest": "^25.2.2",
     "install": "^0.13.0",
-    "jest": "^27.3.1",
+    "jest": "^30.0.5",
     "npm": "^8.1.1",
     "postcss": "^8.3.11",
     "prettier": "^2.4.1",
     "react-router-dom": "^5.3.0",
-    "rollup-plugin-dts": "^4.0.0",
+    "rollup-plugin-dts": "^6.2.1",
     "tailwindcss": "^2.2.17",
-    "ts-jest": "^27.0.7",
-    "typescript": "^4.3.2",
-    "vite": "^2.6.4",
-    "vite-plugin-dts": "^0.9.2"
+    "ts-jest": "^29.4.1",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.2",
+    "vite-plugin-dts": "^4.5.4"
   },
   "publishConfig": {
     "tag": "next"

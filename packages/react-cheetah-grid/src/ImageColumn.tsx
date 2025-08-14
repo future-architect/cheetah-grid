@@ -1,7 +1,9 @@
-import type { TYPES } from "cheetah-grid";
+import type { columns, TYPES } from "cheetah-grid";
 import {
+  ProcessedBaseHeaderProps,
   StandardProps,
   WithFieldProps,
+  WithMessageProps,
   WithOnClick,
   parseOnClick,
   processBaseHeaderProps,
@@ -17,7 +19,13 @@ export function ImageColumn<T>(props: ImageColumnProps<T>) {
   return <div></div>;
 }
 
-export function processImageColumnProps<T>(props: ImageColumnProps<T>) {
+export function processImageColumnProps<T>(props: ImageColumnProps<T>): {
+  columnType: "image";
+  style?: TYPES.ImageStyleOption;
+  action: columns.action.BaseAction<T> | undefined;
+} & WithFieldProps<T> &
+  WithMessageProps<T> &
+  ProcessedBaseHeaderProps<T> {
   const { field, style, message } = props;
   return {
     ...processBaseHeaderProps<T>(props),

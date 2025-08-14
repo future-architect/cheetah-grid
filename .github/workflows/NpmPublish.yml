@@ -32,3 +32,9 @@ jobs:
         npm run publish:all
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+    - uses: peter-evans/create-pull-request@v7
+      with:
+        commit-message: post-release updates
+        branch: post-release
+        branch-suffix: timestamp
+        title: post-release updates

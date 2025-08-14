@@ -1,5 +1,4 @@
 import * as cheetahGrid from "cheetah-grid";
-import { OldSortOption } from "cheetah-grid/list-grid/layout-map/api";
 
 export type BaseHeaderProps<T> = {
   caption?: string | (() => string);
@@ -19,7 +18,7 @@ export type BaseHeaderProps<T> = {
     | "multilinetext"
     | "MULTILINETEXT";
   headerAction?: "CHECK" | "check" | "SORT" | "sort";
-  sort?: OldSortOption<T>;
+  sort?: cheetahGrid.TYPES.OldSortOption<T>;
   width?: number | string;
   minWidth?: number | string;
   maxWidth?: number | string;
@@ -28,7 +27,11 @@ export type BaseHeaderProps<T> = {
   rowSpan?: number;
 };
 
-export function processBaseHeaderProps<T>(props: BaseHeaderProps<T>) {
+export type ProcessedBaseHeaderProps<T> = Omit<BaseHeaderProps<T>, "children">;
+
+export function processBaseHeaderProps<T>(
+  props: BaseHeaderProps<T>
+): ProcessedBaseHeaderProps<T> {
   const {
     children,
     caption,
@@ -58,11 +61,14 @@ export function processBaseHeaderProps<T>(props: BaseHeaderProps<T>) {
   };
 }
 
-export type StandardProps<T> = BaseHeaderProps<T> & {
-  icon?:
-    | cheetahGrid.TYPES.ColumnIconOption<T>
-    | cheetahGrid.TYPES.ColumnIconOption<T>[];
+export type StandardProps<T> = BaseHeaderProps<T> &
+  WithMessageProps<T> & {
+    icon?:
+      | cheetahGrid.TYPES.ColumnIconOption<T>
+      | cheetahGrid.TYPES.ColumnIconOption<T>[];
+  };
 
+export type WithMessageProps<T> = {
   message?:
     | cheetahGrid.TYPES.Message
     | ((record: T) => cheetahGrid.TYPES.Message | null)
@@ -89,7 +95,9 @@ export function isOnClick<T>(value: {}): value is OnClick<T> {
 
 export type WithOnClick<T> = OnClick<T>;
 
-export function parseOnClick<T>(props: OnClick<T>) {
+export function parseOnClick<T>(
+  props: OnClick<T>
+): cheetahGrid.columns.action.BaseAction<T> | undefined {
   let action: cheetahGrid.columns.action.BaseAction<T> | undefined;
   const { onClick, disabled } = props;
 
@@ -118,7 +126,9 @@ function isTextEdit(value: unknown): value is TextEditProps {
   return true;
 }
 
-export function parseEditorEditable<T>(props: WithTextEditProps<T>) {
+export function parseEditorEditable<T>(
+  props: WithTextEditProps<T>
+): cheetahGrid.columns.action.BaseAction<T> | undefined {
   let action: cheetahGrid.columns.action.BaseAction<T> | undefined;
   if (isOnClick(props)) {
     action = parseOnClick<T>(props);
