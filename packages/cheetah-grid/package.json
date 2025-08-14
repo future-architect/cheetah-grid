@@ -13,7 +13,7 @@
     "datatable"
   ],
   "main": "dist/main.mjs",
-  "unpkg": "dist/main.umd.mjs",
+  "unpkg": "dist/main.umd.js",
   "exports": {
     ".": {
       "import": "./dist/main.mjs",

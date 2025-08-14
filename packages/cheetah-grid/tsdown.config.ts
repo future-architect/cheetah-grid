@@ -11,7 +11,7 @@ export default defineConfig([
 		outputOptions: {
 			name: 'cheetahGrid',
 		},
-		target: 'es2020',
+		target: 'es2019',
 		banner: {js:BANNER, css:BANNER},
 	},
 ]);
