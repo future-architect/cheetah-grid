@@ -55,7 +55,7 @@ async function checkPackageJson(pkg, pkgs) {
 			if (isPublished) {
 				if (depsName === 'dependencies' || depsName === 'devDependencies') {
 					// eslint-disable-next-line no-await-in-loop
-					await callNpm(pkg, 'i', [depsName === 'dependencies' ? '-S' : '-D', `${name}@latest`], opts);
+					await callNpm(pkg, 'i', [depsName === 'dependencies' ? '-S' : '-D', `${name}@${pkgs.pkgs[name].version}`], opts);
 				}
 				const message = `${name} version numbers do not match. expect:${pkgs.pkgs[name].version} "${pkg.rootDir}/package.json".${depsName}.${name}:"${v}" `;
 				console.error(message);
