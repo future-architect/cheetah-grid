@@ -44,3 +44,4 @@ jobs:
         branch: post-release
         branch-suffix: timestamp
         title: post-release updates
+        base: master
