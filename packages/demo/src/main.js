@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import router from './router'
+import 'cheetah-grid/main.css'
 import cheetahGrid from 'cheetah-grid'
 import CGrid from 'vue-cheetah-grid'
 import App from './App.vue'
