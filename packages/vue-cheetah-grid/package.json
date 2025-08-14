@@ -1,6 +1,6 @@
 {
   "name": "vue-cheetah-grid",
-  "version": "1.16.7",
+  "version": "2.0.0",
   "description": "Cheetah Grid for Vue.js",
   "main": "lib/index.js",
   "unpkg": "dist/vueCheetahGrid.js",
@@ -105,5 +105,8 @@
   },
   "peerDependencies": {
     "vue": "^3.0.0"
+  },
+  "publishConfig": {
+    "tag": "next"
   }
 }

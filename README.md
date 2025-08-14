@@ -23,7 +23,7 @@ The fastest open-source data table for web.
 [![npm](https://img.shields.io/npm/v/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
 
 ```html
-<script src="https://unpkg.com/cheetah-grid@1.16"></script>
+<script src="https://unpkg.com/cheetah-grid@2.0"></script>
 ```
 
 ### Downloading Cheetah Grid using npm
@@ -43,8 +43,8 @@ import * as cheetahGrid from "cheetah-grid";
 
 [![npm](https://img.shields.io/npm/v/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
 
-[main.mjs](https://unpkg.com/cheetah-grid@1.16/dist/main.mjs)
-[main.css](https://unpkg.com/cheetah-grid@1.16/dist/main.css)
+[main.mjs](https://unpkg.com/cheetah-grid@2.0/dist/main.mjs)
+[main.css](https://unpkg.com/cheetah-grid@2.0/dist/main.css)
 
 ### Downloading Cheetah Grid using GitHub
 
