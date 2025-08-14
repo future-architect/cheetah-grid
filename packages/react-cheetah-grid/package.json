@@ -42,6 +42,7 @@
     "eslint-plugin-jest": "^25.2.2",
     "install": "^0.13.0",
     "jest": "^30.0.5",
+    "jest-environment-jsdom": "^30.0.5",
     "npm": "^8.1.1",
     "postcss": "^8.3.11",
     "prettier": "^2.4.1",
