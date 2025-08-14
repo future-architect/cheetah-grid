@@ -1,6 +1,7 @@
 import { EventHandler } from "../../internal/EventHandler";
 import type { ListGridAPI } from "../../ts-types";
 import { createElement } from "../../internal/dom";
+import "./TooltipElement.css";
 
 const CLASSNAME = "cheetah-grid__tooltip-element";
 const CONTENT_CLASSNAME = `${CLASSNAME}__content`;
@@ -16,7 +17,6 @@ const ELEMENT_WIDTH_CSS_PROP_NAME = `${CSS_PROP_NAME_PREFIX}width`;
 const ELEMENT_HEIGHT_CSS_PROP_NAME = `${CSS_PROP_NAME_PREFIX}height`;
 
 function createTooltipDomElement(): HTMLElement {
-  require("@/tooltip/internal/TooltipElement.css");
   const rootElement = createElement("div", {
     classList: [CLASSNAME, HIDDEN_CLASSNAME],
   });

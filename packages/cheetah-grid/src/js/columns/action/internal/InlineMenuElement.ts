@@ -10,6 +10,7 @@ import {
 } from "../../../internal/dom";
 import { EventHandler } from "../../../internal/EventHandler";
 import { event } from "../../../internal/utils";
+import "./InlineMenuElement.css";
 
 const KEY_TAB = 9;
 const KEY_ENTER = 13;
@@ -45,7 +46,6 @@ function findItemParents(target: HTMLElement | null): HTMLElement | null {
 }
 
 function createMenuElement(): HTMLUListElement {
-  require("@/columns/action/internal/InlineMenuElement.css");
   const el = createElement("ul", { classList: CLASSNAME });
   el.popover = "manual";
   return el;

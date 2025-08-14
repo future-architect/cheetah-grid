@@ -1,6 +1,7 @@
 import type { ListGridAPI, MessageObject } from "../../../ts-types";
 import { EventHandler } from "../../../internal/EventHandler";
 import { createElement } from "../../../internal/dom";
+import "./MessageElement.css";
 
 const CLASSNAME = "cheetah-grid__message-element";
 const MESSAGE_CLASSNAME = `${CLASSNAME}__message`;
@@ -18,7 +19,6 @@ const ELEMENT_HEIGHT_CSS_PROP_NAME = `${CSS_PROP_NAME_PREFIX}height`;
 const LEFT_DIFF_CSS_PROP_NAME = "--cheetah-grid-message-element-left-diff";
 
 function createMessageDomElement(): HTMLElement {
-  require("@/columns/message/internal/MessageElement.css");
   const rootElement = createElement("div", {
     classList: [CLASSNAME, HIDDEN_CLASSNAME],
   });

@@ -189,6 +189,13 @@ module.exports = {
 		'prefer-named-capture-group': 'off',
 		'sort-imports': 'off'
 
-	}
-
+	},
+	'overrides': [
+		{
+			'files': ['*.ts', '**/*.ts'],
+			'parserOptions': {
+				'sourceType': 'module',
+			}
+		},
+	]
 };

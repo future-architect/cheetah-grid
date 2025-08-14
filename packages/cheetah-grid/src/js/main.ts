@@ -7,12 +7,12 @@ import * as icons from "./icons";
 import * as register from "./register";
 import * as themes from "./themes";
 import * as tools from "./tools";
-import {
+import { ListGrid } from "./ListGrid";
+import type {
   ColumnDefine,
   GroupHeaderDefine,
   HeaderDefine,
   HeadersDefine,
-  ListGrid,
   ListGridConstructorOptions,
 } from "./ListGrid";
 import { GridCanvasHelper } from "./GridCanvasHelper";

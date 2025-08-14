@@ -1,3 +1,5 @@
+import "./style.css";
+
 function getScrollBarWidth() {
   const wrapper = document.createElement("div");
   const inner = document.createElement("div");
@@ -23,7 +25,6 @@ function getScrollBarWidth() {
 
 let SCROLLBAR_SIZE: number;
 function initDocumentInternal(): void {
-  require("@/internal/style.css");
   SCROLLBAR_SIZE = getScrollBarWidth() || 10;
   const style = document.createElement("style");
   style.setAttribute("type", "text/css");

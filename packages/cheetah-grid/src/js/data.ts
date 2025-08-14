@@ -1,4 +1,5 @@
-import { DataSource, DataSourceParam } from "./data/DataSource";
+import type { DataSourceParam } from "./data/DataSource";
+import { DataSource } from "./data/DataSource";
 import { CachedDataSource } from "./data/CachedDataSource";
 import { FilterDataSource } from "./data/FilterDataSource";
 
@@ -7,10 +8,6 @@ import { FilterDataSource } from "./data/FilterDataSource";
  * @namespace cheetahGrid.data
  * @memberof cheetahGrid
  */
-export {
-  DataSource,
-  CachedDataSource,
-  FilterDataSource,
-  //types
-  DataSourceParam,
-};
+export { DataSource, CachedDataSource, FilterDataSource };
+//types
+export type { DataSourceParam };
