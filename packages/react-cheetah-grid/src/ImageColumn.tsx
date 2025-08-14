@@ -1,5 +1,4 @@
-import { ImageStyleOption } from "cheetah-grid/ts-types/column/style";
-
+import type { TYPES } from "cheetah-grid";
 import {
   StandardProps,
   WithFieldProps,
@@ -9,7 +8,7 @@ import {
 } from "./columnProps";
 
 export type ImageColumnProps<T> = {
-  style?: ImageStyleOption;
+  style?: TYPES.ImageStyleOption;
 } & StandardProps<T> &
   WithFieldProps<T> &
   WithOnClick<T>;

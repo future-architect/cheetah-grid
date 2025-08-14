@@ -7,4 +7,8 @@ export * from "./define";
 export * from "./data";
 export * from "./grid-engine";
 
-export type { ColumnDefine, HeadersDefine } from "../list-grid/layout-map/api";
+export type {
+  ColumnDefine,
+  HeadersDefine,
+  OldSortOption,
+} from "../list-grid/layout-map/api";

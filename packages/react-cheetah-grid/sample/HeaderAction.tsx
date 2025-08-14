@@ -1,4 +1,3 @@
-import { ChangedHeaderValueCellEvent } from "cheetah-grid/ts-types";
 import { useCallback } from "react";
 import {
   CheetahGrid,
@@ -10,6 +9,7 @@ import {
   Header,
   useCheetahGridInstance,
 } from "../src/index";
+import type { TYPES } from "cheetah-grid";
 
 type Record = {
   personid: number;
@@ -95,7 +95,7 @@ const records: Record[] = [
 export function HeaderAction() {
   const [instance, instanceRef] = useCheetahGridInstance();
   const onChangeHeaderValue = useCallback(
-    (v: ChangedHeaderValueCellEvent) => {
+    (v: TYPES.ChangedHeaderValueCellEvent) => {
       console.log(v);
       for (const record of records) {
         record.check = v.value;

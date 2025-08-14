@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import type { MutableRefObject } from "react";
-import { ListGrid } from "cheetah-grid";
-import { Selection } from "cheetah-grid/ts-types/grid-engine";
+import { ListGrid, TYPES } from "cheetah-grid";
 
 export class CheetahGridInstance<T> {
   private _cg: ListGrid<T>;
@@ -22,7 +21,7 @@ export class CheetahGridInstance<T> {
     }
   }
 
-  get selection(): Selection {
+  get selection(): TYPES.Selection {
     return this._cg.selection;
   }
 }

@@ -1,5 +1,4 @@
 import * as cheetahGrid from "cheetah-grid";
-import { ButtonStyleOption } from "cheetah-grid/ts-types/column/style";
 
 import { processBaseHeaderProps, StandardProps } from "./columnProps";
 
@@ -8,7 +7,7 @@ export type ButtonColumnProps<T> = {
   buttonBgColor?: string;
   onClick: (row: T) => void;
   disabled?: boolean;
-  style?: ButtonStyleOption;
+  style?: cheetahGrid.TYPES.ButtonStyleOption;
 } & StandardProps<T>;
 
 export function ButtonColumn<T>(props: ButtonColumnProps<T>) {

@@ -1,5 +1,4 @@
 import * as cheetahGrid from "cheetah-grid";
-import { PercentCompleteBarStyleOption } from "cheetah-grid/ts-types/column/style";
 
 import {
   parseOnClick,
@@ -10,7 +9,7 @@ import {
 } from "./columnProps";
 
 export type PercentCompleteBarColumnProps<T> = {
-  style?: PercentCompleteBarStyleOption;
+  style?: cheetahGrid.TYPES.PercentCompleteBarStyleOption;
   formatter?: (v: string) => string;
   min?: number;
   max?: number;

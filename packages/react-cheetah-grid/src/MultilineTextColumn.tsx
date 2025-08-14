@@ -1,5 +1,4 @@
-import { MultilineTextStyleOption } from "cheetah-grid/ts-types/column/style";
-
+import type { TYPES } from "cheetah-grid";
 import {
   parseOnClick,
   processBaseHeaderProps,
@@ -9,7 +8,7 @@ import {
 } from "./columnProps";
 
 export type MultilineTextColumnProps<T> = {
-  style?: MultilineTextStyleOption;
+  style?: TYPES.MultilineTextStyleOption;
 } & StandardProps<T> &
   WithFieldProps<T> &
   WithOnClick<T>;

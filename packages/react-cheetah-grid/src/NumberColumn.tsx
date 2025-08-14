@@ -1,5 +1,4 @@
 import * as cheetahGrid from "cheetah-grid";
-import { NumberStyleOption } from "cheetah-grid/columns/style";
 
 import {
   StandardProps,
@@ -10,7 +9,7 @@ import {
 } from "./columnProps";
 
 export type NumberColumnProps<T> = {
-  style?: NumberStyleOption;
+  style?: cheetahGrid.TYPES.NumberStyleOption;
   format?: Intl.NumberFormat;
 } & StandardProps<T> &
   WithFieldProps<T> &

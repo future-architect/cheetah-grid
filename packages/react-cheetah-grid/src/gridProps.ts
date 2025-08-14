@@ -1,22 +1,6 @@
 import { MutableRefObject } from "react";
 import type { ReactElement } from "react";
-import { ListGrid } from "cheetah-grid";
-
-import type {
-  MouseCellEvent,
-  MousePointerCellEvent,
-  SelectedCellEvent,
-  TouchCellEvent,
-  KeydownEvent,
-  InputCellEvent,
-  PasteCellEvent,
-  ChangedValueCellEvent,
-  ScrollEvent,
-  ChangedHeaderValueCellEvent,
-  ModifyStatusEditableinputCellEvent,
-} from "cheetah-grid/ts-types/events";
-import { CellAddress, ThemeDefine } from "cheetah-grid/ts-types";
-import { DataSource } from "cheetah-grid/data";
+import { data, ListGrid, TYPES } from "cheetah-grid";
 import { StandardProps } from "./columnProps";
 import type { BodyLayoutProps, HeaderLayoutProps, LineProps } from "./Layout";
 export type ColumnResizeEvent = {
@@ -32,27 +16,29 @@ export type Style = {
 };
 
 type CheetahGridEventProps<T> = {
-  onCellClick?: (e: MouseCellEvent) => void;
-  onCellDoubleClick?: (e: MouseCellEvent) => void;
-  onCellDoubleTap?: (e: TouchCellEvent) => void;
-  onCellMouseDown?: (e: MouseCellEvent) => void;
-  onCellMouseUp?: (e: MouseCellEvent) => void;
-  onCellSelect?: (e: SelectedCellEvent) => void;
-  onKeyDown?: (e: KeydownEvent) => void;
-  onCellMouseMove?: (e: MouseCellEvent) => void;
-  onCellMouseEnter?: (e: MousePointerCellEvent) => void;
-  onCellMouseLeave?: (e: MousePointerCellEvent) => void;
-  onCellMouseOver?: (e: MousePointerCellEvent) => void;
-  onCellMouseOut?: (e: MousePointerCellEvent) => void;
-  onCellInput?: (e: InputCellEvent) => void;
-  onCellPaste?: (e: PasteCellEvent) => void;
-  onCellContextMenu?: (e: MouseCellEvent) => void;
+  onCellClick?: (e: TYPES.MouseCellEvent) => void;
+  onCellDoubleClick?: (e: TYPES.MouseCellEvent) => void;
+  onCellDoubleTap?: (e: TYPES.TouchCellEvent) => void;
+  onCellMouseDown?: (e: TYPES.MouseCellEvent) => void;
+  onCellMouseUp?: (e: TYPES.MouseCellEvent) => void;
+  onCellSelect?: (e: TYPES.SelectedCellEvent) => void;
+  onKeyDown?: (e: TYPES.KeydownEvent) => void;
+  onCellMouseMove?: (e: TYPES.MouseCellEvent) => void;
+  onCellMouseEnter?: (e: TYPES.MousePointerCellEvent) => void;
+  onCellMouseLeave?: (e: TYPES.MousePointerCellEvent) => void;
+  onCellMouseOver?: (e: TYPES.MousePointerCellEvent) => void;
+  onCellMouseOut?: (e: TYPES.MousePointerCellEvent) => void;
+  onCellInput?: (e: TYPES.InputCellEvent) => void;
+  onCellPaste?: (e: TYPES.PasteCellEvent) => void;
+  onCellContextMenu?: (e: TYPES.MouseCellEvent) => void;
   onColumnResize?: (e: ColumnResizeEvent) => void;
-  onScroll?: (e: ScrollEvent) => void;
-  onCellEditableInput?: (e: CellAddress) => boolean | void;
-  onModifyStatusEditableInput?: (e: ModifyStatusEditableinputCellEvent) => void;
-  onValueChange?: (e: ChangedValueCellEvent<T>) => void;
-  onHeaderValueChange?: (e: ChangedHeaderValueCellEvent) => void;
+  onScroll?: (e: TYPES.ScrollEvent) => void;
+  onCellEditableInput?: (e: TYPES.CellAddress) => boolean | void;
+  onModifyStatusEditableInput?: (
+    e: TYPES.ModifyStatusEditableinputCellEvent
+  ) => void;
+  onValueChange?: (e: TYPES.ChangedValueCellEvent<T>) => void;
+  onHeaderValueChange?: (e: TYPES.ChangedHeaderValueCellEvent) => void;
   onFocus?: (e: FocusEvent) => void;
   onBlur?: (e: FocusEvent) => void;
 };
@@ -70,7 +56,7 @@ type CheetahGridStdProps<T> = {
   defaultRowHeight?: number;
   headerRowHeight?: number;
   instance?: MutableRefObject<ListGrid<T> | undefined>;
-  theme?: ThemeDefine | string;
+  theme?: TYPES.ThemeDefine | string;
 };
 
 type StaticRecordProps<T> = {
@@ -84,7 +70,7 @@ export function isStaticRecordProps<
 }
 
 type DataSourceProps<T> = {
-  dataSource: DataSource<T>;
+  dataSource: data.DataSource<T>;
 };
 
 export function isDataSourceProps<T>(value: {}): value is DataSourceProps<T> {
@@ -92,7 +78,7 @@ export function isDataSourceProps<T>(value: {}): value is DataSourceProps<T> {
 }
 
 type DataProps<T> = {
-  data: T[] | DataSource<T>;
+  data: T[] | data.DataSource<T>;
 };
 
 export function isDataProps<T>(value: {}): value is DataProps<T> {

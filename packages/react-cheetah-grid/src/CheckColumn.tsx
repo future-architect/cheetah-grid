@@ -1,5 +1,4 @@
-import { CheckStyleOption } from "cheetah-grid/ts-types/column/style";
-
+import type { TYPES } from "cheetah-grid";
 import {
   StandardProps,
   WithFieldProps,
@@ -9,7 +8,7 @@ import {
 } from "./columnProps";
 
 export type CheckColumnProps<T> = {
-  style?: CheckStyleOption;
+  style?: TYPES.CheckStyleOption;
 } & StandardProps<T> &
   WithFieldProps<T> &
   WithWidgetEditableProps<T>;
