@@ -129,7 +129,8 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 				width: '15%',
 				// minWidth: '200px',
 				sort: true,
-				headerStyle: {multiline: true, padding: 18}
+				headerStyle: {multiline: true, padding: 18},
+				// message: () => 'Email address of the person'
 			},
 			{
 				caption: 'nums',

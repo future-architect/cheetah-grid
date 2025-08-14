@@ -7,6 +7,14 @@ const CONTENT_CLASSNAME = `${CLASSNAME}__content`;
 const HIDDEN_CLASSNAME = `${CLASSNAME}--hidden`;
 const SHOWN_CLASSNAME = `${CLASSNAME}--shown`;
 
+const CSS_PROP_NAME_PREFIX = "--cheetah-grid-tooltip-element-";
+const CELL_TOP_CSS_PROP_NAME = `${CSS_PROP_NAME_PREFIX}cell-top`;
+const CELL_BOTTOM_CSS_PROP_NAME = `${CSS_PROP_NAME_PREFIX}cell-bottom`;
+const CELL_LEFT_CSS_PROP_NAME = `${CSS_PROP_NAME_PREFIX}cell-left`;
+const CELL_RIGHT_CSS_PROP_NAME = `${CSS_PROP_NAME_PREFIX}cell-right`;
+const ELEMENT_WIDTH_CSS_PROP_NAME = `${CSS_PROP_NAME_PREFIX}width`;
+const ELEMENT_HEIGHT_CSS_PROP_NAME = `${CSS_PROP_NAME_PREFIX}height`;
+
 function createTooltipDomElement(): HTMLElement {
   require("@/tooltip/internal/TooltipElement.css");
   const rootElement = createElement("div", {
@@ -16,6 +24,7 @@ function createTooltipDomElement(): HTMLElement {
     classList: [CONTENT_CLASSNAME],
   });
   rootElement.appendChild(messageElement);
+  rootElement.popover = "manual";
   return rootElement;
 }
 
@@ -55,22 +64,15 @@ export class TooltipElement<T> {
 
     rootElement.classList.remove(SHOWN_CLASSNAME);
     rootElement.classList.add(HIDDEN_CLASSNAME);
+    rootElement.hidePopover();
 
-    if (this._attachCell(grid, col, row)) {
-      rootElement.classList.add(SHOWN_CLASSNAME);
-      rootElement.classList.remove(HIDDEN_CLASSNAME);
-
-      messageElement.textContent = content;
-    } else {
+    messageElement.textContent = content;
+    if (!this._attachCell(grid, col, row)) {
       this._detach();
     }
   }
   move(grid: ListGridAPI<T>, col: number, row: number): void {
-    const rootElement = this._rootElement;
-    if (this._attachCell(grid, col, row)) {
-      rootElement.classList.add(SHOWN_CLASSNAME);
-      rootElement.classList.remove(HIDDEN_CLASSNAME);
-    } else {
+    if (!this._attachCell(grid, col, row)) {
       this._detach();
     }
   }
@@ -84,6 +86,8 @@ export class TooltipElement<T> {
       rootElement.classList.remove(SHOWN_CLASSNAME);
       rootElement.classList.add(HIDDEN_CLASSNAME);
     }
+
+    rootElement.hidePopover();
   }
   _attachCell(grid: ListGridAPI<T>, col: number, row: number): boolean {
     const rootElement = this._rootElement;
@@ -91,60 +95,80 @@ export class TooltipElement<T> {
       grid.getCellRange(col, row)
     );
 
-    const { bottom: top, left, width } = rect;
     const { frozenRowCount, frozenColCount } = grid;
     if (row >= frozenRowCount && frozenRowCount > 0) {
       const { rect: frozenRect } = grid.getAttachCellsArea(
         grid.getCellRange(col, frozenRowCount - 1)
       );
-      if (top < frozenRect.bottom) {
-        return false; //範囲外
+      if (rect.bottom < frozenRect.bottom) {
+        return false; // Outside the rectangle.
       }
     } else {
-      if (top < 0) {
-        return false; //範囲外
+      if (rect.bottom < 0) {
+        return false; // Outside the rectangle.
       }
     }
     if (col >= frozenColCount && frozenColCount > 0) {
       const { rect: frozenRect } = grid.getAttachCellsArea(
         grid.getCellRange(frozenColCount - 1, row)
       );
-      if (left < frozenRect.right) {
-        return false; //範囲外
+      if (rect.left < frozenRect.right) {
+        return false; // Outside the rectangle.
       }
     } else {
-      if (left < 0) {
-        return false; //範囲外
+      if (rect.left < 0) {
+        return false; // Outside the rectangle.
       }
     }
     const {
       height: offsetHeight,
       width: offsetWidth,
       left: elementLeft,
-      right: elementRight,
+      top: elementTop,
     } = element.getBoundingClientRect();
-    if (offsetHeight < top) {
-      return false; //範囲外
+    if (offsetHeight < rect.bottom) {
+      return false; // Outside the rectangle.
     }
-    if (offsetWidth < left) {
-      return false; //範囲外
+    if (offsetWidth < rect.left) {
+      return false; // Outside the rectangle.
     }
-    const cellCenter = left + width / 2;
 
-    rootElement.style.top = `${top.toFixed()}px`;
-    rootElement.style.left = `${cellCenter.toFixed()}px`;
-    rootElement.style.minWidth = `${width.toFixed()}px`;
-
-    const maxWidthForLeft = (elementLeft + cellCenter) * 2;
-    const winWidth = window.innerWidth;
-    const maxWidthForRight =
-      (offsetWidth - cellCenter + (winWidth - elementRight)) * 2;
-    const maxWidth = Math.min(maxWidthForLeft, maxWidthForRight);
-    rootElement.style.maxWidth = `${maxWidth.toFixed()}px`;
+    rootElement.style.setProperty(
+      CELL_TOP_CSS_PROP_NAME,
+      `${(elementTop + rect.top).toFixed()}px`
+    );
+    rootElement.style.setProperty(
+      CELL_BOTTOM_CSS_PROP_NAME,
+      `${(elementTop + rect.bottom).toFixed()}px`
+    );
+    rootElement.style.setProperty(
+      CELL_LEFT_CSS_PROP_NAME,
+      `${(elementLeft + rect.left).toFixed()}px`
+    );
+    rootElement.style.setProperty(
+      CELL_RIGHT_CSS_PROP_NAME,
+      `${(elementLeft + rect.right).toFixed()}px`
+    );
 
     if (rootElement.parentElement !== element) {
       element.appendChild(rootElement);
     }
+
+    rootElement.showPopover();
+
+    const rootElementRect = rootElement.getBoundingClientRect();
+    rootElement.style.setProperty(
+      ELEMENT_WIDTH_CSS_PROP_NAME,
+      `${rootElementRect.width.toFixed()}px`
+    );
+    rootElement.style.setProperty(
+      ELEMENT_HEIGHT_CSS_PROP_NAME,
+      `${rootElementRect.height.toFixed()}px`
+    );
+
+    rootElement.classList.add(SHOWN_CLASSNAME);
+    rootElement.classList.remove(HIDDEN_CLASSNAME);
+
     return true;
   }
 }

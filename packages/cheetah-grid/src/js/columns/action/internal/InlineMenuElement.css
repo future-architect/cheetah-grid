@@ -1,33 +1,54 @@
 .cheetah-grid__inline-menu {
-	position: absolute;
+	position: fixed;
 	color: rgba(0, 0, 0, .87);
-	box-sizing: content-box;
-	margin: -1px auto auto -1px;
+	box-sizing: border-box;
+	margin: -1px 0 0 -1px;
 	padding: 8px 0;
 	background-color: #fafafa;
 	list-style-type: none;
 	border-radius: 2px;
+	border-width: 0;
 	max-height: calc(100vh - 40px);
 	overflow-y: auto;
+
+	--cheetah-grid-inline-menu-cell-width: calc(var(--cheetah-grid-inline-menu-cell-right) - var(--cheetah-grid-inline-menu-cell-left));
+	--cheetah-grid-inline-menu-cell-height: calc(var(--cheetah-grid-inline-menu-cell-bottom) - var(--cheetah-grid-inline-menu-cell-top));
+
+	top:
+		clamp(
+			20px,
+			calc(var(--cheetah-grid-inline-menu-cell-top) - var(--cheetah-grid-inline-menu-target-item-offset-top) - 8px),
+			calc(100vh - 20px - var(--cheetah-grid-inline-menu-height))
+		);
+	left: var(--cheetah-grid-inline-menu-cell-left);
+	width: calc(var(--cheetah-grid-inline-menu-cell-width) + 1px);
+	transform-origin: center calc(var(--cheetah-grid-inline-menu-target-item-offset-top) + var(--cheetah-grid-inline-menu-target-item-height) / 2) 0;
 }
 .cheetah-grid__inline-menu--hidden {
-	transform: scale(.9);
 	box-shadow: none;
 	opacity: 0;
 	pointer-events: none;
-	transition: all 50ms ease-out;
 }
 .cheetah-grid__inline-menu--hidden * {
 	pointer-events: none;
 }
 .cheetah-grid__inline-menu--shown {
-	transform: translateY(-7px);
 	box-shadow: 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12);
 	opacity: 1;
-	transition: all 150ms ease-out;
+	animation: cheetah-grid__inline-menu--shown-animation 150ms ease-out;
+}
+
+@keyframes cheetah-grid__inline-menu--shown-animation {
+	0% {
+		opacity: 0;
+		transform: scale(.9);
+	}
+	100% {
+		opacity: 1;
+		transform: scale(1);
+	}
 }
 .cheetah-grid__inline-menu__menu-item {
-	height: 100%;
 	box-sizing: border-box;
 	display: flex;
 	align-items: center;
@@ -37,6 +58,7 @@
 	position: relative;
 	overflow: hidden;
 	padding: 0 16px;
+	min-height: calc(var(--cheetah-grid-inline-menu-cell-height) + 1px);
 }
 .cheetah-grid__inline-menu__menu-item--empty {
 	color: rgba(0, 0, 0, .38);
