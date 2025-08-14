@@ -5,3 +5,4 @@
 - [vue-cheetah-grid](./vue-cheetah-grid) - package `vue-cheetah-grid`
 - [demo](./demo) - demo site sources
 - [docs](./docs) - documentation site sources
+- [react-cheetah-grid](./react-cheetah-grid) - package `react-cheetah-grid`

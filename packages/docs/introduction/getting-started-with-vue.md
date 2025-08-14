@@ -17,7 +17,7 @@ npm install -S vue-cheetah-grid
 ```js
 import vueCheetahGrid from "vue-cheetah-grid";
 
-Vue.use(vueCheetahGrid);
+app.use(vueCheetahGrid);
 ```
 
 ### Via CDN
@@ -25,17 +25,14 @@ Vue.use(vueCheetahGrid);
 [![npm](https://img.shields.io/npm/v/vue-cheetah-grid.svg)](https://www.npmjs.com/package/vue-cheetah-grid)
 
 ```html
-<script src="https://unpkg.com/cheetah-grid@1.16"></script>
-<script src="https://unpkg.com/vue-cheetah-grid@1.16"></script>
+<link rel="stylesheet" href="https://unpkg.com/cheetah-grid@2.0/main.css" />
+<script src="https://unpkg.com/cheetah-grid@2.0"></script>
+<script src="https://unpkg.com/vue-cheetah-grid@2.0"></script>
 ```
 
 ```js
-Vue.use(vueCheetahGrid);
+app.use(vueCheetahGrid);
 ```
-
-:::warning
-This usage only supports Vue.js v2.
-:::
 
 ## Vue Instance & Template
 
