@@ -212,7 +212,9 @@ export default {
 
 <!-- EVENTS_TABLE_END -->
 
-and more...
+and more.\
+In addition to the above, you can also use event names emitted by ListGrid in kebab-case.\
+Please see [JS API Events](../../js/events.md) for details.
 
 :::tip
 The events for which the column can be identified emit the same event to each column definition component.  
