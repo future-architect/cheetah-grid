@@ -35,8 +35,8 @@ npm install -S cheetah-grid
 ```
 
 ```js
-import * as cheetahGrid from "cheetah-grid";
 import "cheetah-grid/main.css";
+import * as cheetahGrid from "cheetah-grid";
 ```
 
 ### Downloading Cheetah Grid source code
