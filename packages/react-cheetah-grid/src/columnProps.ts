@@ -1,18 +1,14 @@
 import * as cheetahGrid from "cheetah-grid";
-import type { BaseAction } from "cheetah-grid/columns/action/BaseAction";
-import type { Message } from "cheetah-grid/ts-types/data";
-import type {
-  ColumnIconOption,
-  HeaderStyleOption,
-} from "cheetah-grid/ts-types";
-import { BaseStyle } from "cheetah-grid/columns/style";
 import { OldSortOption } from "cheetah-grid/list-grid/layout-map/api";
 
 export type BaseHeaderProps<T> = {
   caption?: string | (() => string);
   children?: string;
   headerField?: string;
-  headerStyle?: HeaderStyleOption | BaseStyle | null;
+  headerStyle?:
+    | cheetahGrid.TYPES.HeaderStyleOption
+    | cheetahGrid.columns.style.BaseStyle
+    | null;
   headerType?:
     | "DEFAULT"
     | "default"
@@ -63,13 +59,19 @@ export function processBaseHeaderProps<T>(props: BaseHeaderProps<T>) {
 }
 
 export type StandardProps<T> = BaseHeaderProps<T> & {
-  icon?: ColumnIconOption<T> | ColumnIconOption<T>[];
+  icon?:
+    | cheetahGrid.TYPES.ColumnIconOption<T>
+    | cheetahGrid.TYPES.ColumnIconOption<T>[];
 
   message?:
-    | Message
-    | ((record: T) => Message | null)
+    | cheetahGrid.TYPES.Message
+    | ((record: T) => cheetahGrid.TYPES.Message | null)
     | keyof T
-    | (Message | ((record: T) => Message | null) | keyof T)[];
+    | (
+        | cheetahGrid.TYPES.Message
+        | ((record: T) => cheetahGrid.TYPES.Message | null)
+        | keyof T
+      )[];
 };
 
 export type WithFieldProps<T> = {
@@ -88,7 +90,7 @@ export function isOnClick<T>(value: {}): value is OnClick<T> {
 export type WithOnClick<T> = OnClick<T>;
 
 export function parseOnClick<T>(props: OnClick<T>) {
-  let action: BaseAction<T> | undefined;
+  let action: cheetahGrid.columns.action.BaseAction<T> | undefined;
   const { onClick, disabled } = props;
 
   if (onClick) {
@@ -117,7 +119,7 @@ function isTextEdit(value: unknown): value is TextEditProps {
 }
 
 export function parseEditorEditable<T>(props: WithTextEditProps<T>) {
-  let action: BaseAction<T> | undefined;
+  let action: cheetahGrid.columns.action.BaseAction<T> | undefined;
   if (isOnClick(props)) {
     action = parseOnClick<T>(props);
   } else if (isTextEdit(props)) {
@@ -146,7 +148,7 @@ export function parseWidgetEditable<T>(
   widget: "checkbox" | "radio",
   props: WithWidgetEditableProps<T>
 ) {
-  let action: BaseAction<T> | undefined;
+  let action: cheetahGrid.columns.action.BaseAction<T> | undefined;
   if (isOnClick(props)) {
     action = parseOnClick<T>(props);
   } else {

@@ -35,21 +35,16 @@ npm install -S cheetah-grid
 ```
 
 ```js
+import "cheetah-grid/main.css";
 import * as cheetahGrid from "cheetah-grid";
-
-// or
-
-const cheetahGrid = require("cheetah-grid");
 ```
 
 ### Downloading Cheetah Grid source code
 
 [![npm](https://img.shields.io/npm/v/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
 
-[cheetahGrid.min.js](https://unpkg.com/cheetah-grid@1.16/dist/cheetahGrid.min.js)
-
-SourceMap  
-[cheetahGrid.min.js.map](https://unpkg.com/cheetah-grid@1.16/dist/cheetahGrid.min.js.map)
+[main.mjs](https://unpkg.com/cheetah-grid@1.16/dist/main.mjs)
+[main.css](https://unpkg.com/cheetah-grid@1.16/dist/main.css)
 
 ### Downloading Cheetah Grid using GitHub
 

@@ -1,6 +1,9 @@
 /**
  * core styles
  */
+:root {
+	--cheetah-grid-css-enable: 1;
+}
 .cheetah-grid .grid-scrollable {
 	height: 100%;
 	width: 100%;

@@ -3,6 +3,7 @@ import { event, then } from "../../../internal/utils";
 import { EventHandler } from "../../../internal/EventHandler";
 import { createElement } from "../../../internal/dom";
 import { setInputValue } from "./input-value-handler";
+import "./SmallDialogInputElement.css";
 
 const CLASSNAME = "cheetah-grid__small-dialog-input";
 const INPUT_CLASSNAME = `${CLASSNAME}__input`;
@@ -42,7 +43,6 @@ function _focus(input: HTMLInputElement, handler: EventHandler): void {
 }
 
 function createDialogElement(): HTMLDivElement {
-  require("@/columns/action/internal/SmallDialogInputElement.css");
   const element = createElement("div", {
     classList: [CLASSNAME, HIDDEN_CLASSNAME],
   });

@@ -60,7 +60,7 @@ export default {
 ### `default` slot
 
 Use this slot to set the simple header definition.  
-The definition is set to `header` property described in [Define Headers and Columns]
+The definition is set to `header` property described in [Define Headers and Columns](../../js/headers_columns.md)
 
 <!-- SLOT_DEFAULT_END -->
 
@@ -70,7 +70,7 @@ The definition is set to `header` property described in [Define Headers and Colu
 
 Use this slot to set the layout header definition.  
 Use this slot in combination with the `layout-body` slot.  
-The definition is set to `layout.header` property described in [Advanced Layout].
+The definition is set to `layout.header` property described in [Advanced Layout](../advanced_layout/index.md).
 
 <!-- SLOT_LAYOUT-HEADER_END -->
 
@@ -80,7 +80,7 @@ The definition is set to `layout.header` property described in [Advanced Layout]
 
 Use this slot to set the layout body definition.  
 Use this slot in combination with the `layout-header` slot.  
-The definition is set to `layout.body` property described in [Advanced Layout].
+The definition is set to `layout.body` property described in [Advanced Layout](../advanced_layout/index.md).
 
 <!-- SLOT_LAYOUT-BODY_END -->
 
@@ -212,7 +212,9 @@ export default {
 
 <!-- EVENTS_TABLE_END -->
 
-and more...
+and more.\
+In addition to the above, you can also use event names emitted by ListGrid in kebab-case.\
+Please see [JS API Events](../../js/events.md) for details.
 
 :::tip
 The events for which the column can be identified emit the same event to each column definition component.  

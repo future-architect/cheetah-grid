@@ -3,13 +3,13 @@ import type { ListGridAPI } from "../../../ts-types";
 import { createElement } from "../../../internal/dom";
 import { event } from "../../../internal/utils";
 import { setInputValue } from "./input-value-handler";
+import "./InlineInputElement.css";
 const KEY_TAB = 9;
 const KEY_ENTER = 13;
 
 const CLASSNAME = "cheetah-grid__inline-input";
 
 function createInputElement(): HTMLInputElement {
-  require("@/columns/action/internal/InlineInputElement.css");
   return createElement("input", { classList: CLASSNAME });
 }
 

@@ -1,3 +1,5 @@
+import "./style.css";
+
 function getScrollBarWidth() {
   const wrapper = document.createElement("div");
   const inner = document.createElement("div");
@@ -21,10 +23,28 @@ function getScrollBarWidth() {
   return Math.ceil(wrapperWidth - innerWidth);
 }
 
+function validateCSSLoaded() {
+  const style = getComputedStyle(document.body);
+  if (style.getPropertyValue("--cheetah-grid-css-enable") !== "1") {
+    console.warn(`Cheetah Grid CSS is not enabled!
+Please load 'cheetah-grid/main.css' before running the cheetah-grid script.
+
+For example, if you bundle your application:
+
+  import 'cheetah-grid/main.css'
+
+For example, if you use CDN:
+
+  <link rel="stylesheet" href="https://unpkg.com/cheetah-grid@2/main.css" />
+`);
+  }
+}
+
 let SCROLLBAR_SIZE: number;
 function initDocumentInternal(): void {
-  require("@/internal/style.css");
+  validateCSSLoaded();
   SCROLLBAR_SIZE = getScrollBarWidth() || 10;
+
   const style = document.createElement("style");
   style.setAttribute("type", "text/css");
   style.setAttribute("data-name", "cheetah-grid");
@@ -34,14 +54,12 @@ function initDocumentInternal(): void {
 	height: ${SCROLLBAR_SIZE}px;
 }
 .cheetah-grid > canvas {
-	width: -webkit-calc(100% - ${SCROLLBAR_SIZE}px);
 	width: calc(100% - ${SCROLLBAR_SIZE}px);
-	height: -webkit-calc(100% - ${SCROLLBAR_SIZE}px);
 	height: calc(100% - ${SCROLLBAR_SIZE}px);
 }
-		`;
+`;
 
-  document.head.appendChild(style);
+  document.body.appendChild(style);
 }
 
 let initDocumentVar = initDocumentInternal;

@@ -1,12 +1,7 @@
 // Karma configuration
 // Generated on Thu Jan 19 2017 10:39:28 GMT+0900 (東京 (標準時))
 'use strict';
-let mintarget = false;
-process.argv.forEach((val) => {
-	if (val === '--min') {
-		mintarget = true;
-	}
-});
+
 module.exports = function(config) {
 	config.set({
 
@@ -24,7 +19,8 @@ module.exports = function(config) {
 			require.resolve('promise-polyfills'),
 			require.resolve('image-matcher'),
 			'src/test/specs/test-helper.js',
-			mintarget ? 'dist/cheetahGrid.min.js' : 'dist/cheetahGrid.js',
+			'dist/main.css',
+			'dist/main.umd.js',
 			'src/test/specs/*_spec.js',
 			'src/test/specs/**/*_spec.js',
 		],

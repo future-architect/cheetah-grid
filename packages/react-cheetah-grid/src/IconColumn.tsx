@@ -1,5 +1,4 @@
 import * as cheetahGrid from "cheetah-grid";
-import { IconStyleOption } from "cheetah-grid/ts-types/column/style";
 
 import {
   StandardProps,
@@ -10,7 +9,7 @@ import {
 } from "./columnProps";
 
 export type IconColumnProps<T> = {
-  style?: IconStyleOption;
+  style?: cheetahGrid.TYPES.IconStyleOption;
   className?: string;
   content: string;
 } & StandardProps<T> &

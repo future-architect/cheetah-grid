@@ -15,13 +15,18 @@ function getVueCheetahGridPath () {
     return 'vue-cheetah-grid'
   }
 }
-function getCheetahGridPath () {
-  const cgPath = path.resolve(__dirname, '../cheetah-grid/dist/cheetahGrid.js')
+function getCheetahGridAliasPaths () {
+  const jsPath = path.resolve(__dirname, '../cheetah-grid/dist/main.mjs')
+  const cssPath = path.resolve(__dirname, '../cheetah-grid/dist/main.css')
   try {
-    fs.statSync(cgPath)
-    return cgPath
+    fs.statSync(jsPath)
+    fs.statSync(cssPath)
+    return {
+      'cheetah-grid/main.css': cssPath,
+      'cheetah-grid': jsPath
+    }
   } catch (err) {
-    return 'cheetah-grid'
+    return {}
   }
 }
 const devtoolModuleFilenameTemplate = ({ resourcePath }) => {
@@ -76,7 +81,7 @@ module.exports = (env, argv) => {
       extensions: ['.js', '.json'],
       alias: {
         // vue$: 'vue/dist/vue.esm.js',
-        'cheetah-grid': production ? 'cheetah-grid' : getCheetahGridPath(),
+        ...getCheetahGridAliasPaths(),
         // 'cheetah-grid': cheetahGridAliasPath,
         'vue-cheetah-grid': getVueCheetahGridPath()
       }

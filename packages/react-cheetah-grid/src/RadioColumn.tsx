@@ -1,5 +1,4 @@
 import * as cheetahGrid from "cheetah-grid";
-import { RadioStyleOption } from "cheetah-grid/ts-types/column/style";
 
 import {
   parseWidgetEditable,
@@ -10,7 +9,7 @@ import {
 } from "./columnProps";
 
 export type RadioColumnProps<T> = {
-  style?: RadioStyleOption;
+  style?: cheetahGrid.TYPES.RadioStyleOption;
 } & StandardProps<T> &
   WithFieldProps<T> &
   WithWidgetEditableProps<T>;

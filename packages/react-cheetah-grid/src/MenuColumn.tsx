@@ -1,6 +1,4 @@
 import * as cheetahGrid from "cheetah-grid";
-import { BaseAction } from "cheetah-grid/columns/action/BaseAction";
-import { MenuStyleOption } from "cheetah-grid/columns/style";
 
 import {
   StandardProps,
@@ -13,7 +11,7 @@ import {
 } from "./columnProps";
 
 export type MenuColumnProps<T> = {
-  style?: MenuStyleOption;
+  style?: cheetahGrid.TYPES.MenuStyleOption;
   options: { label: string; value: any }[]; // todo: value type
   menuOptions?: { label: string; value: any }[]; // todo: value type
 } & StandardProps<T> &
@@ -27,7 +25,7 @@ export function MenuColumn<T>(props: MenuColumnProps<T>) {
 export function processMenuColumnProps<T>(props: MenuColumnProps<T>) {
   const { field, options, menuOptions, style, message } = props;
 
-  let action: BaseAction<T> | undefined;
+  let action: cheetahGrid.columns.action.BaseAction<T> | undefined;
   if (isOnClick(props)) {
     action = parseOnClick<T>(props);
   } else if (isWidgetEditableProps(props)) {

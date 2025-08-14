@@ -1,5 +1,4 @@
 import * as cheetahGrid from "cheetah-grid";
-import { BranchGraphStyleOption } from "cheetah-grid/ts-types/column/style";
 
 import {
   parseOnClick,
@@ -11,7 +10,7 @@ import {
 export type BranchGraphColumnProps<T> = {
   start?: "top" | "bottom";
   cache?: boolean;
-  style?: BranchGraphStyleOption;
+  style?: cheetahGrid.TYPES.BranchGraphStyleOption;
 } & StandardProps<T> &
   WithFieldProps<T> &
   WithOnClick<T>;

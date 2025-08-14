@@ -12,12 +12,17 @@
     "datagrid",
     "datatable"
   ],
-  "main": "dist/cheetahGrid.js",
-  "unpkg": "dist/cheetahGrid.min.js",
-  "typescript": {
-    "definition": "dist/index.d.ts"
+  "main": "dist/main.mjs",
+  "unpkg": "dist/main.umd.js",
+  "exports": {
+    ".": {
+      "import": "./dist/main.mjs",
+      "require": "./dist/main.umd.js",
+      "default": "./dist/main.mjs"
+    },
+    "./main.css": "./dist/main.css",
+    "./package.json": "./package.json"
   },
-  "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/future-architect/cheetah-grid.git"
@@ -37,29 +42,23 @@
   "files": [
     "src/js/",
     "dist/",
-    "tools/src/",
-    "webpack-loader/"
+    "tools/src/"
   ],
   "scripts": {
     "test": "karma start --no-auto-watch --single-run --browsers Chrome_travis_ci",
-    "lint": "npm run eslint && npm run stylelint",
+    "lint": "npm run eslint && npm run stylelint && npm run tsc",
     "test:once": "karma start --min  --no-auto-watch --single-run",
     "test:watch": "karma start --min",
     "test:ff": "karma start --browsers Firefox",
     "test:chrome": "karma start --browsers Chrome",
-    "build": "npm run build:ts && npm run build:webpack && npm run build:dts",
-    "build:ts": "rimraf dist-ts && tsc --project ./tsconfig.json",
-    "build:webpack": "cross-env NO_UPDATE_NOTIFIER=1 node --openssl-legacy-provider ./node_modules/webpack/bin/webpack.js",
-    "build:dts": "dts-bundle --name cheetah-grid --main dist-ts/main.d.ts --out ../dist/index.d.ts",
-    "watch": "cross-env NO_UPDATE_NOTIFIER=1 webpack --watch",
+    "build": "npm run build:tsdown",
+    "build:tsdown": "tsdown",
     "eslint": "eslint . --ext .js,.ts",
     "eslint:fix": "eslint . --fix --ext .js,.ts",
     "stylelint": "stylelint \"**/*.css\"",
     "stylelint:fix": "stylelint \"**/*.css\" --fix",
-    "test:font-svg-to-icons-js-loader": "node webpack/test/font-svg-to-icons-js-loader/test.js",
-    "test:svg-to-icon-js-loader": "node webpack/test/svg-to-icon-js-loader/test.js",
-    "test:loader": "npm run test:font-svg-to-icons-js-loader && npm run test:svg-to-icon-js-loader",
-    "test:node": "node ./dist/cheetahGrid.js",
+    "tsc": "tsc --project ./tsconfig.json",
+    "test:node": "node ./dist/main.umd.js",
     "build:ci": "npm run build",
     "coverage:remap": "remap-istanbul -i coverage/dist/report-json/coverage-final.json -o coverage/remap/html-report -t html",
     "coverage:open": "open coverage/remap/html-report/index.html"
@@ -79,7 +78,6 @@
     "cross-env": "^7.0.2",
     "css-loader": "^4.2.1",
     "cssnano": "^4.1.10",
-    "dts-bundle": "^0.7.3",
     "eslint": "^7.7.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-html": "^6.0.3",
@@ -105,12 +103,8 @@
     "style-loader": "^1.2.1",
     "stylelint": "^13.6.1",
     "stylelint-config-standard": "^20.0.0",
-    "typescript": "~5.8.3",
-    "webpack": "^4.44.2",
-    "webpack-cli": "^3.1.0",
-    "webpack-livereload-plugin": "^2.1.1",
-    "webpack-sources": "^1.3.0",
-    "wrapper-webpack-plugin": "^2.0.0"
+    "tsdown": "^0.14.1",
+    "typescript": "^5.9.2"
   },
   "browserslist": [
     ">0.2%",

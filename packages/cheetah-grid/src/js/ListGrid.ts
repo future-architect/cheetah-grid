@@ -30,19 +30,19 @@ import type {
   SortState,
   ThemeDefine,
 } from "./ts-types";
-import {
-  ColumnDefine,
-  GroupHeaderDefine,
-  HeaderDefine,
-  HeadersDefine,
-  MultiLayoutMap,
-  SimpleHeaderLayoutMap,
-} from "./list-grid/layout-map";
+import { MultiLayoutMap, SimpleHeaderLayoutMap } from "./list-grid/layout-map";
 import type {
   DrawGridConstructorOptions,
   DrawGridProtected,
 } from "./core/DrawGrid";
-import type { LayoutDefine, LayoutMapAPI } from "./list-grid/layout-map";
+import type {
+  LayoutDefine,
+  LayoutMapAPI,
+  ColumnDefine,
+  GroupHeaderDefine,
+  HeaderDefine,
+  HeadersDefine,
+} from "./list-grid/layout-map";
 import { MessageHandler, hasMessage } from "./columns/message/MessageHandler";
 import {
   cellEquals,
@@ -884,7 +884,7 @@ export interface ListGridConstructorOptions<T>
    */
   frozenRowCount?: undefined;
 }
-export { HeadersDefine, ColumnDefine, HeaderDefine, GroupHeaderDefine };
+export type { HeadersDefine, ColumnDefine, HeaderDefine, GroupHeaderDefine };
 /**
  * ListGrid
  * @classdesc cheetahGrid.ListGrid

@@ -17,11 +17,24 @@ function resolve (dir) {
   const p = path.join(__dirname, dir)
   return p
 }
-function devPath (basePath) {
-  const rootPath = resolve(basePath)
+function devCheetahPaths () {
+  const rootPath = resolve('../../cheetah-grid/')
   const pkg = requireJson(path.join(rootPath, 'package.json'))
-  const p = path.join(rootPath, pkg.unpkg || pkg.main)
-  return p
+  const result = [path.join(rootPath, pkg.unpkg || pkg.main)]
+
+  for (const [key, value] of Object.entries(pkg.exports)) {
+    if (key.endsWith('.css')) {
+      if (typeof value === 'string') {
+        result.push(path.join(rootPath, value))
+      } else {
+        for (const [, val] of Object.entries(value)) {
+          result.push(path.join(rootPath, val))
+        }
+      }
+    }
+  }
+
+  return result
 }
 
 function requireJson (jsonPath) {
@@ -32,6 +45,7 @@ function requireJson (jsonPath) {
 export default async ({ mode }) => {
   const production = mode === 'production'
   const scriptPaths = []
+  const cssPaths = []
   const devDir = resolve('../public/dev')
   if (production) {
     const gridVersion = `${semver.major(pkg.version)}.${semver.minor(pkg.version)}.0-0`
@@ -40,17 +54,25 @@ export default async ({ mode }) => {
     scriptPaths.push(
       `https://unpkg.com/cheetah-grid@${v}`
     )
+    cssPaths.push(
+      `https://unpkg.com/cheetah-grid@${v}/main.css`
+    )
   } else {
     if (!fs.existsSync(devDir)) {
       fs.mkdirSync(devDir)
     }
     for (const p of [
-      devPath('../../cheetah-grid/')
+      ...devCheetahPaths()
     ]) {
-      const jsname = path.basename(p)
-      const dest = path.join(devDir, jsname)
+      const name = path.basename(p)
+      const dest = path.join(devDir, name)
       fs.copyFileSync(p, dest)
-      scriptPaths.push(`/cheetah-grid/documents/dev/${jsname}`)
+
+      if (name.endsWith('.css')) {
+        cssPaths.push(`/cheetah-grid/documents/dev/${name}`)
+      } else {
+        scriptPaths.push(`/cheetah-grid/documents/dev/${name}`)
+      }
     }
   }
   return defineConfig({
@@ -86,6 +108,7 @@ export default async ({ mode }) => {
       ['link', { rel: 'stylesheet', href: 'https://fonts.googleapis.com/icon?family=Material+Icons' }],
       ['link', { rel: 'stylesheet', href: 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css' }],
 
+      ...cssPaths.map(p => ['link', { rel: 'stylesheet', href: p }]),
       ...scriptPaths.map(p => ['script', { src: p }])
     ],
     base: '/cheetah-grid/documents/',
