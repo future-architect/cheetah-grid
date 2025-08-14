@@ -1,6 +1,6 @@
 {
   "name": "cheetah-grid",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Cheetah Grid is a high performance grid engine that works on canvas",
   "keywords": [
     "spreadsheet",
@@ -16,6 +16,7 @@
   "unpkg": "dist/main.umd.js",
   "exports": {
     ".": {
+      "types": "./dist/main.d.mts",
       "import": "./dist/main.mjs",
       "require": "./dist/main.umd.js",
       "default": "./dist/main.mjs"

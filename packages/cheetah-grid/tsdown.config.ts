@@ -13,5 +13,6 @@ export default defineConfig([
 		},
 		target: 'es2019',
 		banner: {js:BANNER, css:BANNER},
+		dts: true
 	},
 ]);
