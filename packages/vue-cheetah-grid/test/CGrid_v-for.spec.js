@@ -1,9 +1,6 @@
 import { expect } from 'chai'
-import { mount, createLocalVue } from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 import CGrid from '../lib/index'
-
-const localVue = createLocalVue()
-localVue.use(CGrid)
 
 describe('c-grid v-for', () => {
   it('It should work even if columns are defined by v-for.', () => {
@@ -33,14 +30,16 @@ describe('c-grid v-for', () => {
       }
     }
     const wrapper = mount(Component, {
-      localVue,
-      attachTo: '.test-root-element'
+      global: {
+        plugins: [CGrid]
+      }
     })
     const { rawGrid } = wrapper.vm.$refs.grid
     expect(rawGrid.header.length).to.equal(1)
 
     wrapper.vm.cols.push({ id: 1 })
     return wrapper.vm.$nextTick()
+      .then(() => new Promise(resolve => setTimeout(resolve, 100)))
       .then(() => {
         expect(rawGrid.header.length).to.equal(2)
         expect(rawGrid.colCount).to.equal(2)
@@ -98,14 +97,16 @@ describe('c-grid v-for', () => {
       }
     }
     const wrapper = mount(Component, {
-      localVue,
-      attachTo: '.test-root-element'
+      global: {
+        plugins: [CGrid]
+      }
     })
     const { rawGrid } = wrapper.vm.$refs.grid
     expect(rawGrid.header.length).to.equal(2)
 
     wrapper.vm.cols1.push({ id: 1 })
     return wrapper.vm.$nextTick()
+      .then(() => new Promise(resolve => setTimeout(resolve, 100)))
       .then(() => {
         expect(rawGrid.header.length).to.equal(3)
         expect(rawGrid.colCount).to.equal(3)

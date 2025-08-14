@@ -1,14 +1,11 @@
 import chai from 'chai'
 import sinon from 'sinon'
-import { mount, createLocalVue } from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 import CGrid from '../lib/index'
 import * as cheetahGrid from 'cheetah-grid'
 import sinonChai from 'sinon-chai'
 chai.use(sinonChai)
 const { expect } = chai
-
-const localVue = createLocalVue()
-localVue.use(CGrid)
 
 describe('c-grid-column ColumnType', () => {
   it('ColumnType name', () => {
@@ -40,8 +37,9 @@ describe('c-grid-column ColumnType', () => {
       }
     }
     const wrapper = mount(Component, {
-      localVue,
-      attachTo: '.test-root-element'
+      global: {
+        plugins: [CGrid]
+      }
     })
     const { rawGrid } = wrapper.vm.$refs.grid
     expect(rawGrid.header.length).to.equal(1)
@@ -79,8 +77,9 @@ describe('c-grid-column ColumnType', () => {
       }
     }
     const wrapper = mount(Component, {
-      localVue,
-      attachTo: '.test-root-element'
+      global: {
+        plugins: [CGrid]
+      }
     })
     const { rawGrid } = wrapper.vm.$refs.grid
     expect(rawGrid.header.length).to.equal(1)
@@ -113,8 +112,9 @@ describe('c-grid-column ColumnType', () => {
       }
     }
     const wrapper = mount(Component, {
-      localVue,
-      attachTo: '.test-root-element'
+      global: {
+        plugins: [CGrid]
+      }
     })
     const { rawGrid } = wrapper.vm.$refs.grid
     expect(rawGrid.header.length).to.equal(1)

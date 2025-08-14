@@ -1,14 +1,15 @@
 import { expect } from 'chai'
-import { mount, createLocalVue } from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 import CGrid from '../lib/index'
 import Sample from './Sample.vue'
 import * as cheetahGrid from 'cheetah-grid'
 
-const localVue = createLocalVue()
-localVue.use(CGrid)
-
 describe('sample', () => {
-  const wrapper = mount(Sample, { localVue, attachTo: '.test-root-element' })
+  const wrapper = mount(Sample, {
+    global: {
+      plugins: [CGrid]
+    }
+  })
   const { rawGrid } = wrapper.vm.$refs.grid
   it('header config', () => {
     expect(rawGrid.header.length).to.equal(7)

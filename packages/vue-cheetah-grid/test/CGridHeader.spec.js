@@ -1,12 +1,9 @@
 import chai from 'chai'
-import { mount, createLocalVue } from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 import CGrid from '../lib/index'
 import sinonChai from 'sinon-chai'
 chai.use(sinonChai)
 const { expect } = chai
-
-const localVue = createLocalVue()
-localVue.use(CGrid)
 
 describe('c-grid-header', () => {
   it('layout header', () => {
@@ -16,7 +13,7 @@ describe('c-grid-header', () => {
       ref="grid"
       :data="data"
       :frozen-col-count="1">
-      <template slot="layout-header">
+      <template v-slot:layout-header>
         <c-grid-layout-row>
           <c-grid-header caption="test"/>
           <c-grid-header caption="test2" rowspan="2"/>
@@ -25,7 +22,7 @@ describe('c-grid-header', () => {
           <c-grid-header caption="test3"/>
         </c-grid-layout-row>
       </template>
-      <template slot="layout-body">
+      <template v-slot:layout-body>
         <c-grid-layout-row>
           <c-grid-column
             field="text"
@@ -47,8 +44,9 @@ describe('c-grid-header', () => {
       }
     }
     const wrapper = mount(Component, {
-      localVue,
-      attachTo: '.test-root-element'
+      global: {
+        plugins: [CGrid]
+      }
     })
     const { rawGrid } = wrapper.vm.$refs.grid
     expect(rawGrid.layout.header.length).to.equal(2)
@@ -65,7 +63,7 @@ describe('c-grid-header', () => {
       ref="grid"
       :data="data"
       :frozen-col-count="1">
-      <template slot="layout-body">
+      <template v-slot:layout-body>
         <c-grid-layout-row>
           <c-grid-column
             field="text"
@@ -92,8 +90,9 @@ describe('c-grid-header', () => {
       }
     }
     const wrapper = mount(Component, {
-      localVue,
-      attachTo: '.test-root-element'
+      global: {
+        plugins: [CGrid]
+      }
     })
     const { rawGrid } = wrapper.vm.$refs.grid
     expect(rawGrid.layout.header.length).to.equal(2)

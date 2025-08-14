@@ -1,9 +1,6 @@
 import { expect } from 'chai'
-import { mount, createLocalVue } from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 import CGrid from '../lib/index'
-
-const localVue = createLocalVue()
-localVue.use(CGrid)
 
 describe('c-grid update', () => {
   it('CGrid update data', () => {
@@ -30,8 +27,9 @@ describe('c-grid update', () => {
       }
     }
     const wrapper = mount(Component, {
-      localVue,
-      attachTo: '.test-root-element'
+      global: {
+        plugins: [CGrid]
+      }
     })
     wrapper.vm.data = [
       ...wrapper.vm.data,
@@ -71,14 +69,16 @@ describe('c-grid update', () => {
       }
     }
     const wrapper = mount(Component, {
-      localVue,
-      attachTo: '.test-root-element'
+      global: {
+        plugins: [CGrid]
+      }
     })
     let { rawGrid } = wrapper.vm.$refs.grid
     expect(rawGrid.header.length).to.equal(1)
 
     wrapper.vm.showButton = true
     return wrapper.vm.$nextTick()
+      .then(() => new Promise(resolve => setTimeout(resolve, 100)))
       .then(() => {
         ({ rawGrid } = wrapper.vm.$refs.grid)
         expect(rawGrid.header.length).to.equal(2)
@@ -114,14 +114,16 @@ describe('c-grid update', () => {
       }
     }
     const wrapper = mount(Component, {
-      localVue,
-      attachTo: '.test-root-element'
+      global: {
+        plugins: [CGrid]
+      }
     })
     let { rawGrid } = wrapper.vm.$refs.grid
     const before = rawGrid.header
 
     wrapper.vm.showButton = 1234
     return wrapper.vm.$nextTick()
+      .then(() => new Promise(resolve => setTimeout(resolve, 100)))
       .then(() => {
         ({ rawGrid } = wrapper.vm.$refs.grid)
         expect(rawGrid.header).to.equal(before)
@@ -163,8 +165,9 @@ describe('c-grid update', () => {
       }
     }
     const wrapper = mount(Component, {
-      localVue,
-      attachTo: '.test-root-element'
+      global: {
+        plugins: [CGrid]
+      }
     })
     let { rawGrid } = wrapper.vm.$refs.grid
     expect(rawGrid.frozenColCount).to.equal(1)
@@ -203,16 +206,20 @@ describe('c-grid update', () => {
       }
     }
     const wrapper = mount(Component, {
-      localVue,
-      attachTo: '.test-root-element'
+      global: {
+        plugins: [CGrid]
+      }
     })
     let { rawGrid } = wrapper.vm.$refs.grid
     expect(rawGrid.dataSource.length).to.equal(2)
 
     wrapper.vm.filter = (rec) => rec.text === 'text1'
     return wrapper.vm.$nextTick()
+      .then(() => new Promise(resolve => setTimeout(resolve, 100)))
       .then(() => {
         ({ rawGrid } = wrapper.vm.$refs.grid)
+        rawGrid.dataSource.get(0)
+        rawGrid.dataSource.get(1)
         expect(rawGrid.dataSource.length).to.equal(1)
       })
   })
@@ -243,8 +250,9 @@ describe('c-grid update', () => {
       }
     }
     const wrapper = mount(Component, {
-      localVue,
-      attachTo: '.test-root-element'
+      global: {
+        plugins: [CGrid]
+      }
     })
     let { rawGrid } = wrapper.vm.$refs.grid
     const before = rawGrid.header
