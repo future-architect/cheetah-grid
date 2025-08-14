@@ -20,6 +20,7 @@ module.exports = function(config) {
 			require.resolve('image-matcher'),
 			'src/test/specs/test-helper.js',
 			'dist/main.umd.js',
+			'dist/main.css',
 			'src/test/specs/*_spec.js',
 			'src/test/specs/**/*_spec.js',
 		],

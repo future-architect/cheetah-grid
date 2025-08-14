@@ -58,7 +58,7 @@
     "stylelint": "stylelint \"**/*.css\"",
     "stylelint:fix": "stylelint \"**/*.css\" --fix",
     "tsc": "tsc --project ./tsconfig.json",
-    "test:node": "node ./dist/cheetahGrid.umd.js",
+    "test:node": "node ./dist/main.umd.js",
     "build:ci": "npm run build",
     "coverage:remap": "remap-istanbul -i coverage/dist/report-json/coverage-final.json -o coverage/remap/html-report -t html",
     "coverage:open": "open coverage/remap/html-report/index.html"
