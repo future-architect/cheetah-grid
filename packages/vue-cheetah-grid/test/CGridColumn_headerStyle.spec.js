@@ -1,12 +1,9 @@
 import chai from 'chai'
-import { mount, createLocalVue } from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 import CGrid from '../lib/index'
 import sinonChai from 'sinon-chai'
 chai.use(sinonChai)
 const { expect } = chai
-
-const localVue = createLocalVue()
-localVue.use(CGrid)
 
 describe('c-grid-column headerStyle', () => {
   it('headerStyle', () => {
@@ -34,8 +31,9 @@ describe('c-grid-column headerStyle', () => {
       }
     }
     const wrapper = mount(Component, {
-      localVue,
-      attachTo: '.test-root-element'
+      global: {
+        plugins: [CGrid]
+      }
     })
     const { rawGrid } = wrapper.vm.$refs.grid
     expect(rawGrid.header.length).to.equal(1)

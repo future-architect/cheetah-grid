@@ -1,5 +1,5 @@
 'use strict'
-const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const { VueLoaderPlugin } = require('vue-loader')
 const path = require('path')
 const rm = require('rimraf')
 const webpack = require('webpack')
@@ -51,10 +51,16 @@ module.exports = (env, argv) => {
       }
     },
     resolve: {
-      extensions: ['.js', '.json'],
-      alias: argv.test ? {
-        'cheetah-grid': path.resolve(__dirname, '../cheetah-grid')
-      } : undefined
+      extensions: ['.mjs', '.js', '.json'],
+      alias: {
+        ...argv.test
+          ? {
+            'node:stream': path.relative(__dirname, './test/empty.js'),
+            'cheetah-grid': path.resolve(__dirname, '../cheetah-grid'),
+            vue: path.resolve(__dirname, './node_modules/vue/dist/vue.esm-bundler.js')
+          }
+          : {}
+      }
     },
     module: {
       rules: [

@@ -1,11 +1,8 @@
 import { expect } from 'chai'
 import sinon from 'sinon'
-import { mount, createLocalVue } from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 import CGrid from '../lib/index'
 import * as cheetahGrid from 'cheetah-grid'
-
-const localVue = createLocalVue()
-localVue.use(CGrid)
 
 describe('c-grid-button-column', () => {
   it('Should call the action, if click a button.', () => {
@@ -35,13 +32,15 @@ describe('c-grid-button-column', () => {
       }
     }
     const wrapper = mount(Component, {
-      localVue,
-      attachTo: '.test-root-element'
+      global: {
+        plugins: [CGrid]
+      }
     })
     const { rawGrid } = wrapper.vm.$refs.grid
     expect(rawGrid.header.length).to.equal(1)
     const [action] = rawGrid.header
-    expect(action.action).to.be.an.instanceof(cheetahGrid.columns.action.Action)
+    expect(action.action).to.be.an.instanceof(cheetahGrid.columns.action.BaseAction)
+    rawGrid.selection.select = { row: 1, col: 0 }
     rawGrid.fireListeners('click_cell', { row: 1, col: 0 })
     expect(onAction.getCall(0).args).to.deep.equal([{ record: 123 }])
   })
@@ -74,10 +73,12 @@ describe('c-grid-button-column', () => {
       }
     }
     const wrapper = mount(Component, {
-      localVue,
-      attachTo: '.test-root-element'
+      global: {
+        plugins: [CGrid]
+      }
     })
     const { rawGrid } = wrapper.vm.$refs.grid
+    rawGrid.selection.select = { row: 1, col: 0 }
     rawGrid.fireListeners('click_cell', { row: 1, col: 0 })
     expect(onAction.called).to.equal(false)
   })
@@ -111,10 +112,12 @@ describe('c-grid-button-column', () => {
       }
     }
     const wrapper = mount(Component, {
-      localVue,
-      attachTo: '.test-root-element'
+      global: {
+        plugins: [CGrid]
+      }
     })
     const { rawGrid } = wrapper.vm.$refs.grid
+    rawGrid.selection.select = { row: 1, col: 0 }
     rawGrid.fireListeners('click_cell', { row: 1, col: 0 })
     expect(onAction.called).to.equal(true)
 
@@ -122,6 +125,7 @@ describe('c-grid-button-column', () => {
     return wrapper.vm.$nextTick()
       .then(() => {
         onAction = sinon.spy()
+        rawGrid.selection.select = { row: 1, col: 0 }
         rawGrid.fireListeners('click_cell', { row: 1, col: 0 })
         expect(onAction.called).to.equal(false)
       })
@@ -131,6 +135,7 @@ describe('c-grid-button-column', () => {
       })
       .then(() => {
         onAction = sinon.spy()
+        rawGrid.selection.select = { row: 1, col: 0 }
         rawGrid.fireListeners('click_cell', { row: 1, col: 0 })
         expect(onAction.called).to.equal(true)
       })

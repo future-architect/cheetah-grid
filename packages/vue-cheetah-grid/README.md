@@ -8,7 +8,7 @@
 [![npm](https://img.shields.io/npm/dt/vue-cheetah-grid.svg)](http://www.npmtrends.com/vue-cheetah-grid)
 [![Build Status](https://github.com/future-architect/cheetah-grid/workflows/CI/badge.svg?branch=master)](https://github.com/future-architect/cheetah-grid/actions?query=workflow%3ACI)
 
-It supports Vue 2 and Vue 3.
+It supports Vue 3.
 
 ## Install using npm
 
@@ -44,8 +44,6 @@ npm install -S vue-cheetah-grid
 
 ### Use Components Globally
 
-Vue3:
-
 ```js
 import { createApp } from "vue";
 import CGrid from "vue-cheetah-grid";
@@ -53,15 +51,6 @@ import CGrid from "vue-cheetah-grid";
 const app = createApp(App);
 
 app.use(CGrid);
-```
-
-Vue2:
-
-```js
-import Vue from "vue";
-import CGrid from "vue-cheetah-grid";
-
-Vue.use(CGrid);
 ```
 
 ### Use Components Locally

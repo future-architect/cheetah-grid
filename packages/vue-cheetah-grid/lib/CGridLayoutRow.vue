@@ -10,7 +10,7 @@
 
 <script>
 import { slotElementsToHeaderOptions, slotElementsToHeaderProps } from './c-grid/header-utils'
-import { getSlotChildren, hackVue3 } from './c-grid/utils'
+import { getSlotChildren } from './c-grid/utils'
 import { storeElement, removeElement } from './c-grid/elements'
 
 /**
@@ -19,10 +19,6 @@ import { storeElement, removeElement } from './c-grid/elements'
  */
 export default {
   name: 'CGridLayoutRow',
-  get mixins () {
-    hackVue3(this)
-    return undefined
-  },
   inject: ['$_CGridInstance'],
   mounted () {
     storeElement(this)
@@ -32,14 +28,10 @@ export default {
   updated () {
     this.$_CGrid_nextTickUpdate()
   },
-  // for Vue 3
   beforeUnmount () {
-    beforeDestroy(this)
-  },
-  // for Vue 2
-  // eslint-disable-next-line vue/no-deprecated-destroyed-lifecycle
-  beforeDestroy () {
-    beforeDestroy(this)
+    const vm = this
+    removeElement(vm)
+    vm.$_CGridInstance.$_CGrid_removeColumnDefine(vm)
   },
   methods: {
     /**
@@ -63,11 +55,6 @@ export default {
       }
     }
   }
-}
-
-function beforeDestroy (vm) {
-  removeElement(vm)
-  vm.$_CGridInstance.$_CGrid_removeColumnDefine(vm)
 }
 </script>
 

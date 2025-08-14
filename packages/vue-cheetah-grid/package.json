@@ -15,7 +15,6 @@
     "test": "cross-env BABEL_ENV=test npm run karma -- start --single-run --browsers Chrome_travis_ci",
     "test:once": "cross-env BABEL_ENV=test npm run karma -- start --no-auto-watch --single-run",
     "test:watch": "cross-env BABEL_ENV=test npm run karma -- start",
-    "test:ie": "cross-env BABEL_ENV=test npm run karma -- start --browsers IE_no_addons",
     "build": "npm run build:webpack && npm run build:gen",
     "watch": "npm run webpack -- --watch --mode development",
     "lint": "npm run eslint && npm run stylelint",
@@ -27,7 +26,7 @@
     "build:webpack": "npm run webpack -- --mode production",
     "build:gen": "node ./scripts/gen.js",
     "webpack": "node --openssl-legacy-provider ./node_modules/webpack/bin/webpack.js",
-    "karma": "node --openssl-legacy-provider ./node_modules/karma/lib/cli.js"
+    "karma": "node --openssl-legacy-provider ./node_modules/karma/bin/karma"
   },
   "repository": {
     "type": "git",
@@ -68,7 +67,7 @@
     "@babel/plugin-transform-runtime": "^7.11.0",
     "@babel/preset-env": "^7.11.0",
     "@babel/runtime": "^7.11.2",
-    "@vue/test-utils": "^1.0.4",
+    "@vue/test-utils": "^2.4.6",
     "@vuedoc/md": "^1.6.0",
     "babel-loader": "^8.0.4",
     "babel-plugin-istanbul": "^5.1.0",
@@ -103,13 +102,12 @@
     "style-loader": "^1.2.1",
     "stylelint": "^13.6.1",
     "stylelint-config-standard": "^20.0.0",
-    "vue": "^2.5.17",
-    "vue-loader": "^15.9.3",
-    "vue-template-compiler": "^2.5.17",
+    "vue": "^3.5.18",
+    "vue-loader": "^17.4.2",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12"
   },
   "peerDependencies": {
-    "vue": "^2.5.16 || ^3.0.0"
+    "vue": "^3.0.0"
   }
 }
