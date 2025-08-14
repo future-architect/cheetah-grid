@@ -12,8 +12,8 @@
     "datagrid",
     "datatable"
   ],
-  "main": "dist/cheetahGrid.es5.js",
-  "unpkg": "dist/cheetahGrid.es5.min.js",
+  "main": "dist/cheetahGrid.js",
+  "unpkg": "dist/cheetahGrid.min.js",
   "typescript": {
     "definition": "dist/index.d.ts"
   },
@@ -23,16 +23,11 @@
     "url": "https://github.com/future-architect/cheetah-grid.git"
   },
   "author": {
-    "name": "yosuke ota",
+    "name": "Yosuke Ota",
     "email": "otameshiyo23@gmail.com",
     "url": "https://www.npmjs.com/~ota-meshi"
   },
-  "contributors": [
-    {
-      "name": "yasuhiro murata",
-      "email": "y.murata.38@future.co.jp"
-    }
-  ],
+  "contributors": [],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/future-architect/cheetah-grid/issues",
@@ -43,8 +38,7 @@
     "src/js/",
     "dist/",
     "tools/src/",
-    "webpack-loader/",
-    "index.d.ts"
+    "webpack-loader/"
   ],
   "scripts": {
     "test": "karma start --no-auto-watch --single-run --browsers Chrome_travis_ci",
@@ -52,7 +46,6 @@
     "test:once": "karma start --min  --no-auto-watch --single-run",
     "test:watch": "karma start --min",
     "test:ff": "karma start --browsers Firefox",
-    "test:ie": "karma start --min --browsers IE_no_addons",
     "test:chrome": "karma start --browsers Chrome",
     "build": "npm run build:ts && npm run build:webpack && npm run build:dts",
     "build:ts": "rimraf dist-ts && tsc --project ./tsconfig.json",
@@ -120,7 +113,8 @@
     "wrapper-webpack-plugin": "^2.0.0"
   },
   "browserslist": [
-    "IE 11",
+    ">0.2%",
+    "not dead",
     "last 2 versions"
   ]
 }

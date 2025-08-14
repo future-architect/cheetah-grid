@@ -11,7 +11,7 @@
 	}
 
 	const GridCanvasHelper = cheetahGrid.GridCanvasHelper;
-	const _ = cheetahGrid._getInternal().symbolManager.getProtectedSymbol();
+	const _ = cheetahGrid._getInternal().symbolManager.PROTECTED_SYMBOL;
 
 	const grid = new cheetahGrid.core.DrawGrid({
 		parentElement: (function() {

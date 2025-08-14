@@ -13,9 +13,9 @@ import type { DrawCellInfo, GridInternal } from "../../ts-types-internal";
 import { getOrApply, isPromise, obj } from "../../internal/utils";
 import { BaseColumn } from "./BaseColumn";
 import { BranchGraphStyle } from "../style/BranchGraphStyle";
-import { getBranchGraphColumnStateId } from "../../internal/symbolManager";
+import { BRANCH_GRAPH_COLUMN_STATE_ID } from "../../internal/symbolManager";
 
-const _ = getBranchGraphColumnStateId();
+const _: typeof BRANCH_GRAPH_COLUMN_STATE_ID = BRANCH_GRAPH_COLUMN_STATE_ID;
 
 type Timelines = { timeline: BranchPoint[][]; branches: string[] };
 

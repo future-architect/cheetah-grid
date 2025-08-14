@@ -1,10 +1,9 @@
 import type { AnyListener, EventListenerId } from "../ts-types";
 import { each } from "../internal/utils";
-import { get as getSymbol } from "../internal/symbolManager";
 
 //private symbol
 /** @private */
-const _ = getSymbol();
+const _ = Symbol("private");
 
 /** @private */
 let nextId = 1;
@@ -55,7 +54,7 @@ export class EventTarget {
    * @param  {number} id the id returned by listen().
    * @return {void}
    */
-  unlisten(id: EventListenerId): void {
+  unlisten(id: EventListenerId | `${EventListenerId}`): void {
     if (!this[_]) {
       return;
     }

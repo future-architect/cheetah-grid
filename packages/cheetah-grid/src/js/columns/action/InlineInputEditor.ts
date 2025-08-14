@@ -6,9 +6,9 @@ import type {
 import type { GridInternal, InputEditorState } from "../../ts-types-internal";
 import { BaseInputEditor } from "./BaseInputEditor";
 import { InlineInputElement } from "./internal/InlineInputElement";
-import { getInlineInputEditorStateId } from "../../internal/symbolManager";
+import { INLINE_INPUT_EDITOR_STATE_ID } from "../../internal/symbolManager";
 import { obj } from "../../internal/utils";
-const _ = getInlineInputEditorStateId();
+const _: typeof INLINE_INPUT_EDITOR_STATE_ID = INLINE_INPUT_EDITOR_STATE_ID;
 
 function getState<T>(grid: GridInternal<T>): InputEditorState {
   let state = grid[_];

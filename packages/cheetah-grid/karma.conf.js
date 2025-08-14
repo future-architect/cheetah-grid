@@ -24,7 +24,7 @@ module.exports = function(config) {
 			require.resolve('promise-polyfills'),
 			require.resolve('image-matcher'),
 			'src/test/specs/test-helper.js',
-			mintarget ? 'dist/cheetahGrid.es5.min.js' : 'dist/cheetahGrid.es5.js',
+			mintarget ? 'dist/cheetahGrid.min.js' : 'dist/cheetahGrid.js',
 			'src/test/specs/*_spec.js',
 			'src/test/specs/**/*_spec.js',
 		],
@@ -49,7 +49,7 @@ module.exports = function(config) {
 				sourceMap: 'inline'
 			},
 			filename(file) {
-				return file.originalPath.replace(/\.js$/, '.es5.js');
+				return file.originalPath;
 			},
 			sourceFileName(file) {
 				return file.originalPath;
@@ -105,13 +105,9 @@ module.exports = function(config) {
 
 		// start these browsers
 		// available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-		// browsers: ['Chrome', 'Firefox', 'IE'],
-		browsers: ['Chrome', 'IE_no_addons'],
+		// browsers: ['Chrome', 'Firefox'],
+		browsers: ['Chrome'],
 		customLaunchers: {
-			'IE_no_addons': {
-				base: 'IE',
-				flags: ['-extoff']
-			},
 			'ChromeHeadless_custom': {
 				base: 'ChromeHeadless',
 				flags: ['--enable-logging', '--v=2']

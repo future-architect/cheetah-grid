@@ -7,10 +7,8 @@ import type { CheckHeaderState, GridInternal } from "../../ts-types-internal";
 import { bindCellClickAction, bindCellKeyAction } from "./actionBind";
 import { BaseAction } from "./BaseAction";
 import { animate } from "../../internal/animate";
-import { getCheckHeaderStateId } from "../../internal/symbolManager";
+import { CHECK_HEADER_STATE_ID } from "../../internal/symbolManager";
 import { obj } from "../../internal/utils";
-
-const CHECK_HEADER_STATE_ID = getCheckHeaderStateId();
 
 function getState<T>(grid: GridInternal<T>): CheckHeaderState {
   let state = grid[CHECK_HEADER_STATE_ID];

@@ -20,7 +20,6 @@ import type {
   PasteRangeBoxValues,
 } from "../ts-types";
 import {
-  array,
   browser,
   event,
   isDescendantElement,
@@ -39,20 +38,18 @@ import { Rect } from "../internal/Rect";
 import { Scrollable } from "../internal/Scrollable";
 import { getFontSize } from "../internal/canvases";
 //protected symbol
-import { getProtectedSymbol } from "../internal/symbolManager";
+import { PROTECTED_SYMBOL } from "../internal/symbolManager";
 
 const {
   /** @private */
   isTouchEvent,
-  /** @private */
-  getMouseButtons,
   /** @private */
   getKeyCode,
   /** @private */
   cancel: cancelEvent,
 } = event;
 /** @private */
-const _ = getProtectedSymbol();
+const _: typeof PROTECTED_SYMBOL = PROTECTED_SYMBOL;
 
 /** @private */
 function createRootElement(): HTMLElement {
@@ -83,10 +80,6 @@ const KEY_DOWN = 40;
 const KEY_DEL = 46;
 /** @private */
 const KEY_ALPHA_A = 65;
-/** @private */
-const KEY_ALPHA_C = 67;
-/** @private */
-const KEY_ALPHA_V = 86;
 
 //private methods
 /** @private */
@@ -1244,7 +1237,7 @@ function _updatedSelection(this: DrawGrid): void {
     row: selRow,
   });
 
-  const editMode = array.findIndex(results, (v) => !!v) >= 0;
+  const editMode = results.findIndex((v) => !!v) >= 0;
   focusControl.editMode = editMode;
 
   if (editMode) {
@@ -1338,12 +1331,12 @@ function _bindEvents(this: DrawGrid): void {
         DG_EVENT_TYPE.MOUSEDOWN_CELL,
         eventArgs
       );
-      if (array.findIndex(results, (v) => !v) >= 0) {
+      if (results.findIndex((v) => !v) >= 0) {
         return;
       }
     }
     if (
-      getMouseButtons(e) !== 1 &&
+      e.buttons !== 1 &&
       // For mobile safari. If we do not post-process here, the keyboard will not start in Mobile Safari.
       e.buttons !== 0
     ) {
@@ -1698,10 +1691,9 @@ function _bindEvents(this: DrawGrid): void {
     return copyLines.join("\n");
   });
   grid[_].focusControl.onCopy((_e: ClipboardEvent): string | void =>
-    array.find(
-      grid.fireListeners("copydata", grid[_].selection.range),
-      (r) => r != null
-    )
+    grid
+      .fireListeners("copydata", grid[_].selection.range)
+      .find((r) => r != null)
   );
   grid[_].focusControl.onPaste(
     ({ value, event }: { value: string; event: ClipboardEvent }) => {
@@ -1890,7 +1882,7 @@ class BaseMouseDownMover {
   }
   private _mouseMove(e: MouseEvent | TouchEvent): void {
     if (!isTouchEvent(e)) {
-      if (getMouseButtons(e) !== 1) {
+      if (e.buttons !== 1) {
         this._mouseUp(e);
         return;
       }
@@ -2241,31 +2233,6 @@ class FocusControl extends EventTarget {
       }
       inputClear(true);
     });
-    if (browser.IE) {
-      handler.on(document, "keydown", (e) => {
-        if (e.target !== input) {
-          return;
-        }
-        const keyCode = getKeyCode(e);
-        if (keyCode === KEY_ALPHA_C && e.ctrlKey) {
-          // When text is not selected copy-event is not emit, on IE.
-          setSafeInputValue(input, "dummy");
-          input.select();
-          setTimeout(() => {
-            setSafeInputValue(input, "");
-          }, 100);
-        } else if (keyCode === KEY_ALPHA_V && e.ctrlKey) {
-          // When input is read-only paste-event is not emit, on IE.
-          if (input.readOnly) {
-            input.readOnly = false;
-            setTimeout(() => {
-              input.readOnly = true;
-              setSafeInputValue(input, "");
-            }, 10);
-          }
-        }
-      });
-    }
     if (browser.Edge) {
       handler.once(document, "keydown", (e) => {
         if (!isDescendantElement(parentElement, e.target as HTMLElement)) {
@@ -2284,25 +2251,20 @@ class FocusControl extends EventTarget {
         return;
       }
       let pasteText: string | undefined = undefined;
-      if (browser.IE) {
-        // IE
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        pasteText = (window as any).clipboardData.getData("Text");
+
+      const clipboardData = e.clipboardData!;
+      if (clipboardData.items) {
+        // Chrome & Firefox & Edge
+        pasteText = clipboardData.getData("text/plain");
       } else {
-        const clipboardData = e.clipboardData!;
-        if (clipboardData.items) {
-          // Chrome & Firefox & Edge
-          pasteText = clipboardData.getData("text/plain");
-        } else {
-          // Safari
-          if (
-            -1 !==
-            Array.prototype.indexOf.call(clipboardData.types, "text/plain")
-          ) {
-            pasteText = clipboardData.getData("Text");
-          }
+        // Safari
+        if (
+          -1 !== Array.prototype.indexOf.call(clipboardData.types, "text/plain")
+        ) {
+          pasteText = clipboardData.getData("Text");
         }
       }
+
       if (pasteText != null && pasteText.length) {
         this.fireListeners("paste", { value: pasteText, event: e });
       }
@@ -2315,15 +2277,11 @@ class FocusControl extends EventTarget {
         return;
       }
       setSafeInputValue(input, "");
-      const data = array.find(this.fireListeners("copy"), (r) => r != null);
+      const data = this.fireListeners("copy").find((r: unknown) => r != null);
       if (data != null) {
         cancelEvent(e);
-        if (browser.IE) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (window as any).clipboardData.setData("Text", data); // IE
-        } else {
-          e.clipboardData!.setData("text/plain", data as string); // Chrome, Firefox
-        }
+
+        e.clipboardData!.setData("text/plain", data as string);
       }
     });
     handler.on(input, "focus", (e) => {
@@ -2999,15 +2957,13 @@ export interface DrawGridConstructorOptions {
    */
   trimOnPaste?: boolean;
 }
-/** @private */
-const protectedKey = _;
 /**
  * DrawGrid
  * @classdesc cheetahGrid.core.DrawGrid
  * @memberof cheetahGrid.core
  */
 export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
-  protected [protectedKey]: DrawGridProtected;
+  protected [PROTECTED_SYMBOL]: DrawGridProtected;
   static get EVENT_TYPE(): typeof DG_EVENT_TYPE {
     return DG_EVENT_TYPE;
   }
@@ -3270,16 +3226,8 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
     const { canvas } = this[_];
     canvas.style.width = "";
     canvas.style.height = "";
-    const width = Math.floor(
-      canvas.offsetWidth ||
-        canvas.parentElement!.offsetWidth -
-          style.getScrollBarSize() /*for legacy*/
-    );
-    const height = Math.floor(
-      canvas.offsetHeight ||
-        canvas.parentElement!.offsetHeight -
-          style.getScrollBarSize() /*for legacy*/
-    );
+    const width = Math.floor(canvas.offsetWidth);
+    const height = Math.floor(canvas.offsetHeight);
 
     canvas.width = width;
     canvas.height = height;

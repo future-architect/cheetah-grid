@@ -1,10 +1,9 @@
 import type { ActionAreaPredicate, ButtonActionOption } from "../../ts-types";
 import type { ButtonColumnState, GridInternal } from "../../ts-types-internal";
 import { AbstractAction } from "./Action";
-import { getButtonColumnStateId } from "../../internal/symbolManager";
+import { BUTTON_COLUMN_STATE_ID } from "../../internal/symbolManager";
 import { obj } from "../../internal/utils";
 
-const BUTTON_COLUMN_STATE_ID = getButtonColumnStateId();
 export class ButtonAction<T> extends AbstractAction<T> {
   constructor(option: ButtonActionOption = {}) {
     super(option);
