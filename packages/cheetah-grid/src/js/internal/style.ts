@@ -42,7 +42,7 @@ function initDocumentInternal(): void {
 }
 		`;
 
-  document.head.appendChild(style);
+  document.body.appendChild(style);
 }
 
 let initDocumentVar = initDocumentInternal;

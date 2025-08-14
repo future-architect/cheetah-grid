@@ -15,8 +15,8 @@ npm install -S cheetah-grid
 ```
 
 ```js
-import * as cheetahGrid from "cheetah-grid";
 import "cheetah-grid/main.css";
+import * as cheetahGrid from "cheetah-grid";
 ```
 
 ### Via CDN
@@ -24,8 +24,8 @@ import "cheetah-grid/main.css";
 [![npm](https://img.shields.io/npm/v/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
 
 ```html
-<script src="https://unpkg.com/cheetah-grid@1.16"></script>
 <link rel="stylesheet" href="https://unpkg.com/cheetah-grid@1.16/main.css" />
+<script src="https://unpkg.com/cheetah-grid@1.16"></script>
 ```
 
 ### Via Source Code
