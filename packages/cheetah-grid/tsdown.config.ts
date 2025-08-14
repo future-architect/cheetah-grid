@@ -1,5 +1,5 @@
+/* eslint prettier/prettier: 'off' */
 import {defineConfig} from 'tsdown';
-
 
 import PACKAGEJSON from './package.json' with {type: 'json'};
 const BANNER = `/*! Cheetah Grid v${PACKAGEJSON.version} | license ${PACKAGEJSON.license} */`;
@@ -11,6 +11,6 @@ export default defineConfig([
 		outputOptions: {
 			name: 'cheetahGrid',
 		},
-        banner: {js:BANNER, css:BANNER},
+    banner: {js:BANNER, css:BANNER},
 	},
 ]);
