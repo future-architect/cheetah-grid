@@ -1,7 +1,7 @@
 import type {
   MessageHandler as Base,
   DrawCellInfo,
-} from "../../ts-types-internal";
+} from "../../ts-types/grid-engine";
 import type {
   CellContext,
   ColumnStyle,

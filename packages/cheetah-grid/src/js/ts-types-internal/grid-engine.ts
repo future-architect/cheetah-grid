@@ -1,16 +1,5 @@
 import type { CellAddress, FieldDef } from "../ts-types/grid";
-import type {
-  CellContext,
-  GridCanvasHelperAPI,
-  ListGridAPI,
-} from "../ts-types/grid-engine";
-import type { ColorPropertyDefine, ColumnIconOption } from "../ts-types/define";
-import type {
-  ColumnStyle,
-  ColumnStyleOption,
-  HeaderStyleOption,
-} from "../ts-types/column";
-import type { Message } from "../ts-types/data";
+import type { ListGridAPI } from "../ts-types/grid-engine";
 import type {
   BRANCH_GRAPH_COLUMN_STATE_ID,
   BUTTON_COLUMN_STATE_ID,
@@ -23,28 +12,6 @@ import type {
   SMALL_DIALOG_INPUT_EDITOR_STATE_ID,
   TREE_COLUMN_STATE_ID,
 } from "../internal/symbolManager";
-
-export interface MessageHandler<T> {
-  drawCellMessage(
-    message: Message,
-    context: CellContext,
-    style: ColumnStyle,
-    helper: GridCanvasHelperAPI,
-    grid: ListGridAPI<T>,
-    info: DrawCellInfo<T>
-  ): void;
-}
-
-export interface DrawCellInfo<T> {
-  getRecord(): unknown;
-  getIcon(): ColumnIconOption<never> | ColumnIconOption<never>[] | null;
-  getMessage(): Message;
-  messageHandler: MessageHandler<T>;
-  style: ColumnStyleOption | HeaderStyleOption | null | undefined;
-  drawCellBase(arg?: { bgColor?: ColorPropertyDefine }): void;
-  drawCellBg(arg?: { bgColor?: ColorPropertyDefine }): void;
-  drawCellBorder(): void;
-}
 
 export type ColumnFadeinState = {
   activeFadeins?: ((point: number) => void)[];

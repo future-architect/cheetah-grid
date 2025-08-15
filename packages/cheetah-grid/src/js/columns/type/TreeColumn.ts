@@ -5,6 +5,7 @@ import type {
   CellAddress,
   CellContext,
   DataSourceAPI,
+  DrawCellInfo,
   FieldDef,
   GridCanvasHelperAPI,
   ListGridAPI,
@@ -13,7 +14,7 @@ import type {
   TreeColumnOption,
   TreeDataValue,
 } from "../../ts-types";
-import type { DrawCellInfo, GridInternal } from "../../ts-types-internal";
+import type { GridInternal } from "../../ts-types-internal";
 import { Column } from "./Column";
 import { Rect } from "../../internal/Rect";
 import { TreeLineKind } from "../../ts-types-internal";

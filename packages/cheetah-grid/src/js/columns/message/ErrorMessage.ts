@@ -2,12 +2,12 @@ import * as messageUtils from "./messageUtils";
 import type {
   CellContext,
   ColumnStyle,
+  DrawCellInfo,
   GridCanvasHelperAPI,
   ListGridAPI,
   MessageObject,
 } from "../../ts-types";
 import { BaseMessage } from "./BaseMessage";
-import type { DrawCellInfo } from "../../ts-types-internal";
 import { ErrorMessageElement } from "./internal/ErrorMessageElement";
 import { cellInRange } from "../../internal/utils";
 

@@ -2,12 +2,12 @@ import * as icons from "../../internal/icons";
 import type {
   CellContext,
   ColumnIconOption,
+  DrawCellInfo,
   GridCanvasHelperAPI,
   IconColumnOption,
   ListGridAPI,
 } from "../../ts-types";
 import { Column } from "./Column";
-import type { DrawCellInfo } from "../../ts-types-internal";
 import { IconStyle } from "../style/IconStyle";
 
 function repeatArray(

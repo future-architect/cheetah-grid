@@ -1,11 +1,11 @@
 import type {
   CellContext,
   ColumnStyle,
+  DrawCellInfo,
   GridCanvasHelperAPI,
   ListGridAPI,
   MessageObject,
 } from "../../ts-types";
-import type { DrawCellInfo } from "../../ts-types-internal";
 import type { MessageElement } from "./internal/MessageElement";
 
 export abstract class BaseMessage<T> {
