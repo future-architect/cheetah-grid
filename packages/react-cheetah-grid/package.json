@@ -8,6 +8,7 @@
     "build:ci": "npm run build",
     "postbuild": "tsc src/* --declaration --emitDeclarationOnly --jsx react-jsx --esModuleInterop --target es2020 --outDir dist --moduleResolution node",
     "serve": "vite preview",
+    "pretest": "npx -y link ../cheetah-grid",
     "test": "jest"
   },
   "repository": {

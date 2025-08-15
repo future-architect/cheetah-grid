@@ -891,18 +891,21 @@ const gridMap = new WeakMap<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Accept any type
   ListGrid<any>
 >();
-const resizeObserver = new ResizeObserver((entries) => {
-  for (const entry of entries) {
-    if (entry.contentBoxSize) {
-      const grid = gridMap.get(entry.target);
-      if (grid) {
-        grid.updateSize();
-        grid.updateScroll();
-        grid.invalidate();
-      }
-    }
-  }
-});
+const resizeObserver =
+  typeof ResizeObserver === "undefined"
+    ? { observe: () => {}, unobserve: () => {} }
+    : new ResizeObserver((entries) => {
+        for (const entry of entries) {
+          if (entry.contentBoxSize) {
+            const grid = gridMap.get(entry.target);
+            if (grid) {
+              grid.updateSize();
+              grid.updateScroll();
+              grid.invalidate();
+            }
+          }
+        }
+      });
 /**
  * ListGrid
  * @classdesc cheetahGrid.ListGrid
