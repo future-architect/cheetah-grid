@@ -17,3 +17,8 @@ packages/demo/.devdocs
 /docs/assets
 /docs/documents
 /docs/animals-icons
+
+/packages/cheetah-grid/README.md
+/packages/cheetah-grid/LICENSE
+/packages/vue-cheetah-grid/LICENSE
+/packages/cheetah-grid-icon-svg-loader/LICENSE

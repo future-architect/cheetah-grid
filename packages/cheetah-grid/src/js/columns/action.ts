@@ -10,6 +10,7 @@ import type {
   SmallDialogInputEditorOption,
 } from "../ts-types";
 import { Action } from "./action/Action";
+import type { RangePasteContext } from "./action/BaseAction";
 import { BaseAction } from "./action/BaseAction";
 import { ButtonAction } from "./action/ButtonAction";
 import { CheckEditor } from "./action/CheckEditor";
@@ -76,6 +77,7 @@ export type {
   InlineInputEditorOption,
   InlineMenuEditorOption,
   SmallDialogInputEditorOption,
+  RangePasteContext,
 };
 export function of<T>(
   columnAction: ColumnActionOption | BaseAction<T> | null | undefined
