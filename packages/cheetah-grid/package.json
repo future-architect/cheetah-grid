@@ -1,6 +1,6 @@
 {
   "name": "cheetah-grid",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Cheetah Grid is a high performance grid engine that works on canvas",
   "keywords": [
     "spreadsheet",
@@ -53,7 +53,7 @@
     "test:watch": "karma start --min",
     "test:ff": "karma start --browsers Firefox",
     "test:chrome": "karma start --browsers Chrome",
-    "build": "npm run build:tsdown",
+    "build": "npm run build:tsdown && npm run test:node",
     "build:tsdown": "tsdown",
     "eslint": "eslint . --ext .js,.ts",
     "eslint:fix": "eslint . --fix --ext .js,.ts",
@@ -76,7 +76,7 @@
     "@typescript-eslint/eslint-plugin": "^4.0.0",
     "@typescript-eslint/parser": "^4.0.0",
     "babel-loader": "^8.1.0",
-    "cheetah-grid-icon-svg-loader": "^2.0.0",
+    "cheetah-grid-icon-svg-loader": "^2.1.0",
     "cross-env": "^7.0.2",
     "css-loader": "^4.2.1",
     "cssnano": "^4.1.10",
