@@ -3,13 +3,14 @@ import type {
   BranchGraphCommandValue,
   CellContext,
   ColorDef,
+  DrawCellInfo,
   FieldDef,
   GridCanvasHelperAPI,
   ListGridAPI,
   MaybePromise,
   MaybePromiseOrUndef,
 } from "../../ts-types";
-import type { DrawCellInfo, GridInternal } from "../../ts-types-internal";
+import type { GridInternal } from "../../ts-types-internal";
 import { getOrApply, isPromise, obj } from "../../internal/utils";
 import { BaseColumn } from "./BaseColumn";
 import { BranchGraphStyle } from "../style/BranchGraphStyle";

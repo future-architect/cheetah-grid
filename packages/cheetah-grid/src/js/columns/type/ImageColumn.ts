@@ -1,11 +1,11 @@
 import type {
   CellContext,
+  DrawCellInfo,
   GridCanvasHelperAPI,
   ListGridAPI,
   MaybePromise,
 } from "../../ts-types";
 import { BaseColumn } from "./BaseColumn";
-import type { DrawCellInfo } from "../../ts-types-internal";
 import { ImageStyle } from "../style/ImageStyle";
 import { Rect } from "../../internal/Rect";
 import { calcStartPosition } from "../../internal/canvases";

@@ -1,12 +1,12 @@
 import type {
   CellContext,
+  DrawCellInfo,
   GridCanvasHelperAPI,
   ListGridAPI,
   PercentCompleteBarColumnOption,
 } from "../../ts-types";
 import { getOrApply, str } from "../../internal/utils";
 import { Column } from "./Column";
-import type { DrawCellInfo } from "../../ts-types-internal";
 import { PercentCompleteBarStyle } from "../style/PercentCompleteBarStyle";
 
 const MARGIN = 2;

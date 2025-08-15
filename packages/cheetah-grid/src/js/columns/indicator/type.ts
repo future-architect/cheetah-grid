@@ -1,10 +1,10 @@
 import type {
   CellContext,
+  DrawCellInfo,
   GridCanvasHelperAPI,
   IndicatorObject,
   ListGridAPI,
 } from "../../ts-types";
-import type { DrawCellInfo } from "../../ts-types-internal";
 
 export const enum DrawIndicatorKind {
   topLeft,

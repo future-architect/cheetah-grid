@@ -2,12 +2,12 @@ import * as messageUtils from "./messageUtils";
 import type {
   CellContext,
   ColumnStyle,
+  DrawCellInfo,
   GridCanvasHelperAPI,
   ListGridAPI,
   MessageObject,
 } from "../../ts-types";
 import { BaseMessage } from "./BaseMessage";
-import type { DrawCellInfo } from "../../ts-types-internal";
 import { MessageElement } from "./internal/MessageElement";
 import { cellInRange } from "../../internal/utils";
 const GREY_L2 = "#e0e0e0";

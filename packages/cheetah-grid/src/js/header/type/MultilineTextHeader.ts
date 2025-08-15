@@ -1,7 +1,7 @@
 import * as utils from "../../columns/type/columnUtils";
-import type { DrawCellInfo, GridInternal } from "../../ts-types-internal";
+import type { GridInternal } from "../../ts-types-internal";
 import { BaseHeader } from "./BaseHeader";
-import type { CellContext } from "../../ts-types";
+import type { CellContext, DrawCellInfo } from "../../ts-types";
 import type { GridCanvasHelper } from "../../GridCanvasHelper";
 import { MultilineTextHeaderStyle } from "../style/MultilineTextHeaderStyle";
 

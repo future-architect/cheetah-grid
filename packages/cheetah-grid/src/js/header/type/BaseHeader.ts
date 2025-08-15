@@ -2,13 +2,13 @@ import * as styleContents from "../style";
 import type {
   CellAddress,
   CellContext,
+  DrawCellInfo,
   EventListenerId,
   HeaderStyleOption,
   LayoutObjectId,
   ListGridAPI,
 } from "../../ts-types";
 import { BaseStyle } from "../style/BaseStyle";
-import type { DrawCellInfo } from "../../ts-types-internal";
 import type { GridCanvasHelper } from "../../GridCanvasHelper";
 
 export abstract class BaseHeader<T> {

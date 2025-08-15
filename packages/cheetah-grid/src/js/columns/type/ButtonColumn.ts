@@ -2,10 +2,11 @@ import * as utils from "./columnUtils";
 import type {
   ButtonColumnOption,
   CellContext,
+  DrawCellInfo,
   GridCanvasHelperAPI,
   MaybePromise,
 } from "../../ts-types";
-import type { DrawCellInfo, GridInternal } from "../../ts-types-internal";
+import type { GridInternal } from "../../ts-types-internal";
 import { ButtonStyle } from "../style/ButtonStyle";
 import { Column } from "./Column";
 import { cellInRange } from "../../internal/utils";

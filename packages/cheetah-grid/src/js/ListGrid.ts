@@ -11,6 +11,7 @@ import type {
   ColumnIconOption,
   ColumnStyleOption,
   ColumnTypeAPI,
+  DrawCellInfo,
   DrawGridAPI,
   EventListenerId,
   FieldData,
@@ -55,7 +56,6 @@ import {
 import type { BaseColumn } from "./columns/type/BaseColumn";
 import { BaseStyle } from "./columns/style";
 import type { ColumnData } from "./list-grid/layout-map/api";
-import type { DrawCellInfo } from "./ts-types-internal";
 import { DrawGrid } from "./core/DrawGrid";
 import { GridCanvasHelper } from "./GridCanvasHelper";
 import { BaseStyle as HeaderBaseStyle } from "./header/style";

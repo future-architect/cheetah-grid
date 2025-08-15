@@ -17,15 +17,22 @@ import type { CellAddress, CellRange, FieldData, FieldDef } from "./grid";
 import type {
   ColorPropertyDefine,
   ColorsPropertyDefine,
+  ColumnIconOption,
   FontPropertyDefine,
   LineClamp,
   StylePropertyFunctionArg,
   TextOverflow,
 } from "./define";
 import type { ColumnDefine, HeadersDefine } from "../list-grid/layout-map/api";
-import type { RecordBoolean } from "./column";
+import type {
+  ColumnStyle,
+  ColumnStyleOption,
+  HeaderStyleOption,
+  RecordBoolean,
+} from "./column";
 import type { RequiredThemeDefine } from "./plugin";
 import type { SimpleColumnIconOption } from "../ts-types-internal/data";
+import type { Message } from "./data";
 
 export type LayoutObjectId = number | string | symbol;
 
@@ -402,4 +409,26 @@ export interface CellContext {
 export interface Selection {
   select: CellAddress;
   range: CellRange;
+}
+
+export interface DrawCellInfo<T> {
+  getRecord(): unknown;
+  getIcon(): ColumnIconOption<never> | ColumnIconOption<never>[] | null;
+  getMessage(): Message;
+  messageHandler: MessageHandler<T>;
+  style: ColumnStyleOption | HeaderStyleOption | null | undefined;
+  drawCellBase(arg?: { bgColor?: ColorPropertyDefine }): void;
+  drawCellBg(arg?: { bgColor?: ColorPropertyDefine }): void;
+  drawCellBorder(): void;
+}
+
+export interface MessageHandler<T> {
+  drawCellMessage(
+    message: Message,
+    context: CellContext,
+    style: ColumnStyle,
+    helper: GridCanvasHelperAPI,
+    grid: ListGridAPI<T>,
+    info: DrawCellInfo<T>
+  ): void;
 }

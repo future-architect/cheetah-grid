@@ -1,11 +1,11 @@
 import * as utils from "./columnUtils";
 import type {
   CellContext,
+  DrawCellInfo,
   GridCanvasHelperAPI,
   ListGridAPI,
 } from "../../ts-types";
 import { BaseColumn } from "./BaseColumn";
-import type { DrawCellInfo } from "../../ts-types-internal";
 import { MultilineTextStyle } from "../style/MultilineTextStyle";
 
 export class MultilineTextColumn<T> extends BaseColumn<T> {

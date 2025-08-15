@@ -1,11 +1,11 @@
 import * as inlineUtils from "../../element/inlines";
 import * as utils from "../../columns/type/columnUtils";
-import type { CellContext, ColorPropertyDefine } from "../../ts-types";
 import type {
-  CheckHeaderState,
+  CellContext,
+  ColorPropertyDefine,
   DrawCellInfo,
-  GridInternal,
-} from "../../ts-types-internal";
+} from "../../ts-types";
+import type { CheckHeaderState, GridInternal } from "../../ts-types-internal";
 import { BaseHeader } from "./BaseHeader";
 import { CheckHeaderStyle } from "../style/CheckHeaderStyle";
 import type { GridCanvasHelper } from "../../GridCanvasHelper";

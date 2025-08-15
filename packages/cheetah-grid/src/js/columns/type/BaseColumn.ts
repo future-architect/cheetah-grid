@@ -4,6 +4,7 @@ import type {
   CellAddress,
   CellContext,
   ColumnTypeAPI,
+  DrawCellInfo,
   EventListenerId,
   GridCanvasHelperAPI,
   LayoutObjectId,
@@ -11,11 +12,7 @@ import type {
   MaybePromise,
   Message,
 } from "../../ts-types";
-import type {
-  ColumnFadeinState,
-  DrawCellInfo,
-  GridInternal,
-} from "../../ts-types-internal";
+import type { ColumnFadeinState, GridInternal } from "../../ts-types-internal";
 import { isPromise, obj } from "../../internal/utils";
 import { BaseStyle } from "../style/BaseStyle";
 import { DrawIndicatorKind } from "../indicator/type";

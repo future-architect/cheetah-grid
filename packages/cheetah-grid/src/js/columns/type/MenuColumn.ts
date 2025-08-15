@@ -2,13 +2,13 @@ import * as utils from "./columnUtils";
 import type {
   CellContext,
   ColumnMenuItemOptions,
+  DrawCellInfo,
   GridCanvasHelperAPI,
   ListGridAPI,
   MenuColumnOption,
   SimpleColumnMenuItemOption,
 } from "../../ts-types";
 import { BaseColumn } from "./BaseColumn";
-import type { DrawCellInfo } from "../../ts-types-internal";
 import { MenuStyle } from "../style/MenuStyle";
 import { normalize } from "../../internal/menu-items";
 
