@@ -32,7 +32,7 @@ import * as cheetahGrid from "cheetah-grid";
 
 [![npm](https://img.shields.io/npm/v/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
 
-[main.mjs](https://unpkg.com/cheetah-grid@2.0/dist/main.mjs)
+[main.mjs](https://unpkg.com/cheetah-grid@2.0/dist/main.mjs)\
 [main.css](https://unpkg.com/cheetah-grid@2.0/dist/main.css)
 
 ### Via GitHub
