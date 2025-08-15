@@ -1,7 +1,7 @@
 {
   "name": "react-cheetah-grid",
   "license": "MIT",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -53,8 +53,5 @@
     "typescript": "^5.9.2",
     "vite": "^7.1.2",
     "vite-plugin-dts": "^4.5.4"
-  },
-  "publishConfig": {
-    "tag": "next"
   }
 }
