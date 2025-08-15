@@ -6,7 +6,7 @@
 [![npm](https://img.shields.io/npm/dm/cheetah-grid.svg)](http://www.npmtrends.com/cheetah-grid)
 [![npm](https://img.shields.io/npm/dy/cheetah-grid.svg)](http://www.npmtrends.com/cheetah-grid)
 [![npm](https://img.shields.io/npm/dt/cheetah-grid.svg)](http://www.npmtrends.com/cheetah-grid)
-[![Build Status](https://github.com/future-architect/cheetah-grid/workflows/CI/badge.svg?branch=master)](https://github.com/future-architect/cheetah-grid/actions?query=workflow%3ACI)
+[![Build Status](https://github.com/future-architect/cheetah-grid/actions/workflows/NodeCI.yml/badge.svg)](https://github.com/future-architect/cheetah-grid/actions/workflows/NodeCI.yml)
 
 [![Cheetah Grid](https://future-architect.github.io/cheetah-grid/logo.svg)](https://future-architect.github.io/cheetah-grid/)
 
