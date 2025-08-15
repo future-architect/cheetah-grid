@@ -885,6 +885,24 @@ export interface ListGridConstructorOptions<T>
   frozenRowCount?: undefined;
 }
 export type { HeadersDefine, ColumnDefine, HeaderDefine, GroupHeaderDefine };
+
+const gridMap = new WeakMap<
+  Element,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Accept any type
+  ListGrid<any>
+>();
+const resizeObserver = new ResizeObserver((entries) => {
+  for (const entry of entries) {
+    if (entry.contentBoxSize) {
+      const grid = gridMap.get(entry.target);
+      if (grid) {
+        grid.updateSize();
+        grid.updateScroll();
+        grid.invalidate();
+      }
+    }
+  }
+});
 /**
  * ListGrid
  * @classdesc cheetahGrid.ListGrid
@@ -929,17 +947,19 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
     protectedSpace.tooltipHandler = new TooltipHandler(this);
     _refreshHeader(this);
     this.invalidate();
-    protectedSpace.handler.on(window, "resize", () => {
-      this.updateSize();
-      this.updateScroll();
-      this.invalidate();
-    });
+
+    const element = this.getElement();
+    gridMap.set(element, this);
+    resizeObserver.observe(element);
   }
   /**
    * Dispose the grid instance.
    * @returns {void}
    */
   dispose(): void {
+    const element = this.getElement();
+    gridMap.delete(element);
+    resizeObserver.unobserve(element);
     const protectedSpace = this[_];
     protectedSpace.messageHandler.dispose();
     protectedSpace.tooltipHandler.dispose();
