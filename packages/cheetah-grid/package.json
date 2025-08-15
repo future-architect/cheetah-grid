@@ -21,6 +21,7 @@
       "require": "./dist/main.umd.js",
       "default": "./dist/main.mjs"
     },
+    "./main.mjs": "./dist/main.mjs",
     "./main.css": "./dist/main.css",
     "./package.json": "./package.json"
   },
