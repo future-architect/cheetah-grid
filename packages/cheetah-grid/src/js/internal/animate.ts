@@ -85,8 +85,8 @@ export function animate(
     easing == null
       ? EASINGS.easeInOut
       : typeof easing === "string"
-      ? EASINGS[easing]
-      : easing;
+        ? EASINGS[easing]
+        : easing;
 
   let canceledFlg = false;
   const createAnim = (

@@ -1,9 +1,8 @@
-/*eslint-env es6*/
 /*eslint prefer-arrow-callback:"off", object-shorthand:"off", prefer-rest-params:"off", complexity: "off", prefer-destructuring: "off" */
 'use strict';
 (function() {
 	//エラーをconsoleに
-	if (!window.__karma__) {
+	if (!window.__karma__ && typeof jasmine !== 'undefined') {
 		jasmine.getEnv().addReporter({
 			specDone: function(result) {
 				if (result.failedExpectations.length) {

@@ -5,7 +5,7 @@ import * as data from "./data";
 import * as headers from "./headers";
 import * as icons from "./icons";
 import * as register from "./register";
-import * as themes from "./themes";
+import * as themesModule from "./themes";
 import * as tools from "./tools";
 import { ListGrid } from "./ListGrid";
 import type {
@@ -18,7 +18,14 @@ import type {
 import { GridCanvasHelper } from "./GridCanvasHelper";
 import type { Theme } from "./themes/theme";
 
+const themes = { ...themesModule };
+
 export { getInternal as _getInternal } from "./get-internal";
+
+/** @private */
+function getIcons(): { [key: string]: TYPES.IconDefine } {
+  return icons.get();
+}
 
 /**
  * Cheetah Grid
@@ -55,11 +62,6 @@ export type {
   TYPES,
 };
 
-/** @private */
-function getIcons(): { [key: string]: TYPES.IconDefine } {
-  return icons.get();
-}
-
 // backward compatibility
 export default {
   core,
@@ -84,10 +86,10 @@ Object.defineProperty(themes as any, "default", {
   enumerable: false,
   configurable: true,
   get() {
-    return themes.getDefault();
+    return themesModule.getDefault();
   },
   set(defaultTheme: Theme): void {
-    themes.setDefault(defaultTheme);
+    themesModule.setDefault(defaultTheme);
   },
 });
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -95,6 +97,6 @@ Object.defineProperty(themes as any, "choices", {
   enumerable: false,
   configurable: true,
   get() {
-    return themes.getChoices();
+    return themesModule.getChoices();
   },
 });

@@ -13,7 +13,7 @@ export function strokeColorsRect(
     ColorDef | null,
     ColorDef | null,
     ColorDef | null,
-    ColorDef | null
+    ColorDef | null,
   ],
   left: number,
   top: number,

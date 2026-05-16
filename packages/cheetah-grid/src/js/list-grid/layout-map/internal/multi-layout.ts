@@ -117,36 +117,32 @@ export class MultiLayoutMap<T> implements LayoutMapAPI<T> {
     const hbLayouut = normalizeLayout(layout);
     const header = (this._header = new LayoutObjectGrid(
       hbLayouut.header,
-      (hd: HeaderCellDefine<T>, id: LayoutObjectId): HeaderData<T> => {
-        return {
-          id,
-          caption: hd.caption,
-          field: hd.headerField || (hd as CellDefine<T>).field,
-          headerIcon: hd.headerIcon,
-          style: hd.headerStyle,
-          headerType: headerType.ofCell(hd),
-          action: headerAction.ofCell(hd),
-          define: hd,
-        };
-      }
+      (hd: HeaderCellDefine<T>, id: LayoutObjectId): HeaderData<T> => ({
+        id,
+        caption: hd.caption,
+        field: hd.headerField || (hd as CellDefine<T>).field,
+        headerIcon: hd.headerIcon,
+        style: hd.headerStyle,
+        headerType: headerType.ofCell(hd),
+        action: headerAction.ofCell(hd),
+        define: hd,
+      })
     ));
     const body = (this._body = new LayoutObjectGrid(
       hbLayouut.body,
-      (colDef: CellDefine<T>, id: LayoutObjectId): ColumnData<T> => {
-        return {
-          id,
-          field: colDef.field,
-          width: colDef.width,
-          minWidth: colDef.minWidth,
-          maxWidth: colDef.maxWidth,
-          icon: colDef.icon,
-          message: colDef.message,
-          columnType: columns.type.of(colDef.columnType),
-          action: columns.action.of(colDef.action),
-          style: colDef.style,
-          define: colDef,
-        };
-      }
+      (colDef: CellDefine<T>, id: LayoutObjectId): ColumnData<T> => ({
+        id,
+        field: colDef.field,
+        width: colDef.width,
+        minWidth: colDef.minWidth,
+        maxWidth: colDef.maxWidth,
+        icon: colDef.icon,
+        message: colDef.message,
+        columnType: columns.type.of(colDef.columnType),
+        action: columns.action.of(colDef.action),
+        style: colDef.style,
+        define: colDef,
+      })
     ));
     const columnCount = (this._columnCount = Math.max(
       header.columnCount,

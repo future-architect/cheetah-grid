@@ -2,6 +2,11 @@
 
 Webpack loader that loads the icon module for Cheetah Grid from SVG.
 
+> [!WARNING]
+> `cheetah-grid-icon-svg-loader` is deprecated. Use
+> `unplugin-cheetah-grid-icon-svg` instead for Vite, Rollup, Rolldown, Webpack,
+> Rspack, and esbuild.
+
 ## Installation
 
 ```bash

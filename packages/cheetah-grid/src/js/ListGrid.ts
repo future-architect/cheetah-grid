@@ -838,8 +838,9 @@ interface ListGridProtected<T> extends DrawGridProtected {
 }
 export { ListGridProtected };
 
-export interface ListGridConstructorOptions<T>
-  extends DrawGridConstructorOptions {
+export interface ListGridConstructorOptions<
+  T,
+> extends DrawGridConstructorOptions {
   /**
    * Simple header property
    */

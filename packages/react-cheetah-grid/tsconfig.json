@@ -12,6 +12,7 @@
     "module": "ESNext",
     "moduleResolution": "Node",
     "resolveJsonModule": true,
+    "types": ["vitest/globals"],
     "isolatedModules": false,
     "noEmit": true,
     "jsx": "react-jsx",

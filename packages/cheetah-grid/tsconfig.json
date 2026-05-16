@@ -63,6 +63,7 @@
   },
   "include": [
     "src/js/**/*",
-    "tsdown.config.ts"
+    "tsdown.config.ts",
+    "vitest.config.ts"
   ]
 }

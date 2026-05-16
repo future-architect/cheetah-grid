@@ -69,8 +69,8 @@ export class PercentCompleteBarColumn<T> extends Column<T> {
       num < this._min
         ? 0
         : num > this._max
-        ? 1
-        : (num - this._min) / (this._max - this._min);
+          ? 1
+          : (num - this._min) / (this._max - this._min);
 
     helper.drawWithClip(context, (ctx) => {
       const rect = context.getRect();

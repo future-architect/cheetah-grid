@@ -106,7 +106,7 @@ export class InlineInputElement<T> {
           input.selectionEnd = end;
           return;
         }
-      } catch (e) {
+      } catch {
         //ignore
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

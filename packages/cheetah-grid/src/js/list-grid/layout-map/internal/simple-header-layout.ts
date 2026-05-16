@@ -25,10 +25,13 @@ export class SimpleHeaderLayoutMap<T> implements LayoutMapAPI<T> {
     this._headerCellIds = [];
 
     this._headerObjects = this._addHeaders(0, header, []);
-    this._headerObjectMap = this._headerObjects.reduce((o, e) => {
-      o[e.id as number] = e;
-      return o;
-    }, {} as { [key in LayoutObjectId]: HeaderData<T> });
+    this._headerObjectMap = this._headerObjects.reduce(
+      (o, e) => {
+        o[e.id as number] = e;
+        return o;
+      },
+      {} as { [key in LayoutObjectId]: HeaderData<T> }
+    );
   }
   get columnWidths(): ColumnData<T>[] {
     return this._columns;

@@ -8,13 +8,13 @@
   ],
   "scripts": {
     "pretest": "npm run lint",
-    "test:base": "mocha \"tests/**/*.js\" --reporter dot",
-    "test": "npm run test:nyc",
-    "test:nyc": "nyc --reporter=lcov npm run test:base -- --timeout 60000",
-    "test:d": "mocha --inspect --debug-brk \"tests/**/*.js\" --reporter dot",
-    "watch": "npm run test:base -- --watch",
+    "test:base": "vitest run",
+    "test": "vitest run --coverage",
+    "test:nyc": "vitest run --coverage",
+    "test:d": "vitest --inspect-brk",
+    "watch": "vitest",
     "lint": "npm run eslint",
-    "eslint": "eslint . ",
+    "eslint": "eslint .",
     "eslint:fix": "eslint . --fix"
   },
   "repository": {
@@ -38,11 +38,13 @@
   },
   "homepage": "https://github.com/future-architect/cheetah-grid/tree/master/packages/cheetah-grid-icon-svg-loader",
   "devDependencies": {
-    "eslint": "^7.11.0",
-    "eslint-plugin-node": "^11.1.0",
+    "@eslint/js": "^10.0.1",
+    "@vitest/coverage-v8": "^4.1.6",
+    "eslint": "^10.4.0",
+    "eslint-plugin-n": "^18.0.1",
     "font-awesome": "^4.7.0",
-    "mocha": "^5.2.0",
-    "nyc": "^15.0.0"
+    "globals": "^17.6.0",
+    "vitest": "^4.1.6"
   },
   "engines": {
     "node": ">=6.0.0"

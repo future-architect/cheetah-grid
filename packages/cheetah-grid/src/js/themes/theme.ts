@@ -274,7 +274,7 @@ export class Theme implements RequiredThemeDefine {
         | ColorPropertyDefine
         | number
         | TreeLineStyle
-        | TreeBranchIconStyleDefine
+        | TreeBranchIconStyleDefine,
     >(
       prop: string,
       defNames: string[] | undefined,
@@ -443,10 +443,7 @@ function colorsToColor(
   }
   return colorsArrayToColor(colors);
 
-  function colorsArrayToColor(
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    colors: Exclude<ColorsPropertyDefine, Function>
-  ) {
+  function colorsArrayToColor(colors: Exclude<ColorsPropertyDefine, Function>) {
     if (!Array.isArray(colors)) {
       return colors;
     }
