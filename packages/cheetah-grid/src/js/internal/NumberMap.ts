@@ -16,10 +16,13 @@ const indexFirst = (arr: number[], elm: number): number => {
 
 export class NumberMap<T> {
   private _keys: number[] = [];
-  private _vals: { [key: number]: T } = {};
+  private _vals = Object.create(null) as { [key: number]: T };
   private _sorted = false;
+  private _has(key: number): boolean {
+    return Object.prototype.hasOwnProperty.call(this._vals, key);
+  }
   put(key: number, value: T): void {
-    if (!(key in this._vals)) {
+    if (!this._has(key)) {
       this._keys.push(key);
       this._sorted = false;
     }
@@ -38,7 +41,7 @@ export class NumberMap<T> {
     return this._vals[key];
   }
   has(key: number): boolean {
-    return this._vals[key] != null;
+    return this._has(key);
   }
   each(keyFrom: number, keyTo: number, fn: (t: T, k: number) => void): void {
     const { _keys: keys } = this;
