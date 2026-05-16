@@ -200,5 +200,80 @@
 				textOverflow: 'ellipsis',
 			});
 		});
+
+		it('draws dedicated multiline headers and tests fonts', function() {
+			const calls = [];
+			const bases = [];
+			const context = createContext(1, 0);
+
+			const clone = new types.MultilineTextHeader().clone();
+			clone.drawInternal('A\nB', context, new styles.MultilineTextHeaderStyle({
+				bgColor: 'base',
+				color: 'ink',
+				font: '11px sans-serif',
+				padding: 2,
+				lineHeight: 14,
+				autoWrapText: true,
+				lineClamp: 2,
+			}), createHelper(calls), createGrid(), {
+				drawCellBase: function(option) {
+					bases.push(option);
+				},
+				getIcon: function() {
+					return null;
+				},
+			});
+
+			expect(clone.StyleClass).toBe(styles.MultilineTextHeaderStyle);
+			expect(bases).toEqual([{bgColor: 'base'}]);
+			expect(calls).toEqual([
+				['testFontLoad', '11px sans-serif', 'A\nB', context],
+				['multilineText', ['A', 'B'], context, {
+					textAlign: 'left',
+					textBaseline: 'middle',
+					color: 'ink',
+					font: '11px sans-serif',
+					padding: 2,
+					lineHeight: 14,
+					autoWrapText: true,
+					lineClamp: 2,
+					textOverflow: 'ellipsis',
+					icons: undefined,
+				}],
+			]);
+		});
+
+		it('uses BaseHeader.onDrawCell to resolve style and draw base cells', function() {
+			const bases = [];
+			const draws = [];
+			const helper = createHelper([]);
+			const grid = {
+				getGridCanvasHelper: function() {
+					return helper;
+				},
+			};
+			class TestHeader extends types.BaseHeader {
+				get StyleClass() {
+					return styles.Style;
+				}
+				drawInternal(value, context, style, drawHelper, drawGrid, info) {
+					draws.push([value, context, style.color, drawHelper, drawGrid, info]);
+				}
+			}
+			const context = createContext(1, 0);
+			const info = {
+				style: {color: 'ink'},
+				drawCellBase: function(option) {
+					bases.push(option || {});
+				},
+			};
+
+			new TestHeader().onDrawCell(function() {
+				return 'Caption';
+			}, info, context, grid);
+
+			expect(bases).toEqual([{}]);
+			expect(draws).toEqual([['Caption', context, 'ink', helper, grid, info]]);
+		});
 	});
 })();
