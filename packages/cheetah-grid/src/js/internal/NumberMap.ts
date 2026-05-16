@@ -19,7 +19,7 @@ export class NumberMap<T> {
   private _vals = Object.create(null) as { [key: number]: T };
   private _sorted = false;
   private _has(key: number): boolean {
-    return Object.prototype.hasOwnProperty.call(this._vals, key);
+    return key in this._vals;
   }
   put(key: number, value: T): void {
     if (!this._has(key)) {

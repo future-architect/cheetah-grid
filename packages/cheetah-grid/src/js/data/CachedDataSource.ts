@@ -43,11 +43,11 @@ export class CachedDataSource<T> extends DataSource<T> {
   }
   constructor(opt?: DataSourceParam<T>) {
     super(opt);
-    this._rCache = {};
-    this._fCache = {};
+    this._rCache = Object.create(null) as typeof this._rCache;
+    this._fCache = Object.create(null) as typeof this._fCache;
   }
   protected getOriginal(index: number): MaybePromiseOrUndef<T> {
-    if (this._rCache && this._rCache[index]) {
+    if (this._rCache && index in this._rCache) {
       return this._rCache[index];
     }
     return super.getOriginal(index);
@@ -58,9 +58,8 @@ export class CachedDataSource<T> extends DataSource<T> {
   ): FieldData {
     const rowCache = this._fCache && this._fCache[index];
     if (rowCache) {
-      const cache = rowCache.get(field);
-      if (cache) {
-        return cache;
+      if (rowCache.has(field)) {
+        return rowCache.get(field);
       }
     }
     return super.getOriginalField(index, field);
@@ -79,10 +78,10 @@ export class CachedDataSource<T> extends DataSource<T> {
   }
   clearCache(): void {
     if (this._rCache) {
-      this._rCache = {};
+      this._rCache = Object.create(null) as typeof this._rCache;
     }
     if (this._fCache) {
-      this._fCache = {};
+      this._fCache = Object.create(null) as typeof this._fCache;
     }
   }
   protected fieldPromiseCallBackInternal<F extends FieldDef<T>>(

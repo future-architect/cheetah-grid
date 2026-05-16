@@ -8,7 +8,7 @@ export class LRUCache<T> {
     this._cacheSize = cacheSize || 50;
   }
   private _has(key: string): boolean {
-    return Object.prototype.hasOwnProperty.call(this._map, key);
+    return key in this._map;
   }
   get(key: string): T {
     const val = this._map[key];
