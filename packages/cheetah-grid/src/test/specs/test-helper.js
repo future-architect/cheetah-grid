@@ -3,7 +3,7 @@
 'use strict';
 (function() {
 	//エラーをconsoleに
-	if (!window.__karma__) {
+	if (!window.__karma__ && typeof jasmine !== 'undefined') {
 		jasmine.getEnv().addReporter({
 			specDone: function(result) {
 				if (result.failedExpectations.length) {

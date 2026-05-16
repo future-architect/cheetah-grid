@@ -86,10 +86,8 @@ function getAllModule(svgs) {
 }
 
 describe('svg load', () => {
-	describe('should succeed loading modules for material-design-icons', () => {
-		if (!fs.existsSync(MDI_ROOT)) {
-			return;
-		}
+	const describeWithMaterialDesignIcons = fs.existsSync(MDI_ROOT) ? describe : describe.skip;
+	describeWithMaterialDesignIcons('should succeed loading modules for material-design-icons', () => {
 		for (const target of TEST_TARGETS) {
 			it(`@${target}`, () => {
 				const dirRoot = path.join(MDI_ROOT, target);
