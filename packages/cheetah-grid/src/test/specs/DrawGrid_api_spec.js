@@ -187,17 +187,32 @@
 				grid.makeVisibleCell(19, 19);
 				expect(grid.scrollLeft).toBeGreaterThan(25);
 				expect(grid.scrollTop).toBeGreaterThan(30);
+				const focusControl = grid.getElement().querySelector('.grid-focus-control');
 				grid.setFocusCursor(2, 2);
+				expect(focusControl.style.left).toEqual('80px');
+				expect(focusControl.style.top).toEqual('30px');
 				grid.focusCell(3, 3);
-				expect(grid.getElement().querySelector('.grid-focus-control').style.left).toEqual('120px');
+				expect(focusControl.style.left).toEqual('120px');
 
+				const drawnCells = [];
+				grid.onDrawCell = function(col, row) {
+					drawnCells.push([col, row]);
+				};
+				let drawnCount = drawnCells.length;
 				grid.invalidateCell(0, 0);
+				expect(drawnCells.length).toBeGreaterThan(drawnCount);
+				drawnCount = drawnCells.length;
 				grid.invalidateGridRect(0, 0, 3, 3);
+				expect(drawnCells.length).toBeGreaterThan(drawnCount);
+				drawnCount = drawnCells.length;
 				grid.invalidateCellRange({
 					start: {col: 1, row: 1},
 					end: {col: 2, row: 2},
 				});
+				expect(drawnCells.length).toBeGreaterThan(drawnCount);
+				drawnCount = drawnCells.length;
 				grid.invalidate();
+				expect(drawnCells.length).toBeGreaterThan(drawnCount);
 
 				const area = grid.getAttachCellsArea({
 					start: {col: 1, row: 1},

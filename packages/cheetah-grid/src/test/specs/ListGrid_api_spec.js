@@ -324,8 +324,6 @@
 				expect(grid.selection.select).toEqual({col: 1, row: 3});
 				grid.focusGridCell('missing', 1);
 				expect(grid.selection.select).toEqual({col: 1, row: 3});
-				grid.makeVisibleGridCell('age', 1);
-				grid.makeVisibleGridCell('missing', 1);
 
 				grid.setHeaderValue(0, 1, 'manual');
 				expect(grid.getHeaderValue(0, 1)).toEqual('manual');
@@ -401,7 +399,6 @@
 				expect(grid.records).toEqual(null);
 				ds.length = 2;
 				expect(grid.rowCount).toEqual(4);
-				ds.sort('name', 'asc');
 
 				grid.dataSource = {
 					length: 1,
@@ -429,6 +426,7 @@
 				grid.onDrawCell(0, 0, createContext(0, 0));
 				grid.onDrawCell(0, 1, createContext(0, 1));
 				grid.onDrawCell(0, 2, createContext(0, 2));
+				const validDrawCallCount = calls.length;
 				grid.onDrawCell(99, 99, createContext(99, 99));
 
 				expect(calls).toContainEqual(['drawHeader', 'Person', {path: 'M0 0h1v1z', width: 8}, headerStyle, 100]);
@@ -445,6 +443,7 @@
 					style,
 					40,
 				]);
+				expect(calls.length).toEqual(validDrawCallCount);
 
 				expect(grid.getCopyCellValue(0, 0)).toEqual('header:Person');
 				expect(grid.getCopyCellValue(1, 0, {

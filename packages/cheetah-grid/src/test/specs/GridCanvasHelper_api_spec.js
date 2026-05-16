@@ -192,13 +192,21 @@
 		};
 	}
 
+	function createSelection() {
+		return {
+			select: {col: 1, row: 1},
+			range: {
+				start: {col: 1, row: 1},
+				end: {col: 2, row: 2},
+			},
+		};
+	}
+
 	describe('GridCanvasHelper API', function() {
-		it('resolves theme values, calculators, padding, and clip rectangles', function() {
+		it('resolves theme values from the grid theme', function() {
 			const calls = [];
 			const grid = createGrid(calls);
 			const helper = new GridCanvasHelper(grid);
-			const context = createContext(1, 1, calls);
-			const noDrawContext = createContext(1, 1, calls, null, null);
 
 			expect(helper.theme.font).toEqual('13px sans-serif');
 			expect(helper.theme.underlayBackgroundColor).toEqual('#fafafa');
@@ -229,6 +237,13 @@
 			expect(helper.theme.indicators.bottomRightSize).toEqual(3);
 			expect(helper.theme.indicators.bottomLeftColor).toEqual('#0b0');
 			expect(helper.theme.indicators.bottomLeftSize).toEqual(4);
+		});
+
+		it('calculates box sizes and resolves style callbacks', function() {
+			const calls = [];
+			const grid = createGrid(calls);
+			const helper = new GridCanvasHelper(grid);
+			const context = createContext(1, 1, calls);
 
 			const calculator = helper.createCalculator(context, '__grid_canvas_helper_12px__');
 			expect(calculator.calcWidth('50%')).toEqual(40);
@@ -247,89 +262,212 @@
 			expect(helper.getStyleProperty(function(args) {
 				return args.grid === grid ? 'grid' : 'other';
 			}, 3, 4, context.getContext())).toEqual('grid');
+		});
+
+		it('skips clipped draw callbacks when the draw rectangle is missing', function() {
+			const calls = [];
+			const grid = createGrid(calls);
+			const helper = new GridCanvasHelper(grid);
+			const noDrawContext = createContext(1, 1, calls, null, null);
 
 			helper.drawWithClip(noDrawContext, function() {
 				calls.push(['should-not-draw']);
 			});
+
+			expect(calls).toEqual([]);
+		});
+
+		it('skips clipped border callbacks when the draw rectangle is missing', function() {
+			const calls = [];
+			const grid = createGrid(calls);
+			const helper = new GridCanvasHelper(grid);
+			const noDrawContext = createContext(1, 1, calls, null, null);
+
 			helper.drawBorderWithClip(noDrawContext, function() {
 				calls.push(['should-not-border']);
 			});
+
+			expect(calls).toEqual([]);
+		});
+
+		it('clips draw callbacks to the cell draw rectangle', function() {
+			const calls = [];
+			const grid = createGrid(calls);
+			const helper = new GridCanvasHelper(grid);
+			const context = createContext(1, 1, calls);
+
 			helper.drawWithClip(context, function(ctx) {
 				ctx.fillStyle = '#draw';
 				ctx.fill();
 			});
+
+			expect(calls).toEqual([
+				['save'],
+				['beginPath'],
+				['rect', 10, 20, 80, 36],
+				['clip'],
+				['fill', '#draw'],
+				['restore'],
+			]);
+		});
+
+		it('clips border callbacks with a one-pixel border allowance', function() {
+			const calls = [];
+			const grid = createGrid(calls);
+			const helper = new GridCanvasHelper(grid);
+			const context = createContext(1, 1, calls);
+
 			helper.drawBorderWithClip(context, function(ctx) {
 				ctx.strokeStyle = '#border';
 				ctx.stroke();
 			});
 
-			expect(calls).not.toContainEqual(['should-not-draw']);
-			expect(calls).not.toContainEqual(['should-not-border']);
-			expect(calls).toContainEqual(['rect', 10, 20, 80, 36]);
-			expect(calls).toContainEqual(['clip']);
-			expect(calls).toContainEqual(['fill', '#draw']);
-			expect(calls).toContainEqual(['stroke', '#border', 1]);
+			expect(calls).toEqual([
+				['save'],
+				['beginPath'],
+				['rect', 9, 19, 81, 37],
+				['clip'],
+				['stroke', '#border', 1],
+				['restore'],
+			]);
 		});
 
-		it('fills, borders, and resolves selection-aware colors', function() {
+		it('resolves selection-aware fill colors', function() {
 			const calls = [];
-			const selection = {
-				select: {col: 1, row: 1},
-				range: {
-					start: {col: 1, row: 1},
-					end: {col: 2, row: 2},
-				},
-			};
+			const selection = createSelection();
 			const grid = createGrid(calls, selection);
 			const helper = new GridCanvasHelper(grid);
 			const selected = createContext(1, 1, calls, selection);
 			const ranged = createContext(2, 2, calls, selection);
 			const defaultCell = createContext(3, 3, calls, selection);
 			const frozen = createContext(0, 0, calls, selection);
-			const rightOfSelected = createContext(2, 1, calls, selection);
-			const belowSelected = createContext(1, 2, calls, selection);
 
 			expect(helper.getFillColorState(ranged)).toEqual('#cde');
 			expect(helper.getFillColorState(defaultCell, {fillColor: '#custom'})).toEqual('#custom');
 			expect(helper.getFillColorState(selected)).toEqual('#def');
 			expect(helper.getFillColorState(frozen)).toEqual('#eee');
 			expect(helper.getFillColorState(defaultCell)).toEqual('#fff');
+		});
+
+		it('draws direct frozen-row text with frozen-row color and resolved font', function() {
+			const calls = [];
+			const selection = createSelection();
+			const grid = createGrid(calls, selection);
+			const helper = new GridCanvasHelper(grid);
+			const frozen = createContext(0, 0, calls, selection);
 
 			helper.fillText('hello', 1, 2, frozen, {
 				font: function(args) {
 					return args.row === 0 ? '10px serif' : undefined;
 				},
 			});
-			helper.text('frozen', frozen, {offset: 2});
-			helper.multilineText(['frozen'], frozen, {offset: 2});
-			helper.fillCell(defaultCell);
-			helper.fillCellWithState(ranged);
-			helper.fillRect({left: 1, top: 2, width: 3, height: 4}, defaultCell, {fillColor: '#fill'});
-			helper.fillRectWithState({left: 2, top: 3, width: 4, height: 5}, selected);
-			helper.border(defaultCell, {lineWidth: 1});
-			helper.border(defaultCell, {borderColor: '#single', lineWidth: 2});
-			helper.border(defaultCell, {borderColor: ['#a', '#b', '#c', '#d'], lineWidth: 4});
-			helper.borderWithState(selected);
-			helper.borderWithState(frozen);
-			helper.borderWithState(rightOfSelected);
-			helper.borderWithState(belowSelected);
 
 			expect(calls).toContainEqual(['fillText', 'hello', 1, 2, '#222', '10px serif']);
-			expect(calls.filter(function(call) {
-				return call[0] === 'fillText' && call[1] === 'frozen' && call[4] === '#222';
-			}).length).toEqual(2);
-			expect(calls).toContainEqual(['fill', '#fff']);
+		});
+
+		it('draws single-line frozen-row cell text with frozen-row color', function() {
+			const calls = [];
+			const selection = createSelection();
+			const grid = createGrid(calls, selection);
+			const helper = new GridCanvasHelper(grid);
+			const frozen = createContext(0, 0, calls, selection);
+
+			helper.text('frozen', frozen, {offset: 2});
+
+			expect(calls).toContainEqual(['fillText', 'frozen', 13, 38, '#222', '__grid_canvas_helper_12px__']);
+		});
+
+		it('draws multiline frozen-row cell text with frozen-row color', function() {
+			const calls = [];
+			const selection = createSelection();
+			const grid = createGrid(calls, selection);
+			const helper = new GridCanvasHelper(grid);
+			const frozen = createContext(0, 0, calls, selection);
+
+			helper.multilineText(['frozen'], frozen, {offset: 2});
+
+			expect(calls).toContainEqual(['fillText', 'frozen', 13, 38, '#222', '__grid_canvas_helper_12px__']);
+		});
+
+		it('fills cells and rectangles with default, selected, and custom colors', function() {
+			const calls = [];
+			const selection = createSelection();
+			const grid = createGrid(calls, selection);
+			const helper = new GridCanvasHelper(grid);
+			const selected = createContext(1, 1, calls, selection);
+			const ranged = createContext(2, 2, calls, selection);
+			const defaultCell = createContext(3, 3, calls, selection);
+
+			helper.fillCell(defaultCell);
+			expect(calls.slice()).toContainEqual(['fill', '#fff']);
+			calls.length = 0;
+
+			helper.fillCellWithState(ranged);
 			expect(calls).toContainEqual(['fill', '#cde']);
+			calls.length = 0;
+
+			helper.fillRect({left: 1, top: 2, width: 3, height: 4}, defaultCell, {fillColor: '#fill'});
+			expect(calls).toContainEqual(['rect', 1, 2, 3, 4]);
 			expect(calls).toContainEqual(['fill', '#fill']);
+			calls.length = 0;
+
+			helper.fillRectWithState({left: 2, top: 3, width: 4, height: 5}, selected);
+			expect(calls).toContainEqual(['rect', 2, 3, 4, 5]);
 			expect(calls).toContainEqual(['fill', '#def']);
+		});
+
+		it('draws borders with the requested line width and colors', function() {
+			const calls = [];
+			const selection = createSelection();
+			const grid = createGrid(calls, selection);
+			const helper = new GridCanvasHelper(grid);
+			const defaultCell = createContext(3, 3, calls, selection);
+
+			helper.border(defaultCell, {lineWidth: 1});
+			expect(calls).toContainEqual(['moveTo', 9.5, 19.5]);
+			expect(calls).toContainEqual(['lineTo', 89.5, 19.5]);
+			expect(calls).toContainEqual(['stroke', '#100', 1]);
+			calls.length = 0;
+
+			helper.border(defaultCell, {borderColor: '#single', lineWidth: 2});
 			expect(calls).toContainEqual(['strokeRect', 10, 20, 79, 35, '#single', 2]);
+			calls.length = 0;
+
+			helper.border(defaultCell, {borderColor: ['#a', '#b', '#c', '#d'], lineWidth: 4});
+			expect(calls).toContainEqual(['moveTo', 11, 21]);
+			expect(calls).toContainEqual(['lineTo', 88, 21]);
+			expect(calls).toContainEqual(['stroke', '#a', 4]);
+		});
+
+		it('draws state borders for selected, frozen, and adjacent selected cells', function() {
+			const calls = [];
+			const selection = createSelection();
+			const grid = createGrid(calls, selection);
+			const helper = new GridCanvasHelper(grid);
+			const selected = createContext(1, 1, calls, selection);
+			const frozen = createContext(0, 0, calls, selection);
+			const rightOfSelected = createContext(2, 1, calls, selection);
+			const belowSelected = createContext(1, 2, calls, selection);
+
+			helper.borderWithState(selected);
+			expect(calls).toContainEqual(['strokeRect', 10, 20, 79, 35, '#f00', 2]);
+			calls.length = 0;
+
+			helper.borderWithState(frozen);
+			expect(calls).toContainEqual(['strokeRect', 9.5, 19.5, 80, 36, '#555', 1]);
+			calls.length = 0;
+
+			helper.borderWithState(rightOfSelected);
 			expect(calls).toContainEqual(['moveTo', 9.5, 20]);
 			expect(calls).toContainEqual(['lineTo', 9.5, 56]);
+			calls.length = 0;
+
+			helper.borderWithState(belowSelected);
 			expect(calls).toContainEqual(['moveTo', 10, 19.5]);
 			expect(calls).toContainEqual(['lineTo', 90, 19.5]);
 		});
 
-		it('draws text, multiline text, checkboxes, radio buttons, and buttons', function() {
+		it('draws overflowing text with leading and trailing icons', function() {
 			const calls = [];
 			const selection = {
 				select: {col: 5, row: 5},
@@ -341,9 +479,7 @@
 			const grid = createGrid(calls, selection);
 			const helper = new GridCanvasHelper(grid);
 			const context = createContext(3, 3, calls, selection);
-			const bottomContext = createContext(4, 4, calls, selection);
 
-			const overflowTextStart = calls.length;
 			helper.text('long text that will overflow', context, {
 				padding: ['1em', '4px', '2px', '3px'],
 				textOverflow: '!',
@@ -353,9 +489,9 @@
 					return '__grid_canvas_helper_12px__';
 				},
 			});
-			const overflowTextCalls = calls.slice(overflowTextStart);
-			expect(overflowTextCalls).toContainEqual(['overflow', 3, 3, 'long text that will overflow']);
-			expect(overflowTextCalls.filter(function(call) {
+
+			expect(calls).toContainEqual(['overflow', 3, 3, 'long text that will overflow']);
+			expect(calls.filter(function(call) {
 				return call[0] === 'fillText';
 			}).map(function(call) {
 				return [call[1], call[4]];
@@ -365,6 +501,21 @@
 				['!', '#111'],
 				['T', '#111'],
 			]);
+		});
+
+		it('draws auto-wrapped multiline text with a trailing icon', function() {
+			const calls = [];
+			const selection = {
+				select: {col: 5, row: 5},
+				range: {
+					start: {col: 5, row: 5},
+					end: {col: 5, row: 5},
+				},
+			};
+			const grid = createGrid(calls, selection);
+			const helper = new GridCanvasHelper(grid);
+			const bottomContext = createContext(4, 4, calls, selection);
+
 			helper.multilineText(['first very long line', 'second'], bottomContext, {
 				autoWrapText: true,
 				lineClamp: 'auto',
@@ -374,55 +525,125 @@
 				textBaseline: 'bottom',
 				padding: 2,
 			});
+
+			expect(calls).toContainEqual(['overflow', 4, 4, false]);
+			expect(calls.filter(function(call) {
+				return call[0] === 'fillText';
+			}).map(function(call) {
+				return call[1];
+			})).toEqual(['first', 'very', 'long li', '…', 'T']);
+		});
+
+		it('draws unclamped multiline text with a trailing icon', function() {
+			const calls = [];
+			const selection = {
+				select: {col: 5, row: 5},
+				range: {
+					start: {col: 5, row: 5},
+					end: {col: 5, row: 5},
+				},
+			};
+			const grid = createGrid(calls, selection);
+			const helper = new GridCanvasHelper(grid);
+			const context = createContext(3, 3, calls, selection);
+
 			helper.multilineText(['plain', 'lines'], context, {
 				textOverflow: 'clip',
 				lineClamp: 0,
 				trailingIcon: {content: 'T', width: 8},
 			});
-			const lineClampStart = calls.length;
+
+			expect(calls).toContainEqual(['overflow', 3, 3, false]);
+			expect(calls.filter(function(call) {
+				return call[0] === 'fillText';
+			}).map(function(call) {
+				return call[1];
+			})).toEqual(['plain', 'lines', 'T']);
+		});
+
+		it('draws multiline text up to the requested line clamp', function() {
+			const calls = [];
+			const selection = {
+				select: {col: 5, row: 5},
+				range: {
+					start: {col: 5, row: 5},
+					end: {col: 5, row: 5},
+				},
+			};
+			const grid = createGrid(calls, selection);
+			const helper = new GridCanvasHelper(grid);
+			const context = createContext(3, 3, calls, selection);
+
 			helper.multilineText(['short', 'rows'], context, {
 				offset: 2,
 				lineClamp: 3,
 				textOverflow: 'clip',
 			});
-			const lineClampCalls = calls.slice(lineClampStart);
-			expect(lineClampCalls).toContainEqual(['overflow', 3, 3, false]);
-			expect(lineClampCalls.filter(function(call) {
+
+			expect(calls).toContainEqual(['overflow', 3, 3, false]);
+			expect(calls.filter(function(call) {
 				return call[0] === 'fillText';
 			}).map(function(call) {
 				return call[1];
 			})).toEqual(['short', 'rows']);
-			const checkedCheckboxTransitionStart = calls.length;
+		});
+
+		it('draws checkbox animation colors for checked and unchecked states', function() {
+			const calls = [];
+			const selection = {
+				select: {col: 5, row: 5},
+				range: {
+					start: {col: 5, row: 5},
+					end: {col: 5, row: 5},
+				},
+			};
+			const grid = createGrid(calls, selection);
+			const helper = new GridCanvasHelper(grid);
+			const context = createContext(3, 3, calls, selection);
+
 			helper.checkbox(true, context, {
 				animElapsedTime: 0.25,
 				padding: '1em',
 				checkBgColor: '#000000',
 			});
-			const checkedCheckboxTransitionCalls = calls.slice(checkedCheckboxTransitionStart);
-			expect(checkedCheckboxTransitionCalls).toContainEqual(['fill', 'rgb(192, 192, 192)']);
-			const uncheckedCheckboxTransitionStart = calls.length;
+			expect(calls).toContainEqual(['fill', 'rgb(192, 192, 192)']);
+			calls.length = 0;
+
 			helper.checkbox(false, context, {
 				animElapsedTime: 0.25,
 				padding: 2,
 			});
-			const uncheckedCheckboxTransitionCalls = calls.slice(uncheckedCheckboxTransitionStart);
-			expect(uncheckedCheckboxTransitionCalls).toContainEqual(['fill', 'rgb(102, 102, 102)']);
-			const checkedCheckboxStart = calls.length;
+			expect(calls).toContainEqual(['fill', 'rgb(102, 102, 102)']);
+			calls.length = 0;
+
 			helper.checkbox(true, context, {
 				animElapsedTime: 1,
 			});
-			const checkedCheckboxCalls = calls.slice(checkedCheckboxStart);
-			expect(checkedCheckboxCalls).toContainEqual(['fill', '#333']);
-			const initialCheckboxStart = calls.length;
+			expect(calls).toContainEqual(['fill', '#333']);
+			calls.length = 0;
+
 			helper.checkbox(true, context, {
 				animElapsedTime: 0,
 			});
-			const initialCheckboxCalls = calls.slice(initialCheckboxStart);
-			expect(initialCheckboxCalls).toContainEqual(['fill', '#fff']);
+			expect(calls).toContainEqual(['fill', '#fff']);
+		});
+
+		it('builds checkbox inline drawers with the provided checked color', function() {
+			const calls = [];
+			const selection = {
+				select: {col: 5, row: 5},
+				range: {
+					start: {col: 5, row: 5},
+					end: {col: 5, row: 5},
+				},
+			};
+			const grid = createGrid(calls, selection);
+			const helper = new GridCanvasHelper(grid);
+			const context = createContext(3, 3, calls, selection);
+
 			const inline = helper.buildCheckBoxInline(true, context, {
 				checkBgColor: '#112233',
 			});
-			const inlineCheckboxStart = calls.length;
 			inline.draw({
 				ctx: context.getContext(),
 				canvashelper: cheetahGrid.tools.canvashelper,
@@ -433,9 +654,23 @@
 				offsetTop: 3,
 				offsetBottom: 4,
 			});
-			const inlineCheckboxCalls = calls.slice(inlineCheckboxStart);
-			expect(inlineCheckboxCalls).toContainEqual(['fill', '#112233']);
-			const checkedRadioStart = calls.length;
+
+			expect(calls).toContainEqual(['fill', '#112233']);
+		});
+
+		it('draws checked and unchecked radio buttons with interpolated colors', function() {
+			const calls = [];
+			const selection = {
+				select: {col: 5, row: 5},
+				range: {
+					start: {col: 5, row: 5},
+					end: {col: 5, row: 5},
+				},
+			};
+			const grid = createGrid(calls, selection);
+			const helper = new GridCanvasHelper(grid);
+			const context = createContext(3, 3, calls, selection);
+
 			helper.radioButton(true, context, {
 				animElapsedTime: 0.25,
 				checkColor: '#123456',
@@ -444,11 +679,11 @@
 				uncheckBgColor: '#111111',
 				checkBgColor: '#555555',
 			});
-			const checkedRadioCalls = calls.slice(checkedRadioStart);
-			expect(checkedRadioCalls).toContainEqual(['fill', 'rgb(34, 34, 34)']);
-			expect(checkedRadioCalls).toContainEqual(['stroke', 'rgb(51, 51, 51)', 1]);
-			expect(checkedRadioCalls).toContainEqual(['fill', '#123456']);
-			const uncheckedRadioStart = calls.length;
+			expect(calls).toContainEqual(['fill', 'rgb(34, 34, 34)']);
+			expect(calls).toContainEqual(['stroke', 'rgb(51, 51, 51)', 1]);
+			expect(calls).toContainEqual(['fill', '#123456']);
+			calls.length = 0;
+
 			helper.radioButton(false, context, {
 				animElapsedTime: 0.25,
 				checkColor: '#654321',
@@ -457,11 +692,24 @@
 				uncheckBgColor: '#111111',
 				checkBgColor: '#555555',
 			});
-			const uncheckedRadioCalls = calls.slice(uncheckedRadioStart);
-			expect(uncheckedRadioCalls).toContainEqual(['fill', 'rgb(68, 68, 68)']);
-			expect(uncheckedRadioCalls).toContainEqual(['stroke', 'rgb(47, 47, 47)', 1]);
-			expect(uncheckedRadioCalls).toContainEqual(['fill', '#654321']);
-			const buttonStart = calls.length;
+			expect(calls).toContainEqual(['fill', 'rgb(68, 68, 68)']);
+			expect(calls).toContainEqual(['stroke', 'rgb(47, 47, 47)', 1]);
+			expect(calls).toContainEqual(['fill', '#654321']);
+		});
+
+		it('draws buttons with resolved background and text colors', function() {
+			const calls = [];
+			const selection = {
+				select: {col: 5, row: 5},
+				range: {
+					start: {col: 5, row: 5},
+					end: {col: 5, row: 5},
+				},
+			};
+			const grid = createGrid(calls, selection);
+			const helper = new GridCanvasHelper(grid);
+			const context = createContext(3, 3, calls, selection);
+
 			helper.button('Run', context, {
 				padding: [2, 3, 4, 5],
 				bgColor: function() {
@@ -475,14 +723,13 @@
 				},
 				textOverflow: '...',
 			});
-			const buttonCalls = calls.slice(buttonStart);
 
-			expect(buttonCalls.filter(function(call) {
+			expect(calls.filter(function(call) {
 				return call[0] === 'fillText';
 			}).map(function(call) {
 				return [call[1], call[4]];
-			})).toContainEqual(['Run', '#eeeeee']);
-			expect(buttonCalls).toContainEqual(['fill', '#223344']);
+			})).toEqual([['Run', '#eeeeee']]);
+			expect(calls).toContainEqual(['fill', '#223344']);
 		});
 	});
 })();

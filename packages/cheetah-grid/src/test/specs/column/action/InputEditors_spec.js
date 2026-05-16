@@ -124,21 +124,23 @@
 			});
 			const cell = {col: 1, row: 2};
 
-			editor.onInputCellInternal(grid, cell, 'input');
-			const input = grid.host.querySelector('input');
-			input.value = 'changed';
-			editor.onChangeSelectCellInternal(grid, cell, false);
+			try {
+				editor.onInputCellInternal(grid, cell, 'input');
+				const input = grid.host.querySelector('input');
+				input.value = 'changed';
+				editor.onChangeSelectCellInternal(grid, cell, false);
 
-			expect(grid.changes).toEqual([[1, 2, 'changed']]);
-			expect(grid.invalidates).toEqual([{
-				start: {col: 1, row: 2},
-				end: {col: 1, row: 2},
-			}]);
-			expect(grid.host.children.length).toEqual(0);
-
-			grid.disposables.forEach(function(disposable) {
-				disposable.dispose();
-			});
+				expect(grid.changes).toEqual([[1, 2, 'changed']]);
+				expect(grid.invalidates).toEqual([{
+					start: {col: 1, row: 2},
+					end: {col: 1, row: 2},
+				}]);
+				expect(grid.host.children.length).toEqual(0);
+			} finally {
+				grid.disposables.forEach(function(disposable) {
+					disposable.dispose();
+				});
+			}
 		});
 
 		it('opens and cancels small dialog input editors through grid lifecycle hooks', function() {
@@ -150,49 +152,51 @@
 			});
 			const cell = {col: 1, row: 2};
 
-			editor.onOpenCellInternal(grid, cell);
-			let dialog = grid.host.querySelector('.cheetah-grid__small-dialog-input');
-			let input = dialog.querySelector('input');
+			try {
+				editor.onOpenCellInternal(grid, cell);
+				let dialog = grid.host.querySelector('.cheetah-grid__small-dialog-input');
+				let input = dialog.querySelector('input');
 
-			expect(input.value).toEqual('opened');
-			expect(dialog.classList.contains('dialog-editor')).toEqual(true);
-			expect(dialog.dataset.helperText).toEqual('helper');
+				expect(input.value).toEqual('opened');
+				expect(dialog.classList.contains('dialog-editor')).toEqual(true);
+				expect(dialog.dataset.helperText).toEqual('helper');
 
-			editor.onGridScrollInternal(grid);
+				editor.onGridScrollInternal(grid);
 
-			expect(grid.focused).toEqual(true);
-			expect(grid.invalidates).toEqual([{
-				start: {col: 1, row: 2},
-				end: {col: 1, row: 2},
-			}]);
-			expect(dialog.classList.contains('cheetah-grid__small-dialog-input--hidden')).toEqual(true);
-
-			editor.onInputCellInternal(grid, cell, 'disabled');
-			editor.onChangeDisabledInternal();
-			editor.onInputCellInternal(grid, cell, 'readonly');
-			editor.onChangeReadOnlyInternal();
-			dialog = grid.host.querySelector('.cheetah-grid__small-dialog-input');
-			input = dialog.querySelector('input');
-
-			expect(input.readOnly).toEqual(true);
-			expect(grid.invalidates).toEqual([
-				{
+				expect(grid.focused).toEqual(true);
+				expect(grid.invalidates).toEqual([{
 					start: {col: 1, row: 2},
 					end: {col: 1, row: 2},
-				},
-				{
-					start: {col: 1, row: 2},
-					end: {col: 1, row: 2},
-				},
-				{
-					start: {col: 1, row: 2},
-					end: {col: 1, row: 2},
-				},
-			]);
+				}]);
+				expect(dialog.classList.contains('cheetah-grid__small-dialog-input--hidden')).toEqual(true);
 
-			grid.disposables.forEach(function(disposable) {
-				disposable.dispose();
-			});
+				editor.onInputCellInternal(grid, cell, 'disabled');
+				editor.onChangeDisabledInternal();
+				editor.onInputCellInternal(grid, cell, 'readonly');
+				editor.onChangeReadOnlyInternal();
+				dialog = grid.host.querySelector('.cheetah-grid__small-dialog-input');
+				input = dialog.querySelector('input');
+
+				expect(input.readOnly).toEqual(true);
+				expect(grid.invalidates).toEqual([
+					{
+						start: {col: 1, row: 2},
+						end: {col: 1, row: 2},
+					},
+					{
+						start: {col: 1, row: 2},
+						end: {col: 1, row: 2},
+					},
+					{
+						start: {col: 1, row: 2},
+						end: {col: 1, row: 2},
+					},
+				]);
+			} finally {
+				grid.disposables.forEach(function(disposable) {
+					disposable.dispose();
+				});
+			}
 		});
 	});
 })();

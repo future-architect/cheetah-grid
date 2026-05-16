@@ -125,11 +125,6 @@
 			expect(error._messageElement.classList.contains('cheetah-grid__error-message-element__message')).toEqual(true);
 			expect(warning._rootElement.classList.contains('cheetah-grid__warning-message-element')).toEqual(true);
 			expect(warning._messageElement.classList.contains('cheetah-grid__warning-message-element__message')).toEqual(true);
-
-			prepareElement(error);
-			prepareElement(warning);
-			error.dispose();
-			warning.dispose();
 		});
 	});
 })();
