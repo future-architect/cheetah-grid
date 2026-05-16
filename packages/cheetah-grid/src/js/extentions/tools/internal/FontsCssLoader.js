@@ -1,6 +1,6 @@
 //https://github.com/tsayen/dom-to-image/blob/master/src/dom-to-image.js
 //を参考に作成
-/*eslint-disable no-bitwise*/
+/*eslint-disable no-bitwise, no-redeclare*/
 'use strict';
 
 const Loader = require('./Loader');

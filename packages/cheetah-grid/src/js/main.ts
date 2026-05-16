@@ -22,6 +22,11 @@ const themes = { ...themesModule };
 
 export { getInternal as _getInternal } from "./get-internal";
 
+/** @private */
+function getIcons(): { [key: string]: TYPES.IconDefine } {
+  return icons.get();
+}
+
 /**
  * Cheetah Grid
  * @namespace cheetahGrid
@@ -56,11 +61,6 @@ export type {
    */
   TYPES,
 };
-
-/** @private */
-function getIcons(): { [key: string]: TYPES.IconDefine } {
-  return icons.get();
-}
 
 // backward compatibility
 export default {

@@ -15,9 +15,9 @@ function polylineToPath(polyline) {
 }
 
 function circleToPath(circle) {
-	const cx = circle.getAttribute('cx') - 0;
-	const cy = circle.getAttribute('cy') - 0;
-	const r = circle.getAttribute('r') - 0;
+	const cx = Number(circle.getAttribute('cx'));
+	const cy = Number(circle.getAttribute('cy'));
+	const r = Number(circle.getAttribute('r'));
 
 	//https://tyru.github.io/svg-circle-misc-algorithm/
 	const SEGMENTS = 8;
@@ -36,10 +36,10 @@ function circleToPath(circle) {
 }
 
 function rectToPath(rect) {
-	const x = rect.getAttribute('x') - 0;
-	const y = rect.getAttribute('y') - 0;
-	const width = rect.getAttribute('width') - 0;
-	const height = rect.getAttribute('height') - 0;
+	const x = Number(rect.getAttribute('x'));
+	const y = Number(rect.getAttribute('y'));
+	const width = Number(rect.getAttribute('width'));
+	const height = Number(rect.getAttribute('height'));
 	return `M${x},${y} h${width} v${height} h${-width}z`;
 }
 
@@ -150,14 +150,14 @@ function glyphToJSON(svgString, {
 	// 	y: bbox[3] - 0,
 	// };
 
-	const fontHorizAdvX = (font.getAttribute('horiz-adv-x') - 0) || 0;
-	const fontVertAdvX = (font.getAttribute('vert-adv-x') - 0) || 0;
-	const horizAdvX = (glyph.getAttribute('horiz-adv-x') - 0) || fontHorizAdvX || 0;
-	const vertAdvX = (glyph.getAttribute('vert-adv-x') - 0) || fontVertAdvX || 0;
+	const fontHorizAdvX = Number(font.getAttribute('horiz-adv-x')) || 0;
+	const fontVertAdvX = Number(font.getAttribute('vert-adv-x')) || 0;
+	const horizAdvX = Number(glyph.getAttribute('horiz-adv-x')) || fontHorizAdvX || 0;
+	const vertAdvX = Number(glyph.getAttribute('vert-adv-x')) || fontVertAdvX || 0;
 
-	const unitsPerEm = (fontFace.getAttribute('units-per-em') - 0) || 1000;
+	const unitsPerEm = Number(fontFace.getAttribute('units-per-em')) || 1000;
 	// const ascent = (fontFace.getAttribute('ascent') - 0) || (unitsPerEm - vertAdvX);
-	const descent = (fontFace.getAttribute('descent') - 0) || vertAdvX;
+	const descent = Number(fontFace.getAttribute('descent')) || vertAdvX;
 
 	let size = unitsPerEm;
 	const contentSize = {
@@ -193,8 +193,8 @@ function glyphToJSON(svgString, {
 function svgToJSON(svgString, resource) {
 	const {svg} = svgData.get(svgString);
 	const viewBox = (svg.getAttribute('viewBox') || '').split(' ');
-	const width = ((svg.getAttribute('width') || viewBox[2]) - 0) || 0;
-	const height = ((svg.getAttribute('height') || viewBox[3]) - 0) || 0;
+	const width = Number(svg.getAttribute('width') || viewBox[2]) || 0;
+	const height = Number(svg.getAttribute('height') || viewBox[3]) || 0;
 	const offsetX = (0 - viewBox[0]) || 0;
 	const offsetY = (0 - viewBox[1]) || 0;
 

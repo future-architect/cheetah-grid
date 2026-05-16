@@ -128,7 +128,7 @@ const cache: Record<string, Svg | undefined> = {};
 export function get(svgCode: string): Svg {
   const cacheKey = `font:${svgCode}`;
   cache[cacheKey] = cache[cacheKey] || new Svg(svgCode);
-  return cache[cacheKey]!;
+  return cache[cacheKey];
 }
 
 export { isElementNode };

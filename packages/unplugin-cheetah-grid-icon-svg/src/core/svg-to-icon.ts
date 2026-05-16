@@ -170,8 +170,8 @@ function glyphToJSON(
       glyphName && glyphName !== true
         ? glyphName
         : unicode && unicode !== true
-        ? unicode
-        : "";
+          ? unicode
+          : "";
     throw new Error(`Glyph not found: ${glyphLabel}`);
   }
 

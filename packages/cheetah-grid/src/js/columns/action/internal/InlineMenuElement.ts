@@ -390,10 +390,8 @@ export class InlineMenuElement<T> {
 
     if (!e.shiftKey) {
       if (!findNextSiblingFocusable(item)) {
-        let n: HTMLElement | null = menu.querySelector(
-          `.${ITEM_CLASSNAME}`
-        ) as HTMLElement;
-        if (!isFocusable(n)) {
+        let n: HTMLElement | null = menu.querySelector(`.${ITEM_CLASSNAME}`);
+        if (n && !isFocusable(n)) {
           n = findNextSiblingFocusable(n);
         }
         if (n) {

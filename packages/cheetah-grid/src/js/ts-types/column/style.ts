@@ -40,8 +40,7 @@ export interface StdTextBaseStyleOption extends StdBaseStyleOption {
   font?: string;
   textOverflow?: TextOverflow;
 }
-export interface StdMultilineTextBaseStyleOption
-  extends StdTextBaseStyleOption {
+export interface StdMultilineTextBaseStyleOption extends StdTextBaseStyleOption {
   lineHeight?: string | number;
   autoWrapText?: boolean;
   lineClamp?: LineClamp;

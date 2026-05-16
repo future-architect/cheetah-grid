@@ -903,6 +903,7 @@ function _getScrollHeight(this: DrawGrid, row?: number): number {
   return h;
 }
 /** @private */
+// eslint-disable-next-line complexity
 function _onScroll(grid: DrawGrid, _e: Event): void {
   const lastLeft = grid[_].scroll.left;
   const lastTop = grid[_].scroll.top;

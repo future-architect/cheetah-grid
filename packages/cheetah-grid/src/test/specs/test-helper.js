@@ -1,4 +1,3 @@
-/*eslint-env es6*/
 /*eslint prefer-arrow-callback:"off", object-shorthand:"off", prefer-rest-params:"off", complexity: "off", prefer-destructuring: "off" */
 'use strict';
 (function() {

@@ -1,5 +1,4 @@
 /*global cheetahGrid*/
-/*eslint-env es6*/
 /*eslint prefer-arrow-callback:"off", object-shorthand:"off", max-len: "off", prefer-destructuring:"off"*/
 'use strict';
 (function() {

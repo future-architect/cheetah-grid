@@ -57,10 +57,12 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "cross-env": "^5.2.0",
-    "eslint": "^7.11.0",
-    "eslint-plugin-html": "^6.1.0",
+    "eslint": "^10.4.0",
+    "eslint-plugin-html": "^8.1.4",
+    "globals": "^17.6.0",
     "mrpm": "^4.1.0",
-    "prettier": "^2.5.1"
+    "prettier": "^3.8.3"
   }
 }

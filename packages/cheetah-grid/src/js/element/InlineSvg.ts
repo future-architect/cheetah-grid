@@ -28,10 +28,10 @@ export class InlineSvg extends InlineImage {
   constructor({ svg, width, height }: InlineSvgConstructorOption) {
     const svgElem = then(svg, getSvgElement);
     const elmWidth = !isPromise(svgElem)
-      ? svgElem.getAttribute("width") ?? undefined
+      ? (svgElem.getAttribute("width") ?? undefined)
       : undefined;
     const elmHeight = !isPromise(svgElem)
-      ? svgElem.getAttribute("height") ?? undefined
+      ? (svgElem.getAttribute("height") ?? undefined)
       : undefined;
     const numElmWidth = elmWidth != null ? Number(elmWidth) : undefined;
     const numElmHeight = elmHeight != null ? Number(elmHeight) : undefined;

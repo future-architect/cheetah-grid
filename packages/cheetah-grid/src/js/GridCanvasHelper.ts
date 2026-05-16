@@ -201,8 +201,8 @@ function drawInlines<T>(
     const inline = inlines[0];
     drawInline(inline, 0, 0);
   } else {
-    const inlineWidths = inlines.map(
-      (inline) => (inline.width({ ctx }) || 0) - 0
+    const inlineWidths = inlines.map((inline) =>
+      Number(inline.width({ ctx }) || 0)
     );
     let offsetRight = inlineWidths.reduce((a, b) => a + b);
 
@@ -257,7 +257,7 @@ function getOverflowInlinesIndex(
   let lineWidth = 0;
   for (let i = 0; i < inlines.length; i++) {
     const inline = inlines[i];
-    const inlineWidth = (inline.width({ ctx }) || 0) - 0;
+    const inlineWidth = Number(inline.width({ ctx }) || 0);
     if (lineWidth + inlineWidth > maxWidth) {
       return {
         index: i,
@@ -580,33 +580,33 @@ function _multiInlineRect<T>(
           return true;
         }
       : isAllowOverflow(textOverflow)
-      ? (inlines: Inline[], hasNext: boolean): boolean => {
-          if (!procLineClamp(inlines, hasNext)) {
-            return false;
-          }
-          const { inlines: truncInlines, overflow } = truncateInlines(
-            ctx,
-            inlines,
-            width,
-            textOverflow
-          );
-          buildedMultiInlines.push(truncInlines);
-          if (overflow) {
-            grid.setCellOverflowText(
-              col,
-              row,
-              multiInlines.map(inlineToString).join("\n")
+        ? (inlines: Inline[], hasNext: boolean): boolean => {
+            if (!procLineClamp(inlines, hasNext)) {
+              return false;
+            }
+            const { inlines: truncInlines, overflow } = truncateInlines(
+              ctx,
+              inlines,
+              width,
+              textOverflow
             );
+            buildedMultiInlines.push(truncInlines);
+            if (overflow) {
+              grid.setCellOverflowText(
+                col,
+                row,
+                multiInlines.map(inlineToString).join("\n")
+              );
+            }
+            return true;
           }
-          return true;
-        }
-      : (inlines: Inline[], hasNext: boolean): boolean => {
-          if (!procLineClamp(inlines, hasNext)) {
-            return false;
-          }
-          buildedMultiInlines.push(inlines);
-          return true;
-        };
+        : (inlines: Inline[], hasNext: boolean): boolean => {
+            if (!procLineClamp(inlines, hasNext)) {
+              return false;
+            }
+            buildedMultiInlines.push(inlines);
+            return true;
+          };
     grid.setCellOverflowText(col, row, false);
     for (let lineRow = 0; lineRow < multiInlines.length; lineRow++) {
       const inline = multiInlines[lineRow];
@@ -884,7 +884,7 @@ class ThemeResolver<T> implements RequiredThemeDefine {
     this._grid = grid;
   }
   getThemeValue<
-    T extends ColorPropertyDefine | ColorsPropertyDefine | FontPropertyDefine
+    T extends ColorPropertyDefine | ColorsPropertyDefine | FontPropertyDefine,
   >(...name: string[]): T {
     return getThemeValue(this._grid, ...name);
   }
@@ -1015,7 +1015,7 @@ class ThemeResolver<T> implements RequiredThemeDefine {
         | ColorPropertyDefine
         | number
         | TreeLineStyle
-        | TreeBranchIconStyleDefine
+        | TreeBranchIconStyleDefine,
     >(prop: string): T {
       return getThemeValue(grid, "tree", prop);
     }

@@ -56,8 +56,8 @@
     "build:tsdown": "tsdown",
     "prepack": "npm run build",
     "lint": "npm run eslint && npm run tsc",
-    "eslint": "eslint . --ext .js,.ts",
-    "eslint:fix": "eslint . --fix --ext .js,.ts",
+    "eslint": "eslint .",
+    "eslint:fix": "eslint . --fix",
     "tsc": "tsc --project ./tsconfig.json"
   },
   "repository": {
@@ -89,16 +89,17 @@
     "unplugin": "^2.3.10"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/node": "^24.12.4",
-    "@typescript-eslint/eslint-plugin": "^4.0.0",
-    "@typescript-eslint/parser": "^4.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.59.3",
+    "@typescript-eslint/parser": "^8.59.3",
     "@vitest/coverage-v8": "^4.1.6",
-    "eslint": "^7.11.0",
-    "eslint-config-prettier": "^6.11.0",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-prettier": "^3.1.4",
+    "eslint": "^10.4.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
     "font-awesome": "^4.7.0",
-    "prettier": "^2.5.1",
+    "globals": "^17.6.0",
+    "prettier": "^3.8.3",
     "tsdown": "^0.14.1",
     "typescript": "^5.9.2",
     "vitest": "^4.1.6"

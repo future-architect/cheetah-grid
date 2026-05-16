@@ -164,9 +164,9 @@ export class TreeColumn<T> extends Column<T> {
           definedTreeIcon === "none"
             ? null
             : definedTreeIcon === "chevron_right" ||
-              definedTreeIcon === "expand_more"
-            ? { name: definedTreeIcon, width: fontSize.width }
-            : definedTreeIcon;
+                definedTreeIcon === "expand_more"
+              ? { name: definedTreeIcon, width: fontSize.width }
+              : definedTreeIcon;
 
         // Calculate icon rect
         let iconRect: Rect | null = null;
@@ -491,7 +491,7 @@ function getTreeDataFromValue(value: TreeDataValue): NormalizedTreeData {
             value.caption ?? value.path[value.path.length - 1] ?? ""
           ),
           path: value.path,
-          nodeType: value.nodeType as never,
+          nodeType: value.nodeType,
         };
       if (typeof value.path === "function")
         return getTreeDataFromValue({ ...value, path: value.path() });

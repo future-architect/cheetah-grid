@@ -14,7 +14,7 @@
     "test:d": "vitest --inspect-brk",
     "watch": "vitest",
     "lint": "npm run eslint",
-    "eslint": "eslint . ",
+    "eslint": "eslint .",
     "eslint:fix": "eslint . --fix"
   },
   "repository": {
@@ -38,10 +38,12 @@
   },
   "homepage": "https://github.com/future-architect/cheetah-grid/tree/master/packages/cheetah-grid-icon-svg-loader",
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@vitest/coverage-v8": "^4.1.6",
-    "eslint": "^7.11.0",
-    "eslint-plugin-node": "^11.1.0",
+    "eslint": "^10.4.0",
+    "eslint-plugin-n": "^18.0.1",
     "font-awesome": "^4.7.0",
+    "globals": "^17.6.0",
     "vitest": "^4.1.6"
   },
   "engines": {

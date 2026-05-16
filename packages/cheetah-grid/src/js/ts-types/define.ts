@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-types */
 import type { ColorDef } from "./base";
 import type { ListGridAPI } from "./grid-engine";
 

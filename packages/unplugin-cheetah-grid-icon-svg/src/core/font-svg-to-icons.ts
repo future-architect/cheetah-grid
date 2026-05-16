@@ -56,10 +56,10 @@ function buildObjectCode(
     const targetName = glyph.getAttribute(name) || "";
     script += `
 	'${toCodeString(targetName)}': ${transform(unicode, svgCode, resource).replace(
-      /\r?\n|\r/gu,
-      `
+    /\r?\n|\r/gu,
+    `
 	`
-    )},`;
+  )},`;
   });
   script += "\n}";
   return script;

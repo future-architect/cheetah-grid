@@ -4,8 +4,8 @@ export function normalizePasteValue(text: string): string {
   return text[text.length - 1] !== "\n"
     ? text
     : text[text.length - 2] === "\r"
-    ? text.slice(0, -2)
-    : text.slice(0, -1);
+      ? text.slice(0, -2)
+      : text.slice(0, -1);
 }
 type ParsePasteRangeBoxValuesOption = { trimOnPaste: boolean };
 export function parsePasteRangeBoxValues(

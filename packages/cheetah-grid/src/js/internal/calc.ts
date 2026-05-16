@@ -305,5 +305,5 @@ export function toPx(value: string | number, context: CalcContext): number {
   if (typeof value === "string") {
     return toPxInternal(value.trim(), context);
   }
-  return value - 0;
+  return Number(value);
 }
