@@ -122,7 +122,10 @@
 			]);
 			expect(grid[CHECK_COLUMN_STATE_ID].mouseActiveCell).toEqual({col: 1, row: 2});
 			expect(grid.element.style.cursor).toEqual('pointer');
-			expect(grid.invalidates.length).toBeGreaterThan(0);
+			expect(grid.invalidates[0]).toEqual({
+				start: {col: 1, row: 2},
+				end: {col: 1, row: 2},
+			});
 			expect(keyEvent).toMatchObject({prevented: true, stopped: true});
 			expect(pasteEvent).toMatchObject({prevented: true, stopped: true});
 		});

@@ -93,7 +93,10 @@
 				[1, 2, true],
 				[1, 2, false],
 			]);
-			expect(grid.invalidates.length).toBeGreaterThan(0);
+			expect(grid.invalidates[0]).toEqual({
+				start: {col: 1, row: 2},
+				end: {col: 1, row: 2},
+			});
 			expect(grid[CHECK_HEADER_STATE_ID].mouseActiveCell).toBeUndefined();
 			expect(grid.element.style.cursor).toEqual('');
 			expect(keyEvent).toMatchObject({prevented: true, stopped: true});

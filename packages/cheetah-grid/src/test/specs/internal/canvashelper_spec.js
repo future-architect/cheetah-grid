@@ -2,6 +2,7 @@
 'use strict';
 (function() {
 	function createContext(calls) {
+		const states = [];
 		return {
 			canvas: {
 				style: {
@@ -22,9 +23,22 @@
 				return {width: 12};
 			},
 			save: function() {
+				states.push({
+					font: this.font,
+					textAlign: this.textAlign,
+					textBaseline: this.textBaseline,
+					fillStyle: this.fillStyle,
+					strokeStyle: this.strokeStyle,
+					lineWidth: this.lineWidth,
+					shadowColor: this.shadowColor,
+					shadowBlur: this.shadowBlur,
+					shadowOffsetX: this.shadowOffsetX,
+					shadowOffsetY: this.shadowOffsetY,
+				});
 				calls.push(['save']);
 			},
 			restore: function() {
+				Object.assign(this, states.pop());
 				calls.push(['restore']);
 			},
 			beginPath: function() {
@@ -52,6 +66,15 @@
 				calls.push(['strokeRect', left, top, width, height, this.strokeStyle]);
 			},
 			fill: function() {
+				if (this.shadowColor || this.shadowBlur || this.shadowOffsetX || this.shadowOffsetY) {
+					calls.push([
+						'shadow',
+						this.shadowColor,
+						this.shadowBlur,
+						this.shadowOffsetX,
+						this.shadowOffsetY,
+					]);
+				}
 				calls.push(['fill', this.fillStyle]);
 			},
 			stroke: function() {
@@ -123,9 +146,9 @@
 				padding: {right: 5, bottom: 6},
 			});
 
-			expect(calls.filter(function(call) {
-				return call[0] === 'arc';
-			}).length).toBeGreaterThanOrEqual(10);
+			expect(calls).toContainEqual(['arc', 15, 25, 5, -Math.PI, -0.5 * Math.PI, false]);
+			expect(calls).toContainEqual(['arc', 4, 5, 3, 0, 2 * Math.PI, undefined]);
+			expect(calls).toContainEqual(['arc', 3, 4, 2, 0, 2 * Math.PI, undefined]);
 			expect(calls).toContainEqual(['fill', '']);
 			expect(calls).toContainEqual(['stroke', '', 0]);
 			expect(calls).toContainEqual(['rect', 10, 20, 80, 40]);
@@ -194,10 +217,11 @@
 			expect(calls).toContainEqual(['fill', 'checked']);
 			expect(calls).toContainEqual(['stroke', 'border', 1]);
 			expect(calls).toContainEqual(['fill', 'button']);
-			expect(ctx.shadowColor).toEqual('shadow');
-			expect(ctx.shadowBlur).toEqual(4);
-			expect(ctx.shadowOffsetX).toEqual(5);
-			expect(ctx.shadowOffsetY).toEqual(6);
+			expect(calls).toContainEqual(['shadow', 'shadow', 4, 5, 6]);
+			expect(ctx.shadowColor).toEqual('');
+			expect(ctx.shadowBlur).toEqual(0);
+			expect(ctx.shadowOffsetX).toEqual(0);
+			expect(ctx.shadowOffsetY).toEqual(0);
 		});
 	});
 })();

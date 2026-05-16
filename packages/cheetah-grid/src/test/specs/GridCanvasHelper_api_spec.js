@@ -5,6 +5,7 @@
 	const GridCanvasHelper = cheetahGrid.GridCanvasHelper;
 
 	function createCanvasContext(calls) {
+		const states = [];
 		return {
 			canvas: {
 				style: {
@@ -25,9 +26,22 @@
 				return {width: Math.max(String(text).length * 8, 8)};
 			},
 			save: function() {
+				states.push({
+					font: this.font,
+					fillStyle: this.fillStyle,
+					strokeStyle: this.strokeStyle,
+					textAlign: this.textAlign,
+					textBaseline: this.textBaseline,
+					lineWidth: this.lineWidth,
+					shadowColor: this.shadowColor,
+					shadowBlur: this.shadowBlur,
+					shadowOffsetX: this.shadowOffsetX,
+					shadowOffsetY: this.shadowOffsetY,
+				});
 				calls.push(['save']);
 			},
 			restore: function() {
+				Object.assign(this, states.pop());
 				calls.push(['restore']);
 			},
 			beginPath: function() {
@@ -329,6 +343,7 @@
 			const context = createContext(3, 3, calls, selection);
 			const bottomContext = createContext(4, 4, calls, selection);
 
+			const overflowTextStart = calls.length;
 			helper.text('long text that will overflow', context, {
 				padding: ['1em', '4px', '2px', '3px'],
 				textOverflow: '!',
@@ -338,6 +353,18 @@
 					return '__grid_canvas_helper_12px__';
 				},
 			});
+			const overflowTextCalls = calls.slice(overflowTextStart);
+			expect(overflowTextCalls).toContainEqual(['overflow', 3, 3, 'long text that will overflow']);
+			expect(overflowTextCalls.filter(function(call) {
+				return call[0] === 'fillText';
+			}).map(function(call) {
+				return [call[1], call[4]];
+			})).toEqual([
+				['I', '#999'],
+				['long t', '#111'],
+				['!', '#111'],
+				['T', '#111'],
+			]);
 			helper.multilineText(['first very long line', 'second'], bottomContext, {
 				autoWrapText: true,
 				lineClamp: 'auto',
@@ -418,14 +445,12 @@
 			});
 
 			expect(calls.filter(function(call) {
-				return call[0] === 'overflow';
-			}).length).toBeGreaterThan(0);
-			expect(calls.filter(function(call) {
 				return call[0] === 'fillText';
-			}).length).toBeGreaterThan(0);
-			expect(calls.filter(function(call) {
-				return call[0] === 'arc';
-			}).length).toBeGreaterThan(0);
+			}).map(function(call) {
+				return [call[1], call[4]];
+			})).toContainEqual(['Run', '#button-text']);
+			expect(calls).toContainEqual(['fill', '#333']);
+			expect(calls).toContainEqual(['fill', '#fff']);
 			expect(calls).toContainEqual(['fill', '#button']);
 			expect(calls).toContainEqual(['fill', '#inline']);
 			expect(calls).toContainEqual(['fill', '#radio']);

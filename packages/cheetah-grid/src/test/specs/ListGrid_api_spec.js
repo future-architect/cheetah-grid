@@ -291,7 +291,7 @@
 				expect(grid.font).toBeUndefined();
 				grid.font = '13px serif';
 				expect(grid.font).toEqual('13px serif');
-				expect(grid.underlayBackgroundColor).toBeTypeOf('string');
+				expect(grid.underlayBackgroundColor).toEqual('#F6F6F6');
 				grid.underlayBackgroundColor = '#abc';
 				expect(grid.underlayBackgroundColor).toEqual('#abc');
 
@@ -318,7 +318,7 @@
 					end: {col: 1, row: 0},
 				});
 				expect(grid.getHeaderCellRange(0, 0)).toEqual(grid.getCellRange(0, 0));
-				expect(grid.getLayoutCellId(0, 2)).toBeTypeOf('number');
+				expect(grid.getLayoutCellId(0, 2)).not.toEqual(grid.getLayoutCellId(1, 2));
 
 				grid.focusGridCell('age', 1);
 				expect(grid.selection.select).toEqual({col: 1, row: 3});
@@ -343,11 +343,17 @@
 				grid.headerValues = null;
 				expect(grid.getHeaderValue(0, 1)).toEqual(undefined);
 
-				expect(calls).toContainEqual(['bindHeaderType', expect.any(Number)]);
-				expect(calls).toContainEqual(['bindHeaderAction', expect.any(Number)]);
-				expect(calls).toContainEqual(['bindColumnType', expect.any(Number)]);
-				expect(calls).toContainEqual(['bindAction', expect.any(Number)]);
-				expect(headerValueEvents.length).toBeGreaterThan(0);
+				expect(calls).toContainEqual(['bindHeaderType', grid.getLayoutCellId(0, 0)]);
+				expect(calls).toContainEqual(['bindHeaderAction', grid.getLayoutCellId(0, 0)]);
+				expect(calls).toContainEqual(['bindColumnType', grid.getLayoutCellId(0, 2)]);
+				expect(calls).toContainEqual(['bindAction', grid.getLayoutCellId(0, 2)]);
+				expect(headerValueEvents).toEqual([
+					[0, 1, 'nameHeader', 'manual', undefined],
+					[0, 1, 'nameHeader', 'asc', 'manual'],
+					[0, 1, 'nameHeader', undefined, 'asc'],
+					[1, 1, 'ageHeader', 'desc', undefined],
+					[1, 1, 'ageHeader', undefined, 'desc'],
+				]);
 
 			} finally {
 				grid.dispose();

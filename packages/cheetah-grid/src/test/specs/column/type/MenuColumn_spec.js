@@ -124,8 +124,30 @@
 				},
 			});
 
-			expect(calls[1][3].color).toEqual('rgba(0, 0, 0, .38)');
-			expect(calls.length).toEqual(3);
+			expect(calls).toEqual([
+				['testFontLoad', undefined, '', context],
+				['text', '', context, {
+					textAlign: 'left',
+					textBaseline: 'middle',
+					color: 'rgba(0, 0, 0, .38)',
+					font: undefined,
+					padding: [0, 26, 0, 0],
+					textOverflow: 'clip',
+					icons: undefined,
+				}],
+				['text', '', context, {
+					textAlign: 'right',
+					textBaseline: 'middle',
+					color: 'rgba(0, 0, 0, .38)',
+					font: undefined,
+					icons: [{
+						path: 'M0 2 5 7 10 2z',
+						width: 10,
+						color: 'rgba(0, 0, 0, .54)',
+					}],
+					padding: [0, 8, 0, 0],
+				}],
+			]);
 		});
 	});
 })();

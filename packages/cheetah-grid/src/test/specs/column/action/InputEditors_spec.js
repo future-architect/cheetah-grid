@@ -175,7 +175,20 @@
 			input = dialog.querySelector('input');
 
 			expect(input.readOnly).toEqual(true);
-			expect(grid.invalidates.length).toEqual(3);
+			expect(grid.invalidates).toEqual([
+				{
+					start: {col: 1, row: 2},
+					end: {col: 1, row: 2},
+				},
+				{
+					start: {col: 1, row: 2},
+					end: {col: 1, row: 2},
+				},
+				{
+					start: {col: 1, row: 2},
+					end: {col: 1, row: 2},
+				},
+			]);
 
 			grid.disposables.forEach(function(disposable) {
 				disposable.dispose();

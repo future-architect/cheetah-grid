@@ -69,38 +69,48 @@
 				},
 			});
 
-			expect(calls.length).toEqual(1);
-			expect(calls[0][0]).toEqual('');
-			expect(calls[0][2].icons).toEqual([
+			expect(calls).toEqual([[
+				'',
+				context,
 				{
-					content: 'A',
-					font: '16px Times',
+					textAlign: 'center',
+					textBaseline: 'middle',
 					color: 'red',
-					isLiga: false,
-					width: 12,
-					src: undefined,
-					svg: undefined,
-					name: 'arrow_upward',
-					path: undefined,
-					tagName: 'span',
-					offsetTop: undefined,
-					offsetLeft: undefined,
+					font: undefined,
+					padding: undefined,
+					textOverflow: 'clip',
+					icons: [
+						{
+							content: 'A',
+							font: '16px Times',
+							color: 'red',
+							isLiga: false,
+							width: 12,
+							src: undefined,
+							svg: undefined,
+							name: 'arrow_upward',
+							path: undefined,
+							tagName: 'span',
+							offsetTop: undefined,
+							offsetLeft: undefined,
+						},
+						{
+							content: 'A',
+							font: '16px Times',
+							color: 'red',
+							isLiga: false,
+							width: 12,
+							src: undefined,
+							svg: undefined,
+							name: 'arrow_upward',
+							path: undefined,
+							tagName: 'span',
+							offsetTop: undefined,
+							offsetLeft: undefined,
+						},
+					],
 				},
-				{
-					content: 'A',
-					font: '16px Times',
-					color: 'red',
-					isLiga: false,
-					width: 12,
-					src: undefined,
-					svg: undefined,
-					name: 'arrow_upward',
-					path: undefined,
-					tagName: 'span',
-					offsetTop: undefined,
-					offsetLeft: undefined,
-				},
-			]);
+			]]);
 		});
 
 		it('clears icons for non-numeric values', function() {

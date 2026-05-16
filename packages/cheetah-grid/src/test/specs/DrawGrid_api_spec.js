@@ -177,8 +177,8 @@
 				expect(grid.scrollTop).toEqual(30);
 				expect(grid.topRow).toBeGreaterThanOrEqual(1);
 				expect(grid.leftCol).toBeGreaterThanOrEqual(1);
-				expect(grid.visibleRowCount).toBeGreaterThanOrEqual(0);
-				expect(grid.visibleColCount).toBeGreaterThanOrEqual(0);
+				expect(grid.visibleRowCount).toBeGreaterThan(0);
+				expect(grid.visibleColCount).toBeGreaterThan(0);
 
 				grid.makeVisibleCell(19, 19);
 				expect(grid.scrollLeft).toBeGreaterThan(0);
@@ -404,9 +404,7 @@
 				expect(events).toContainEqual(['paste', 1, 1, 'a\tb\n c', true, 2, 2, 'b']);
 				expect(events).toContainEqual(['focus']);
 				expect(events).toContainEqual(['blur']);
-				expect(copyText).toContain('"A\tB"');
-				expect(copyText).toContain('123');
-				expect(copyText).not.toContain('[object Object]');
+				expect(copyText).toEqual('"A\tB"\t\t123\n\t\t"line\nbreak"');
 			} finally {
 				grid.dispose();
 			}

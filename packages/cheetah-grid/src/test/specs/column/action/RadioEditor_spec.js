@@ -116,7 +116,14 @@
 			]);
 			expect(grid[RADIO_COLUMN_STATE_ID].mouseActiveCell).toEqual({col: 1, row: 2});
 			expect(grid.element.style.cursor).toEqual('pointer');
-			expect(grid.invalidates.length).toBeGreaterThan(0);
+			expect(grid.invalidates[0]).toEqual({
+				start: {col: 1, row: 2},
+				end: {col: 1, row: 2},
+			});
+			expect(grid.invalidates).toContainEqual({
+				start: {col: 1, row: 3},
+				end: {col: 1, row: 3},
+			});
 		});
 
 		it('handles paste values with checkAction and rejects non-boolean values', async function() {

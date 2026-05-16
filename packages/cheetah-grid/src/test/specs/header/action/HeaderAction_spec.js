@@ -72,15 +72,19 @@
 		it('resolves cell actions from sort definitions before headerAction', function() {
 			const sortAction = actions.ofCell({sort: true, headerAction: 'check'});
 			const stringSortAction = actions.ofCell({sort: 'name'});
-			const customSortAction = actions.ofCell({
-				sort: function() {
-					// noop
+			const customSortCalls = [];
+			const customCell = {
+				sort: function(order, col, grid) {
+					customSortCalls.push([this, order, col, grid]);
 				},
-			});
+			};
+			const customSortAction = actions.ofCell(customCell);
+			const grid = createGrid();
 
 			expect(sortAction).toBe(actions.of('sort'));
 			expect(stringSortAction.sort).toEqual('name');
-			expect(customSortAction.sort).toBeTypeOf('function');
+			customSortAction._executeSort({col: 2, row: 3, order: 'desc'}, grid);
+			expect(customSortCalls).toEqual([[customCell, 'desc', 2, grid]]);
 			expect(actions.ofCell({headerAction: 'check'})).toBe(actions.of('check'));
 			expect(actions.ofCell({})).toBeUndefined();
 		});
