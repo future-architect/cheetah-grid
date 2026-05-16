@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const { getAllVueComponentMetadata, getPropType, isRequiredProp, getMethodSignature } = require('./lib/metadata')
-const cheetahGrid = require('cheetah-grid')
+const cheetahGrid = requireCheetahGrid()
 const { EVENT_TYPE } = cheetahGrid.ListGrid
 const allEmits = Object.keys(EVENT_TYPE)
   .map(k => EVENT_TYPE[k].replace(/_/g, '-').toLowerCase())
@@ -127,6 +127,14 @@ export declare function install (Vue: any /* Vue 2 Vue object or Vue 3 App insta
 }
 
 main()
+
+function requireCheetahGrid () {
+  try {
+    return require('../../cheetah-grid')
+  } catch (err) {
+    return require('cheetah-grid')
+  }
+}
 
 /**
  * Convert text to kebab-case
