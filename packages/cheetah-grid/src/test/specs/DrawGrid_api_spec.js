@@ -130,7 +130,9 @@
 				grid.setColWidth(0, 50);
 				grid.setMaxColWidth(1, 20);
 				expect(grid.getColWidth(1)).toEqual(20);
-				expect(grid.getColWidth(2)).toBeGreaterThan(0);
+				expect(grid.getColWidth(2)).toEqual(grid.getColWidth(3));
+				expect(grid.getColWidth(2)).toEqual(grid.getColWidth(4));
+				expect(grid.getColWidth(2)).toBeGreaterThan(grid.getColWidth(1));
 				grid.defaultColWidth = 40;
 				grid.setMaxColWidth(1, null);
 				grid.setColWidth(1, 60);
@@ -140,11 +142,11 @@
 				expect(rect.top).toEqual(20);
 				expect(rect.width).toEqual(60);
 				expect(rect.height).toEqual(20);
-				expect(grid.getCellsRect(1, 1, 2, 2).width).toBeGreaterThan(rect.width);
+				expect(grid.getCellsRect(1, 1, 2, 2).width).toEqual(100);
 				expect(grid.getCellRangeRect({
 					start: {col: 1, row: 1},
 					end: {col: 2, row: 2},
-				}).height).toBeGreaterThan(rect.height);
+				}).height).toEqual(60);
 				expect(grid.getCellAt(10, 10)).toEqual({col: 0, row: 0});
 				expect(grid.getRowAt(9999)).toEqual(-1);
 				expect(grid.getColAt(9999)).toEqual(-1);
@@ -177,12 +179,14 @@
 				expect(grid.scrollTop).toEqual(30);
 				expect(grid.topRow).toBeGreaterThanOrEqual(1);
 				expect(grid.leftCol).toBeGreaterThanOrEqual(1);
-				expect(grid.visibleRowCount).toBeGreaterThan(0);
-				expect(grid.visibleColCount).toBeGreaterThan(0);
+				expect(grid.visibleRowCount).toBeGreaterThanOrEqual(2);
+				expect(grid.visibleRowCount).toBeLessThanOrEqual(grid.rowCount);
+				expect(grid.visibleColCount).toBeGreaterThanOrEqual(2);
+				expect(grid.visibleColCount).toBeLessThanOrEqual(grid.colCount);
 
 				grid.makeVisibleCell(19, 19);
-				expect(grid.scrollLeft).toBeGreaterThan(0);
-				expect(grid.scrollTop).toBeGreaterThan(0);
+				expect(grid.scrollLeft).toBeGreaterThan(25);
+				expect(grid.scrollTop).toBeGreaterThan(30);
 				grid.setFocusCursor(2, 2);
 				grid.focusCell(3, 3);
 				expect(grid.getElement().querySelector('.grid-focus-control').style.left).toEqual('120px');
@@ -200,8 +204,8 @@
 					end: {col: 2, row: 2},
 				});
 				expect(area.element).toBe(grid.getElement());
-				expect(area.rect.width).toBeGreaterThan(0);
-				expect(area.rect.height).toBeGreaterThan(0);
+				expect(area.rect.width).toEqual(80);
+				expect(area.rect.height).toEqual(40);
 			} finally {
 				grid.dispose();
 			}

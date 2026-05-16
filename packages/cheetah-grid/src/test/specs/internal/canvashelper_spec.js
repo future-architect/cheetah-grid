@@ -165,45 +165,73 @@
 			expect(canvashelper.measureCheckbox(ctx)).toEqual({width: 12});
 			expect(canvashelper.measureRadioButton(ctx)).toEqual({width: 12});
 
+			const uncheckedCheckboxStart = calls.length;
 			canvashelper.drawCheckbox(ctx, 1.2, 2.3, false, {
 				boxSize: 10,
-				uncheckBgColor: 'white',
-				borderColor: 'black',
+				uncheckBgColor: '#ffffff',
+				borderColor: '#000000',
 			});
+			const uncheckedCheckboxCalls = calls.slice(uncheckedCheckboxStart);
+			expect(uncheckedCheckboxCalls).toContainEqual(['fill', '#ffffff']);
+			expect(uncheckedCheckboxCalls).toContainEqual(['stroke', '#000000', 1]);
+			const partialCheckboxStart = calls.length;
 			canvashelper.drawCheckbox(ctx, 1.2, 2.3, 0.25, {
 				boxSize: 10,
-				checkBgColor: 'checked',
-				uncheckBgColor: 'mark',
-				borderColor: 'border',
+				checkBgColor: '#333333',
+				uncheckBgColor: '#eeeeee',
+				borderColor: '#111111',
 			});
+			const partialCheckboxCalls = calls.slice(partialCheckboxStart);
+			expect(partialCheckboxCalls).toContainEqual(['fill', '#333333']);
+			expect(partialCheckboxCalls).toContainEqual(['stroke', '#111111', 1]);
+			expect(partialCheckboxCalls).toContainEqual(['stroke', '#eeeeee', 1]);
+			const completeCheckboxStart = calls.length;
 			canvashelper.drawCheckbox(ctx, 1.2, 2.3, 2, {
 				boxSize: 10,
-				checkBgColor: 'checked',
-				uncheckBgColor: 'mark',
-				borderColor: 'border',
+				checkBgColor: '#333333',
+				uncheckBgColor: '#eeeeee',
+				borderColor: '#111111',
 			});
+			const completeCheckboxCalls = calls.slice(completeCheckboxStart);
+			expect(completeCheckboxCalls).toContainEqual(['fill', '#333333']);
+			expect(completeCheckboxCalls.filter(function(call) {
+				return call[0] === 'lineTo';
+			}).length).toEqual(2);
+			const uncheckedRadioStart = calls.length;
 			canvashelper.drawRadioButton(ctx, 5.1, 6.2, false, {
 				boxSize: 10,
-				bgColor: 'white',
-				borderColor: 'black',
+				bgColor: '#ffffff',
+				borderColor: '#000000',
 			});
+			const uncheckedRadioCalls = calls.slice(uncheckedRadioStart);
+			expect(uncheckedRadioCalls).toContainEqual(['fill', '#ffffff']);
+			expect(uncheckedRadioCalls).toContainEqual(['stroke', '#000000', 1]);
+			const partialRadioStart = calls.length;
 			canvashelper.drawRadioButton(ctx, 5.1, 6.2, 0.5, {
 				boxSize: 10,
-				bgColor: 'white',
-				checkColor: 'checked',
-				borderColor: 'black',
+				bgColor: '#ffffff',
+				checkColor: '#222222',
+				borderColor: '#000000',
 			});
+			const partialRadioCalls = calls.slice(partialRadioStart);
+			expect(partialRadioCalls).toContainEqual(['fill', '#ffffff']);
+			expect(partialRadioCalls).toContainEqual(['stroke', '#000000', 1]);
+			expect(partialRadioCalls).toContainEqual(['fill', '#222222']);
+			const shadowButtonStart = calls.length;
 			canvashelper.drawButton(ctx, 1.2, 2.2, 30.1, 20.1, {
-				bgColor: 'button',
+				bgColor: '#445566',
 				radius: 3,
 				shadow: {
-					color: 'shadow',
+					color: '#111111',
 					blur: 4,
 					offset: {x: 5, y: 6},
 				},
 			});
+			const shadowButtonCalls = calls.slice(shadowButtonStart);
+			expect(shadowButtonCalls).toContainEqual(['fill', '#445566']);
+			expect(shadowButtonCalls).toContainEqual(['shadow', '#111111', 4, 5, 6]);
 			canvashelper.drawButton(ctx, 1, 2, 3, 4, {
-				backgroundColor: 'background',
+				backgroundColor: '#778899',
 				shadow: null,
 			});
 
@@ -213,11 +241,6 @@
 			expect(calls.filter(function(call) {
 				return call[0] === 'restore';
 			}).length).toEqual(7);
-			expect(calls).toContainEqual(['fill', 'white']);
-			expect(calls).toContainEqual(['fill', 'checked']);
-			expect(calls).toContainEqual(['stroke', 'border', 1]);
-			expect(calls).toContainEqual(['fill', 'button']);
-			expect(calls).toContainEqual(['shadow', 'shadow', 4, 5, 6]);
 			expect(ctx.shadowColor).toEqual('');
 			expect(ctx.shadowBlur).toEqual(0);
 			expect(ctx.shadowOffsetX).toEqual(0);

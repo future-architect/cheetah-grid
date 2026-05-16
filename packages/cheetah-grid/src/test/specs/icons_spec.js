@@ -33,10 +33,11 @@
 
 		it('icons fill', function() {
 			ctx.fillStyle = '#555';
+			const iconNames = Object.keys(icons);
 			let y = 0;
 			let x = 0;
 			ctx.textBaseline = 'top';
-			Object.keys(icons).forEach(function(k) {
+			iconNames.forEach(function(k) {
 				ctx.fillText(k, x, y);
 				ctx.beginPath();
 				ctx.strokeStyle = '#ddd';
@@ -51,7 +52,28 @@
 					y += iconSize;
 				}
 			});
-			expect(true).toBe(true);
+			const firstIconPixels = ctx.getImageData(0, textHeight, iconSize, iconSize).data;
+			const firstIconHasPaint = Array.prototype.some.call(firstIconPixels, function(value, index) {
+				return index % 4 !== 3 && value !== 255;
+			});
+			expect(iconNames).toEqual([
+				'arrow_upward',
+				'arrow_downward',
+				'edit',
+				'add',
+				'star',
+				'star_border',
+				'star_half',
+				'keyboard_arrow_down',
+				'keyboard_arrow_left',
+				'keyboard_arrow_right',
+				'keyboard_arrow_up',
+				'chevron_left',
+				'chevron_right',
+				'expand_less',
+				'expand_more',
+			]);
+			expect(firstIconHasPaint).toEqual(true);
 		});
 	});
 

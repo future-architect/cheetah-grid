@@ -392,24 +392,37 @@
 			}).map(function(call) {
 				return call[1];
 			})).toEqual(['short', 'rows']);
+			const checkedCheckboxTransitionStart = calls.length;
 			helper.checkbox(true, context, {
 				animElapsedTime: 0.25,
 				padding: '1em',
-				checkBgColor: '#checked',
+				checkBgColor: '#000000',
 			});
+			const checkedCheckboxTransitionCalls = calls.slice(checkedCheckboxTransitionStart);
+			expect(checkedCheckboxTransitionCalls).toContainEqual(['fill', 'rgb(192, 192, 192)']);
+			const uncheckedCheckboxTransitionStart = calls.length;
 			helper.checkbox(false, context, {
 				animElapsedTime: 0.25,
 				padding: 2,
 			});
+			const uncheckedCheckboxTransitionCalls = calls.slice(uncheckedCheckboxTransitionStart);
+			expect(uncheckedCheckboxTransitionCalls).toContainEqual(['fill', 'rgb(102, 102, 102)']);
+			const checkedCheckboxStart = calls.length;
 			helper.checkbox(true, context, {
 				animElapsedTime: 1,
 			});
+			const checkedCheckboxCalls = calls.slice(checkedCheckboxStart);
+			expect(checkedCheckboxCalls).toContainEqual(['fill', '#333']);
+			const initialCheckboxStart = calls.length;
 			helper.checkbox(true, context, {
 				animElapsedTime: 0,
 			});
+			const initialCheckboxCalls = calls.slice(initialCheckboxStart);
+			expect(initialCheckboxCalls).toContainEqual(['fill', '#fff']);
 			const inline = helper.buildCheckBoxInline(true, context, {
-				checkBgColor: '#inline',
+				checkBgColor: '#112233',
 			});
+			const inlineCheckboxStart = calls.length;
 			inline.draw({
 				ctx: context.getContext(),
 				canvashelper: cheetahGrid.tools.canvashelper,
@@ -420,40 +433,56 @@
 				offsetTop: 3,
 				offsetBottom: 4,
 			});
+			const inlineCheckboxCalls = calls.slice(inlineCheckboxStart);
+			expect(inlineCheckboxCalls).toContainEqual(['fill', '#112233']);
+			const checkedRadioStart = calls.length;
 			helper.radioButton(true, context, {
 				animElapsedTime: 0.25,
-				checkColor: '#radio',
-				uncheckBorderColor: '#unchecked-border',
-				checkBorderColor: '#checked-border',
+				checkColor: '#123456',
+				uncheckBorderColor: '#222222',
+				checkBorderColor: '#666666',
+				uncheckBgColor: '#111111',
+				checkBgColor: '#555555',
 			});
+			const checkedRadioCalls = calls.slice(checkedRadioStart);
+			expect(checkedRadioCalls).toContainEqual(['fill', 'rgb(34, 34, 34)']);
+			expect(checkedRadioCalls).toContainEqual(['stroke', 'rgb(51, 51, 51)', 1]);
+			expect(checkedRadioCalls).toContainEqual(['fill', '#123456']);
+			const uncheckedRadioStart = calls.length;
 			helper.radioButton(false, context, {
 				animElapsedTime: 0.25,
-				uncheckBgColor: '#unchecked',
+				checkColor: '#654321',
+				uncheckBorderColor: '#222222',
+				checkBorderColor: '#333333',
+				uncheckBgColor: '#111111',
+				checkBgColor: '#555555',
 			});
+			const uncheckedRadioCalls = calls.slice(uncheckedRadioStart);
+			expect(uncheckedRadioCalls).toContainEqual(['fill', 'rgb(68, 68, 68)']);
+			expect(uncheckedRadioCalls).toContainEqual(['stroke', 'rgb(47, 47, 47)', 1]);
+			expect(uncheckedRadioCalls).toContainEqual(['fill', '#654321']);
+			const buttonStart = calls.length;
 			helper.button('Run', context, {
 				padding: [2, 3, 4, 5],
 				bgColor: function() {
-					return '#button';
+					return '#223344';
 				},
-				color: '#button-text',
+				color: '#eeeeee',
 				shadow: {
-					color: '#shadow',
+					color: '#111111',
 					blur: 2,
 					offset: {x: 1, y: 2},
 				},
 				textOverflow: '...',
 			});
+			const buttonCalls = calls.slice(buttonStart);
 
-			expect(calls.filter(function(call) {
+			expect(buttonCalls.filter(function(call) {
 				return call[0] === 'fillText';
 			}).map(function(call) {
 				return [call[1], call[4]];
-			})).toContainEqual(['Run', '#button-text']);
-			expect(calls).toContainEqual(['fill', '#333']);
-			expect(calls).toContainEqual(['fill', '#fff']);
-			expect(calls).toContainEqual(['fill', '#button']);
-			expect(calls).toContainEqual(['fill', '#inline']);
-			expect(calls).toContainEqual(['fill', '#radio']);
+			})).toContainEqual(['Run', '#eeeeee']);
+			expect(buttonCalls).toContainEqual(['fill', '#223344']);
 		});
 	});
 })();
