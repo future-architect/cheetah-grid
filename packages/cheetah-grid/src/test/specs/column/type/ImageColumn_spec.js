@@ -99,6 +99,29 @@
 			]);
 		});
 
+		it('shrinks keep-aspect-ratio images by height when height is the limiting edge', function() {
+			const calls = [];
+			const column = new ImageColumn();
+			const image = {width: 50, height: 100};
+			const style = new ImageStyle({
+				imageSizing: 'keep-aspect-ratio',
+				margin: 5,
+				textAlign: 'center',
+				textBaseline: 'middle',
+			});
+
+			column.drawInternal(image, createContext(), style, createHelper(calls), {}, {
+				drawCellBase: function() {
+					// noop
+				},
+			});
+
+			expect(calls).toEqual([
+				[image, 0, 0, 50, 100, 42.5, 25, 35, 70],
+				['align', 'center', 'middle'],
+			]);
+		});
+
 		it('skips drawing when hidden or image value is missing', function() {
 			const calls = [];
 			const column = new ImageColumn();

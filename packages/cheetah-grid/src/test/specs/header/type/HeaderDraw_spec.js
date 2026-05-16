@@ -148,6 +148,53 @@
 			]);
 		});
 
+		it('draws multiline descending sort headers with themed arrows and background', function() {
+			const calls = [];
+			const bases = [];
+			const context = createContext(1, 0);
+			const grid = createGrid();
+			grid.sortState = {col: 1, row: 0, order: 'desc'};
+
+			new types.SortHeader().drawInternal('A\r\nB', context, new styles.SortHeaderStyle({
+				bgColor: 'base',
+				color: 'ink',
+				font: '10px sans-serif',
+				multiline: true,
+				lineHeight: 16,
+				autoWrapText: true,
+				lineClamp: 2,
+			}), createHelper(calls), grid, {
+				drawCellBase: function(option) {
+					bases.push(option);
+				},
+				getIcon: function() {
+					return null;
+				},
+			});
+
+			expect(bases).toEqual([{bgColor: 'base'}]);
+			expect(calls).toEqual([
+				['testFontLoad', '10px sans-serif', 'A\r\nB', context],
+				['multilineText', ['A', 'B'], context, {
+					textAlign: 'left',
+					textBaseline: 'middle',
+					color: 'ink',
+					font: '10px sans-serif',
+					padding: undefined,
+					lineHeight: 16,
+					autoWrapText: true,
+					lineClamp: 2,
+					textOverflow: 'ellipsis',
+					icons: undefined,
+					trailingIcon: {
+						name: 'arrow_upward',
+						width: 12,
+						color: 'themeSort:1:0',
+					},
+				}],
+			]);
+		});
+
 		it('draws check headers with checkbox inline state and animation', async function() {
 			const {CHECK_HEADER_STATE_ID} = await import('../../../../js/internal/symbolManager.ts');
 			const calls = [];
@@ -199,6 +246,47 @@
 				padding: 4,
 				textOverflow: 'ellipsis',
 			});
+		});
+
+		it('draws unchecked check headers with base fill and text content', function() {
+			const calls = [];
+			const bases = [];
+			const context = createContext(1, 2);
+			const grid = createGrid();
+			grid.getHeaderValue = function() {
+				return false;
+			};
+
+			new types.CheckHeader().drawInternal('All', context, new styles.CheckHeaderStyle({
+				bgColor: 'base',
+				borderColor: 'border',
+				checkBgColor: 'checked',
+				uncheckBgColor: 'unchecked',
+				color: 'ink',
+				font: '12px sans-serif',
+				padding: 4,
+			}), createHelper(calls), grid, {
+				drawCellBase: function(option) {
+					bases.push(option);
+				},
+				getIcon: function() {
+					return null;
+				},
+			});
+
+			const inline = calls[0][1];
+			expect(bases).toEqual([{bgColor: 'base'}]);
+			expect(inline.checked).toEqual(false);
+			expect(inline.option).toEqual({
+				textAlign: 'center',
+				textBaseline: 'middle',
+				borderColor: 'border',
+				checkBgColor: 'checked',
+				uncheckBgColor: 'unchecked',
+			});
+			expect(calls[1][0]).toEqual('text');
+			expect(calls[1][1][0]).toBe(inline);
+			expect(String(calls[1][1][1])).toEqual('All');
 		});
 
 		it('draws dedicated multiline headers and tests fonts', function() {

@@ -171,6 +171,59 @@
 			});
 		});
 
+		it('draws button backgrounds, hidden state, and selected active state', async function() {
+			const {BUTTON_COLUMN_STATE_ID} = await import('../../../../js/internal/symbolManager.ts');
+			const bases = [];
+			const calls = [];
+			const context = createContext();
+			const grid = createGrid();
+			grid[BUTTON_COLUMN_STATE_ID] = {};
+
+			new types.ButtonColumn().drawInternal('Hidden', context, new styles.ButtonStyle({
+				bgColor: 'hidden-bg',
+				visibility: 'hidden',
+			}), createHelper(calls), grid, {
+				drawCellBase: function(option) {
+					bases.push(option);
+				},
+				getIcon: function() {
+					return null;
+				},
+			});
+			new types.ButtonColumn().drawInternal('Selected', context, new styles.ButtonStyle({
+				bgColor: 'base-bg',
+				buttonBgColor: 'button-bg',
+			}), createHelper(calls), grid, {
+				drawCellBase: function(option) {
+					bases.push(option);
+				},
+				getIcon: function() {
+					return null;
+				},
+			});
+
+			expect(bases).toEqual([
+				{bgColor: 'hidden-bg'},
+				{bgColor: 'base-bg'},
+			]);
+			expect(calls[0]).toEqual(['testFontLoad', undefined, 'Selected', context]);
+			expect(calls[1]).toEqual(['button', 'Selected', context, {
+				textAlign: 'center',
+				textBaseline: 'middle',
+				bgColor: 'button-bg',
+				color: undefined,
+				font: undefined,
+				padding: undefined,
+				shadow: {
+					color: 'rgba(0, 0, 0, 0.48)',
+					blur: 6,
+					offsetY: 3,
+				},
+				textOverflow: 'clip',
+				icons: undefined,
+			}]);
+		});
+
 		it('draws multiline text from normalized line breaks', function() {
 			const calls = [];
 			const context = createContext();
@@ -207,6 +260,27 @@
 					icons: undefined,
 				}],
 			]);
+		});
+
+		it('draws multiline backgrounds and skips hidden text', function() {
+			const calls = [];
+			const bases = [];
+			const context = createContext();
+
+			new types.MultilineTextColumn().drawInternal('Hidden', context, new styles.MultilineTextStyle({
+				bgColor: 'hidden-bg',
+				visibility: 'hidden',
+			}), createHelper(calls), {}, {
+				drawCellBase: function(option) {
+					bases.push(option);
+				},
+				getIcon: function() {
+					return null;
+				},
+			});
+
+			expect(bases).toEqual([{bgColor: 'hidden-bg'}]);
+			expect(calls).toEqual([]);
 		});
 	});
 })();
