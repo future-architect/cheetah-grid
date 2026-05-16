@@ -77,5 +77,30 @@
 			expect(styles.SortHeaderStyle.DEFAULT).toBe(styles.SortHeaderStyle.DEFAULT);
 			expect(styles.CheckHeaderStyle.DEFAULT).toBe(styles.CheckHeaderStyle.DEFAULT);
 		});
+
+		it('fires change events for standard header alignment setters and clones them', async function() {
+			const {StdBaseStyle} = await import('../../../../js/header/style/StdBaseStyle.ts');
+			const style = new StdBaseStyle({
+				textAlign: 'left',
+				textBaseline: 'top',
+			});
+			const clone = style.clone();
+			const calls = [];
+
+			style.listen(styles.BaseStyle.EVENT_TYPE.CHANGE_STYLE, function() {
+				calls.push('change');
+			});
+
+			style.textAlign = 'right';
+			style.textBaseline = 'bottom';
+			clone.textAlign = 'center';
+
+			expect(style.textAlign).toEqual('right');
+			expect(style.textBaseline).toEqual('bottom');
+			expect(clone.textAlign).toEqual('center');
+			expect(clone.textBaseline).toEqual('top');
+			expect(calls).toEqual(['change', 'change']);
+			expect(StdBaseStyle.DEFAULT).toBe(StdBaseStyle.DEFAULT);
+		});
 	});
 })();

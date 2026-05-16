@@ -116,5 +116,157 @@
 				grid: {frozenRowCount: 1},
 			})).toEqual('white');
 		});
+
+		it('evaluates BASIC row backgrounds and caches frozen-row gradients', function() {
+			const gradients = [];
+			const context = {
+				createLinearGradient: function(left, top, right, bottom) {
+					const gradient = {
+						left,
+						top,
+						right,
+						bottom,
+						stops: [],
+						addColorStop: function(stop, color) {
+							this.stops.push([stop, color]);
+						},
+					};
+					gradients.push(gradient);
+					return gradient;
+				},
+			};
+			const grid = {
+				frozenRowCount: 2,
+				getRecordIndexByRow: function(row) {
+					return row - 2;
+				},
+				getCellRelativeRect: function(_col, row) {
+					return {
+						left: 10,
+						top: row * 20,
+						bottom: row * 20 + 20,
+					};
+				},
+			};
+
+			expect(themes.BASIC.defaultBgColor({row: 0, grid})).toEqual('#FFF');
+			expect(themes.BASIC.defaultBgColor({row: 2, grid})).toEqual('#FFF');
+			expect(themes.BASIC.defaultBgColor({row: 3, grid})).toEqual('#F6F6F6');
+
+			const first = themes.BASIC.frozenRowsBgColor({
+				col: 1,
+				grid,
+				context,
+			});
+			const second = themes.BASIC.frozenRowsBgColor({
+				col: 1,
+				grid,
+				context,
+			});
+
+			expect(second).toBe(first);
+			expect(gradients).toEqual([{
+				left: 10,
+				top: 0,
+				right: 10,
+				bottom: 40,
+				stops: [
+					[0, '#FFF'],
+					[1, '#D3D3D3'],
+				],
+				addColorStop: gradients[0].addColorStop,
+			}]);
+		});
+
+		it('evaluates MATERIAL_DESIGN border callbacks for frozen, grouped, and edge cells', function() {
+			const grid = {
+				colCount: 4,
+				frozenColCount: 2,
+				recordRowCount: 2,
+				getRecordIndexByRow: function(row) {
+					return Math.floor(row / 2);
+				},
+				getRecordStartRowByRecordIndex: function(index) {
+					return index * 2;
+				},
+			};
+
+			expect(themes.MATERIAL_DESIGN.frozenRowsBorderColor({
+				row: 0,
+				grid: {frozenRowCount: 2},
+			})).toEqual(['#f2f2f2']);
+			expect(themes.MATERIAL_DESIGN.frozenRowsBorderColor({
+				row: 1,
+				grid: {frozenRowCount: 2},
+			})).toEqual(['#f2f2f2', '#f2f2f2', '#ccc7c7', '#f2f2f2']);
+			expect(themes.MATERIAL_DESIGN.borderColor({
+				col: 0,
+				row: 1,
+				grid,
+			})).toEqual([null, null, '#ccc7c7', null]);
+			expect(themes.MATERIAL_DESIGN.borderColor({
+				col: 1,
+				row: 0,
+				grid,
+			})).toEqual(['#ccc7c7', '#f2f2f2', null, null]);
+			expect(themes.MATERIAL_DESIGN.borderColor({
+				col: 3,
+				row: 2,
+				grid,
+			})).toEqual(['#ccc7c7', '#f2f2f2', null, null]);
+		});
+
+		it('derives nested theme fallbacks and caches nested accessors', function() {
+			const borderColor = function() {
+				return [null, 'right', 'bottom', 'left'];
+			};
+			const base = new Theme({
+				font: '12px sans-serif',
+				color: 'ink',
+				defaultBgColor: 'paper',
+				underlayBackgroundColor: 'underlay',
+				borderColor,
+			});
+			const child = base.extends({
+				tree: {
+					lineWidth: 3,
+				},
+				header: {},
+				messages: {
+					boxWidth: 12,
+					markHeight: 5,
+				},
+				indicators: {
+					bottomLeftSize: 7,
+				},
+			});
+			const args = {};
+
+			expect(child.checkbox).toBe(child.checkbox);
+			expect(child.radioButton).toBe(child.radioButton);
+			expect(child.tree).toBe(child.tree);
+			expect(child.header).toBe(child.header);
+			expect(child.messages).toBe(child.messages);
+			expect(child.indicators).toBe(child.indicators);
+			expect(child.checkbox.checkBgColor(args)).toEqual('right');
+			expect(child.checkbox.borderColor(args)).toEqual('right');
+			expect(child.radioButton.checkColor).toEqual('ink');
+			expect(child.radioButton.uncheckBorderColor(args)).toEqual('right');
+			expect(child.radioButton.checkBorderColor(args)).toEqual('right');
+			expect(child.radioButton.uncheckBgColor).toEqual('paper');
+			expect(child.radioButton.checkBgColor).toEqual('paper');
+			expect(child.button.color).toEqual('ink');
+			expect(child.button.bgColor).toEqual('paper');
+			expect(child.tree.lineStyle).toEqual('solid');
+			expect(child.tree.lineColor(args)).toEqual('right');
+			expect(child.tree.lineWidth).toEqual(3);
+			expect(child.header.sortArrowColor).toEqual('ink');
+			expect(child.messages.boxWidth).toEqual(12);
+			expect(child.messages.markHeight).toEqual(5);
+			expect(child.indicators.topRightColor(args)).toEqual('right');
+			expect(child.indicators.bottomRightColor(args)).toEqual('right');
+			expect(child.indicators.bottomLeftColor(args)).toEqual('right');
+			expect(child.indicators.bottomLeftSize).toEqual(7);
+		});
 	});
 })();
