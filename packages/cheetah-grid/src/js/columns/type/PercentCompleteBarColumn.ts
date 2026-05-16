@@ -28,13 +28,13 @@ export class PercentCompleteBarColumn<T> extends Column<T> {
     return new PercentCompleteBarColumn(this);
   }
   get min(): number {
-    return this.min;
+    return this._min;
   }
   get max(): number {
-    return this.max;
+    return this._max;
   }
   get formatter(): (value: unknown) => unknown {
-    return this.formatter;
+    return this._formatter;
   }
   drawInternal(
     value: unknown,

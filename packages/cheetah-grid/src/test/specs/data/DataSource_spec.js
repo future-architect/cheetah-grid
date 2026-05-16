@@ -76,6 +76,62 @@
 			});
 		});
 
+		it('resolves promise records and promise field values', async function() {
+			const record = {
+				id: 1,
+				name: function() {
+					return Promise.resolve('Ada');
+				},
+				nested: {
+					score: function() {
+						return Promise.resolve(42);
+					},
+				},
+			};
+			const dataSource = new DataSource({
+				length: 1,
+				get: function() {
+					return Promise.resolve(record);
+				},
+			});
+			const accessor = {
+				get: function(r) {
+					return Promise.resolve(r.id + 1);
+				},
+				set: function() {
+					return false;
+				},
+			};
+
+			expect(await dataSource.get(0)).toBe(record);
+			expect(await dataSource.getField(0, 'name')).toEqual('Ada');
+			expect(await dataSource.getField(0, 'nested.score')).toEqual(42);
+			expect(await dataSource.getField(0, accessor)).toEqual(2);
+		});
+
+		it('sets fields after promise records resolve', async function() {
+			const record = {id: 1};
+			const dataSource = new DataSource({
+				length: 1,
+				get: function() {
+					return Promise.resolve(record);
+				},
+			});
+
+			expect(await dataSource.setField(0, 'id', 2)).toEqual(true);
+			expect(await dataSource.setField(0, 'nested.value', 'ready')).toEqual(true);
+			expect(await dataSource.setField(0, function(r, value) {
+				r.fn = value;
+				return true;
+			}, 'done')).toEqual(true);
+
+			expect(record).toEqual({
+				id: 2,
+				nested: {value: 'ready'},
+				fn: 'done',
+			});
+		});
+
 		it('fires length events and allows update cancellation', function() {
 			const dataSource = DataSource.ofArray([{id: 1}]);
 			const calls = [];
@@ -118,6 +174,34 @@
 			await dataSource.sort('value', 'desc');
 			expect([dataSource.get(0).id, dataSource.get(1).id, dataSource.get(2).id]).toEqual([1, 3, 2]);
 			expect(calls).toEqual(['updated_order', 'updated_order']);
+		});
+
+		it('sorts nullish and asynchronous field values consistently', async function() {
+			const records = [
+				{
+					id: 'high',
+					value: function() {
+						return Promise.resolve(2);
+					},
+				},
+				{id: 'null', value: null},
+				{id: 'low', value: Promise.resolve(1)},
+			];
+			const dataSource = DataSource.ofArray(records);
+
+			await dataSource.sort('value', 'asc');
+			expect([
+				dataSource.get(0).id,
+				dataSource.get(1).id,
+				dataSource.get(2).id,
+			]).toEqual(['null', 'low', 'high']);
+
+			await dataSource.sort('value', 'desc');
+			expect([
+				dataSource.get(0).id,
+				dataSource.get(1).id,
+				dataSource.get(2).id,
+			]).toEqual(['high', 'low', 'null']);
 		});
 	});
 })();

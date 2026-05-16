@@ -11,7 +11,9 @@
 			expect(types.of('default')).toBe(types.of());
 			expect(types.of('number')).toBe(types.of('NUMBER'));
 			expect(types.of('check')).toBe(types.of('CHECK'));
+			expect(types.of('radio')).toBe(types.of('RADIO'));
 			expect(types.of('button')).toBe(types.of('BUTTON'));
+			expect(types.of('image')).toBe(types.of('IMAGE'));
 			expect(types.of('multilinetext')).toBe(types.of('MULTILINETEXT'));
 		});
 
@@ -78,6 +80,19 @@
 			expect(column.convertInternal('000')).toEqual(false);
 			expect(column.convertInternal('001')).toEqual(true);
 			expect(column.StyleClass).toBe(styles.CheckStyle);
+		});
+
+		it('converts radio values with spreadsheet-like false strings', function() {
+			const column = new types.RadioColumn();
+
+			expect(column.convertInternal(true)).toEqual(true);
+			expect(column.convertInternal(1)).toEqual(true);
+			expect(column.convertInternal('true')).toEqual(true);
+			expect(column.convertInternal('false')).toEqual(false);
+			expect(column.convertInternal('off')).toEqual(false);
+			expect(column.convertInternal('000')).toEqual(false);
+			expect(column.convertInternal('001')).toEqual(true);
+			expect(column.StyleClass).toBe(styles.RadioStyle);
 		});
 
 		it('converts nullish default column values to empty strings', function() {
