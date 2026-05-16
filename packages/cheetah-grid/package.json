@@ -85,7 +85,7 @@
     "image-matcher": "^0.1.4",
     "playwright": "^1.60.0",
     "prettier": "^2.1.1",
-    "rolldown": "1.0.0-beta.32",
+    "rolldown": "^1.0.1",
     "stylelint": "^13.6.1",
     "stylelint-config-standard": "^20.0.0",
     "tsdown": "^0.14.1",
