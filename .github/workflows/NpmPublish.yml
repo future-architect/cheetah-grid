@@ -2,20 +2,24 @@ name: publish
 
 on:
   push:
-    tags:
-      - "*"
+    branches: [master]
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 permissions:
   contents: write
   pull-requests: write
+  id-token: write
 
 jobs:
   release:
-    name: check version, and release
+    name: release
     runs-on: macos-latest
     steps:
     - name: checkout
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
     - uses: pnpm/action-setup@v4
       with:
         version: 10.30.1
@@ -27,25 +31,12 @@ jobs:
         registry-url: 'https://registry.npmjs.org'
     - name: Install Packages
       run: pnpm install --frozen-lockfile
-    - name: Build
-      run: pnpm run build:ci
-    - name: test
-      run: pnpm test
-    - name: release
-      run: |+
-        pnpm run echo:v
-        cp ./README.md ./packages/cheetah-grid/README.md
-        cp ./LICENSE ./packages/cheetah-grid/LICENSE
-        cp ./LICENSE ./packages/vue-cheetah-grid/LICENSE
-        cp ./LICENSE ./packages/cheetah-grid-icon-svg-loader/LICENSE
-        cp ./LICENSE ./packages/unplugin-cheetah-grid-icon-svg/LICENSE
-        pnpm run publish:all
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-    - uses: peter-evans/create-pull-request@v7
+    - name: Create release PR or publish
+      uses: changesets/action@v1
       with:
-        commit-message: post-release updates
-        branch: post-release
-        branch-suffix: timestamp
-        title: post-release updates
-        base: master
+        version: pnpm run version
+        publish: pnpm run release
+        commit: "chore: version packages"
+        title: "chore: version packages"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
