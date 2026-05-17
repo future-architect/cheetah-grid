@@ -63,4 +63,75 @@
 			}).then(done);
 		});
 	});
+
+	describe('FilterDataSource data source behavior', function() {
+		it('proxies source and dataSource and can disable filtering', function() {
+			const records = [{id: 1}, {id: 2}];
+			const dataSource = data.DataSource.ofArray(records);
+			const filterDataSource = new cheetahGrid.data.FilterDataSource(dataSource, function(record) {
+				return record.id === 2;
+			});
+
+			expect(filterDataSource.source).toBe(records);
+			expect(filterDataSource.dataSource).toBe(dataSource);
+			expect(filterDataSource.get(0)).toBe(records[1]);
+
+			filterDataSource.filter = null;
+
+			expect(filterDataSource.length).toEqual(2);
+			expect(filterDataSource.get(0)).toBe(records[0]);
+			expect(filterDataSource.get(1)).toBe(records[1]);
+		});
+
+		it('forwards length events from the wrapped data source until disposed', function() {
+			const records = [{id: 1}];
+			const dataSource = data.DataSource.ofArray(records);
+			const filterDataSource = new cheetahGrid.data.FilterDataSource(dataSource, function() {
+				return true;
+			});
+			const calls = [];
+
+			filterDataSource.listen(data.DataSource.EVENT_TYPE.UPDATE_LENGTH, function(length) {
+				calls.push(['update', length]);
+			});
+			filterDataSource.listen(data.DataSource.EVENT_TYPE.UPDATED_LENGTH, function(length) {
+				calls.push(['updated', length]);
+			});
+
+			dataSource.length = 2;
+			expect(calls).toEqual([
+				['update', 2],
+				['updated', 2],
+			]);
+
+			filterDataSource.dispose();
+			dataSource.length = 3;
+
+			expect(calls).toEqual([
+				['update', 2],
+				['updated', 2],
+			]);
+		});
+
+		it('filters asynchronous records as they resolve', async function() {
+			const records = [
+				Promise.resolve({id: 1, keep: false}),
+				Promise.resolve({id: 2, keep: true}),
+			];
+			const dataSource = new data.DataSource({
+				length: records.length,
+				get: function(index) {
+					return records[index];
+				},
+				source: records,
+			});
+			const filterDataSource = new cheetahGrid.data.FilterDataSource(dataSource, function(record) {
+				return record && record.keep;
+			});
+
+			expect(await filterDataSource.get(0)).toEqual({id: 2, keep: true});
+			expect(filterDataSource.get(1)).toBeUndefined();
+			expect(filterDataSource.length).toEqual(1);
+		});
+	});
 })();

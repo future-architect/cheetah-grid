@@ -87,6 +87,177 @@
 
 		}
 
+		function createEllipsisAnswerCanvas(grid) {
+			const base = createAnswerCanvasBase(grid);
+			const canvasHelper = base.canvasHelper;
+			const ctx = canvasHelper.context;
+			const gridHelper = base.gridHelper;
+
+			ctx.fillStyle = '#000';
+			const textOpt = {
+				offset: 3,
+				textBaseline: 'middle',
+				textAlign: 'left',
+			};
+			gridHelper.text('TES\u2026', 0, 0, textOpt);
+			gridHelper.text('VAL\u2026', 0, 1, textOpt);
+			gridHelper.text('VAL\u2026', 0, 2, textOpt);
+			return canvasHelper.canvas;
+		}
+
+		function createMultilineEllipsisAnswerCanvas(grid) {
+			const base = createAnswerCanvasBase(grid);
+			const canvasHelper = base.canvasHelper;
+			const ctx = canvasHelper.context;
+			const gridHelper = base.gridHelper;
+			const em = ctx.measureText('あ').width;
+			const textOpt = {
+				offset: 3,
+				textBaseline: 'middle',
+				textAlign: 'left',
+			};
+
+			ctx.fillStyle = '#000';
+			gridHelper.text('TES\u2026', 0, 0, textOpt);
+			gridHelper.text('VAL\u2026', 0, 1, {
+				y: 61,
+				offset: 4,
+				textBaseline: 'middle',
+				textAlign: 'left',
+			});
+			gridHelper.text('VAL\u2026', 0, 1, {
+				y: 61 + em,
+				offset: 4,
+				textBaseline: 'middle',
+				textAlign: 'left',
+			});
+			gridHelper.text('VAL\u2026', 0, 2, {
+				y: 111,
+				offset: 4,
+				textBaseline: 'middle',
+				textAlign: 'left',
+			});
+			gridHelper.text('VAL\u2026', 0, 2, {
+				y: 111 + Number(em),
+				offset: 4,
+				textBaseline: 'middle',
+				textAlign: 'left',
+			});
+			return canvasHelper.canvas;
+		}
+
+		function createAutoWrapLineClampAnswerCanvas(grid) {
+			const base = createAnswerCanvasBase(grid);
+			const canvasHelper = base.canvasHelper;
+			const ctx = canvasHelper.context;
+			const gridHelper = base.gridHelper;
+			const em = ctx.measureText('あ').width;
+			const lineClamp = Math.floor((50 - 6) / em);
+			const valTop = 62;
+
+			ctx.fillStyle = '#000';
+			gridHelper.text('TES\u2026', 0, 0, {
+				offset: 3,
+				textBaseline: 'middle',
+				textAlign: 'left',
+			});
+			gridHelper.text('VALU', 0, 1, {
+				y: valTop,
+				offset: 3,
+				textBaseline: 'middle',
+				textAlign: 'left',
+			});
+			if (lineClamp === 2) {
+				gridHelper.text('E\u2026', 0, 1, {
+					y: valTop + em,
+					offset: 3,
+					textBaseline: 'middle',
+					textAlign: 'left',
+				});
+			}
+			if (lineClamp > 2) {
+				gridHelper.text('E', 0, 1, {
+					y: valTop + em,
+					offset: 3,
+					textBaseline: 'middle',
+					textAlign: 'left',
+				});
+			}
+			if (lineClamp === 3) {
+				gridHelper.text('VAL\u2026', 0, 1, {
+					y: valTop + em * 2,
+					offset: 3,
+					textBaseline: 'middle',
+					textAlign: 'left',
+				});
+			}
+			if (lineClamp > 3) {
+				gridHelper.text('VALU', 0, 1, {
+					y: valTop + em * 2,
+					offset: 3,
+					textBaseline: 'middle',
+					textAlign: 'left',
+				});
+			}
+			if (lineClamp === 4) {
+				gridHelper.text('E\u2026', 0, 1, {
+					y: valTop + em * 3,
+					offset: 3,
+					textBaseline: 'middle',
+					textAlign: 'left',
+				});
+			}
+			if (lineClamp > 4) {
+				gridHelper.text('E', 0, 1, {
+					y: valTop + em * 3,
+					offset: 3,
+					textBaseline: 'middle',
+					textAlign: 'left',
+				});
+			}
+			if (lineClamp === 5) {
+				gridHelper.text('VAL\u2026', 0, 1, {
+					y: valTop + em * 4,
+					offset: 3,
+					textBaseline: 'middle',
+					textAlign: 'left',
+				});
+			}
+			if (lineClamp > 5) {
+				gridHelper.text('VALU', 0, 1, {
+					y: valTop + em * 4,
+					offset: 3,
+					textBaseline: 'middle',
+					textAlign: 'left',
+				});
+			}
+			if (lineClamp === 6) {
+				gridHelper.text('E\u2026', 0, 1, {
+					y: valTop + em * 5,
+					offset: 3,
+					textBaseline: 'middle',
+					textAlign: 'left',
+				});
+			}
+			if (lineClamp > 6) {
+				gridHelper.text('E', 0, 1, {
+					y: valTop + em * 5,
+					offset: 3,
+					textBaseline: 'middle',
+					textAlign: 'left',
+				});
+			}
+			if (lineClamp === 7) {
+				gridHelper.text('VAL\u2026', 0, 1, {
+					y: valTop + em * 6,
+					offset: 3,
+					textBaseline: 'middle',
+					textAlign: 'left',
+				});
+			}
+			return canvasHelper.canvas;
+		}
+
 		it('textOverflow="ellipsis"', function(done) {
 
 			const grid = createGrid([
@@ -99,37 +270,7 @@
 					textOverflow: 'ellipsis'
 				}},
 			]);
-			function createAnswerCanvas() {
-
-				const base = createAnswerCanvasBase(grid);
-				const canvasHelper = base.canvasHelper;
-				const ctx = canvasHelper.context;
-
-				const gridHelper = base.gridHelper;
-
-				//TEXT
-				ctx.fillStyle = '#000';
-				const textOpt = {
-					offset: 3,
-					textBaseline: 'middle',
-					textAlign: 'left',
-				};
-				gridHelper.text('TES\u2026', 0, 0, textOpt);
-				gridHelper.text('VAL\u2026', 0, 1, {
-					offset: 3,
-					textBaseline: 'middle',
-					textAlign: 'left',
-				});
-				gridHelper.text('VAL\u2026', 0, 2, {
-					offset: 3,
-					textBaseline: 'middle',
-					textAlign: 'left',
-				});
-
-
-				return canvasHelper.canvas;
-			}
-			const canvas = createAnswerCanvas();
+			const canvas = createEllipsisAnswerCanvas(grid);
 			setTimeout(function() {
 				expect(grid.canvas).toMatchImage(canvas, {tolerance: 110, delta: '20%', blurLevel: 1});
 				expect(grid.getCellOverflowText(0, 1)).toBe('VALUE');
@@ -152,53 +293,7 @@
 					textOverflow: 'ellipsis'
 				}},
 			], {defaultRowHeight: 50});
-			function createAnswerCanvas() {
-
-				const base = createAnswerCanvasBase(grid);
-				const canvasHelper = base.canvasHelper;
-				const ctx = canvasHelper.context;
-
-				const gridHelper = base.gridHelper;
-
-				const em = ctx.measureText('あ').width;
-
-				//TEXT
-				ctx.fillStyle = '#000';
-				const textOpt = {
-					offset: 3,
-					textBaseline: 'middle',
-					textAlign: 'left',
-				};
-				gridHelper.text('TES\u2026', 0, 0, textOpt);
-				gridHelper.text('VAL\u2026', 0, 1, {
-					y: 61,
-					offset: 4,
-					textBaseline: 'middle',
-					textAlign: 'left',
-				});
-				gridHelper.text('VAL\u2026', 0, 1, {
-					y: 61 + em,
-					offset: 4,
-					textBaseline: 'middle',
-					textAlign: 'left',
-				});
-				gridHelper.text('VAL\u2026', 0, 2, {
-					y: 111,
-					offset: 4,
-					textBaseline: 'middle',
-					textAlign: 'left',
-				});
-				gridHelper.text('VAL\u2026', 0, 2, {
-					y: 111 + Number(em),
-					offset: 4,
-					textBaseline: 'middle',
-					textAlign: 'left',
-				});
-
-
-				return canvasHelper.canvas;
-			}
-			const canvas = createAnswerCanvas();
+			const canvas = createMultilineEllipsisAnswerCanvas(grid);
 			setTimeout(function() {
 				expect(grid.canvas).toMatchImage(canvas, {tolerance: 200, delta: '30%', blurLevel: 1});
 				expect(grid.getCellOverflowText(0, 1)).toBe('VALUE\nVALUE');
@@ -222,128 +317,7 @@
 					autoWrapText: true,
 				}},
 			], {defaultRowHeight: 50, records: [{}]});
-			function createAnswerCanvas() {
-
-				const base = createAnswerCanvasBase(grid);
-				const canvasHelper = base.canvasHelper;
-				const ctx = canvasHelper.context;
-
-				const gridHelper = base.gridHelper;
-
-				const em = ctx.measureText('あ').width;
-
-				const lineClamp = Math.floor((50 - 6) / em);
-				console.log(`lineClamp=${lineClamp}`);
-
-				//TEXT
-				ctx.fillStyle = '#000';
-				const textOpt = {
-					offset: 3,
-					textBaseline: 'middle',
-					textAlign: 'left',
-				};
-				gridHelper.text('TES\u2026', 0, 0, textOpt);
-
-				const valTop = 62;
-				gridHelper.text('VALU', 0, 1, {
-					y: valTop,
-					offset: 3,
-					textBaseline: 'middle',
-					textAlign: 'left',
-				});
-				if (lineClamp === 2) {
-					gridHelper.text('E\u2026', 0, 1, {
-						y: valTop + em,
-						offset: 3,
-						textBaseline: 'middle',
-						textAlign: 'left',
-					});
-				}
-
-				if (lineClamp > 2) {
-					gridHelper.text('E', 0, 1, {
-						y: valTop + em,
-						offset: 3,
-						textBaseline: 'middle',
-						textAlign: 'left',
-					});
-				}
-				if (lineClamp === 3) {
-					gridHelper.text('VAL\u2026', 0, 1, {
-						y: valTop + em * 2,
-						offset: 3,
-						textBaseline: 'middle',
-						textAlign: 'left',
-					});
-				}
-				if (lineClamp > 3) {
-					gridHelper.text('VALU', 0, 1, {
-						y: valTop + em * 2,
-						offset: 3,
-						textBaseline: 'middle',
-						textAlign: 'left',
-					});
-				}
-				if (lineClamp === 4) {
-					gridHelper.text('E\u2026', 0, 1, {
-						y: valTop + em * 3,
-						offset: 3,
-						textBaseline: 'middle',
-						textAlign: 'left',
-					});
-				}
-				if (lineClamp > 4) {
-					gridHelper.text('E', 0, 1, {
-						y: valTop + em * 3,
-						offset: 3,
-						textBaseline: 'middle',
-						textAlign: 'left',
-					});
-				}
-				if (lineClamp === 5) {
-					gridHelper.text('VAL\u2026', 0, 1, {
-						y: valTop + em * 4,
-						offset: 3,
-						textBaseline: 'middle',
-						textAlign: 'left',
-					});
-				}
-				if (lineClamp > 5) {
-					gridHelper.text('VALU', 0, 1, {
-						y: valTop + em * 4,
-						offset: 3,
-						textBaseline: 'middle',
-						textAlign: 'left',
-					});
-				}
-				if (lineClamp === 6) {
-					gridHelper.text('E\u2026', 0, 1, {
-						y: valTop + em * 5,
-						offset: 3,
-						textBaseline: 'middle',
-						textAlign: 'left',
-					});
-				}
-				if (lineClamp > 6) {
-					gridHelper.text('E', 0, 1, {
-						y: valTop + em * 5,
-						offset: 3,
-						textBaseline: 'middle',
-						textAlign: 'left',
-					});
-				}
-				if (lineClamp === 7) {
-					gridHelper.text('VAL\u2026', 0, 1, {
-						y: valTop + em * 6,
-						offset: 3,
-						textBaseline: 'middle',
-						textAlign: 'left',
-					});
-				}
-				// other
-				return canvasHelper.canvas;
-			}
-			const canvas = createAnswerCanvas();
+			const canvas = createAutoWrapLineClampAnswerCanvas(grid);
 			setTimeout(function() {
 				expect(grid.canvas).toMatchImage(canvas, {tolerance: 210, delta: '25%', blurLevel: 1, log: true});
 				expect(grid.getCellOverflowText(0, 1)).toBe('VALUE\nVALUE\nVALUE\nVALUE');

@@ -113,38 +113,40 @@
 			};
 		}
 
-		it('init drawing', function(done) {
-			function createAnswerCanvas() {
-				const base = createAnswerCanvasBase();
-				const canvasHelper = base.canvasHelper;
-				const ctx = canvasHelper.context;
+		function createAnswerCanvas(color, size) {
+			const base = createAnswerCanvasBase();
+			const canvasHelper = base.canvasHelper;
+			const ctx = canvasHelper.context;
+			const gridHelper = base.gridHelper;
 
-				const gridHelper = base.gridHelper;
-
-				for (const cell of [
-					[0, 1],
-					[1, 1],
-					[2, 1],
-					[0, 2],
-					[2, 2],
-				]) {
-					drawTopRightTriangleIndicator({
-						ctx,
-						color: BORDER_COLOR,
-						rect: gridHelper.getRect(cell[0], cell[1]),
-						size: 4,
-					});
-				}
-
-				return canvasHelper.canvas;
-			}
-			const canvas = createAnswerCanvas();
-			setTimeout(function() {
-				expect(grid.canvas).toMatchImage(canvas, {
-					tolerance: 50,
-					delta: '10%',
-					blurLevel: 1,
+			for (const cell of [
+				[0, 1],
+				[1, 1],
+				[2, 1],
+				[0, 2],
+				[2, 2],
+			]) {
+				drawTopRightTriangleIndicator({
+					ctx,
+					color,
+					rect: gridHelper.getRect(cell[0], cell[1]),
+					size,
 				});
+			}
+			return canvasHelper.canvas;
+		}
+		function expectCanvas(canvas, tolerance) {
+			expect(grid.canvas).toMatchImage(canvas, {
+				tolerance,
+				delta: '10%',
+				blurLevel: 1,
+			});
+		}
+
+		it('init drawing', function(done) {
+			const canvas = createAnswerCanvas(BORDER_COLOR, 4);
+			setTimeout(function() {
+				expectCanvas(canvas, 50);
 				done();
 			}, 200);
 		});
@@ -153,146 +155,26 @@
 			theme.indicators.topRightColor = color;
 			grid.invalidate();
 
-			function createAnswerCanvas() {
-				const base = createAnswerCanvasBase();
-				const canvasHelper = base.canvasHelper;
-				const ctx = canvasHelper.context;
-				const canvas = canvasHelper.canvas;
-
-				const gridHelper = base.gridHelper;
-
-				for (const cell of [
-					[0, 1],
-					[1, 1],
-					[2, 1],
-					[0, 2],
-					[2, 2],
-				]) {
-					drawTopRightTriangleIndicator({
-						ctx,
-						color,
-						rect: gridHelper.getRect(cell[0], cell[1]),
-						size: 4,
-					});
-				}
-
-				return canvas;
-			}
-			const canvas = createAnswerCanvas();
-			expect(grid.canvas).toMatchImage(canvas, {
-				tolerance: 100,
-				delta: '10%',
-				blurLevel: 1,
-			});
+			expectCanvas(createAnswerCanvas(color, 4), 100);
 		});
 		it('reset color', function() {
 			theme.indicators.topRightColor = undefined;
 			grid.invalidate();
 
-			function createAnswerCanvas() {
-				const base = createAnswerCanvasBase();
-				const canvasHelper = base.canvasHelper;
-				const ctx = canvasHelper.context;
-				const canvas = canvasHelper.canvas;
-
-				const gridHelper = base.gridHelper;
-
-				for (const cell of [
-					[0, 1],
-					[1, 1],
-					[2, 1],
-					[0, 2],
-					[2, 2],
-				]) {
-					drawTopRightTriangleIndicator({
-						ctx,
-						color: BORDER_COLOR,
-						rect: gridHelper.getRect(cell[0], cell[1]),
-						size: 4,
-					});
-				}
-
-				return canvas;
-			}
-			const canvas = createAnswerCanvas();
-			expect(grid.canvas).toMatchImage(canvas, {
-				tolerance: 100,
-				delta: '10%',
-				blurLevel: 1,
-			});
+			expectCanvas(createAnswerCanvas(BORDER_COLOR, 4), 100);
 		});
 		it('update size', function() {
 			const size = 6;
 			theme.indicators.topRightSize = size;
 			grid.invalidate();
 
-			function createAnswerCanvas() {
-				const base = createAnswerCanvasBase();
-				const canvasHelper = base.canvasHelper;
-				const ctx = canvasHelper.context;
-				const canvas = canvasHelper.canvas;
-
-				const gridHelper = base.gridHelper;
-
-				for (const cell of [
-					[0, 1],
-					[1, 1],
-					[2, 1],
-					[0, 2],
-					[2, 2],
-				]) {
-					drawTopRightTriangleIndicator({
-						ctx,
-						color: BORDER_COLOR,
-						rect: gridHelper.getRect(cell[0], cell[1]),
-						size,
-					});
-				}
-
-				return canvas;
-			}
-			const canvas = createAnswerCanvas();
-			expect(grid.canvas).toMatchImage(canvas, {
-				tolerance: 100,
-				delta: '10%',
-				blurLevel: 1,
-			});
+			expectCanvas(createAnswerCanvas(BORDER_COLOR, size), 100);
 		});
 		it('reset size', function() {
 			theme.indicators.topRightSize = undefined;
 			grid.invalidate();
 
-			function createAnswerCanvas() {
-				const base = createAnswerCanvasBase();
-				const canvasHelper = base.canvasHelper;
-				const ctx = canvasHelper.context;
-				const canvas = canvasHelper.canvas;
-
-				const gridHelper = base.gridHelper;
-
-				for (const cell of [
-					[0, 1],
-					[1, 1],
-					[2, 1],
-					[0, 2],
-					[2, 2],
-				]) {
-					drawTopRightTriangleIndicator({
-						ctx,
-						color: BORDER_COLOR,
-						rect: gridHelper.getRect(cell[0], cell[1]),
-						size: 4,
-					});
-				}
-
-				return canvas;
-			}
-			const canvas = createAnswerCanvas();
-			expect(grid.canvas).toMatchImage(canvas, {
-				tolerance: 100,
-				delta: '10%',
-				blurLevel: 1,
-			});
+			expectCanvas(createAnswerCanvas(BORDER_COLOR, 4), 100);
 		});
 	});
 })();

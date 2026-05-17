@@ -28,30 +28,56 @@
 	ctx.rect(0, 0, width, height);
 	ctx.fill();
 
+	const expectedIconNames = [
+		'arrow_upward',
+		'arrow_downward',
+		'edit',
+		'add',
+		'star',
+		'star_border',
+		'star_half',
+		'keyboard_arrow_down',
+		'keyboard_arrow_left',
+		'keyboard_arrow_right',
+		'keyboard_arrow_up',
+		'chevron_left',
+		'chevron_right',
+		'expand_less',
+		'expand_more',
+	];
+
+	function drawIcons(iconNames) {
+		let y = 0;
+		let x = 0;
+		ctx.textBaseline = 'top';
+		iconNames.forEach(function(k) {
+			ctx.fillText(k, x, y);
+			ctx.beginPath();
+			ctx.strokeStyle = '#ddd';
+			ctx.rect(x, y + textHeight, iconSize, iconSize);
+			ctx.stroke();
+			path2DManager.fill(icons[k], ctx, x, y + textHeight, iconSize, iconSize);
+			x += 100;
+			if (x > (width - 100)) {
+				x = 0;
+				y += iconSize;
+			}
+		});
+	}
 
 	describe('svg to icons', function() {
 
 		it('icons fill', function() {
 			ctx.fillStyle = '#555';
-			let y = 0;
-			let x = 0;
-			ctx.textBaseline = 'top';
-			Object.keys(icons).forEach(function(k) {
-				ctx.fillText(k, x, y);
-				ctx.beginPath();
-				ctx.strokeStyle = '#ddd';
-				ctx.rect(x, y + textHeight, iconSize, iconSize);
-				ctx.stroke();
-				path2DManager.fill(icons[k], ctx, x, y + textHeight, iconSize, iconSize);
-				x += 100;
+			const iconNames = Object.keys(icons);
+			drawIcons(iconNames);
 
-
-				if (x > (width - 100)) {
-					x = 0;
-					y += iconSize;
-				}
+			const firstIconPixels = ctx.getImageData(0, textHeight, iconSize, iconSize).data;
+			const firstIconHasPaint = Array.prototype.some.call(firstIconPixels, function(value, index) {
+				return index % 4 !== 3 && value !== 255;
 			});
-			expect(true).toBe(true);
+			expect(iconNames).toEqual(expectedIconNames);
+			expect(firstIconHasPaint).toEqual(true);
 		});
 	});
 
