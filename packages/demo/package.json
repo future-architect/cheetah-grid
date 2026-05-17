@@ -7,7 +7,7 @@
   "scripts": {
     "test": "exit 0",
     "build": "vite build --mode production",
-    "lint": "npm run eslint",
+    "lint": "pnpm run eslint",
     "watch": "vite build --watch --mode development",
     "build:dev": "vite build --mode development",
     "dev": "vite",
@@ -26,7 +26,7 @@
     "vite": "^8.0.13",
     "vue": "^3.5.18",
     "vue-eslint-parser": "^10.4.0",
-    "vue-cheetah-grid": "^2.1.0",
+    "vue-cheetah-grid": "workspace:^",
     "vue-router": "^4.0.0-beta.13"
   }
 }

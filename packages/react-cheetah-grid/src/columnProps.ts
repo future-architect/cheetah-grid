@@ -104,7 +104,7 @@ export function parseOnClick<T>(
   if (onClick) {
     action = new cheetahGrid.columns.action.Action({
       disabled,
-      action(rec) {
+      action(rec: T) {
         if (onClick) {
           onClick(rec);
         }

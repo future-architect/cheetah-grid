@@ -36,28 +36,30 @@
     "dist/"
   ],
   "scripts": {
-    "test": "mrpm run test --mrpm-max-workers=1",
-    "build": "mrpm run build",
-    "build:ci": "mrpm run build:ci",
-    "prune:all": "mrpm prune",
-    "lint": "mrpm run lint",
+    "test": "pnpm -r --workspace-concurrency=1 run test",
+    "build": "pnpm -r run build",
+    "build:ci": "pnpm -r run build:ci",
+    "prune:all": "pnpm prune",
+    "lint": "pnpm -r run lint",
     "echo:v": "echo $npm_package_version",
     "check": "node ./scripts/check_readme.js && node ./scripts/check_versions.js",
-    "publish:all": "mrpm publish",
-    "update:all": "mrpm update",
-    "ci:all": "cross-env NO_UPDATE_NOTIFIER=1 mrpm ci",
-    "install:all": "cross-env NO_UPDATE_NOTIFIER=1 mrpm install",
-    "mrpm": "mrpm",
+    "publish:all": "pnpm -r publish --access public --no-git-checks",
+    "update:all": "pnpm -r update",
+    "ci:all": "pnpm install --frozen-lockfile",
+    "install:all": "pnpm install",
     "format:md": "prettier --write \"./*.md\" \"./**/*.md\""
   },
   "dependencies": {},
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "cross-env": "^5.2.0",
     "eslint": "^10.4.0",
     "eslint-plugin-html": "^8.1.4",
     "globals": "^17.6.0",
-    "mrpm": "^4.1.0",
     "prettier": "^3.8.3"
   }
 }

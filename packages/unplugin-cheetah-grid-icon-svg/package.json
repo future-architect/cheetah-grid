@@ -46,16 +46,16 @@
     "dist"
   ],
   "scripts": {
-    "pretest": "npm run lint",
+    "pretest": "pnpm run lint",
     "test:base": "vitest run",
-    "test": "npm run build && vitest run --coverage",
-    "test:nyc": "npm run test",
+    "test": "pnpm run build && vitest run --coverage",
+    "test:nyc": "pnpm run test",
     "test:d": "vitest --inspect-brk",
     "watch": "vitest",
-    "build": "npm run build:tsdown",
+    "build": "pnpm run build:tsdown",
     "build:tsdown": "tsdown",
-    "prepack": "npm run build",
-    "lint": "npm run eslint && npm run tsc",
+    "prepack": "pnpm run build",
+    "lint": "pnpm run eslint && pnpm run tsc",
     "eslint": "eslint .",
     "eslint:fix": "eslint . --fix",
     "tsc": "tsc --project ./tsconfig.json"

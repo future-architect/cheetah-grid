@@ -1,30 +1,35 @@
 'use strict';
 
-const semver = require('semver');
-const chalk = require('chalk');
-const packages = require('mrpm/lib/packages');
+const fs = require('fs');
+const path = require('path');
+const {execFile} = require('child_process');
+const {promisify} = require('util');
 const {version} = require('../package.json');
-const opts = {cwd: process.cwd()};
-const callNpm = require('mrpm/lib/callNpm');
+
+const execFileAsync = promisify(execFile);
+const rootDir = path.resolve(__dirname, '..');
+const packagesDir = path.join(rootDir, 'packages');
 
 function minorVersion(v) {
-	return `${semver.major(v)}.${semver.minor(v)}`;
+	const match = String(v).match(/(\d+)\.(\d+)/);
+	return match ? `${match[1]}.${match[2]}` : String(v);
 }
 
 function handleDone(err) {
 	if (err) {
-		console.error(`${chalk.red('error')} ${err.message}`);
+		console.error(`error ${err.message}`);
 		process.exit(err.code || 1);//eslint-disable-line
 	}
 }
 
-checkPackageJsons(opts, handleDone);
+checkPackageJsons(handleDone);
 
-async function checkPackageJsons(opts, cb) {
+async function checkPackageJsons(cb) {
 	try {
-		const pkgs = await packages(opts);
-		await	Promise.all(
-				pkgs.list.map((pkg) => checkPackageJson(pkg, pkgs))
+		const pkgs = loadPackages();
+		const pkgsByName = Object.fromEntries(pkgs.map((pkg) => [pkg.name, pkg]));
+		await Promise.all(
+				pkgs.map((pkg) => checkPackageJson(pkg, pkgsByName))
 		);
 		cb(null);
 	} catch (err) {
@@ -32,47 +37,55 @@ async function checkPackageJsons(opts, cb) {
 	}
 }
 
+function loadPackages() {
+	return fs.readdirSync(packagesDir, {withFileTypes: true})
+		.filter((dirent) => dirent.isDirectory())
+		.map((dirent) => path.join(packagesDir, dirent.name))
+		.map((pkgRootDir) => {
+			const packageJsonPath = path.join(pkgRootDir, 'package.json');
+			if (!fs.existsSync(packageJsonPath)) {
+				return null;
+			}
+			return {
+				...JSON.parse(fs.readFileSync(packageJsonPath, 'utf8')),
+				rootDir: pkgRootDir,
+				packageJsonPath
+			};
+		})
+		.filter(Boolean);
+}
 
-async function checkPackageJson(pkg, pkgs) {
+async function checkPackageJson(pkg, pkgsByName) {
 	if (pkg.name === 'react-cheetah-grid') {
 		return;
 	}
 	// check root version
 	if (minorVersion(pkg.version) !== minorVersion(version)) {
-		const message = `Invalid version. ${pkg.name}@${pkg.version}  root:${version} @ "${pkg.rootDir}/package.json"`;
-		console.error(message);
-
-		await callNpm(pkg, 'version', [version], opts);
-
-		throw new Error(message);
+		throw new Error(`Invalid version. ${pkg.name}@${pkg.version}  root:${version} @ "${pkg.packageJsonPath}"`);
 	}
 
-	for (const {depsName, version: v, name} of genVersions(pkg, pkgs)) {
-		if (minorVersion(v) !== minorVersion(pkgs.pkgs[name].version)) {
+	for (const {depsName, version: v, name} of genVersions(pkg, pkgsByName)) {
+		if (minorVersion(v) !== minorVersion(pkgsByName[name].version)) {
 			// eslint-disable-next-line no-await-in-loop
-			const isPublished = await	checkPublished(pkg, name, pkgs.pkgs[name].version);
+			const isPublished = await checkPublished(name, pkgsByName[name].version);
 
 			if (isPublished) {
-				if (depsName === 'dependencies' || depsName === 'devDependencies') {
-					// eslint-disable-next-line no-await-in-loop
-					await callNpm(pkg, 'i', [depsName === 'dependencies' ? '-S' : '-D', `${name}@${pkgs.pkgs[name].version}`], opts);
-				}
-				const message = `${name} version numbers do not match. expect:${pkgs.pkgs[name].version} "${pkg.rootDir}/package.json".${depsName}.${name}:"${v}" `;
-				console.error(message);
-				throw new Error(message);
+				throw new Error(`${name} version numbers do not match. expect:${pkgsByName[name].version} "${pkg.packageJsonPath}".${depsName}.${name}:"${v}" `);
 			}
 		}
 	}
 }
 
-function checkPublished(pkg, name, actVer) {
-	return callNpm(pkg, 'info', [name, 'versions', '--json'], opts).then((vers) => {
-		vers = JSON.parse(vers);
-		return (vers.indexOf(actVer) >= 0);
+async function checkPublished(name, actVer) {
+	const {stdout} = await execFileAsync('pnpm', ['view', name, 'versions', '--json'], {
+		cwd: rootDir,
+		maxBuffer: 10 * 1024 * 1024
 	});
+	const versions = JSON.parse(stdout);
+	return versions.includes(actVer);
 }
 
-function *genVersions(pkg, pkgs) {
+function *genVersions(pkg, pkgsByName) {
 
 	// check dependencies
 	const dependenciesKeys = [
@@ -84,8 +97,11 @@ function *genVersions(pkg, pkgs) {
 	];
 	for (const depsName of dependenciesKeys) {
 		const dependencies = pkg[depsName];
+		if (!dependencies || Array.isArray(dependencies)) {
+			continue;
+		}
 		for (const name in dependencies) {
-			if (!pkgs.pkgs[name]) {
+			if (!pkgsByName[name]) {
 				continue;
 			}
 			const depVer = dependencies[name].match(/(\d+\.\d+\.\d+)/g);

@@ -10,26 +10,34 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v2
+    - uses: actions/checkout@v4
+    - uses: pnpm/action-setup@v4
+      with:
+        version: 10.30.1
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 24
+        cache: pnpm
     - name: Install Packages
-      run: |+
-        npm ci
-        npm run ci:all
+      run: pnpm install --frozen-lockfile
     - name: Lint
       run: |+
-        npm run lint
-        npm run check
+        pnpm run lint
+        pnpm run check
   test:
     runs-on: macos-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v2
+    - uses: actions/checkout@v4
+    - uses: pnpm/action-setup@v4
+      with:
+        version: 10.30.1
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 24
+        cache: pnpm
     - name: Install Packages
-      run: |+
-        npm ci
-        npm run ci:all
+      run: pnpm install --frozen-lockfile
     - name: Build
-      run: npm run build:ci
+      run: pnpm run build:ci
     - name: Test
-      run: npm test -- --mrpm-max-workers=1
+      run: pnpm test

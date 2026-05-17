@@ -8,6 +8,7 @@ import {
   Header,
   useCheetahGridInstance,
 } from "../src/index";
+import type { TYPES } from "cheetah-grid";
 
 type Record = {
   personid: number;
@@ -112,7 +113,11 @@ export function Sort() {
             <Header
               width={40}
               rowSpan={2}
-              sort={(order, col, grid) => {
+              sort={(
+                order: "asc" | "desc",
+                _col: number,
+                grid: TYPES.ListGridAPI<Record>
+              ) => {
                 const compare =
                   order === "desc"
                     ? (v1: number, v2: number) =>

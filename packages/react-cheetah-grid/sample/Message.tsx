@@ -140,7 +140,7 @@ export function Message() {
           field={"text2"}
           width={150}
           editable
-          message={(rec) => {
+          message={(rec: Record) => {
             return rec.text2.match(/^[a-zA-Z]*$/)
               ? null
               : "Please only alphabet.";
@@ -153,7 +153,7 @@ export function Message() {
           width={210}
           options={options}
           editable
-          message={(rec) => {
+          message={(rec: Record) => {
             console.log(rec);
             return rec.val3 ? null : "Please select.";
           }}
@@ -164,7 +164,7 @@ export function Message() {
           field={"check4"}
           width={120}
           editable
-          message={(rec) => {
+          message={(rec: Record) => {
             return rec.check4 ? null : "Please check.";
           }}
         >
@@ -173,7 +173,7 @@ export function Message() {
         <Column
           field={"text1"}
           width={100}
-          message={(rec) => ({
+          message={(_rec: Record) => ({
             type: "info",
             message: "Info Message.",
           })}
@@ -183,7 +183,7 @@ export function Message() {
         <Column
           field={"text1"}
           width={100}
-          message={(rec) => ({
+          message={(_rec: Record) => ({
             type: "warning",
             message: "Warning Message.",
           })}
