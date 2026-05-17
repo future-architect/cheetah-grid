@@ -2,6 +2,7 @@
   "name": "cheetah-grid-manager",
   "private": true,
   "version": "2.1.0",
+  "packageManager": "pnpm@10.30.1",
   "description": "Cheetah Grid is a high performance grid engine that works on canvas",
   "keywords": [
     "spreadsheet",
@@ -36,28 +37,36 @@
     "dist/"
   ],
   "scripts": {
-    "test": "mrpm run test --mrpm-max-workers=1",
-    "build": "mrpm run build",
-    "build:ci": "mrpm run build:ci",
-    "prune:all": "mrpm prune",
-    "lint": "mrpm run lint",
-    "echo:v": "echo $npm_package_version",
-    "check": "node ./scripts/check_readme.js && node ./scripts/check_versions.js",
-    "publish:all": "mrpm publish",
-    "update:all": "mrpm update",
-    "ci:all": "cross-env NO_UPDATE_NOTIFIER=1 mrpm ci",
-    "install:all": "cross-env NO_UPDATE_NOTIFIER=1 mrpm install",
-    "mrpm": "mrpm",
+    "test": "pnpm -r --workspace-concurrency=1 run test",
+    "build": "pnpm -r run build",
+    "build:ci": "pnpm -r run build:ci",
+    "prune:all": "pnpm prune",
+    "lint": "pnpm -r run lint",
+    "check": "node ./scripts/check_readme.js",
+    "update:docs": "node ./scripts/check_readme.js --write",
+    "version": "changeset version && pnpm run update:docs && pnpm install --lockfile-only",
+    "prepare:publish": "node ./scripts/prepare_publish.js",
+    "release": "pnpm run build:ci && pnpm test && pnpm run prepare:publish && changeset publish",
+    "changeset": "changeset",
+    "update:all": "pnpm -r update",
+    "ci:all": "pnpm install --frozen-lockfile",
+    "install:all": "pnpm install",
     "format:md": "prettier --write \"./*.md\" \"./**/*.md\""
   },
   "dependencies": {},
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  },
   "devDependencies": {
+    "@changesets/cli": "^2.31.0",
     "@eslint/js": "^10.0.1",
-    "cross-env": "^5.2.0",
+    "chalk": "^4.1.2",
     "eslint": "^10.4.0",
     "eslint-plugin-html": "^8.1.4",
     "globals": "^17.6.0",
-    "mrpm": "^4.1.0",
-    "prettier": "^3.8.3"
+    "prettier": "^3.8.3",
+    "semver": "^7.8.0"
   }
 }

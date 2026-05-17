@@ -48,12 +48,12 @@
   ],
   "scripts": {
     "test": "vitest run",
-    "lint": "npm run eslint && npm run stylelint && npm run tsc",
-    "test:once": "npm run test",
+    "lint": "pnpm run eslint && pnpm run stylelint && pnpm run tsc",
+    "test:once": "pnpm run test",
     "test:watch": "vitest",
     "test:ff": "cross-env VITEST_BROWSER=firefox vitest run",
     "test:chrome": "cross-env VITEST_BROWSER=chromium VITEST_BROWSER_CHANNEL=chrome vitest run",
-    "build": "npm run build:tsdown && npm run test:node",
+    "build": "pnpm run build:tsdown && pnpm run test:node",
     "build:tsdown": "tsdown",
     "eslint": "eslint .",
     "eslint:fix": "eslint . --fix",
@@ -61,9 +61,9 @@
     "stylelint:fix": "stylelint \"**/*.css\" --fix",
     "tsc": "tsc --project ./tsconfig.json",
     "test:node": "node ./dist/main.umd.js",
-    "build:ci": "npm run build",
+    "build:ci": "pnpm run build",
     "coverage": "vitest run --coverage",
-    "coverage:remap": "npm run coverage",
+    "coverage:remap": "pnpm run coverage",
     "coverage:open": "open coverage/index.html"
   },
   "directories": {

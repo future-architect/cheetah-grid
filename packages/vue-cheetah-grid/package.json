@@ -13,18 +13,18 @@
   ],
   "scripts": {
     "test": "vitest run",
-    "test:once": "npm run test",
+    "test:once": "pnpm run test",
     "test:watch": "vitest",
     "test:ff": "cross-env VITEST_BROWSER=firefox vitest run",
     "test:chrome": "cross-env VITEST_BROWSER=chromium VITEST_BROWSER_CHANNEL=chrome vitest run",
-    "build": "npm run build:vite && npm run build:gen",
+    "build": "pnpm run build:vite && pnpm run build:gen",
     "watch": "vite build --watch --mode development",
-    "lint": "npm run eslint && npm run stylelint",
+    "lint": "pnpm run eslint && pnpm run stylelint",
     "eslint": "eslint .",
     "eslint:fix": "eslint . --fix",
     "stylelint": "stylelint \"**/*.css\" \"**/*.vue\"",
     "stylelint:fix": "stylelint \"**/*.css\" \"**/*.vue\" --fix",
-    "build:ci": "npm run build",
+    "build:ci": "pnpm run build",
     "build:vite": "vite build",
     "build:gen": "node ./scripts/gen.js",
     "coverage": "vitest run --coverage"
@@ -51,7 +51,7 @@
   },
   "homepage": "https://github.com/future-architect/cheetah-grid/tree/master/packages/vue-cheetah-grid",
   "dependencies": {
-    "cheetah-grid": "^2.1.1"
+    "cheetah-grid": "workspace:^"
   },
   "devDependencies": {
     "@babel/core": "^7.28.0",
@@ -74,6 +74,7 @@
     "chai": "^4.2.0",
     "cross-env": "^5.2.0",
     "delay-cli": "^1.1.0",
+    "deepmerge": "^3.3.0",
     "eslint": "^10.4.0",
     "eslint-plugin-vue": "^10.9.1",
     "globals": "^17.6.0",

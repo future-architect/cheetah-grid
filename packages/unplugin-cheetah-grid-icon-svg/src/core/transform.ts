@@ -22,7 +22,7 @@ export interface ParsedId {
 
 export interface TransformResult {
   code: string;
-  map: { mappings: string };
+  map: { mappings: string; names: string[]; sources: string[]; version: 3 };
 }
 
 export const DEFAULT_QUERY_NAMES = ["cheetah-grid-icon", "cg-icon"];
@@ -170,6 +170,6 @@ export function transformSvg(
 ): TransformResult {
   return {
     code: `export default ${sourceToIconJsObject(source, id, options)};\n`,
-    map: { mappings: "" },
+    map: { mappings: "", names: [], sources: [id], version: 3 },
   };
 }

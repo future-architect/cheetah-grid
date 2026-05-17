@@ -7,13 +7,13 @@
     "lib"
   ],
   "scripts": {
-    "pretest": "npm run lint",
+    "pretest": "pnpm run lint",
     "test:base": "vitest run",
     "test": "vitest run --coverage",
     "test:nyc": "vitest run --coverage",
     "test:d": "vitest --inspect-brk",
     "watch": "vitest",
-    "lint": "npm run eslint",
+    "lint": "pnpm run eslint",
     "eslint": "eslint .",
     "eslint:fix": "eslint . --fix"
   },
