@@ -35,6 +35,7 @@ jobs:
         cp ./LICENSE ./packages/cheetah-grid/LICENSE
         cp ./LICENSE ./packages/vue-cheetah-grid/LICENSE
         cp ./LICENSE ./packages/cheetah-grid-icon-svg-loader/LICENSE
+        cp ./LICENSE ./packages/unplugin-cheetah-grid-icon-svg/LICENSE
         npm run publish:all
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
