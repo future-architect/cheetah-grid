@@ -81,37 +81,36 @@
 			},
 		};
 	}
-
-	describe('message drawing', function() {
-		it('draws exclamation and information mark boxes', async function() {
-			const utils = await import('../../../js/columns/message/messageUtils.ts');
-			const calls = [];
-			const ctx = {
-				fillStyle: '',
-				fillRect: function(left, top, width, height) {
-					calls.push(['fillRect', left, top, width, height, this.fillStyle]);
-				},
-			};
-			const context = {
+	function createMarkBoxFixture(calls) {
+		const ctx = {
+			fillStyle: '',
+			fillRect: function(left, top, width, height) {
+				calls.push(['fillRect', left, top, width, height, this.fillStyle]);
+			},
+		};
+		return {
+			context: {
 				getContext: function() {
 					return ctx;
 				},
 				getRect: createRect,
-			};
-			const helper = {
+			},
+			helper: {
 				fillRectWithState: function(rect, _context, option) {
 					calls.push(['mark', rect.left, rect.top, rect.width, rect.height, option.fillColor]);
 				},
-			};
+			},
+		};
+	}
+
+	describe('message drawing', function() {
+		it('draws exclamation mark boxes', async function() {
+			const utils = await import('../../../js/columns/message/messageUtils.ts');
+			const calls = [];
+			const {context, helper} = createMarkBoxFixture(calls);
 
 			utils.drawExclamationMarkBox(context, {
 				bgColor: 'errorBg',
-				color: 'ink',
-				boxWidth: 20,
-				markHeight: 10,
-			}, helper);
-			utils.drawInformationMarkBox(context, {
-				bgColor: 'infoBg',
 				color: 'ink',
 				boxWidth: 20,
 				markHeight: 10,
@@ -121,6 +120,22 @@
 				['fillRect', 90, 20, 100, 39, 'errorBg'],
 				['mark', 139, 35, 2, 6, 'ink'],
 				['mark', 139, 43, 2, 2, 'ink'],
+			]);
+		});
+
+		it('draws information mark boxes', async function() {
+			const utils = await import('../../../js/columns/message/messageUtils.ts');
+			const calls = [];
+			const {context, helper} = createMarkBoxFixture(calls);
+
+			utils.drawInformationMarkBox(context, {
+				bgColor: 'infoBg',
+				color: 'ink',
+				boxWidth: 20,
+				markHeight: 10,
+			}, helper);
+
+			expect(calls).toEqual([
 				['fillRect', 90, 20, 100, 39, 'infoBg'],
 				['mark', 139, 35, 2, 2, 'ink'],
 				['mark', 139, 39, 2, 6, 'ink'],

@@ -68,12 +68,92 @@
 		}, props));
 	}
 
+	function clipboardEvent(type, clipboardData) {
+		const event = new ClipboardEvent(type, {
+			bubbles: true,
+			cancelable: true,
+		});
+		Object.defineProperty(event, 'clipboardData', {value: clipboardData});
+		return event;
+	}
+
+	function setCanvasBounds(grid) {
+		grid.canvas.getBoundingClientRect = function() {
+			return {
+				left: 0,
+				top: 0,
+				right: 200,
+				bottom: 100,
+				width: 200,
+				height: 100,
+			};
+		};
+	}
+
+	function installCopyCellValues(grid) {
+		grid.getCopyCellValue = function(col, row) {
+			if (row === 0 && col === 0) {
+				return 'A\tB';
+			}
+			if (row === 0 && col === 1) {
+				return null;
+			}
+			if (row === 0 && col === 2) {
+				return 123;
+			}
+			if (row === 1 && col === 0) {
+				return Promise.resolve('async');
+			}
+			if (row === 1 && col === 1) {
+				return {};
+			}
+			return 'line\nbreak';
+		};
+	}
+
+	function createEditableInputFixture() {
+		const grid = createGrid({
+			rowCount: 2,
+			colCount: 3,
+		});
+		const input = grid.getElement().querySelector('.grid-focus-control');
+		const events = [];
+		grid.listen(EVENT_TYPE.EDITABLEINPUT_CELL, function(e) {
+			events.push(['editable', e.col, e.row]);
+			return true;
+		});
+		grid.listen(EVENT_TYPE.MODIFY_STATUS_EDITABLEINPUT_CELL, function(e) {
+			events.push(['modify', e.col, e.row, e.input === input]);
+		});
+		grid.listen(EVENT_TYPE.INPUT_CELL, function(e) {
+			events.push(['input', e.col, e.row, e.value]);
+		});
+		grid.selection.select = {col: 1, row: 1};
+		return {events, grid, input};
+	}
+
+	function createPointerFixture(eventTypes) {
+		const grid = createGrid({rowCount: 4, colCount: 4});
+		const events = [];
+		setCanvasBounds(grid);
+		eventTypes.forEach(function(type) {
+			grid.listen(type, function(e) {
+				events.push([type, e.col, e.row]);
+			});
+		});
+		return {
+			element: grid.getElement(),
+			events,
+			grid,
+			scrollable: grid[_].scrollable.getElement(),
+		};
+	}
+
 	describe('DrawGrid API', function() {
-		it('updates size, counts, dimensions, ranges, and overflow text', function() {
+		it('exposes initial sizing, count, theme, and keyboard options', function() {
 			const grid = createGrid({
 				keyboardOptions: {moveCellOnTab: true},
 			});
-			const disposed = [];
 			try {
 				expect(grid.rowCount).toEqual(8);
 				expect(grid.colCount).toEqual(8);
@@ -85,7 +165,16 @@
 				expect(grid.underlayBackgroundColor).toEqual('#eee');
 				expect(grid.trimOnPaste).toEqual(true);
 				expect(grid.keyboardOptions).toEqual({moveCellOnTab: true});
+			} finally {
+				grid.dispose();
+			}
+		});
 
+		it('updates configuration and mutable display options', function() {
+			const grid = createGrid({
+				keyboardOptions: {moveCellOnTab: true},
+			});
+			try {
 				grid.configure('fadeinWhenCallbackInPromise', true);
 				expect(grid.configure('fadeinWhenCallbackInPromise')).toEqual(true);
 				grid.keyboardOptions = null;
@@ -96,12 +185,26 @@
 				expect(grid.trimOnPaste).toEqual(false);
 				expect(grid.font).toEqual('14px serif');
 				expect(grid.underlayBackgroundColor).toEqual('#fff');
+			} finally {
+				grid.dispose();
+			}
+		});
 
+		it('clamps selection when row and column counts shrink', function() {
+			const grid = createGrid();
+			try {
 				grid.selection.select = {col: 7, row: 7};
 				grid.rowCount = 4;
 				grid.colCount = 5;
 				expect(grid.selection.select).toEqual({col: 4, row: 3});
+			} finally {
+				grid.dispose();
+			}
+		});
 
+		it('updates frozen cell ranges and row heights', function() {
+			const grid = createGrid();
+			try {
 				grid.frozenColCount = 2;
 				grid.frozenRowCount = 2;
 				expect(grid.isFrozenCell(1, 3)).toEqual({row: false, col: true});
@@ -112,7 +215,14 @@
 				expect(grid.getRowHeight(2)).toEqual(30);
 				grid.setRowHeight(2, null);
 				expect(grid.getRowHeight(2)).toEqual(20);
+			} finally {
+				grid.dispose();
+			}
+		});
 
+		it('applies column width, min width, and max width constraints', function() {
+			const grid = createGrid();
+			try {
 				grid.setColWidth(1, 60);
 				expect(grid.getColWidth(1)).toEqual(60);
 				grid.setMinColWidth(1, 70);
@@ -136,13 +246,24 @@
 				grid.defaultColWidth = 40;
 				grid.setMaxColWidth(1, null);
 				grid.setColWidth(1, 60);
+				expect(grid.getColWidth(1)).toEqual(60);
+			} finally {
+				grid.dispose();
+			}
+		});
 
+		it('calculates cell geometry and point lookup results', function() {
+			const grid = createGrid();
+			try {
+				grid.setColWidth(0, 50);
+				grid.setColWidth(1, 60);
 				const rect = grid.getCellRect(1, 1);
 				expect(rect.left).toEqual(50);
 				expect(rect.top).toEqual(20);
 				expect(rect.width).toEqual(60);
 				expect(rect.height).toEqual(20);
 				expect(grid.getCellsRect(1, 1, 2, 2).width).toEqual(100);
+				grid.setRowHeight(2, 40);
 				expect(grid.getCellRangeRect({
 					start: {col: 1, row: 1},
 					end: {col: 2, row: 2},
@@ -150,12 +271,27 @@
 				expect(grid.getCellAt(10, 10)).toEqual({col: 0, row: 0});
 				expect(grid.getRowAt(9999)).toEqual(-1);
 				expect(grid.getColAt(9999)).toEqual(-1);
+			} finally {
+				grid.dispose();
+			}
+		});
 
+		it('sets, trims, and clears cell overflow text', function() {
+			const grid = createGrid();
+			try {
 				grid.setCellOverflowText(1, 2, '  overflowed  ');
 				expect(grid.getCellOverflowText(1, 2)).toEqual('overflowed');
 				grid.setCellOverflowText(1, 2, false);
 				expect(grid.getCellOverflowText(1, 2)).toEqual(null);
+			} finally {
+				grid.dispose();
+			}
+		});
 
+		it('rejects invalid disposables and disposes registered ones', function() {
+			const grid = createGrid();
+			const disposed = [];
+			try {
 				expect(function() {
 					grid.addDisposable({});
 				}).toThrowError('not disposable!');
@@ -170,7 +306,7 @@
 			expect(disposed).toEqual(['disposed']);
 		});
 
-		it('scrolls, focuses cells, and invalidates visible areas', function() {
+		it('updates scroll position and visible cell counts', function() {
 			const grid = createGrid({rowCount: 20, colCount: 20});
 			try {
 				expect(grid.updateScroll()).toEqual(false);
@@ -183,17 +319,41 @@
 				expect(grid.visibleRowCount).toBeLessThanOrEqual(grid.rowCount);
 				expect(grid.visibleColCount).toBeGreaterThanOrEqual(2);
 				expect(grid.visibleColCount).toBeLessThanOrEqual(grid.colCount);
+			} finally {
+				grid.dispose();
+			}
+		});
 
+		it('scrolls enough to make a target cell visible', function() {
+			const grid = createGrid({rowCount: 20, colCount: 20});
+			try {
+				scroll(grid, 25, 30);
 				grid.makeVisibleCell(19, 19);
 				expect(grid.scrollLeft).toBeGreaterThan(25);
 				expect(grid.scrollTop).toBeGreaterThan(30);
+			} finally {
+				grid.dispose();
+			}
+		});
+
+		it('positions the focus control when setting or focusing a cell', function() {
+			const grid = createGrid({rowCount: 20, colCount: 20});
+			try {
 				const focusControl = grid.getElement().querySelector('.grid-focus-control');
 				grid.setFocusCursor(2, 2);
 				expect(focusControl.style.left).toEqual('80px');
 				expect(focusControl.style.top).toEqual('30px');
 				grid.focusCell(3, 3);
 				expect(focusControl.style.left).toEqual('120px');
+				expect(focusControl.style.top).toEqual('50px');
+			} finally {
+				grid.dispose();
+			}
+		});
 
+		it('invalidates cells, grid rectangles, ranges, and the full grid', function() {
+			const grid = createGrid({rowCount: 20, colCount: 20});
+			try {
 				const drawnCells = [];
 				grid.onDrawCell = function(col, row) {
 					drawnCells.push([col, row]);
@@ -213,7 +373,14 @@
 				drawnCount = drawnCells.length;
 				grid.invalidate();
 				expect(drawnCells.length).toBeGreaterThan(drawnCount);
+			} finally {
+				grid.dispose();
+			}
+		});
 
+		it('returns the attach area for a cell range', function() {
+			const grid = createGrid({rowCount: 20, colCount: 20});
+			try {
 				const area = grid.getAttachCellsArea({
 					start: {col: 1, row: 1},
 					end: {col: 2, row: 2},
@@ -226,15 +393,10 @@
 			}
 		});
 
-		it('moves selection with keyboard shortcuts and custom move callbacks', function() {
+		it('moves selection with arrow keys and preserves anchor for range selection', function() {
 			const grid = createGrid({
 				rowCount: 4,
 				colCount: 4,
-				keyboardOptions: {
-					moveCellOnTab: true,
-					moveCellOnEnter: true,
-					selectAllOnCtrlA: true,
-				},
 			});
 			try {
 				grid.selection.select = {col: 1, row: 1};
@@ -249,8 +411,23 @@
 				expect(event.defaultPrevented).toEqual(true);
 				expect(grid.selection.focus).toEqual({col: 2, row: 2});
 				expect(grid.selection.select).toEqual({col: 2, row: 1});
+			} finally {
+				grid.dispose();
+			}
+		});
 
-				event = keyEvent(36, {ctrlKey: true});
+		it('moves selection to grid edges and selects all from keyboard shortcuts', function() {
+			const grid = createGrid({
+				rowCount: 4,
+				colCount: 4,
+				keyboardOptions: {
+					selectAllOnCtrlA: true,
+				},
+			});
+			try {
+				grid.selection.select = {col: 2, row: 2};
+
+				let event = keyEvent(36, {ctrlKey: true});
 				grid.onKeyDownMove(event);
 				expect(grid.selection.select).toEqual({col: 0, row: 0});
 				expect(event.defaultPrevented).toEqual(true);
@@ -260,8 +437,30 @@
 				expect(grid.selection.select).toEqual({col: 3, row: 3});
 				expect(event.defaultPrevented).toEqual(true);
 
+				event = keyEvent(65, {ctrlKey: true});
+				grid.onKeyDownMove(event);
+				expect(grid.selection.range).toEqual({
+					start: {col: 0, row: 0},
+					end: {col: 3, row: 3},
+				});
+				expect(event.defaultPrevented).toEqual(true);
+			} finally {
+				grid.dispose();
+			}
+		});
+
+		it('wraps selection with tab and enter keyboard moves', function() {
+			const grid = createGrid({
+				rowCount: 4,
+				colCount: 4,
+				keyboardOptions: {
+					moveCellOnTab: true,
+					moveCellOnEnter: true,
+				},
+			});
+			try {
 				grid.selection.select = {col: 3, row: 0};
-				event = keyEvent(9);
+				let event = keyEvent(9);
 				grid.onKeyDownMove(event);
 				expect(grid.selection.select).toEqual({col: 0, row: 1});
 				expect(event.defaultPrevented).toEqual(true);
@@ -271,39 +470,82 @@
 				grid.onKeyDownMove(event);
 				expect(grid.selection.select).toEqual({col: 1, row: 3});
 				expect(event.defaultPrevented).toEqual(true);
+			} finally {
+				grid.dispose();
+			}
+		});
 
-				event = keyEvent(65, {ctrlKey: true});
-				grid.onKeyDownMove(event);
-				expect(grid.selection.range).toEqual({
-					start: {col: 0, row: 0},
-					end: {col: 3, row: 3},
-				});
-				expect(event.defaultPrevented).toEqual(true);
-
-				grid.keyboardOptions = {
+		it('uses custom tab and enter move callbacks and ignores alt-modified keys', function() {
+			const grid = createGrid({
+				rowCount: 4,
+				colCount: 4,
+				keyboardOptions: {
 					moveCellOnTab: function() {
 						return {col: 2, row: 0};
 					},
 					moveCellOnEnter: function() {
 						return {col: 0, row: 2};
 					},
-				};
-				event = keyEvent(9);
+				},
+			});
+			try {
+				let event = keyEvent(9);
 				grid.onKeyDownMove(event);
 				expect(grid.selection.select).toEqual({col: 2, row: 0});
+				expect(event.defaultPrevented).toEqual(true);
+
 				event = keyEvent(13);
 				grid.onKeyDownMove(event);
 				expect(grid.selection.select).toEqual({col: 0, row: 2});
+				expect(event.defaultPrevented).toEqual(true);
 
+				grid.selection.select = {col: 0, row: 2};
 				event = keyEvent(37, {altKey: true});
 				grid.onKeyDownMove(event);
+				expect(grid.selection.select).toEqual({col: 0, row: 2});
 				expect(event.defaultPrevented).toEqual(false);
 			} finally {
 				grid.dispose();
 			}
 		});
 
-		it('fires focus-control input, paste, copy, delete, and focus events', function() {
+		it('fires focus-control editable input events before keypress input', function() {
+			const {events, grid, input} = createEditableInputFixture();
+			try {
+				expect(input.readOnly).toEqual(false);
+				input.dispatchEvent(new KeyboardEvent('keypress', {
+					key: 'x',
+					bubbles: true,
+					cancelable: true,
+				}));
+				expect(events).toEqual([
+					['editable', 1, 1],
+					['modify', 1, 1, true],
+					['input', 1, 1, 'x'],
+				]);
+			} finally {
+				grid.dispose();
+			}
+		});
+
+		it('fires focus-control text input events with the normalized input data', function() {
+			const {events, grid, input} = createEditableInputFixture();
+			try {
+				input.dispatchEvent(new InputEvent('input', {
+					data: ' ',
+					bubbles: true,
+				}));
+				expect(events).toEqual([
+					['editable', 1, 1],
+					['modify', 1, 1, true],
+					['input', 1, 1, ' '],
+				]);
+			} finally {
+				grid.dispose();
+			}
+		});
+
+		it('fires focus-control keydown and delete events', function() {
 			const grid = createGrid({
 				rowCount: 2,
 				colCount: 3,
@@ -314,43 +556,32 @@
 			const input = grid.getElement().querySelector('.grid-focus-control');
 			const events = [];
 			try {
-				grid.getCopyCellValue = function(col, row) {
-					if (row === 0 && col === 0) {
-						return 'A\tB';
-					}
-					if (row === 0 && col === 1) {
-						return null;
-					}
-					if (row === 0 && col === 2) {
-						return 123;
-					}
-					if (row === 1 && col === 0) {
-						return Promise.resolve('async');
-					}
-					if (row === 1 && col === 1) {
-						return {};
-					}
-					return 'line\nbreak';
-				};
-				grid.listen(EVENT_TYPE.EDITABLEINPUT_CELL, function(e) {
-					events.push(['editable', e.col, e.row]);
-					return true;
-				});
-				grid.listen(EVENT_TYPE.MODIFY_STATUS_EDITABLEINPUT_CELL, function(e) {
-					events.push(['modify', e.col, e.row, e.input === input]);
-				});
-				grid.listen(EVENT_TYPE.INPUT_CELL, function(e) {
-					events.push(['input', e.col, e.row, e.value]);
-				});
 				grid.listen(EVENT_TYPE.KEYDOWN, function(e) {
 					events.push(['keydown', e.keyCode]);
 				});
 				grid.listen(EVENT_TYPE.DELETE_CELL, function(e) {
 					events.push(['delete', e.col, e.row, e.event.keyCode]);
 				});
+
+				grid.selection.select = {col: 1, row: 1};
+				input.dispatchEvent(keyEvent(46));
+
+				expect(events).toEqual([
+					['keydown', 46],
+					['delete', 1, 1, 46],
+				]);
+			} finally {
+				grid.dispose();
+			}
+		});
+
+		it('fires paste events with trimmed normalized values and range data', function() {
+			const grid = createGrid({rowCount: 2, colCount: 3});
+			const input = grid.getElement().querySelector('.grid-focus-control');
+			const events = [];
+			try {
 				grid.listen(EVENT_TYPE.PASTE_CELL, function(e) {
 					events.push([
-						'paste',
 						e.col,
 						e.row,
 						e.normalizeValue,
@@ -360,6 +591,48 @@
 						e.rangeBoxValues.getCellValue(1, 0),
 					]);
 				});
+				grid.selection.select = {col: 1, row: 1};
+
+				input.dispatchEvent(clipboardEvent('paste', {
+					items: [{}],
+					getData: function() {
+						return '  a\tb\n c  ';
+					},
+				}));
+
+				expect(events).toEqual([[1, 1, 'a\tb\n c', true, 2, 2, 'b']]);
+			} finally {
+				grid.dispose();
+			}
+		});
+
+		it('copies the selected cell range into clipboard text', function() {
+			const grid = createGrid({rowCount: 2, colCount: 3});
+			const input = grid.getElement().querySelector('.grid-focus-control');
+			let copyText = null;
+			try {
+				installCopyCellValues(grid);
+				grid.selection.range = {
+					start: {col: 0, row: 0},
+					end: {col: 2, row: 1},
+				};
+				input.dispatchEvent(clipboardEvent('copy', {
+					setData: function(_type, value) {
+						copyText = value;
+					},
+				}));
+
+				expect(copyText).toEqual('"A\tB"\t\t123\n\t\t"line\nbreak"');
+			} finally {
+				grid.dispose();
+			}
+		});
+
+		it('fires focus and blur events from the focus control', function() {
+			const grid = createGrid();
+			const input = grid.getElement().querySelector('.grid-focus-control');
+			const events = [];
+			try {
 				grid.listen(EVENT_TYPE.FOCUS_GRID, function() {
 					events.push(['focus']);
 				});
@@ -367,128 +640,102 @@
 					events.push(['blur']);
 				});
 
-				grid.selection.select = {col: 1, row: 1};
-				expect(input.readOnly).toEqual(false);
-				input.dispatchEvent(new KeyboardEvent('keypress', {
-					key: 'x',
-					bubbles: true,
-					cancelable: true,
-				}));
-				input.dispatchEvent(keyEvent(46));
-				input.dispatchEvent(new InputEvent('input', {
-					data: ' ',
-					bubbles: true,
-				}));
-
-				const pasteEvent = new ClipboardEvent('paste', {
-					bubbles: true,
-					cancelable: true,
-				});
-				Object.defineProperty(pasteEvent, 'clipboardData', {
-					value: {
-						items: [{}],
-						getData: function() {
-							return '  a\tb\n c  ';
-						},
-					},
-				});
-				input.dispatchEvent(pasteEvent);
-
-				let copyText = null;
-				const copyEvent = new ClipboardEvent('copy', {
-					bubbles: true,
-					cancelable: true,
-				});
-				Object.defineProperty(copyEvent, 'clipboardData', {
-					value: {
-						setData: function(_type, value) {
-							copyText = value;
-						},
-					},
-				});
-				grid.selection.range = {
-					start: {col: 0, row: 0},
-					end: {col: 2, row: 1},
-				};
-				input.dispatchEvent(copyEvent);
 				input.dispatchEvent(new FocusEvent('focus', {bubbles: true}));
+				expect(events).toEqual([['focus']]);
 				input.dispatchEvent(new FocusEvent('blur', {bubbles: true}));
-
-				expect(events).toContainEqual(['editable', 1, 1]);
-				expect(events).toContainEqual(['modify', 1, 1, true]);
-				expect(events).toContainEqual(['input', 1, 1, 'x']);
-				expect(events).toContainEqual(['input', 1, 1, ' ']);
-				expect(events).toContainEqual(['keydown', 46]);
-				expect(events).toContainEqual(['delete', 1, 1, 46]);
-				expect(events).toContainEqual(['paste', 1, 1, 'a\tb\n c', true, 2, 2, 'b']);
-				expect(events).toContainEqual(['focus']);
-				expect(events).toContainEqual(['blur']);
-				expect(copyText).toEqual('"A\tB"\t\t123\n\t\t"line\nbreak"');
+				expect(events).toEqual([['focus'], ['blur']]);
 			} finally {
 				grid.dispose();
 			}
 		});
 
-		it('emits pointer events for cells and ignores out-of-canvas positions', function() {
-			const grid = createGrid({rowCount: 4, colCount: 4});
-			const element = grid.getElement();
-			const scrollable = grid[_].scrollable.getElement();
-			const events = [];
+		it('emits pointer enter, over, and move events for the first cell hit', function() {
+			const fixture = createPointerFixture([
+				EVENT_TYPE.MOUSEENTER_CELL,
+				EVENT_TYPE.MOUSEOVER_CELL,
+				EVENT_TYPE.MOUSEMOVE_CELL,
+			]);
 			try {
-				grid.canvas.getBoundingClientRect = function() {
-					return {
-						left: 0,
-						top: 0,
-						right: 200,
-						bottom: 100,
-						width: 200,
-						height: 100,
-					};
-				};
-				[
-					EVENT_TYPE.MOUSEENTER_CELL,
-					EVENT_TYPE.MOUSELEAVE_CELL,
-					EVENT_TYPE.MOUSEOVER_CELL,
-					EVENT_TYPE.MOUSEOUT_CELL,
-					EVENT_TYPE.MOUSEMOVE_CELL,
-					EVENT_TYPE.MOUSEUP_CELL,
-					EVENT_TYPE.CLICK_CELL,
-					EVENT_TYPE.DBLCLICK_CELL,
-					EVENT_TYPE.CONTEXTMENU_CELL,
-				].forEach(function(type) {
-					grid.listen(type, function(e) {
-						events.push([type, e.col, e.row]);
-					});
-				});
-				grid.listen(EVENT_TYPE.MOUSEDOWN_CELL, function(e) {
-					events.push([EVENT_TYPE.MOUSEDOWN_CELL, e.col, e.row]);
+				fixture.scrollable.dispatchEvent(mouseEvent('mouseover', 5, 5));
+				fixture.element.dispatchEvent(mouseEvent('mousemove', 5, 5));
+
+				expect(fixture.events).toContainEqual([EVENT_TYPE.MOUSEENTER_CELL, 0, 0]);
+				expect(fixture.events).toContainEqual([EVENT_TYPE.MOUSEOVER_CELL, 0, 0]);
+				expect(fixture.events).toContainEqual([EVENT_TYPE.MOUSEMOVE_CELL, 0, 0]);
+			} finally {
+				fixture.grid.dispose();
+			}
+		});
+
+		it('emits pointer leave and out events when moving across cells and leaving canvas', function() {
+			const fixture = createPointerFixture([
+				EVENT_TYPE.MOUSEENTER_CELL,
+				EVENT_TYPE.MOUSELEAVE_CELL,
+				EVENT_TYPE.MOUSEOUT_CELL,
+			]);
+			try {
+				fixture.scrollable.dispatchEvent(mouseEvent('mouseover', 5, 5));
+				fixture.element.dispatchEvent(mouseEvent('mousemove', 5, 5));
+				expect(fixture.events).toContainEqual([EVENT_TYPE.MOUSEENTER_CELL, 0, 0]);
+
+				fixture.element.dispatchEvent(mouseEvent('mousemove', 45, 25));
+				expect(fixture.events).toContainEqual([EVENT_TYPE.MOUSEENTER_CELL, 1, 1]);
+				expect(fixture.events).toContainEqual([EVENT_TYPE.MOUSELEAVE_CELL, 0, 0]);
+				expect(fixture.events).toContainEqual([EVENT_TYPE.MOUSEOUT_CELL, 0, 0]);
+
+				fixture.scrollable.dispatchEvent(mouseEvent('mouseout', 45, 25));
+				expect(fixture.events).toContainEqual([EVENT_TYPE.MOUSEOUT_CELL, 1, 1]);
+			} finally {
+				fixture.grid.dispose();
+			}
+		});
+
+		it('emits pointer action events for a target cell', function() {
+			const fixture = createPointerFixture([
+				EVENT_TYPE.MOUSEUP_CELL,
+				EVENT_TYPE.CLICK_CELL,
+				EVENT_TYPE.DBLCLICK_CELL,
+				EVENT_TYPE.CONTEXTMENU_CELL,
+			]);
+			try {
+				fixture.element.dispatchEvent(mouseEvent('mouseup', 45, 25));
+				expect(fixture.events).toContainEqual([EVENT_TYPE.MOUSEUP_CELL, 1, 1]);
+				fixture.element.dispatchEvent(mouseEvent('click', 45, 25));
+				expect(fixture.events).toContainEqual([EVENT_TYPE.CLICK_CELL, 1, 1]);
+				fixture.element.dispatchEvent(mouseEvent('dblclick', 45, 25));
+				expect(fixture.events).toContainEqual([EVENT_TYPE.DBLCLICK_CELL, 1, 1]);
+				fixture.element.dispatchEvent(mouseEvent('contextmenu', 45, 25));
+				expect(fixture.events).toContainEqual([EVENT_TYPE.CONTEXTMENU_CELL, 1, 1]);
+			} finally {
+				fixture.grid.dispose();
+			}
+		});
+
+		it('keeps mousedown default handling when a listener returns false', function() {
+			const fixture = createPointerFixture([]);
+			try {
+				fixture.grid.listen(EVENT_TYPE.MOUSEDOWN_CELL, function(e) {
+					fixture.events.push([EVENT_TYPE.MOUSEDOWN_CELL, e.col, e.row]);
 					return false;
 				});
+				const mousedown = mouseEvent('mousedown', 45, 25);
+				fixture.element.dispatchEvent(mousedown);
 
-				scrollable.dispatchEvent(mouseEvent('mouseover', 5, 5));
-				element.dispatchEvent(mouseEvent('mousemove', 5, 5));
-				element.dispatchEvent(mouseEvent('mousemove', 45, 25));
-				element.dispatchEvent(mouseEvent('mouseup', 45, 25));
-				element.dispatchEvent(mouseEvent('click', 45, 25));
-				element.dispatchEvent(mouseEvent('dblclick', 45, 25));
-				element.dispatchEvent(mouseEvent('contextmenu', 45, 25));
-				element.dispatchEvent(mouseEvent('mousedown', 45, 25));
-				scrollable.dispatchEvent(mouseEvent('mouseout', 45, 25));
-				element.dispatchEvent(mouseEvent('mouseleave', 45, 25));
+				expect(fixture.events).toContainEqual([EVENT_TYPE.MOUSEDOWN_CELL, 1, 1]);
+				expect(mousedown.defaultPrevented).toEqual(false);
+			} finally {
+				fixture.grid.dispose();
+			}
+		});
+
+		it('clears resize cursors when pointer movement leaves the canvas bounds', function() {
+			const grid = createGrid({rowCount: 4, colCount: 4});
+			const element = grid.getElement();
+			try {
+				setCanvasBounds(grid);
 				element.style.cursor = 'col-resize';
 				element.dispatchEvent(mouseEvent('mousemove', 250, 150));
 
-				expect(events).toContainEqual([EVENT_TYPE.MOUSEENTER_CELL, 0, 0]);
-				expect(events).toContainEqual([EVENT_TYPE.MOUSEOVER_CELL, 0, 0]);
-				expect(events).toContainEqual([EVENT_TYPE.MOUSEMOVE_CELL, 0, 0]);
-				expect(events).toContainEqual([EVENT_TYPE.MOUSEENTER_CELL, 1, 1]);
-				expect(events).toContainEqual([EVENT_TYPE.MOUSELEAVE_CELL, 0, 0]);
-				expect(events).toContainEqual([EVENT_TYPE.MOUSEOUT_CELL, 0, 0]);
-				expect(events).toContainEqual([EVENT_TYPE.MOUSEUP_CELL, 1, 1]);
-				expect(events).toContainEqual([EVENT_TYPE.CLICK_CELL, 1, 1]);
-				expect(events).toContainEqual([EVENT_TYPE.DBLCLICK_CELL, 1, 1]);
-				expect(events).toContainEqual([EVENT_TYPE.CONTEXTMENU_CELL, 1, 1]);
-				expect(events).toContainEqual([EVENT_TYPE.MOUSEDOWN_CELL, 1, 1]);
 				expect(element.style.cursor).toEqual('');
 			} finally {
 				grid.dispose();

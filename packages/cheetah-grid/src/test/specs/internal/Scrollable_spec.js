@@ -53,7 +53,11 @@
 			scrollable.onScroll(function() {
 				count++;
 			});
+			expect(count).toEqual(0);
+
 			element.dispatchEvent(new Event('scroll'));
+			expect(count).toEqual(1);
+
 			scrollable.dispose();
 			element.dispatchEvent(new Event('scroll'));
 

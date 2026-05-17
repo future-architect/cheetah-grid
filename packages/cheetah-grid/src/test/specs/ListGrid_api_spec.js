@@ -269,15 +269,10 @@
 	}
 
 	describe('ListGrid API', function() {
-		it('exposes header, record, field, theme, and sort APIs', function() {
+		it('exposes initial header, record, data source, theme, and binding state', function() {
 			const calls = [];
 			const {grid, records, header, columnType} = createSimpleGrid(calls);
-			const headerValueEvents = [];
 			try {
-				grid.listen(EVENT_TYPE.CHANGED_HEADER_VALUE, function(e) {
-					headerValueEvents.push([e.col, e.row, e.field, e.value, e.oldValue]);
-				});
-
 				expect(grid.header).toBe(header);
 				expect(grid.layout).toEqual([]);
 				expect(grid.headerRowHeight).toEqual([24, 28]);
@@ -286,15 +281,37 @@
 				expect(grid.dataSource.length).toEqual(2);
 				expect(grid.theme).not.toEqual(null);
 				expect(grid.allowRangePaste).toEqual(false);
+				expect(grid.font).toBeUndefined();
+				expect(grid.underlayBackgroundColor).toEqual('#F6F6F6');
+				expect(grid.getColumnType(0, 2)).toBe(columnType);
+				expect(calls).toContainEqual(['bindHeaderType', grid.getLayoutCellId(0, 0)]);
+				expect(calls).toContainEqual(['bindHeaderAction', grid.getLayoutCellId(0, 0)]);
+				expect(calls).toContainEqual(['bindColumnType', grid.getLayoutCellId(0, 2)]);
+				expect(calls).toContainEqual(['bindAction', grid.getLayoutCellId(0, 2)]);
+			} finally {
+				grid.dispose();
+			}
+		});
+
+		it('updates mutable paste and display options', function() {
+			const calls = [];
+			const {grid} = createSimpleGrid(calls);
+			try {
 				grid.allowRangePaste = true;
 				expect(grid.allowRangePaste).toEqual(true);
-				expect(grid.font).toBeUndefined();
 				grid.font = '13px serif';
 				expect(grid.font).toEqual('13px serif');
-				expect(grid.underlayBackgroundColor).toEqual('#F6F6F6');
 				grid.underlayBackgroundColor = '#abc';
 				expect(grid.underlayBackgroundColor).toEqual('#abc');
+			} finally {
+				grid.dispose();
+			}
+		});
 
+		it('resolves fields, column definitions, header definitions, records, and cell ranges', function() {
+			const calls = [];
+			const {grid, records, columnType} = createSimpleGrid(calls);
+			try {
 				expect(grid.getField(0, 2)).toEqual('name');
 				expect(grid.getColumnDefine(0, 2).field).toEqual('name');
 				expect(grid.getColumnType(0, 2)).toBe(columnType);
@@ -319,14 +336,57 @@
 				});
 				expect(grid.getHeaderCellRange(0, 0)).toEqual(grid.getCellRange(0, 0));
 				expect(grid.getLayoutCellId(0, 2)).not.toEqual(grid.getLayoutCellId(1, 2));
+			} finally {
+				grid.dispose();
+			}
+		});
 
+		it('focuses cells by field and keeps selection unchanged for missing fields', function() {
+			const calls = [];
+			const {grid} = createSimpleGrid(calls);
+			try {
 				grid.focusGridCell('age', 1);
 				expect(grid.selection.select).toEqual({col: 1, row: 3});
 				grid.focusGridCell('missing', 1);
 				expect(grid.selection.select).toEqual({col: 1, row: 3});
+			} finally {
+				grid.dispose();
+			}
+		});
+
+		it('updates explicit header values and fires header change events', function() {
+			const calls = [];
+			const {grid} = createSimpleGrid(calls);
+			const headerValueEvents = [];
+			try {
+				grid.listen(EVENT_TYPE.CHANGED_HEADER_VALUE, function(e) {
+					headerValueEvents.push([e.col, e.row, e.field, e.value, e.oldValue]);
+				});
 
 				grid.setHeaderValue(0, 1, 'manual');
 				expect(grid.getHeaderValue(0, 1)).toEqual('manual');
+
+				grid.headerValues = new Map([['nameHeader', 'mapValue']]);
+				expect(grid.getHeaderValue(0, 1)).toEqual('mapValue');
+				grid.headerValues = null;
+				expect(grid.getHeaderValue(0, 1)).toEqual(undefined);
+				expect(headerValueEvents).toEqual([
+					[0, 1, 'nameHeader', 'manual', undefined],
+				]);
+			} finally {
+				grid.dispose();
+			}
+		});
+
+		it('updates sort state and fires header change events for sort headers', function() {
+			const calls = [];
+			const {grid} = createSimpleGrid(calls);
+			const headerValueEvents = [];
+			try {
+				grid.listen(EVENT_TYPE.CHANGED_HEADER_VALUE, function(e) {
+					headerValueEvents.push([e.col, e.row, e.field, e.value, e.oldValue]);
+				});
+
 				grid.sortState = {col: 0, row: 1, order: 'asc'};
 				expect(grid.sortState).toEqual({col: 0, row: 1, order: 'asc'});
 				expect(grid.getHeaderValue(0, 1)).toEqual('asc');
@@ -336,23 +396,12 @@
 				grid.sortState = null;
 				expect(grid.sortState).toEqual({col: -1, row: -1, order: undefined});
 
-				grid.headerValues = new Map([['nameHeader', 'mapValue']]);
-				expect(grid.getHeaderValue(0, 1)).toEqual('mapValue');
-				grid.headerValues = null;
-				expect(grid.getHeaderValue(0, 1)).toEqual(undefined);
-
-				expect(calls).toContainEqual(['bindHeaderType', grid.getLayoutCellId(0, 0)]);
-				expect(calls).toContainEqual(['bindHeaderAction', grid.getLayoutCellId(0, 0)]);
-				expect(calls).toContainEqual(['bindColumnType', grid.getLayoutCellId(0, 2)]);
-				expect(calls).toContainEqual(['bindAction', grid.getLayoutCellId(0, 2)]);
 				expect(headerValueEvents).toEqual([
-					[0, 1, 'nameHeader', 'manual', undefined],
-					[0, 1, 'nameHeader', 'asc', 'manual'],
+					[0, 1, 'nameHeader', 'asc', undefined],
 					[0, 1, 'nameHeader', undefined, 'asc'],
 					[1, 1, 'ageHeader', 'desc', undefined],
 					[1, 1, 'ageHeader', undefined, 'desc'],
 				]);
-
 			} finally {
 				grid.dispose();
 			}
@@ -381,7 +430,7 @@
 			}
 		});
 
-		it('updates records and data sources and responds to data source events', function() {
+		it('updates records while preserving existing records for null assignment', function() {
 			const calls = [];
 			const {grid} = createSimpleGrid(calls);
 			try {
@@ -392,7 +441,15 @@
 				grid.records = [{name: 'New', age: 1}];
 				expect(grid.records).toEqual([{name: 'New', age: 1}]);
 				expect(grid.rowCount).toEqual(3);
+			} finally {
+				grid.dispose();
+			}
+		});
 
+		it('updates data sources and responds to data source events', function() {
+			const calls = [];
+			const {grid} = createSimpleGrid(calls);
+			try {
 				const ds = DataSource.ofArray([{name: 'DS', age: 2}]);
 				grid.dataSource = ds;
 				expect(grid.dataSource).toBe(ds);
@@ -411,7 +468,15 @@
 				grid.dataSource = null;
 				expect(grid.dataSource.length).toEqual(0);
 				expect(grid.rowCount).toEqual(2);
+			} finally {
+				grid.dispose();
+			}
+		});
 
+		it('accepts null themes explicitly', function() {
+			const calls = [];
+			const {grid} = createSimpleGrid(calls);
+			try {
 				grid.theme = null;
 				expect(grid.theme).toEqual(null);
 			} finally {
@@ -419,7 +484,7 @@
 			}
 		});
 
-		it('draws and copies header/body cells through layout-aware cell ranges', function() {
+		it('draws header and body cells through layout-aware cell ranges', function() {
 			const calls = [];
 			const {grid, records, style, headerStyle} = createSimpleGrid(calls);
 			try {
@@ -444,7 +509,15 @@
 					40,
 				]);
 				expect(calls.length).toEqual(validDrawCallCount);
+			} finally {
+				grid.dispose();
+			}
+		});
 
+		it('copies header and body cells through layout-aware cell ranges', function() {
+			const calls = [];
+			const {grid} = createSimpleGrid(calls);
+			try {
 				expect(grid.getCopyCellValue(0, 0)).toEqual('header:Person');
 				expect(grid.getCopyCellValue(1, 0, {
 					start: {col: 0, row: 0},
@@ -456,7 +529,23 @@
 			}
 		});
 
-		it('gets, changes, pastes, deletes, and rejects values through actions', async function() {
+		it('gets cell values through body fields and rejects header reads', function() {
+			const calls = [];
+			const {grid, records} = createMultiGrid(calls);
+			try {
+				expect(grid.doGetCellValue(0, 0, function() {})).toEqual(false);
+				const got = [];
+				expect(grid.doGetCellValue(0, 1, function(value) {
+					got.push(value);
+				})).toEqual(true);
+				expect(got).toEqual(['Ada']);
+				expect(records[0].name).toEqual('Ada');
+			} finally {
+				grid.dispose();
+			}
+		});
+
+		it('changes cell values through actions and fires before and changed events', function() {
 			const calls = [];
 			const {grid, records} = createMultiGrid(calls);
 			const events = [];
@@ -467,17 +556,6 @@
 				grid.listen(EVENT_TYPE.CHANGED_VALUE, function(e) {
 					events.push(['changed', e.col, e.row, e.field, e.value, e.oldValue]);
 				});
-				grid.listen(EVENT_TYPE.REJECTED_PASTE_VALUES, function(e) {
-					events.push(['rejected', e.detail.length, e.detail[0].pasteValue]);
-				});
-
-				expect(grid.doGetCellValue(0, 0, function() {})).toEqual(false);
-				const got = [];
-				expect(grid.doGetCellValue(0, 1, function(value) {
-					got.push(value);
-				})).toEqual(true);
-				expect(got).toEqual(['Ada']);
-
 				expect(grid.doChangeValue(0, 0, function() {
 					return 'header';
 				})).toEqual(false);
@@ -490,7 +568,19 @@
 				expect(records[0].name).toEqual('Ada!');
 				expect(events).toContainEqual(['before', 0, 1, 'name', 'Ada!', 'Ada']);
 				expect(events).toContainEqual(['changed', 0, 1, 'name', 'Ada!', 'Ada']);
+			} finally {
+				grid.dispose();
+			}
+		});
 
+		it('pastes range values through actions and reports rejected paste values', async function() {
+			const calls = [];
+			const {grid, records} = createMultiGrid(calls);
+			const events = [];
+			try {
+				grid.listen(EVENT_TYPE.REJECTED_PASTE_VALUES, function(e) {
+					events.push(['rejected', e.detail.length, e.detail[0].pasteValue]);
+				});
 				grid.selection.range = {
 					start: {col: 0, row: 1},
 					end: {col: 1, row: 2},
@@ -510,7 +600,19 @@
 					start: {col: 0, row: 1},
 					end: {col: 1, row: 2},
 				});
+			} finally {
+				grid.dispose();
+			}
+		});
 
+		it('handles paste and delete cell events through range actions', function() {
+			const calls = [];
+			const {grid} = createMultiGrid(calls);
+			try {
+				grid.selection.range = {
+					start: {col: 0, row: 1},
+					end: {col: 1, row: 2},
+				};
 				const pasteEvent = clipboardEvent();
 				grid.fireListeners(EVENT_TYPE.PASTE_CELL, {
 					col: 0,
@@ -537,7 +639,7 @@
 			}
 		});
 
-		it('uses merged cell ranges for keyboard movement and paste/delete early returns', function() {
+		it('uses merged cell ranges for vertical keyboard movement', function() {
 			const calls = [];
 			const {grid} = createMultiGrid(calls);
 			try {
@@ -550,7 +652,15 @@
 				event = keyEvent(38);
 				grid.onKeyDownMove(event);
 				expect(grid.selection.select).toEqual({col: 0, row: 1});
+			} finally {
+				grid.dispose();
+			}
+		});
 
+		it('leaves single paste events untouched when range paste is disabled', function() {
+			const calls = [];
+			const {grid} = createMultiGrid(calls);
+			try {
 				grid.allowRangePaste = false;
 				const pasteEvent = clipboardEvent();
 				grid.fireListeners(EVENT_TYPE.PASTE_CELL, {
@@ -563,7 +673,15 @@
 					event: pasteEvent,
 				});
 				expect(pasteEvent.defaultPrevented).toEqual(false);
+			} finally {
+				grid.dispose();
+			}
+		});
 
+		it('leaves header paste and delete events untouched', function() {
+			const calls = [];
+			const {grid} = createMultiGrid(calls);
+			try {
 				grid.allowRangePaste = true;
 				grid.selection.range = {
 					start: {col: 0, row: 0},

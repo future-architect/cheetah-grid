@@ -50,6 +50,8 @@
 			const element = document.createElement('button');
 
 			dom.appendHtml(parent, '<span>A</span>');
+			expect(parent.children[0].tagName).toEqual('SPAN');
+
 			dom.appendHtml(parent, element);
 
 			expect(Array.prototype.map.call(parent.children, function(child) {
@@ -70,6 +72,7 @@
 			parent.appendChild(first);
 			parent.appendChild(middle);
 			parent.appendChild(last);
+			expect(parent.children.length).toEqual(3);
 
 			dom.disableFocus(parent);
 

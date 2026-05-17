@@ -56,102 +56,99 @@
 		}
 		return arr;
 	}
+	function createDefaultAnswerCanvas() {
+		const rows = repeat([24], 3);
+		const cols = repeat([80], 10);
+
+		const canvasHelper = window.createCanvasHelper(grid.canvas.width, grid.canvas.height);
+		const ctx = canvasHelper.context;
+		const canvas = canvasHelper.canvas;
+		const gridHelper = canvasHelper.createGridHelper(cols, rows);
+
+		canvasHelper.fillRect('#f6f6f6');
+		gridHelper.fillRect('white');
+		gridHelper.fillRect('#d3d3d3', 0, 0, null, 0);
+		gridHelper.fillRect('#F6F6F6', 0, 2, null, 2);
+
+		gridHelper.lineAll(1);
+		ctx.strokeStyle = '#5e9ed6';
+		gridHelper.lineH(1, 0, 0, 0);
+		gridHelper.lineH(2, 0, 0, 0, true);
+		gridHelper.lineV(1, 0, 0, 0);
+		gridHelper.lineV(2, 0, 0, 0, true);
+
+		ctx.font = '16px sans-serif';
+		ctx.fillStyle = '#000';
+		for (let row = 0; row < rows.length; row++) {
+			for (let col = 0; col < cols.length; col++) {
+				gridHelper.text('[' + col + ':' + row + ']', col, row, {
+					offset: 3,
+					textBaseline: 'middle'
+				});
+			}
+		}
+		return canvas;
+	}
+	function createSelectMakeVisibleAnswerCanvas() {
+		const rows = repeat([24], 3);
+		const cols = repeat([80], 10);
+		cols[2] = grid.canvas.width - (6 * 80);
+
+		const canvasHelper = window.createCanvasHelper(grid.canvas.width, grid.canvas.height);
+		const ctx = canvasHelper.context;
+		const canvas = canvasHelper.canvas;
+		const gridHelper = canvasHelper.createGridHelper(cols, rows);
+
+		canvasHelper.fillRect('#f6f6f6');
+		gridHelper.fillRect('white');
+		gridHelper.fillRect('#d3d3d3', 0, 0, null, 0);
+		gridHelper.fillRect('#F6F6F6', 0, 2, null, 2);
+
+		gridHelper.lineAll(1);
+		ctx.strokeStyle = '#5e9ed6';
+		gridHelper.lineH(1, 0, 6, 6, true);
+		gridHelper.lineH(1, 1, 6, 6);
+		gridHelper.lineH(2, 1, 6, 6, true);
+		gridHelper.lineV(1, 5, 1, 1, true);
+		gridHelper.lineV(1, 6, 1, 1);
+		gridHelper.lineV(2, 6, 1, 1, true);
+
+		ctx.font = '16px sans-serif';
+		ctx.fillStyle = '#000';
+		for (let row = 0; row < rows.length; row++) {
+			for (let col = 0; col < cols.length; col++) {
+				const text = col < 2 ? '[' + col + ':' + row + ']'
+					: (col === 2 ? '' : '[' + (col + 2) + ':' + row + ']');
+				gridHelper.text(text, col, row, {
+					offset: 3,
+					textBaseline: 'middle'
+				});
+			}
+		}
+		return canvas;
+	}
 
 	describe('DrawGrid draw image', function() {
 
 		it('draw default helper', function() {
-			function createAnswerCanvas() {
-				const rows = repeat([24], 3);
-				const cols = repeat([80], 10);
-
-				const canvasHelper = window.createCanvasHelper(grid.canvas.width, grid.canvas.height);
-				const ctx = canvasHelper.context;
-				const canvas = canvasHelper.canvas;
-
-				const gridHelper = canvasHelper.createGridHelper(cols, rows);
-
-				//塗りつぶし
-				canvasHelper.fillRect('#f6f6f6');
-				gridHelper.fillRect('white');
-				gridHelper.fillRect('#d3d3d3', 0, 0, null, 0);
-				gridHelper.fillRect('#F6F6F6', 0, 2, null, 2);
-
-				//罫線
-				gridHelper.lineAll(1);
-				ctx.strokeStyle = '#5e9ed6';
-				gridHelper.lineH(1, 0, 0, 0);
-				gridHelper.lineH(2, 0, 0, 0, true);
-				gridHelper.lineV(1, 0, 0, 0);
-				gridHelper.lineV(2, 0, 0, 0, true);
-
-				//TEXT
-				ctx.font = '16px sans-serif';
-				ctx.fillStyle = '#000';
-
-				for (let row = 0; row < rows.length; row++) {
-					for (let col = 0; col < cols.length; col++) {
-						gridHelper.text('[' + col + ':' + row + ']', col, row, {
-							offset: 3,
-							textBaseline: 'middle'
-						});
-					}
-				}
-				return canvas;
-			}
-			const canvas = createAnswerCanvas();
-			expect(grid.canvas).toMatchImage(canvas, {tolerance: 0, delta: '15%', blurLevel: 1});
+			expect(grid.canvas).toMatchImage(createDefaultAnswerCanvas(), {
+				tolerance: 0,
+				delta: '15%',
+				blurLevel: 1,
+			});
 		});
 
 		it('select and makeVisible', function() {
 			grid.selection.select = {col: 8, row: 1};
 			grid.makeVisibleCell(8, 1);
+			expect(grid[_].scrollable.scrollLeft).toBeGreaterThan(0);
+
 			grid[_].scrollable._handler.fire(grid[_].scrollable._scrollable, 'scroll', {});
+			expect(grid.selection.select).toEqual({col: 8, row: 1});
+
 			grid.invalidate();
 
-			function createAnswerCanvas() {
-				const rows = repeat([24], 3);
-				const cols = repeat([80], 10);
-				cols[2] = grid.canvas.width - (6 * 80);
-
-				const canvasHelper = window.createCanvasHelper(grid.canvas.width, grid.canvas.height);
-				const ctx = canvasHelper.context;
-				const canvas = canvasHelper.canvas;
-
-				const gridHelper = canvasHelper.createGridHelper(cols, rows);
-
-				//塗りつぶし
-				canvasHelper.fillRect('#f6f6f6');
-				gridHelper.fillRect('white');
-				gridHelper.fillRect('#d3d3d3', 0, 0, null, 0);
-				gridHelper.fillRect('#F6F6F6', 0, 2, null, 2);
-
-				//罫線
-				gridHelper.lineAll(1);
-				ctx.strokeStyle = '#5e9ed6';
-				gridHelper.lineH(1, 0, 6, 6, true);
-				gridHelper.lineH(1, 1, 6, 6);
-				gridHelper.lineH(2, 1, 6, 6, true);
-				gridHelper.lineV(1, 5, 1, 1, true);
-				gridHelper.lineV(1, 6, 1, 1);
-				gridHelper.lineV(2, 6, 1, 1, true);
-
-				//TEXT
-				ctx.font = '16px sans-serif';
-				ctx.fillStyle = '#000';
-
-				for (let row = 0; row < rows.length; row++) {
-					for (let col = 0; col < cols.length; col++) {
-						const text = col < 2 ? '[' + col + ':' + row + ']'
-							: (col === 2 ? '' : '[' + (col + 2) + ':' + row + ']');
-						gridHelper.text(text, col, row, {
-							offset: 3,
-							textBaseline: 'middle'
-						});
-					}
-				}
-				return canvas;
-			}
-			const canvas = createAnswerCanvas();
+			const canvas = createSelectMakeVisibleAnswerCanvas();
 			expect(grid.canvas).toMatchImage(canvas, {tolerance: 0, delta: '15%', blurLevel: 1});
 		});
 	});

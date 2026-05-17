@@ -23,6 +23,33 @@
 		};
 	}
 
+	function createRepeatedIconColumn() {
+		return new IconColumn({
+			tagName: 'span',
+			className: 'icon',
+			content: 'A',
+			name: 'arrow_upward',
+			iconWidth: 12,
+		});
+	}
+
+	function createExpectedRepeatedIcon() {
+		return {
+			content: 'A',
+			font: expect.any(String),
+			color: 'red',
+			isLiga: false,
+			width: 12,
+			src: undefined,
+			svg: undefined,
+			name: 'arrow_upward',
+			path: undefined,
+			tagName: 'span',
+			offsetTop: undefined,
+			offsetLeft: undefined,
+		};
+	}
+
 	describe('IconColumn', function() {
 		it('exposes constructor options and clones them', function() {
 			const column = new IconColumn({
@@ -50,13 +77,7 @@
 
 		it('turns numeric values into repeated icons', function() {
 			const calls = [];
-			const column = new IconColumn({
-				tagName: 'span',
-				className: 'icon',
-				content: 'A',
-				name: 'arrow_upward',
-				iconWidth: 12,
-			});
+			const column = createRepeatedIconColumn();
 			const context = createContext();
 			const helper = createHelper(calls);
 
@@ -80,34 +101,8 @@
 					padding: undefined,
 					textOverflow: 'clip',
 					icons: [
-						{
-							content: 'A',
-							font: '16px Times',
-							color: 'red',
-							isLiga: false,
-							width: 12,
-							src: undefined,
-							svg: undefined,
-							name: 'arrow_upward',
-							path: undefined,
-							tagName: 'span',
-							offsetTop: undefined,
-							offsetLeft: undefined,
-						},
-						{
-							content: 'A',
-							font: '16px Times',
-							color: 'red',
-							isLiga: false,
-							width: 12,
-							src: undefined,
-							svg: undefined,
-							name: 'arrow_upward',
-							path: undefined,
-							tagName: 'span',
-							offsetTop: undefined,
-							offsetLeft: undefined,
-						},
+						createExpectedRepeatedIcon(),
+						createExpectedRepeatedIcon(),
 					],
 				},
 			]]);

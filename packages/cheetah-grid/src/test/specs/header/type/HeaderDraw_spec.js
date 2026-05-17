@@ -70,6 +70,140 @@
 			},
 		};
 	}
+	function createInfo(bases) {
+		return {
+			drawCellBase: function(option) {
+				if (bases) {
+					bases.push(option);
+				}
+			},
+			getIcon: function() {
+				return null;
+			},
+		};
+	}
+	function createCheckHeaderStyle(option) {
+		return new styles.CheckHeaderStyle(Object.assign({
+			borderColor: 'border',
+			checkBgColor: 'checked',
+			uncheckBgColor: 'unchecked',
+			color: 'ink',
+			font: '12px sans-serif',
+			padding: 4,
+		}, option));
+	}
+	function createDefaultMultilineStyle() {
+		return new styles.Style({
+			multiline: true,
+			color: 'ink',
+			font: '12px sans-serif',
+			padding: 2,
+			lineHeight: 16,
+			autoWrapText: true,
+			lineClamp: 2,
+			textOverflow: 'clip',
+			bgColor: 'base',
+		});
+	}
+	function expectDefaultMultilineHeaderCall(calls, context) {
+		expect(calls).toEqual([['multilineText', ['A', 'B', 'C'], context, {
+			textAlign: 'left',
+			textBaseline: 'middle',
+			color: 'ink',
+			font: '12px sans-serif',
+			padding: 2,
+			lineHeight: 16,
+			autoWrapText: true,
+			lineClamp: 2,
+			textOverflow: 'clip',
+			icons: undefined,
+		}]]);
+	}
+	function expectMultilineSortHeaderCall(calls, context) {
+		expect(calls).toEqual([
+			['testFontLoad', '10px sans-serif', 'A\r\nB', context],
+			['multilineText', ['A', 'B'], context, {
+				textAlign: 'left',
+				textBaseline: 'middle',
+				color: 'ink',
+				font: '10px sans-serif',
+				padding: undefined,
+				lineHeight: 16,
+				autoWrapText: true,
+				lineClamp: 2,
+				textOverflow: 'ellipsis',
+				icons: undefined,
+				trailingIcon: {
+					name: 'arrow_upward',
+					width: 12,
+					color: 'themeSort:1:0',
+				},
+			}],
+		]);
+	}
+	function expectCheckHeaderTextCall(calls, inline, context) {
+		expect(calls[1][0]).toEqual('text');
+		expect(calls[1][1][0]).toBe(inline);
+		expect(String(calls[1][1][1])).toEqual('');
+		expect(calls[1][2]).toBe(context);
+		expect(calls[1][3]).toEqual({
+			textAlign: 'center',
+			textBaseline: 'middle',
+			color: 'ink',
+			font: '12px sans-serif',
+			padding: 4,
+			textOverflow: 'ellipsis',
+		});
+	}
+	function expectSortHeaderCall(calls, context) {
+		expect(calls).toEqual([
+			['testFontLoad', '10px sans-serif', 'Name', context],
+			['text', 'Name', context, {
+				textAlign: 'left',
+				textBaseline: 'middle',
+				color: 'ink',
+				font: '10px sans-serif',
+				padding: 3,
+				textOverflow: 'ellipsis',
+				icons: undefined,
+				trailingIcon: {
+					name: 'arrow_downward',
+					width: 12,
+					color: 'sortColor:1:0',
+				},
+			}],
+		]);
+	}
+	function expectUncheckedCheckHeaderInline(calls, inline) {
+		expect(inline.checked).toEqual(false);
+		expect(inline.option).toEqual({
+			textAlign: 'center',
+			textBaseline: 'middle',
+			borderColor: 'border',
+			checkBgColor: 'checked',
+			uncheckBgColor: 'unchecked',
+		});
+		expect(calls[1][0]).toEqual('text');
+		expect(calls[1][1][0]).toBe(inline);
+		expect(String(calls[1][1][1])).toEqual('All');
+	}
+	function expectDedicatedMultilineHeaderCall(calls, context) {
+		expect(calls).toEqual([
+			['testFontLoad', '11px sans-serif', 'A\nB', context],
+			['multilineText', ['A', 'B'], context, {
+				textAlign: 'left',
+				textBaseline: 'middle',
+				color: 'ink',
+				font: '11px sans-serif',
+				padding: 2,
+				lineHeight: 14,
+				autoWrapText: true,
+				lineClamp: 2,
+				textOverflow: 'ellipsis',
+				icons: undefined,
+			}],
+		]);
+	}
 
 	describe('header drawing', function() {
 		it('draws multiline default headers', function() {
@@ -77,17 +211,7 @@
 			const bases = [];
 			const context = createContext(1, 0);
 
-			new types.Header().drawInternal('A\r\nB\rC', context, new styles.Style({
-				multiline: true,
-				color: 'ink',
-				font: '12px sans-serif',
-				padding: 2,
-				lineHeight: 16,
-				autoWrapText: true,
-				lineClamp: 2,
-				textOverflow: 'clip',
-				bgColor: 'base',
-			}), createHelper(calls), createGrid(), {
+			new types.Header().drawInternal('A\r\nB\rC', context, createDefaultMultilineStyle(), createHelper(calls), createGrid(), {
 				drawCellBase: function(option) {
 					bases.push(option);
 				},
@@ -97,18 +221,7 @@
 			});
 
 			expect(bases).toEqual([{bgColor: 'base'}]);
-			expect(calls).toEqual([['multilineText', ['A', 'B', 'C'], context, {
-				textAlign: 'left',
-				textBaseline: 'middle',
-				color: 'ink',
-				font: '12px sans-serif',
-				padding: 2,
-				lineHeight: 16,
-				autoWrapText: true,
-				lineClamp: 2,
-				textOverflow: 'clip',
-				icons: undefined,
-			}]]);
+			expectDefaultMultilineHeaderCall(calls, context);
 		});
 
 		it('draws sort headers with matching sort arrows', function() {
@@ -129,23 +242,7 @@
 				},
 			});
 
-			expect(calls).toEqual([
-				['testFontLoad', '10px sans-serif', 'Name', context],
-				['text', 'Name', context, {
-					textAlign: 'left',
-					textBaseline: 'middle',
-					color: 'ink',
-					font: '10px sans-serif',
-					padding: 3,
-					textOverflow: 'ellipsis',
-					icons: undefined,
-					trailingIcon: {
-						name: 'arrow_downward',
-						width: 12,
-						color: 'sortColor:1:0',
-					},
-				}],
-			]);
+			expectSortHeaderCall(calls, context);
 		});
 
 		it('draws multiline descending sort headers with themed arrows and background', function() {
@@ -155,7 +252,7 @@
 			const grid = createGrid();
 			grid.sortState = {col: 1, row: 0, order: 'desc'};
 
-			new types.SortHeader().drawInternal('A\r\nB', context, new styles.SortHeaderStyle({
+			const style = new styles.SortHeaderStyle({
 				bgColor: 'base',
 				color: 'ink',
 				font: '10px sans-serif',
@@ -163,36 +260,11 @@
 				lineHeight: 16,
 				autoWrapText: true,
 				lineClamp: 2,
-			}), createHelper(calls), grid, {
-				drawCellBase: function(option) {
-					bases.push(option);
-				},
-				getIcon: function() {
-					return null;
-				},
 			});
+			new types.SortHeader().drawInternal('A\r\nB', context, style, createHelper(calls), grid, createInfo(bases));
 
 			expect(bases).toEqual([{bgColor: 'base'}]);
-			expect(calls).toEqual([
-				['testFontLoad', '10px sans-serif', 'A\r\nB', context],
-				['multilineText', ['A', 'B'], context, {
-					textAlign: 'left',
-					textBaseline: 'middle',
-					color: 'ink',
-					font: '10px sans-serif',
-					padding: undefined,
-					lineHeight: 16,
-					autoWrapText: true,
-					lineClamp: 2,
-					textOverflow: 'ellipsis',
-					icons: undefined,
-					trailingIcon: {
-						name: 'arrow_upward',
-						width: 12,
-						color: 'themeSort:1:0',
-					},
-				}],
-			]);
+			expectMultilineSortHeaderCall(calls, context);
 		});
 
 		it('draws check headers with checkbox inline state and animation', async function() {
@@ -205,21 +277,8 @@
 				block: {},
 			};
 
-			new types.CheckHeader().drawInternal(null, context, new styles.CheckHeaderStyle({
-				borderColor: 'border',
-				checkBgColor: 'checked',
-				uncheckBgColor: 'unchecked',
-				color: 'ink',
-				font: '12px sans-serif',
-				padding: 4,
-			}), createHelper(calls), grid, {
-				drawCellBase: function() {
-					// noop
-				},
-				getIcon: function() {
-					return null;
-				},
-			});
+			const style = createCheckHeaderStyle();
+			new types.CheckHeader().drawInternal(null, context, style, createHelper(calls), grid, createInfo());
 
 			const inline = calls[0][1];
 			expect(inline).toEqual({
@@ -234,18 +293,7 @@
 					animElapsedTime: 0.5,
 				},
 			});
-			expect(calls[1][0]).toEqual('text');
-			expect(calls[1][1][0]).toBe(inline);
-			expect(String(calls[1][1][1])).toEqual('');
-			expect(calls[1][2]).toBe(context);
-			expect(calls[1][3]).toEqual({
-				textAlign: 'center',
-				textBaseline: 'middle',
-				color: 'ink',
-				font: '12px sans-serif',
-				padding: 4,
-				textOverflow: 'ellipsis',
-			});
+			expectCheckHeaderTextCall(calls, inline, context);
 		});
 
 		it('draws unchecked check headers with base fill and text content', function() {
@@ -276,17 +324,7 @@
 
 			const inline = calls[0][1];
 			expect(bases).toEqual([{bgColor: 'base'}]);
-			expect(inline.checked).toEqual(false);
-			expect(inline.option).toEqual({
-				textAlign: 'center',
-				textBaseline: 'middle',
-				borderColor: 'border',
-				checkBgColor: 'checked',
-				uncheckBgColor: 'unchecked',
-			});
-			expect(calls[1][0]).toEqual('text');
-			expect(calls[1][1][0]).toBe(inline);
-			expect(String(calls[1][1][1])).toEqual('All');
+			expectUncheckedCheckHeaderInline(calls, inline);
 		});
 
 		it('draws dedicated multiline headers and tests fonts', function() {
@@ -314,21 +352,7 @@
 
 			expect(clone.StyleClass).toBe(styles.MultilineTextHeaderStyle);
 			expect(bases).toEqual([{bgColor: 'base'}]);
-			expect(calls).toEqual([
-				['testFontLoad', '11px sans-serif', 'A\nB', context],
-				['multilineText', ['A', 'B'], context, {
-					textAlign: 'left',
-					textBaseline: 'middle',
-					color: 'ink',
-					font: '11px sans-serif',
-					padding: 2,
-					lineHeight: 14,
-					autoWrapText: true,
-					lineClamp: 2,
-					textOverflow: 'ellipsis',
-					icons: undefined,
-				}],
-			]);
+			expectDedicatedMultilineHeaderCall(calls, context);
 		});
 
 		it('uses BaseHeader.onDrawCell to resolve style and draw base cells', function() {

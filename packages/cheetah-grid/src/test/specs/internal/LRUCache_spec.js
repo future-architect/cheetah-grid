@@ -7,6 +7,7 @@
 			const cache = new LRUCache(2);
 
 			cache.put('a', 'A');
+			expect(cache.get('a')).toEqual('A');
 			cache.put('b', 'B');
 			expect(cache.get('a')).toEqual('A');
 			cache.put('c', 'C');
@@ -21,8 +22,13 @@
 			const cache = new LRUCache(2);
 
 			cache.put('a', 'A');
+			expect(cache.get('a')).toEqual('A');
 			cache.put('b', 'B');
+			expect(cache.get('b')).toEqual('B');
+
 			cache.put('a', 'AA');
+			expect(cache.get('a')).toEqual('AA');
+
 			cache.put('c', 'C');
 
 			expect(cache.get('a')).toEqual('AA');
@@ -35,6 +41,7 @@
 			const cache = new LRUCache(2);
 
 			cache.put('zero', 0);
+			expect(cache.get('zero')).toEqual(0);
 			cache.put('empty', '');
 			expect(cache.get('zero')).toEqual(0);
 			cache.put('next', 'next');

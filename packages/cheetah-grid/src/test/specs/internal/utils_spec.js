@@ -20,9 +20,10 @@
 			const {utils} = await import('./utils-test-module.mjs');
 			const source = {a: 1, b: undefined, c: 3};
 			const omitted = utils.omit(source, ['c']);
+			expect(omitted).toEqual({a: 1, b: undefined});
+
 			const defaulted = utils.defaults(source, {b: 2, d: 4});
 
-			expect(omitted).toEqual({a: 1, b: undefined});
 			expect(defaulted).toEqual({a: 1, b: 2, c: 3, d: 4});
 
 			omitted.a = 10;

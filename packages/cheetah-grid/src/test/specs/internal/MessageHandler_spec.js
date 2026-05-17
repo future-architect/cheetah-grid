@@ -41,6 +41,18 @@
 		};
 	}
 
+	function createHandlerWithInstances(MessageHandler) {
+		const grid = createGrid();
+		const handler = new MessageHandler(grid, function() {
+			return null;
+		});
+		const error = createMessageInstance();
+		const info = createMessageInstance();
+		handler._messageInstances.error = error;
+		handler._messageInstances.info = info;
+		return {error, handler, info};
+	}
+
 	describe('MessageHandler', function() {
 		it('detects messages from strings and supported message objects', async function() {
 			const {hasMessage} = await import('../../../js/columns/message/MessageHandler.ts');
@@ -53,26 +65,32 @@
 			expect(hasMessage(Promise.resolve('Later'))).toEqual(false);
 		});
 
-		it('draws normalized messages with the matching message instance', async function() {
+		it('draws string messages with the error message instance', async function() {
 			const {MessageHandler} = await import('../../../js/columns/message/MessageHandler.ts');
-			const grid = createGrid();
-			const handler = new MessageHandler(grid, function() {
-				return null;
-			});
-			const error = createMessageInstance();
-			const info = createMessageInstance();
-			handler._messageInstances.error = error;
-			handler._messageInstances.info = info;
+			const {error, handler} = createHandlerWithInstances(MessageHandler);
 
 			handler.drawCellMessage('Required');
-			handler.drawCellMessage({type: 'info', message: 'Saved'});
-			handler.drawCellMessage(null);
-
 			expect(error.draws).toEqual([{
 				type: 'error',
 				message: 'Required',
 				original: 'Required',
 			}]);
+		});
+
+		it('draws info messages and ignores null messages', async function() {
+			const {MessageHandler} = await import('../../../js/columns/message/MessageHandler.ts');
+			const {error, handler, info} = createHandlerWithInstances(MessageHandler);
+
+			handler.drawCellMessage({type: 'info', message: 'Saved'});
+			expect(info.draws).toEqual([{
+				type: 'info',
+				message: 'Saved',
+				original: {type: 'info', message: 'Saved'},
+			}]);
+
+			handler.drawCellMessage(null);
+
+			expect(error.draws).toEqual([]);
 			expect(info.draws).toEqual([{
 				type: 'info',
 				message: 'Saved',
@@ -92,24 +110,25 @@
 			handler._messageInstances.info = info;
 
 			handler._attach(1, 2, 'Required');
-			handler._move(1, 2);
-			handler._move(2, 2);
-			handler._attach(1, 2, {type: 'info', message: 'Saved'});
-			handler._detach();
-			handler._detach();
-
 			expect(error.attaches).toEqual([[
 				1,
 				2,
 				{type: 'error', message: 'Required', original: 'Required'},
 			]]);
+			handler._move(1, 2);
 			expect(error.moves).toEqual([[1, 2]]);
+			handler._move(2, 2);
+			expect(error.moves).toEqual([[1, 2]]);
+			handler._attach(1, 2, {type: 'info', message: 'Saved'});
 			expect(error.detaches).toEqual(1);
 			expect(info.attaches).toEqual([[
 				1,
 				2,
 				{type: 'info', message: 'Saved', original: {type: 'info', message: 'Saved'}},
 			]]);
+			handler._detach();
+			expect(info.detaches).toEqual(1);
+			handler._detach();
 			expect(info.detaches).toEqual(1);
 		});
 
@@ -133,29 +152,21 @@
 				col: 1,
 				row: 1,
 			});
+			expect(error.attaches.length).toEqual(1);
 			grid.listeners[LG_EVENT_TYPE.SCROLL]();
+			expect(error.moves).toEqual([[1, 1]]);
 			messages['1:1'] = null;
 			grid.listeners[LG_EVENT_TYPE.CHANGED_VALUE]({col: 1, row: 1});
-
-			expect(error.attaches.length).toEqual(1);
-			expect(error.moves).toEqual([[1, 1]]);
 			expect(error.detaches).toEqual(1);
 		});
 
-		it('ignores unchanged selection events and resolves async messages only for the current cell', async function() {
+		it('ignores unchanged and deselected selection events', async function() {
 			const {MessageHandler} = await import('../../../js/columns/message/MessageHandler.ts');
 			const {LG_EVENT_TYPE} = await import('../../../js/list-grid/LG_EVENT_TYPE.ts');
 			const grid = createGrid();
 			grid.selection.select = {col: 1, row: 1};
-			let resolveMessage;
-			const promise = new Promise(function(resolve) {
-				resolveMessage = resolve;
-			});
-			const handler = new MessageHandler(grid, function(col, row) {
-				if (col === 1 && row === 1) {
-					return promise;
-				}
-				return {type: 'unknown', message: 'Object message'};
+			const handler = new MessageHandler(grid, function() {
+				return 'message';
 			});
 			const error = createMessageInstance();
 			handler._messageInstances.error = error;
@@ -166,27 +177,59 @@
 				col: 1,
 				row: 1,
 			});
+			expect(error.attaches).toEqual([]);
 			grid.listeners[LG_EVENT_TYPE.SELECTED_CELL]({
 				selected: false,
 				before: {col: 0, row: 0},
 				col: 1,
 				row: 1,
 			});
+			expect(error.attaches).toEqual([]);
+		});
+
+		it('ignores async messages that resolve after selection moves away', async function() {
+			const {MessageHandler} = await import('../../../js/columns/message/MessageHandler.ts');
+			const {LG_EVENT_TYPE} = await import('../../../js/list-grid/LG_EVENT_TYPE.ts');
+			const grid = createGrid();
+			grid.selection.select = {col: 1, row: 1};
+			let resolveMessage;
+			const promise = new Promise(function(resolve) {
+				resolveMessage = resolve;
+			});
+			const handler = new MessageHandler(grid, function() {
+				return promise;
+			});
+			const error = createMessageInstance();
+			handler._messageInstances.error = error;
+
 			grid.listeners[LG_EVENT_TYPE.SELECTED_CELL]({
 				selected: true,
 				before: {col: 0, row: 0},
 				col: 1,
 				row: 1,
 			});
+			expect(error.attaches).toEqual([]);
 			grid.selection.select = {col: 2, row: 2};
 			resolveMessage('Stale');
 			await promise;
 			await new Promise(function(resolve) {
 				setTimeout(resolve);
 			});
-			grid.listeners[LG_EVENT_TYPE.FOCUS_GRID]({col: 2, row: 2});
-			grid.listeners[LG_EVENT_TYPE.BLUR_GRID]({});
+			expect(error.attaches).toEqual([]);
+		});
 
+		it('attaches focused cell messages and detaches them on blur', async function() {
+			const {MessageHandler} = await import('../../../js/columns/message/MessageHandler.ts');
+			const {LG_EVENT_TYPE} = await import('../../../js/list-grid/LG_EVENT_TYPE.ts');
+			const grid = createGrid();
+			grid.selection.select = {col: 2, row: 2};
+			const handler = new MessageHandler(grid, function() {
+				return {type: 'unknown', message: 'Object message'};
+			});
+			const error = createMessageInstance();
+			handler._messageInstances.error = error;
+
+			grid.listeners[LG_EVENT_TYPE.FOCUS_GRID]({col: 2, row: 2});
 			expect(error.attaches).toEqual([[
 				2,
 				2,
@@ -196,6 +239,7 @@
 					original: {type: 'unknown', message: 'Object message'},
 				},
 			]]);
+			grid.listeners[LG_EVENT_TYPE.BLUR_GRID]({});
 			expect(error.detaches).toEqual(1);
 		});
 	});

@@ -5,6 +5,85 @@
 	const {themes} = cheetahGrid;
 	const {Theme} = themes.theme;
 
+	function createNestedTheme() {
+		const borderColor = function() {
+			return [null, 'right', 'bottom', 'left'];
+		};
+		return new Theme({
+			font: '12px sans-serif',
+			color: 'ink',
+			defaultBgColor: 'paper',
+			underlayBackgroundColor: 'underlay',
+			borderColor,
+		}).extends({
+			tree: {
+				lineWidth: 3,
+			},
+			header: {},
+			messages: {
+				boxWidth: 12,
+				markHeight: 5,
+			},
+			indicators: {
+				bottomLeftSize: 7,
+			},
+		});
+	}
+	function createBaseTheme() {
+		return new Theme({
+			font: '12px sans-serif',
+			color: 'black',
+			defaultBgColor: 'white',
+			frozenRowsBgColor: 'silver',
+			underlayBackgroundColor: 'transparent',
+			borderColor: ['gray', 'darkgray'],
+			button: {
+				bgColor: 'button-bg',
+			},
+			messages: {
+				infoBgColor: 'info',
+				errorBgColor: 'error',
+				warnBgColor: 'warn',
+				boxWidth: 16,
+				markHeight: 4,
+			},
+		});
+	}
+
+	function createFrozenRowsGradientFixture() {
+		const gradients = [];
+		const context = {
+			createLinearGradient: function(left, top, right, bottom) {
+				const gradient = {
+					left,
+					top,
+					right,
+					bottom,
+					stops: [],
+					addColorStop: function(stop, color) {
+						this.stops.push([stop, color]);
+					},
+				};
+				gradients.push(gradient);
+				return gradient;
+			},
+		};
+		const grid = {
+			frozenRowCount: 2,
+			getRecordIndexByRow: function(row) {
+				return row - 2;
+			},
+			getCellRelativeRect: function(_col, row) {
+				return {
+					left: 10,
+					top: row * 20,
+					bottom: row * 20 + 20,
+				};
+			},
+		};
+		return {context, gradients, grid};
+	}
+
 	describe('themes', function() {
 		it('resolves built-in themes by name ignoring case', function() {
 			expect(themes.of('basic')).toBe(themes.BASIC);
@@ -56,26 +135,8 @@
 			}
 		});
 
-		it('extends themes and falls back to parent properties', function() {
-			const base = new Theme({
-				font: '12px sans-serif',
-				color: 'black',
-				defaultBgColor: 'white',
-				frozenRowsBgColor: 'silver',
-				underlayBackgroundColor: 'transparent',
-				borderColor: ['gray', 'darkgray'],
-				button: {
-					bgColor: 'button-bg',
-				},
-				messages: {
-					infoBgColor: 'info',
-					errorBgColor: 'error',
-					warnBgColor: 'warn',
-					boxWidth: 16,
-					markHeight: 4,
-				},
-			});
-			const child = base.extends({
+		it('extends themes and falls back to parent visual properties', function() {
+			const child = createBaseTheme().extends({
 				color: 'blue',
 				checkbox: {
 					uncheckBgColor: 'unchecked',
@@ -93,6 +154,15 @@
 			expect(child.indicators.topLeftColor).toEqual('gray');
 			expect(child.indicators.topLeftSize).toEqual(8);
 			expect(child.messages.boxWidth).toEqual(16);
+		});
+
+		it('reports whether nested theme properties exist', function() {
+			const child = createBaseTheme().extends({
+				checkbox: {
+					uncheckBgColor: 'unchecked',
+				},
+			});
+
 			expect(child.hasProperty(['checkbox', 'uncheckBgColor'])).toEqual(true);
 			expect(child.hasProperty(['checkbox', 'missing'])).toEqual(false);
 		});
@@ -118,36 +188,7 @@
 		});
 
 		it('evaluates BASIC row backgrounds and caches frozen-row gradients', function() {
-			const gradients = [];
-			const context = {
-				createLinearGradient: function(left, top, right, bottom) {
-					const gradient = {
-						left,
-						top,
-						right,
-						bottom,
-						stops: [],
-						addColorStop: function(stop, color) {
-							this.stops.push([stop, color]);
-						},
-					};
-					gradients.push(gradient);
-					return gradient;
-				},
-			};
-			const grid = {
-				frozenRowCount: 2,
-				getRecordIndexByRow: function(row) {
-					return row - 2;
-				},
-				getCellRelativeRect: function(_col, row) {
-					return {
-						left: 10,
-						top: row * 20,
-						bottom: row * 20 + 20,
-					};
-				},
-			};
+			const {context, gradients, grid} = createFrozenRowsGradientFixture();
 
 			expect(themes.BASIC.defaultBgColor({row: 0, grid})).toEqual('#FFF');
 			expect(themes.BASIC.defaultBgColor({row: 2, grid})).toEqual('#FFF');
@@ -178,7 +219,18 @@
 			}]);
 		});
 
-		it('evaluates MATERIAL_DESIGN border callbacks for frozen, grouped, and edge cells', function() {
+		it('evaluates MATERIAL_DESIGN frozen row border callbacks', function() {
+			expect(themes.MATERIAL_DESIGN.frozenRowsBorderColor({
+				row: 0,
+				grid: {frozenRowCount: 2},
+			})).toEqual(['#f2f2f2']);
+			expect(themes.MATERIAL_DESIGN.frozenRowsBorderColor({
+				row: 1,
+				grid: {frozenRowCount: 2},
+			})).toEqual(['#f2f2f2', '#f2f2f2', '#ccc7c7', '#f2f2f2']);
+		});
+
+		it('evaluates MATERIAL_DESIGN body border callbacks for grouped and edge cells', function() {
 			const grid = {
 				colCount: 4,
 				frozenColCount: 2,
@@ -191,14 +243,6 @@
 				},
 			};
 
-			expect(themes.MATERIAL_DESIGN.frozenRowsBorderColor({
-				row: 0,
-				grid: {frozenRowCount: 2},
-			})).toEqual(['#f2f2f2']);
-			expect(themes.MATERIAL_DESIGN.frozenRowsBorderColor({
-				row: 1,
-				grid: {frozenRowCount: 2},
-			})).toEqual(['#f2f2f2', '#f2f2f2', '#ccc7c7', '#f2f2f2']);
 			expect(themes.MATERIAL_DESIGN.borderColor({
 				col: 0,
 				row: 1,
@@ -216,31 +260,8 @@
 			})).toEqual(['#ccc7c7', '#f2f2f2', null, null]);
 		});
 
-		it('derives nested theme fallbacks and caches nested accessors', function() {
-			const borderColor = function() {
-				return [null, 'right', 'bottom', 'left'];
-			};
-			const base = new Theme({
-				font: '12px sans-serif',
-				color: 'ink',
-				defaultBgColor: 'paper',
-				underlayBackgroundColor: 'underlay',
-				borderColor,
-			});
-			const child = base.extends({
-				tree: {
-					lineWidth: 3,
-				},
-				header: {},
-				messages: {
-					boxWidth: 12,
-					markHeight: 5,
-				},
-				indicators: {
-					bottomLeftSize: 7,
-				},
-			});
-			const args = {};
+		it('caches nested theme accessors', function() {
+			const child = createNestedTheme();
 
 			expect(child.checkbox).toBe(child.checkbox);
 			expect(child.radioButton).toBe(child.radioButton);
@@ -248,6 +269,12 @@
 			expect(child.header).toBe(child.header);
 			expect(child.messages).toBe(child.messages);
 			expect(child.indicators).toBe(child.indicators);
+		});
+
+		it('derives nested theme fallbacks for controls', function() {
+			const child = createNestedTheme();
+			const args = {};
+
 			expect(child.checkbox.checkBgColor(args)).toEqual('right');
 			expect(child.checkbox.borderColor(args)).toEqual('right');
 			expect(child.radioButton.checkColor).toEqual('ink');
@@ -257,6 +284,12 @@
 			expect(child.radioButton.checkBgColor).toEqual('paper');
 			expect(child.button.color).toEqual('ink');
 			expect(child.button.bgColor).toEqual('paper');
+		});
+
+		it('derives nested theme fallbacks for tree, headers, messages, and indicators', function() {
+			const child = createNestedTheme();
+			const args = {};
+
 			expect(child.tree.lineStyle).toEqual('solid');
 			expect(child.tree.lineColor(args)).toEqual('right');
 			expect(child.tree.lineWidth).toEqual(3);

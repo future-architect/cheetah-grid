@@ -1,6 +1,23 @@
 /*eslint prefer-arrow-callback:"off", object-shorthand:"off"*/
 'use strict';
 (function() {
+	function normalizedIcon(option) {
+		return Object.assign({
+			content: undefined,
+			font: undefined,
+			color: undefined,
+			width: undefined,
+			src: undefined,
+			svg: undefined,
+			name: undefined,
+			path: undefined,
+			tagName: undefined,
+			isLiga: undefined,
+			offsetTop: undefined,
+			offsetLeft: undefined,
+		}, option);
+	}
+
 	describe('internal icons', function() {
 		it('normalizes scalar icon props into a single icon', async function() {
 			const icons = await import('../../../js/internal/icons.ts');
@@ -37,34 +54,8 @@
 				color: 'red',
 				width: [10],
 			})).toEqual([
-				{
-					content: 'A',
-					font: undefined,
-					color: 'red',
-					width: 10,
-					src: undefined,
-					svg: undefined,
-					name: undefined,
-					path: undefined,
-					tagName: undefined,
-					isLiga: undefined,
-					offsetTop: undefined,
-					offsetLeft: undefined,
-				},
-				{
-					content: 'B',
-					font: undefined,
-					color: 'red',
-					width: null,
-					src: undefined,
-					svg: undefined,
-					name: undefined,
-					path: undefined,
-					tagName: undefined,
-					isLiga: undefined,
-					offsetTop: undefined,
-					offsetLeft: undefined,
-				},
+				normalizedIcon({content: 'A', color: 'red', width: 10}),
+				normalizedIcon({content: 'B', color: 'red', width: null}),
 			]);
 		});
 

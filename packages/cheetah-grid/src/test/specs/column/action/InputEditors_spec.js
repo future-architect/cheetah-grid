@@ -78,22 +78,10 @@
 			expect(input.type).toEqual('email');
 		});
 
-		it('clones small dialog input options and exposes validators', function() {
-			const helperText = function(value) {
-				return `helper:${value}`;
-			};
-			const inputValidator = function(value) {
-				return value ? '' : 'required';
-			};
-			const validator = function(value) {
-				return value === 'ok' ? '' : 'invalid';
-			};
+		it('clones small dialog input class and type options', function() {
 			const editor = new actions.SmallDialogInputEditor({
 				classList: ['dialog-editor'],
 				type: 'number',
-				helperText,
-				inputValidator,
-				validator,
 			});
 			const clone = editor.clone();
 			const input = document.createElement('input');
@@ -104,16 +92,35 @@
 
 			expect(editor.classList).toEqual(['dialog-editor']);
 			expect(editor.type).toEqual('number');
+			expect(clone.classList).toEqual(['clone-dialog']);
+			expect(clone.type).toEqual('text');
+			expect(input.className).toEqual('');
+			expect(input.type).toEqual('number');
+		});
+
+		it('clones small dialog input validators and helper text', function() {
+			const helperText = function(value) {
+				return `helper:${value}`;
+			};
+			const inputValidator = function(value) {
+				return value ? '' : 'required';
+			};
+			const validator = function(value) {
+				return value === 'ok' ? '' : 'invalid';
+			};
+			const editor = new actions.SmallDialogInputEditor({
+				helperText,
+				inputValidator,
+				validator,
+			});
+			const clone = editor.clone();
+
 			expect(editor.helperText).toBe(helperText);
 			expect(editor.inputValidator).toBe(inputValidator);
 			expect(editor.validator).toBe(validator);
-			expect(clone.classList).toEqual(['clone-dialog']);
-			expect(clone.type).toEqual('text');
 			expect(clone.helperText).toBe(helperText);
 			expect(clone.inputValidator).toBe(inputValidator);
 			expect(clone.validator).toBe(validator);
-			expect(input.className).toEqual('');
-			expect(input.type).toEqual('number');
 		});
 
 		it('attaches inline input editors, commits on selection change, and disposes shared state', function() {
@@ -143,7 +150,7 @@
 			}
 		});
 
-		it('opens and cancels small dialog input editors through grid lifecycle hooks', function() {
+		it('opens small dialog input editors with value, class, and helper text', function() {
 			const grid = createGrid();
 			const editor = new actions.SmallDialogInputEditor({
 				classList: 'dialog-editor',
@@ -154,12 +161,31 @@
 
 			try {
 				editor.onOpenCellInternal(grid, cell);
-				let dialog = grid.host.querySelector('.cheetah-grid__small-dialog-input');
-				let input = dialog.querySelector('input');
+				const dialog = grid.host.querySelector('.cheetah-grid__small-dialog-input');
+				const input = dialog.querySelector('input');
 
 				expect(input.value).toEqual('opened');
 				expect(dialog.classList.contains('dialog-editor')).toEqual(true);
 				expect(dialog.dataset.helperText).toEqual('helper');
+			} finally {
+				grid.disposables.forEach(function(disposable) {
+					disposable.dispose();
+				});
+			}
+		});
+
+		it('cancels small dialog input editors on grid scroll', function() {
+			const grid = createGrid();
+			const editor = new actions.SmallDialogInputEditor({
+				classList: 'dialog-editor',
+				type: 'text',
+				helperText: 'helper',
+			});
+			const cell = {col: 1, row: 2};
+
+			try {
+				editor.onOpenCellInternal(grid, cell);
+				const dialog = grid.host.querySelector('.cheetah-grid__small-dialog-input');
 
 				editor.onGridScrollInternal(grid);
 
@@ -169,20 +195,32 @@
 					end: {col: 1, row: 2},
 				}]);
 				expect(dialog.classList.contains('cheetah-grid__small-dialog-input--hidden')).toEqual(true);
+			} finally {
+				grid.disposables.forEach(function(disposable) {
+					disposable.dispose();
+				});
+			}
+		});
 
+		it('updates small dialog input read-only state through lifecycle hooks', function() {
+			const grid = createGrid();
+			const editor = new actions.SmallDialogInputEditor({
+				classList: 'dialog-editor',
+				type: 'text',
+				helperText: 'helper',
+			});
+			const cell = {col: 1, row: 2};
+
+			try {
 				editor.onInputCellInternal(grid, cell, 'disabled');
 				editor.onChangeDisabledInternal();
 				editor.onInputCellInternal(grid, cell, 'readonly');
 				editor.onChangeReadOnlyInternal();
-				dialog = grid.host.querySelector('.cheetah-grid__small-dialog-input');
-				input = dialog.querySelector('input');
+				const dialog = grid.host.querySelector('.cheetah-grid__small-dialog-input');
+				const input = dialog.querySelector('input');
 
 				expect(input.readOnly).toEqual(true);
 				expect(grid.invalidates).toEqual([
-					{
-						start: {col: 1, row: 2},
-						end: {col: 1, row: 2},
-					},
 					{
 						start: {col: 1, row: 2},
 						end: {col: 1, row: 2},

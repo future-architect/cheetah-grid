@@ -123,6 +123,61 @@
 		};
 	}
 
+	function createSyncDrawInfo(ctx, bases, messages) {
+		return {
+			style: new Style({
+				bgColor: 'cell-bg',
+				color: 'ink',
+				font: '12px sans-serif',
+				textOverflow: 'ellipsis',
+				indicatorTopLeft: 'triangle',
+				indicatorBottomRight: {style: 'triangle', color: 'custom', size: 3},
+			}),
+			getRecord: function() {
+				return {id: 1};
+			},
+			drawCellBase: function(option) {
+				bases.push({
+					option: option || {},
+					alpha: ctx.globalAlpha,
+				});
+			},
+			getIcon: function() {
+				return null;
+			},
+			getMessage: function() {
+				return 'sync message';
+			},
+			messageHandler: {
+				drawCellMessage: function(message, contextArg, styleArg) {
+					messages.push([message, contextArg, styleArg]);
+				},
+			},
+		};
+	}
+	function expectSyncTextCalls(calls, context) {
+		expect(calls[0]).toEqual(['testFontLoad', '12px sans-serif', 'sync value', context]);
+		expect(calls[1]).toEqual(['text', 'sync value', context, {
+			textAlign: 'left',
+			textBaseline: 'middle',
+			color: 'ink',
+			font: '12px sans-serif',
+			padding: undefined,
+			textOverflow: 'ellipsis',
+			icons: undefined,
+		}]);
+	}
+	function expectIndicatorCalls(calls) {
+		expect(calls.filter(function(call) {
+			return call[0] === 'indicatorClip';
+		})).toEqual([
+			['indicatorClip', 1, 2],
+			['indicatorClip', 1, 2],
+		]);
+		expect(calls).toContainEqual(['fill', 'themeTopLeft:1:2']);
+		expect(calls).toContainEqual(['fill', 'custom']);
+	}
+
 	describe('BaseColumn.onDrawCell', function() {
 		it('waits for promise records, values, and messages before drawing', async function() {
 			const calls = [];
@@ -202,36 +257,7 @@
 				return ctx;
 			};
 			const column = new Column();
-			const info = {
-				style: new Style({
-					bgColor: 'cell-bg',
-					color: 'ink',
-					font: '12px sans-serif',
-					textOverflow: 'ellipsis',
-					indicatorTopLeft: 'triangle',
-					indicatorBottomRight: {style: 'triangle', color: 'custom', size: 3},
-				}),
-				getRecord: function() {
-					return {id: 1};
-				},
-				drawCellBase: function(option) {
-					bases.push({
-						option: option || {},
-						alpha: ctx.globalAlpha,
-					});
-				},
-				getIcon: function() {
-					return null;
-				},
-				getMessage: function() {
-					return 'sync message';
-				},
-				messageHandler: {
-					drawCellMessage: function(message, contextArg, styleArg) {
-						messages.push([message, contextArg, styleArg]);
-					},
-				},
-			};
+			const info = createSyncDrawInfo(ctx, bases, messages);
 
 			column.onDrawCell('sync value', info, context, grid);
 
@@ -241,24 +267,8 @@
 				{option: {}, alpha: 0.75},
 			]);
 			expect(ctx.globalAlpha).toEqual(1);
-			expect(calls[0]).toEqual(['testFontLoad', '12px sans-serif', 'sync value', context]);
-			expect(calls[1]).toEqual(['text', 'sync value', context, {
-				textAlign: 'left',
-				textBaseline: 'middle',
-				color: 'ink',
-				font: '12px sans-serif',
-				padding: undefined,
-				textOverflow: 'ellipsis',
-				icons: undefined,
-			}]);
-			expect(calls.filter(function(call) {
-				return call[0] === 'indicatorClip';
-			})).toEqual([
-				['indicatorClip', 1, 2],
-				['indicatorClip', 1, 2],
-			]);
-			expect(calls).toContainEqual(['fill', 'themeTopLeft:1:2']);
-			expect(calls).toContainEqual(['fill', 'custom']);
+			expectSyncTextCalls(calls, context);
+			expectIndicatorCalls(calls);
 			expect(messages).toEqual([['sync message', context, info.style]]);
 		});
 	});

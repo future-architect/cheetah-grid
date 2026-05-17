@@ -46,6 +46,27 @@
 		};
 	}
 
+	function createDrawInfo() {
+		return {
+			drawCellBase: function() {
+				// noop
+			},
+			getIcon: function() {
+				return null;
+			},
+		};
+	}
+
+	function createPercentStyle() {
+		return new PercentCompleteBarStyle({
+			barColor: function(rate) {
+				return rate >= 100 ? 'full' : 'partial';
+			},
+			barBgColor: 'bg',
+			barHeight: 4,
+		});
+	}
+
 	describe('PercentCompleteBarColumn', function() {
 		it('exposes constructor options and clones them', function() {
 			const formatter = function(value) {
@@ -76,24 +97,11 @@
 					return `${value}%`;
 				},
 			});
-			const style = new PercentCompleteBarStyle({
-				barColor: function(rate) {
-					return rate >= 100 ? 'full' : 'partial';
-				},
-				barBgColor: 'bg',
-				barHeight: 4,
-			});
+			const style = createPercentStyle();
 			const context = createContext();
 			const helper = createHelper(drawCalls);
 
-			column.drawInternal(20, context, style, helper, {}, {
-				drawCellBase: function() {
-					// noop
-				},
-				getIcon: function() {
-					return null;
-				},
-			});
+			column.drawInternal(20, context, style, helper, {}, createDrawInfo());
 
 			expect(drawCalls[0][0]).toEqual('text');
 			expect(drawCalls[0][1]).toEqual('20%');
@@ -121,6 +129,12 @@
 					return null;
 				},
 			});
+			expect(drawCalls[0][0]).toEqual('text');
+			expect(drawCalls[0][1]).toEqual('not-number');
+			expect(drawCalls.filter(function(call) {
+				return call[0] === 'rect';
+			})).toEqual([]);
+
 			column.drawInternal(50, context, new PercentCompleteBarStyle({visibility: 'hidden'}), helper, {}, {
 				drawCellBase: function() {
 					// noop

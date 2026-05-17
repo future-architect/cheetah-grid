@@ -47,20 +47,118 @@
 			},
 		};
 	}
+	function createInfo(getIcon) {
+		return {
+			drawCellBase: function() {
+				// noop
+			},
+			getIcon: getIcon || function() {
+				return null;
+			},
+		};
+	}
+	function expectActiveButtonCall(calls, context) {
+		expect(calls[0]).toEqual(['testFontLoad', '12px sans-serif', 'Ignored', context]);
+		expect(calls[1]).toEqual(['testFontLoad', '12px icon', 'I', context]);
+		expect(calls[2][0]).toEqual('button');
+		expect(calls[2][1]).toEqual('Ignored');
+		expect(calls[2][2]).toBe(context);
+		expect(calls[2][3]).toMatchObject({
+			bgColor: 'button',
+			color: 'ink',
+			font: '12px sans-serif',
+			padding: 2,
+			shadow: {
+				color: 'rgba(0, 0, 0, 0.48)',
+				blur: 6,
+				offsetY: 3,
+			},
+			textOverflow: 'ellipsis',
+			icons: [{
+				content: 'I',
+				font: '12px icon',
+			}],
+		});
+	}
+	function expectCheckControlCall(calls, context) {
+		expect(calls).toEqual([[
+			'checkbox',
+			true,
+			context,
+			{
+				textAlign: 'center',
+				textBaseline: 'middle',
+				borderColor: 'border',
+				checkBgColor: 'checked',
+				uncheckBgColor: 'unchecked',
+				padding: 3,
+				animElapsedTime: 0.25,
+			},
+		]]);
+	}
+	function expectRadioControlCall(calls, context) {
+		expect(calls).toEqual([[
+			'radioButton',
+			false,
+			context,
+			{
+				textAlign: 'center',
+				textBaseline: 'middle',
+				checkColor: 'check',
+				uncheckBorderColor: 'uncheckBorder',
+				checkBorderColor: 'checkBorder',
+				uncheckBgColor: 'uncheckBg',
+				checkBgColor: 'checkBg',
+				padding: 4,
+				animElapsedTime: 0.75,
+			},
+		]]);
+	}
+	function expectSelectedButtonCall(calls, context) {
+		expect(calls[0]).toEqual(['testFontLoad', undefined, 'Selected', context]);
+		expect(calls[1]).toEqual(['button', 'Selected', context, {
+			textAlign: 'center',
+			textBaseline: 'middle',
+			bgColor: 'button-bg',
+			color: undefined,
+			font: undefined,
+			padding: undefined,
+			shadow: {
+				color: 'rgba(0, 0, 0, 0.48)',
+				blur: 6,
+				offsetY: 3,
+			},
+			textOverflow: 'clip',
+			icons: undefined,
+		}]);
+	}
+	function expectMultilineTextCall(calls, context) {
+		expect(calls).toEqual([
+			['testFontLoad', '13px serif', 'A\r\nB\rC', context],
+			['multilineText', ['A', 'B', 'C'], context, {
+				textAlign: 'left',
+				textBaseline: 'top',
+				color: 'ink',
+				font: '13px serif',
+				padding: 2,
+				lineHeight: 18,
+				autoWrapText: true,
+				lineClamp: 2,
+				textOverflow: 'clip',
+				icons: undefined,
+			}],
+		]);
+	}
 
 	describe('basic column drawing', function() {
-		it('draws check and radio controls with animation state', async function() {
-			const {CHECK_COLUMN_STATE_ID, RADIO_COLUMN_STATE_ID} = await import('../../../../js/internal/symbolManager.ts');
+		it('draws check controls with animation state', async function() {
+			const {CHECK_COLUMN_STATE_ID} = await import('../../../../js/internal/symbolManager.ts');
 			const checkCalls = [];
-			const radioCalls = [];
 			const bases = [];
 			const context = createContext();
 			const grid = createGrid();
 			grid[CHECK_COLUMN_STATE_ID] = {
 				elapsed: {'1:2': 0.25},
-			};
-			grid[RADIO_COLUMN_STATE_ID] = {
-				elapsed: {'1:2': 0.75},
 			};
 
 			new types.CheckColumn().drawInternal(true, context, new styles.CheckStyle({
@@ -74,6 +172,23 @@
 					bases.push(['check', option]);
 				},
 			});
+
+			expect(bases).toEqual([
+				['check', {bgColor: 'base'}],
+			]);
+			expectCheckControlCall(checkCalls, context);
+		});
+
+		it('draws radio controls with animation state', async function() {
+			const {RADIO_COLUMN_STATE_ID} = await import('../../../../js/internal/symbolManager.ts');
+			const radioCalls = [];
+			const bases = [];
+			const context = createContext();
+			const grid = createGrid();
+			grid[RADIO_COLUMN_STATE_ID] = {
+				elapsed: {'1:2': 0.75},
+			};
+
 			new types.RadioColumn().drawInternal(false, context, new styles.RadioStyle({
 				bgColor: 'base',
 				checkColor: 'check',
@@ -89,39 +204,9 @@
 			});
 
 			expect(bases).toEqual([
-				['check', {bgColor: 'base'}],
 				['radio', {bgColor: 'base'}],
 			]);
-			expect(checkCalls).toEqual([[
-				'checkbox',
-				true,
-				context,
-				{
-					textAlign: 'center',
-					textBaseline: 'middle',
-					borderColor: 'border',
-					checkBgColor: 'checked',
-					uncheckBgColor: 'unchecked',
-					padding: 3,
-					animElapsedTime: 0.25,
-				},
-			]]);
-			expect(radioCalls).toEqual([[
-				'radioButton',
-				false,
-				context,
-				{
-					textAlign: 'center',
-					textBaseline: 'middle',
-					checkColor: 'check',
-					uncheckBorderColor: 'uncheckBorder',
-					checkBorderColor: 'checkBorder',
-					uncheckBgColor: 'uncheckBg',
-					checkBgColor: 'checkBg',
-					padding: 4,
-					animElapsedTime: 0.75,
-				},
-			]]);
+			expectRadioControlCall(radioCalls, context);
 		});
 
 		it('draws button captions with active state shadows and icons', async function() {
@@ -133,45 +218,23 @@
 				mouseActiveCell: {col: 1, row: 2},
 			};
 
-			new types.ButtonColumn({caption: 'Run'}).drawInternal('Ignored', context, new styles.ButtonStyle({
+			const style = new styles.ButtonStyle({
 				buttonBgColor: 'button',
 				color: 'ink',
 				font: '12px sans-serif',
 				padding: 2,
 				textOverflow: 'ellipsis',
-			}), createHelper(calls), grid, {
-				drawCellBase: function() {
-					// noop
-				},
-				getIcon: function() {
-					return {content: 'I', font: '12px icon'};
-				},
 			});
+			const info = createInfo(function() {
+				return {content: 'I', font: '12px icon'};
+			});
+			new types.ButtonColumn({caption: 'Run'}).drawInternal('Ignored', context, style, createHelper(calls), grid, info);
 
-			expect(calls[0]).toEqual(['testFontLoad', '12px sans-serif', 'Ignored', context]);
-			expect(calls[1]).toEqual(['testFontLoad', '12px icon', 'I', context]);
-			expect(calls[2][0]).toEqual('button');
-			expect(calls[2][1]).toEqual('Ignored');
-			expect(calls[2][2]).toBe(context);
-			expect(calls[2][3]).toMatchObject({
-				bgColor: 'button',
-				color: 'ink',
-				font: '12px sans-serif',
-				padding: 2,
-				shadow: {
-					color: 'rgba(0, 0, 0, 0.48)',
-					blur: 6,
-					offsetY: 3,
-				},
-				textOverflow: 'ellipsis',
-				icons: [{
-					content: 'I',
-					font: '12px icon',
-				}],
-			});
+			expect(calls.length).toEqual(3);
+			expectActiveButtonCall(calls, context);
 		});
 
-		it('draws button backgrounds, hidden state, and selected active state', async function() {
+		it('draws button background and skips caption drawing when hidden', async function() {
 			const {BUTTON_COLUMN_STATE_ID} = await import('../../../../js/internal/symbolManager.ts');
 			const bases = [];
 			const calls = [];
@@ -190,6 +253,21 @@
 					return null;
 				},
 			});
+
+			expect(bases).toEqual([
+				{bgColor: 'hidden-bg'},
+			]);
+			expect(calls).toEqual([]);
+		});
+
+		it('draws selected button captions with active state shadows', async function() {
+			const {BUTTON_COLUMN_STATE_ID} = await import('../../../../js/internal/symbolManager.ts');
+			const bases = [];
+			const calls = [];
+			const context = createContext();
+			const grid = createGrid();
+			grid[BUTTON_COLUMN_STATE_ID] = {};
+
 			new types.ButtonColumn().drawInternal('Selected', context, new styles.ButtonStyle({
 				bgColor: 'base-bg',
 				buttonBgColor: 'button-bg',
@@ -203,25 +281,9 @@
 			});
 
 			expect(bases).toEqual([
-				{bgColor: 'hidden-bg'},
 				{bgColor: 'base-bg'},
 			]);
-			expect(calls[0]).toEqual(['testFontLoad', undefined, 'Selected', context]);
-			expect(calls[1]).toEqual(['button', 'Selected', context, {
-				textAlign: 'center',
-				textBaseline: 'middle',
-				bgColor: 'button-bg',
-				color: undefined,
-				font: undefined,
-				padding: undefined,
-				shadow: {
-					color: 'rgba(0, 0, 0, 0.48)',
-					blur: 6,
-					offsetY: 3,
-				},
-				textOverflow: 'clip',
-				icons: undefined,
-			}]);
+			expectSelectedButtonCall(calls, context);
 		});
 
 		it('draws multiline text from normalized line breaks', function() {
@@ -245,21 +307,7 @@
 				},
 			});
 
-			expect(calls).toEqual([
-				['testFontLoad', '13px serif', 'A\r\nB\rC', context],
-				['multilineText', ['A', 'B', 'C'], context, {
-					textAlign: 'left',
-					textBaseline: 'top',
-					color: 'ink',
-					font: '13px serif',
-					padding: 2,
-					lineHeight: 18,
-					autoWrapText: true,
-					lineClamp: 2,
-					textOverflow: 'clip',
-					icons: undefined,
-				}],
-			]);
+			expectMultilineTextCall(calls, context);
 		});
 
 		it('draws multiline backgrounds and skips hidden text', function() {

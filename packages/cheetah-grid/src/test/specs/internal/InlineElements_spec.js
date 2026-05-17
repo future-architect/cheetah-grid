@@ -59,6 +59,39 @@
 			offsetBottom: 4,
 		};
 	}
+	async function createLoadedInlineImage() {
+		const {InlineImage} = await import('../../../js/element/InlineImage.ts');
+		const inline = new InlineImage({
+			src: IMAGE_SRC,
+			imageLeft: 1,
+			imageTop: 2,
+			imageWidth: 3,
+			imageHeight: 4,
+		});
+		const img = {width: 30, height: 20};
+		inline._inlineImg = img;
+		return {img, inline};
+	}
+	function expectInlineIconDrawCall(option) {
+		expect(option.calls).toEqual([[
+			'fillTextRect',
+			true,
+			'I',
+			1,
+			2,
+			20,
+			10,
+			{
+				offset: 1,
+				padding: {
+					left: 6,
+					right: 2,
+					top: 9,
+					bottom: 4,
+				},
+			},
+		]]);
+	}
 
 	describe('inline element classes', function() {
 		it('draws InlineIcon content with offsets and restores letter spacing', async function() {
@@ -82,24 +115,7 @@
 			inline.draw(option);
 
 			expect(option.ctx.canvas.style.letterSpacing).toEqual('');
-			expect(option.calls).toEqual([[
-				'fillTextRect',
-				true,
-				'I',
-				1,
-				2,
-				20,
-				10,
-				{
-					offset: 1,
-					padding: {
-						left: 6,
-						right: 2,
-						top: 9,
-						bottom: 4,
-					},
-				},
-			]]);
+			expectInlineIconDrawCall(option);
 		});
 
 		it('measures InlineIcon content with a loaded font', async function() {
@@ -190,19 +206,9 @@
 			}]);
 		});
 
-		it('draws InlineImage from the loaded image and reports fallback image size', async function() {
-			const {InlineImage} = await import('../../../js/element/InlineImage.ts');
-			const inline = new InlineImage({
-				src: IMAGE_SRC,
-				imageLeft: 1,
-				imageTop: 2,
-				imageWidth: 3,
-				imageHeight: 4,
-			});
-			const img = {width: 30, height: 20};
+		it('reports InlineImage size and metadata from the loaded image', async function() {
+			const {inline} = await createLoadedInlineImage();
 			const option = createDrawOption();
-
-			inline._inlineImg = img;
 
 			expect(inline.width({ctx: option.ctx})).toEqual(30);
 			expect(inline.font()).toEqual(null);
@@ -210,6 +216,11 @@
 			expect(inline.canDraw()).toEqual(true);
 			expect(inline.canBreak()).toEqual(false);
 			expect(`${inline}`).toEqual('');
+		});
+
+		it('draws InlineImage from the loaded image', async function() {
+			const {img, inline} = await createLoadedInlineImage();
+			const option = createDrawOption();
 
 			inline.draw(option);
 

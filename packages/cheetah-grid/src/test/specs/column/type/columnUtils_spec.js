@@ -1,6 +1,23 @@
 /*eslint prefer-arrow-callback:"off", object-shorthand:"off"*/
 'use strict';
 (function() {
+	function iconProps(props) {
+		return Object.assign({
+			content: undefined,
+			font: undefined,
+			color: undefined,
+			width: undefined,
+			src: undefined,
+			svg: undefined,
+			name: undefined,
+			path: undefined,
+			tagName: undefined,
+			isLiga: undefined,
+			offsetTop: undefined,
+			offsetLeft: undefined,
+		}, props);
+	}
+
 	describe('columnUtils', function() {
 		it('loads normalized icons and tests icon fonts', async function() {
 			const columnUtils = await import('../../../../js/columns/type/columnUtils.ts');
@@ -28,20 +45,11 @@
 			});
 
 			expect(calls).toEqual([['16px sans-serif', 'A', context]]);
-			expect(callbackIcons).toEqual([{
+			expect(callbackIcons).toEqual([iconProps({
 				content: 'A',
 				font: '16px sans-serif',
 				color: 'red',
-				width: undefined,
-				src: undefined,
-				svg: undefined,
-				name: undefined,
-				path: undefined,
-				tagName: undefined,
-				isLiga: undefined,
-				offsetTop: undefined,
-				offsetLeft: undefined,
-			}]);
+			})]);
 			expect(callbackContext).toBe(context);
 		});
 
@@ -69,20 +77,9 @@
 			expect(callbacks).toEqual([
 				[undefined, context],
 				[
-					[{
-						content: undefined,
-						font: undefined,
-						color: undefined,
-						width: undefined,
-						src: undefined,
-						svg: undefined,
+					[iconProps({
 						name: 'arrow_upward',
-						path: undefined,
-						tagName: undefined,
-						isLiga: undefined,
-						offsetTop: undefined,
-						offsetLeft: undefined,
-					}],
+					})],
 					currentContext,
 				],
 			]);

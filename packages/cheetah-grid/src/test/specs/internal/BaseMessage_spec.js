@@ -40,14 +40,18 @@
 			const message = new TestMessage(grid);
 
 			message.attachMessageElement(1, 2, {type: 'error', message: 'Error'});
+			expect(createCount).toEqual(1);
+			expect(element.attaches).toEqual([[grid, 1, 2, {type: 'error', message: 'Error'}]]);
+
 			message.moveMessageElement(1, 2);
+			expect(element.moves).toEqual([[grid, 1, 2]]);
+
 			message.detachMessageElement();
+			expect(element.detaches).toEqual(1);
+
 			message.drawCellMessage({type: 'error', message: 'Draw'});
 
 			expect(createCount).toEqual(1);
-			expect(element.attaches).toEqual([[grid, 1, 2, {type: 'error', message: 'Error'}]]);
-			expect(element.moves).toEqual([[grid, 1, 2]]);
-			expect(element.detaches).toEqual(1);
 			expect(message.lastDraw).toEqual({type: 'error', message: 'Draw'});
 		});
 

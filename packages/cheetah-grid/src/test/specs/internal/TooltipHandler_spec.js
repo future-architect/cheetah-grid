@@ -52,10 +52,15 @@
 			handler._tooltipInstances['overflow-text'] = tooltip;
 
 			handler._attach(1, 2);
+			expect(tooltip.attaches).toEqual([[1, 2, 'Overflow']]);
 			handler._move(1, 2);
+			expect(tooltip.moves).toEqual([[1, 2]]);
 			handler._move(3, 2);
+			expect(tooltip.moves).toEqual([[1, 2]]);
 			handler._detach();
+			expect(tooltip.detaches).toEqual(1);
 			handler._detach();
+			expect(tooltip.detaches).toEqual(1);
 
 			expect(tooltip.attaches).toEqual([[1, 2, 'Overflow']]);
 			expect(tooltip.moves).toEqual([[1, 2]]);
@@ -71,13 +76,16 @@
 			handler._tooltipInstances['overflow-text'] = tooltip;
 
 			handler._attach(1, 2);
+			expect(tooltip.attaches).toEqual([[1, 2, 'Overflow']]);
+			expect(tooltip.detaches).toEqual(0);
+
 			handler._attach(4, 4);
 
 			expect(tooltip.attaches).toEqual([[1, 2, 'Overflow']]);
 			expect(tooltip.detaches).toEqual(1);
 		});
 
-		it('responds to grid mouse, selection, scroll, and changed-value events', async function() {
+		it('responds to grid mouse, selection, and scroll events', async function() {
 			const {TooltipHandler} = await import('../../../js/tooltip/TooltipHandler.ts');
 			const {LG_EVENT_TYPE} = await import('../../../js/list-grid/LG_EVENT_TYPE.ts');
 			const overflowText = {'1:2': 'Overflow'};
@@ -87,23 +95,40 @@
 			handler._tooltipInstances['overflow-text'] = tooltip;
 
 			grid.listeners[LG_EVENT_TYPE.MOUSEOVER_CELL]({col: 1, row: 2});
+			expect(tooltip.attaches).toEqual([[1, 2, 'Overflow']]);
 			grid.listeners[LG_EVENT_TYPE.SCROLL]();
+			expect(tooltip.moves).toEqual([[1, 2]]);
 			grid.listeners[LG_EVENT_TYPE.MOUSEOUT_CELL]({
 				col: 1,
 				row: 2,
 				related: {col: 1, row: 2},
 			});
+			expect(tooltip.detaches).toEqual(0);
 			grid.listeners[LG_EVENT_TYPE.SELECTED_CELL]({col: 1, row: 2});
+			expect(tooltip.detaches).toEqual(1);
 			grid.listeners[LG_EVENT_TYPE.MOUSEOVER_CELL]({col: 1, row: 2});
-			overflowText['1:2'] = null;
-			grid.listeners[LG_EVENT_TYPE.CHANGED_VALUE]({col: 1, row: 2});
-
 			expect(tooltip.attaches).toEqual([
 				[1, 2, 'Overflow'],
 				[1, 2, 'Overflow'],
 			]);
 			expect(tooltip.moves).toEqual([[1, 2]]);
-			expect(tooltip.detaches).toEqual(2);
+			expect(tooltip.detaches).toEqual(1);
+		});
+
+		it('detaches overflow tooltips when changed values remove overflow text', async function() {
+			const {TooltipHandler} = await import('../../../js/tooltip/TooltipHandler.ts');
+			const {LG_EVENT_TYPE} = await import('../../../js/list-grid/LG_EVENT_TYPE.ts');
+			const overflowText = {'1:2': 'Overflow'};
+			const grid = createGrid(overflowText);
+			const handler = new TooltipHandler(grid);
+			const tooltip = createTooltipInstance();
+			handler._tooltipInstances['overflow-text'] = tooltip;
+
+			grid.listeners[LG_EVENT_TYPE.MOUSEOVER_CELL]({col: 1, row: 2});
+			expect(tooltip.attaches).toEqual([[1, 2, 'Overflow']]);
+			overflowText['1:2'] = null;
+			grid.listeners[LG_EVENT_TYPE.CHANGED_VALUE]({col: 1, row: 2});
+			expect(tooltip.detaches).toEqual(1);
 		});
 	});
 })();

@@ -201,9 +201,26 @@
 			},
 		};
 	}
+	function createUnselectedFixture(calls) {
+		const selection = {
+			select: {col: 5, row: 5},
+			range: {
+				start: {col: 5, row: 5},
+				end: {col: 5, row: 5},
+			},
+		};
+		const grid = createGrid(calls, selection);
+		const helper = new GridCanvasHelper(grid);
+		return {
+			context: createContext(3, 3, calls, selection),
+			grid,
+			helper,
+			selection,
+		};
+	}
 
 	describe('GridCanvasHelper API', function() {
-		it('resolves theme values from the grid theme', function() {
+		it('resolves base and control theme values from the grid theme', function() {
 			const calls = [];
 			const grid = createGrid(calls);
 			const helper = new GridCanvasHelper(grid);
@@ -224,6 +241,13 @@
 			expect(helper.theme.tree.lineWidth).toEqual(2);
 			expect(helper.theme.tree.treeIcon).toEqual({path: 'M0 0h1v1z', width: 8});
 			expect(helper.theme.header.sortArrowColor).toEqual('#040');
+		});
+
+		it('resolves message and indicator theme values from the grid theme', function() {
+			const calls = [];
+			const grid = createGrid(calls);
+			const helper = new GridCanvasHelper(grid);
+
 			expect(helper.theme.messages.infoBgColor).toEqual('#050');
 			expect(helper.theme.messages.errorBgColor).toEqual('#060');
 			expect(helper.theme.messages.warnBgColor).toEqual('#070');
@@ -469,16 +493,7 @@
 
 		it('draws overflowing text with leading and trailing icons', function() {
 			const calls = [];
-			const selection = {
-				select: {col: 5, row: 5},
-				range: {
-					start: {col: 5, row: 5},
-					end: {col: 5, row: 5},
-				},
-			};
-			const grid = createGrid(calls, selection);
-			const helper = new GridCanvasHelper(grid);
-			const context = createContext(3, 3, calls, selection);
+			const {context, helper} = createUnselectedFixture(calls);
 
 			helper.text('long text that will overflow', context, {
 				padding: ['1em', '4px', '2px', '3px'],
@@ -590,16 +605,7 @@
 
 		it('draws checkbox animation colors for checked and unchecked states', function() {
 			const calls = [];
-			const selection = {
-				select: {col: 5, row: 5},
-				range: {
-					start: {col: 5, row: 5},
-					end: {col: 5, row: 5},
-				},
-			};
-			const grid = createGrid(calls, selection);
-			const helper = new GridCanvasHelper(grid);
-			const context = createContext(3, 3, calls, selection);
+			const {context, helper} = createUnselectedFixture(calls);
 
 			helper.checkbox(true, context, {
 				animElapsedTime: 0.25,
@@ -630,16 +636,7 @@
 
 		it('builds checkbox inline drawers with the provided checked color', function() {
 			const calls = [];
-			const selection = {
-				select: {col: 5, row: 5},
-				range: {
-					start: {col: 5, row: 5},
-					end: {col: 5, row: 5},
-				},
-			};
-			const grid = createGrid(calls, selection);
-			const helper = new GridCanvasHelper(grid);
-			const context = createContext(3, 3, calls, selection);
+			const {context, helper} = createUnselectedFixture(calls);
 
 			const inline = helper.buildCheckBoxInline(true, context, {
 				checkBgColor: '#112233',
@@ -660,16 +657,7 @@
 
 		it('draws checked and unchecked radio buttons with interpolated colors', function() {
 			const calls = [];
-			const selection = {
-				select: {col: 5, row: 5},
-				range: {
-					start: {col: 5, row: 5},
-					end: {col: 5, row: 5},
-				},
-			};
-			const grid = createGrid(calls, selection);
-			const helper = new GridCanvasHelper(grid);
-			const context = createContext(3, 3, calls, selection);
+			const {context, helper} = createUnselectedFixture(calls);
 
 			helper.radioButton(true, context, {
 				animElapsedTime: 0.25,
@@ -699,16 +687,7 @@
 
 		it('draws buttons with resolved background and text colors', function() {
 			const calls = [];
-			const selection = {
-				select: {col: 5, row: 5},
-				range: {
-					start: {col: 5, row: 5},
-					end: {col: 5, row: 5},
-				},
-			};
-			const grid = createGrid(calls, selection);
-			const helper = new GridCanvasHelper(grid);
-			const context = createContext(3, 3, calls, selection);
+			const {context, helper} = createUnselectedFixture(calls);
 
 			helper.button('Run', context, {
 				padding: [2, 3, 4, 5],

@@ -34,7 +34,11 @@
 
 			target.addEventListener('change', first);
 			target.addEventListener('change', second);
+			expect(target.hasListeners('change')).toEqual(true);
+
 			target.removeEventListener('change', first);
+			expect(target.hasListeners('change')).toEqual(true);
+
 			target.fireListeners('change', 1);
 
 			expect(calls).toEqual([['second', 1]]);
@@ -48,12 +52,18 @@
 			target.listen('change', function() {
 				return null;
 			});
+			expect(target.fireListeners('change')).toEqual([]);
+
 			target.listen('change', function() {
 				return undefined;
 			});
+			expect(target.fireListeners('change')).toEqual([]);
+
 			target.listen('change', function() {
 				return 0;
 			});
+			expect(target.fireListeners('change')).toEqual([0]);
+
 			target.listen('change', function() {
 				return false;
 			});

@@ -120,6 +120,19 @@
 		};
 	}
 
+	function createBranchStyle(BranchGraphStyle) {
+		return new BranchGraphStyle({
+			branchColors: function(name, index) {
+				return `${name}:${index}`;
+			},
+			branchLineWidth: 3,
+			circleSize: 10,
+			margin: 2,
+			mergeStyle: 'straight',
+			bgColor: 'base',
+		});
+	}
+
 	describe('BranchGraphColumn', function() {
 		it('clones options and clears cached branch timelines', async function() {
 			const {BRANCH_GRAPH_COLUMN_STATE_ID} = await import('../../../../js/internal/symbolManager.ts');
@@ -156,16 +169,7 @@
 			const helper = createHelper(calls);
 			const grid = createGrid(rows, helper);
 			const column = new BranchGraphColumn({start: 'top'});
-			const style = new BranchGraphStyle({
-				branchColors: function(name, index) {
-					return `${name}:${index}`;
-				},
-				branchLineWidth: 3,
-				circleSize: 10,
-				margin: 2,
-				mergeStyle: 'straight',
-				bgColor: 'base',
-			});
+			const style = createBranchStyle(BranchGraphStyle);
 			const info = {
 				drawCellBase: function(option) {
 					bases.push(option || {});
@@ -173,14 +177,16 @@
 			};
 
 			column.drawInternal(rows[1].graph, createContext(1), style, helper, grid, info);
+			expect(bases).toEqual([{bgColor: 'base'}]);
+			expect(calls).toContainEqual(['moveTo', 17, 40]);
+			expect(calls).toContainEqual(['lineTo', 17, 80]);
+
 			column.drawInternal(rows[2].graph, createContext(2), style, helper, grid, info);
 
 			expect(bases).toEqual([
 				{bgColor: 'base'},
 				{bgColor: 'base'},
 			]);
-			expect(calls).toContainEqual(['moveTo', 17, 40]);
-			expect(calls).toContainEqual(['lineTo', 17, 80]);
 			expect(calls).toContainEqual(['stroke', 'main:0', 3, 'round']);
 			expect(calls).toContainEqual(['arc', 17, 80, 5, 0, Math.PI * 2, true]);
 			expect(calls).toContainEqual(['fill', 'main:0']);

@@ -84,9 +84,9 @@
 
 			input.value = 'changed';
 			element.doChangeValue();
+			expect(grid.changes).toEqual([[1, 2, 'changed']]);
 			element.detach(true);
 
-			expect(grid.changes).toEqual([[1, 2, 'changed']]);
 			expect(grid.invalidates).toEqual([{
 				start: {col: 1, row: 2},
 				end: {col: 1, row: 2},
@@ -97,7 +97,7 @@
 			element.dispose();
 		});
 
-		it('commits and moves on enter and tab keys', async function() {
+		it('commits and moves on enter keys', async function() {
 			const {InlineInputElement} = await import('../../../../js/columns/action/internal/InlineInputElement.ts');
 			const grid = createGrid();
 			const element = new InlineInputElement();
@@ -107,19 +107,99 @@
 				setTimeout(resolve);
 			});
 			const firstInput = grid.host.querySelector('input');
+			expect(firstInput.value).toEqual('first');
 			firstInput.value = 'enter';
 			firstInput.dispatchEvent(keyEvent(13));
+			expect(grid.changes).toEqual([[1, 2, 'enter']]);
+			expect(grid.moves).toEqual([13]);
+
+			element.dispose();
+		});
+
+		it('commits and moves on tab keys', async function() {
+			const {InlineInputElement} = await import('../../../../js/columns/action/internal/InlineInputElement.ts');
+			const grid = createGrid();
+			const element = new InlineInputElement();
 
 			element.attach(grid, {}, 1, 2, 'second');
+			await new Promise(function(resolve) {
+				setTimeout(resolve);
+			});
 			const secondInput = grid.host.querySelector('input');
+			expect(secondInput.value).toEqual('second');
 			secondInput.value = 'tab';
 			secondInput.dispatchEvent(keyEvent(9));
 
-			expect(grid.changes).toEqual([
-				[1, 2, 'enter'],
-				[1, 2, 'tab'],
-			]);
-			expect(grid.moves).toEqual([13, 9]);
+			expect(grid.changes).toEqual([[1, 2, 'tab']]);
+			expect(grid.moves).toEqual([9]);
+
+			element.dispose();
+		});
+
+		it('ignores enter keys while the input is still attaching', async function() {
+			const {InlineInputElement} = await import('../../../../js/columns/action/internal/InlineInputElement.ts');
+			const grid = createGrid();
+			const element = new InlineInputElement();
+
+			element.attach(grid, {}, 1, 2, 'start');
+			const input = grid.host.querySelector('input');
+			expect(input.value).toEqual('start');
+
+			input.value = 'ignored';
+			input.dispatchEvent(keyEvent(13));
+			expect(grid.changes).toEqual([]);
+			expect(grid.moves).toEqual([]);
+			expect(grid.host.contains(input)).toEqual(true);
+
+			element.dispose();
+		});
+
+		it('keeps composing input active and commits the value on blur', async function() {
+			const {InlineInputElement} = await import('../../../../js/columns/action/internal/InlineInputElement.ts');
+			const grid = createGrid();
+			const element = new InlineInputElement();
+
+			element.attach(grid, {}, 1, 2, 'start');
+			await new Promise(function(resolve) {
+				setTimeout(resolve);
+			});
+			const input = grid.host.querySelector('input');
+			expect(input.value).toEqual('start');
+
+			input.dispatchEvent(new CompositionEvent('compositionstart', {bubbles: true}));
+			expect(input.classList.contains('composition')).toEqual(true);
+			input.value = 'composing';
+			input.dispatchEvent(keyEvent(13));
+			expect(grid.changes).toEqual([]);
+			expect(grid.host.contains(input)).toEqual(true);
+
+			input.dispatchEvent(new CompositionEvent('compositionend', {bubbles: true}));
+			expect(input.classList.contains('composition')).toEqual(false);
+			input.dispatchEvent(new FocusEvent('blur', {bubbles: true}));
+			expect(grid.changes).toEqual([[1, 2, 'composing']]);
+			expect(grid.host.children.length).toEqual(0);
+
+			element.dispose();
+		});
+
+		it('ignores tab keys when tab movement is disabled', async function() {
+			const {InlineInputElement} = await import('../../../../js/columns/action/internal/InlineInputElement.ts');
+			const grid = createGrid();
+			const element = new InlineInputElement();
+			grid.keyboardOptions.moveCellOnTab = false;
+
+			element.attach(grid, {}, 1, 2, 'start');
+			await new Promise(function(resolve) {
+				setTimeout(resolve);
+			});
+			const input = grid.host.querySelector('input');
+			expect(input.value).toEqual('start');
+
+			input.value = 'ignored';
+			input.dispatchEvent(keyEvent(9));
+			expect(grid.changes).toEqual([]);
+			expect(grid.moves).toEqual([]);
+			expect(grid.host.contains(input)).toEqual(true);
 
 			element.dispose();
 		});

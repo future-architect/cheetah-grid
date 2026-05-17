@@ -79,6 +79,21 @@
 			},
 		};
 	}
+	function expectRadioGroupToggle(grid, groups) {
+		expect(groups).toEqual([{
+			grid,
+			col: 1,
+			row: 2,
+		}]);
+		expect(grid.values).toMatchObject({
+			'1:2': true,
+			'1:3': false,
+		});
+		expect(grid.changes).toEqual([
+			[1, 2, true],
+			[1, 3, false],
+		]);
+	}
 
 	describe('RadioEditor', function() {
 		it('uses group definitions to check the target and clear sibling cells', async function() {
@@ -98,39 +113,22 @@
 
 			editor.bindGridEvent(grid, '1:2');
 			grid.listeners[DG_EVENT_TYPE.MOUSEOVER_CELL]({col: 1, row: 2});
-			grid.listeners[DG_EVENT_TYPE.CLICK_CELL]({col: 1, row: 2});
-			grid.listeners[DG_EVENT_TYPE.MOUSEOUT_CELL]({col: 1, row: 2});
-
-			expect(groups).toEqual([{
-				grid,
-				col: 1,
-				row: 2,
-			}]);
-			expect(grid.values).toMatchObject({
-				'1:2': true,
-				'1:3': false,
-			});
-			expect(grid.changes).toEqual([
-				[1, 2, true],
-				[1, 3, false],
-			]);
 			expect(grid[RADIO_COLUMN_STATE_ID].mouseActiveCell).toEqual({col: 1, row: 2});
 			expect(grid.element.style.cursor).toEqual('pointer');
-			expect(grid.invalidates[0]).toEqual({
-				start: {col: 1, row: 2},
-				end: {col: 1, row: 2},
-			});
-			expect(grid.invalidates).toContainEqual({
-				start: {col: 1, row: 3},
-				end: {col: 1, row: 3},
-			});
+			expect(grid.invalidates[0]).toEqual(grid.getCellRange(1, 2));
+
+			grid.listeners[DG_EVENT_TYPE.CLICK_CELL]({col: 1, row: 2});
+			expectRadioGroupToggle(grid, groups);
+
+			grid.listeners[DG_EVENT_TYPE.MOUSEOUT_CELL]({col: 1, row: 2});
+			expect(grid.element.style.cursor).toEqual('pointer');
+			expect(grid.invalidates).toContainEqual(grid.getCellRange(1, 3));
 		});
 
-		it('handles paste values with checkAction and rejects non-boolean values', async function() {
+		it('handles bound paste values with checkAction', async function() {
 			const {DG_EVENT_TYPE} = await import('../../../../js/core/DG_EVENT_TYPE.ts');
 			const grid = createGrid();
 			const checks = [];
-			const rejected = [];
 			const editor = new actions.RadioEditor({
 				checkAction: function(record, cell) {
 					checks.push([record, cell.col, cell.row, cell.grid]);
@@ -146,19 +144,28 @@
 				normalizeValue: 'true',
 				event: trueEvent,
 			});
+			expect(checks).toEqual([[grid.records[2], 1, 2, grid]]);
+			expect(trueEvent).toMatchObject({prevented: true, stopped: true});
+		});
+
+		it('accepts false range paste values and rejects non-boolean values', function() {
+			const grid = createGrid();
+			const rejected = [];
+			const editor = new actions.RadioEditor();
+
 			editor.onPasteCellRangeBox(grid, {col: 1, row: 2}, 'false', {
 				reject: function() {
 					rejected.push('false');
 				},
 			});
+			expect(rejected).toEqual([]);
+
 			editor.onPasteCellRangeBox(grid, {col: 1, row: 2}, 'maybe', {
 				reject: function() {
 					rejected.push('maybe');
 				},
 			});
 
-			expect(checks).toEqual([[grid.records[2], 1, 2, grid]]);
-			expect(trueEvent).toMatchObject({prevented: true, stopped: true});
 			expect(rejected).toEqual(['maybe']);
 		});
 	});

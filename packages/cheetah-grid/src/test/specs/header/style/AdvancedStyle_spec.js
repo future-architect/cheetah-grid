@@ -5,7 +5,7 @@
 	const styles = cheetahGrid.headers.style;
 
 	describe('advanced header styles', function() {
-		it('fires change events for text and multiline style setters', function() {
+		it('fires change events for text style setters', function() {
 			const style = new styles.Style();
 			const calls = [];
 
@@ -17,53 +17,46 @@
 			style.font = '12px sans-serif';
 			style.padding = 4;
 			style.textOverflow = 'clip';
-			style.lineHeight = 18;
-			style.autoWrapText = true;
-			style.lineClamp = 2;
-			style.multiline = true;
 
 			expect(style.color).toEqual('ink');
 			expect(style.font).toEqual('12px sans-serif');
 			expect(style.padding).toEqual(4);
 			expect(style.textOverflow).toEqual('clip');
+			expect(calls).toEqual(['change', 'change', 'change', 'change']);
+		});
+
+		it('fires change events for multiline style setters', function() {
+			const style = new styles.Style();
+			const calls = [];
+
+			style.listen(styles.BaseStyle.EVENT_TYPE.CHANGE_STYLE, function() {
+				calls.push('change');
+			});
+
+			style.lineHeight = 18;
+			style.autoWrapText = true;
+			style.lineClamp = 2;
+			style.multiline = true;
+
 			expect(style.lineHeight).toEqual(18);
 			expect(style.autoWrapText).toEqual(true);
 			expect(style.lineClamp).toEqual(2);
 			expect(style.multiline).toEqual(true);
-			expect(calls).toEqual([
-				'change',
-				'change',
-				'change',
-				'change',
-				'change',
-				'change',
-				'change',
-				'change',
-			]);
+			expect(calls).toEqual(['change', 'change', 'change', 'change']);
 		});
 
-		it('clones check and multiline header styles independently', function() {
+		it('clones check header styles independently', function() {
 			const check = new styles.CheckHeaderStyle({
 				borderColor: 'border',
 				checkBgColor: 'checked',
 				uncheckBgColor: 'unchecked',
 				padding: 2,
 			});
-			const multiline = new styles.MultilineTextHeaderStyle({
-				color: 'ink',
-				lineHeight: 20,
-				autoWrapText: true,
-				lineClamp: 3,
-			});
 			const checkClone = check.clone();
-			const multilineClone = multiline.clone();
 
 			checkClone.borderColor = 'cloneBorder';
 			checkClone.checkBgColor = 'cloneChecked';
 			checkClone.uncheckBgColor = 'cloneUnchecked';
-			multilineClone.lineHeight = 24;
-			multilineClone.autoWrapText = false;
-			multilineClone.lineClamp = 1;
 
 			expect(check.borderColor).toEqual('border');
 			expect(check.checkBgColor).toEqual('checked');
@@ -72,6 +65,21 @@
 			expect(checkClone.borderColor).toEqual('cloneBorder');
 			expect(checkClone.checkBgColor).toEqual('cloneChecked');
 			expect(checkClone.uncheckBgColor).toEqual('cloneUnchecked');
+		});
+
+		it('clones multiline header styles independently', function() {
+			const multiline = new styles.MultilineTextHeaderStyle({
+				color: 'ink',
+				lineHeight: 20,
+				autoWrapText: true,
+				lineClamp: 3,
+			});
+			const multilineClone = multiline.clone();
+
+			multilineClone.lineHeight = 24;
+			multilineClone.autoWrapText = false;
+			multilineClone.lineClamp = 1;
+
 			expect(multiline.color).toEqual('ink');
 			expect(multiline.lineHeight).toEqual(20);
 			expect(multiline.autoWrapText).toEqual(true);

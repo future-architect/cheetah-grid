@@ -52,6 +52,30 @@
 		}
 		return arr;
 	}
+	function createSmallAnswerCanvas() {
+		const rows = repeat([24], 10);
+		const cols = repeat([80], 3);
+		const canvasHelper = window.createCanvasHelper(grid.canvas.width, grid.canvas.height);
+		const ctx = canvasHelper.context;
+		const canvas = canvasHelper.canvas;
+		const gridHelper = canvasHelper.createGridHelper(cols, rows);
+
+		canvasHelper.fillRect('#F6f6f6');
+		gridHelper.fillRect('white');
+		gridHelper.lineAll(1);
+		ctx.font = '10px Arial';
+		ctx.fillStyle = 'blue';
+		ctx.textAlign = 'left';
+		ctx.textBaseline = 'top';
+		for (let row = 0; row < rows.length; row++) {
+			for (let col = 0; col < cols.length; col++) {
+				gridHelper.text('[' + col + ':' + row + ']', col, row, {
+					offset: 3
+				});
+			}
+		}
+		return canvas;
+	}
 
 	describe('DrawGrid draw image', function() {
 
@@ -94,43 +118,11 @@
 			grid.colCount = 3;
 			grid.invalidate();
 
-			function createAnswerCanvas() {
-				const rows = repeat([24], 10);
-				const cols = repeat([80], 3);
-
-
-				const canvasHelper = window.createCanvasHelper(grid.canvas.width, grid.canvas.height);
-				const ctx = canvasHelper.context;
-				const canvas = canvasHelper.canvas;
-
-				//全体塗りつぶし
-				canvasHelper.fillRect('#F6f6f6');
-
-				const gridHelper = canvasHelper.createGridHelper(cols, rows);
-
-				//内部塗りつぶし
-				gridHelper.fillRect('white');
-
-				//罫線
-				gridHelper.lineAll(1);
-
-				//TEXT
-				ctx.font = '10px Arial';
-				ctx.fillStyle = 'blue';
-				ctx.textAlign = 'left';
-				ctx.textBaseline = 'top';
-
-				for (let row = 0; row < rows.length; row++) {
-					for (let col = 0; col < cols.length; col++) {
-						gridHelper.text('[' + col + ':' + row + ']', col, row, {
-							offset: 3
-						});
-					}
-				}
-				return canvas;
-			}
-			const canvas = createAnswerCanvas();
-			expect(grid.canvas).toMatchImage(canvas, {tolerance: 50, delta: '12%', blurLevel: 1});
+			expect(grid.canvas).toMatchImage(createSmallAnswerCanvas(), {
+				tolerance: 50,
+				delta: '12%',
+				blurLevel: 1,
+			});
 		});
 	});
 

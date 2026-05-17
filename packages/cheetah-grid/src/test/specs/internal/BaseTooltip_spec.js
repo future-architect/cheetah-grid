@@ -37,12 +37,15 @@
 			const tooltip = new TestTooltip(grid);
 
 			tooltip.attachTooltipElement(1, 2, 'Overflow');
+			expect(createCount).toEqual(1);
+			expect(element.attaches).toEqual([[grid, 1, 2, 'Overflow']]);
+
 			tooltip.moveTooltipElement(1, 2);
+			expect(element.moves).toEqual([[grid, 1, 2]]);
+
 			tooltip.detachTooltipElement();
 
 			expect(createCount).toEqual(1);
-			expect(element.attaches).toEqual([[grid, 1, 2, 'Overflow']]);
-			expect(element.moves).toEqual([[grid, 1, 2]]);
 			expect(element.detaches).toEqual(1);
 		});
 

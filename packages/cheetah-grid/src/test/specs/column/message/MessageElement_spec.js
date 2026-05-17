@@ -104,6 +104,7 @@
 			const prepared = prepareElement(element);
 
 			element.attach(grid, 2, 3, {type: 'info', message: 'Hello'});
+			expect(grid.host.contains(prepared.root)).toEqual(true);
 			targetRect.value = rect(10, 30, 40, 30);
 			element.move(grid, 2, 3);
 

@@ -28,6 +28,68 @@
 			},
 		};
 	}
+	function createInfo(bases) {
+		return {
+			drawCellBase: function(option) {
+				if (bases) {
+					bases.push(option);
+				}
+			},
+			getIcon: function() {
+				return null;
+			},
+		};
+	}
+	function expectSelectedMenuCalls(calls, context) {
+		expect(calls[0]).toEqual(['testFontLoad', '12px sans-serif', 'Alpha', context]);
+		expect(calls[1]).toEqual(['text', 'Alpha', context, {
+			textAlign: 'left',
+			textBaseline: 'middle',
+			color: 'ink',
+			font: '12px sans-serif',
+			padding: [2, 28, 2, 2],
+			textOverflow: 'ellipsis',
+			icons: undefined,
+		}]);
+		expect(calls[2]).toEqual(['text', '', context, {
+			textAlign: 'right',
+			textBaseline: 'middle',
+			color: 'ink',
+			font: '12px sans-serif',
+			icons: [{
+				path: 'M0 2 5 7 10 2z',
+				width: 10,
+				color: 'rgba(0, 0, 0, .54)',
+			}],
+			padding: [2, 10, 2, 2],
+		}]);
+	}
+	function expectPlaceholderMenuCalls(calls, context) {
+		expect(calls).toEqual([
+			['testFontLoad', undefined, '', context],
+			['text', '', context, {
+				textAlign: 'left',
+				textBaseline: 'middle',
+				color: 'rgba(0, 0, 0, .38)',
+				font: undefined,
+				padding: [0, 26, 0, 0],
+				textOverflow: 'clip',
+				icons: undefined,
+			}],
+			['text', '', context, {
+				textAlign: 'right',
+				textBaseline: 'middle',
+				color: 'rgba(0, 0, 0, .38)',
+				font: undefined,
+				icons: [{
+					path: 'M0 2 5 7 10 2z',
+					width: 10,
+					color: 'rgba(0, 0, 0, .54)',
+				}],
+				padding: [0, 8, 0, 0],
+			}],
+		]);
+	}
 
 	describe('MenuColumn', function() {
 		it('normalizes options and clones with independent options', function() {
@@ -59,95 +121,41 @@
 				},
 			});
 
-			column.drawInternal('a', context, new MenuStyle({
+			const style = new MenuStyle({
 				appearance: 'menulist-button',
 				bgColor: 'base',
 				color: 'ink',
 				font: '12px sans-serif',
 				padding: 2,
 				textOverflow: 'ellipsis',
-			}), createHelper(calls), {}, {
-				drawCellBase: function(option) {
-					bases.push(option);
-				},
-				getIcon: function() {
-					return null;
-				},
 			});
+			column.drawInternal('a', context, style, createHelper(calls), {}, createInfo(bases));
 
 			expect(bases).toEqual([{bgColor: 'base'}]);
-			expect(calls[0]).toEqual(['testFontLoad', '12px sans-serif', 'Alpha', context]);
-			expect(calls[1]).toEqual(['text', 'Alpha', context, {
-				textAlign: 'left',
-				textBaseline: 'middle',
-				color: 'ink',
-				font: '12px sans-serif',
-				padding: [2, 28, 2, 2],
-				textOverflow: 'ellipsis',
-				icons: undefined,
-			}]);
-			expect(calls[2]).toEqual(['text', '', context, {
-				textAlign: 'right',
-				textBaseline: 'middle',
-				color: 'ink',
-				font: '12px sans-serif',
-				icons: [{
-					path: 'M0 2 5 7 10 2z',
-					width: 10,
-					color: 'rgba(0, 0, 0, .54)',
-				}],
-				padding: [2, 10, 2, 2],
-			}]);
+			expectSelectedMenuCalls(calls, context);
 		});
 
-		it('uses placeholder color for empty values and skips hidden cells', function() {
+		it('uses placeholder color for empty values', function() {
 			const calls = [];
 			const column = new MenuColumn();
 			const context = createContext();
 
-			column.drawInternal('', context, new MenuStyle(), createHelper(calls), {}, {
-				drawCellBase: function() {
-					// noop
-				},
-				getIcon: function() {
-					return null;
-				},
-			});
+			column.drawInternal('', context, new MenuStyle(), createHelper(calls), {}, createInfo());
+
+			expect(calls.length).toEqual(3);
+			expectPlaceholderMenuCalls(calls, context);
+		});
+
+		it('skips hidden cells after applying the base draw path only', function() {
+			const calls = [];
+			const column = new MenuColumn();
+			const context = createContext();
+
 			column.drawInternal('hidden', context, new MenuStyle({
 				visibility: 'hidden',
-			}), createHelper(calls), {}, {
-				drawCellBase: function() {
-					// noop
-				},
-				getIcon: function() {
-					return null;
-				},
-			});
+			}), createHelper(calls), {}, createInfo());
 
-			expect(calls).toEqual([
-				['testFontLoad', undefined, '', context],
-				['text', '', context, {
-					textAlign: 'left',
-					textBaseline: 'middle',
-					color: 'rgba(0, 0, 0, .38)',
-					font: undefined,
-					padding: [0, 26, 0, 0],
-					textOverflow: 'clip',
-					icons: undefined,
-				}],
-				['text', '', context, {
-					textAlign: 'right',
-					textBaseline: 'middle',
-					color: 'rgba(0, 0, 0, .38)',
-					font: undefined,
-					icons: [{
-						path: 'M0 2 5 7 10 2z',
-						width: 10,
-						color: 'rgba(0, 0, 0, .54)',
-					}],
-					padding: [0, 8, 0, 0],
-				}],
-			]);
+			expect(calls).toEqual([]);
 		});
 	});
 })();

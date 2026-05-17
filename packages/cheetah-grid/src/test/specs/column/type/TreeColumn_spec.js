@@ -130,6 +130,32 @@
 		};
 	}
 
+	function drawRootTreeColumn() {
+		const rows = createRows();
+		const grid = createGrid(rows);
+		const calls = [];
+		const bases = [];
+		const helper = createHelper(calls);
+		grid.helper = helper;
+		const column = new TreeColumn({cache: true});
+		const context = createContext(0);
+
+		column.onDrawCell(rows[0].tree, createDrawInfo(new TreeStyle({
+			color: 'ink',
+			font: '10px sans-serif',
+			lineColor: 'line',
+			lineStyle: 'solid',
+			lineWidth: 2,
+			padding: 2,
+			treeIcon: {
+				path: 'M0 0 10 5 0 10z',
+				width: 10,
+				color: 'icon',
+			},
+		}), bases), context, grid);
+		return {bases, calls, column, context, grid};
+	}
+
 	describe('TreeColumn', function() {
 		it('normalizes copy values and clones cache options', function() {
 			const column = new TreeColumn({cache: true});
@@ -168,44 +194,9 @@
 			});
 		});
 
-		it('draws tree icons, tracks icon action areas, and clears cached info', async function() {
-			const {TREE_COLUMN_STATE_ID} = await import('../../../../js/internal/symbolManager.ts');
-			const rows = createRows();
-			const grid = createGrid(rows);
-			const calls = [];
-			const bases = [];
-			const helper = createHelper(calls);
-			grid.helper = helper;
-			const column = new TreeColumn({cache: true});
-			const context = createContext(0);
+		it('draws tree icons and text with configured style', function() {
+			const {bases, calls, context} = drawRootTreeColumn();
 
-			column.onDrawCell(rows[0].tree, createDrawInfo(new TreeStyle({
-				color: 'ink',
-				font: '10px sans-serif',
-				lineColor: 'line',
-				lineStyle: 'solid',
-				lineWidth: 2,
-				padding: 2,
-				treeIcon: {
-					path: 'M0 0 10 5 0 10z',
-					width: 10,
-					color: 'icon',
-				},
-			}), bases), context, grid);
-
-			expect(grid[TREE_COLUMN_STATE_ID].cache.has('tree')).toEqual(true);
-			expect(column.drawnIconActionArea({
-				grid,
-				col: 0,
-				row: 0,
-				pointInDrawingCanvas: {x: 17, y: 35},
-			})).toEqual(true);
-			expect(column.drawnIconActionArea({
-				grid,
-				col: 0,
-				row: 0,
-				pointInDrawingCanvas: {x: 40, y: 35},
-			})).toEqual(false);
 			expect(bases).toEqual([{}]);
 			expect(calls).toContainEqual(['testFontLoad', '10px sans-serif', 'Root', context]);
 			expect(calls.filter(function(call) {
@@ -233,7 +224,25 @@
 					icons: undefined,
 				}],
 			]);
+		});
 
+		it('tracks tree icon action areas and clears cached info', async function() {
+			const {TREE_COLUMN_STATE_ID} = await import('../../../../js/internal/symbolManager.ts');
+			const {column, grid} = drawRootTreeColumn();
+
+			expect(grid[TREE_COLUMN_STATE_ID].cache.has('tree')).toEqual(true);
+			expect(column.drawnIconActionArea({
+				grid,
+				col: 0,
+				row: 0,
+				pointInDrawingCanvas: {x: 17, y: 35},
+			})).toEqual(true);
+			expect(column.drawnIconActionArea({
+				grid,
+				col: 0,
+				row: 0,
+				pointInDrawingCanvas: {x: 40, y: 35},
+			})).toEqual(false);
 			column.clearCache(grid);
 			expect(grid[TREE_COLUMN_STATE_ID].cache).toBeUndefined();
 		});

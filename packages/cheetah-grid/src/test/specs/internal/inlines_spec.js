@@ -2,6 +2,50 @@
 /*eslint prefer-arrow-callback:"off", object-shorthand:"off"*/
 'use strict';
 (function() {
+	function createDrawerContext(calls) {
+		return {
+			textAlign: 'left',
+			textBaseline: 'top',
+			save: function() {
+				calls.push(['save']);
+			},
+			restore: function() {
+				calls.push(['restore']);
+			},
+			beginPath: function() {
+				calls.push(['beginPath']);
+			},
+			rect: function(left, top, width, height) {
+				calls.push(['rect', left, top, width, height]);
+			},
+			clip: function() {
+				calls.push(['clip']);
+			},
+			translate: function(x, y) {
+				calls.push(['translate', x, y]);
+			},
+			scale: function(x, y) {
+				calls.push(['scale', x, y]);
+			},
+			fill: function(path) {
+				calls.push(['fill', path instanceof Path2D]);
+			},
+		};
+	}
+
+	function createInlineDrawOptions(ctx) {
+		return {
+			ctx,
+			canvashelper: {},
+			rect: {left: 1, top: 2, width: 20, height: 20, right: 21, bottom: 22},
+			offset: 0,
+			offsetLeft: 0,
+			offsetRight: 0,
+			offsetTop: 0,
+			offsetBottom: 0,
+		};
+	}
+
 	describe('inlines', function() {
 		it('wraps strings and keeps inline instances unchanged', async function() {
 			const inlines = await import('../../../js/element/inlines.ts');
@@ -51,46 +95,10 @@
 				height: 10,
 			});
 			const inline = inlines.iconOf({name: iconName, width: 10});
-			const ctx = {
-				textAlign: 'left',
-				textBaseline: 'top',
-				save: function() {
-					calls.push(['save']);
-				},
-				restore: function() {
-					calls.push(['restore']);
-				},
-				beginPath: function() {
-					calls.push(['beginPath']);
-				},
-				rect: function(left, top, width, height) {
-					calls.push(['rect', left, top, width, height]);
-				},
-				clip: function() {
-					calls.push(['clip']);
-				},
-				translate: function(x, y) {
-					calls.push(['translate', x, y]);
-				},
-				scale: function(x, y) {
-					calls.push(['scale', x, y]);
-				},
-				fill: function(path) {
-					calls.push(['fill', path instanceof Path2D]);
-				},
-			};
+			const ctx = createDrawerContext(calls);
 
 			expect(inline).toBeInstanceOf(InlineDrawer);
-			inline.draw({
-				ctx,
-				canvashelper: {},
-				rect: {left: 1, top: 2, width: 20, height: 20, right: 21, bottom: 22},
-				offset: 0,
-				offsetLeft: 0,
-				offsetRight: 0,
-				offsetTop: 0,
-				offsetBottom: 0,
-			});
+			inline.draw(createInlineDrawOptions(ctx));
 
 			expect(calls).toEqual([
 				['save'],

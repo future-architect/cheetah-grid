@@ -44,24 +44,69 @@
 			expect(branch.branchColors('main', 3)).toEqual('#979797');
 		});
 
-		it('clones icon, number, image, menu, percent, radio, tree, and branch graph styles independently', async function() {
-			const {BranchGraphStyle} = await import('../../../../js/columns/style/BranchGraphStyle.ts');
+		it('clones icon and number styles independently', function() {
 			const icon = new styles.IconStyle({
 				color: 'ink',
 			});
 			const number = new styles.NumberStyle({
 				color: 'num',
 			});
+
+			const iconClone = icon.clone();
+			expect(iconClone).not.toBe(icon);
+			const numberClone = number.clone();
+			expect(numberClone).not.toBe(number);
+
+			iconClone.color = 'cloneInk';
+			numberClone.textAlign = 'left';
+
+			expect(icon.textAlign).toEqual('center');
+			expect(icon.color).toEqual('ink');
+			expect(iconClone.color).toEqual('cloneInk');
+			expect(number.textAlign).toEqual('right');
+			expect(number.color).toEqual('num');
+			expect(numberClone.textAlign).toEqual('left');
+		});
+
+		it('clones image styles independently', function() {
 			const image = new styles.ImageStyle({
 				imageSizing: 'keep-aspect-ratio',
 				margin: 8,
 			});
+			const imageClone = image.clone();
+			expect(imageClone).not.toBe(image);
+
+			imageClone.margin = 9;
+			imageClone.imageSizing = undefined;
+
+			expect(image.margin).toEqual(8);
+			expect(image.imageSizing).toEqual('keep-aspect-ratio');
+			expect(imageClone.margin).toEqual(9);
+			expect(imageClone.imageSizing).toBeUndefined();
+		});
+
+		it('clones menu and percent styles independently', function() {
 			const menu = new styles.MenuStyle({appearance: 'none'});
 			const percent = new styles.PercentCompleteBarStyle({
 				barColor: 'red',
 				barBgColor: 'gray',
 				barHeight: 6,
 			});
+			const menuClone = menu.clone();
+			expect(menuClone).not.toBe(menu);
+			const percentClone = percent.clone();
+			expect(percentClone).not.toBe(percent);
+
+			menuClone.appearance = 'menulist-button';
+			percentClone.barHeight = 9;
+
+			expect(menu.appearance).toEqual('none');
+			expect(menuClone.appearance).toEqual('menulist-button');
+			expect(percent.barHeight).toEqual(6);
+			expect(percentClone.barHeight).toEqual(9);
+		});
+
+		it('clones radio and tree styles independently', function() {
 			const radio = new styles.RadioStyle({
 				checkColor: 'black',
 				checkBgColor: 'white',
@@ -72,6 +117,22 @@
 				lineWidth: 2,
 				treeIcon: 'expand_more',
 			});
+			const radioClone = radio.clone();
+			expect(radioClone).not.toBe(radio);
+			const treeClone = tree.clone();
+			expect(treeClone).not.toBe(tree);
+
+			radioClone.checkColor = 'red';
+			treeClone.lineWidth = 4;
+
+			expect(radio.checkColor).toEqual('black');
+			expect(radioClone.checkColor).toEqual('red');
+			expect(tree.lineWidth).toEqual(2);
+			expect(treeClone.lineWidth).toEqual(4);
+		});
+
+		it('clones branch graph styles independently', async function() {
+			const {BranchGraphStyle} = await import('../../../../js/columns/style/BranchGraphStyle.ts');
 			const branch = new BranchGraphStyle({
 				branchColors: 'orange',
 				margin: 5,
@@ -79,44 +140,10 @@
 				branchLineWidth: 3,
 				mergeStyle: 'straight',
 			});
-
-			const iconClone = icon.clone();
-			const numberClone = number.clone();
-			const imageClone = image.clone();
-			const menuClone = menu.clone();
-			const percentClone = percent.clone();
-			const radioClone = radio.clone();
-			const treeClone = tree.clone();
 			const branchClone = branch.clone();
 
-			iconClone.color = 'cloneInk';
-			numberClone.textAlign = 'left';
-			imageClone.margin = 9;
-			imageClone.imageSizing = undefined;
-			menuClone.appearance = 'menulist-button';
-			percentClone.barHeight = 9;
-			radioClone.checkColor = 'red';
-			treeClone.lineWidth = 4;
 			branchClone.mergeStyle = 'bezier';
 
-			expect(icon.textAlign).toEqual('center');
-			expect(icon.color).toEqual('ink');
-			expect(iconClone.color).toEqual('cloneInk');
-			expect(number.textAlign).toEqual('right');
-			expect(number.color).toEqual('num');
-			expect(numberClone.textAlign).toEqual('left');
-			expect(image.margin).toEqual(8);
-			expect(image.imageSizing).toEqual('keep-aspect-ratio');
-			expect(imageClone.margin).toEqual(9);
-			expect(imageClone.imageSizing).toBeUndefined();
-			expect(menu.appearance).toEqual('none');
-			expect(menuClone.appearance).toEqual('menulist-button');
-			expect(percent.barHeight).toEqual(6);
-			expect(percentClone.barHeight).toEqual(9);
-			expect(radio.checkColor).toEqual('black');
-			expect(radioClone.checkColor).toEqual('red');
-			expect(tree.lineWidth).toEqual(2);
-			expect(treeClone.lineWidth).toEqual(4);
 			expect(branch.mergeStyle).toEqual('straight');
 			expect(branchClone.mergeStyle).toEqual('bezier');
 		});
@@ -136,7 +163,17 @@
 			expect(calls).toEqual(['change', 'change', 'change']);
 		});
 
-		it('keeps specialized default singletons stable and fires branch graph changes', async function() {
+		it('keeps specialized default singletons stable', async function() {
+			const {BranchGraphStyle} = await import('../../../../js/columns/style/BranchGraphStyle.ts');
+			expect(styles.IconStyle.DEFAULT).toBe(styles.IconStyle.DEFAULT);
+			expect(styles.ImageStyle.DEFAULT).toBe(styles.ImageStyle.DEFAULT);
+			expect(styles.MenuStyle.DEFAULT).toBe(styles.MenuStyle.DEFAULT);
+			expect(styles.RadioStyle.DEFAULT).toBe(styles.RadioStyle.DEFAULT);
+			expect(styles.TreeStyle.DEFAULT).toBe(styles.TreeStyle.DEFAULT);
+			expect(BranchGraphStyle.DEFAULT).toBe(BranchGraphStyle.DEFAULT);
+		});
+
+		it('fires change events for branch graph colors and sizing setters', async function() {
 			const {BranchGraphStyle} = await import('../../../../js/columns/style/BranchGraphStyle.ts');
 			const branchColors = function(name, index) {
 				return `${name}:${index}`;
@@ -148,25 +185,42 @@
 				calls.push('change');
 			});
 
+			let before = calls.length;
 			branch.branchColors = branchColors;
-			branch.margin = 6;
-			branch.circleSize = 8;
-			branch.branchLineWidth = 2;
-			branch.mergeStyle = 'straight';
-
-			expect(styles.IconStyle.DEFAULT).toBe(styles.IconStyle.DEFAULT);
-			expect(styles.ImageStyle.DEFAULT).toBe(styles.ImageStyle.DEFAULT);
-			expect(styles.MenuStyle.DEFAULT).toBe(styles.MenuStyle.DEFAULT);
-			expect(styles.RadioStyle.DEFAULT).toBe(styles.RadioStyle.DEFAULT);
-			expect(styles.TreeStyle.DEFAULT).toBe(styles.TreeStyle.DEFAULT);
-			expect(BranchGraphStyle.DEFAULT).toBe(BranchGraphStyle.DEFAULT);
 			expect(branch.branchColors).toBe(branchColors);
 			expect(branch.branchColors('main', 4)).toEqual('main:4');
+			expect(calls.slice(before)).toEqual(['change']);
+			before = calls.length;
+			branch.margin = 6;
 			expect(branch.margin).toEqual(6);
+			expect(calls.slice(before)).toEqual(['change']);
+			before = calls.length;
+			branch.circleSize = 8;
 			expect(branch.circleSize).toEqual(8);
+			expect(calls.slice(before)).toEqual(['change']);
+
+			expect(calls).toEqual(['change', 'change', 'change']);
+		});
+
+		it('fires change events for branch graph line and merge style setters', async function() {
+			const {BranchGraphStyle} = await import('../../../../js/columns/style/BranchGraphStyle.ts');
+			const branch = new BranchGraphStyle();
+			const calls = [];
+
+			branch.listen(styles.EVENT_TYPE.CHANGE_STYLE, function() {
+				calls.push('change');
+			});
+
+			let before = calls.length;
+			branch.branchLineWidth = 2;
 			expect(branch.branchLineWidth).toEqual(2);
+			expect(calls.slice(before)).toEqual(['change']);
+			before = calls.length;
+			branch.mergeStyle = 'straight';
 			expect(branch.mergeStyle).toEqual('straight');
-			expect(calls).toEqual(['change', 'change', 'change', 'change', 'change']);
+			expect(calls.slice(before)).toEqual(['change']);
+
+			expect(calls).toEqual(['change', 'change']);
 		});
 	});
 })();

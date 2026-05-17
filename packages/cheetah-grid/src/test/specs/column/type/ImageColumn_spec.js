@@ -131,6 +131,8 @@
 					// noop
 				},
 			});
+			expect(calls).toEqual([]);
+
 			column.drawInternal({width: 10, height: 10}, createContext(), new ImageStyle({visibility: 'hidden'}), createHelper(calls), {}, {
 				drawCellBase: function() {
 					// noop

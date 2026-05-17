@@ -112,6 +112,9 @@
 			const prepared = prepareElement(element);
 
 			element.attach(grid, 2, 3, 'Tooltip text');
+			expect(grid.host.contains(prepared.root)).toEqual(true);
+			expect(prepared.root.classList.contains('cheetah-grid__tooltip-element--shown')).toEqual(true);
+
 			element.detach();
 
 			expect(grid.host.contains(prepared.root)).toEqual(true);
@@ -132,6 +135,9 @@
 			const prepared = prepareElement(element);
 
 			element.attach(grid, 2, 3, 'Tooltip text');
+			expect(grid.host.contains(prepared.root)).toEqual(true);
+			expect(prepared.root.classList.contains('cheetah-grid__tooltip-element--shown')).toEqual(true);
+
 			targetRect.value = rect(10, 30, 40, 30);
 			element.move(grid, 2, 3);
 

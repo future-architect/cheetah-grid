@@ -99,6 +99,11 @@
 			});
 
 			dataSource.length = 2;
+			expect(calls).toEqual([
+				['update', 2],
+				['updated', 2],
+			]);
+
 			filterDataSource.dispose();
 			dataSource.length = 3;
 

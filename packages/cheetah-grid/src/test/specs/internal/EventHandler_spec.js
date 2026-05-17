@@ -15,7 +15,11 @@
 			expect(handler.hasListener(target, 'change')).toEqual(true);
 
 			target.dispatchEvent(new Event('change'));
+			expect(calls).toEqual(['change']);
+
 			handler.off(id);
+			expect(handler.hasListener(target, 'change')).toEqual(false);
+
 			target.dispatchEvent(new Event('change'));
 
 			expect(calls).toEqual(['change']);
@@ -34,6 +38,8 @@
 
 			handler.once(target, 'change', listener);
 			handler.fire(target, 'change', 1);
+			expect(calls).toEqual([1]);
+
 			handler.fire(target, 'change', 2);
 
 			expect(calls).toEqual([1]);
@@ -92,9 +98,13 @@
 			};
 
 			handler.on(target, 'change', listener);
+			expect(handler.hasListener(target, 'change')).toEqual(true);
 			handler.off(null);
+			expect(handler.hasListener(target, 'change')).toEqual(true);
 			handler.off(undefined);
+			expect(handler.hasListener(target, 'change')).toEqual(true);
 			handler.clear();
+			expect(handler.hasListener(target, 'change')).toEqual(false);
 			target.dispatchEvent(new Event('change'));
 
 			expect(calls).toEqual([]);

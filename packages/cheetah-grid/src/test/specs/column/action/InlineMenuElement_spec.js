@@ -121,6 +121,29 @@
 		}
 	}
 
+	function expectOpenedMenu(prepared) {
+		const items = prepared.menu.querySelectorAll('li');
+		expect(items.length).toEqual(3);
+		expect(items[0].classList.contains('cheetah-grid__inline-menu__menu-item--empty')).toEqual(true);
+		expect(items[0].textContent).toEqual('Empty 7');
+		expect(items[1].classList.contains('alpha-item')).toEqual(true);
+		expect(items[2].dataset.select).toEqual('select');
+		expect(items[2].innerHTML).toEqual('<b>Bee</b>');
+		expect(prepared.menu.classList.contains('menu-class')).toEqual(true);
+		expect(prepared.menu.classList.contains('cheetah-grid__inline-menu--shown')).toEqual(true);
+		expect(prepared.menu.style.font).toEqual('12px sans-serif');
+		return items;
+	}
+
+	function expectMenuCellCss(menu) {
+		expect(menu.style.getPropertyValue('--cheetah-grid-inline-menu-cell-top')).toEqual('240px');
+		expect(menu.style.getPropertyValue('--cheetah-grid-inline-menu-cell-bottom')).toEqual('264px');
+		expect(menu.style.getPropertyValue('--cheetah-grid-inline-menu-cell-left')).toEqual('130px');
+		expect(menu.style.getPropertyValue('--cheetah-grid-inline-menu-cell-right')).toEqual('210px');
+		expect(menu.style.getPropertyValue('--cheetah-grid-inline-menu-width')).toEqual('90px');
+		expect(menu.style.getPropertyValue('--cheetah-grid-inline-menu-height')).toEqual('70px');
+	}
+
 	describe('InlineMenuElement', function() {
 		it('opens menu options, focuses the selected value, and writes cell CSS variables', async function() {
 			const {InlineMenuElement} = await import('../../../../js/columns/action/internal/InlineMenuElement.ts');
@@ -131,22 +154,8 @@
 			withScrollIntoViewRecorder(function(scrollCalls) {
 				element.attach(grid, createEditor(['menu-class']), 1, 2, 'b', {id: 7});
 
-				const items = prepared.menu.querySelectorAll('li');
-				expect(items.length).toEqual(3);
-				expect(items[0].classList.contains('cheetah-grid__inline-menu__menu-item--empty')).toEqual(true);
-				expect(items[0].textContent).toEqual('Empty 7');
-				expect(items[1].classList.contains('alpha-item')).toEqual(true);
-				expect(items[2].dataset.select).toEqual('select');
-				expect(items[2].innerHTML).toEqual('<b>Bee</b>');
-				expect(prepared.menu.classList.contains('menu-class')).toEqual(true);
-				expect(prepared.menu.classList.contains('cheetah-grid__inline-menu--shown')).toEqual(true);
-				expect(prepared.menu.style.font).toEqual('12px sans-serif');
-				expect(prepared.menu.style.getPropertyValue('--cheetah-grid-inline-menu-cell-top')).toEqual('240px');
-				expect(prepared.menu.style.getPropertyValue('--cheetah-grid-inline-menu-cell-bottom')).toEqual('264px');
-				expect(prepared.menu.style.getPropertyValue('--cheetah-grid-inline-menu-cell-left')).toEqual('130px');
-				expect(prepared.menu.style.getPropertyValue('--cheetah-grid-inline-menu-cell-right')).toEqual('210px');
-				expect(prepared.menu.style.getPropertyValue('--cheetah-grid-inline-menu-width')).toEqual('90px');
-				expect(prepared.menu.style.getPropertyValue('--cheetah-grid-inline-menu-height')).toEqual('70px');
+				const items = expectOpenedMenu(prepared);
+				expectMenuCellCss(prepared.menu);
 				expect(scrollCalls[0][0]).toEqual(items[2]);
 				expect(scrollCalls[0][1]).toEqual({
 					behavior: 'instant',
@@ -189,7 +198,7 @@
 			element.dispose();
 		});
 
-		it('commits enter and tab keys with grid movement', async function() {
+		it('commits enter keys with grid movement', async function() {
 			const {InlineMenuElement} = await import('../../../../js/columns/action/internal/InlineMenuElement.ts');
 			const grid = createGrid();
 			const element = new InlineMenuElement();
@@ -199,27 +208,33 @@
 				element.attach(grid, createEditor(['menu-class']), 1, 2, 'a', {id: 7});
 			});
 			prepared.menu.querySelectorAll('li')[1].dispatchEvent(keyEvent(13));
+			expect(grid.changes).toEqual([[1, 2, 'a']]);
+			expect(grid.moves).toEqual([13]);
+			expect(grid.invalidates).toEqual([{
+				start: {col: 1, row: 2},
+				end: {col: 1, row: 2},
+			}]);
+
+			element.dispose();
+		});
+
+		it('commits tab keys with grid movement', async function() {
+			const {InlineMenuElement} = await import('../../../../js/columns/action/internal/InlineMenuElement.ts');
+			const grid = createGrid();
+			const element = new InlineMenuElement();
+			const prepared = prepareElement(element);
 
 			withScrollIntoViewRecorder(function() {
 				element.attach(grid, createEditor(['menu-class']), 1, 2, 'b', {id: 7});
 			});
 			prepared.menu.querySelectorAll('li')[2].dispatchEvent(keyEvent(9));
 
-			expect(grid.changes).toEqual([
-				[1, 2, 'a'],
-				[1, 2, 'b'],
-			]);
-			expect(grid.moves).toEqual([13, 9]);
-			expect(grid.invalidates).toEqual([
-				{
-					start: {col: 1, row: 2},
-					end: {col: 1, row: 2},
-				},
-				{
-					start: {col: 1, row: 2},
-					end: {col: 1, row: 2},
-				},
-			]);
+			expect(grid.changes).toEqual([[1, 2, 'b']]);
+			expect(grid.moves).toEqual([9]);
+			expect(grid.invalidates).toEqual([{
+				start: {col: 1, row: 2},
+				end: {col: 1, row: 2},
+			}]);
 
 			element.dispose();
 		});

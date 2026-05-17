@@ -94,12 +94,84 @@
 		};
 	}
 
+	async function createFontToolsWithCssStub() {
+		const sources = await loadSources();
+		const stubs = createBaseStubs();
+		const loader = createLoader(sources, stubs);
+		const Thenable = loader.load('extentions/tools/Thenable.js');
+		stubs['extentions/tools/internal/FontsCssLoader.js'] = class FontsCssLoader extends Thenable {
+			constructor() {
+				super(function(resolve) {
+					resolve('.icon{font-family:test;}');
+				});
+			}
+			get() {
+				return '.icon{font-family:test;}';
+			}
+		};
+		return createLoader(sources, stubs).load('extentions/tools/fontTools.js');
+	}
+
+	function installSvgBBoxMock() {
+		const originalGetBBox = SVGElement.prototype.getBBox;
+		const originalSvgGetBBox = SVGSVGElement.prototype.getBBox;
+		const getBBox = function() {
+			const text = this.querySelector && this.querySelector('text');
+			const style = text ? text.getAttribute('style') : '';
+			return {
+				width: style && style.indexOf('\'liga\' 0') >= 0 ? 10 : 20,
+				height: 12,
+			};
+		};
+		SVGElement.prototype.getBBox = getBBox;
+		SVGSVGElement.prototype.getBBox = getBBox;
+		return function restore() {
+			SVGElement.prototype.getBBox = originalGetBBox;
+			SVGSVGElement.prototype.getBBox = originalSvgGetBBox;
+		};
+	}
+	function createFontFaceRule() {
+		return {
+			type: CSSRule.FONT_FACE_RULE,
+			cssText: '@font-face { font-family: local; src: url("local.woff2"); }',
+			style: {
+				getPropertyValue: function() {
+					return 'url("local.woff2")';
+				},
+			},
+		};
+	}
+	function createBlockedStylesheet() {
+		const inaccessible = {};
+		Object.defineProperty(inaccessible, 'cssRules', {
+			get: function() {
+				const error = new Error('blocked');
+				error.name = 'SecurityError';
+				throw error;
+			},
+		});
+		inaccessible.href = 'https://cdn.example.com/fonts.css';
+		return inaccessible;
+	}
+	function installStyleSheetsMock(sheets) {
+		const originalSheets = document.styleSheets;
+		Object.defineProperty(document, 'styleSheets', {
+			configurable: true,
+			value: sheets,
+		});
+		return function restore() {
+			Object.defineProperty(document, 'styleSheets', {
+				configurable: true,
+				value: originalSheets,
+			});
+		};
+	}
+
 	describe('fontTools extension modules', function() {
-		it('runs Thenable.all/resolve and Loader cache semantics', async function() {
+		it('runs Thenable.all and resolve semantics', async function() {
 			const sources = await loadSources();
 			const loader = createLoader(sources, createBaseStubs());
 			const Thenable = loader.load('extentions/tools/Thenable.js');
-			const Loader = loader.load('extentions/tools/internal/Loader.js');
 			const calls = [];
 
 			Thenable.resolve('ready').then(function(value) {
@@ -115,6 +187,21 @@
 			]).then(function(value) {
 				calls.push(['all', value]);
 			});
+
+			await new Promise(function(resolve) {
+				setTimeout(resolve, 10);
+			});
+			expect(calls).toContainEqual(['resolve', 'ready']);
+			expect(calls).toContainEqual(['promise', 'promise']);
+			expect(calls).toContainEqual(['all', ['a', 'b', 'c']]);
+		});
+
+		it('exposes cached Loader values after delayed Thenables resolve', async function() {
+			const sources = await loadSources();
+			const loader = createLoader(sources, createBaseStubs());
+			const Thenable = loader.load('extentions/tools/Thenable.js');
+			const Loader = loader.load('extentions/tools/internal/Loader.js');
+
 			const delayed = new Thenable(function(resolve) {
 				setTimeout(function() {
 					resolve('late');
@@ -124,13 +211,6 @@
 			expect(delayedLoader.get()).toBeUndefined();
 			expect(await toPromise(delayedLoader)).toEqual('late');
 			expect(delayedLoader.get()).toEqual('late');
-
-			await new Promise(function(resolve) {
-				setTimeout(resolve, 10);
-			});
-			expect(calls).toContainEqual(['resolve', 'ready']);
-			expect(calls).toContainEqual(['promise', 'promise']);
-			expect(calls).toContainEqual(['all', ['a', 'b', 'c']]);
 		});
 
 		it('loads xhr results once per URL and applies mime overrides', async function() {
@@ -175,34 +255,13 @@
 			};
 			const loader = createLoader(sources, stubs);
 			const AllFontsLoader = loader.load('extentions/tools/internal/AllFontsLoader.js');
-			const originalSheets = document.styleSheets;
-			const localRule = {
-				type: CSSRule.FONT_FACE_RULE,
-				cssText: '@font-face { font-family: local; src: url("local.woff2"); }',
-				style: {
-					getPropertyValue: function() {
-						return 'url("local.woff2")';
-					},
-				},
-			};
-			const inaccessible = {};
-			Object.defineProperty(inaccessible, 'cssRules', {
-				get: function() {
-					const error = new Error('blocked');
-					error.name = 'SecurityError';
-					throw error;
-				},
-			});
-			inaccessible.href = 'https://cdn.example.com/fonts.css';
+			const localRule = createFontFaceRule();
+			const restoreStyleSheets = installStyleSheetsMock([
+				{href: 'https://example.com/css/app.css', cssRules: [localRule]},
+				createBlockedStylesheet(),
+				{href: 'file:///tmp/local.css', cssRules: [localRule]},
+			]);
 			try {
-				Object.defineProperty(document, 'styleSheets', {
-					configurable: true,
-					value: [
-						{href: 'https://example.com/css/app.css', cssRules: [localRule]},
-						inaccessible,
-						{href: 'file:///tmp/local.css', cssRules: [localRule]},
-					],
-				});
 				const fontFaces = await toPromise(new AllFontsLoader());
 				expect(fontFaces[0]).toEqual({
 					urls: ['https://example.com/css/local.woff2'],
@@ -210,10 +269,7 @@
 				});
 				expect(fontFaces[1].urls[0]).toEqual('https://cdn.example.com/fonts.css/linked.woff2');
 			} finally {
-				Object.defineProperty(document, 'styleSheets', {
-					configurable: true,
-					value: originalSheets,
-				});
+				restoreStyleSheets();
 			}
 		});
 
@@ -244,43 +300,21 @@
 			expect(css).toContain('url(\'data:image/png;base64,cG5n\')');
 		});
 
-		it('converts font content to SVG and supports callback, cache, arrays, and Promise fallback', async function() {
-			const sources = await loadSources();
-			const stubs = createBaseStubs();
-			const loader = createLoader(sources, stubs);
-			const Thenable = loader.load('extentions/tools/Thenable.js');
-			stubs['extentions/tools/internal/FontsCssLoader.js'] = class FontsCssLoader extends Thenable {
-				constructor() {
-					super(function(resolve) {
-						resolve('.icon{font-family:test;}');
-					});
-				}
-				get() {
-					return '.icon{font-family:test;}';
-				}
-			};
-			const fontTools = createLoader(sources, stubs).load('extentions/tools/fontTools.js');
-			const originalGetBBox = SVGElement.prototype.getBBox;
-			const originalSvgGetBBox = SVGSVGElement.prototype.getBBox;
+		it('converts class names to font descriptors', async function() {
+			const fontTools = await createFontToolsWithCssStub();
+
+			expect(fontTools.classNameToFont('icon-add', 'i')).toEqual({
+				tagName: 'i',
+				className: 'icon-add',
+				font: '12px icon',
+			});
+		});
+
+		it('converts font content to SVG and invokes callbacks', async function() {
+			const fontTools = await createFontToolsWithCssStub();
+			const restoreSvgBBox = installSvgBBoxMock();
 			const callbacks = [];
 			try {
-				const getBBox = function() {
-					const text = this.querySelector && this.querySelector('text');
-					const style = text ? text.getAttribute('style') : '';
-					return {
-						width: style && style.indexOf('\'liga\' 0') >= 0 ? 10 : 20,
-						height: 12,
-					};
-				};
-				SVGElement.prototype.getBBox = getBBox;
-				SVGSVGElement.prototype.getBBox = getBBox;
-
-				expect(fontTools.classNameToFont('icon-add', 'i')).toEqual({
-					tagName: 'i',
-					className: 'icon-add',
-					font: '12px icon',
-				});
-
 				const result = fontTools.fontContentToSvg({
 					font: '12px icon',
 					content: 'A',
@@ -292,6 +326,15 @@
 				expect(svg.nodeName.toLowerCase()).toEqual('svg');
 				expect(svg.getAttribute('width')).toEqual('20');
 				expect(callbacks).toEqual(['svg']);
+			} finally {
+				restoreSvgBBox();
+			}
+		});
+
+		it('converts arrays of font content to SVG elements', async function() {
+			const fontTools = await createFontToolsWithCssStub();
+			const restoreSvgBBox = installSvgBBoxMock();
+			try {
 
 				const arrayResult = fontTools.fontContentToSvg({
 					font: '12px icon',
@@ -305,10 +348,8 @@
 				expect(resolved.map(function(item) {
 					return item.querySelector('text').textContent;
 				})).toEqual(['B', 'C']);
-
 			} finally {
-				SVGElement.prototype.getBBox = originalGetBBox;
-				SVGSVGElement.prototype.getBBox = originalSvgGetBBox;
+				restoreSvgBBox();
 			}
 		});
 	});

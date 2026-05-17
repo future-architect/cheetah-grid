@@ -74,20 +74,27 @@
 			},
 		};
 	}
+	function nextTick() {
+		return new Promise(function(resolve) {
+			setTimeout(resolve);
+		});
+	}
+
+	async function createAttachedDialog(value) {
+		const {SmallDialogInputElement} = await import('../../../../js/columns/action/internal/SmallDialogInputElement.ts');
+		const grid = createGrid();
+		const element = new SmallDialogInputElement();
+		element.attach(grid, createEditor(), 1, 2, value);
+		await nextTick();
+
+		const dialog = grid.host.querySelector('.cheetah-grid__small-dialog-input');
+		const input = dialog.querySelector('input');
+		return {dialog, element, grid, input};
+	}
 
 	describe('SmallDialogInputElement', function() {
-		it('attaches dialog props, validates input, commits enter, and detaches', async function() {
-			const {SmallDialogInputElement} = await import('../../../../js/columns/action/internal/SmallDialogInputElement.ts');
-			const grid = createGrid();
-			const element = new SmallDialogInputElement();
-
-			element.attach(grid, createEditor(), 1, 2, 'start');
-			await new Promise(function(resolve) {
-				setTimeout(resolve);
-			});
-
-			const dialog = grid.host.querySelector('.cheetah-grid__small-dialog-input');
-			const input = dialog.querySelector('input');
+		it('attaches dialog props and input state', async function() {
+			const {dialog, element, input} = await createAttachedDialog('start');
 
 			expect(dialog.classList.contains('dialog-class')).toEqual(true);
 			expect(dialog.classList.contains('cheetah-grid__small-dialog-input--shown')).toEqual(true);
@@ -101,8 +108,15 @@
 			expect(input.tabIndex).toEqual(0);
 			expect(input.value).toEqual('start');
 
+			element.dispose();
+		});
+
+		it('keeps the dialog open when input validation fails', async function() {
+			const {dialog, element, grid, input} = await createAttachedDialog('start');
+
 			input.value = 'bad';
 			input.dispatchEvent(new KeyboardEvent('keyup', {bubbles: true}));
+			expect(dialog.dataset.helperText).toEqual('1:2:bad');
 			input.dispatchEvent(keyEvent(13));
 
 			expect(dialog.dataset.helperText).toEqual('1:2:bad');
@@ -110,8 +124,15 @@
 			expect(grid.changes).toEqual([]);
 			expect(dialog.classList.contains('cheetah-grid__small-dialog-input--shown')).toEqual(true);
 
+			element.dispose();
+		});
+
+		it('commits valid enter input and detaches dialog editing state', async function() {
+			const {dialog, element, grid, input} = await createAttachedDialog('start');
+
 			input.value = 'good';
 			input.dispatchEvent(new KeyboardEvent('keyup', {bubbles: true}));
+			expect(dialog.dataset.errorMessage).toEqual(undefined);
 			input.dispatchEvent(keyEvent(13));
 
 			expect(dialog.dataset.errorMessage).toEqual(undefined);
@@ -124,31 +145,41 @@
 			expect(grid.moves).toEqual([13]);
 			expect(input.readOnly).toEqual(true);
 			expect(input.tabIndex).toEqual(-1);
+			expect(dialog.classList.contains('cheetah-grid__small-dialog-input--shown')).toEqual(false);
 
 			element.dispose();
 		});
 
-		it('clears previous props, exposes static attr binding, and cancels with escape', async function() {
+		it('exposes static attr binding', async function() {
 			const {SmallDialogInputElement} = await import('../../../../js/columns/action/internal/SmallDialogInputElement.ts');
 			const grid = createGrid();
-			const element = new SmallDialogInputElement();
 			const inputForAttrs = document.createElement('input');
 
 			SmallDialogInputElement.setInputAttrs({type: 'number'}, grid, inputForAttrs);
 			expect(inputForAttrs.type).toEqual('number');
+		});
+
+		it('clears previous props when reattached', async function() {
+			const {SmallDialogInputElement} = await import('../../../../js/columns/action/internal/SmallDialogInputElement.ts');
+			const grid = createGrid();
+			const element = new SmallDialogInputElement();
 
 			element.attach(grid, {
 				type: 'text',
 				classList: ['first-class'],
 				helperText: 'first helper',
 			}, 1, 2, 'first');
+			let dialog = grid.host.querySelector('.cheetah-grid__small-dialog-input');
+			expect(dialog.classList.contains('first-class')).toEqual(true);
+			expect(dialog.dataset.helperText).toEqual('first helper');
+
 			element.attach(grid, {
 				type: 'search',
 				classList: ['second-class'],
 				helperText: 'second helper',
 			}, 1, 2, 'second');
 
-			const dialog = grid.host.querySelector('.cheetah-grid__small-dialog-input');
+			dialog = grid.host.querySelector('.cheetah-grid__small-dialog-input');
 			const input = dialog.querySelector('input');
 
 			expect(dialog.classList.contains('first-class')).toEqual(false);
@@ -156,9 +187,20 @@
 			expect(dialog.dataset.helperText).toEqual('second helper');
 			expect(input.type).toEqual('search');
 
-			await new Promise(function(resolve) {
-				setTimeout(resolve);
-			});
+			element.dispose();
+		});
+
+		it('cancels editing with escape', async function() {
+			const {SmallDialogInputElement} = await import('../../../../js/columns/action/internal/SmallDialogInputElement.ts');
+			const grid = createGrid();
+			const element = new SmallDialogInputElement();
+			element.attach(grid, createEditor(), 1, 2, 'start');
+			expect(grid.host.querySelector('.cheetah-grid__small-dialog-input')).not.toBeNull();
+			await nextTick();
+			const dialog = grid.host.querySelector('.cheetah-grid__small-dialog-input');
+			const input = dialog.querySelector('input');
+			expect(input.value).toEqual('start');
+
 			input.dispatchEvent(keyEvent(27));
 
 			expect(grid.changes).toEqual([]);

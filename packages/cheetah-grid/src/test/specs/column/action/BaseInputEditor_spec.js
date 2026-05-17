@@ -116,56 +116,18 @@
 		};
 	}
 
+	async function createBoundEditor(option) {
+		const {DG_EVENT_TYPE} = await import('../../../../js/core/DG_EVENT_TYPE.ts');
+		const TestInputEditor = await createEditorClass();
+		const editor = new TestInputEditor(option);
+		const grid = createGrid();
+		const ids = editor.bindGridEvent(grid, '1:2');
+		return {DG_EVENT_TYPE, editor, grid, ids};
+	}
+
 	describe('BaseInputEditor', function() {
-		it('binds input, open, selection, scroll, and editable input events', async function() {
-			const {DG_EVENT_TYPE} = await import('../../../../js/core/DG_EVENT_TYPE.ts');
-			const TestInputEditor = await createEditorClass();
-			const editor = new TestInputEditor();
-			const grid = createGrid();
-
-			const ids = editor.bindGridEvent(grid, '1:2');
-			grid.listeners[DG_EVENT_TYPE.INPUT_CELL]({col: 9, row: 2, value: 'ignored'});
-			grid.listeners[DG_EVENT_TYPE.INPUT_CELL]({col: 1, row: 2, value: 'typed'});
-
-			const pasteEvent = createCancelableEvent();
-			grid.listeners[DG_EVENT_TYPE.PASTE_CELL]({
-				col: 1,
-				row: 2,
-				multi: false,
-				normalizeValue: 'pasted',
-				event: pasteEvent,
-			});
-			grid.listeners[DG_EVENT_TYPE.PASTE_CELL]({
-				col: 1,
-				row: 2,
-				multi: true,
-				normalizeValue: 'ignored',
-				event: createCancelableEvent(),
-			});
-
-			const tapEvent = createCancelableEvent();
-			const keyEvent = {
-				keyCode: 113,
-				stopped: false,
-				stopCellMoving: function() {
-					this.stopped = true;
-				},
-			};
-			grid.listeners[DG_EVENT_TYPE.DBLCLICK_CELL]({col: 1, row: 2});
-			grid.listeners[DG_EVENT_TYPE.DBLTAP_CELL]({col: 1, row: 2, event: tapEvent});
-			grid.listeners[DG_EVENT_TYPE.KEYDOWN](keyEvent);
-			grid.listeners[DG_EVENT_TYPE.SELECTED_CELL]({col: 1, row: 2, selected: true});
-			grid.listeners[DG_EVENT_TYPE.SCROLL]();
-
-			const input = createInput();
-			expect(grid.listeners[DG_EVENT_TYPE.EDITABLEINPUT_CELL]({col: 1, row: 2})).toEqual(true);
-			expect(grid.listeners[DG_EVENT_TYPE.EDITABLEINPUT_CELL]({col: 9, row: 2})).toEqual(false);
-			grid.listeners[DG_EVENT_TYPE.MODIFY_STATUS_EDITABLEINPUT_CELL]({
-				col: 1,
-				row: 2,
-				input,
-			});
-
+		it('returns the listener ids used to bind grid events', async function() {
+			const {DG_EVENT_TYPE, ids} = await createBoundEditor();
 			expect(ids).toEqual([
 				DG_EVENT_TYPE.INPUT_CELL,
 				DG_EVENT_TYPE.PASTE_CELL,
@@ -177,15 +139,102 @@
 				DG_EVENT_TYPE.EDITABLEINPUT_CELL,
 				DG_EVENT_TYPE.MODIFY_STATUS_EDITABLEINPUT_CELL,
 			]);
-			expect(pasteEvent).toMatchObject({prevented: true, stopped: true});
-			expect(tapEvent).toMatchObject({prevented: true, stopped: true});
-			expect(keyEvent.stopped).toEqual(true);
+		});
+
+		it('binds input events for the target cell', async function() {
+			const {DG_EVENT_TYPE, editor, grid} = await createBoundEditor();
+
+			grid.listeners[DG_EVENT_TYPE.INPUT_CELL]({col: 9, row: 2, value: 'ignored'});
+			expect(editor.calls).toEqual([]);
+			grid.listeners[DG_EVENT_TYPE.INPUT_CELL]({col: 1, row: 2, value: 'typed'});
 			expect(editor.calls).toEqual([
 				['input', {col: 1, row: 2}, 'typed'],
+			]);
+		});
+
+		it('binds single-value paste events for the target cell', async function() {
+			const {DG_EVENT_TYPE, editor, grid} = await createBoundEditor();
+
+			const pasteEvent = createCancelableEvent();
+			grid.listeners[DG_EVENT_TYPE.PASTE_CELL]({
+				col: 1,
+				row: 2,
+				multi: false,
+				normalizeValue: 'pasted',
+				event: pasteEvent,
+			});
+			expect(pasteEvent).toMatchObject({prevented: true, stopped: true});
+			expect(editor.calls).toEqual([
 				['input', {col: 1, row: 2}, 'pasted'],
+			]);
+
+			const multiPasteEvent = createCancelableEvent();
+			grid.listeners[DG_EVENT_TYPE.PASTE_CELL]({
+				col: 1,
+				row: 2,
+				multi: true,
+				normalizeValue: 'ignored',
+				event: multiPasteEvent,
+			});
+			expect(multiPasteEvent).toMatchObject({prevented: false, stopped: false});
+			expect(editor.calls).toEqual([
+				['input', {col: 1, row: 2}, 'pasted'],
+			]);
+		});
+
+		it('binds double click, double tap, and keydown events to open the cell', async function() {
+			const {DG_EVENT_TYPE, editor, grid} = await createBoundEditor();
+
+			const tapEvent = createCancelableEvent();
+			const keyEvent = {
+				keyCode: 113,
+				stopped: false,
+				stopCellMoving: function() {
+					this.stopped = true;
+				},
+			};
+			grid.listeners[DG_EVENT_TYPE.DBLCLICK_CELL]({col: 1, row: 2});
+			expect(editor.calls).toEqual([
+				['open', {col: 1, row: 2}],
+			]);
+			grid.listeners[DG_EVENT_TYPE.DBLTAP_CELL]({col: 1, row: 2, event: tapEvent});
+			expect(tapEvent).toMatchObject({prevented: true, stopped: true});
+			expect(editor.calls).toEqual([
+				['open', {col: 1, row: 2}],
+				['open', {col: 1, row: 2}],
+			]);
+			grid.listeners[DG_EVENT_TYPE.KEYDOWN](keyEvent);
+			expect(keyEvent.stopped).toEqual(true);
+			expect(editor.calls).toEqual([
 				['open', {col: 1, row: 2}],
 				['open', {col: 1, row: 2}],
 				['open', {col: 1, row: 2}],
+			]);
+		});
+
+		it('binds selection, scroll, editable checks, and editable input attributes', async function() {
+			const {DG_EVENT_TYPE, editor, grid} = await createBoundEditor();
+
+			grid.listeners[DG_EVENT_TYPE.SELECTED_CELL]({col: 1, row: 2, selected: true});
+			expect(editor.calls).toEqual([
+				['select', {col: 1, row: 2}, true],
+			]);
+			grid.listeners[DG_EVENT_TYPE.SCROLL]();
+			expect(editor.calls).toEqual([
+				['select', {col: 1, row: 2}, true],
+				['scroll'],
+			]);
+
+			const input = createInput();
+			expect(grid.listeners[DG_EVENT_TYPE.EDITABLEINPUT_CELL]({col: 1, row: 2})).toEqual(true);
+			expect(grid.listeners[DG_EVENT_TYPE.EDITABLEINPUT_CELL]({col: 9, row: 2})).toEqual(false);
+			grid.listeners[DG_EVENT_TYPE.MODIFY_STATUS_EDITABLEINPUT_CELL]({
+				col: 1,
+				row: 2,
+				input,
+			});
+
+			expect(editor.calls).toEqual([
 				['select', {col: 1, row: 2}, true],
 				['scroll'],
 				['attrs', {col: 1, row: 2}, {
@@ -236,7 +285,14 @@
 			multiline.multiline = true;
 
 			editor.onPasteCellRangeBox(grid, {col: 1, row: 2}, 'A\nB');
+			expect(grid.changes).toEqual([[1, 2, 'A B']]);
+
 			multiline.onPasteCellRangeBox(grid, {col: 2, row: 3}, 'A\nB');
+			expect(grid.changes).toEqual([
+				[1, 2, 'A B'],
+				[2, 3, 'A\nB'],
+			]);
+
 			editor.onDeleteCellRangeBox(grid, {col: 1, row: 2});
 
 			expect(grid.changes).toEqual([

@@ -23,11 +23,12 @@
 		it('normalizes static and record-dependent options as functions', async function() {
 			const {normalizeToFn} = await import('../../../js/internal/menu-items.ts');
 			const staticOptions = normalizeToFn({a: 'A'});
+			expect(staticOptions()).toEqual([{value: 'a', label: 'A'}]);
+
 			const dynamicOptions = normalizeToFn(function(record) {
 				return record ? record.options : undefined;
 			});
 
-			expect(staticOptions()).toEqual([{value: 'a', label: 'A'}]);
 			expect(dynamicOptions({options: {b: 'B'}})).toEqual([{value: 'b', label: 'B'}]);
 			expect(dynamicOptions()).toEqual([]);
 		});

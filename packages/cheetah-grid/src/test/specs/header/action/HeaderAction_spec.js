@@ -93,7 +93,9 @@
 			const base = new actions.BaseAction({disabled: true});
 			const sort = new actions.SortHeaderAction({sort: 'name'});
 			const baseClone = base.clone();
+			expect(baseClone).not.toBe(base);
 			const sortClone = sort.clone();
+			expect(sortClone).not.toBe(sort);
 
 			baseClone.disabled = false;
 			sortClone.sort = 'age';
@@ -116,7 +118,11 @@
 			const inferred = new actions.SortHeaderAction();
 
 			custom._executeSort({col: 2, row: 3, order: 'desc'}, grid);
+			expect(calls.length).toEqual(1);
+
 			explicit._executeSort({col: 2, row: 3, order: 'asc'}, grid);
+			expect(grid.sorts).toEqual([['name', 'asc']]);
+
 			inferred._executeSort({col: 2, row: 3, order: 'desc'}, grid);
 
 			expect(calls).toEqual([{
@@ -137,18 +143,21 @@
 			const action = new actions.SortHeaderAction({sort: 'name'});
 
 			const ids = action.bindGridEvent(grid, '1:2');
-			grid.listeners[DG_EVENT_TYPE.MOUSEOVER_CELL]({col: 1, row: 2});
-			grid.listeners[DG_EVENT_TYPE.CLICK_CELL]({col: 1, row: 2});
-			grid.listeners[DG_EVENT_TYPE.MOUSEOUT_CELL]({col: 1, row: 2});
-
 			expect(ids).toEqual([
 				DG_EVENT_TYPE.CLICK_CELL,
 				DG_EVENT_TYPE.MOUSEOVER_CELL,
 				DG_EVENT_TYPE.MOUSEMOVE_CELL,
 				DG_EVENT_TYPE.MOUSEOUT_CELL,
 			]);
+
+			grid.listeners[DG_EVENT_TYPE.MOUSEOVER_CELL]({col: 1, row: 2});
+			expect(grid.element.style.cursor).toEqual('pointer');
+
+			grid.listeners[DG_EVENT_TYPE.CLICK_CELL]({col: 1, row: 2});
 			expect(grid.sortState).toEqual({col: 1, row: 2, order: 'desc'});
 			expect(grid.sorts).toEqual([['name', 'desc']]);
+
+			grid.listeners[DG_EVENT_TYPE.MOUSEOUT_CELL]({col: 1, row: 2});
 			expect(grid.invalidates).toEqual([[0, 0, 4, 5]]);
 			expect(grid.element.style.cursor).toEqual('');
 		});
@@ -163,6 +172,8 @@
 
 			action.bindGridEvent(grid, '1:2');
 			grid.listeners[DG_EVENT_TYPE.MOUSEOVER_CELL]({col: 1, row: 2});
+			expect(grid.element.style.cursor).toEqual('');
+
 			grid.listeners[DG_EVENT_TYPE.CLICK_CELL]({col: 1, row: 2});
 
 			expect(grid.sortState).toEqual({col: 1, row: 2, order: 'asc'});

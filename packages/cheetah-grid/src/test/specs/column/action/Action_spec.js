@@ -116,6 +116,26 @@
 					clientY: 260,
 				},
 			});
+			expect(areas[0].pointInDrawingCanvas).toEqual({x: 40, y: 60});
+			expect(areas[0].pointInCell).toEqual({x: 35, y: 47});
+			expect(grid.element.style.cursor).toEqual('pointer');
+		});
+
+		it('binds generic click action events', async function() {
+			const {DG_EVENT_TYPE} = await import('../../../../js/core/DG_EVENT_TYPE.ts');
+			const grid = createGrid();
+			const calls = [];
+			const action = new actions.Action({
+				action: function(record, cell) {
+					calls.push([record, cell.col, cell.row, cell.grid]);
+				},
+				area: function() {
+					return true;
+				},
+			});
+
+			action.bindGridEvent(grid, '1:2');
+
 			grid.listeners[DG_EVENT_TYPE.CLICK_CELL]({
 				col: 1,
 				row: 2,
@@ -124,14 +144,31 @@
 					clientY: 260,
 				},
 			});
-			grid.listeners[DG_EVENT_TYPE.MOUSEOUT_CELL]({col: 1, row: 2});
-
-			expect(areas[0].pointInDrawingCanvas).toEqual({x: 40, y: 60});
-			expect(areas[0].pointInCell).toEqual({x: 35, y: 47});
 			expect(calls).toEqual([[grid.record, 1, 2, grid]]);
-			expect(grid.invalidates).toEqual([
-				{start: {col: 1, row: 2}, end: {col: 1, row: 2}},
-			]);
+		});
+
+		it('binds generic mouseout action events after mouseover activates the cell', async function() {
+			const {DG_EVENT_TYPE} = await import('../../../../js/core/DG_EVENT_TYPE.ts');
+			const grid = createGrid();
+			const action = new actions.Action({
+				action: function() {},
+				area: function() {
+					return true;
+				},
+			});
+
+			action.bindGridEvent(grid, '1:2');
+			grid.listeners[DG_EVENT_TYPE.MOUSEOVER_CELL]({
+				col: 1,
+				row: 2,
+				event: {
+					clientX: 140,
+					clientY: 260,
+				},
+			});
+			expect(grid.invalidates).toEqual([grid.getCellRange(1, 2)]);
+			grid.listeners[DG_EVENT_TYPE.MOUSEOUT_CELL]({col: 1, row: 2});
+			expect(grid.invalidates).toEqual([grid.getCellRange(1, 2)]);
 			expect(grid.element.style.cursor).toEqual('pointer');
 		});
 
@@ -148,6 +185,8 @@
 
 			action.bindGridEvent(grid, '1:2');
 			grid.listeners[DG_EVENT_TYPE.MOUSEOVER_CELL]({col: 1, row: 2, event: {}});
+			expect(grid.element.style.cursor).toEqual('');
+
 			grid.listeners[DG_EVENT_TYPE.CLICK_CELL]({col: 1, row: 2, event: {}});
 
 			expect(calls).toEqual([]);

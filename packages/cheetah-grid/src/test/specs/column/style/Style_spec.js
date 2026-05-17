@@ -4,6 +4,19 @@
 (function() {
 	const styles = cheetahGrid.columns.style;
 
+	function listenChanges(style, calls) {
+		style.listen(styles.EVENT_TYPE.CHANGE_STYLE, function() {
+			calls.push(style.constructor.name);
+		});
+	}
+
+	function expectSetterChange(style, property, value, expected, calls) {
+		const before = calls.length;
+		style[property] = value;
+		expect(style[property]).toEqual(expected);
+		expect(calls.slice(before)).toEqual([style.constructor.name]);
+	}
+
 	describe('column styles', function() {
 		it('normalizes base style visibility and indicators', function() {
 			const style = new styles.BaseStyle({
@@ -86,87 +99,119 @@
 			expect(styles.ButtonStyle.DEFAULT).toBe(styles.ButtonStyle.DEFAULT);
 		});
 
-		it('fires change events for base and standard text style setters', async function() {
-			const {StdBaseStyle} = await import('../../../../js/columns/style/StdBaseStyle.ts');
+		it('fires change events for base background setters', function() {
 			const base = new styles.BaseStyle({
 				bgColor: 'white',
+			});
+			const calls = [];
+			listenChanges(base, calls);
+
+			expectSetterChange(base, 'bgColor', 'gray', 'gray', calls);
+			expect(calls).toEqual(['BaseStyle']);
+		});
+
+		it('fires change events for base indicator setters', function() {
+			const base = new styles.BaseStyle({
 				indicatorTopRight: {style: 'triangle', color: 'red'},
 			});
+			const calls = [];
+			listenChanges(base, calls);
+			expect(calls).toEqual([]);
+
+			expectSetterChange(base, 'indicatorTopLeft', 'triangle', {style: 'triangle'}, calls);
+			expectSetterChange(base, 'indicatorTopRight', undefined, undefined, calls);
+			expectSetterChange(base, 'indicatorBottomLeft', {style: 'triangle', size: 4}, {
+				style: 'triangle',
+				size: 4,
+			}, calls);
+			expect(calls).toEqual(['BaseStyle', 'BaseStyle', 'BaseStyle']);
+		});
+
+		it('fires change events for standard text positioning setters', async function() {
+			const {StdBaseStyle} = await import('../../../../js/columns/style/StdBaseStyle.ts');
 			const std = new StdBaseStyle({
 				textAlign: 'left',
 				textBaseline: 'top',
 				padding: 1,
 			});
+			const calls = [];
+			listenChanges(std, calls);
+			expect(calls).toEqual([]);
+
+			expectSetterChange(std, 'textAlign', 'right', 'right', calls);
+			expectSetterChange(std, 'textBaseline', 'bottom', 'bottom', calls);
+			expectSetterChange(std, 'padding', [1, 2, 3, 4], [1, 2, 3, 4], calls);
+			expect(calls).toEqual(['StdBaseStyle', 'StdBaseStyle', 'StdBaseStyle']);
+		});
+
+		it('fires change events for text style setters', function() {
 			const text = new styles.Style({
 				color: 'black',
 				font: '12px sans-serif',
 				textOverflow: 'clip',
 			});
+			const calls = [];
+			listenChanges(text, calls);
+			expect(calls).toEqual([]);
+
+			expectSetterChange(text, 'color', 'blue', 'blue', calls);
+			expectSetterChange(text, 'font', '13px serif', '13px serif', calls);
+			expectSetterChange(text, 'textOverflow', 'ellipsis', 'ellipsis', calls);
+			expect(calls).toEqual(['Style', 'Style', 'Style']);
+		});
+
+		it('fires change events for multiline text setters', function() {
 			const multiline = new styles.MultilineTextStyle({
 				lineHeight: 18,
 				autoWrapText: true,
 				lineClamp: 3,
 			});
 			const calls = [];
+			listenChanges(multiline, calls);
+			expect(calls).toEqual([]);
 
-			[base, std, text, multiline].forEach(function(style) {
-				style.listen(styles.EVENT_TYPE.CHANGE_STYLE, function() {
-					calls.push(style.constructor.name);
-				});
-			});
-
-			base.bgColor = 'gray';
-			base.indicatorTopLeft = 'triangle';
-			base.indicatorTopRight = undefined;
-			base.indicatorBottomLeft = {style: 'triangle', size: 4};
-			std.textAlign = 'right';
-			std.textBaseline = 'bottom';
-			std.padding = [1, 2, 3, 4];
-			text.color = 'blue';
-			text.font = '13px serif';
-			text.textOverflow = 'ellipsis';
-			multiline.lineHeight = '2em';
-			multiline.autoWrapText = false;
-			multiline.lineClamp = undefined;
-
-			expect(base.bgColor).toEqual('gray');
-			expect(base.indicatorTopLeft).toEqual({style: 'triangle'});
-			expect(base.indicatorTopRight).toEqual(undefined);
-			expect(base.indicatorBottomLeft).toEqual({style: 'triangle', size: 4});
-			expect(std.textAlign).toEqual('right');
-			expect(std.textBaseline).toEqual('bottom');
-			expect(std.padding).toEqual([1, 2, 3, 4]);
-			expect(text.color).toEqual('blue');
-			expect(text.font).toEqual('13px serif');
-			expect(text.textOverflow).toEqual('ellipsis');
-			expect(multiline.lineHeight).toEqual('2em');
-			expect(multiline.autoWrapText).toEqual(false);
-			expect(multiline.lineClamp).toEqual(undefined);
-			expect(calls).toEqual([
-				'BaseStyle',
-				'BaseStyle',
-				'BaseStyle',
-				'BaseStyle',
-				'StdBaseStyle',
-				'StdBaseStyle',
-				'StdBaseStyle',
-				'Style',
-				'Style',
-				'Style',
-				'MultilineTextStyle',
-				'MultilineTextStyle',
-				'MultilineTextStyle',
-			]);
+			expectSetterChange(multiline, 'lineHeight', '2em', '2em', calls);
+			expectSetterChange(multiline, 'autoWrapText', false, false, calls);
+			expectSetterChange(multiline, 'lineClamp', undefined, undefined, calls);
+			expect(calls).toEqual(['MultilineTextStyle', 'MultilineTextStyle', 'MultilineTextStyle']);
 		});
 
-		it('fires change events for specialized style setters', function() {
+		it('fires change events for button style setters', function() {
 			const button = new styles.ButtonStyle({buttonBgColor: 'old'});
+			const calls = [];
+			listenChanges(button, calls);
+
+			expectSetterChange(button, 'buttonBgColor', 'new', 'new', calls);
+			expect(calls).toEqual(['ButtonStyle']);
+		});
+
+		it('fires change events for image style setters', function() {
 			const image = new styles.ImageStyle({imageSizing: undefined, margin: 4});
+			const calls = [];
+			listenChanges(image, calls);
+
+			expectSetterChange(image, 'imageSizing', 'keep-aspect-ratio', 'keep-aspect-ratio', calls);
+			expectSetterChange(image, 'margin', 6, 6, calls);
+			expect(calls).toEqual(['ImageStyle', 'ImageStyle']);
+		});
+
+		it('fires change events for check style setters', function() {
 			const check = new styles.CheckStyle({
 				uncheckBgColor: 'unchecked',
 				checkBgColor: 'checked',
 				borderColor: 'border',
 			});
+			const calls = [];
+			listenChanges(check, calls);
+			expect(calls).toEqual([]);
+
+			expectSetterChange(check, 'uncheckBgColor', 'newUnchecked', 'newUnchecked', calls);
+			expectSetterChange(check, 'checkBgColor', 'newChecked', 'newChecked', calls);
+			expectSetterChange(check, 'borderColor', 'newBorder', 'newBorder', calls);
+			expect(calls).toEqual(['CheckStyle', 'CheckStyle', 'CheckStyle']);
+		});
+
+		it('fires change events for radio style setters', function() {
 			const radio = new styles.RadioStyle({
 				checkColor: 'check',
 				uncheckBorderColor: 'uncheckBorder',
@@ -174,6 +219,20 @@
 				uncheckBgColor: 'uncheckBg',
 				checkBgColor: 'checkBg',
 			});
+			const calls = [];
+			listenChanges(radio, calls);
+			expect(calls).toEqual([]);
+
+			expectSetterChange(radio, 'checkColor', 'newCheck', 'newCheck', calls);
+			expectSetterChange(radio, 'uncheckBorderColor', 'newUncheckBorder', 'newUncheckBorder', calls);
+			expectSetterChange(radio, 'checkBorderColor', 'newCheckBorder', 'newCheckBorder', calls);
+			expect(calls).toEqual(['RadioStyle', 'RadioStyle', 'RadioStyle']);
+			expectSetterChange(radio, 'uncheckBgColor', 'newUncheckBg', 'newUncheckBg', calls);
+			expectSetterChange(radio, 'checkBgColor', 'newCheckBg', 'newCheckBg', calls);
+			expect(calls).toEqual(['RadioStyle', 'RadioStyle', 'RadioStyle', 'RadioStyle', 'RadioStyle']);
+		});
+
+		it('fires change events for tree style setters', function() {
 			const tree = new styles.TreeStyle({
 				lineStyle: 'solid',
 				lineColor: 'line',
@@ -181,61 +240,15 @@
 				treeIcon: 'expand_more',
 			});
 			const calls = [];
+			listenChanges(tree, calls);
+			expect(calls).toEqual([]);
 
-			[button, image, check, radio, tree].forEach(function(style) {
-				style.listen(styles.EVENT_TYPE.CHANGE_STYLE, function() {
-					calls.push(style.constructor.name);
-				});
-			});
-
-			button.buttonBgColor = 'new';
-			image.imageSizing = 'keep-aspect-ratio';
-			image.margin = 6;
-			check.uncheckBgColor = 'newUnchecked';
-			check.checkBgColor = 'newChecked';
-			check.borderColor = 'newBorder';
-			radio.checkColor = 'newCheck';
-			radio.uncheckBorderColor = 'newUncheckBorder';
-			radio.checkBorderColor = 'newCheckBorder';
-			radio.uncheckBgColor = 'newUncheckBg';
-			radio.checkBgColor = 'newCheckBg';
-			tree.lineStyle = 'dashed';
-			tree.lineColor = 'newLine';
-			tree.lineWidth = 2;
-			tree.treeIcon = {name: 'chevron_right'};
-
-			expect(button.buttonBgColor).toEqual('new');
-			expect(image.imageSizing).toEqual('keep-aspect-ratio');
-			expect(image.margin).toEqual(6);
-			expect(check.uncheckBgColor).toEqual('newUnchecked');
-			expect(check.checkBgColor).toEqual('newChecked');
-			expect(check.borderColor).toEqual('newBorder');
-			expect(radio.checkColor).toEqual('newCheck');
-			expect(radio.uncheckBorderColor).toEqual('newUncheckBorder');
-			expect(radio.checkBorderColor).toEqual('newCheckBorder');
-			expect(radio.uncheckBgColor).toEqual('newUncheckBg');
-			expect(radio.checkBgColor).toEqual('newCheckBg');
-			expect(tree.lineStyle).toEqual('dashed');
-			expect(tree.lineColor).toEqual('newLine');
-			expect(tree.lineWidth).toEqual(2);
-			expect(tree.treeIcon).toEqual({name: 'chevron_right'});
-			expect(calls).toEqual([
-				'ButtonStyle',
-				'ImageStyle',
-				'ImageStyle',
-				'CheckStyle',
-				'CheckStyle',
-				'CheckStyle',
-				'RadioStyle',
-				'RadioStyle',
-				'RadioStyle',
-				'RadioStyle',
-				'RadioStyle',
-				'TreeStyle',
-				'TreeStyle',
-				'TreeStyle',
-				'TreeStyle',
-			]);
+			expectSetterChange(tree, 'lineStyle', 'dashed', 'dashed', calls);
+			expectSetterChange(tree, 'lineColor', 'newLine', 'newLine', calls);
+			expect(calls).toEqual(['TreeStyle', 'TreeStyle']);
+			expectSetterChange(tree, 'lineWidth', 2, 2, calls);
+			expectSetterChange(tree, 'treeIcon', {name: 'chevron_right'}, {name: 'chevron_right'}, calls);
+			expect(calls).toEqual(['TreeStyle', 'TreeStyle', 'TreeStyle', 'TreeStyle']);
 		});
 	});
 })();
