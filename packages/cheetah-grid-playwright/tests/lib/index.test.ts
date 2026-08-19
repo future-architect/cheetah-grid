@@ -183,6 +183,17 @@ describe("gridLocator", () => {
     );
   });
 
+  it("rejects operating on a grid scaled by an ancestor transform", async () => {
+    await page.evaluate(() => {
+      document.querySelector<HTMLElement>("#parent")!.style.transform =
+        "scale(0.8)";
+    });
+    const grid = gridLocator(page.locator(".cheetah-grid"));
+    await expect(grid.cell("fname", 0).rect()).rejects.toThrow(
+      "scaled by an ancestor transform"
+    );
+  });
+
   it("throws a clear error for an out-of-range cell", async () => {
     const grid = gridLocator(page.locator(".cheetah-grid"));
     await expect(grid.cell("email", 5000).value()).rejects.toThrow(

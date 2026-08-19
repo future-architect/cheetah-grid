@@ -107,6 +107,16 @@ async function cellOperation<OP extends keyof CellOperationResults>(
     }
     const rect = grid.getCellRelativeRect(col, row);
     const canvasRect = grid.canvas.getBoundingClientRect();
+    // The grid's own mouse hit-testing does not compensate for visual
+    // scaling either, so scaled grids cannot be operated by coordinates.
+    if (
+      Math.abs(canvasRect.width / grid.canvas.offsetWidth - 1) > 0.01 ||
+      Math.abs(canvasRect.height / grid.canvas.offsetHeight - 1) > 0.01
+    ) {
+      throw new Error(
+        "The grid is scaled by an ancestor transform or zoom, which is not supported."
+      );
+    }
     return {
       x: frameOffsetX + canvasRect.left + rect.left,
       y: frameOffsetY + canvasRect.top + rect.top,
