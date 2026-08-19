@@ -1,26 +1,14 @@
 import { defineConfig } from "tsdown";
 
-const baseConfig = {
+export default defineConfig({
   entry: {
     index: "./src/index.ts",
   },
   target: "es2020",
   external: ["playwright-core"],
-  fixedExtension: true,
+  fixedExtension: false,
   hash: false,
-};
-
-export default defineConfig([
-  {
-    ...baseConfig,
-    format: ["esm"],
-    dts: true,
-    clean: true,
-  },
-  {
-    ...baseConfig,
-    format: ["cjs"],
-    dts: false,
-    clean: false,
-  },
-]);
+  format: ["esm"],
+  dts: true,
+  clean: true,
+});

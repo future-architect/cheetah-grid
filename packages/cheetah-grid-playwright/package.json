@@ -2,15 +2,15 @@
   "name": "cheetah-grid-playwright",
   "version": "0.0.0",
   "description": "Playwright helpers for driving Cheetah Grid in browser automation.",
-  "main": "dist/index.cjs",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.mts",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.mts",
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.mjs"
-    }
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
   },
   "files": [
     "dist"
@@ -66,7 +66,7 @@
     "playwright": "^1.60.0",
     "playwright-core": "^1.60.0",
     "prettier": "^3.8.3",
-    "tsdown": "^0.14.1",
+    "tsdown": "^0.22.14",
     "typescript": "^5.9.2",
     "vitest": "^4.1.6"
   }
