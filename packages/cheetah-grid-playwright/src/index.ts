@@ -7,15 +7,20 @@ type CellSpec =
   | { type: "gridCell"; field: string; index: number }
   | { type: "cell"; col: number; row: number };
 
+interface CellOperationResults {
+  rect: CellRect;
+  value: unknown;
+}
+
 /**
  * Runs an operation on a cell.
  * NOTE: This function is serialized and executed in the page context,
  * so it must be self-contained.
  */
-async function cellOperation(
+async function cellOperation<OP extends keyof CellOperationResults>(
   el: SVGElement | HTMLElement,
-  { spec, op }: { spec: CellSpec; op: "rect" | "value" }
-): Promise<unknown> {
+  { spec, op }: { spec: CellSpec; op: OP }
+): Promise<CellOperationResults[OP]> {
   const ns = (window as unknown as { cheetahGrid?: CheetahGridNamespace })
     .cheetahGrid;
   if (!ns) {
@@ -44,7 +49,7 @@ async function cellOperation(
     ({ col, row } = spec);
   }
   if (op === "value") {
-    return grid.getCellValue(col, row);
+    return grid.getCellValue(col, row) as CellOperationResults[OP];
   }
   // op === "rect"
   const before = { left: grid.scrollLeft, top: grid.scrollTop };
@@ -73,7 +78,7 @@ async function cellOperation(
     y: canvasRect.top + rect.top,
     width: rect.width,
     height: rect.height,
-  };
+  } as CellOperationResults[OP];
 }
 
 /** The viewport rectangle of a cell. */
@@ -137,17 +142,17 @@ export class CheetahGridCellLocator {
    * rectangle of the cell.
    */
   rect(): Promise<CellRect> {
-    return this._grid.locator.evaluate(cellOperation, {
+    return this._grid.locator.evaluate(cellOperation<"rect">, {
       spec: this._spec,
       op: "rect" as const,
-    }) as Promise<CellRect>;
+    });
   }
   /**
    * Returns the value of the cell. If the record has not been loaded yet,
    * the value is awaited. For header cells, returns the caption.
    */
   value(): Promise<unknown> {
-    return this._grid.locator.evaluate(cellOperation, {
+    return this._grid.locator.evaluate(cellOperation<"value">, {
       spec: this._spec,
       op: "value" as const,
     });
