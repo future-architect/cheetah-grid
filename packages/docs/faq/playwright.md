@@ -63,6 +63,8 @@ Do not use `page.locator("canvas").click()`. The grid places a scrollable elemen
 
 ## Reading a Cell Value
 
+Use `getGridCellValue(field, index)` (or `getCellValue(col, row)`). If the record has not been loaded yet, it returns a promise of the value, and `page.evaluate()` automatically awaits it.
+
 ```ts
 async function getCellValue(
   page: Page,
@@ -75,17 +77,16 @@ async function getCellValue(
       const grid = cheetahGrid.ListGrid.getInstanceByElement(
         document.querySelector(selector)
       );
-      const { col, row } = grid.getCellRangeByField(field, index).start;
-      let value;
-      grid.doGetCellValue(col, row, (v) => {
-        value = v;
-      });
-      return value;
+      return grid.getGridCellValue(field, index);
     },
     [selector, field, index] as const
   );
 }
 ```
+
+::: warning
+The resolution of the returned promise means the value is available, not that the canvas has finished repainting it (asynchronously loaded values are drawn with a short fade-in animation). It is reliable for asserting values, but not for taking screenshots.
+:::
 
 ## Editing a Cell
 

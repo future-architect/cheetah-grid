@@ -196,6 +196,8 @@ export interface ListGridAPI<T> extends DrawGridAPI {
   getCellRangeByField(field: FieldDef<T>, index: number): CellRange | null;
   focusGridCell(field: FieldDef<T>, index: number): void;
   makeVisibleGridCell(field: FieldDef<T>, index: number): void;
+  getCellValue(col: number, row: number): FieldData;
+  getGridCellValue(field: FieldDef<T>, index: number): FieldData;
   getGridCanvasHelper(): GridCanvasHelperAPI;
   doChangeValue(
     col: number,

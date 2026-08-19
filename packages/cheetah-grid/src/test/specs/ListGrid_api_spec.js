@@ -307,6 +307,41 @@
 			expect(ListGrid.getInstanceByElement(element)).toBeUndefined();
 		});
 
+		it('gets cell values including header captions', function() {
+			const calls = [];
+			const {grid} = createSimpleGrid(calls);
+			try {
+				expect(grid.getCellValue(0, 0)).toEqual('Person');
+				expect(grid.getCellValue(0, 1)).toEqual('Name');
+				expect(grid.getCellValue(0, 2)).toEqual('Ada');
+				expect(grid.getCellValue(1, 3)).toEqual(85);
+				expect(grid.getGridCellValue('name', 1)).toEqual('Grace');
+				expect(grid.getGridCellValue('age', 0)).toEqual(36);
+				expect(grid.getGridCellValue('unknown', 0)).toBeUndefined();
+			} finally {
+				grid.dispose();
+			}
+		});
+
+		it('gets cell values from unloaded records as promises', async function() {
+			const grid = new ListGrid({
+				parentElement: createParent(),
+				header: [{field: 'name', caption: 'Name', width: 100}],
+				dataSource: new DataSource({
+					get(index) {
+						return Promise.resolve({name: `p${index}`});
+					},
+					length: 2,
+				}),
+			});
+			try {
+				expect(await grid.getCellValue(0, 1)).toEqual('p0');
+				expect(await grid.getGridCellValue('name', 1)).toEqual('p1');
+			} finally {
+				grid.dispose();
+			}
+		});
+
 		it('updates mutable paste and display options', function() {
 			const calls = [];
 			const {grid} = createSimpleGrid(calls);
