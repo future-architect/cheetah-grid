@@ -90,19 +90,17 @@ The resolution of the returned promise means the value is available, not that th
 
 ## Editing a Cell
 
-After clicking a cell that has an [input action](../api/js/column_actions/InlineInputEditor.md), you can start editing it with real keyboard events.
+After clicking a cell that has an [input action](../api/js/column_actions/InlineInputEditor.md), typing characters opens the inline editor with the typed text, replacing the current value — just like typing on a spreadsheet. The editor is a real focused `<input>` element, so keyboard events simply go to it; no selector is needed.
 
 ```ts
 await clickCell(page, ".sample-grid", "email", 3);
-// Open the inline editor with F2 (or double-click the cell), ...
-await page.keyboard.press("F2");
-// ... type the new value into the editor element, ...
-await page.locator("input.cheetah-grid__inline-input").fill("cat@example.com");
-// ... then commit it.
+await page.keyboard.type("cat@example.com");
 await page.keyboard.press("Enter");
 ```
 
-Alternatively, simply typing characters on the selected cell also opens the inline editor. Note that you must use `page.keyboard.type()` (which fires real key events) in that case; `page.keyboard.insertText()` does not open the editor.
+To modify the current value instead of replacing it, open the editor with F2 or a double click; the current value is pre-filled with the caret at the end.
+
+Note that you must use `page.keyboard.type()` (which fires real key events); `page.keyboard.insertText()` does not open the editor.
 
 ## Waiting for Grid Events
 
