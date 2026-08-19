@@ -49,9 +49,9 @@ test("edit a cell", async ({ page }) => {
 
 ## API
 
-### `gridLocator(locator, options?)`
+### `gridLocator(locator)`
 
-Creates a grid locator. `locator` may point at the grid root element (`.cheetah-grid`), any element inside the grid, or an ancestor element containing the grid. `options.globalName` overrides the name of the `window` global holding the cheetahGrid namespace (default: `"cheetahGrid"`).
+Creates a grid locator. `locator` may point at the grid root element (`.cheetah-grid`), any element inside the grid, or an ancestor element containing the grid.
 
 ### `grid.cell(field, index)` / `grid.cellAt(col, row)`
 

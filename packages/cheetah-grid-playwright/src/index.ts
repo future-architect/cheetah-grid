@@ -5,11 +5,6 @@ type CheetahGridNamespace = typeof cheetahGridNamespace;
 
 type CellSpec = { field: string; index: number } | { col: number; row: number };
 
-interface EvalContext {
-  globalName: string;
-  spec: CellSpec;
-}
-
 /** The viewport rectangle of a cell. */
 export interface CellRect {
   x: number;
@@ -18,36 +13,24 @@ export interface CellRect {
   height: number;
 }
 
-export interface GridLocatorOptions {
-  /**
-   * Name of the `window` global that holds the cheetahGrid namespace.
-   * The UMD bundle defines `window.cheetahGrid` automatically; applications
-   * bundling the ES module must expose it themselves
-   * (e.g. `window.cheetahGrid = cheetahGrid`).
-   * @default "cheetahGrid"
-   */
-  globalName?: string;
-}
-
 /**
  * Creates a {@link CheetahGridLocator} that drives the Cheetah Grid found
  * at the given locator. The locator may point at the grid root element
  * (`.cheetah-grid`), any element inside the grid, or an ancestor element
  * containing the grid.
+ *
+ * The page must expose the cheetahGrid namespace as `window.cheetahGrid`.
+ * The UMD bundle defines it automatically; applications bundling the ES
+ * module must expose it themselves (e.g. `window.cheetahGrid = cheetahGrid`).
  */
-export function gridLocator(
-  locator: Locator,
-  options: GridLocatorOptions = {}
-): CheetahGridLocator {
-  return new CheetahGridLocator(locator, options.globalName ?? "cheetahGrid");
+export function gridLocator(locator: Locator): CheetahGridLocator {
+  return new CheetahGridLocator(locator);
 }
 
 export class CheetahGridLocator {
   readonly locator: Locator;
-  readonly globalName: string;
-  constructor(locator: Locator, globalName: string) {
+  constructor(locator: Locator) {
     this.locator = locator;
-    this.globalName = globalName;
   }
   get page(): Page {
     return this.locator.page();
@@ -79,114 +62,102 @@ export class CheetahGridCellLocator {
    * rectangle of the cell.
    */
   rect(): Promise<CellRect> {
-    return this._grid.locator.evaluate(
-      async (el, { globalName, spec }: EvalContext) => {
-        // NOTE: This function runs in the page context and must be
-        // self-contained.
-        const ns = (
-          window as unknown as Record<string, CheetahGridNamespace | undefined>
-        )[globalName];
-        if (!ns) {
+    return this._grid.locator.evaluate(async (el, spec: CellSpec) => {
+      // NOTE: This function runs in the page context and must be
+      // self-contained.
+      const ns = (window as unknown as { cheetahGrid?: CheetahGridNamespace })
+        .cheetahGrid;
+      if (!ns) {
+        throw new Error(
+          '"window.cheetahGrid" is not defined. Expose the cheetahGrid namespace for automation (e.g. `window.cheetahGrid = cheetahGrid`).'
+        );
+      }
+      const inner = el.querySelector(".cheetah-grid");
+      const grid =
+        ns.ListGrid.getInstanceByElement(el) ??
+        (inner ? ns.ListGrid.getInstanceByElement(inner) : undefined);
+      if (!grid) {
+        throw new Error("No ListGrid instance is associated with the element.");
+      }
+      let col: number;
+      let row: number;
+      if ("field" in spec) {
+        const range = grid.getCellRangeByField(spec.field, spec.index);
+        if (!range) {
           throw new Error(
-            `"window.${globalName}" is not defined. Expose the cheetahGrid namespace for automation (e.g. \`window.${globalName} = cheetahGrid\`).`
+            `Cell not found: field=${spec.field}, index=${spec.index}`
           );
         }
-        const inner = el.querySelector(".cheetah-grid");
-        const grid =
-          ns.ListGrid.getInstanceByElement(el) ??
-          (inner ? ns.ListGrid.getInstanceByElement(inner) : undefined);
-        if (!grid) {
-          throw new Error(
-            "No ListGrid instance is associated with the element."
-          );
-        }
-        let col: number;
-        let row: number;
-        if ("field" in spec) {
-          const range = grid.getCellRangeByField(spec.field, spec.index);
-          if (!range) {
-            throw new Error(
-              `Cell not found: field=${spec.field}, index=${spec.index}`
-            );
-          }
-          ({ col, row } = range.start);
-        } else {
-          ({ col, row } = spec);
-        }
-        const before = { left: grid.scrollLeft, top: grid.scrollTop };
-        grid.makeVisibleCell(col, row);
-        if (grid.scrollLeft !== before.left || grid.scrollTop !== before.top) {
-          // makeVisibleCell only updates the DOM scroll position; the
-          // grid state used by getCellRelativeRect is updated by the
-          // asynchronous scroll event, so wait for it.
-          await new Promise<void>((resolve) => {
-            const id = grid.listen("scroll", () => {
+        ({ col, row } = range.start);
+      } else {
+        ({ col, row } = spec);
+      }
+      const before = { left: grid.scrollLeft, top: grid.scrollTop };
+      grid.makeVisibleCell(col, row);
+      if (grid.scrollLeft !== before.left || grid.scrollTop !== before.top) {
+        // makeVisibleCell only updates the DOM scroll position; the
+        // grid state used by getCellRelativeRect is updated by the
+        // asynchronous scroll event, so wait for it.
+        await new Promise<void>((resolve) => {
+          const id = grid.listen("scroll", () => {
+            grid.unlisten(id);
+            resolve();
+          });
+          requestAnimationFrame(() =>
+            requestAnimationFrame(() => {
               grid.unlisten(id);
               resolve();
-            });
-            requestAnimationFrame(() =>
-              requestAnimationFrame(() => {
-                grid.unlisten(id);
-                resolve();
-              })
-            );
-          });
-        }
-        const rect = grid.getCellRelativeRect(col, row);
-        const canvasRect = grid.canvas.getBoundingClientRect();
-        return {
-          x: canvasRect.left + rect.left,
-          y: canvasRect.top + rect.top,
-          width: rect.width,
-          height: rect.height,
-        };
-      },
-      { globalName: this._grid.globalName, spec: this._spec }
-    );
+            })
+          );
+        });
+      }
+      const rect = grid.getCellRelativeRect(col, row);
+      const canvasRect = grid.canvas.getBoundingClientRect();
+      return {
+        x: canvasRect.left + rect.left,
+        y: canvasRect.top + rect.top,
+        width: rect.width,
+        height: rect.height,
+      };
+    }, this._spec);
   }
   /**
    * Returns the value of the cell. If the record has not been loaded yet,
    * the value is awaited. For header cells, returns the caption.
    */
   value(): Promise<unknown> {
-    return this._grid.locator.evaluate(
-      (el, { globalName, spec }: EvalContext) => {
-        // NOTE: This function runs in the page context and must be
-        // self-contained.
-        const ns = (
-          window as unknown as Record<string, CheetahGridNamespace | undefined>
-        )[globalName];
-        if (!ns) {
+    return this._grid.locator.evaluate((el, spec: CellSpec) => {
+      // NOTE: This function runs in the page context and must be
+      // self-contained.
+      const ns = (window as unknown as { cheetahGrid?: CheetahGridNamespace })
+        .cheetahGrid;
+      if (!ns) {
+        throw new Error(
+          '"window.cheetahGrid" is not defined. Expose the cheetahGrid namespace for automation (e.g. `window.cheetahGrid = cheetahGrid`).'
+        );
+      }
+      const inner = el.querySelector(".cheetah-grid");
+      const grid =
+        ns.ListGrid.getInstanceByElement(el) ??
+        (inner ? ns.ListGrid.getInstanceByElement(inner) : undefined);
+      if (!grid) {
+        throw new Error("No ListGrid instance is associated with the element.");
+      }
+      let col: number;
+      let row: number;
+      if ("field" in spec) {
+        const range = grid.getCellRangeByField(spec.field, spec.index);
+        if (!range) {
           throw new Error(
-            `"window.${globalName}" is not defined. Expose the cheetahGrid namespace for automation (e.g. \`window.${globalName} = cheetahGrid\`).`
+            `Cell not found: field=${spec.field}, index=${spec.index}`
           );
         }
-        const inner = el.querySelector(".cheetah-grid");
-        const grid =
-          ns.ListGrid.getInstanceByElement(el) ??
-          (inner ? ns.ListGrid.getInstanceByElement(inner) : undefined);
-        if (!grid) {
-          throw new Error(
-            "No ListGrid instance is associated with the element."
-          );
-        }
-        let col: number;
-        let row: number;
-        if ("field" in spec) {
-          const range = grid.getCellRangeByField(spec.field, spec.index);
-          if (!range) {
-            throw new Error(
-              `Cell not found: field=${spec.field}, index=${spec.index}`
-            );
-          }
-          ({ col, row } = range.start);
-        } else {
-          ({ col, row } = spec);
-        }
-        return grid.getCellValue(col, row);
-      },
-      { globalName: this._grid.globalName, spec: this._spec }
-    );
+        ({ col, row } = range.start);
+      } else {
+        ({ col, row } = spec);
+      }
+      return grid.getCellValue(col, row);
+    }, this._spec);
   }
   /**
    * Clicks the center of the cell with a real mouse event, scrolling the
