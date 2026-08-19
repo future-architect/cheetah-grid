@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>editors grid fixture</title>
+<link rel="stylesheet" href="../../../cheetah-grid/dist/main.css">
+<script src="../../../cheetah-grid/dist/main.umd.js"></script>
+</head>
+<body>
+<div id="parent" style="width: 600px; height: 300px;"></div>
+<script>
+const langOptions = [
+	{value: 'en', label: 'English'},
+	{value: 'ja', label: 'Japanese'},
+];
+window.grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#parent'),
+	header: [
+		{field: 'name', caption: 'Name', width: 150, action: 'input'},
+		{
+			field: 'lang',
+			caption: 'Lang',
+			width: 100,
+			columnType: new cheetahGrid.columns.type.MenuColumn({options: langOptions}),
+			action: new cheetahGrid.columns.action.InlineMenuEditor({options: langOptions}),
+		},
+		{
+			field: 'age',
+			caption: 'Age',
+			width: 100,
+			action: new cheetahGrid.columns.action.SmallDialogInputEditor({
+				inputValidator: (value) => (/^\d+$/.test(value) ? '' : 'Please enter numbers only.'),
+			}),
+		},
+	],
+	records: [
+		{name: 'Ada', lang: 'en', age: 36},
+		{name: 'Grace', lang: 'ja', age: 21},
+	],
+});
+</script>
+</body>
+</html>

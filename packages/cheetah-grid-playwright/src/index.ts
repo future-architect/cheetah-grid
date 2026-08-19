@@ -295,8 +295,10 @@ export class CheetahGridCellLocator {
       "input:focus:not(.grid-focus-control)"
     );
     if ((await editorInput.count()) === 0) {
+      // Close a menu editor etc. that the click may have opened.
+      await page.keyboard.press("Escape");
       throw new Error(
-        "The cell editor did not open. The cell may not be editable."
+        "The cell editor did not open. The cell may not be editable, or its editor may not be a text input."
       );
     }
     await editorInput.fill(value);

@@ -209,6 +209,25 @@ describe("gridLocator", () => {
     );
   });
 
+  it("rejects fill() on a menu editor cell and closes the menu", async () => {
+    await page.goto(
+      new URL("../fixtures/editors-grid.html", import.meta.url).href
+    );
+    await page.waitForFunction(
+      () => (window as { grid?: unknown }).grid != null
+    );
+    const grid = gridLocator(page.locator(".cheetah-grid"));
+    await expect(grid.cell("lang", 0).fill("ja")).rejects.toThrow(
+      "The cell editor did not open"
+    );
+    expect(
+      await page.locator(".cheetah-grid__inline-menu--shown").count()
+    ).toBe(0);
+    // Subsequent operations are not affected by the failed fill().
+    await grid.cell("name", 0).fill("AfterMenu");
+    expect(await grid.cell("name", 0).value()).toBe("AfterMenu");
+  });
+
   it("throws a clear error for an out-of-range cell", async () => {
     const grid = gridLocator(page.locator(".cheetah-grid"));
     await expect(grid.cell("email", 5000).value()).rejects.toThrow(
