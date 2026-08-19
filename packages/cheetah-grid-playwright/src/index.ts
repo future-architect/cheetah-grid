@@ -55,31 +55,7 @@ async function cellOperation<OP extends keyof CellOperationResults>(
     return grid.getCellValue(col, row);
   }
   if (op === "rect") {
-    const before = { left: grid.scrollLeft, top: grid.scrollTop };
-    grid.makeVisibleCell(col, row);
-    if (grid.scrollLeft !== before.left || grid.scrollTop !== before.top) {
-      // makeVisibleCell only updates the DOM scroll position; the grid
-      // state used by getCellRelativeRect is updated by the asynchronous
-      // scroll event, so wait for it.
-      await new Promise<void>((resolve) => {
-        // Settle exactly once: both paths below reach here, and the
-        // grid's unlisten() is not idempotent (a second call throws).
-        let settled = false;
-        const settle = (): void => {
-          if (settled) {
-            return;
-          }
-          settled = true;
-          grid.unlisten(id);
-          resolve();
-        };
-        const id = grid.listen("scroll", settle);
-        // Fallback in case no scroll event arrives. Scroll events are
-        // processed before animation frame callbacks in the rendering
-        // steps, so a pending scroll event always wins this race.
-        requestAnimationFrame(() => requestAnimationFrame(settle));
-      });
-    }
+    await scrollCellIntoView();
     const frameOffset = getFrameOffset();
     // For merged (colSpan/rowSpan) cells, return the whole merged
     // rectangle rather than the anchor cell slice.
@@ -138,6 +114,62 @@ async function cellOperation<OP extends keyof CellOperationResults>(
       throw new Error("No ListGrid instance is associated with the element.");
     }
     return grid;
+  }
+  /**
+   * Scrolls the grid so that the cell is inside the grid's own viewport,
+   * and waits until the grid's internal scroll state catches up.
+   */
+  async function scrollCellIntoView(): Promise<void> {
+    const before = { left: grid.scrollLeft, top: grid.scrollTop };
+    // Force instant scrolling while adjusting the grid's scroll
+    // position: under `scroll-behavior: smooth` the programmatic scroll
+    // of makeVisibleCell animates, so the position (which the wait
+    // below and the returned coordinates are based on) would still be
+    // the old one when this function returns. An automation helper
+    // should not wait for the cosmetic animation either.
+    const scrollable = grid
+      .getElement()
+      .querySelector<HTMLElement>(".grid-scrollable");
+    const behavior = scrollable?.style.getPropertyValue("scroll-behavior");
+    const behaviorPriority =
+      scrollable?.style.getPropertyPriority("scroll-behavior");
+    scrollable?.style.setProperty("scroll-behavior", "auto", "important");
+    grid.makeVisibleCell(col, row);
+    if (scrollable) {
+      if (behavior) {
+        scrollable.style.setProperty(
+          "scroll-behavior",
+          behavior,
+          behaviorPriority
+        );
+      } else {
+        scrollable.style.removeProperty("scroll-behavior");
+      }
+    }
+    if (grid.scrollLeft === before.left && grid.scrollTop === before.top) {
+      return;
+    }
+    // makeVisibleCell only updates the DOM scroll position; the grid
+    // state used by getCellRelativeRect is updated by the asynchronous
+    // scroll event, so wait for it.
+    await new Promise<void>((resolve) => {
+      // Settle exactly once: both paths below reach here, and the
+      // grid's unlisten() is not idempotent (a second call throws).
+      let settled = false;
+      const settle = (): void => {
+        if (settled) {
+          return;
+        }
+        settled = true;
+        grid.unlisten(id);
+        resolve();
+      };
+      const id = grid.listen("scroll", settle);
+      // Fallback in case no scroll event arrives. Scroll events are
+      // processed before animation frame callbacks in the rendering
+      // steps, so a pending scroll event always wins this race.
+      requestAnimationFrame(() => requestAnimationFrame(settle));
+    });
   }
   /**
    * Returns the total offset of the ancestor frame elements. The mouse

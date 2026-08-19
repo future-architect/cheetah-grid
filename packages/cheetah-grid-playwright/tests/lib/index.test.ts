@@ -220,6 +220,23 @@ describe("gridLocator", () => {
     expect(await grid.cell("fname", 1).value()).toBe("BelowFold");
   });
 
+  it("operates under scroll-behavior: smooth", async () => {
+    await page.addStyleTag({
+      content: "* { scroll-behavior: smooth !important; }",
+    });
+    const grid = gridLocator(page.locator(".cheetah-grid"));
+    await grid.cell("email", 800).click();
+    const select = await page.evaluate(
+      () =>
+        (
+          window as unknown as {
+            grid: { selection: { select: { col: number; row: number } } };
+          }
+        ).grid.selection.select
+    );
+    expect(select).toEqual({ col: 3, row: 801 });
+  });
+
   it("operates on a grid taller than the window viewport", async () => {
     await page.evaluate(() => {
       document.querySelector<HTMLElement>("#parent")!.style.height = "2000px";
