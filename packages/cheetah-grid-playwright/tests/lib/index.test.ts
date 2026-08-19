@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 import type { Browser, Page } from "playwright";
 import { chromium } from "playwright";
 import { gridLocator } from "../../src/index";
+import { gotoFixture } from "../support/goto-fixture";
 
 const FIXTURE_URL = new URL("../fixtures/grid.html", import.meta.url).href;
 // Iframe tests require real origins (file: documents are opaque origins in
@@ -60,8 +61,7 @@ afterAll(async () => {
 });
 
 beforeEach(async () => {
-  await page.goto(FIXTURE_URL);
-  await page.waitForFunction(() => (window as { grid?: unknown }).grid != null);
+  await gotoFixture(page, FIXTURE_URL);
   pageErrors = [];
 });
 
@@ -165,11 +165,9 @@ describe("gridLocator", () => {
   });
 
   it("replaces the value of a lazily loaded record", async () => {
-    await page.goto(
+    await gotoFixture(
+      page,
       new URL("../fixtures/async-grid.html", import.meta.url).href
-    );
-    await page.waitForFunction(
-      () => (window as { grid?: unknown }).grid != null
     );
     const grid = gridLocator(page.locator(".cheetah-grid"));
     await grid.cell("name", 300).fill("LazyFilled");
@@ -184,11 +182,9 @@ describe("gridLocator", () => {
   });
 
   it("returns the whole rectangle of a merged cell", async () => {
-    await page.goto(
+    await gotoFixture(
+      page,
       new URL("../fixtures/layout-grid.html", import.meta.url).href
-    );
-    await page.waitForFunction(
-      () => (window as { grid?: unknown }).grid != null
     );
     const grid = gridLocator(page.locator(".cheetah-grid"));
     const merged = await grid.cell("name", 0).rect();
@@ -260,11 +256,9 @@ describe("gridLocator", () => {
   });
 
   it("rejects fill() on a menu editor cell and closes the menu", async () => {
-    await page.goto(
+    await gotoFixture(
+      page,
       new URL("../fixtures/editors-grid.html", import.meta.url).href
-    );
-    await page.waitForFunction(
-      () => (window as { grid?: unknown }).grid != null
     );
     const grid = gridLocator(page.locator(".cheetah-grid"));
     await expect(grid.cell("lang", 0).fill("ja")).rejects.toThrow(
@@ -279,11 +273,9 @@ describe("gridLocator", () => {
   });
 
   it("rejects fill() when the input validator rejects the value", async () => {
-    await page.goto(
+    await gotoFixture(
+      page,
       new URL("../fixtures/editors-grid.html", import.meta.url).href
-    );
-    await page.waitForFunction(
-      () => (window as { grid?: unknown }).grid != null
     );
     const grid = gridLocator(page.locator(".cheetah-grid"));
     await expect(grid.cell("age", 1).fill("abc")).rejects.toThrow(
@@ -309,11 +301,9 @@ describe("gridLocator", () => {
   });
 
   it("operates on a cell wider than the grid viewport", async () => {
-    await page.goto(
+    await gotoFixture(
+      page,
       new URL("../fixtures/wide-grid.html", import.meta.url).href
-    );
-    await page.waitForFunction(
-      () => (window as { grid?: unknown }).grid != null
     );
     const grid = gridLocator(page.locator(".cheetah-grid"));
     await grid.cell("wide", 0).click();
@@ -333,11 +323,9 @@ describe("gridLocator", () => {
   });
 
   it("rejects an ancestor locator containing multiple grids", async () => {
-    await page.goto(
+    await gotoFixture(
+      page,
       new URL("../fixtures/two-grids.html", import.meta.url).href
-    );
-    await page.waitForFunction(
-      () => (window as { grid2?: unknown }).grid2 != null
     );
     await expect(
       gridLocator(page.locator("#container")).cell("fname", 0).value()

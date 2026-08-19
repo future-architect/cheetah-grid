@@ -3,6 +3,7 @@ import { fileURLToPath } from "node:url";
 import type { Browser, Page } from "playwright";
 import { chromium } from "playwright";
 import type { gridLocator as gridLocatorSrc } from "../../src/index";
+import { gotoFixture } from "../support/goto-fixture";
 
 const FIXTURE_URL = new URL("../fixtures/grid.html", import.meta.url).href;
 const DIST_URL = new URL("../../dist/index.js", import.meta.url).href;
@@ -36,10 +37,7 @@ describe("built package", () => {
       gridLocator: typeof gridLocatorSrc;
     };
 
-    await page.goto(FIXTURE_URL);
-    await page.waitForFunction(
-      () => (window as { grid?: unknown }).grid != null
-    );
+    await gotoFixture(page, FIXTURE_URL);
     const grid = gridLocator(page.locator(".cheetah-grid"));
     expect(await grid.cell("fname", 0).value()).toBe("name0");
     // Exercise the scroll wait and the editor flow through the built code.
