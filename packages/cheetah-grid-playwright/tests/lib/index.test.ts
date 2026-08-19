@@ -308,6 +308,22 @@ describe("gridLocator", () => {
     );
   });
 
+  it("rejects an ancestor locator containing multiple grids", async () => {
+    await page.goto(
+      new URL("../fixtures/two-grids.html", import.meta.url).href
+    );
+    await page.waitForFunction(
+      () => (window as { grid2?: unknown }).grid2 != null
+    );
+    await expect(
+      gridLocator(page.locator("#container")).cell("fname", 0).value()
+    ).rejects.toThrow("The element contains 2 grids");
+    // A locator identifying a single grid still works.
+    expect(
+      await gridLocator(page.locator("#parent2")).cell("fname", 0).value()
+    ).toBe("b0");
+  });
+
   it("throws a clear error for an unknown field", async () => {
     const grid = gridLocator(page.locator(".cheetah-grid"));
     await expect(grid.cell("unknown", 0).value()).rejects.toThrow(

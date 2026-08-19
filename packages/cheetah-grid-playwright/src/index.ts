@@ -106,10 +106,21 @@ async function cellOperation<OP extends keyof CellOperationResults>(
         '"window.cheetahGrid" is not defined. Expose the cheetahGrid namespace for automation (e.g. `window.cheetahGrid = cheetahGrid`).'
       );
     }
-    const inner = el.querySelector(".cheetah-grid");
-    const grid =
-      ns.ListGrid.getInstanceByElement(el) ??
-      (inner ? ns.ListGrid.getInstanceByElement(inner) : undefined);
+    let grid = ns.ListGrid.getInstanceByElement(el);
+    if (!grid) {
+      // The element is not inside a grid; find the grid under it. Never
+      // pick one of several silently — operating on the wrong grid only
+      // shows up as confusing wrong-cell failures.
+      const inners = el.querySelectorAll(".cheetah-grid");
+      if (inners.length > 1) {
+        throw new Error(
+          `The element contains ${inners.length} grids. Use a locator that identifies a single grid.`
+        );
+      }
+      if (inners.length === 1) {
+        grid = ns.ListGrid.getInstanceByElement(inners[0]);
+      }
+    }
     if (!grid) {
       throw new Error("No ListGrid instance is associated with the element.");
     }

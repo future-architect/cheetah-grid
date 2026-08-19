@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>two grids fixture</title>
+<link rel="stylesheet" href="../../../cheetah-grid/dist/main.css">
+<script src="../../../cheetah-grid/dist/main.umd.js"></script>
+</head>
+<body>
+<div id="container">
+	<div id="parent1" style="width: 600px; height: 200px;"></div>
+	<div id="parent2" style="width: 600px; height: 200px;"></div>
+</div>
+<script>
+function createGrid(parent, prefix) {
+	return new cheetahGrid.ListGrid({
+		parentElement: document.querySelector(parent),
+		header: [
+			{field: 'id', caption: 'ID', width: 80},
+			{field: 'fname', caption: 'First Name', width: 200, action: 'input'},
+		],
+		records: [
+			{id: 1, fname: `${prefix}0`},
+			{id: 2, fname: `${prefix}1`},
+		],
+	});
+}
+window.grid1 = createGrid('#parent1', 'a');
+window.grid2 = createGrid('#parent2', 'b');
+</script>
+</body>
+</html>
