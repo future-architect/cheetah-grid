@@ -14,28 +14,16 @@ interface CellOperationResults {
 
 /**
  * Runs an operation on a cell.
- * NOTE: This function is serialized and executed in the page context,
- * so it must be self-contained.
+ * NOTE: This function is serialized and executed in the page context, so
+ * it must be self-contained. Helper functions are declared inside it so
+ * that they are serialized together with it.
  */
 async function cellOperation<OP extends keyof CellOperationResults>(
   el: SVGElement | HTMLElement,
   { spec, op }: { spec: CellSpec; op: OP }
 ): Promise<CellOperationResults[OP]> {
   // Get the grid instance associated with the element, and the column and row of the cell.
-  const ns = (window as unknown as { cheetahGrid?: CheetahGridNamespace })
-    .cheetahGrid;
-  if (!ns) {
-    throw new Error(
-      '"window.cheetahGrid" is not defined. Expose the cheetahGrid namespace for automation (e.g. `window.cheetahGrid = cheetahGrid`).'
-    );
-  }
-  const inner = el.querySelector(".cheetah-grid");
-  const grid =
-    ns.ListGrid.getInstanceByElement(el) ??
-    (inner ? ns.ListGrid.getInstanceByElement(inner) : undefined);
-  if (!grid) {
-    throw new Error("No ListGrid instance is associated with the element.");
-  }
+  const grid = resolveGrid();
   let col: number;
   let row: number;
   if (spec.type === "gridCell") {
@@ -82,30 +70,24 @@ async function cellOperation<OP extends keyof CellOperationResults>(
         requestAnimationFrame(() => requestAnimationFrame(settle));
       });
     }
-    // The mouse operates in the top-level viewport while
-    // getBoundingClientRect is relative to this frame's viewport, so add
-    // the offsets of the ancestor frame elements.
-    let frameOffsetX = 0;
-    let frameOffsetY = 0;
-    for (let win: Window = window; win !== win.parent; win = win.parent) {
-      const { frameElement } = win;
-      if (!frameElement) {
-        throw new Error(
-          "The grid is inside a cross-origin iframe, which is not supported."
-        );
-      }
-      const frameRect = frameElement.getBoundingClientRect();
-      const frameStyle = win.parent.getComputedStyle(frameElement);
-      frameOffsetX +=
-        frameRect.left +
-        frameElement.clientLeft +
-        parseFloat(frameStyle.paddingLeft);
-      frameOffsetY +=
-        frameRect.top +
-        frameElement.clientTop +
-        parseFloat(frameStyle.paddingTop);
-    }
-    const rect = grid.getCellRelativeRect(col, row);
+    const frameOffset = getFrameOffset();
+    // For merged (colSpan/rowSpan) cells, return the whole merged
+    // rectangle rather than the anchor cell slice.
+    const range = grid.getCellRange(col, row);
+    const startRect = grid.getCellRelativeRect(
+      range.start.col,
+      range.start.row
+    );
+    const endRect =
+      range.start.col === range.end.col && range.start.row === range.end.row
+        ? startRect
+        : grid.getCellRelativeRect(range.end.col, range.end.row);
+    const rect = {
+      left: startRect.left,
+      top: startRect.top,
+      width: endRect.left + endRect.width - startRect.left,
+      height: endRect.top + endRect.height - startRect.top,
+    };
     const canvasRect = grid.canvas.getBoundingClientRect();
     // The grid's own mouse hit-testing does not compensate for visual
     // scaling either, so scaled grids cannot be operated by coordinates.
@@ -118,14 +100,63 @@ async function cellOperation<OP extends keyof CellOperationResults>(
       );
     }
     return {
-      x: frameOffsetX + canvasRect.left + rect.left,
-      y: frameOffsetY + canvasRect.top + rect.top,
+      x: frameOffset.x + canvasRect.left + rect.left,
+      y: frameOffset.y + canvasRect.top + rect.top,
       width: rect.width,
       height: rect.height,
     };
   }
 
   throw new Error(`Invalid cell operation: ${op}`);
+
+  /**
+   * Gets the grid instance associated with the element.
+   */
+  function resolveGrid() {
+    const ns = (window as unknown as { cheetahGrid?: CheetahGridNamespace })
+      .cheetahGrid;
+    if (!ns) {
+      throw new Error(
+        '"window.cheetahGrid" is not defined. Expose the cheetahGrid namespace for automation (e.g. `window.cheetahGrid = cheetahGrid`).'
+      );
+    }
+    const inner = el.querySelector(".cheetah-grid");
+    const grid =
+      ns.ListGrid.getInstanceByElement(el) ??
+      (inner ? ns.ListGrid.getInstanceByElement(inner) : undefined);
+    if (!grid) {
+      throw new Error("No ListGrid instance is associated with the element.");
+    }
+    return grid;
+  }
+  /**
+   * Returns the total offset of the ancestor frame elements. The mouse
+   * operates in the top-level viewport while getBoundingClientRect is
+   * relative to this frame's viewport.
+   */
+  function getFrameOffset(): { x: number; y: number } {
+    let x = 0;
+    let y = 0;
+    for (let win: Window = window; win !== win.parent; win = win.parent) {
+      const { frameElement } = win;
+      if (!frameElement) {
+        throw new Error(
+          "The grid is inside a cross-origin iframe, which is not supported."
+        );
+      }
+      const frameRect = frameElement.getBoundingClientRect();
+      const frameStyle = win.parent.getComputedStyle(frameElement);
+      x +=
+        frameRect.left +
+        frameElement.clientLeft +
+        parseFloat(frameStyle.paddingLeft);
+      y +=
+        frameRect.top +
+        frameElement.clientTop +
+        parseFloat(frameStyle.paddingTop);
+    }
+    return { x, y };
+  }
 }
 
 /** The viewport rectangle of a cell. */

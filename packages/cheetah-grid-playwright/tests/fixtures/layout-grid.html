@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>layout grid fixture</title>
+<link rel="stylesheet" href="../../../cheetah-grid/dist/main.css">
+<script src="../../../cheetah-grid/dist/main.umd.js"></script>
+</head>
+<body>
+<div id="parent" style="width: 600px; height: 300px;"></div>
+<script>
+window.grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#parent'),
+	layout: {
+		header: [
+			[
+				{caption: 'Name', width: 150},
+				{caption: 'Note', width: 200},
+			],
+		],
+		body: [
+			[
+				{field: 'name', rowSpan: 2, action: 'input'},
+				{field: 'note1'},
+			],
+			[
+				{field: 'note2'},
+			],
+		],
+	},
+	records: [
+		{name: 'Ada', note1: 'a1', note2: 'a2'},
+		{name: 'Grace', note1: 'g1', note2: 'g2'},
+	],
+});
+</script>
+</body>
+</html>

@@ -183,6 +183,21 @@ describe("gridLocator", () => {
     );
   });
 
+  it("returns the whole rectangle of a merged cell", async () => {
+    await page.goto(
+      new URL("../fixtures/layout-grid.html", import.meta.url).href
+    );
+    await page.waitForFunction(
+      () => (window as { grid?: unknown }).grid != null
+    );
+    const grid = gridLocator(page.locator(".cheetah-grid"));
+    const merged = await grid.cell("name", 0).rect();
+    const single = await grid.cell("note1", 0).rect();
+    expect(merged.height).toBe(single.height * 2);
+    await grid.cell("name", 0).fill("MergedFilled");
+    expect(await grid.cell("name", 0).value()).toBe("MergedFilled");
+  });
+
   it("rejects operating on a grid scaled by an ancestor transform", async () => {
     await page.evaluate(() => {
       document.querySelector<HTMLElement>("#parent")!.style.transform =
