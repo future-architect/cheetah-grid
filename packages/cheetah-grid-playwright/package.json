@@ -1,0 +1,73 @@
+{
+  "name": "cheetah-grid-playwright",
+  "version": "0.0.0",
+  "description": "Playwright helpers for driving Cheetah Grid in browser automation.",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.mts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "build:ci": "pnpm run build",
+    "prepack": "pnpm run build",
+    "test": "vitest run",
+    "watch": "vitest",
+    "lint": "pnpm run eslint && pnpm run tsc",
+    "eslint": "eslint .",
+    "eslint:fix": "eslint . --fix",
+    "tsc": "tsc --project ./tsconfig.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/future-architect/cheetah-grid.git"
+  },
+  "keywords": [
+    "playwright",
+    "testing",
+    "e2e",
+    "grid",
+    "cheetah-grid"
+  ],
+  "author": {
+    "name": "yosuke ota",
+    "email": "otameshiyo23@gmail.com",
+    "url": "https://www.npmjs.com/~ota-meshi"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/future-architect/cheetah-grid/issues"
+  },
+  "homepage": "https://github.com/future-architect/cheetah-grid/tree/master/packages/cheetah-grid-playwright",
+  "engines": {
+    "node": "^22.12.0 || ^24.11.0"
+  },
+  "peerDependencies": {
+    "playwright-core": ">=1.40.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^24.12.4",
+    "@typescript-eslint/eslint-plugin": "^8.59.3",
+    "@typescript-eslint/parser": "^8.59.3",
+    "cheetah-grid": "workspace:*",
+    "eslint": "^10.4.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
+    "globals": "^17.6.0",
+    "playwright": "^1.60.0",
+    "playwright-core": "^1.60.0",
+    "prettier": "^3.8.3",
+    "tsdown": "^0.14.1",
+    "typescript": "^5.9.2",
+    "vitest": "^4.1.6"
+  }
+}

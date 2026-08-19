@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>cheetah-grid-playwright fixture</title>
+<link rel="stylesheet" href="../../../cheetah-grid/dist/main.css">
+<script src="../../../cheetah-grid/dist/main.umd.js"></script>
+</head>
+<body>
+<div id="parent" style="width: 600px; height: 300px;"></div>
+<script>
+const records = [];
+for (let i = 0; i < 1000; i++) {
+	records.push({
+		personid: i + 1,
+		check: i % 2 === 0,
+		fname: `name${i}`,
+		email: `mail${i}@example.com`,
+	});
+}
+window.grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#parent'),
+	header: [
+		{field: 'personid', caption: 'ID', width: 80},
+		{field: 'check', caption: 'Check', width: 60, columnType: 'check', action: 'check'},
+		{field: 'fname', caption: 'First Name', width: 200, action: 'input'},
+		{field: 'email', caption: 'Email', width: 250, action: 'input'},
+	],
+	frozenColCount: 1,
+	records,
+});
+</script>
+</body>
+</html>
