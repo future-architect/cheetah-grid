@@ -209,6 +209,39 @@ describe("gridLocator", () => {
     );
   });
 
+  it("operates on a grid below the window fold", async () => {
+    await page.evaluate(() => {
+      const spacer = document.createElement("div");
+      spacer.style.height = "2000px";
+      document.body.prepend(spacer);
+    });
+    const grid = gridLocator(page.locator(".cheetah-grid"));
+    await grid.cell("fname", 1).fill("BelowFold");
+    expect(await grid.cell("fname", 1).value()).toBe("BelowFold");
+  });
+
+  it("operates on a grid taller than the window viewport", async () => {
+    await page.evaluate(() => {
+      document.querySelector<HTMLElement>("#parent")!.style.height = "2000px";
+    });
+    await page.waitForFunction(
+      () =>
+        document.querySelector<HTMLElement>(".cheetah-grid canvas")!
+          .offsetHeight > 1500
+    );
+    const grid = gridLocator(page.locator(".cheetah-grid"));
+    await grid.cell("email", 800).click();
+    const select = await page.evaluate(
+      () =>
+        (
+          window as unknown as {
+            grid: { selection: { select: { col: number; row: number } } };
+          }
+        ).grid.selection.select
+    );
+    expect(select).toEqual({ col: 3, row: 801 });
+  });
+
   it("rejects fill() on a menu editor cell and closes the menu", async () => {
     await page.goto(
       new URL("../fixtures/editors-grid.html", import.meta.url).href

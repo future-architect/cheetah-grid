@@ -258,26 +258,59 @@ export class CheetahGridCellLocator {
     });
   }
   /**
+   * Returns the viewport point to click: the center of the cell. Scrolls
+   * the window (and ancestor frames) so that the grid is in view first —
+   * the grid only scrolls its own viewport internally — and fails clearly
+   * when the point still lies outside the window viewport (mouse events
+   * outside the viewport hit nothing, silently).
+   */
+  private async _clickPoint(): Promise<{ x: number; y: number }> {
+    await this._grid.rootLocator.scrollIntoViewIfNeeded();
+    let rect = await this.rect();
+    let x = rect.x + rect.width / 2;
+    let y = rect.y + rect.height / 2;
+    const viewport = this._grid.page.viewportSize();
+    if (
+      viewport &&
+      (x < 0 || viewport.width < x || y < 0 || viewport.height < y)
+    ) {
+      // The grid is in view but the cell is not, e.g. when the grid
+      // element itself is larger than the window viewport
+      // (scrollIntoViewIfNeeded does nothing once any part of the grid
+      // is visible). Scroll the window to bring the point around the
+      // center of the viewport, and recompute.
+      await this._grid.page.evaluate(
+        ([scrollX, scrollY]) => {
+          window.scrollBy(scrollX, scrollY);
+        },
+        [x - viewport.width / 2, y - viewport.height / 2]
+      );
+      rect = await this.rect();
+      x = rect.x + rect.width / 2;
+      y = rect.y + rect.height / 2;
+      if (x < 0 || viewport.width < x || y < 0 || viewport.height < y) {
+        throw new Error(
+          `The cell's click point (${x}, ${y}) is outside the window viewport (${viewport.width}x${viewport.height}).`
+        );
+      }
+    }
+    return { x, y };
+  }
+  /**
    * Clicks the center of the cell with a real mouse event, scrolling the
    * grid to make the cell visible first.
    */
   async click(): Promise<void> {
-    const rect = await this.rect();
-    await this._grid.page.mouse.click(
-      rect.x + rect.width / 2,
-      rect.y + rect.height / 2
-    );
+    const point = await this._clickPoint();
+    await this._grid.page.mouse.click(point.x, point.y);
   }
   /**
    * Double-clicks the center of the cell with real mouse events, scrolling
    * the grid to make the cell visible first.
    */
   async dblclick(): Promise<void> {
-    const rect = await this.rect();
-    await this._grid.page.mouse.dblclick(
-      rect.x + rect.width / 2,
-      rect.y + rect.height / 2
-    );
+    const point = await this._clickPoint();
+    await this._grid.page.mouse.dblclick(point.x, point.y);
   }
   /**
    * Replaces the value of an editable cell: selects the cell, opens the
