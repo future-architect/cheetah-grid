@@ -100,7 +100,7 @@ await page.keyboard.press("Enter");
 
 To modify the current value instead of replacing it, open the editor with F2 or a double click; the current value is pre-filled with the caret at the end.
 
-Note that you must use `page.keyboard.type()` (which fires real key events); `page.keyboard.insertText()` does not open the editor.
+Note that you must use `page.keyboard.type()` (which fires real key events) to start editing; `page.keyboard.insertText()` and `locator.fill()` do not open the editor, since the grid opens it on `keypress` and there is no editable element in the DOM until then. Once the editor is open, the focused input is a regular element, so `page.locator(":focus").fill("...")` also works.
 
 ## Waiting for Grid Events
 
