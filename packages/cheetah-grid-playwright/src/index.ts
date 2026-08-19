@@ -21,6 +21,7 @@ async function cellOperation<OP extends keyof CellOperationResults>(
   el: SVGElement | HTMLElement,
   { spec, op }: { spec: CellSpec; op: OP }
 ): Promise<CellOperationResults[OP]> {
+  // Get the grid instance associated with the element, and the column and row of the cell.
   const ns = (window as unknown as { cheetahGrid?: CheetahGridNamespace })
     .cheetahGrid;
   if (!ns) {
@@ -48,37 +49,42 @@ async function cellOperation<OP extends keyof CellOperationResults>(
   } else {
     ({ col, row } = spec);
   }
+
+  // Perform the requested operation.
   if (op === "value") {
-    return grid.getCellValue(col, row) as CellOperationResults[OP];
+    return grid.getCellValue(col, row);
   }
-  // op === "rect"
-  const before = { left: grid.scrollLeft, top: grid.scrollTop };
-  grid.makeVisibleCell(col, row);
-  if (grid.scrollLeft !== before.left || grid.scrollTop !== before.top) {
-    // makeVisibleCell only updates the DOM scroll position; the grid
-    // state used by getCellRelativeRect is updated by the asynchronous
-    // scroll event, so wait for it.
-    await new Promise<void>((resolve) => {
-      const id = grid.listen("scroll", () => {
-        grid.unlisten(id);
-        resolve();
-      });
-      requestAnimationFrame(() =>
-        requestAnimationFrame(() => {
+  if (op === "rect") {
+    const before = { left: grid.scrollLeft, top: grid.scrollTop };
+    grid.makeVisibleCell(col, row);
+    if (grid.scrollLeft !== before.left || grid.scrollTop !== before.top) {
+      // makeVisibleCell only updates the DOM scroll position; the grid
+      // state used by getCellRelativeRect is updated by the asynchronous
+      // scroll event, so wait for it.
+      await new Promise<void>((resolve) => {
+        const id = grid.listen("scroll", () => {
           grid.unlisten(id);
           resolve();
-        })
-      );
-    });
+        });
+        requestAnimationFrame(() =>
+          requestAnimationFrame(() => {
+            grid.unlisten(id);
+            resolve();
+          })
+        );
+      });
+    }
+    const rect = grid.getCellRelativeRect(col, row);
+    const canvasRect = grid.canvas.getBoundingClientRect();
+    return {
+      x: canvasRect.left + rect.left,
+      y: canvasRect.top + rect.top,
+      width: rect.width,
+      height: rect.height,
+    };
   }
-  const rect = grid.getCellRelativeRect(col, row);
-  const canvasRect = grid.canvas.getBoundingClientRect();
-  return {
-    x: canvasRect.left + rect.left,
-    y: canvasRect.top + rect.top,
-    width: rect.width,
-    height: rect.height,
-  } as CellOperationResults[OP];
+
+  throw new Error(`Invalid cell operation: ${op}`);
 }
 
 /** The viewport rectangle of a cell. */
