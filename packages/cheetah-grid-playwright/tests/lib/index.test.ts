@@ -228,6 +228,26 @@ describe("gridLocator", () => {
     expect(await grid.cell("name", 0).value()).toBe("AfterMenu");
   });
 
+  it("rejects fill() when the input validator rejects the value", async () => {
+    await page.goto(
+      new URL("../fixtures/editors-grid.html", import.meta.url).href
+    );
+    await page.waitForFunction(
+      () => (window as { grid?: unknown }).grid != null
+    );
+    const grid = gridLocator(page.locator(".cheetah-grid"));
+    await expect(grid.cell("age", 1).fill("abc")).rejects.toThrow(
+      "The cell value was not committed: Please enter numbers only."
+    );
+    expect(await grid.cell("age", 1).value()).toBe(21);
+    expect(
+      await page.locator(".cheetah-grid__small-dialog-input--shown").count()
+    ).toBe(0);
+    // A valid value still commits.
+    await grid.cell("age", 1).fill("42");
+    expect(await grid.cell("age", 1).value()).toBe("42");
+  });
+
   it("throws a clear error for an out-of-range cell", async () => {
     const grid = gridLocator(page.locator(".cheetah-grid"));
     await expect(grid.cell("email", 5000).value()).rejects.toThrow(

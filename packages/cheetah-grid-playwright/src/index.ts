@@ -3,10 +3,15 @@ import type * as cheetahGridNamespace from "cheetah-grid";
 
 type CheetahGridNamespace = typeof cheetahGridNamespace;
 
+/**
+ * How the target cell is specified: by the field and record index
+ * (`gridCell`), or by raw column/row indices including headers (`cell`).
+ */
 type CellSpec =
   | { type: "gridCell"; field: string; index: number }
   | { type: "cell"; col: number; row: number };
 
+/** Result of {@link cellOperation}, keyed by the operation. */
 interface CellOperationResults {
   rect: CellRect;
   value: unknown;
@@ -57,6 +62,8 @@ async function cellOperation<OP extends keyof CellOperationResults>(
       // state used by getCellRelativeRect is updated by the asynchronous
       // scroll event, so wait for it.
       await new Promise<void>((resolve) => {
+        // Settle exactly once: both paths below reach here, and the
+        // grid's unlisten() is not idempotent (a second call throws).
         let settled = false;
         const settle = (): void => {
           if (settled) {
@@ -67,6 +74,9 @@ async function cellOperation<OP extends keyof CellOperationResults>(
           resolve();
         };
         const id = grid.listen("scroll", settle);
+        // Fallback in case no scroll event arrives. Scroll events are
+        // processed before animation frame callbacks in the rendering
+        // steps, so a pending scroll event always wins this race.
         requestAnimationFrame(() => requestAnimationFrame(settle));
       });
     }
@@ -277,6 +287,8 @@ export class CheetahGridCellLocator {
     const { page } = this._grid;
     // Load the record first; the editor cannot open while it is loading.
     await this.value();
+    // Select the cell with a real click, then open its editor with F2
+    // (pre-filled with the current value).
     await this.click();
     await page.keyboard.press("F2");
     // The cell editors ignore Enter for one macrotask after opening.
@@ -289,13 +301,16 @@ export class CheetahGridCellLocator {
         })
     );
     // The editor element is attached inside the grid root element. The
-    // grid's own focus control is excluded so that the value is never
-    // silently typed into it when no editor opened.
+    // grid's own hidden focus control is excluded: it is the focused
+    // (and editable) element whenever no editor is open, so without the
+    // exclusion the value would be silently typed into it.
     const editorInput = this._grid.rootLocator.locator(
       "input:focus:not(.grid-focus-control)"
     );
     if ((await editorInput.count()) === 0) {
-      // Close a menu editor etc. that the click may have opened.
+      // No editor opened. Menu editors open their menu on the single
+      // click above and trap the focus on a menu item; close it so that
+      // the failed fill() does not affect subsequent operations.
       await page.keyboard.press("Escape");
       throw new Error(
         "The cell editor did not open. The cell may not be editable, or its editor may not be a text input."
@@ -303,5 +318,59 @@ export class CheetahGridCellLocator {
     }
     await editorInput.fill(value);
     await page.keyboard.press("Enter");
+    // Enter does not guarantee a commit: when a validator rejects the
+    // value (possibly asynchronously), the value stays unchanged and the
+    // editor stays open. Poll until the outcome is known and resolve with
+    // the validation message, or null on success.
+    const errorMessage = await this._grid.rootLocator.evaluate(
+      (root) =>
+        new Promise<string | null>((resolve, reject) => {
+          const startTime = Date.now();
+          const check = (): void => {
+            // Special-case handling for the built-in
+            // SmallDialogInputEditor, the only built-in editor that
+            // supports validators (`inputValidator`/`validator`; the
+            // string action "input" also maps to this editor). When a
+            // validator rejects the value, the dialog stays open: the
+            // dialog element always remains in the DOM with its
+            // visibility expressed only by the "--shown"/"--hidden"
+            // state classes, and it exposes the validation message as
+            // data-error-message. The other built-in text editor
+            // (InlineInputEditor) has no validators, and rejections by
+            // custom editors cannot be detected here — those resolve via
+            // the focus check below or hit the timeout.
+            const dialog = root.querySelector<HTMLElement>(
+              ".cheetah-grid__small-dialog-input--shown"
+            );
+            const message = dialog?.dataset.errorMessage;
+            if (message) {
+              resolve(message);
+              return;
+            }
+            // On a successful commit the editor closes and the grid
+            // moves the focus back to its own focus control.
+            const active = root.ownerDocument.activeElement;
+            if (
+              !active ||
+              !root.contains(active) ||
+              active.classList.contains("grid-focus-control")
+            ) {
+              resolve(null);
+              return;
+            }
+            if (Date.now() - startTime > 30000) {
+              reject(new Error("The cell value was not committed."));
+              return;
+            }
+            setTimeout(check, 16);
+          };
+          check();
+        })
+    );
+    if (errorMessage !== null) {
+      // Cancel the editing so that the dialog does not stay open.
+      await page.keyboard.press("Escape");
+      throw new Error(`The cell value was not committed: ${errorMessage}`);
+    }
   }
 }
