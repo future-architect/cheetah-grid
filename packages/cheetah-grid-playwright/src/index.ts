@@ -62,16 +62,17 @@ async function cellOperation<OP extends keyof CellOperationResults>(
       // state used by getCellRelativeRect is updated by the asynchronous
       // scroll event, so wait for it.
       await new Promise<void>((resolve) => {
-        const id = grid.listen("scroll", () => {
+        let settled = false;
+        const settle = (): void => {
+          if (settled) {
+            return;
+          }
+          settled = true;
           grid.unlisten(id);
           resolve();
-        });
-        requestAnimationFrame(() =>
-          requestAnimationFrame(() => {
-            grid.unlisten(id);
-            resolve();
-          })
-        );
+        };
+        const id = grid.listen("scroll", settle);
+        requestAnimationFrame(() => requestAnimationFrame(settle));
       });
     }
     const rect = grid.getCellRelativeRect(col, row);

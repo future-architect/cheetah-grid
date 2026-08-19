@@ -6,10 +6,12 @@ const FIXTURE_URL = new URL("../fixtures/grid.html", import.meta.url).href;
 
 let browser: Browser;
 let page: Page;
+let pageErrors: Error[] = [];
 
 beforeAll(async () => {
   browser = await chromium.launch({ channel: "chrome" });
   page = await browser.newPage();
+  page.on("pageerror", (error) => pageErrors.push(error));
 });
 
 afterAll(async () => {
@@ -19,6 +21,20 @@ afterAll(async () => {
 beforeEach(async () => {
   await page.goto(FIXTURE_URL);
   await page.waitForFunction(() => (window as { grid?: unknown }).grid != null);
+  pageErrors = [];
+});
+
+afterEach(async () => {
+  // Let pending requestAnimationFrame callbacks fire before checking.
+  await page.evaluate(
+    () =>
+      new Promise((resolve) => {
+        requestAnimationFrame(() =>
+          requestAnimationFrame(() => requestAnimationFrame(resolve))
+        );
+      })
+  );
+  expect(pageErrors).toEqual([]);
 });
 
 describe("gridLocator", () => {
