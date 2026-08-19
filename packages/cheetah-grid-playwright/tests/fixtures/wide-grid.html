@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>wide column fixture</title>
+<link rel="stylesheet" href="../../../cheetah-grid/dist/main.css">
+<script src="../../../cheetah-grid/dist/main.umd.js"></script>
+</head>
+<body>
+<div id="parent" style="width: 600px; height: 300px;"></div>
+<script>
+window.grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#parent'),
+	header: [
+		{field: 'id', caption: 'ID', width: 80},
+		{field: 'wide', caption: 'Wide', width: 1300, action: 'input'},
+	],
+	records: [
+		{id: 1, wide: 'w0'},
+		{id: 2, wide: 'w1'},
+	],
+});
+</script>
+</body>
+</html>

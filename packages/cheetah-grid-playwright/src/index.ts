@@ -14,6 +14,7 @@ type CellSpec =
 /** Result of {@link cellOperation}, keyed by the operation. */
 interface CellOperationResults {
   rect: CellRect;
+  _evaluateClickPoint: { x: number; y: number };
   value: unknown;
 }
 
@@ -25,8 +26,12 @@ interface CellOperationResults {
  */
 async function cellOperation<OP extends keyof CellOperationResults>(
   el: SVGElement | HTMLElement,
-  { spec, op }: { spec: CellSpec; op: OP }
-): Promise<CellOperationResults[OP]> {
+  arg: { spec: CellSpec; op: OP }
+): Promise<CellOperationResults[OP]>;
+async function cellOperation(
+  el: SVGElement | HTMLElement,
+  { spec, op }: { spec: CellSpec; op: keyof CellOperationResults }
+): Promise<unknown> {
   // Get the grid instance associated with the element, and the column and row of the cell.
   const grid = resolveGrid();
   let col: number;
@@ -54,7 +59,7 @@ async function cellOperation<OP extends keyof CellOperationResults>(
   if (op === "value") {
     return grid.getCellValue(col, row);
   }
-  if (op === "rect") {
+  if (op === "rect" || op === "_evaluateClickPoint") {
     await scrollCellIntoView();
     const frameOffset = getFrameOffset();
     // For merged (colSpan/rowSpan) cells, return the whole merged
@@ -85,15 +90,32 @@ async function cellOperation<OP extends keyof CellOperationResults>(
         "The grid is scaled by an ancestor transform or zoom, which is not supported."
       );
     }
+    if (op === "rect") {
+      return {
+        x: frameOffset.x + canvasRect.left + rect.left,
+        y: frameOffset.y + canvasRect.top + rect.top,
+        width: rect.width,
+        height: rect.height,
+      };
+    }
+    // The click point: the center of the visible part of the cell. The center
+    // of the whole rectangle can fall outside the canvas when the cell
+    // is larger than the grid viewport (e.g. a column wider than the
+    // grid), and mouse events outside the canvas hit nothing.
+    const left = Math.max(rect.left, 0);
+    const top = Math.max(rect.top, 0);
+    const right = Math.min(rect.left + rect.width, canvasRect.width);
+    const bottom = Math.min(rect.top + rect.height, canvasRect.height);
+    if (right <= left || bottom <= top) {
+      throw new Error("The cell is outside the visible area of the grid.");
+    }
     return {
-      x: frameOffset.x + canvasRect.left + rect.left,
-      y: frameOffset.y + canvasRect.top + rect.top,
-      width: rect.width,
-      height: rect.height,
+      x: frameOffset.x + canvasRect.left + (left + right) / 2,
+      y: frameOffset.y + canvasRect.top + (top + bottom) / 2,
     };
   }
 
-  throw new Error(`Invalid cell operation: ${op}`);
+  throw new Error(`Invalid cell operation: ${String(op)}`);
 
   /**
    * Gets the grid instance associated with the element.
@@ -301,7 +323,9 @@ export class CheetahGridCellLocator {
     });
   }
   /**
-   * Returns the viewport point to click: the center of the cell. Scrolls
+   * Returns the viewport point to click: the center of the visible part
+   * of the cell (a cell larger than the grid viewport is only partially
+   * on the canvas, and mouse events outside the canvas hit nothing). Scrolls
    * the window (and ancestor frames) so that the grid is in view first —
    * the grid only scrolls its own viewport internally — and fails clearly
    * when the point still lies outside the window viewport (mouse events
@@ -309,13 +333,14 @@ export class CheetahGridCellLocator {
    */
   private async _clickPoint(): Promise<{ x: number; y: number }> {
     await this._grid.rootLocator.scrollIntoViewIfNeeded();
-    let rect = await this.rect();
-    let x = rect.x + rect.width / 2;
-    let y = rect.y + rect.height / 2;
+    let point = await this._evaluateClickPoint();
     const viewport = this._grid.page.viewportSize();
     if (
       viewport &&
-      (x < 0 || viewport.width < x || y < 0 || viewport.height < y)
+      (point.x < 0 ||
+        viewport.width < point.x ||
+        point.y < 0 ||
+        viewport.height < point.y)
     ) {
       // The grid is in view but the cell is not, e.g. when the grid
       // element itself is larger than the window viewport
@@ -326,18 +351,27 @@ export class CheetahGridCellLocator {
         ([scrollX, scrollY]) => {
           window.scrollBy(scrollX, scrollY);
         },
-        [x - viewport.width / 2, y - viewport.height / 2]
+        [point.x - viewport.width / 2, point.y - viewport.height / 2]
       );
-      rect = await this.rect();
-      x = rect.x + rect.width / 2;
-      y = rect.y + rect.height / 2;
-      if (x < 0 || viewport.width < x || y < 0 || viewport.height < y) {
+      point = await this._evaluateClickPoint();
+      if (
+        point.x < 0 ||
+        viewport.width < point.x ||
+        point.y < 0 ||
+        viewport.height < point.y
+      ) {
         throw new Error(
-          `The cell's click point (${x}, ${y}) is outside the window viewport (${viewport.width}x${viewport.height}).`
+          `The cell's click point (${point.x}, ${point.y}) is outside the window viewport (${viewport.width}x${viewport.height}).`
         );
       }
     }
-    return { x, y };
+    return point;
+  }
+  private _evaluateClickPoint(): Promise<{ x: number; y: number }> {
+    return this._grid.locator.evaluate(cellOperation<"_evaluateClickPoint">, {
+      spec: this._spec,
+      op: "_evaluateClickPoint" as const,
+    });
   }
   /**
    * Clicks the center of the cell with a real mouse event, scrolling the

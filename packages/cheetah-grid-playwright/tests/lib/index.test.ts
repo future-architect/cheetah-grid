@@ -308,6 +308,30 @@ describe("gridLocator", () => {
     );
   });
 
+  it("operates on a cell wider than the grid viewport", async () => {
+    await page.goto(
+      new URL("../fixtures/wide-grid.html", import.meta.url).href
+    );
+    await page.waitForFunction(
+      () => (window as { grid?: unknown }).grid != null
+    );
+    const grid = gridLocator(page.locator(".cheetah-grid"));
+    await grid.cell("wide", 0).click();
+    const select = await page.evaluate(
+      () =>
+        (
+          window as unknown as {
+            grid: { selection: { select: { col: number; row: number } } };
+          }
+        ).grid.selection.select
+    );
+    expect(select).toEqual({ col: 1, row: 1 });
+    // NOTE: fill() cannot work on cells wider than the grid viewport:
+    // focusing the oversized editor input scrolls the grid, and the
+    // editors close themselves on any grid scroll (a core limitation
+    // that also affects real users pressing F2).
+  });
+
   it("rejects an ancestor locator containing multiple grids", async () => {
     await page.goto(
       new URL("../fixtures/two-grids.html", import.meta.url).href
