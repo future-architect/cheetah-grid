@@ -1,14 +1,52 @@
+import { readFile } from "node:fs/promises";
+import type { Server } from "node:http";
+import { createServer } from "node:http";
+import type { AddressInfo } from "node:net";
+import { extname, join, normalize } from "node:path";
+import { fileURLToPath } from "node:url";
 import type { Browser, Page } from "playwright";
 import { chromium } from "playwright";
 import { gridLocator } from "../../src/index";
 
 const FIXTURE_URL = new URL("../fixtures/grid.html", import.meta.url).href;
+// Iframe tests require real origins (file: documents are opaque origins in
+// Chrome, so even same-directory iframes read as cross-origin), so the
+// fixtures are also served over HTTP from the repository root.
+const REPO_ROOT = fileURLToPath(new URL("../../../..", import.meta.url));
+const CONTENT_TYPES: Record<string, string> = {
+  ".html": "text/html",
+  ".js": "text/javascript",
+  ".css": "text/css",
+};
 
 let browser: Browser;
 let page: Page;
 let pageErrors: Error[] = [];
+let server: Server;
+let serverUrl: string;
 
 beforeAll(async () => {
+  server = createServer((req, res) => {
+    const path = normalize(join(REPO_ROOT, req.url?.split("?")[0] ?? "/"));
+    readFile(path).then(
+      (body) => {
+        res.setHeader(
+          "Content-Type",
+          CONTENT_TYPES[extname(path)] ?? "application/octet-stream"
+        );
+        res.end(body);
+      },
+      () => {
+        res.statusCode = 404;
+        res.end();
+      }
+    );
+  });
+  await new Promise<void>((resolve) => {
+    server.listen(0, resolve);
+  });
+  serverUrl = `http://localhost:${(server.address() as AddressInfo).port}`;
+
   browser = await chromium.launch({ channel: "chrome" });
   page = await browser.newPage();
   page.on("pageerror", (error) => pageErrors.push(error));
@@ -16,6 +54,9 @@ beforeAll(async () => {
 
 afterAll(async () => {
   await browser?.close();
+  await new Promise((resolve) => {
+    server?.close(resolve);
+  });
 });
 
 beforeEach(async () => {
@@ -100,6 +141,27 @@ describe("gridLocator", () => {
     expect(await grid.cell("check", 0).value()).toBe(true);
     await grid.cell("check", 0).click();
     expect(await grid.cell("check", 0).value()).toBe(false);
+  });
+
+  it("operates on a grid inside a same-origin iframe", async () => {
+    await page.goto(
+      `${serverUrl}/packages/cheetah-grid-playwright/tests/fixtures/iframe-grid.html`
+    );
+    const gridElement = page.frameLocator("iframe").locator(".cheetah-grid");
+    await gridElement.waitFor();
+    const grid = gridLocator(gridElement);
+    await grid.cell("email", 2).click();
+    const select = await gridElement.evaluate(
+      () =>
+        (
+          window as unknown as {
+            grid: { selection: { select: { col: number; row: number } } };
+          }
+        ).grid.selection.select
+    );
+    expect(select).toEqual({ col: 3, row: 3 });
+    await grid.cell("fname", 1).fill("InIframe");
+    expect(await grid.cell("fname", 1).value()).toBe("InIframe");
   });
 
   it("throws a clear error for an unknown field", async () => {

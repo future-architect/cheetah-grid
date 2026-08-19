@@ -75,11 +75,34 @@ async function cellOperation<OP extends keyof CellOperationResults>(
         requestAnimationFrame(() => requestAnimationFrame(settle));
       });
     }
+    // The mouse operates in the top-level viewport while
+    // getBoundingClientRect is relative to this frame's viewport, so add
+    // the offsets of the ancestor frame elements.
+    let frameOffsetX = 0;
+    let frameOffsetY = 0;
+    for (let win: Window = window; win !== win.parent; win = win.parent) {
+      const { frameElement } = win;
+      if (!frameElement) {
+        throw new Error(
+          "The grid is inside a cross-origin iframe, which is not supported."
+        );
+      }
+      const frameRect = frameElement.getBoundingClientRect();
+      const frameStyle = win.parent.getComputedStyle(frameElement);
+      frameOffsetX +=
+        frameRect.left +
+        frameElement.clientLeft +
+        parseFloat(frameStyle.paddingLeft);
+      frameOffsetY +=
+        frameRect.top +
+        frameElement.clientTop +
+        parseFloat(frameStyle.paddingTop);
+    }
     const rect = grid.getCellRelativeRect(col, row);
     const canvasRect = grid.canvas.getBoundingClientRect();
     return {
-      x: canvasRect.left + rect.left,
-      y: canvasRect.top + rect.top,
+      x: frameOffsetX + canvasRect.left + rect.left,
+      y: frameOffsetY + canvasRect.top + rect.top,
       width: rect.width,
       height: rect.height,
     };
@@ -117,6 +140,18 @@ export class CheetahGridLocator {
   }
   get page(): Page {
     return this.locator.page();
+  }
+  /**
+   * Locator of the grid root element (`.cheetah-grid`), resolved from the
+   * given locator whether it points at the root itself, an element inside
+   * the grid, or an ancestor element. Stays in the locator's own frame.
+   */
+  get rootLocator(): Locator {
+    return this.locator
+      .locator(
+        "xpath=ancestor-or-self::*[contains(concat(' ', normalize-space(@class), ' '), ' cheetah-grid ')]"
+      )
+      .or(this.locator.locator(".cheetah-grid"));
   }
   /**
    * Returns a cell locator for the given field and record index.
@@ -195,15 +230,16 @@ export class CheetahGridCellLocator {
     await this.click();
     await page.keyboard.press("F2");
     // The cell editors ignore Enter for one macrotask after opening.
-    // The page's pending timeout runs before this one (FIFO), so after
-    // this wait the editor accepts the commit.
-    await page.evaluate(
+    // The grid frame's pending timeout runs before this one (FIFO), so
+    // after this wait the editor accepts the commit.
+    await this._grid.locator.evaluate(
       () =>
         new Promise((resolve) => {
           setTimeout(resolve);
         })
     );
-    await page.locator("input:focus").fill(value);
+    // The editor element is attached inside the grid root element.
+    await this._grid.rootLocator.locator("input:focus").fill(value);
     await page.keyboard.press("Enter");
   }
 }
