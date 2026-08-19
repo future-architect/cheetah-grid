@@ -920,6 +920,23 @@ export class ListGrid<T> extends DrawGrid implements ListGridAPI<T> {
     return LG_EVENT_TYPE;
   }
   /**
+   * Gets the ListGrid instance associated with the given element.
+   * @param element the root element of the grid, or any element inside the grid
+   * @returns the ListGrid instance, or `undefined` if the given element does not belong to any ListGrid
+   */
+  static getInstanceByElement(
+    element: Element
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Accept any type
+  ): ListGrid<any> | undefined {
+    for (let el: Element | null = element; el; el = el.parentElement) {
+      const grid = gridMap.get(el);
+      if (grid) {
+        return grid;
+      }
+    }
+    return undefined;
+  }
+  /**
    * constructor
    *
    * @constructor

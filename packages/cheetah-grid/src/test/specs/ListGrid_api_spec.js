@@ -293,6 +293,20 @@
 			}
 		});
 
+		it('gets the grid instance associated with the element', function() {
+			const calls = [];
+			const {grid} = createSimpleGrid(calls);
+			const element = grid.getElement();
+			try {
+				expect(ListGrid.getInstanceByElement(element)).toBe(grid);
+				expect(ListGrid.getInstanceByElement(element.querySelector('canvas'))).toBe(grid);
+				expect(ListGrid.getInstanceByElement(document.body)).toBeUndefined();
+			} finally {
+				grid.dispose();
+			}
+			expect(ListGrid.getInstanceByElement(element)).toBeUndefined();
+		});
+
 		it('updates mutable paste and display options', function() {
 			const calls = [];
 			const {grid} = createSimpleGrid(calls);
