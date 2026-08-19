@@ -114,12 +114,12 @@ await page.evaluate((selector) => {
   const grid = cheetahGrid.ListGrid.getInstanceByElement(
     document.querySelector(selector)
   );
-  (window as any).__changedValue = new Promise((resolve) => {
-    const id = grid.listen(cheetahGrid.ListGrid.EVENT_TYPE.CHANGED_VALUE, (e) => {
-      grid.unlisten(id);
-      resolve(e);
-    });
+  const { promise, resolve } = Promise.withResolvers();
+  const id = grid.listen(cheetahGrid.ListGrid.EVENT_TYPE.CHANGED_VALUE, (e) => {
+    grid.unlisten(id);
+    resolve(e);
   });
+  (window as any).__changedValue = promise;
 }, ".sample-grid");
 
 // ... perform the edit operation, then:
