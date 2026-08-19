@@ -3,7 +3,9 @@ import type * as cheetahGridNamespace from "cheetah-grid";
 
 type CheetahGridNamespace = typeof cheetahGridNamespace;
 
-type CellSpec = { field: string; index: number } | { col: number; row: number };
+type CellSpec =
+  | { type: "gridCell"; field: string; index: number }
+  | { type: "cell"; col: number; row: number };
 
 /** The viewport rectangle of a cell. */
 export interface CellRect {
@@ -39,14 +41,18 @@ export class CheetahGridLocator {
    * Returns a cell locator for the given field and record index.
    */
   cell(field: string, index: number): CheetahGridCellLocator {
-    return new CheetahGridCellLocator(this, { field, index });
+    return new CheetahGridCellLocator(this, {
+      type: "gridCell",
+      field,
+      index,
+    });
   }
   /**
    * Returns a cell locator for the given raw column and row indices
    * (including header rows).
    */
   cellAt(col: number, row: number): CheetahGridCellLocator {
-    return new CheetahGridCellLocator(this, { col, row });
+    return new CheetahGridCellLocator(this, { type: "cell", col, row });
   }
 }
 
@@ -81,7 +87,7 @@ export class CheetahGridCellLocator {
       }
       let col: number;
       let row: number;
-      if ("field" in spec) {
+      if (spec.type === "gridCell") {
         const range = grid.getCellRangeByField(spec.field, spec.index);
         if (!range) {
           throw new Error(
@@ -145,7 +151,7 @@ export class CheetahGridCellLocator {
       }
       let col: number;
       let row: number;
-      if ("field" in spec) {
+      if (spec.type === "gridCell") {
         const range = grid.getCellRangeByField(spec.field, spec.index);
         if (!range) {
           throw new Error(
