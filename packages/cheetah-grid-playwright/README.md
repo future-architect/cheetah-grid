@@ -17,6 +17,8 @@ import * as cheetahGrid from "cheetah-grid";
 window.cheetahGrid = cheetahGrid;
 ```
 
+The exposed namespace must be the same module instance that created the grid — `ListGrid.getInstanceByElement` cannot find grids created by another copy of the module. In particular, when using `vue-cheetah-grid` or `react-cheetah-grid`, make sure your `cheetah-grid` import resolves to the same copy that the wrapper uses.
+
 ## Usage
 
 ```ts
