@@ -227,6 +227,8 @@ export class CheetahGridCellLocator {
    */
   async fill(value: string): Promise<void> {
     const { page } = this._grid;
+    // Load the record first; the editor cannot open while it is loading.
+    await this.value();
     await this.click();
     await page.keyboard.press("F2");
     // The cell editors ignore Enter for one macrotask after opening.
@@ -238,8 +240,18 @@ export class CheetahGridCellLocator {
           setTimeout(resolve);
         })
     );
-    // The editor element is attached inside the grid root element.
-    await this._grid.rootLocator.locator("input:focus").fill(value);
+    // The editor element is attached inside the grid root element. The
+    // grid's own focus control is excluded so that the value is never
+    // silently typed into it when no editor opened.
+    const editorInput = this._grid.rootLocator.locator(
+      "input:focus:not(.grid-focus-control)"
+    );
+    if ((await editorInput.count()) === 0) {
+      throw new Error(
+        "The cell editor did not open. The cell may not be editable."
+      );
+    }
+    await editorInput.fill(value);
     await page.keyboard.press("Enter");
   }
 }

@@ -164,6 +164,25 @@ describe("gridLocator", () => {
     expect(await grid.cell("fname", 1).value()).toBe("InIframe");
   });
 
+  it("replaces the value of a lazily loaded record", async () => {
+    await page.goto(
+      new URL("../fixtures/async-grid.html", import.meta.url).href
+    );
+    await page.waitForFunction(
+      () => (window as { grid?: unknown }).grid != null
+    );
+    const grid = gridLocator(page.locator(".cheetah-grid"));
+    await grid.cell("name", 300).fill("LazyFilled");
+    expect(await grid.cell("name", 300).value()).toBe("LazyFilled");
+  });
+
+  it("fails clearly when the cell editor does not open", async () => {
+    const grid = gridLocator(page.locator(".cheetah-grid"));
+    await expect(grid.cell("personid", 0).fill("x")).rejects.toThrow(
+      "The cell editor did not open"
+    );
+  });
+
   it("throws a clear error for an unknown field", async () => {
     const grid = gridLocator(page.locator(".cheetah-grid"));
     await expect(grid.cell("unknown", 0).value()).rejects.toThrow(
