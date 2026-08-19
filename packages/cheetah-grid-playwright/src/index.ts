@@ -1,33 +1,7 @@
 import type { Locator, Page } from "playwright-core";
+import type * as cheetahGridNamespace from "cheetah-grid";
 
-/**
- * Minimal structural types of the cheetah-grid objects used from the page
- * context. Declared locally to avoid depending on the built type
- * definitions of the `cheetah-grid` package.
- */
-interface ListGridLike {
-  canvas: HTMLCanvasElement;
-  scrollLeft: number;
-  scrollTop: number;
-  makeVisibleCell(col: number, row: number): void;
-  getCellRelativeRect(
-    col: number,
-    row: number
-  ): { left: number; top: number; width: number; height: number };
-  getCellRangeByField(
-    field: string,
-    index: number
-  ): { start: { col: number; row: number } } | null;
-  getCellValue(col: number, row: number): unknown;
-  listen(type: string, listener: () => void): number;
-  unlisten(id: number): void;
-}
-
-interface CheetahGridNamespaceLike {
-  ListGrid: {
-    getInstanceByElement(element: Element): ListGridLike | undefined;
-  };
-}
+type CheetahGridNamespace = typeof cheetahGridNamespace;
 
 type CellSpec = { field: string; index: number } | { col: number; row: number };
 
@@ -110,10 +84,7 @@ export class CheetahGridCellLocator {
         // NOTE: This function runs in the page context and must be
         // self-contained.
         const ns = (
-          window as unknown as Record<
-            string,
-            CheetahGridNamespaceLike | undefined
-          >
+          window as unknown as Record<string, CheetahGridNamespace | undefined>
         )[globalName];
         if (!ns) {
           throw new Error(
@@ -183,10 +154,7 @@ export class CheetahGridCellLocator {
         // NOTE: This function runs in the page context and must be
         // self-contained.
         const ns = (
-          window as unknown as Record<
-            string,
-            CheetahGridNamespaceLike | undefined
-          >
+          window as unknown as Record<string, CheetahGridNamespace | undefined>
         )[globalName];
         if (!ns) {
           throw new Error(
