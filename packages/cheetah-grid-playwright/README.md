@@ -14,7 +14,11 @@ Requires `cheetah-grid >= 2.2` and the `cheetahGrid` namespace exposed on `windo
 
 ```js
 import * as cheetahGrid from "cheetah-grid";
-window.cheetahGrid = cheetahGrid;
+
+if (import.meta.env.MODE !== "production") {
+  // Expose the namespace for browser automation.
+  window.cheetahGrid = cheetahGrid;
+}
 ```
 
 The exposed namespace must be the same module instance that created the grid — `ListGrid.getInstanceByElement` cannot find grids created by another copy of the module. In particular, when using `vue-cheetah-grid` or `react-cheetah-grid`, make sure your `cheetah-grid` import resolves to the same copy that the wrapper uses.
