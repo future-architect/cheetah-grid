@@ -90,17 +90,19 @@ The resolution of the returned promise means the value is available, not that th
 
 ## Editing a Cell
 
-After clicking a cell that has an [input action](../api/js/column_actions/InlineInputEditor.md), typing characters opens the inline editor with the typed text, replacing the current value — just like typing on a spreadsheet. The editor is a real focused `<input>` element, so keyboard events simply go to it; no selector is needed.
+To replace the value of a cell that has an [input action](../api/js/column_actions/InlineInputEditor.md), open the editor and `fill()` the focused input. `fill()` replaces the whole value regardless of the caret position or text selection state in the editor, and it fails with a clear timeout if the editor did not open.
 
 ```ts
 await clickCell(page, ".sample-grid", "email", 3);
-await page.keyboard.type("cat@example.com");
+// Open the editor (the current value is pre-filled).
+await page.keyboard.press("F2");
+// Replace the value. The editor is a real focused <input> element.
+await page.locator("input:focus").fill("cat@example.com");
+// Commit.
 await page.keyboard.press("Enter");
 ```
 
-To modify the current value instead of replacing it, open the editor with F2 or a double click; the current value is pre-filled with the caret at the end.
-
-Note that you must use `page.keyboard.type()` (which fires real key events) to start editing; `page.keyboard.insertText()` and `locator.fill()` do not open the editor, since the grid opens it on `keypress` and there is no editable element in the DOM until then. Once the editor is open, the focused input is a regular element, so `page.locator(":focus").fill("...")` also works.
+Typing characters on a selected cell (`page.keyboard.type()`) also opens the editor, replacing the value with the typed text like a spreadsheet. However, `page.keyboard.insertText()` and `locator.fill()` cannot *start* editing: the grid opens the editor on `keypress`, and no editable element exists in the DOM until then.
 
 ## Waiting for Grid Events
 
