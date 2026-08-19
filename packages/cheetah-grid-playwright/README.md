@@ -2,6 +2,9 @@
 
 Playwright helpers for driving [Cheetah Grid](https://github.com/future-architect/cheetah-grid) in browser automation.
 
+> [!WARNING]
+> This package is experimental. Breaking changes may be introduced in minor version releases.
+
 Cheetah Grid renders all cells on an HTML5 `<canvas>` element, so cells do not exist in the DOM and cannot be located with DOM selectors. This package locates cells through the grid's API and operates on them with real mouse and keyboard events, so interactions go through the same code path as actual user input.
 
 ## Installation

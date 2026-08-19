@@ -7,6 +7,10 @@ order: 400
 Cheetah Grid renders all cells on an HTML5 `<canvas>` element, so the cells do not exist in the DOM.
 This means that browser automation tools such as [Playwright](https://playwright.dev/) cannot locate cells with DOM selectors (e.g. `getByRole` or `getByText`).
 
+::: tip
+The experimental helper package [`cheetah-grid-playwright`](https://github.com/future-architect/cheetah-grid/tree/master/packages/cheetah-grid-playwright) packages the recipes on this page into ready-made helpers such as `grid.cell("email", 3).click()`.
+:::
+
 Instead, you can combine the grid's API with real mouse and keyboard events:
 
 1. Get the grid instance from an element using `cheetahGrid.ListGrid.getInstanceByElement(element)` inside `page.evaluate()`.
