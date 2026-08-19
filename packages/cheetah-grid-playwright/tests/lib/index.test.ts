@@ -183,6 +183,16 @@ describe("gridLocator", () => {
     );
   });
 
+  it("throws a clear error for an out-of-range cell", async () => {
+    const grid = gridLocator(page.locator(".cheetah-grid"));
+    await expect(grid.cell("email", 5000).value()).rejects.toThrow(
+      "Cell out of range: field=email, index=5000"
+    );
+    await expect(grid.cellAt(99, 0).rect()).rejects.toThrow(
+      "Cell out of range: col=99, row=0"
+    );
+  });
+
   it("throws a clear error for an unknown field", async () => {
     const grid = gridLocator(page.locator(".cheetah-grid"));
     await expect(grid.cell("unknown", 0).value()).rejects.toThrow(

@@ -49,6 +49,13 @@ async function cellOperation<OP extends keyof CellOperationResults>(
   } else {
     ({ col, row } = spec);
   }
+  if (col < 0 || grid.colCount <= col || row < 0 || grid.rowCount <= row) {
+    const target =
+      spec.type === "gridCell"
+        ? `field=${spec.field}, index=${spec.index}`
+        : `col=${col}, row=${row}`;
+    throw new Error(`Cell out of range: ${target}`);
+  }
 
   // Perform the requested operation.
   if (op === "value") {
