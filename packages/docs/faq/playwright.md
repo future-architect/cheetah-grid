@@ -104,9 +104,17 @@ await page.keyboard.press("Enter");
 
 Typing characters on a selected cell (`page.keyboard.type()`) also opens the editor, replacing the value with the typed text like a spreadsheet. However, `page.keyboard.insertText()` and `locator.fill()` cannot *start* editing: the grid opens the editor on `keypress`, and no editable element exists in the DOM until then.
 
-## Waiting for Grid Events
+## Waiting for Changes
 
-To wait for an operation to take effect, you can listen to [grid events](../api/js/events.md) inside the page.
+To wait for an operation to take effect, poll the resulting state with [`expect.poll`](https://playwright.dev/docs/test-assertions#expectpoll):
+
+```ts
+await expect
+  .poll(() => getCellValue(page, ".sample-grid", "email", 3))
+  .toBe("cat@example.com");
+```
+
+If you need the payload of a [grid event](../api/js/events.md) itself, register a listener before the operation and keep the promise on `window`, since separate `page.evaluate()` calls do not share variables:
 
 ```ts
 // Evaluate before the operation:
