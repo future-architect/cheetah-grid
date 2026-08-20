@@ -29,6 +29,11 @@ let serverUrl: string;
 beforeAll(async () => {
   server = createServer((req, res) => {
     const path = normalize(join(REPO_ROOT, req.url?.split("?")[0] ?? "/"));
+    if (!path.startsWith(REPO_ROOT)) {
+      res.statusCode = 403;
+      res.end();
+      return;
+    }
     readFile(path).then(
       (body) => {
         res.setHeader(
@@ -43,10 +48,12 @@ beforeAll(async () => {
       }
     );
   });
+  // Loopback only: the default bind would expose the repository files
+  // to the local network while the suite runs.
   await new Promise<void>((resolve) => {
-    server.listen(0, resolve);
+    server.listen(0, "127.0.0.1", resolve);
   });
-  serverUrl = `http://localhost:${(server.address() as AddressInfo).port}`;
+  serverUrl = `http://127.0.0.1:${(server.address() as AddressInfo).port}`;
 
   browser = await chromium.launch({ channel: "chrome" });
   page = await browser.newPage();

@@ -98,6 +98,12 @@ async function cellOperation(
         '"window.cheetahGrid" is not defined. Expose the cheetahGrid namespace for automation (e.g. `window.cheetahGrid = cheetahGrid`).'
       );
     }
+    if (typeof ns.ListGrid.getInstanceByElement !== "function") {
+      // Instead of a bare TypeError on older pages.
+      throw new Error(
+        "cheetah-grid >= 2.2 is required (ListGrid.getInstanceByElement is not available)."
+      );
+    }
     let grid = ns.ListGrid.getInstanceByElement(el);
     if (!grid) {
       // The element is not inside a grid; find the grid under it. Never
