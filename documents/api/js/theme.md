@@ -1,0 +1,408 @@
+---
+url: /cheetah-grid/documents/api/js/theme.md
+---
+
+# Theme
+
+Can set theme to Cheetah Grid.\
+Can settings for grid instance or global.
+
+## Grid instance
+
+Set a theme to the `theme` property of the grid instance.\
+Built-in themes are `MATERIAL_DESIGN` and `BASIC`.
+
+::: code-group
+
+```js [main.js]
+import { createGrid } from "./grid-builder.js";
+const grid = createGrid(document.querySelector(".sample1"));
+
+const themeSelect = document.querySelector(".theme-select1");
+themeSelect.onchange = function () {
+  grid.theme = cheetahGrid.themes.choices[themeSelect.value];
+
+  /* The `theme` property of the grid instance can also be set as a string. */
+  // grid.theme = themeSelect.value;
+};
+themeSelect.onchange();
+```
+
+```html [HTML]
+<label>theme</label>
+<select class="theme-select1">
+  <option value="" selected="true">unset</option>
+  <option value="MATERIAL_DESIGN">MATERIAL_DESIGN</option>
+  <option value="BASIC">BASIC</option>
+</select>
+<div class="sample1 demo-grid small"></div>
+```
+
+```js
+/* globals generatePersons, cheetahGrid */
+export const girdInstances = []
+export function createGrid (parentElement) {
+  const records = generatePersons(100)
+
+  const grid = new cheetahGrid.ListGrid({
+    parentElement,
+    header: [
+      { field: 'check', caption: '', width: 50, columnType: 'check', action: 'check' },
+      { field: 'personid', caption: 'ID', width: 100 },
+      { /* multiple header */
+        caption: 'name',
+        columns: [
+          { field: 'fname', caption: 'First Name', width: 200, sort: true },
+          { field: 'lname', caption: 'Last Name', width: 200, sort: true }
+        ]
+      },
+      {
+        field: 'email',
+        caption: 'Email',
+        width: 250,
+        sort: true,
+        style (rec) {
+          const index = records.indexOf(rec)
+          if (index % 3 === 2) {
+            return { indicatorTopLeft: 'triangle' }
+          }
+          return undefined
+        }
+      },
+      {
+      /* callback field */
+        field (rec) {
+          const d = rec.birthday
+          return `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`
+        },
+        caption: 'birthday',
+        width: 100,
+        message (rec) {
+          const index = records.indexOf(rec)
+          switch (index % 3) {
+            case 0: {
+              return {
+                type: 'info',
+                message: 'Info Message.'
+              }
+            }
+            case 1: {
+              return {
+                type: 'warning',
+                message: 'Warn Message.'
+              }
+            }
+          }
+          return {
+            type: 'error',
+            message: 'Error Message.'
+          }
+        }
+      },
+      {
+        caption: 'button',
+        width: 120,
+        /* button column */
+        columnType: new cheetahGrid.columns.type.ButtonColumn({
+          caption: 'SHOW REC'
+        }),
+        action: new cheetahGrid.columns.action.ButtonAction({
+          action (rec) {
+            alert(JSON.stringify(rec))
+          }
+        })
+      }
+    ],
+    frozenColCount: 2,
+    records
+  })
+  girdInstances.push(grid)
+  return grid
+}
+
+```
+
+:::
+
+## Global theme
+
+Set a theme to the `cheetahGrid.themes.default` property.
+(default MATERIAL\_DESIGN.)
+
+::: code-group
+
+```js [main.js]
+import { createGrid, girdInstances } from "./grid-builder.js";
+createGrid(document.querySelector(".sample2"));
+
+const themeSelect = document.querySelector(".theme-select2");
+themeSelect.onchange = function () {
+  cheetahGrid.themes.default = cheetahGrid.themes.choices[themeSelect.value];
+
+  // redraw all the grids
+  girdInstances.forEach((grid) => grid.invalidate());
+};
+
+themeSelect.onchange();
+```
+
+```html [HTML]
+<label>theme</label>
+<select class="theme-select2">
+  <option value="MATERIAL_DESIGN" selected="true">MATERIAL_DESIGN</option>
+  <option value="BASIC">BASIC</option>
+</select>
+<div class="sample2 demo-grid small"></div>
+```
+
+```js
+/* globals generatePersons, cheetahGrid */
+export const girdInstances = []
+export function createGrid (parentElement) {
+  const records = generatePersons(100)
+
+  const grid = new cheetahGrid.ListGrid({
+    parentElement,
+    header: [
+      { field: 'check', caption: '', width: 50, columnType: 'check', action: 'check' },
+      { field: 'personid', caption: 'ID', width: 100 },
+      { /* multiple header */
+        caption: 'name',
+        columns: [
+          { field: 'fname', caption: 'First Name', width: 200, sort: true },
+          { field: 'lname', caption: 'Last Name', width: 200, sort: true }
+        ]
+      },
+      {
+        field: 'email',
+        caption: 'Email',
+        width: 250,
+        sort: true,
+        style (rec) {
+          const index = records.indexOf(rec)
+          if (index % 3 === 2) {
+            return { indicatorTopLeft: 'triangle' }
+          }
+          return undefined
+        }
+      },
+      {
+      /* callback field */
+        field (rec) {
+          const d = rec.birthday
+          return `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`
+        },
+        caption: 'birthday',
+        width: 100,
+        message (rec) {
+          const index = records.indexOf(rec)
+          switch (index % 3) {
+            case 0: {
+              return {
+                type: 'info',
+                message: 'Info Message.'
+              }
+            }
+            case 1: {
+              return {
+                type: 'warning',
+                message: 'Warn Message.'
+              }
+            }
+          }
+          return {
+            type: 'error',
+            message: 'Error Message.'
+          }
+        }
+      },
+      {
+        caption: 'button',
+        width: 120,
+        /* button column */
+        columnType: new cheetahGrid.columns.type.ButtonColumn({
+          caption: 'SHOW REC'
+        }),
+        action: new cheetahGrid.columns.action.ButtonAction({
+          action (rec) {
+            alert(JSON.stringify(rec))
+          }
+        })
+      }
+    ],
+    frozenColCount: 2,
+    records
+  })
+  girdInstances.push(grid)
+  return grid
+}
+
+```
+
+:::
+
+## Extend theme
+
+To extend the theme, do as follows.
+
+::: code-group
+
+```js [main.js]
+import { createGrid } from "./grid-builder.js";
+const grid = createGrid(document.querySelector(".sample3"));
+
+const userTheme = {
+  color: "red",
+  frozenRowsColor: "red",
+  defaultBgColor: "#FDD",
+  frozenRowsBgColor: "#EAA",
+  selectionBgColor: "#FDA",
+  highlightBgColor: "#FDC",
+  underlayBackgroundColor: "#FEE",
+  // You can also change the theme apply in the state by using callback.
+  frozenRowsBorderColor(args) {
+    const {
+      row,
+      grid: { frozenRowCount },
+    } = args;
+    if (frozenRowCount - 1 === row) {
+      return ["#F88" /*top*/, "#F88" /*right and left*/, "red" /*bottom*/];
+    } else {
+      return "#F88";
+    }
+  },
+  borderColor(args) {
+    const {
+      col,
+      grid: { colCount },
+    } = args;
+    if (colCount - 1 === col) {
+      return ["red" /*top*/, "#F88" /*right*/, "red" /*bottom*/, null /*left*/];
+    } else {
+      return ["red" /*top and bottom*/, null /*right and left*/];
+    }
+  },
+  highlightBorderColor: "#FD5",
+  checkbox: {
+    uncheckBgColor: "#FDD",
+    checkBgColor: "rgb(255, 73, 72)",
+    borderColor: "red",
+  },
+  button: {
+    color: "#FDD",
+    bgColor: "#F55",
+  },
+  font: "16px sans-serif",
+  header: {
+    sortArrowColor: "#D00",
+  },
+  messages: {
+    infoBgColor: "gray",
+    errorBgColor: "red",
+    warnBgColor: "yellow",
+    boxWidth: 12,
+    markHeight: 15,
+  },
+  indicators: {
+    topLeftColor: "blue",
+    topLeftSize: 10,
+    topRightColor: "blue",
+    topRightSize: 10,
+    bottomLeftColor: "blue",
+    bottomLeftSize: 10,
+    bottomRightColor: "blue",
+    bottomRightSize: 10,
+  },
+};
+grid.theme = userTheme;
+```
+
+```html [HTML]
+<div class="sample3 demo-grid small"></div>
+```
+
+```js
+/* globals generatePersons, cheetahGrid */
+export const girdInstances = []
+export function createGrid (parentElement) {
+  const records = generatePersons(100)
+
+  const grid = new cheetahGrid.ListGrid({
+    parentElement,
+    header: [
+      { field: 'check', caption: '', width: 50, columnType: 'check', action: 'check' },
+      { field: 'personid', caption: 'ID', width: 100 },
+      { /* multiple header */
+        caption: 'name',
+        columns: [
+          { field: 'fname', caption: 'First Name', width: 200, sort: true },
+          { field: 'lname', caption: 'Last Name', width: 200, sort: true }
+        ]
+      },
+      {
+        field: 'email',
+        caption: 'Email',
+        width: 250,
+        sort: true,
+        style (rec) {
+          const index = records.indexOf(rec)
+          if (index % 3 === 2) {
+            return { indicatorTopLeft: 'triangle' }
+          }
+          return undefined
+        }
+      },
+      {
+      /* callback field */
+        field (rec) {
+          const d = rec.birthday
+          return `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`
+        },
+        caption: 'birthday',
+        width: 100,
+        message (rec) {
+          const index = records.indexOf(rec)
+          switch (index % 3) {
+            case 0: {
+              return {
+                type: 'info',
+                message: 'Info Message.'
+              }
+            }
+            case 1: {
+              return {
+                type: 'warning',
+                message: 'Warn Message.'
+              }
+            }
+          }
+          return {
+            type: 'error',
+            message: 'Error Message.'
+          }
+        }
+      },
+      {
+        caption: 'button',
+        width: 120,
+        /* button column */
+        columnType: new cheetahGrid.columns.type.ButtonColumn({
+          caption: 'SHOW REC'
+        }),
+        action: new cheetahGrid.columns.action.ButtonAction({
+          action (rec) {
+            alert(JSON.stringify(rec))
+          }
+        })
+      }
+    ],
+    frozenColCount: 2,
+    records
+  })
+  girdInstances.push(grid)
+  return grid
+}
+
+```
+
+:::
