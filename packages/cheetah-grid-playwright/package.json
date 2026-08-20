@@ -1,6 +1,6 @@
 {
   "name": "cheetah-grid-playwright",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Playwright helpers for driving Cheetah Grid in browser automation.",
   "type": "module",
   "main": "dist/index.js",

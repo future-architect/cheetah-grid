@@ -24,16 +24,16 @@ import * as cheetahGrid from "cheetah-grid";
 [![npm](https://img.shields.io/npm/v/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
 
 ```html
-<link rel="stylesheet" href="https://unpkg.com/cheetah-grid@2.1/main.css" />
-<script src="https://unpkg.com/cheetah-grid@2.1"></script>
+<link rel="stylesheet" href="https://unpkg.com/cheetah-grid@2.2/main.css" />
+<script src="https://unpkg.com/cheetah-grid@2.2"></script>
 ```
 
 ### Via Source Code
 
 [![npm](https://img.shields.io/npm/v/cheetah-grid.svg)](https://www.npmjs.com/package/cheetah-grid)
 
-[main.mjs](https://unpkg.com/cheetah-grid@2.1/dist/main.mjs)\
-[main.css](https://unpkg.com/cheetah-grid@2.1/dist/main.css)
+[main.mjs](https://unpkg.com/cheetah-grid@2.2/dist/main.mjs)\
+[main.css](https://unpkg.com/cheetah-grid@2.2/dist/main.css)
 
 ### Via GitHub
 
