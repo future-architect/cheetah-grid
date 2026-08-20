@@ -3488,18 +3488,28 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
       return;
     }
     const { scrollable } = this[_];
+    // When aligning the end edge of the cell, never scroll its start
+    // edge out of view: a cell larger than the viewport can never fit,
+    // and aligning its end edge would just shove the start of the cell
+    // (and the editor opened on it) off screen.
     if (!isFrozenCell || !isFrozenCell.col) {
       if (rect.left < visibleRect.left) {
         scrollable.scrollLeft -= visibleRect.left - rect.left;
       } else if (visibleRect.right < rect.right) {
-        scrollable.scrollLeft -= visibleRect.right - rect.right;
+        scrollable.scrollLeft += Math.min(
+          rect.right - visibleRect.right,
+          rect.left - visibleRect.left
+        );
       }
     }
     if (!isFrozenCell || !isFrozenCell.row) {
       if (rect.top < visibleRect.top) {
         scrollable.scrollTop -= visibleRect.top - rect.top;
       } else if (visibleRect.bottom < rect.bottom) {
-        scrollable.scrollTop -= visibleRect.bottom - rect.bottom;
+        scrollable.scrollTop += Math.min(
+          rect.bottom - visibleRect.bottom,
+          rect.top - visibleRect.top
+        );
       }
     }
   }

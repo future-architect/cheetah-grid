@@ -307,6 +307,25 @@
 			expect(ListGrid.getInstanceByElement(element)).toBeUndefined();
 		});
 
+		it('keeps the start edge of an oversized cell in view on makeVisibleCell', function() {
+			const grid = new ListGrid({
+				parentElement: createParent(),
+				header: [
+					{field: 'id', caption: 'ID', width: 80},
+					{field: 'wide', caption: 'W', width: 1000},
+				],
+				records: [{id: 1, wide: 'w'}],
+			});
+			try {
+				grid.makeVisibleCell(1, 1);
+				// Align the left edge of the cell; aligning the right edge
+				// would push the start of the cell out of view.
+				expect(grid.scrollLeft).toEqual(80);
+			} finally {
+				grid.dispose();
+			}
+		});
+
 		it('gets cell values including header captions', function() {
 			const calls = [];
 			const {grid} = createSimpleGrid(calls);

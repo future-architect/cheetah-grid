@@ -316,10 +316,8 @@ describe("gridLocator", () => {
         ).grid.selection.select
     );
     expect(select).toEqual({ col: 1, row: 1 });
-    // NOTE: fill() cannot work on cells wider than the grid viewport:
-    // focusing the oversized editor input scrolls the grid, and the
-    // editors close themselves on any grid scroll (a core limitation
-    // that also affects real users pressing F2).
+    await grid.cell("wide", 1).fill("WideFilled");
+    expect(await grid.cell("wide", 1).value()).toBe("WideFilled");
   });
 
   it("rejects an ancestor locator containing multiple grids", async () => {
