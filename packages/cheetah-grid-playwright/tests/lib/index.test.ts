@@ -298,6 +298,57 @@ describe("gridLocator", () => {
     await expect(grid.cellAt(99, 0).rect()).rejects.toThrow(
       "Cell out of range: col=99, row=0"
     );
+    // A negative index would resolve onto a header row, and a fractional
+    // one onto a nonexistent row; both are rejected at the API boundary.
+    expect(() => grid.cell("email", -1)).toThrow(
+      "The record index must be a non-negative integer: -1"
+    );
+    expect(() => grid.cell("email", 0.5)).toThrow(
+      "The record index must be a non-negative integer: 0.5"
+    );
+    expect(() => grid.cellAt(1.5, 2)).toThrow(
+      "The column and row indices must be integers: col=1.5, row=2"
+    );
+  });
+
+  it("operates on a merged cell spanning the frozen column boundary", async () => {
+    await gotoFixture(
+      page,
+      new URL("../fixtures/frozen-span-grid.html", import.meta.url).href
+    );
+    // Scroll fully to the right so that the scrollable half of the
+    // merged cell moves under the frozen half.
+    await page.evaluate(async () => {
+      const { grid } = window as unknown as {
+        grid: {
+          scrollLeft: number;
+          listen: (type: string, fn: () => void) => number;
+          unlisten: (id: number) => void;
+        };
+      };
+      const scrolled = new Promise<void>((resolve) => {
+        const id = grid.listen("scroll", () => {
+          grid.unlisten(id);
+          resolve();
+        });
+      });
+      grid.scrollLeft = 800;
+      await scrolled;
+    });
+    const grid = gridLocator(page.locator(".cheetah-grid"));
+    const rect = await grid.cell("name", 5).rect();
+    expect(rect.width).toBeGreaterThan(0);
+    await grid.cell("name", 5).click();
+    const select = await page.evaluate(
+      () =>
+        (
+          window as unknown as {
+            grid: { selection: { select: { col: number; row: number } } };
+          }
+        ).grid.selection.select
+    );
+    expect(select.row).toBe(6);
+    expect(await grid.cell("name", 5).value()).toBe("name5");
   });
 
   it("operates on a cell wider than the grid viewport", async () => {

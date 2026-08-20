@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>frozen span fixture</title>
+<link rel="stylesheet" href="../../../cheetah-grid/dist/main.css">
+<script src="../../../cheetah-grid/dist/main.umd.js"></script>
+</head>
+<body>
+<div id="parent" style="width: 600px; height: 300px;"></div>
+<script>
+const records = [];
+for (let i = 0; i < 20; i++) {
+	records.push({name: `name${i}`, b: `b${i}`, c: `c${i}`});
+}
+window.grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#parent'),
+	layout: {
+		header: [[
+			{caption: 'Name'}, {caption: 'A'}, {caption: 'B'}, {caption: 'C'},
+		]],
+		body: [[
+			{field: 'name', colSpan: 2, width: 300, action: 'input'},
+			{field: 'b', width: 400},
+			{field: 'c', width: 400},
+		]],
+	},
+	frozenColCount: 1,
+	records,
+});
+</script>
+</body>
+</html>

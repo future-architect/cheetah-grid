@@ -62,21 +62,15 @@ async function cellOperation(
   if (op === "rect" || op === "_evaluateClickPoint") {
     await scrollCellIntoView();
     // For merged (colSpan/rowSpan) cells, return the whole merged
-    // rectangle rather than the anchor cell slice.
-    const range = grid.getCellRange(col, row);
-    const startRect = grid.getCellRelativeRect(
-      range.start.col,
-      range.start.row
-    );
-    const endRect =
-      range.start.col === range.end.col && range.start.row === range.end.row
-        ? startRect
-        : grid.getCellRelativeRect(range.end.col, range.end.row);
+    // rectangle rather than the anchor cell slice. getCellRangeRect
+    // handles ranges spanning the frozen boundary (where per-cell rects
+    // live in different coordinate spaces and cannot be unioned).
+    const rangeRect = grid.getCellRangeRect(grid.getCellRange(col, row));
     const rect = {
-      left: startRect.left,
-      top: startRect.top,
-      width: endRect.left + endRect.width - startRect.left,
-      height: endRect.top + endRect.height - startRect.top,
+      left: rangeRect.left - grid.scrollLeft,
+      top: rangeRect.top - grid.scrollTop,
+      width: rangeRect.width,
+      height: rangeRect.height,
     };
     if (op === "rect") {
       const canvasRect = getCanvasRect();
@@ -440,6 +434,14 @@ export class CheetahGridLocator {
    * Returns a cell locator for the given field and record index.
    */
   cell(field: string, index: number): CheetahGridCellLocator {
+    // A negative index would resolve onto a header row (the record start
+    // row is plain arithmetic), and click() could then trigger header
+    // actions such as sorting.
+    if (!Number.isInteger(index) || index < 0) {
+      throw new Error(
+        `The record index must be a non-negative integer: ${index}`
+      );
+    }
     return new CheetahGridCellLocator(this, {
       type: "gridCell",
       field,
@@ -451,6 +453,11 @@ export class CheetahGridLocator {
    * (including header rows).
    */
   cellAt(col: number, row: number): CheetahGridCellLocator {
+    if (!Number.isInteger(col) || !Number.isInteger(row)) {
+      throw new Error(
+        `The column and row indices must be integers: col=${col}, row=${row}`
+      );
+    }
     return new CheetahGridCellLocator(this, { type: "cell", col, row });
   }
 }
@@ -562,51 +569,59 @@ export class CheetahGridCellLocator {
     // value (possibly asynchronously), the value stays unchanged and the
     // editor stays open. Poll until the outcome is known and resolve with
     // the validation message, or null on success.
-    const errorMessage = await this._grid.rootLocator.evaluate(
-      (root) =>
-        new Promise<string | null>((resolve, reject) => {
-          const startTime = Date.now();
-          const check = (): void => {
-            // Special-case handling for the built-in
-            // SmallDialogInputEditor, the only built-in editor that
-            // supports validators (`inputValidator`/`validator`; the
-            // string action "input" also maps to this editor). When a
-            // validator rejects the value, the dialog stays open: the
-            // dialog element always remains in the DOM with its
-            // visibility expressed only by the "--shown"/"--hidden"
-            // state classes, and it exposes the validation message as
-            // data-error-message. The other built-in text editor
-            // (InlineInputEditor) has no validators, and rejections by
-            // custom editors cannot be detected here — those resolve via
-            // the focus check below or hit the timeout.
-            const dialog = root.querySelector<HTMLElement>(
-              ".cheetah-grid__small-dialog-input--shown"
-            );
-            const message = dialog?.dataset.errorMessage;
-            if (message) {
-              resolve(message);
-              return;
-            }
-            // On a successful commit the editor closes and the grid
-            // moves the focus back to its own focus control.
-            const active = root.ownerDocument.activeElement;
-            if (
-              !active ||
-              !root.contains(active) ||
-              active.classList.contains("grid-focus-control")
-            ) {
-              resolve(null);
-              return;
-            }
-            if (Date.now() - startTime > 30000) {
-              reject(new Error("The cell value was not committed."));
-              return;
-            }
-            setTimeout(check, 16);
-          };
-          check();
-        })
-    );
+    let errorMessage: string | null;
+    try {
+      errorMessage = await this._grid.rootLocator.evaluate(
+        (root) =>
+          new Promise<string | null>((resolve, reject) => {
+            const startTime = Date.now();
+            const check = (): void => {
+              // Special-case handling for the built-in
+              // SmallDialogInputEditor, the only built-in editor that
+              // supports validators (`inputValidator`/`validator`; the
+              // string action "input" also maps to this editor). When a
+              // validator rejects the value, the dialog stays open: the
+              // dialog element always remains in the DOM with its
+              // visibility expressed only by the "--shown"/"--hidden"
+              // state classes, and it exposes the validation message as
+              // data-error-message. The other built-in text editor
+              // (InlineInputEditor) has no validators, and rejections by
+              // custom editors cannot be detected here — those resolve via
+              // the focus check below or hit the timeout.
+              const dialog = root.querySelector<HTMLElement>(
+                ".cheetah-grid__small-dialog-input--shown"
+              );
+              const message = dialog?.dataset.errorMessage;
+              if (message) {
+                resolve(message);
+                return;
+              }
+              // On a successful commit the editor closes and the grid
+              // moves the focus back to its own focus control.
+              const active = root.ownerDocument.activeElement;
+              if (
+                !active ||
+                !root.contains(active) ||
+                active.classList.contains("grid-focus-control")
+              ) {
+                resolve(null);
+                return;
+              }
+              if (Date.now() - startTime > 30000) {
+                reject(new Error("The cell value was not committed."));
+                return;
+              }
+              setTimeout(check, 16);
+            };
+            check();
+          })
+      );
+    } catch (error) {
+      // Cancel the editing so that the editor does not stay open, the
+      // same as the other failure paths.
+      await page.keyboard.press("Escape");
+      throw error;
+    }
     if (errorMessage !== null) {
       // Cancel the editing so that the dialog does not stay open.
       await page.keyboard.press("Escape");
