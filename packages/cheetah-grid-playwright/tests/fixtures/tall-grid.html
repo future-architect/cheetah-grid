@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>tall grid fixture</title>
+<link rel="stylesheet" href="../../../cheetah-grid/dist/main.css">
+<script src="../../../cheetah-grid/dist/main.umd.js"></script>
+</head>
+<body style="margin: 0;">
+<div id="parent" style="width: 600px; height: 1200px;"></div>
+<script>
+const records = [];
+for (let i = 0; i < 100; i++) {
+	records.push({id: i + 1, name: `name${i}`});
+}
+window.grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#parent'),
+	header: [
+		{field: 'id', caption: 'ID', width: 80},
+		{field: 'name', caption: 'Name', width: 200, action: 'input'},
+	],
+	records,
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>clipped grid fixture</title>
+<link rel="stylesheet" href="../../../cheetah-grid/dist/main.css">
+<script src="../../../cheetah-grid/dist/main.umd.js"></script>
+</head>
+<body>
+<div id="panel" style="height: 250px; overflow: auto;">
+	<div id="parent" style="width: 600px; height: 800px;"></div>
+</div>
+<script>
+const records = [];
+for (let i = 0; i < 100; i++) {
+	records.push({id: i + 1, name: `name${i}`});
+}
+window.grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#parent'),
+	header: [
+		{field: 'id', caption: 'ID', width: 80},
+		{field: 'name', caption: 'Name', width: 200, action: 'input'},
+	],
+	records,
+});
+</script>
+</body>
+</html>

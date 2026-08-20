@@ -61,7 +61,6 @@ async function cellOperation(
   }
   if (op === "rect" || op === "_evaluateClickPoint") {
     await scrollCellIntoView();
-    const frameOffset = getFrameOffset();
     // For merged (colSpan/rowSpan) cells, return the whole merged
     // rectangle rather than the anchor cell slice.
     const range = grid.getCellRange(col, row);
@@ -79,18 +78,9 @@ async function cellOperation(
       width: endRect.left + endRect.width - startRect.left,
       height: endRect.top + endRect.height - startRect.top,
     };
-    const canvasRect = grid.canvas.getBoundingClientRect();
-    // The grid's own mouse hit-testing does not compensate for visual
-    // scaling either, so scaled grids cannot be operated by coordinates.
-    if (
-      Math.abs(canvasRect.width / grid.canvas.offsetWidth - 1) > 0.01 ||
-      Math.abs(canvasRect.height / grid.canvas.offsetHeight - 1) > 0.01
-    ) {
-      throw new Error(
-        "The grid is scaled by an ancestor transform or zoom, which is not supported."
-      );
-    }
     if (op === "rect") {
+      const canvasRect = getCanvasRect();
+      const frameOffset = getFrameOffset();
       return {
         x: frameOffset.x + canvasRect.left + rect.left,
         y: frameOffset.y + canvasRect.top + rect.top,
@@ -98,21 +88,7 @@ async function cellOperation(
         height: rect.height,
       };
     }
-    // The click point: the center of the visible part of the cell. The center
-    // of the whole rectangle can fall outside the canvas when the cell
-    // is larger than the grid viewport (e.g. a column wider than the
-    // grid), and mouse events outside the canvas hit nothing.
-    const left = Math.max(rect.left, 0);
-    const top = Math.max(rect.top, 0);
-    const right = Math.min(rect.left + rect.width, canvasRect.width);
-    const bottom = Math.min(rect.top + rect.height, canvasRect.height);
-    if (right <= left || bottom <= top) {
-      throw new Error("The cell is outside the visible area of the grid.");
-    }
-    return {
-      x: frameOffset.x + canvasRect.left + (left + right) / 2,
-      y: frameOffset.y + canvasRect.top + (top + bottom) / 2,
-    };
+    return resolveClickPoint(rect);
   }
 
   throw new Error(`Invalid cell operation: ${String(op)}`);
@@ -205,6 +181,64 @@ async function cellOperation(
     });
   }
   /**
+   * Returns the canvas viewport rectangle, rejecting grids scaled by an
+   * ancestor transform: the grid's own mouse hit-testing does not
+   * compensate for visual scaling, so scaled grids cannot be operated
+   * by coordinates.
+   */
+  function getCanvasRect(): DOMRect {
+    const canvasRect = grid.canvas.getBoundingClientRect();
+    if (
+      Math.abs(canvasRect.width / grid.canvas.offsetWidth - 1) > 0.01 ||
+      Math.abs(canvasRect.height / grid.canvas.offsetHeight - 1) > 0.01
+    ) {
+      throw new Error(
+        "The grid is scaled by an ancestor transform or zoom, which is not supported."
+      );
+    }
+    return canvasRect;
+  }
+  /**
+   * Returns the frame element containing the window, along with the
+   * offset of the window's viewport within the parent frame's viewport.
+   * Rejects cross-origin frames and frame elements scaled by a
+   * transform, for the same reason as {@link getCanvasRect}.
+   */
+  function getFrameStep(win: Window): {
+    frameElement: Element;
+    x: number;
+    y: number;
+  } {
+    const { frameElement } = win;
+    if (!frameElement) {
+      throw new Error(
+        "The grid is inside a cross-origin iframe, which is not supported."
+      );
+    }
+    const frameRect = frameElement.getBoundingClientRect();
+    const frameHtmlElement = frameElement as HTMLElement;
+    if (
+      Math.abs(frameRect.width / frameHtmlElement.offsetWidth - 1) > 0.01 ||
+      Math.abs(frameRect.height / frameHtmlElement.offsetHeight - 1) > 0.01
+    ) {
+      throw new Error(
+        "The grid is scaled by an ancestor transform or zoom, which is not supported."
+      );
+    }
+    const frameStyle = win.parent.getComputedStyle(frameElement);
+    return {
+      frameElement,
+      x:
+        frameRect.left +
+        frameElement.clientLeft +
+        parseFloat(frameStyle.paddingLeft),
+      y:
+        frameRect.top +
+        frameElement.clientTop +
+        parseFloat(frameStyle.paddingTop),
+    };
+  }
+  /**
    * Returns the total offset of the ancestor frame elements. The mouse
    * operates in the top-level viewport while getBoundingClientRect is
    * relative to this frame's viewport.
@@ -213,24 +247,150 @@ async function cellOperation(
     let x = 0;
     let y = 0;
     for (let win: Window = window; win !== win.parent; win = win.parent) {
-      const { frameElement } = win;
-      if (!frameElement) {
-        throw new Error(
-          "The grid is inside a cross-origin iframe, which is not supported."
-        );
-      }
-      const frameRect = frameElement.getBoundingClientRect();
-      const frameStyle = win.parent.getComputedStyle(frameElement);
-      x +=
-        frameRect.left +
-        frameElement.clientLeft +
-        parseFloat(frameStyle.paddingLeft);
-      y +=
-        frameRect.top +
-        frameElement.clientTop +
-        parseFloat(frameStyle.paddingTop);
+      const step = getFrameStep(win);
+      x += step.x;
+      y += step.y;
     }
     return { x, y };
+  }
+  /**
+   * Computes the top-level viewport point to click for the cell
+   * rectangle (in canvas coordinates): the center of the part of the
+   * cell that is visible through the canvas. Scrolls ancestor scroll
+   * containers, frames, and windows when the point is clipped by them,
+   * and verifies with a hit test that the point actually reaches the
+   * grid.
+   */
+  function resolveClickPoint(cellRect: {
+    left: number;
+    top: number;
+    width: number;
+    height: number;
+  }): { x: number; y: number } {
+    // Every corrective scroll moves the coordinates of everything, so
+    // recompute from scratch after each one, a bounded number of times.
+    for (let attempt = 0; attempt < 5; attempt++) {
+      // The center of the whole cell can fall outside the canvas when
+      // the cell is larger than the grid viewport (e.g. a column wider
+      // than the grid), and mouse events outside the canvas hit nothing.
+      const canvasRect = getCanvasRect();
+      const left = Math.max(cellRect.left, 0);
+      const top = Math.max(cellRect.top, 0);
+      const right = Math.min(cellRect.left + cellRect.width, canvasRect.width);
+      const bottom = Math.min(
+        cellRect.top + cellRect.height,
+        canvasRect.height
+      );
+      if (right <= left || bottom <= top) {
+        throw new Error("The cell is outside the visible area of the grid.");
+      }
+      const point = revealPoint({
+        x: canvasRect.left + (left + right) / 2,
+        y: canvasRect.top + (top + bottom) / 2,
+      });
+      if (point) {
+        return point;
+      }
+    }
+    throw new Error("The cell could not be scrolled into the view.");
+  }
+  /**
+   * Walks from the grid's own frame up to the top window, checking the
+   * point against every scroll container, frame, and window viewport on
+   * the way. Performs one corrective (instant) scroll and returns null
+   * when the point is clipped, for the caller to recompute; otherwise
+   * verifies with a hit test that the point reaches the grid (or the
+   * frame chain towards it) and returns the point in top-level viewport
+   * coordinates.
+   */
+  function revealPoint(local: { x: number; y: number }): {
+    x: number;
+    y: number;
+  } | null {
+    let { x, y } = local;
+    let win: Window = window;
+    let anchor: Element = grid.getElement();
+    for (;;) {
+      // The scroll containers between the anchor and the document root.
+      for (let clip = anchor.parentElement; clip; clip = clip.parentElement) {
+        const style = win.getComputedStyle(clip);
+        if (style.overflowX === "visible" && style.overflowY === "visible") {
+          continue;
+        }
+        const clipRect = clip.getBoundingClientRect();
+        const clipLeft = clipRect.left + clip.clientLeft;
+        const clipTop = clipRect.top + clip.clientTop;
+        if (
+          isOutside(
+            x,
+            y,
+            clipLeft,
+            clipTop,
+            clipLeft + clip.clientWidth,
+            clipTop + clip.clientHeight
+          )
+        ) {
+          clip.scrollBy({
+            left: x - (clipLeft + clip.clientWidth / 2),
+            top: y - (clipTop + clip.clientHeight / 2),
+            behavior: "instant",
+          });
+          return null;
+        }
+      }
+      // The window viewport of this frame.
+      const viewport = win.document.documentElement;
+      if (isOutside(x, y, 0, 0, viewport.clientWidth, viewport.clientHeight)) {
+        win.scrollBy({
+          left: x - viewport.clientWidth / 2,
+          top: y - viewport.clientHeight / 2,
+          behavior: "instant",
+        });
+        return null;
+      }
+      // The point is in view in this document; verify that nothing
+      // covers it (sticky toolbars, dialogs, modal backdrops, ...).
+      const hit = win.document.elementFromPoint(x, y);
+      if (!hit || (anchor !== hit && !anchor.contains(hit))) {
+        throw new Error(
+          `The cell is covered by another element: ${describeElement(hit)}`
+        );
+      }
+      if (win === win.parent) {
+        return { x, y };
+      }
+      const step = getFrameStep(win);
+      x += step.x;
+      y += step.y;
+      anchor = step.frameElement;
+      win = win.parent;
+    }
+  }
+  /**
+   * Whether the point lies outside the given bounds.
+   */
+  function isOutside(
+    x: number,
+    y: number,
+    left: number,
+    top: number,
+    right: number,
+    bottom: number
+  ): boolean {
+    return x < left || right < x || y < top || bottom < y;
+  }
+  /**
+   * Describes an element for error messages.
+   */
+  function describeElement(element: Element | null): string {
+    if (!element) {
+      return "(nothing)";
+    }
+    const id = element.getAttribute("id");
+    const classAttribute = element.getAttribute("class");
+    return `<${element.tagName.toLowerCase()}${id ? ` id="${id}"` : ""}${
+      classAttribute ? ` class="${classAttribute}"` : ""
+    }>`;
   }
 }
 
@@ -323,49 +483,19 @@ export class CheetahGridCellLocator {
     });
   }
   /**
-   * Returns the viewport point to click: the center of the visible part
-   * of the cell (a cell larger than the grid viewport is only partially
-   * on the canvas, and mouse events outside the canvas hit nothing). Scrolls
-   * the window (and ancestor frames) so that the grid is in view first —
-   * the grid only scrolls its own viewport internally — and fails clearly
-   * when the point still lies outside the window viewport (mouse events
-   * outside the viewport hit nothing, silently).
+   * Returns the top-level viewport point to click: the center of the
+   * visible part of the cell. Scrolls whatever clips the point (the
+   * window, ancestor frames, and scroll containers) and fails clearly
+   * when the point cannot be brought into view or is covered by another
+   * element — mouse events dispatched to a covered or out-of-view point
+   * would silently hit something else.
    */
   private async _clickPoint(): Promise<{ x: number; y: number }> {
+    // Bring the grid itself into view first (Playwright scrolls all
+    // ancestor containers and frames); the page side then takes care of
+    // the exact cell point.
     await this._grid.rootLocator.scrollIntoViewIfNeeded();
-    let point = await this._evaluateClickPoint();
-    const viewport = this._grid.page.viewportSize();
-    if (
-      viewport &&
-      (point.x < 0 ||
-        viewport.width < point.x ||
-        point.y < 0 ||
-        viewport.height < point.y)
-    ) {
-      // The grid is in view but the cell is not, e.g. when the grid
-      // element itself is larger than the window viewport
-      // (scrollIntoViewIfNeeded does nothing once any part of the grid
-      // is visible). Scroll the window to bring the point around the
-      // center of the viewport, and recompute.
-      await this._grid.page.evaluate(
-        ([scrollX, scrollY]) => {
-          window.scrollBy(scrollX, scrollY);
-        },
-        [point.x - viewport.width / 2, point.y - viewport.height / 2]
-      );
-      point = await this._evaluateClickPoint();
-      if (
-        point.x < 0 ||
-        viewport.width < point.x ||
-        point.y < 0 ||
-        viewport.height < point.y
-      ) {
-        throw new Error(
-          `The cell's click point (${point.x}, ${point.y}) is outside the window viewport (${viewport.width}x${viewport.height}).`
-        );
-      }
-    }
-    return point;
+    return this._evaluateClickPoint();
   }
   private _evaluateClickPoint(): Promise<{ x: number; y: number }> {
     return this._grid.locator.evaluate(cellOperation<"_evaluateClickPoint">, {

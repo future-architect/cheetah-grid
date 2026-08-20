@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>overlay fixture</title>
+<link rel="stylesheet" href="../../../cheetah-grid/dist/main.css">
+<script src="../../../cheetah-grid/dist/main.umd.js"></script>
+</head>
+<body style="margin: 0;">
+<div id="parent" style="width: 600px; height: 300px;"></div>
+<div id="overlay" style="position: fixed; top: 0; left: 0; width: 600px; height: 150px;"></div>
+<script>
+const records = [];
+for (let i = 0; i < 20; i++) {
+	records.push({id: i + 1, name: `name${i}`});
+}
+window.grid = new cheetahGrid.ListGrid({
+	parentElement: document.querySelector('#parent'),
+	header: [
+		{field: 'id', caption: 'ID', width: 80},
+		{field: 'name', caption: 'Name', width: 200, action: 'input'},
+	],
+	records,
+});
+</script>
+</body>
+</html>

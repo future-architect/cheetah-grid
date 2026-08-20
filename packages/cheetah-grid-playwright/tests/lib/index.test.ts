@@ -320,6 +320,122 @@ describe("gridLocator", () => {
     expect(await grid.cell("wide", 1).value()).toBe("WideFilled");
   });
 
+  it("scrolls an ancestor scroll container to the cell", async () => {
+    await gotoFixture(
+      page,
+      new URL("../fixtures/clip-grid.html", import.meta.url).href
+    );
+    const grid = gridLocator(page.locator(".cheetah-grid"));
+    await grid.cell("name", 12).click();
+    const select = await page.evaluate(
+      () =>
+        (
+          window as unknown as {
+            grid: { selection: { select: { col: number; row: number } } };
+          }
+        ).grid.selection.select
+    );
+    expect(select).toEqual({ col: 1, row: 13 });
+    await grid.cell("name", 15).fill("Clipped");
+    expect(await grid.cell("name", 15).value()).toBe("Clipped");
+  });
+
+  it("scrolls the grid's iframe to the cell", async () => {
+    await page.goto(
+      `${serverUrl}/packages/cheetah-grid-playwright/tests/fixtures/short-iframe-grid.html`
+    );
+    const gridElement = page.frameLocator("iframe").locator(".cheetah-grid");
+    await gridElement.waitFor();
+    const grid = gridLocator(gridElement);
+    await grid.cell("name", 25).click();
+    const select = await gridElement.evaluate(
+      () =>
+        (
+          window as unknown as {
+            grid: { selection: { select: { col: number; row: number } } };
+          }
+        ).grid.selection.select
+    );
+    expect(select).toEqual({ col: 1, row: 26 });
+  });
+
+  it("rejects a grid inside a transform-scaled iframe", async () => {
+    await page.goto(
+      `${serverUrl}/packages/cheetah-grid-playwright/tests/fixtures/scaled-iframe-grid.html`
+    );
+    const gridElement = page.frameLocator("iframe").locator(".cheetah-grid");
+    await gridElement.waitFor();
+    const grid = gridLocator(gridElement);
+    await expect(grid.cell("name", 0).click()).rejects.toThrow(
+      "scaled by an ancestor transform"
+    );
+  });
+
+  it("fails clearly when another element covers the cell", async () => {
+    await gotoFixture(
+      page,
+      new URL("../fixtures/overlay-grid.html", import.meta.url).href
+    );
+    const grid = gridLocator(page.locator(".cheetah-grid"));
+    await expect(grid.cell("name", 1).click()).rejects.toThrow(
+      'The cell is covered by another element: <div id="overlay"'
+    );
+  });
+
+  it("operates without a fixed viewport", async () => {
+    const context = await browser.newContext({ viewport: null });
+    try {
+      const noViewportPage = await context.newPage();
+      await gotoFixture(noViewportPage, FIXTURE_URL);
+      await noViewportPage.evaluate(() => {
+        document.querySelector<HTMLElement>("#parent")!.style.height = "2000px";
+      });
+      await noViewportPage.waitForFunction(
+        () =>
+          document.querySelector<HTMLElement>(".cheetah-grid canvas")!
+            .offsetHeight > 1500
+      );
+      const grid = gridLocator(noViewportPage.locator(".cheetah-grid"));
+      await grid.cell("email", 800).click();
+      const select = await noViewportPage.evaluate(
+        () =>
+          (
+            window as unknown as {
+              grid: { selection: { select: { col: number; row: number } } };
+            }
+          ).grid.selection.select
+      );
+      expect(select).toEqual({ col: 3, row: 801 });
+    } finally {
+      await context.close();
+    }
+  });
+
+  it("operates on a tall grid under scroll-behavior: smooth", async () => {
+    await page.addStyleTag({
+      content: "* { scroll-behavior: smooth !important; }",
+    });
+    await page.evaluate(() => {
+      document.querySelector<HTMLElement>("#parent")!.style.height = "2000px";
+    });
+    await page.waitForFunction(
+      () =>
+        document.querySelector<HTMLElement>(".cheetah-grid canvas")!
+          .offsetHeight > 1500
+    );
+    const grid = gridLocator(page.locator(".cheetah-grid"));
+    await grid.cell("email", 800).click();
+    const select = await page.evaluate(
+      () =>
+        (
+          window as unknown as {
+            grid: { selection: { select: { col: number; row: number } } };
+          }
+        ).grid.selection.select
+    );
+    expect(select).toEqual({ col: 3, row: 801 });
+  });
+
   it("rejects an ancestor locator containing multiple grids", async () => {
     await gotoFixture(
       page,
