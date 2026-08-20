@@ -307,6 +307,34 @@
 			expect(ListGrid.getInstanceByElement(element)).toBeUndefined();
 		});
 
+		it('clamps the row direction of getCellsRect by the frozen rows height', async function() {
+			const records = [];
+			for (let i = 0; i < 100; i++) {
+				records.push({a: i});
+			}
+			const grid = new ListGrid({
+				parentElement: createParent(),
+				header: [{field: 'a', caption: 'A', width: 80}],
+				records,
+			});
+			try {
+				const scrolled = new Promise((resolve) => {
+					const id = grid.listen('scroll', () => {
+						grid.unlisten(id);
+						resolve();
+					});
+				});
+				grid.scrollTop = 1000;
+				await scrolled;
+				// The range spans the frozen header row and a body row that is
+				// scrolled far past; the height is clamped by the frozen rows
+				// height (40), not by the column width (80).
+				expect(grid.getCellsRect(0, 0, 0, 1).height).toEqual(40);
+			} finally {
+				grid.dispose();
+			}
+		});
+
 		it('keeps the start edge of an oversized cell in view on makeVisibleCell', function() {
 			const grid = new ListGrid({
 				parentElement: createParent(),

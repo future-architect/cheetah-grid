@@ -3416,7 +3416,7 @@ export abstract class DrawGrid extends EventTarget implements DrawGridAPI {
         height -= scrollTop;
         height = Math.max(
           height,
-          _getColsWidth(this, startRow, this.frozenRowCount - 1)
+          _getRowsHeight.call(this, startRow, this.frozenRowCount - 1)
         );
       }
     }
